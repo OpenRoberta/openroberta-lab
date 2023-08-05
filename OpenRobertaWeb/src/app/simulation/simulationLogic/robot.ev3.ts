@@ -36,7 +36,7 @@ export default class RobotEv3 extends RobotBaseMobile {
 
     // this method might go up to BaseMobileRobots as soon as the configuration has detailed information about the sensors geometry and location on the robot
     protected configure(configuration: object): void {
-        this.chassis = new EV3Chassis(this.id, configuration, this.pose);
+        this.chassis = new EV3Chassis(this.id, configuration, 2, this.pose);
         this.led = new StatusLed();
         let sensors: object = configuration['SENSORS'];
         for (const c in sensors) {

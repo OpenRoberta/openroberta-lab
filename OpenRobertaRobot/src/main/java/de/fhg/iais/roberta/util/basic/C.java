@@ -137,8 +137,9 @@ public class C {
     public static final String LANGUAGE = "language";
     public static final String LAST = "last";
     public static final String LED_COLOR_CONST = "ledColor";
-    public static final String LED_OFF_ACTION = "ledOffAction";
-    public static final String LED_ON_ACTION = "ledOnAction";
+    public static final String LED_ACTION = "ledAction";
+    public static final String RGBLED_ON_ACTION = "rgbLedOnAction";
+    public static final String RGBLED_OFF_ACTION = "rgbLedOffAction";
     public static final String LEFT = "left";
     public static final String LIGHT = "light";
     public static final String LIGHT_ACTION = "lightAction";

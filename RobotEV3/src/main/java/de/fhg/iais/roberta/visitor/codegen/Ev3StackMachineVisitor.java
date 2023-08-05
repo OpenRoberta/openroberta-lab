@@ -128,7 +128,7 @@ public class Ev3StackMachineVisitor extends AbstractStackMachineVisitor implemen
 
     @Override
     public Void visitBrickLightOffAction(BrickLightOffAction brickLightOffAction) {
-        JSONObject o = makeNode(C.LED_OFF_ACTION).put(C.NAME, "ev3").put(C.PORT, "internal");
+        JSONObject o = makeNode(C.RGBLED_OFF_ACTION).put(C.NAME, "ev3").put(C.PORT, "internal");
         return add(o);
     }
 

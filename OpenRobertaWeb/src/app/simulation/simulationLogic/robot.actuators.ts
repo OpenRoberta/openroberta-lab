@@ -118,12 +118,12 @@ export abstract class ChassisDiffDrive extends ChassisMobile {
     private readonly TRACKWIDTH: number;
     protected readonly WHEELDIAMETER: number;
 
-    constructor(id: number, configuration: object) {
+    constructor(id: number, configuration: object, maxRotation: number) {
         super(id);
         this.TRACKWIDTH = configuration['TRACKWIDTH'] * 3;
         this.WHEELDIAMETER = configuration['WHEELDIAMETER'];
         this.ENC = 360.0 / (3.0 * Math.PI * this.WHEELDIAMETER);
-        this.MAXPOWER = (2 * this.WHEELDIAMETER * Math.PI * 3) / 100;
+        this.MAXPOWER = (maxRotation * this.WHEELDIAMETER * Math.PI * 3) / 100;
         for (const item in configuration['ACTUATORS']) {
             const motor = configuration['ACTUATORS'][item];
             if (motor['MOTOR_DRIVE'] === 'RIGHT') {
@@ -872,8 +872,8 @@ export abstract class LegoChassis extends ChassisDiffDrive implements ILabel {
     };
     axisDiff = 2;
 
-    constructor(id: number, configuration: {}, pose: Pose) {
-        super(id, configuration);
+    constructor(id: number, configuration: {}, maxRotation: number, pose: Pose) {
+        super(id, configuration, maxRotation);
         this.transformNewPose(pose, this);
         this.wheelLeft.w = configuration['WHEELDIAMETER'] * 3;
         this.wheelLeft.x = -this.wheelLeft.w / 2;
@@ -1032,8 +1032,8 @@ export class EV3Chassis extends LegoChassis {
         TACHO: '<image width="178" height="128" alt="tacho" xlink:href="data:image/png;base64,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" />',
     };
 
-    constructor(id: number, configuration: {}, pose: Pose) {
-        super(id, configuration, pose);
+    constructor(id: number, configuration: {}, maxRotation: number, pose: Pose) {
+        super(id, configuration, maxRotation, pose);
         $('#simRobotContent').append(this.topView);
         $('#brick' + this.id).hide();
     }
@@ -1047,7 +1047,7 @@ export class EV3Chassis extends LegoChassis {
             let y = display.y;
             let $display = $('#display' + this.id);
             if (text) {
-                $display.html($display.html() + '<text x=' + x * 10 + ' y=' + (y + 1) * 16 + '>' + text + '</text>');
+                $display.html($display.html() + '<text x=' + x * 10 + ' "y=' + (y + 1) * 16 + '">' + text + '</text>');
             }
             if (display.picture) {
                 $display.html(this.display[display.picture]);
@@ -1097,8 +1097,8 @@ export class NXTChassis extends LegoChassis {
         '<line id="bg-line" x1="126" y1="176" x2="126" y2="216" style="stroke-width: 4px; fill: none;" stroke="#cccccc" />' +
         '</svg>';
 
-    constructor(id: number, configuration: {}, pose: Pose) {
-        super(id, configuration, pose);
+    constructor(id: number, configuration: {}, maxRotation: number, pose: Pose) {
+        super(id, configuration, maxRotation, pose);
         $('#simRobotContent').append(this.topView);
         $('#brick' + this.id).hide();
     }
@@ -1108,13 +1108,213 @@ export class NXTChassis extends LegoChassis {
         let display = myRobot.interpreter.getRobotBehaviour().getActionState('display', true);
         if (display) {
             if (display.text) {
-                $('#display').html($('#display').html() + '<text x=' + display.x * 1.5 + ' y=' + display.y * 12 + '>' + display.text + '</text>');
+                $('#display').html($('#display').html() + '<text x=' + display.x * 1.5 + ' "y=' + display.y * 12 + '">' + display.text + '</text>');
             }
             if (display.clear) {
                 $('#display').html('');
             }
         }
     }
+}
+
+export class EdisonChassis extends ChassisDiffDrive {
+    geom: Geometry = {
+        x: -5.5,
+        y: -11.25,
+        w: 24,
+        h: 22.5,
+        radius: 0,
+        color: '#f2f2f2',
+    };
+    axisDiff: number;
+    backLeft: PointRobotWorldBumped = {
+        x: -5.5,
+        y: -11.25,
+        rx: 0,
+        ry: 0,
+        bumped: false,
+    };
+    backMiddle: PointRobotWorld = {
+        x: -5.5,
+        y: 0,
+        rx: 0,
+        ry: 0,
+    };
+    backRight: PointRobotWorldBumped = {
+        x: -5.5,
+        y: 11.25,
+        rx: 0,
+        ry: 0,
+        bumped: false,
+    };
+    frontLeft: PointRobotWorldBumped = {
+        x: 18.5,
+        y: -11.25,
+        rx: 0,
+        ry: 0,
+        bumped: false,
+    };
+    frontMiddle: PointRobotWorld = {
+        x: 18.5,
+        y: 0,
+        rx: 0,
+        ry: 0,
+    };
+    frontRight: PointRobotWorldBumped = {
+        x: 18.5,
+        y: 11.25,
+        rx: 0,
+        ry: 0,
+        bumped: false,
+    };
+    img = new Image();
+    topView: string =
+        '<svg id="brick' +
+        this.id +
+        '" width="360" height="440" viewBox="0 0 360 440" xmlns="http://www.w3.org/2000/svg">\n' +
+        '  <defs>\n' +
+        '    <style>.cls-1{fill:#fff;}.cls-2{fill:none;stroke:#fff;stroke-miterlimit:10;}.cls-3{fill:#ff7000;};}</style>\n' +
+        '        <radialGradient id="radialGradientL' +
+        this.id +
+        '" cx="0.5" cy="0.5" r="1"  xlink:href="#linearGradientL' +
+        this.id +
+        '"/>' +
+        '        <radialGradient id="radialGradientR' +
+        this.id +
+        '" cx="0.5" cy="0.5" r="1"  xlink:href="#linearGradientR' +
+        this.id +
+        '"/>' +
+        '        <linearGradient id="linearGradientL' +
+        this.id +
+        '">' +
+        '            <stop id="stopOnL' +
+        this.id +
+        '" offset="0" style="stop-color:#00ff00;stop-opacity:1;"/>' +
+        '            <stop id="stopOffL' +
+        this.id +
+        '" offset="1" style="stop-color:#00ff00;stop-opacity:0;"/>' +
+        '        </linearGradient>' +
+        '        <linearGradient id="linearGradientR' +
+        this.id +
+        '">' +
+        '            <stop id="stopOnR' +
+        this.id +
+        '" offset="0" style="stop-color:#00ff00;stop-opacity:1;"/>' +
+        '            <stop id="stopOffR' +
+        this.id +
+        '" offset="1" style="stop-color:#00ff00;stop-opacity:0;"/>' +
+        '        </linearGradient>' +
+        '    </defs>' +
+        '  <rect id="background" class="cls-1" width="360" height="440" style="fill: #333333;"/>' +
+        '  <g transform="matrix(1, 0, 0, 1, -35, 5)">\n' +
+        '    <g>\n' +
+        '      <g id="main">\n' +
+        '        <path class="cls-3" d="m380.51,26.85c5.22,1.73,9.49,7.65,9.49,13.15v380c0,5.5-4.5,10-10,10H50c-5.5,0-10-4.5-10-10V40c0-5.5,4.27-11.42,9.49-13.15,0,0,81.01-26.85,165.51-26.85s165.51,26.85,165.51,26.85Z"/>\n' +
+        '      </g>\n' +
+        '    </g>\n' +
+        '    <g id="bricks">\n' +
+        '      <circle id="pin" class="cls-2" cx="66" cy="403.5" r="11"/>\n' +
+        '      <circle id="pin-2" class="cls-2" cx="109.5" cy="404" r="11"/>\n' +
+        '      <circle id="pin-3" class="cls-2" cx="109.5" cy="360.5" r="11"/>\n' +
+        '      <circle id="pin-4" class="cls-2" cx="109.5" cy="317" r="11"/>\n' +
+        '      <circle id="pin-5" class="cls-2" cx="109.5" cy="273.5" r="11"/>\n' +
+        '      <circle id="pin-6" class="cls-2" cx="109.5" cy="230" r="11"/>\n' +
+        '      <path id="pin-7" class="cls-2" d="m109.5,197.5c6.08,0,11-4.92,11-11s-4.92-11-11-11c-6.08,0-11,4.92-11,11,0,6.08,4.92,11,11,11Z"/>\n' +
+        '      <circle id="pin-8" class="cls-2" cx="109.5" cy="143" r="11"/>\n' +
+        '      <circle id="pin-9" class="cls-2" cx="109.5" cy="99.5" r="11"/>\n' +
+        '      <circle id="pin-10" class="cls-2" cx="66" cy="360" r="11"/>\n' +
+        '      <path id="pin-11" class="cls-2" d="m66.5,305.5c-6.08,0-11,4.92-11,11s4.92,11,11,11,11-4.92,11-11-4.92-11-11-11Z"/>\n' +
+        '      <circle id="pin-12" class="cls-2" cx="66.5" cy="273" r="11"/>\n' +
+        '      <circle id="pin-13" class="cls-2" cx="66.5" cy="229.5" r="11"/>\n' +
+        '      <circle id="pin-14" class="cls-2" cx="66.5" cy="186" r="11" transform="translate(-96.2 73.99) rotate(-35.78)"/>\n' +
+        '      <circle id="pin-15" class="cls-2" cx="66.5" cy="142.5" r="11"/>\n' +
+        '      <circle id="pin-16" class="cls-2" cx="66.5" cy="99" r="11"/>\n' +
+        '      <circle id="pin-17" class="cls-2" cx="320.5" cy="403.5" r="11"/>\n' +
+        '      <path id="pin-18" class="cls-2" d="m364,393c-6.08,0-11,4.92-11,11s4.92,11,11,11,11-4.92,11-11-4.92-11-11-11Z"/>\n' +
+        '      <circle id="pin-19" class="cls-2" cx="364" cy="360.5" r="11"/>\n' +
+        '      <circle id="pin-20" class="cls-2" cx="364" cy="317" r="11" transform="translate(-116.65 272.67) rotate(-35.78)"/>\n' +
+        '      <circle id="pin-21" class="cls-2" cx="364" cy="273.5" r="11"/>\n' +
+        '      <circle id="pin-22" class="cls-2" cx="364" cy="230" r="11"/>\n' +
+        '      <circle id="pin-23" class="cls-2" cx="364" cy="186.5" r="11"/>\n' +
+        '      <circle id="pin-24" class="cls-2" cx="364" cy="143" r="11"/>\n' +
+        '      <circle id="pin-25" class="cls-2" cx="364" cy="99.5" r="11"/>\n' +
+        '      <circle id="pin-26" class="cls-2" cx="320.5" cy="360" r="11"/>\n' +
+        '      <circle id="pin-27" class="cls-2" cx="321" cy="316.5" r="11"/>\n' +
+        '      <circle id="pin-28" class="cls-2" cx="321" cy="273" r="11"/>\n' +
+        '      <circle id="pin-29" class="cls-2" cx="321" cy="229.5" r="11"/>\n' +
+        '      <circle id="pin-30" class="cls-2" cx="321" cy="186" r="11"/>\n' +
+        '      <circle id="pin-31" class="cls-2" cx="321" cy="142.5" r="11"/>\n' +
+        '      <circle id="pin-32" class="cls-2" cx="321" cy="99" r="11"/>\n' +
+        '    </g>\n' +
+        '    <circle id="rec' +
+        this.id +
+        '" class="simKey" cx="215" cy="359.27" r="27.78" fill="#666666"/>\n' +
+        '    <g id="button_2">\n' +
+        '      <path fill="#666666" d="m187.22,336.6c0,1.1.54,1.28,1.2.4,0,0,8.8-11.73,26.02-11.73,17.22,0,27.05,11.8,27.05,11.8.7.85,1.28.64,1.28-.46v-51.56c0-1.1-.9-2-2-2h-51.56c-1.1,0-2,.9-2,2v51.56Z"/>\n' +
+        '    </g>\n' +
+        '    <g id="button_3">\n' +
+        '    <path fill="#666666" id="play' +
+        this.id +
+        '" class="simKey" ' +
+        '      d="m216,230.11c-.55-.95-1.45-.95-2,0l-26,45.03c-.55.95-.1,1.73,1,1.73h52c1.1,0,1.55-.78,1-1.73l-26-45.03Z"/>\n' +
+        '    </g>\n' +
+        '    <ellipse id="lled-' +
+        this.id +
+        '" cx="125" cy="45" rx="20" ry="15"' +
+        ' style="fill:url(#radialGradientL' +
+        this.id +
+        ');fill-opacity:1;stroke:none;stroke-width:0.800002"/>' +
+        '    <ellipse id="rled-' +
+        this.id +
+        '" cx="305" cy="45" rx="20" ry="15"' +
+        ' style="fill:url(#radialGradientR' +
+        this.id +
+        ');fill-opacity:1;stroke:none;stroke-width:0.800002"/>' +
+        '  </g>\n' +
+        '</svg>';
+    wheelBack: Geometry = {
+        x: 0,
+        y: 0,
+        w: 0,
+        h: 0,
+        color: '#000000',
+    };
+    wheelLeft: Geometry = {
+        x: 0,
+        y: 0,
+        w: 0,
+        h: 0,
+        color: '#000000',
+    };
+    wheelRight: Geometry = {
+        x: 0,
+        y: 0,
+        w: 0,
+        h: 0,
+        color: '#000000',
+    };
+
+    constructor(id: number, configuration: {}, maxRotation: number, pose: Pose) {
+        super(id, configuration, maxRotation);
+        this.transformNewPose(pose, this);
+        this.img.src = '../../css/img/simulator/edison.png';
+        this.right.port = 'RMOTOR';
+        this.right.speed = 0;
+        this.left.port = 'LMOTOR';
+        this.left.speed = 0;
+        $('#simRobotContent').append(this.topView);
+        $('#brick' + this.id).hide();
+    }
+
+    override draw(rCtx: CanvasRenderingContext2D, myRobot: RobotBaseMobile): void {
+        rCtx.save();
+        rCtx.shadowBlur = 5;
+        rCtx.shadowColor = 'black';
+        rCtx.drawImage(this.img, 0, 0, this.img.width, this.img.height, this.geom.x, this.geom.y, this.geom.w, this.geom.h);
+        rCtx.restore();
+    }
+
+    reset(): void {}
 }
 
 export class ThymioChassis extends ChassisDiffDrive {
@@ -1174,22 +1374,32 @@ export class ThymioChassis extends ChassisDiffDrive {
         '    <defs id="defs1608">' +
         '        <radialGradient id="radialGradientL' +
         this.id +
-        '" gradientUnits="userSpaceOnUse" cx="-295.9747" cy="513.95087" r="89.90358" gradientTransform="matrix(0.611236,0,0,0.611236,1782.0945,50.568234)" xlink:href="#linearGradient' +
+        '" gradientUnits="userSpaceOnUse" cx="-295.9747" cy="513.95087" r="89.90358" gradientTransform="matrix(0.611236,0,0,0.611236,1782.0945,50.568234)" xlink:href="#linearGradientL' +
         this.id +
         '"/>' +
-        '        <linearGradient id="linearGradient' +
+        '        <linearGradient id="linearGradientL' +
         this.id +
         '">' +
-        '            <stop id="stopOn' +
+        '            <stop id="stopOnL' +
         this.id +
         '" offset="0" style="stop-color:#00ff00;stop-opacity:1;"/>' +
-        '            <stop id="stopOff' +
+        '            <stop id="stopOffL' +
+        this.id +
+        '" offset="1" style="stop-color:#00ff00;stop-opacity:0;"/>' +
+        '        </linearGradient>' +
+        '        <linearGradient id="linearGradientR' +
+        this.id +
+        '">' +
+        '            <stop id="stopOnR' +
+        this.id +
+        '" offset="0" style="stop-color:#00ff00;stop-opacity:1;"/>' +
+        '            <stop id="stopOffR' +
         this.id +
         '" offset="1" style="stop-color:#00ff00;stop-opacity:0;"/>' +
         '        </linearGradient>' +
         '        <radialGradient id="radialGradientR' +
         this.id +
-        '" gradientUnits="userSpaceOnUse" cx="-295.9747" cy="513.95087" r="89.90358" gradientTransform="matrix(0.611236,0,0,0.611236,1938.8702,50.568234)" xlink:href="#linearGradient' +
+        '" gradientUnits="userSpaceOnUse" cx="-295.9747" cy="513.95087" r="89.90358" gradientTransform="matrix(0.611236,0,0,0.611236,1938.8702,50.568234)" xlink:href="#linearGradientR' +
         this.id +
         '"/>' +
         '    </defs>' +
@@ -1371,9 +1581,8 @@ export class ThymioChassis extends ChassisDiffDrive {
         color: '#000000',
     };
 
-    constructor(id: number, configuration: {}, pose: Pose) {
-        super(id, configuration);
-        this.MAXPOWER = (1.5 * this.WHEELDIAMETER * Math.PI * 3) / 100;
+    constructor(id: number, configuration: {}, maxRotation: number, pose: Pose) {
+        super(id, configuration, maxRotation);
         this.transformNewPose(pose, this);
         this.wheelFrontRight.x = this.wheelRight.x + this.wheelRight.w;
         this.wheelFrontRight.y = this.wheelRight.y + this.wheelRight.h;
@@ -1518,8 +1727,8 @@ export class MbotChassis extends ChassisDiffDrive {
     };
     axisDiff = 0;
 
-    constructor(id: number, configuration: {}, pose: Pose) {
-        super(id, configuration);
+    constructor(id: number, configuration: {}, maxRotation: number, pose: Pose) {
+        super(id, configuration, maxRotation);
         this.transformNewPose(pose, this);
         this.wheelLeft.w = configuration['WHEELDIAMETER'] * 3;
         this.wheelLeft.x = -this.wheelLeft.w / 2;
@@ -2240,20 +2449,27 @@ export class MbotDisplay extends MatrixDisplay {
 }
 
 export class RGBLed implements IUpdateAction, IDrawable, IReset {
-    color: string = 'grey';
+    color: any = 'grey';
     r: number = 20;
     x: number;
     y: number;
-    port: number;
+    port: string;
+    protected toReset: boolean;
+    protected id: number;
 
-    constructor(p: Point, port?: number) {
+    constructor(p: Point, reset: boolean, port?: string, radius?: number) {
         this.x = p.x;
         this.y = p.y;
-        this.port = port || 0;
+        this.toReset = reset;
+        this.port = port || '0';
+        this.r = radius || this.r;
     }
 
     draw(rCtx: CanvasRenderingContext2D, myRobot: RobotBase): void {
         if (this.color != 'grey') {
+            if (!Array.isArray(this.color)) {
+                this.color = [255, 0, 0];
+            }
             let rad = rCtx.createRadialGradient(this.x, this.y, this.r / 2, this.x, this.y, this.r * 1.5);
             rad.addColorStop(0, 'rgba(' + this.color[0] + ',' + this.color[1] + ',' + this.color[2] + ',1)');
             rad.addColorStop(1, 'rgba(' + this.color[0] + ',' + this.color[1] + ',' + this.color[2] + ',0)');
@@ -2268,10 +2484,11 @@ export class RGBLed implements IUpdateAction, IDrawable, IReset {
 
     reset(): void {
         this.color = 'grey';
+        $('#' + this.port + '-' + this.id).css({ fill: 'rgba(0, 0, 0, 0)' });
     }
 
     updateAction(myRobot: RobotBase, dt: number, interpreterRunning: boolean): void {
-        let led = myRobot.interpreter.getRobotBehaviour().getActionState('led', false);
+        let led = myRobot.interpreter.getRobotBehaviour().getActionState('led', this.toReset);
         if (led) {
             if (led[this.port]) {
                 led = led[this.port];
@@ -2287,12 +2504,18 @@ export class RGBLed implements IUpdateAction, IDrawable, IReset {
                     this.color = led.color;
                 }
             }
+            if (this.color === 'grey') {
+                $('#' + this.port + '-' + myRobot.id).css({ fill: 'rgba(' + this.color[0] + ', ' + this.color[1] + ', ' + this.color[2] + ', 0)' });
+            } else {
+                $('#' + this.port + '-' + myRobot.id).css({ fill: 'rgba(' + this.color[0] + ', ' + this.color[1] + ', ' + this.color[2] + ', 255)' });
+            }
         }
     }
 }
 
 export class ThymioRGBLeds implements IUpdateAction, IDrawable, IReset {
-    color: number[];
+    colorL: number[];
+    colorR: number[];
     private r: number = 7.5;
     private xR: number;
     private yR: number;
@@ -2311,20 +2534,22 @@ export class ThymioRGBLeds implements IUpdateAction, IDrawable, IReset {
     }
 
     draw(rCtx: CanvasRenderingContext2D, myRobot: RobotBase): void {
-        if (this.color) {
-            let radR = rCtx.createRadialGradient(this.xR, this.yR, 0, this.xR, this.yR, this.r);
-            radR.addColorStop(0, 'rgba(' + this.color[0] + ',' + this.color[1] + ',' + this.color[2] + ',1)');
-            radR.addColorStop(1, 'rgba(' + this.color[0] + ',' + this.color[1] + ',' + this.color[2] + ',0)');
+        if (this.colorL) {
             let radL = rCtx.createRadialGradient(this.xL, this.yL, 0, this.xL, this.yL, this.r);
-            radL.addColorStop(0, 'rgba(' + this.color[0] + ',' + this.color[1] + ',' + this.color[2] + ',1)');
-            radL.addColorStop(1, 'rgba(' + this.color[0] + ',' + this.color[1] + ',' + this.color[2] + ',0)');
-            rCtx.fillStyle = radR;
-            rCtx.beginPath();
-            rCtx.arc(this.xR, this.yR, this.r * 1.5, 0, Math.PI * 2);
-            rCtx.fill();
+            radL.addColorStop(0, 'rgba(' + this.colorL[0] + ',' + this.colorL[1] + ',' + this.colorL[2] + ',1)');
+            radL.addColorStop(1, 'rgba(' + this.colorL[0] + ',' + this.colorL[1] + ',' + this.colorL[2] + ',0)');
             rCtx.fillStyle = radL;
             rCtx.beginPath();
             rCtx.arc(this.xL, this.yL, this.r * 1.5, 0, Math.PI * 2);
+            rCtx.fill();
+        }
+        if (this.colorR) {
+            let radR = rCtx.createRadialGradient(this.xR, this.yR, 0, this.xR, this.yR, this.r);
+            radR.addColorStop(0, 'rgba(' + this.colorR[0] + ',' + this.colorR[1] + ',' + this.colorR[2] + ',1)');
+            radR.addColorStop(1, 'rgba(' + this.colorR[0] + ',' + this.colorR[1] + ',' + this.colorR[2] + ',0)');
+            rCtx.fillStyle = radR;
+            rCtx.beginPath();
+            rCtx.arc(this.xR, this.yR, this.r * 1.5, 0, Math.PI * 2);
             rCtx.fill();
         }
     }
@@ -2332,17 +2557,36 @@ export class ThymioRGBLeds implements IUpdateAction, IDrawable, IReset {
     drawPriority: number = 11;
 
     reset(): void {
-        this.color = null;
+        this.colorR = this.colorL = null;
         this.change();
     }
 
     change(): void {
-        if (this.color) {
-            $('#stopOn' + this.myRobotId).css({ 'stop-color': 'rgb(' + this.color[0] + ',' + this.color[1] + ',' + this.color[2] + ')', 'stop-opacity': 1 });
-            $('#stopOff' + this.myRobotId).css({ 'stop-color': 'rgb(' + this.color[0] + ',' + this.color[1] + ',' + this.color[2] + ')', 'stop-opacity': 0 });
+        if (this.colorL) {
+            $('#stopOnL' + this.myRobotId).css({
+                'stop-color': 'rgb(' + this.colorL[0] + ',' + this.colorL[1] + ',' + this.colorL[2] + ')',
+                'stop-opacity': 1,
+            });
+            $('#stopOffL' + this.myRobotId).css({
+                'stop-color': 'rgb(' + this.colorL[0] + ',' + this.colorL[1] + ',' + this.colorL[2] + ')',
+                'stop-opacity': 0,
+            });
         } else {
-            $('#stopOn' + this.myRobotId).css({ 'stop-color': this.chassisColor, 'stop-opacity': 0 });
-            $('#stopOff' + this.myRobotId).css({ 'stop-color': this.chassisColor, 'stop-opacity': 0 });
+            $('#stopOnL' + this.myRobotId).css({ 'stop-color': this.chassisColor, 'stop-opacity': 0 });
+            $('#stopOffL' + this.myRobotId).css({ 'stop-color': this.chassisColor, 'stop-opacity': 0 });
+        }
+        if (this.colorR) {
+            $('#stopOnR' + this.myRobotId).css({
+                'stop-color': 'rgb(' + this.colorR[0] + ',' + this.colorR[1] + ',' + this.colorR[2] + ')',
+                'stop-opacity': 1,
+            });
+            $('#stopOffR' + this.myRobotId).css({
+                'stop-color': 'rgb(' + this.colorR[0] + ',' + this.colorR[1] + ',' + this.colorR[2] + ')',
+                'stop-opacity': 0,
+            });
+        } else {
+            $('#stopOnR' + this.myRobotId).css({ 'stop-color': this.chassisColor, 'stop-opacity': 0 });
+            $('#stopOffR' + this.myRobotId).css({ 'stop-color': this.chassisColor, 'stop-opacity': 0 });
         }
     }
 
@@ -2352,9 +2596,34 @@ export class ThymioRGBLeds implements IUpdateAction, IDrawable, IReset {
             if (led['top']) {
                 led = led['top'];
                 if (led.mode && led.mode === 'off') {
-                    this.color = null;
+                    this.colorL = this.colorR = null;
                 } else if (led.color) {
-                    this.color = led.color;
+                    this.colorL = this.colorR = led.color;
+                }
+            }
+            this.change();
+        }
+    }
+}
+
+export class EdisonLeds extends ThymioRGBLeds {
+    override updateAction(myRobot: RobotBase, dt: number, interpreterRunning: boolean): void {
+        let led = myRobot.interpreter.getRobotBehaviour().getActionState('led', true);
+        if (led) {
+            if (led['lled']) {
+                led = led['lled'];
+                if (led.mode && led.mode === 'off') {
+                    this.colorL = null;
+                } else {
+                    this.colorL = [255, 0, 0];
+                }
+            }
+            if (led['rled']) {
+                led = led['rled'];
+                if (led.mode && led.mode === 'off') {
+                    this.colorR = null;
+                } else {
+                    this.colorR = [255, 0, 0];
                 }
             }
             this.change();
@@ -2652,7 +2921,7 @@ export class ThymioSoundLed implements IUpdateAction, IDrawable, IReset {
 
 export class MbotRGBLed extends RGBLed {
     override updateAction(myRobot: RobotBase, dt: number, interpreterRunning: boolean): void {
-        let led = myRobot.interpreter.getRobotBehaviour().getActionState('leds', false);
+        let led = myRobot.interpreter.getRobotBehaviour().getActionState('leds', this.toReset);
         if (led) {
             if (led[this.port]) {
                 led = led[this.port];

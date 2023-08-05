@@ -33,15 +33,18 @@ import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensors.edison.ResetSensor;
+import de.fhg.iais.roberta.util.basic.C;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.syntax.SC;
 import de.fhg.iais.roberta.visitor.EdisonMethods;
 import de.fhg.iais.roberta.visitor.IEdisonVisitor;
 
 public class EdisonValidatorAndCollectorVisitor extends CommonNepoValidatorAndCollectorVisitor implements IEdisonVisitor<Void> {
+    private final boolean isSim;
 
-    public EdisonValidatorAndCollectorVisitor(ConfigurationAst robotConfiguration, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
+    public EdisonValidatorAndCollectorVisitor(ConfigurationAst robotConfiguration, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders, boolean isSim) {
         super(robotConfiguration, beanBuilders);
+        this.isSim = isSim;
     }
 
     @Override
@@ -151,6 +154,7 @@ public class EdisonValidatorAndCollectorVisitor extends CommonNepoValidatorAndCo
 
     @Override
     public Void visitPlayFileAction(PlayFileAction playFileAction) {
+        addToPhraseIfUnsupportedInSim(playFileAction, false, isSim);
         return null;
     }
 
@@ -168,7 +172,12 @@ public class EdisonValidatorAndCollectorVisitor extends CommonNepoValidatorAndCo
 
     @Override
     public Void visitLightSensor(LightSensor lightSensor) {
-        usedHardwareBuilder.addUsedSensor(new UsedSensor(lightSensor.getUserDefinedPort(), SC.LIGHT, lightSensor.getMode()));
+        String mode = lightSensor.getMode();
+        String port = lightSensor.getUserDefinedPort();
+        usedHardwareBuilder.addUsedSensor(new UsedSensor(lightSensor.getUserDefinedPort(), SC.LIGHT, mode));
+        if ( mode.toLowerCase().equals(C.LIGHT) && !port.equals("LINETRACKER") ) {
+            addToPhraseIfUnsupportedInSim(lightSensor, true, isSim);
+        }
         return null;
     }
 
@@ -176,6 +185,7 @@ public class EdisonValidatorAndCollectorVisitor extends CommonNepoValidatorAndCo
     public Void visitIRSeekerSensor(IRSeekerSensor irSeekerSensor) {
         usedMethodBuilder.addUsedMethod(EdisonMethods.IRSEEK);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(irSeekerSensor.getUserDefinedPort(), SC.IRSEEKER, irSeekerSensor.getMode()));
+        addToPhraseIfUnsupportedInSim(irSeekerSensor, true, isSim);
         return null;
     }
 
@@ -194,17 +204,20 @@ public class EdisonValidatorAndCollectorVisitor extends CommonNepoValidatorAndCo
         requiredComponentVisited(sendIRAction, sendIRAction.code); //?
         usedMethodBuilder.addUsedMethod(EdisonMethods.IRSEND);
         sendIRAction.code.accept(this);
+        addToPhraseIfUnsupportedInSim(sendIRAction, false, isSim);
         return null;
     }
 
     @Override
     public Void visitReceiveIRAction(ReceiveIRAction receiveIRAction) {
         usedMethodBuilder.addUsedMethod(EdisonMethods.IRSEEK);
+        addToPhraseIfUnsupportedInSim(receiveIRAction, true, isSim);
         return null;
     }
 
     @Override
     public Void visitResetSensor(ResetSensor voidResetSensor) {
+        addToPhraseIfUnsupportedInSim(voidResetSensor, false, isSim);
         return null;
     }
 

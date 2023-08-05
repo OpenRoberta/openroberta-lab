@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.visitor;
+package de.fhg.iais.roberta.visitor.codegen;
 
 import java.util.Arrays;
 import java.util.List;
@@ -12,8 +12,7 @@ import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.inter.mode.action.ITurnDirection;
 import de.fhg.iais.roberta.mode.action.DriveDirection;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.action.light.RgbLedOffAction;
-import de.fhg.iais.roberta.syntax.action.light.RgbLedOnAction;
+import de.fhg.iais.roberta.syntax.action.light.LedAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
@@ -27,39 +26,28 @@ import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.SetVolumeAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
-import de.fhg.iais.roberta.syntax.action.thymio.LedButtonOnAction;
-import de.fhg.iais.roberta.syntax.action.thymio.LedCircleOnAction;
-import de.fhg.iais.roberta.syntax.action.thymio.LedProxHOnAction;
-import de.fhg.iais.roberta.syntax.action.thymio.LedProxVOnAction;
-import de.fhg.iais.roberta.syntax.action.thymio.LedSoundOnAction;
-import de.fhg.iais.roberta.syntax.action.thymio.LedTemperatureOnAction;
-import de.fhg.iais.roberta.syntax.action.thymio.PlayRecordingAction;
-import de.fhg.iais.roberta.syntax.action.thymio.RecordStartAction;
-import de.fhg.iais.roberta.syntax.action.thymio.RecordStopAction;
+import de.fhg.iais.roberta.syntax.actors.edison.ReceiveIRAction;
+import de.fhg.iais.roberta.syntax.actors.edison.SendIRAction;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
-import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.IRSeekerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
-import de.fhg.iais.roberta.syntax.sensor.thymio.TapSensor;
+import de.fhg.iais.roberta.syntax.sensors.edison.ResetSensor;
 import de.fhg.iais.roberta.util.basic.C;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.syntax.MotorDuration;
+import de.fhg.iais.roberta.visitor.IEdisonVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.AbstractStackMachineVisitor;
 
-public final class ThymioStackMachineVisitor extends AbstractStackMachineVisitor implements IThymioVisitor<Void> {
-    public ThymioStackMachineVisitor(ConfigurationAst configuration, List<List<Phrase>> phrases, UsedHardwareBean usedHardwareBean, NNBean nnBean) {
+public final class EdisonStackMachineVisitor extends AbstractStackMachineVisitor implements IEdisonVisitor<Void> {
+    public EdisonStackMachineVisitor(ConfigurationAst configuration, List<List<Phrase>> phrases, UsedHardwareBean usedHardwareBean, NNBean nnBean) {
         super(configuration, usedHardwareBean, nnBean);
         Assert.isTrue(!phrases.isEmpty());
-    }
-
-    @Override
-    public Void visitAccelerometerSensor(AccelerometerSensor accelerometerSensor) {
-        return null;
     }
 
     @Override
@@ -78,12 +66,11 @@ public final class ThymioStackMachineVisitor extends AbstractStackMachineVisitor
         curveAction.paramRight.getSpeed().accept(this);
         boolean speedOnly = !processOptionalDuration(curveAction.paramLeft.getDuration());
         DriveDirection driveDirection = (DriveDirection) curveAction.direction;
-
-        JSONObject o = makeNode(C.CURVE_ACTION).put(C.DRIVE_DIRECTION, driveDirection).put(C.SPEED_ONLY, speedOnly);
+        JSONObject o = makeNode(C.CURVE_ACTION).put(C.DRIVE_DIRECTION, driveDirection).put(C.SPEED_ONLY, speedOnly).put(C.SET_TIME, false);
         if ( speedOnly ) {
-            return add(o.put(C.SET_TIME, false));
+            return add(o);
         } else {
-            add(o.put(C.SET_TIME, true));
+            add(o);
             return add(makeNode(C.STOP_DRIVE));
         }
     }
@@ -93,35 +80,32 @@ public final class ThymioStackMachineVisitor extends AbstractStackMachineVisitor
         driveAction.param.getSpeed().accept(this);
         boolean speedOnly = !processOptionalDuration(driveAction.param.getDuration());
         DriveDirection driveDirection = (DriveDirection) driveAction.direction;
-        JSONObject o = makeNode(C.DRIVE_ACTION).put(C.DRIVE_DIRECTION, driveDirection).put(C.SPEED_ONLY, speedOnly);
+        JSONObject o = makeNode(C.DRIVE_ACTION).put(C.DRIVE_DIRECTION, driveDirection).put(C.SPEED_ONLY, speedOnly).put(C.SET_TIME, false);
         if ( speedOnly ) {
-            return add(o.put(C.SET_TIME, false));
+            return add(o);
         } else {
-            add(o.put(C.SET_TIME, true));
+            add(o);
             return add(makeNode(C.STOP_DRIVE));
         }
     }
 
     @Override
     public Void visitInfraredSensor(InfraredSensor infraredSensor) {
+        String port = infraredSensor.getUserDefinedPort();
         String mode = infraredSensor.getMode().toLowerCase();
-        String slot = infraredSensor.getSlot().toLowerCase();
-        switch ( mode ) {
-            case C.DISTANCE:
-                break;
-            case C.LINE:
-            case C.LIGHT:
-            case C.AMBIENTLIGHT:
-                if ( slot.equals("0") ) {
-                    slot = C.LEFT;
-                } else if ( slot.equals("1") ) {
-                    slot = C.RIGHT;
-                }
-                break;
-            default:
-                throw new DbcException("Invalid infrared sensor mode!");
-        }
-        JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.INFRARED).put(C.MODE, mode).put(C.SLOT, slot);
+        JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.INFRARED).put(C.MODE, mode).put(C.PORT, port);
+        return add(o);
+    }
+
+    @Override
+    public Void visitIRSeekerSensor(IRSeekerSensor irSeekerSensor) {
+        return null;
+    }
+
+    @Override
+    public Void visitLightSensor(LightSensor lightSensor) {
+        String mode = lightSensor.getMode().toLowerCase();
+        JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.INFRARED).put(C.MODE, mode);
         return add(o);
     }
 
@@ -133,71 +117,10 @@ public final class ThymioStackMachineVisitor extends AbstractStackMachineVisitor
     }
 
     @Override
-    public Void visitLedButtonOnAction(LedButtonOnAction ledButtonOnAction) {
-        ledButtonOnAction.led1.accept(this);
-        ledButtonOnAction.led2.accept(this);
-        ledButtonOnAction.led3.accept(this);
-        ledButtonOnAction.led4.accept(this);
-        return add(makeNode(C.BUTTON_LED_ACTION));
-    }
-
-    @Override
-    public Void visitLedCircleOnAction(LedCircleOnAction ledCircleOnAction) {
-        ledCircleOnAction.led1.accept(this);
-        ledCircleOnAction.led2.accept(this);
-        ledCircleOnAction.led3.accept(this);
-        ledCircleOnAction.led4.accept(this);
-        ledCircleOnAction.led5.accept(this);
-        ledCircleOnAction.led6.accept(this);
-        ledCircleOnAction.led7.accept(this);
-        ledCircleOnAction.led8.accept(this);
-        return add(makeNode(C.CIRCLE_LED_ACTION));
-    }
-
-    @Override
-    public Void visitLedProxHOnAction(LedProxHOnAction ledProxHOnAction) {
-        ledProxHOnAction.led1.accept(this);
-        ledProxHOnAction.led2.accept(this);
-        ledProxHOnAction.led3.accept(this);
-        ledProxHOnAction.led4.accept(this);
-        ledProxHOnAction.led5.accept(this);
-        ledProxHOnAction.led6.accept(this);
-        ledProxHOnAction.led7.accept(this);
-        ledProxHOnAction.led8.accept(this);
-        return add(makeNode(C.PROXH_LED_ACTION));
-    }
-
-    @Override
-    public Void visitLedProxVOnAction(LedProxVOnAction ledProxVOnAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitLedSoundOnAction(LedSoundOnAction ledSoundOnAction) {
-        ledSoundOnAction.led1.accept(this);
-        return add(makeNode(C.SOUND_LED_ACTION));
-    }
-
-    @Override
-    public Void visitLedTemperatureOnAction(LedTemperatureOnAction ledTemperatureOnAction) {
-        ledTemperatureOnAction.led1.accept(this);
-        ledTemperatureOnAction.led2.accept(this);
-        return add(makeNode(C.TEMPERATURE_LED_ACTION));
-    }
-
-    @Override
-    public Void visitRgbLedOffAction(RgbLedOffAction rgbLedOffAction) {
-        String port = rgbLedOffAction.port.toLowerCase();
-        JSONObject o = makeNode(C.RGBLED_OFF_ACTION).put(C.PORT, port);
-        return add(o);
-    }
-
-    @Override
-    public Void visitRgbLedOnAction(RgbLedOnAction rgbLedOnAction) {
-        rgbLedOnAction.colour.accept(this);
-        String port = rgbLedOnAction.port.toLowerCase();
-        JSONObject o = makeNode(C.RGBLED_ON_ACTION).put(C.PORT, port);
-        return add(o);
+    public Void visitLedAction(LedAction ledAction) {
+        String port = ledAction.port.toLowerCase();
+        String mode = ledAction.mode;
+        return add(makeNode(C.LED_ACTION).put(C.PORT, port).put(C.MODE, mode));
     }
 
     @Override
@@ -217,19 +140,12 @@ public final class ThymioStackMachineVisitor extends AbstractStackMachineVisitor
         MotorDuration duration = motorOnAction.param.getDuration();
         boolean speedOnly = !processOptionalDuration(duration);
         String port = motorOnAction.getUserDefinedPort();
-
-        JSONObject o = makeNode(C.MOTOR_ON_ACTION).put(C.PORT, port.toLowerCase()).put(C.SPEED_ONLY, speedOnly);
+        JSONObject o = makeNode(C.MOTOR_ON_ACTION).put(C.PORT, port.toLowerCase()).put(C.NAME, port.toLowerCase()).put(C.SPEED_ONLY, speedOnly);
         if ( speedOnly ) {
-            return add(o.put(C.SET_TIME, false));
+            return add(o);
         } else {
-            add(o.put(C.SET_TIME, true));
-            if ( duration.getType() == null ) {
-                o.put(C.MOTOR_DURATION, C.TIME);
-
-            } else {
-                String durationType = duration.getType().toString().toLowerCase();
-                o.put(C.MOTOR_DURATION, durationType);
-            }
+            String durationType = duration.getType().toString().toLowerCase();
+            o.put(C.MOTOR_DURATION, durationType);
             add(o);
             return add(makeNode(C.MOTOR_STOP).put(C.PORT, port.toLowerCase()));
         }
@@ -263,33 +179,8 @@ public final class ThymioStackMachineVisitor extends AbstractStackMachineVisitor
     }
 
     @Override
-    public Void visitPlayRecordingAction(PlayRecordingAction playRecordingAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitRecordStartAction(RecordStartAction recordStartAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitRecordStopAction(RecordStopAction recordStopAction) {
-        return null;
-    }
-
-    @Override
     public Void visitSoundSensor(SoundSensor soundSensor) {
         return add(makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.SOUND).put(C.MODE, C.VOLUME));
-    }
-
-    @Override
-    public Void visitTapSensor(TapSensor tapSensor) {
-        return add(makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.TOUCH));
-    }
-
-    @Override
-    public Void visitTemperatureSensor(TemperatureSensor temperatureSensor) {
-        return null;
     }
 
     @Override
@@ -307,6 +198,21 @@ public final class ThymioStackMachineVisitor extends AbstractStackMachineVisitor
     }
 
     @Override
+    public Void visitSendIRAction(SendIRAction sendIRAction) {
+        return null;
+    }
+
+    @Override
+    public Void visitReceiveIRAction(ReceiveIRAction receiveIRAction) {
+        return null;
+    }
+
+    @Override
+    public Void visitResetSensor(ResetSensor resetSensor) {
+        return null;
+    }
+
+    @Override
     public Void visitToneAction(ToneAction toneAction) {
         toneAction.frequency.accept(this);
         toneAction.duration.accept(this);
@@ -319,12 +225,11 @@ public final class ThymioStackMachineVisitor extends AbstractStackMachineVisitor
         turnAction.param.getSpeed().accept(this);
         boolean speedOnly = !processOptionalDuration(turnAction.param.getDuration());
         ITurnDirection turnDirection = turnAction.direction;
-        JSONObject o =
-            makeNode(C.TURN_ACTION).put(C.TURN_DIRECTION, turnDirection.toString().toLowerCase()).put(C.SPEED_ONLY, speedOnly);
+        JSONObject o = makeNode(C.TURN_ACTION).put(C.TURN_DIRECTION, turnDirection.toString().toLowerCase()).put(C.SPEED_ONLY, speedOnly).put(C.SET_TIME, false);
         if ( speedOnly ) {
-            return add(o.put(C.SET_TIME, false));
+            return add(o);
         } else {
-            add(o.put(C.SET_TIME, true));
+            add(o);
             return add(makeNode(C.STOP_DRIVE));
         }
     }

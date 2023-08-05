@@ -23,7 +23,7 @@ define(["require", "exports", "robot.ev3", "./robot.actuators", "./robot.sensors
             return _this;
         }
         RobotNxt.prototype.configure = function (configuration) {
-            this.chassis = new robot_actuators_1.NXTChassis(this.id, configuration, this.pose);
+            this.chassis = new robot_actuators_1.NXTChassis(this.id, configuration, 2, this.pose);
             var sensors = configuration['SENSORS'];
             var _loop_1 = function (c) {
                 console.log(sensors[c]['TYPE']);

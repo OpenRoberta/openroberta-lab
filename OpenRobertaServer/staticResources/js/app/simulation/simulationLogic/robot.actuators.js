@@ -15,7 +15,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 define(["require", "exports", "interpreter.constants", "simulation.math", "guiState.controller", "./simulation.objects", "util", "jquery", "blockly"], function (require, exports, C, SIMATH, GUISTATE_C, simulation_objects_1, UTIL, $, Blockly) {
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.Motors = exports.PinActuators = exports.MbotRGBLed = exports.ThymioSoundLed = exports.ThymioTemperatureLeds = exports.ThymioProxHLeds = exports.ThymioButtonLeds = exports.ThymioCircleLeds = exports.ThymioRGBLeds = exports.RGBLed = exports.MbotDisplay = exports.MbedDisplay = exports.MatrixDisplay = exports.WebAudio = exports.TTS = exports.StatusLed = exports.MbotChassis = exports.ThymioChassis = exports.NXTChassis = exports.EV3Chassis = exports.LegoChassis = exports.RobotinoChassis = exports.ChassisDiffDrive = exports.ChassisMobile = void 0;
+    exports.Motors = exports.PinActuators = exports.MbotRGBLed = exports.ThymioSoundLed = exports.ThymioTemperatureLeds = exports.ThymioProxHLeds = exports.ThymioButtonLeds = exports.ThymioCircleLeds = exports.EdisonLeds = exports.ThymioRGBLeds = exports.RGBLed = exports.MbotDisplay = exports.MbedDisplay = exports.MatrixDisplay = exports.WebAudio = exports.TTS = exports.StatusLed = exports.MbotChassis = exports.ThymioChassis = exports.EdisonChassis = exports.NXTChassis = exports.EV3Chassis = exports.LegoChassis = exports.RobotinoChassis = exports.ChassisDiffDrive = exports.ChassisMobile = void 0;
     var ChassisMobile = /** @class */ (function () {
         function ChassisMobile(id) {
             this.drawPriority = 0;
@@ -66,7 +66,7 @@ define(["require", "exports", "interpreter.constants", "simulation.math", "guiSt
     exports.ChassisMobile = ChassisMobile;
     var ChassisDiffDrive = /** @class */ (function (_super) {
         __extends(ChassisDiffDrive, _super);
-        function ChassisDiffDrive(id, configuration) {
+        function ChassisDiffDrive(id, configuration, maxRotation) {
             var _this = _super.call(this, id) || this;
             _this.left = { port: '', speed: 0 };
             _this.right = { port: '', speed: 0 };
@@ -83,7 +83,7 @@ define(["require", "exports", "interpreter.constants", "simulation.math", "guiSt
             _this.TRACKWIDTH = configuration['TRACKWIDTH'] * 3;
             _this.WHEELDIAMETER = configuration['WHEELDIAMETER'];
             _this.ENC = 360.0 / (3.0 * Math.PI * _this.WHEELDIAMETER);
-            _this.MAXPOWER = (2 * _this.WHEELDIAMETER * Math.PI * 3) / 100;
+            _this.MAXPOWER = (maxRotation * _this.WHEELDIAMETER * Math.PI * 3) / 100;
             for (var item in configuration['ACTUATORS']) {
                 var motor = configuration['ACTUATORS'][item];
                 if (motor['MOTOR_DRIVE'] === 'RIGHT') {
@@ -728,8 +728,8 @@ define(["require", "exports", "interpreter.constants", "simulation.math", "guiSt
     exports.RobotinoChassis = RobotinoChassis;
     var LegoChassis = /** @class */ (function (_super) {
         __extends(LegoChassis, _super);
-        function LegoChassis(id, configuration, pose) {
-            var _this = _super.call(this, id, configuration) || this;
+        function LegoChassis(id, configuration, maxRotation, pose) {
+            var _this = _super.call(this, id, configuration, maxRotation) || this;
             _this.backLeft = {
                 x: -30,
                 y: -20,
@@ -881,8 +881,8 @@ define(["require", "exports", "interpreter.constants", "simulation.math", "guiSt
     exports.LegoChassis = LegoChassis;
     var EV3Chassis = /** @class */ (function (_super) {
         __extends(EV3Chassis, _super);
-        function EV3Chassis(id, configuration, pose) {
-            var _this = _super.call(this, id, configuration, pose) || this;
+        function EV3Chassis(id, configuration, maxRotation, pose) {
+            var _this = _super.call(this, id, configuration, maxRotation, pose) || this;
             _this.geom = {
                 x: -30,
                 y: -20,
@@ -983,7 +983,7 @@ define(["require", "exports", "interpreter.constants", "simulation.math", "guiSt
                 var y = display.y;
                 var $display = $('#display' + this.id);
                 if (text) {
-                    $display.html($display.html() + '<text x=' + x * 10 + ' y=' + (y + 1) * 16 + '>' + text + '</text>');
+                    $display.html($display.html() + '<text x=' + x * 10 + ' "y=' + (y + 1) * 16 + '">' + text + '</text>');
                 }
                 if (display.picture) {
                     $display.html(this.display[display.picture]);
@@ -998,8 +998,8 @@ define(["require", "exports", "interpreter.constants", "simulation.math", "guiSt
     exports.EV3Chassis = EV3Chassis;
     var NXTChassis = /** @class */ (function (_super) {
         __extends(NXTChassis, _super);
-        function NXTChassis(id, configuration, pose) {
-            var _this = _super.call(this, id, configuration, pose) || this;
+        function NXTChassis(id, configuration, maxRotation, pose) {
+            var _this = _super.call(this, id, configuration, maxRotation, pose) || this;
             _this.geom = {
                 x: -30,
                 y: -20,
@@ -1044,7 +1044,7 @@ define(["require", "exports", "interpreter.constants", "simulation.math", "guiSt
             var display = myRobot.interpreter.getRobotBehaviour().getActionState('display', true);
             if (display) {
                 if (display.text) {
-                    $('#display').html($('#display').html() + '<text x=' + display.x * 1.5 + ' y=' + display.y * 12 + '>' + display.text + '</text>');
+                    $('#display').html($('#display').html() + '<text x=' + display.x * 1.5 + ' "y=' + display.y * 12 + '">' + display.text + '</text>');
                 }
                 if (display.clear) {
                     $('#display').html('');
@@ -1054,10 +1054,208 @@ define(["require", "exports", "interpreter.constants", "simulation.math", "guiSt
         return NXTChassis;
     }(LegoChassis));
     exports.NXTChassis = NXTChassis;
+    var EdisonChassis = /** @class */ (function (_super) {
+        __extends(EdisonChassis, _super);
+        function EdisonChassis(id, configuration, maxRotation, pose) {
+            var _this = _super.call(this, id, configuration, maxRotation) || this;
+            _this.geom = {
+                x: -5.5,
+                y: -11.25,
+                w: 24,
+                h: 22.5,
+                radius: 0,
+                color: '#f2f2f2',
+            };
+            _this.backLeft = {
+                x: -5.5,
+                y: -11.25,
+                rx: 0,
+                ry: 0,
+                bumped: false,
+            };
+            _this.backMiddle = {
+                x: -5.5,
+                y: 0,
+                rx: 0,
+                ry: 0,
+            };
+            _this.backRight = {
+                x: -5.5,
+                y: 11.25,
+                rx: 0,
+                ry: 0,
+                bumped: false,
+            };
+            _this.frontLeft = {
+                x: 18.5,
+                y: -11.25,
+                rx: 0,
+                ry: 0,
+                bumped: false,
+            };
+            _this.frontMiddle = {
+                x: 18.5,
+                y: 0,
+                rx: 0,
+                ry: 0,
+            };
+            _this.frontRight = {
+                x: 18.5,
+                y: 11.25,
+                rx: 0,
+                ry: 0,
+                bumped: false,
+            };
+            _this.img = new Image();
+            _this.topView = '<svg id="brick' +
+                _this.id +
+                '" width="360" height="440" viewBox="0 0 360 440" xmlns="http://www.w3.org/2000/svg">\n' +
+                '  <defs>\n' +
+                '    <style>.cls-1{fill:#fff;}.cls-2{fill:none;stroke:#fff;stroke-miterlimit:10;}.cls-3{fill:#ff7000;};}</style>\n' +
+                '        <radialGradient id="radialGradientL' +
+                _this.id +
+                '" cx="0.5" cy="0.5" r="1"  xlink:href="#linearGradientL' +
+                _this.id +
+                '"/>' +
+                '        <radialGradient id="radialGradientR' +
+                _this.id +
+                '" cx="0.5" cy="0.5" r="1"  xlink:href="#linearGradientR' +
+                _this.id +
+                '"/>' +
+                '        <linearGradient id="linearGradientL' +
+                _this.id +
+                '">' +
+                '            <stop id="stopOnL' +
+                _this.id +
+                '" offset="0" style="stop-color:#00ff00;stop-opacity:1;"/>' +
+                '            <stop id="stopOffL' +
+                _this.id +
+                '" offset="1" style="stop-color:#00ff00;stop-opacity:0;"/>' +
+                '        </linearGradient>' +
+                '        <linearGradient id="linearGradientR' +
+                _this.id +
+                '">' +
+                '            <stop id="stopOnR' +
+                _this.id +
+                '" offset="0" style="stop-color:#00ff00;stop-opacity:1;"/>' +
+                '            <stop id="stopOffR' +
+                _this.id +
+                '" offset="1" style="stop-color:#00ff00;stop-opacity:0;"/>' +
+                '        </linearGradient>' +
+                '    </defs>' +
+                '  <rect id="background" class="cls-1" width="360" height="440" style="fill: #333333;"/>' +
+                '  <g transform="matrix(1, 0, 0, 1, -35, 5)">\n' +
+                '    <g>\n' +
+                '      <g id="main">\n' +
+                '        <path class="cls-3" d="m380.51,26.85c5.22,1.73,9.49,7.65,9.49,13.15v380c0,5.5-4.5,10-10,10H50c-5.5,0-10-4.5-10-10V40c0-5.5,4.27-11.42,9.49-13.15,0,0,81.01-26.85,165.51-26.85s165.51,26.85,165.51,26.85Z"/>\n' +
+                '      </g>\n' +
+                '    </g>\n' +
+                '    <g id="bricks">\n' +
+                '      <circle id="pin" class="cls-2" cx="66" cy="403.5" r="11"/>\n' +
+                '      <circle id="pin-2" class="cls-2" cx="109.5" cy="404" r="11"/>\n' +
+                '      <circle id="pin-3" class="cls-2" cx="109.5" cy="360.5" r="11"/>\n' +
+                '      <circle id="pin-4" class="cls-2" cx="109.5" cy="317" r="11"/>\n' +
+                '      <circle id="pin-5" class="cls-2" cx="109.5" cy="273.5" r="11"/>\n' +
+                '      <circle id="pin-6" class="cls-2" cx="109.5" cy="230" r="11"/>\n' +
+                '      <path id="pin-7" class="cls-2" d="m109.5,197.5c6.08,0,11-4.92,11-11s-4.92-11-11-11c-6.08,0-11,4.92-11,11,0,6.08,4.92,11,11,11Z"/>\n' +
+                '      <circle id="pin-8" class="cls-2" cx="109.5" cy="143" r="11"/>\n' +
+                '      <circle id="pin-9" class="cls-2" cx="109.5" cy="99.5" r="11"/>\n' +
+                '      <circle id="pin-10" class="cls-2" cx="66" cy="360" r="11"/>\n' +
+                '      <path id="pin-11" class="cls-2" d="m66.5,305.5c-6.08,0-11,4.92-11,11s4.92,11,11,11,11-4.92,11-11-4.92-11-11-11Z"/>\n' +
+                '      <circle id="pin-12" class="cls-2" cx="66.5" cy="273" r="11"/>\n' +
+                '      <circle id="pin-13" class="cls-2" cx="66.5" cy="229.5" r="11"/>\n' +
+                '      <circle id="pin-14" class="cls-2" cx="66.5" cy="186" r="11" transform="translate(-96.2 73.99) rotate(-35.78)"/>\n' +
+                '      <circle id="pin-15" class="cls-2" cx="66.5" cy="142.5" r="11"/>\n' +
+                '      <circle id="pin-16" class="cls-2" cx="66.5" cy="99" r="11"/>\n' +
+                '      <circle id="pin-17" class="cls-2" cx="320.5" cy="403.5" r="11"/>\n' +
+                '      <path id="pin-18" class="cls-2" d="m364,393c-6.08,0-11,4.92-11,11s4.92,11,11,11,11-4.92,11-11-4.92-11-11-11Z"/>\n' +
+                '      <circle id="pin-19" class="cls-2" cx="364" cy="360.5" r="11"/>\n' +
+                '      <circle id="pin-20" class="cls-2" cx="364" cy="317" r="11" transform="translate(-116.65 272.67) rotate(-35.78)"/>\n' +
+                '      <circle id="pin-21" class="cls-2" cx="364" cy="273.5" r="11"/>\n' +
+                '      <circle id="pin-22" class="cls-2" cx="364" cy="230" r="11"/>\n' +
+                '      <circle id="pin-23" class="cls-2" cx="364" cy="186.5" r="11"/>\n' +
+                '      <circle id="pin-24" class="cls-2" cx="364" cy="143" r="11"/>\n' +
+                '      <circle id="pin-25" class="cls-2" cx="364" cy="99.5" r="11"/>\n' +
+                '      <circle id="pin-26" class="cls-2" cx="320.5" cy="360" r="11"/>\n' +
+                '      <circle id="pin-27" class="cls-2" cx="321" cy="316.5" r="11"/>\n' +
+                '      <circle id="pin-28" class="cls-2" cx="321" cy="273" r="11"/>\n' +
+                '      <circle id="pin-29" class="cls-2" cx="321" cy="229.5" r="11"/>\n' +
+                '      <circle id="pin-30" class="cls-2" cx="321" cy="186" r="11"/>\n' +
+                '      <circle id="pin-31" class="cls-2" cx="321" cy="142.5" r="11"/>\n' +
+                '      <circle id="pin-32" class="cls-2" cx="321" cy="99" r="11"/>\n' +
+                '    </g>\n' +
+                '    <circle id="rec' +
+                _this.id +
+                '" class="simKey" cx="215" cy="359.27" r="27.78" fill="#666666"/>\n' +
+                '    <g id="button_2">\n' +
+                '      <path fill="#666666" d="m187.22,336.6c0,1.1.54,1.28,1.2.4,0,0,8.8-11.73,26.02-11.73,17.22,0,27.05,11.8,27.05,11.8.7.85,1.28.64,1.28-.46v-51.56c0-1.1-.9-2-2-2h-51.56c-1.1,0-2,.9-2,2v51.56Z"/>\n' +
+                '    </g>\n' +
+                '    <g id="button_3">\n' +
+                '    <path fill="#666666" id="play' +
+                _this.id +
+                '" class="simKey" ' +
+                '      d="m216,230.11c-.55-.95-1.45-.95-2,0l-26,45.03c-.55.95-.1,1.73,1,1.73h52c1.1,0,1.55-.78,1-1.73l-26-45.03Z"/>\n' +
+                '    </g>\n' +
+                '    <ellipse id="lled-' +
+                _this.id +
+                '" cx="125" cy="45" rx="20" ry="15"' +
+                ' style="fill:url(#radialGradientL' +
+                _this.id +
+                ');fill-opacity:1;stroke:none;stroke-width:0.800002"/>' +
+                '    <ellipse id="rled-' +
+                _this.id +
+                '" cx="305" cy="45" rx="20" ry="15"' +
+                ' style="fill:url(#radialGradientR' +
+                _this.id +
+                ');fill-opacity:1;stroke:none;stroke-width:0.800002"/>' +
+                '  </g>\n' +
+                '</svg>';
+            _this.wheelBack = {
+                x: 0,
+                y: 0,
+                w: 0,
+                h: 0,
+                color: '#000000',
+            };
+            _this.wheelLeft = {
+                x: 0,
+                y: 0,
+                w: 0,
+                h: 0,
+                color: '#000000',
+            };
+            _this.wheelRight = {
+                x: 0,
+                y: 0,
+                w: 0,
+                h: 0,
+                color: '#000000',
+            };
+            _this.transformNewPose(pose, _this);
+            _this.img.src = '../../css/img/simulator/edison.png';
+            _this.right.port = 'RMOTOR';
+            _this.right.speed = 0;
+            _this.left.port = 'LMOTOR';
+            _this.left.speed = 0;
+            $('#simRobotContent').append(_this.topView);
+            $('#brick' + _this.id).hide();
+            return _this;
+        }
+        EdisonChassis.prototype.draw = function (rCtx, myRobot) {
+            rCtx.save();
+            rCtx.shadowBlur = 5;
+            rCtx.shadowColor = 'black';
+            rCtx.drawImage(this.img, 0, 0, this.img.width, this.img.height, this.geom.x, this.geom.y, this.geom.w, this.geom.h);
+            rCtx.restore();
+        };
+        EdisonChassis.prototype.reset = function () { };
+        return EdisonChassis;
+    }(ChassisDiffDrive));
+    exports.EdisonChassis = EdisonChassis;
     var ThymioChassis = /** @class */ (function (_super) {
         __extends(ThymioChassis, _super);
-        function ThymioChassis(id, configuration, pose) {
-            var _this = _super.call(this, id, configuration) || this;
+        function ThymioChassis(id, configuration, maxRotation, pose) {
+            var _this = _super.call(this, id, configuration, maxRotation) || this;
             _this.geom = {
                 x: -9,
                 y: -17,
@@ -1112,22 +1310,32 @@ define(["require", "exports", "interpreter.constants", "simulation.math", "guiSt
                 '    <defs id="defs1608">' +
                 '        <radialGradient id="radialGradientL' +
                 _this.id +
-                '" gradientUnits="userSpaceOnUse" cx="-295.9747" cy="513.95087" r="89.90358" gradientTransform="matrix(0.611236,0,0,0.611236,1782.0945,50.568234)" xlink:href="#linearGradient' +
+                '" gradientUnits="userSpaceOnUse" cx="-295.9747" cy="513.95087" r="89.90358" gradientTransform="matrix(0.611236,0,0,0.611236,1782.0945,50.568234)" xlink:href="#linearGradientL' +
                 _this.id +
                 '"/>' +
-                '        <linearGradient id="linearGradient' +
+                '        <linearGradient id="linearGradientL' +
                 _this.id +
                 '">' +
-                '            <stop id="stopOn' +
+                '            <stop id="stopOnL' +
                 _this.id +
                 '" offset="0" style="stop-color:#00ff00;stop-opacity:1;"/>' +
-                '            <stop id="stopOff' +
+                '            <stop id="stopOffL' +
+                _this.id +
+                '" offset="1" style="stop-color:#00ff00;stop-opacity:0;"/>' +
+                '        </linearGradient>' +
+                '        <linearGradient id="linearGradientR' +
+                _this.id +
+                '">' +
+                '            <stop id="stopOnR' +
+                _this.id +
+                '" offset="0" style="stop-color:#00ff00;stop-opacity:1;"/>' +
+                '            <stop id="stopOffR' +
                 _this.id +
                 '" offset="1" style="stop-color:#00ff00;stop-opacity:0;"/>' +
                 '        </linearGradient>' +
                 '        <radialGradient id="radialGradientR' +
                 _this.id +
-                '" gradientUnits="userSpaceOnUse" cx="-295.9747" cy="513.95087" r="89.90358" gradientTransform="matrix(0.611236,0,0,0.611236,1938.8702,50.568234)" xlink:href="#linearGradient' +
+                '" gradientUnits="userSpaceOnUse" cx="-295.9747" cy="513.95087" r="89.90358" gradientTransform="matrix(0.611236,0,0,0.611236,1938.8702,50.568234)" xlink:href="#linearGradientR' +
                 _this.id +
                 '"/>' +
                 '    </defs>' +
@@ -1308,7 +1516,6 @@ define(["require", "exports", "interpreter.constants", "simulation.math", "guiSt
                 h: 0,
                 color: '#000000',
             };
-            _this.MAXPOWER = (1.5 * _this.WHEELDIAMETER * Math.PI * 3) / 100;
             _this.transformNewPose(pose, _this);
             _this.wheelFrontRight.x = _this.wheelRight.x + _this.wheelRight.w;
             _this.wheelFrontRight.y = _this.wheelRight.y + _this.wheelRight.h;
@@ -1368,8 +1575,8 @@ define(["require", "exports", "interpreter.constants", "simulation.math", "guiSt
     exports.ThymioChassis = ThymioChassis;
     var MbotChassis = /** @class */ (function (_super) {
         __extends(MbotChassis, _super);
-        function MbotChassis(id, configuration, pose) {
-            var _this = _super.call(this, id, configuration) || this;
+        function MbotChassis(id, configuration, maxRotation, pose) {
+            var _this = _super.call(this, id, configuration, maxRotation) || this;
             _this.geom = {
                 x: -10,
                 y: -14,
@@ -2133,16 +2340,21 @@ define(["require", "exports", "interpreter.constants", "simulation.math", "guiSt
     }(MatrixDisplay));
     exports.MbotDisplay = MbotDisplay;
     var RGBLed = /** @class */ (function () {
-        function RGBLed(p, port) {
+        function RGBLed(p, reset, port, radius) {
             this.color = 'grey';
             this.r = 20;
             this.drawPriority = 11;
             this.x = p.x;
             this.y = p.y;
-            this.port = port || 0;
+            this.toReset = reset;
+            this.port = port || '0';
+            this.r = radius || this.r;
         }
         RGBLed.prototype.draw = function (rCtx, myRobot) {
             if (this.color != 'grey') {
+                if (!Array.isArray(this.color)) {
+                    this.color = [255, 0, 0];
+                }
                 var rad = rCtx.createRadialGradient(this.x, this.y, this.r / 2, this.x, this.y, this.r * 1.5);
                 rad.addColorStop(0, 'rgba(' + this.color[0] + ',' + this.color[1] + ',' + this.color[2] + ',1)');
                 rad.addColorStop(1, 'rgba(' + this.color[0] + ',' + this.color[1] + ',' + this.color[2] + ',0)');
@@ -2154,9 +2366,10 @@ define(["require", "exports", "interpreter.constants", "simulation.math", "guiSt
         };
         RGBLed.prototype.reset = function () {
             this.color = 'grey';
+            $('#' + this.port + '-' + this.id).css({ fill: 'rgba(0, 0, 0, 0)' });
         };
         RGBLed.prototype.updateAction = function (myRobot, dt, interpreterRunning) {
-            var led = myRobot.interpreter.getRobotBehaviour().getActionState('led', false);
+            var led = myRobot.interpreter.getRobotBehaviour().getActionState('led', this.toReset);
             if (led) {
                 if (led[this.port]) {
                     led = led[this.port];
@@ -2175,6 +2388,12 @@ define(["require", "exports", "interpreter.constants", "simulation.math", "guiSt
                         this.color = led.color;
                     }
                 }
+                if (this.color === 'grey') {
+                    $('#' + this.port + '-' + myRobot.id).css({ fill: 'rgba(' + this.color[0] + ', ' + this.color[1] + ', ' + this.color[2] + ', 0)' });
+                }
+                else {
+                    $('#' + this.port + '-' + myRobot.id).css({ fill: 'rgba(' + this.color[0] + ', ' + this.color[1] + ', ' + this.color[2] + ', 255)' });
+                }
             }
         };
         return RGBLed;
@@ -2192,35 +2411,57 @@ define(["require", "exports", "interpreter.constants", "simulation.math", "guiSt
             this.change();
         }
         ThymioRGBLeds.prototype.draw = function (rCtx, myRobot) {
-            if (this.color) {
-                var radR = rCtx.createRadialGradient(this.xR, this.yR, 0, this.xR, this.yR, this.r);
-                radR.addColorStop(0, 'rgba(' + this.color[0] + ',' + this.color[1] + ',' + this.color[2] + ',1)');
-                radR.addColorStop(1, 'rgba(' + this.color[0] + ',' + this.color[1] + ',' + this.color[2] + ',0)');
+            if (this.colorL) {
                 var radL = rCtx.createRadialGradient(this.xL, this.yL, 0, this.xL, this.yL, this.r);
-                radL.addColorStop(0, 'rgba(' + this.color[0] + ',' + this.color[1] + ',' + this.color[2] + ',1)');
-                radL.addColorStop(1, 'rgba(' + this.color[0] + ',' + this.color[1] + ',' + this.color[2] + ',0)');
-                rCtx.fillStyle = radR;
-                rCtx.beginPath();
-                rCtx.arc(this.xR, this.yR, this.r * 1.5, 0, Math.PI * 2);
-                rCtx.fill();
+                radL.addColorStop(0, 'rgba(' + this.colorL[0] + ',' + this.colorL[1] + ',' + this.colorL[2] + ',1)');
+                radL.addColorStop(1, 'rgba(' + this.colorL[0] + ',' + this.colorL[1] + ',' + this.colorL[2] + ',0)');
                 rCtx.fillStyle = radL;
                 rCtx.beginPath();
                 rCtx.arc(this.xL, this.yL, this.r * 1.5, 0, Math.PI * 2);
                 rCtx.fill();
             }
+            if (this.colorR) {
+                var radR = rCtx.createRadialGradient(this.xR, this.yR, 0, this.xR, this.yR, this.r);
+                radR.addColorStop(0, 'rgba(' + this.colorR[0] + ',' + this.colorR[1] + ',' + this.colorR[2] + ',1)');
+                radR.addColorStop(1, 'rgba(' + this.colorR[0] + ',' + this.colorR[1] + ',' + this.colorR[2] + ',0)');
+                rCtx.fillStyle = radR;
+                rCtx.beginPath();
+                rCtx.arc(this.xR, this.yR, this.r * 1.5, 0, Math.PI * 2);
+                rCtx.fill();
+            }
         };
         ThymioRGBLeds.prototype.reset = function () {
-            this.color = null;
+            this.colorR = this.colorL = null;
             this.change();
         };
         ThymioRGBLeds.prototype.change = function () {
-            if (this.color) {
-                $('#stopOn' + this.myRobotId).css({ 'stop-color': 'rgb(' + this.color[0] + ',' + this.color[1] + ',' + this.color[2] + ')', 'stop-opacity': 1 });
-                $('#stopOff' + this.myRobotId).css({ 'stop-color': 'rgb(' + this.color[0] + ',' + this.color[1] + ',' + this.color[2] + ')', 'stop-opacity': 0 });
+            if (this.colorL) {
+                $('#stopOnL' + this.myRobotId).css({
+                    'stop-color': 'rgb(' + this.colorL[0] + ',' + this.colorL[1] + ',' + this.colorL[2] + ')',
+                    'stop-opacity': 1,
+                });
+                $('#stopOffL' + this.myRobotId).css({
+                    'stop-color': 'rgb(' + this.colorL[0] + ',' + this.colorL[1] + ',' + this.colorL[2] + ')',
+                    'stop-opacity': 0,
+                });
             }
             else {
-                $('#stopOn' + this.myRobotId).css({ 'stop-color': this.chassisColor, 'stop-opacity': 0 });
-                $('#stopOff' + this.myRobotId).css({ 'stop-color': this.chassisColor, 'stop-opacity': 0 });
+                $('#stopOnL' + this.myRobotId).css({ 'stop-color': this.chassisColor, 'stop-opacity': 0 });
+                $('#stopOffL' + this.myRobotId).css({ 'stop-color': this.chassisColor, 'stop-opacity': 0 });
+            }
+            if (this.colorR) {
+                $('#stopOnR' + this.myRobotId).css({
+                    'stop-color': 'rgb(' + this.colorR[0] + ',' + this.colorR[1] + ',' + this.colorR[2] + ')',
+                    'stop-opacity': 1,
+                });
+                $('#stopOffR' + this.myRobotId).css({
+                    'stop-color': 'rgb(' + this.colorR[0] + ',' + this.colorR[1] + ',' + this.colorR[2] + ')',
+                    'stop-opacity': 0,
+                });
+            }
+            else {
+                $('#stopOnR' + this.myRobotId).css({ 'stop-color': this.chassisColor, 'stop-opacity': 0 });
+                $('#stopOffR' + this.myRobotId).css({ 'stop-color': this.chassisColor, 'stop-opacity': 0 });
             }
         };
         ThymioRGBLeds.prototype.updateAction = function (myRobot, dt, interpreterRunning) {
@@ -2229,10 +2470,10 @@ define(["require", "exports", "interpreter.constants", "simulation.math", "guiSt
                 if (led['top']) {
                     led = led['top'];
                     if (led.mode && led.mode === 'off') {
-                        this.color = null;
+                        this.colorL = this.colorR = null;
                     }
                     else if (led.color) {
-                        this.color = led.color;
+                        this.colorL = this.colorR = led.color;
                     }
                 }
                 this.change();
@@ -2241,6 +2482,38 @@ define(["require", "exports", "interpreter.constants", "simulation.math", "guiSt
         return ThymioRGBLeds;
     }());
     exports.ThymioRGBLeds = ThymioRGBLeds;
+    var EdisonLeds = /** @class */ (function (_super) {
+        __extends(EdisonLeds, _super);
+        function EdisonLeds() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        EdisonLeds.prototype.updateAction = function (myRobot, dt, interpreterRunning) {
+            var led = myRobot.interpreter.getRobotBehaviour().getActionState('led', true);
+            if (led) {
+                if (led['lled']) {
+                    led = led['lled'];
+                    if (led.mode && led.mode === 'off') {
+                        this.colorL = null;
+                    }
+                    else {
+                        this.colorL = [255, 0, 0];
+                    }
+                }
+                if (led['rled']) {
+                    led = led['rled'];
+                    if (led.mode && led.mode === 'off') {
+                        this.colorR = null;
+                    }
+                    else {
+                        this.colorR = [255, 0, 0];
+                    }
+                }
+                this.change();
+            }
+        };
+        return EdisonLeds;
+    }(ThymioRGBLeds));
+    exports.EdisonLeds = EdisonLeds;
     var ThymioCircleLeds = /** @class */ (function () {
         function ThymioCircleLeds(id) {
             this.leds = [0, 0, 0, 0, 0, 0, 0, 0];
@@ -2505,7 +2778,7 @@ define(["require", "exports", "interpreter.constants", "simulation.math", "guiSt
             return _super !== null && _super.apply(this, arguments) || this;
         }
         MbotRGBLed.prototype.updateAction = function (myRobot, dt, interpreterRunning) {
-            var led = myRobot.interpreter.getRobotBehaviour().getActionState('leds', false);
+            var led = myRobot.interpreter.getRobotBehaviour().getActionState('leds', this.toReset);
             if (led) {
                 if (led[this.port]) {
                     led = led[this.port];

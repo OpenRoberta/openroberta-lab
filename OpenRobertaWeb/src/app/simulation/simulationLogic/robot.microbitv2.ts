@@ -110,7 +110,7 @@ export default class RobotMicrobitv2 extends RobotMicrobit {
                     this[myComponentName] = new WebAudio();
                     break;
                 case 'RGBLED':
-                    this[myComponentName] = new RGBLed({ x: 463, y: 643 });
+                    this[myComponentName] = new RGBLed({ x: 463, y: 643 }, false);
                     break;
                 case 'ANALOG_INPUT': {
                     let myPinIndex: number = mySensorPins.findIndex((pin) => pin.port === configuration['ACTUATORS'][component]['PIN1']);

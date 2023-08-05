@@ -28,10 +28,10 @@ export default class RobotRob3rta extends RobotBaseStationary {
         $.validator.addClassRules('range', { required: true, number: true });
         this.infraredSensor = new Rob3rtaInfraredSensor();
         this.temperatureSensor = new TemperatureSensor();
-        this.rgbLedLeft = new RGBLed({ x: 575, y: 227 }, 1);
-        this.rgbLedRight = new RGBLed({ x: 183, y: 273 }, 2);
-        this.ledLeft = new RGBLed({ x: 470, y: 680 }, 4);
-        this.ledRight = new RGBLed({ x: 370, y: 680 }, 3);
+        this.rgbLedLeft = new RGBLed({ x: 575, y: 227 }, false, '1');
+        this.rgbLedRight = new RGBLed({ x: 183, y: 273 }, false, '2');
+        this.ledLeft = new RGBLed({ x: 470, y: 680 }, false, '4');
+        this.ledRight = new RGBLed({ x: 370, y: 680 }, false, '3');
         let mySensorPins: DrawableTouchKey[] = [
             {
                 x: 280,

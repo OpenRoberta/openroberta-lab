@@ -246,7 +246,7 @@ define(["require", "exports", "jquery", "util", "blockly", "simulation.types"], 
             }
             var $timerValuesView = $('#timerValuesView');
             $timerValuesView.html('');
-            $timerValuesView.append(this.timer.getLabel());
+            //$timerValuesView.append(this.timer.getLabel());
             var $sensorValuesView = $('#sensorValuesView');
             $sensorValuesView.html('');
             var myLabels = [];

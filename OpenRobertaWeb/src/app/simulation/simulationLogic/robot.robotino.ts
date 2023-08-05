@@ -1,19 +1,18 @@
 import { Pose, RobotBaseMobile } from 'robot.base.mobile';
-import { CameraSensor, Keys, OdometrySensor, OpticalSensor, RobotinoInfraredSensor, RobotinoTouchSensor, Timer } from 'robot.sensors';
-import { RobotinoChassis, StatusLed, TTS, WebAudio } from './robot.actuators';
+import { CameraSensor, Keys, OdometrySensor, OpticalSensor, RobotinoInfraredSensors, RobotinoTouchSensor, Timer } from 'robot.sensors';
+import { RobotinoChassis, TTS, WebAudio } from './robot.actuators';
 import { RobotBase, SelectionListener } from 'robot.base';
 import { Interpreter } from 'interpreter.interpreter';
 
 export default class RobotRobotino extends RobotBaseMobile {
     chassis: RobotinoChassis;
-    led: StatusLed;
     volume: number = 0.5;
     tts: TTS = new TTS();
     webAudio: WebAudio = new WebAudio();
     override timer: Timer = new Timer(5);
     buttons: Keys;
     override readonly imgList = ['square', 'roboLab.jpg', 'maze'];
-    private infraredSensor: RobotinoInfraredSensor;
+    private infraredSensors: RobotinoInfraredSensors;
     private robotinoTouchSensor: RobotinoTouchSensor;
     private odometrySensor: OdometrySensor;
     private cameraSensor: CameraSensor;
@@ -47,7 +46,7 @@ export default class RobotRobotino extends RobotBaseMobile {
     protected configure(configuration: object): void {
         this.chassis = new RobotinoChassis(this.id, this.pose);
         this.robotinoTouchSensor = new RobotinoTouchSensor();
-        this.infraredSensor = new RobotinoInfraredSensor();
+        this.infraredSensors = new RobotinoInfraredSensors();
         this.odometrySensor = new OdometrySensor();
         this.cameraSensor = new CameraSensor(new Pose(25, 0, 0), (2 * Math.PI) / 5);
         let numOptical: number = Object.keys(configuration['ACTUATORS']).filter((sensor) => configuration['ACTUATORS'][sensor].TYPE == 'OPTICAL').length;

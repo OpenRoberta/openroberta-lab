@@ -41,13 +41,13 @@ public final class WeDoStackMachineVisitor extends AbstractStackMachineVisitor i
     @Override
     public Void visitRgbLedOnAction(RgbLedOnAction rgbLedOnAction) {
         rgbLedOnAction.colour.accept(this);
-        JSONObject o = makeNode(C.LED_ON_ACTION).put(C.NAME, "W");
+        JSONObject o = makeNode(C.RGBLED_ON_ACTION).put(C.NAME, "W");
         return add(o);
     }
 
     @Override
     public Void visitRgbLedOffAction(RgbLedOffAction rgbLedOffAction) {
-        JSONObject o = makeNode(C.LED_OFF_ACTION).put(C.NAME, "W");
+        JSONObject o = makeNode(C.RGBLED_OFF_ACTION).put(C.NAME, "W");
         return add(o);
     }
 

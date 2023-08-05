@@ -41,7 +41,7 @@ define(["require", "exports", "robot.base.mobile", "robot.sensors", "./robot.act
         };
         // this method might go up to BaseMobileRobots as soon as the configuration has detailed information about the sensors geometry and location on the robot
         RobotEv3.prototype.configure = function (configuration) {
-            this.chassis = new robot_actuators_1.EV3Chassis(this.id, configuration, this.pose);
+            this.chassis = new robot_actuators_1.EV3Chassis(this.id, configuration, 2, this.pose);
             this.led = new robot_actuators_1.StatusLed();
             var sensors = configuration['SENSORS'];
             var _loop_1 = function (c) {

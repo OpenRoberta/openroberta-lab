@@ -27,32 +27,32 @@ define(["require", "exports", "robot.ev3", "./robot.actuators", "robot.sensors",
             // due to no information from the configuration, track width and wheel diameter are fix:
             configuration['TRACKWIDTH'] = 9;
             configuration['WHEELDIAMETER'] = 4.3;
-            this.chassis = new robot_actuators_1.ThymioChassis(this.id, configuration, this.pose);
-            this.lineSensor = new robot_sensors_1.ThymioLineSensor({ x: 24, y: 0 });
+            this.chassis = new robot_actuators_1.ThymioChassis(this.id, configuration, 1.5, this.pose);
+            this.lineSensor = new robot_sensors_1.ThymioLineSensors({ x: 24, y: 0 });
             this.infraredSensors = new robot_sensors_1.ThymioInfraredSensors();
             this.tapSensor = new robot_sensors_1.TapSensor();
             this.soundSensor = new robot_sensors_1.VolumeMeterSensor(this);
             var myButtons = [
                 {
                     name: 'forward',
-                    value: false
+                    value: false,
                 },
                 {
                     name: 'backward',
-                    value: false
+                    value: false,
                 },
                 {
                     name: 'left',
-                    value: false
+                    value: false,
                 },
                 {
                     name: 'right',
-                    value: false
+                    value: false,
                 },
                 {
                     name: 'center',
-                    value: false
-                }
+                    value: false,
+                },
             ];
             this.buttons = new robot_sensors_1.EV3Keys(myButtons, this.id);
             var thymio = this;

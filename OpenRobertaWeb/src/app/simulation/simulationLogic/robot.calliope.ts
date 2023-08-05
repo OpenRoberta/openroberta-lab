@@ -116,7 +116,6 @@ export default class RobotCalliope extends RobotBaseStationary {
                 typeValue: 0,
             },
         ];
-        console.log(configuration['SENSORS']);
         for (const component in configuration['SENSORS']) {
             let sensorType = configuration['SENSORS'][component]['TYPE'];
 
@@ -176,7 +175,7 @@ export default class RobotCalliope extends RobotBaseStationary {
                     this[myComponentName] = new WebAudio();
                     break;
                 case 'RGBLED':
-                    this[myComponentName] = new RGBLed({ x: 463, y: 643 });
+                    this[myComponentName] = new RGBLed({ x: 463, y: 643 }, false);
                     break;
                 case 'ANALOG_INPUT': {
                     let myPinIndex: number = mySensorPins.findIndex((pin) => pin.port === configuration['ACTUATORS'][component]['PIN1']);

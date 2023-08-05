@@ -142,20 +142,20 @@ define(["require", "exports", "jquery", "util", "simulation.roberta", "simulatio
     var SimObjectFactory = /** @class */ (function () {
         function SimObjectFactory() {
         }
-        SimObjectFactory.getSimObject = function (id, myScene, selectionListener, shape, type, origin, optColor) {
+        SimObjectFactory.getSimObject = function (id, myScene, selectionListener, shape, type, origin, maxSize, optColor) {
             var params = [];
-            for (var _i = 7; _i < arguments.length; _i++) {
-                params[_i - 7] = arguments[_i];
+            for (var _i = 8; _i < arguments.length; _i++) {
+                params[_i - 8] = arguments[_i];
             }
             switch (shape) {
                 case SimObjectShape.Rectangle: {
-                    return new (RectangleSimulationObject.bind.apply(RectangleSimulationObject, __spreadArray([void 0, id, myScene, selectionListener, type, origin, optColor], params, false)))();
+                    return new (RectangleSimulationObject.bind.apply(RectangleSimulationObject, __spreadArray([void 0, id, myScene, selectionListener, type, origin, maxSize, optColor], params, false)))();
                 }
                 case SimObjectShape.Triangle: {
-                    return new (TriangleSimulationObject.bind.apply(TriangleSimulationObject, __spreadArray([void 0, id, myScene, selectionListener, type, origin, optColor], params, false)))();
+                    return new (TriangleSimulationObject.bind.apply(TriangleSimulationObject, __spreadArray([void 0, id, myScene, selectionListener, type, origin, maxSize, optColor], params, false)))();
                 }
                 case SimObjectShape.Circle: {
-                    return new (CircleSimulationObject.bind.apply(CircleSimulationObject, __spreadArray([void 0, id, myScene, selectionListener, type, origin, optColor], params, false)))();
+                    return new (CircleSimulationObject.bind.apply(CircleSimulationObject, __spreadArray([void 0, id, myScene, selectionListener, type, origin, maxSize, optColor], params, false)))();
                 }
                 case SimObjectShape.Marker: {
                     return new MarkerSimulationObject(id, myScene, selectionListener, type, origin);
@@ -174,6 +174,7 @@ define(["require", "exports", "jquery", "util", "simulation.roberta", "simulatio
                         x: -1000,
                         y: -1000,
                     },
+                    null,
                     object.color], [object.w, object.h], false));
             }
             else if (object instanceof TriangleSimulationObject) {
@@ -186,6 +187,7 @@ define(["require", "exports", "jquery", "util", "simulation.roberta", "simulatio
                         x: -1000,
                         y: -1000,
                     },
+                    null,
                     object.color], [object.ax, object.ay, object.bx, object.by, object.cx, object.cy], false));
             }
             else if (object instanceof CircleSimulationObject) {
@@ -198,6 +200,7 @@ define(["require", "exports", "jquery", "util", "simulation.roberta", "simulatio
                         x: -1000,
                         y: -1000,
                     },
+                    null,
                     object.color], [object.r], false));
             }
         };
@@ -220,10 +223,10 @@ define(["require", "exports", "jquery", "util", "simulation.roberta", "simulatio
     })(SimObjectShape = exports.SimObjectShape || (exports.SimObjectShape = {}));
     var RectangleSimulationObject = /** @class */ (function (_super) {
         __extends(RectangleSimulationObject, _super);
-        function RectangleSimulationObject(myId, myScene, mySelectionListener, type, p, optColor) {
+        function RectangleSimulationObject(myId, myScene, mySelectionListener, type, p, maxSize, optColor) {
             var params = [];
-            for (var _i = 6; _i < arguments.length; _i++) {
-                params[_i - 6] = arguments[_i];
+            for (var _i = 7; _i < arguments.length; _i++) {
+                params[_i - 7] = arguments[_i];
             }
             var _this = _super.call(this, myId, myScene, mySelectionListener, type, optColor) || this;
             _this.w = 100;
@@ -232,6 +235,10 @@ define(["require", "exports", "jquery", "util", "simulation.roberta", "simulatio
             _this.corners = [];
             _this.x = p.x;
             _this.y = p.y;
+            if (maxSize) {
+                _this.w = maxSize / 9;
+                _this.h = maxSize / 9;
+            }
             if (params.length == 2) {
                 _this.w = params[0];
                 _this.h = params[1];
@@ -588,21 +595,21 @@ define(["require", "exports", "jquery", "util", "simulation.roberta", "simulatio
     exports.MarkerSimulationObject = MarkerSimulationObject;
     var CircleSimulationObject = /** @class */ (function (_super) {
         __extends(CircleSimulationObject, _super);
-        function CircleSimulationObject(myId, myScene, mySelectionListener, type, p, optColor) {
+        function CircleSimulationObject(myId, myScene, mySelectionListener, type, p, maxSize, optColor) {
             var params = [];
-            for (var _i = 6; _i < arguments.length; _i++) {
-                params[_i - 6] = arguments[_i];
+            for (var _i = 7; _i < arguments.length; _i++) {
+                params[_i - 7] = arguments[_i];
             }
             var _this = _super.call(this, myId, myScene, mySelectionListener, type, optColor) || this;
-            _this.defaultRadius = 50;
+            _this.r = 50;
             _this.corners = [];
             _this.x = p.x;
             _this.y = p.y;
+            if (maxSize) {
+                _this.r = maxSize / 18;
+            }
             if (params.length == 1) {
                 _this.r = params[0];
-            }
-            else {
-                _this.r = _this.defaultRadius;
             }
             _this.updateCorners();
             return _this;
@@ -826,14 +833,17 @@ define(["require", "exports", "jquery", "util", "simulation.roberta", "simulatio
     exports.CircleSimulationObject = CircleSimulationObject;
     var TriangleSimulationObject = /** @class */ (function (_super) {
         __extends(TriangleSimulationObject, _super);
-        function TriangleSimulationObject(myId, myScene, mySelectionListener, type, p, optColor) {
+        function TriangleSimulationObject(myId, myScene, mySelectionListener, type, p, maxSize, optColor) {
             var params = [];
-            for (var _i = 6; _i < arguments.length; _i++) {
-                params[_i - 6] = arguments[_i];
+            for (var _i = 7; _i < arguments.length; _i++) {
+                params[_i - 7] = arguments[_i];
             }
             var _this = _super.call(this, myId, myScene, mySelectionListener, type, optColor) || this;
             _this.defaultSize = 50;
             _this.corners = [];
+            if (maxSize) {
+                _this.defaultSize = maxSize / 18;
+            }
             if (params.length == 6) {
                 _this.ax = params[0];
                 _this.ay = params[1];
@@ -841,7 +851,6 @@ define(["require", "exports", "jquery", "util", "simulation.roberta", "simulatio
                 _this.by = params[3];
                 _this.cx = params[4];
                 _this.cy = params[5];
-                _this.updateCorners();
             }
             else {
                 _this.ax = p.x - _this.defaultSize;

@@ -128,7 +128,7 @@ define(["require", "exports", "robot.microbit", "./robot.sensors", "./robot.actu
                         this_2[myComponentName] = new robot_actuators_1.WebAudio();
                         break;
                     case 'RGBLED':
-                        this_2[myComponentName] = new robot_actuators_1.RGBLed({ x: 463, y: 643 });
+                        this_2[myComponentName] = new robot_actuators_1.RGBLed({ x: 463, y: 643 }, false);
                         break;
                     case 'ANALOG_INPUT': {
                         var myPinIndex = mySensorPins.findIndex(function (pin) { return pin.port === configuration['ACTUATORS'][component]['PIN1']; });

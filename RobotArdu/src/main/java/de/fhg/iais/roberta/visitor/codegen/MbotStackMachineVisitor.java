@@ -111,7 +111,7 @@ public class MbotStackMachineVisitor extends AbstractStackMachineVisitor impleme
     @Override
     public Void visitRgbLedOffAction(RgbLedOffAction rgbLedOffAction) {
         JSONObject o =
-            makeNode(C.LED_OFF_ACTION)
+            makeNode(C.RGBLED_OFF_ACTION)
                 .put(C.MODE, SC.OFF)
                 .put(C.PORT, rgbLedOffAction.port)
                 .put(C.NAME, "mbot");

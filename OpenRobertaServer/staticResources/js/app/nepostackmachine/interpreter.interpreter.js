@@ -284,9 +284,18 @@ define(["require", "exports", "./interpreter.state", "./neuralnetwork.ui", "./in
                     case C.NN_SETBIAS_STMT:
                         this.neuralNetwork.changeBias(stmt[C.NAME], this.state.pop());
                         break;
-                    case C.LED_ON_ACTION: {
+                    case C.RGBLED_ON_ACTION: {
                         var color_1 = this.state.pop();
                         this.robotBehaviour.ledOnAction(stmt[C.NAME], stmt[C.PORT], color_1);
+                        break;
+                    }
+                    case C.LED_ACTION: {
+                        if (stmt[C.MODE] === 'ON') {
+                            this.robotBehaviour.ledOnAction(stmt[C.NAME], stmt[C.PORT], null);
+                        }
+                        else {
+                            this.robotBehaviour.ledOffAction(stmt[C.NAME], stmt[C.PORT]);
+                        }
                         break;
                     }
                     case C.REMEMBER: {
@@ -506,7 +515,7 @@ define(["require", "exports", "./interpreter.state", "./neuralnetwork.ui", "./in
                         }
                         this.robotBehaviour.lightAction(stmt[C.MODE], color, stmt[C.PORT]);
                         return [0, true];
-                    case C.LED_OFF_ACTION:
+                    case C.RGBLED_OFF_ACTION:
                         this.robotBehaviour.ledOffAction(stmt[C.NAME], stmt[C.PORT]);
                         return [0, true];
                     case C.CIRCLE_LED_ACTION:

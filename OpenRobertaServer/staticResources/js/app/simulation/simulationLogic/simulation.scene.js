@@ -36,7 +36,7 @@ define(["require", "exports", "util", "jquery", "simulation.objects", "robot.bas
             this._redrawObstacles = false;
             this._redrawMarkers = false;
             this._robots = [];
-            this._uniqueObjectId = 0; // 0 is blocked by the standard obstacle
+            this._uniqueObjectId = 0;
             this.sim = sim;
             this.uCanvas = document.createElement('canvas');
             this.uCtx = this.uCanvas.getContext('2d', { willReadFrequently: true }); // unit context
@@ -146,6 +146,7 @@ define(["require", "exports", "util", "jquery", "simulation.objects", "robot.bas
                     obj.shape,
                     simulation_objects_1.SimObjectType.ColorArea,
                     obj.p,
+                    null,
                     obj.color], obj.params, false));
                 newColorAreaList.push(newObject);
             });
@@ -161,6 +162,7 @@ define(["require", "exports", "util", "jquery", "simulation.objects", "robot.bas
                     obj.shape,
                     simulation_objects_1.SimObjectType.Obstacle,
                     obj.p,
+                    null,
                     obj.color], obj.params, false));
                 newObstacleList.push(newObject);
             });
@@ -176,6 +178,7 @@ define(["require", "exports", "util", "jquery", "simulation.objects", "robot.bas
                     obj.shape,
                     simulation_objects_1.SimObjectType.Marker,
                     obj.p,
+                    null,
                     obj.color], obj.params, false));
                 newObject.markerId = obj.markerId;
                 newMarkerList.push(newObject);
@@ -195,7 +198,7 @@ define(["require", "exports", "util", "jquery", "simulation.objects", "robot.bas
             var newObject = simulation_objects_1.SimObjectFactory.getSimObject(this.uniqueObjectId, this, this.sim.selectionListener, shape, type, {
                 x: x,
                 y: y,
-            });
+            }, this.backgroundImg.width);
             if (shape == simulation_objects_1.SimObjectShape.Marker && markerId) {
                 newObject.markerId = markerId;
             }
@@ -287,12 +290,12 @@ define(["require", "exports", "util", "jquery", "simulation.objects", "robot.bas
             var h = this.backgroundImg.height + 20;
             this.uCtx.clearRect(0, 0, w, h);
             this.uCtx.drawImage(this.backgroundImg, 10, 10, this.backgroundImg.width, this.backgroundImg.height);
-            this.drawPattern(this.uCtx);
+            this.drawPattern(this.uCtx, false);
             this.bCtx.restore();
             this.bCtx.save();
+            this.bCtx.drawImage(this.backgroundImg, 10 * this.sim.scale, 10 * this.sim.scale, this.backgroundImg.width * this.sim.scale, this.backgroundImg.height * this.sim.scale);
+            this.drawPattern(this.bCtx, true);
             this.bCtx.scale(this.sim.scale, this.sim.scale);
-            this.bCtx.clearRect(this.ground.x - 10, this.ground.y - 10, this.ground.w + 20, this.ground.h + 20);
-            this.bCtx.drawImage(this.uCanvas, 0, 0, w, h, 0, 0, w, h);
             this.colorAreaList.forEach(function (colorArea) { return colorArea.draw(_this.bCtx, _this.uCtx); });
         };
         SimulationScene.prototype.drawObstacles = function () {
@@ -311,13 +314,19 @@ define(["require", "exports", "util", "jquery", "simulation.objects", "robot.bas
             this.aCtx.clearRect(this.ground.x - 10, this.ground.y - 10, this.ground.w + 20, this.ground.h + 20);
             this.markerList.forEach(function (marker) { return marker.draw(_this.aCtx, _this.uCtx); });
         };
-        SimulationScene.prototype.drawPattern = function (ctx) {
+        SimulationScene.prototype.drawPattern = function (ctx, scaled) {
             if (this.images && this.images['pattern']) {
+                var lineWidth = 10;
+                var scale = 1;
+                if (scaled) {
+                    lineWidth *= this.sim.scale;
+                    scale = this.sim.scale;
+                }
                 ctx.beginPath();
                 var patternImg = this.images['pattern'];
                 ctx.strokeStyle = ctx.createPattern(patternImg, 'repeat');
-                ctx.lineWidth = 10;
-                ctx.strokeRect(5, 5, this.backgroundImg.width + 10, this.backgroundImg.height + 10);
+                ctx.lineWidth = lineWidth;
+                ctx.strokeRect(lineWidth / 2, lineWidth / 2, this.backgroundImg.width * scale + lineWidth, this.backgroundImg.height * scale + lineWidth);
             }
         };
         SimulationScene.prototype.getRobotPoses = function () {
@@ -368,15 +377,13 @@ define(["require", "exports", "util", "jquery", "simulation.objects", "robot.bas
                                 $('.simMobile').show();
                                 scene.images = scene.loadImages(['roadWorks', 'pattern'], ['roadWorks' + imgType_1, 'wallPattern.png'], function () {
                                     scene.ground = new simulation_objects_1.Ground(10, 10, scene.imgBackgroundList[scene.currentBackground].width, scene.imgBackgroundList[scene.currentBackground].height);
-                                    var standardObstacle = new (simulation_objects_1.RectangleSimulationObject.bind.apply(simulation_objects_1.RectangleSimulationObject, __spreadArray([void 0, 0,
-                                        scene,
-                                        scene.sim.selectionListener,
-                                        simulation_objects_1.SimObjectType.Obstacle,
-                                        { x: 580, y: 290 },
-                                        null], [100, 100], false)))();
+                                    scene.backgroundImg = scene.imgBackgroundList[0];
+                                    var standardObstacle = new simulation_objects_1.RectangleSimulationObject(0, scene, scene.sim.selectionListener, simulation_objects_1.SimObjectType.Obstacle, {
+                                        x: (scene.backgroundImg.width * 7) / 9,
+                                        y: scene.backgroundImg.height - (scene.backgroundImg.width * 2) / 9,
+                                    }, scene.backgroundImg.width);
                                     scene.obstacleList.push(standardObstacle);
-                                    scene.resetAllCanvas(scene.imgBackgroundList[0]);
-                                    scene.resizeAll(true);
+                                    scene.centerBackground(true);
                                     scene.initEvents();
                                     scene.sim.initColorPicker(robot_base_1.RobotBase.colorRange);
                                     scene.showFullyLoadedSim(callbackOnLoaded);
@@ -387,8 +394,8 @@ define(["require", "exports", "util", "jquery", "simulation.objects", "robot.bas
                                 $('.simMobile').hide();
                                 scene.images = {};
                                 scene.ground = new simulation_objects_1.Ground(10, 10, scene.imgBackgroundList[scene.currentBackground].width, scene.imgBackgroundList[scene.currentBackground].height);
-                                scene.resetAllCanvas(scene.imgBackgroundList[0]);
-                                scene.resizeAll(true);
+                                scene.backgroundImg = scene.imgBackgroundList[0];
+                                scene.centerBackground(true);
                                 scene.initEvents();
                                 scene.showFullyLoadedSim(callbackOnLoaded);
                                 scene.sim.start();
@@ -426,7 +433,9 @@ define(["require", "exports", "util", "jquery", "simulation.objects", "robot.bas
             typeof callbackOnLoaded === 'function' && callbackOnLoaded();
         };
         SimulationScene.prototype.initViews = function () {
-            $('#systemValuesView').html('');
+            var $systemValuesView = $('#systemValuesView');
+            var $robotIndex = $('#robotIndex');
+            $systemValuesView.html('');
             var robotIndexColour = '';
             var color = this.robots[0] instanceof robot_base_mobile_1.RobotBaseMobile ? this.robots[0].chassis.geom.color : '#ffffff';
             robotIndexColour += '<select id="robotIndex" style="background-color:' + color + '">';
@@ -435,11 +444,11 @@ define(["require", "exports", "util", "jquery", "simulation.objects", "robot.bas
                 robotIndexColour += '<option style="background-color:' + color + '" value="' + robot.id + '">' + robot.name + '</option>';
             });
             robotIndexColour += '</select>';
-            $('#systemValuesView').append('<div><label id="robotLabel">Program Name</label><span style="width:auto">' + robotIndexColour + '</span></div>');
-            $('#robotIndex').off('change.sim');
+            $systemValuesView.append('<div><label id="robotLabel">Program Name</label><span style="width:auto">' + robotIndexColour + '</span></div>');
+            $robotIndex.off('change.sim');
             if (this.robots.length > 1) {
                 var scene_1 = this;
-                $('#robotIndex').on('change.sim', function (e) {
+                $robotIndex.on('change.sim', function () {
                     var indexNew = Number($(this).val());
                     scene_1.robots[indexNew].selected = true;
                     scene_1.sim.selectionListener.fire(null);
@@ -448,12 +457,13 @@ define(["require", "exports", "util", "jquery", "simulation.objects", "robot.bas
         };
         SimulationScene.prototype.initEvents = function () {
             var _this = this;
-            $(window).off('resize.sim');
-            $(window).on('resize.sim', function () {
-                _this.resizeAll();
+            $(window)
+                .off('resize.sim')
+                .on('resize.sim', function () {
+                _this.centerBackground(false);
             });
-            $('#robotLayer').off('keydown.sim');
-            $('#robotLayer').on('keydown.sim', this.handleKeyEvent.bind(this));
+            var $robotLayer = $('#robotLayer');
+            $robotLayer.off('keydown.sim').on('keydown.sim', this.handleKeyEvent.bind(this));
         };
         SimulationScene.prototype.loadBackgroundImages = function (callback) {
             var myImgList;
@@ -559,24 +569,21 @@ define(["require", "exports", "util", "jquery", "simulation.objects", "robot.bas
                 }
             }
         };
-        SimulationScene.prototype.resetAllCanvas = function (opt_img) {
-            var resetUnified = false;
-            if (opt_img) {
-                this.backgroundImg = opt_img;
-                resetUnified = true;
-            }
+        SimulationScene.prototype.resetAllCanvas = function (backgroundChanged) {
+            var _this = this;
             var sc = this.sim.scale;
-            var left = (this.playground.w - (this.backgroundImg.width + 20) * sc) / 2.0;
+            var left = (this.playground.w - (this.backgroundImg.width + 20) * sc) / 2.0 + 25;
             var top = (this.playground.h - (this.backgroundImg.height + 20) * sc) / 2.0;
             var w = Math.round((this.backgroundImg.width + 20) * sc);
             var h = Math.round((this.backgroundImg.height + 20) * sc);
-            if ($('#simDiv').hasClass('shifting') && $('#simDiv').hasClass('rightActive')) {
-                $('#canvasDiv').css({
+            var $simDiv = $('#simDiv');
+            var $canvasDiv = $('#canvasDiv');
+            if ($simDiv.hasClass('shifting') && $simDiv.hasClass('rightActive')) {
+                $canvasDiv.css({
                     top: top + 'px',
                     left: left + 'px',
                 });
             }
-            var scene = this;
             this.oCtx.canvas.width = w;
             this.oCtx.canvas.height = h;
             this.rCtx.canvas.width = w;
@@ -587,53 +594,50 @@ define(["require", "exports", "util", "jquery", "simulation.objects", "robot.bas
             this.bCtx.canvas.height = h;
             this.aCtx.canvas.width = w;
             this.aCtx.canvas.height = h;
-            if (resetUnified) {
+            if (backgroundChanged) {
                 this.uCanvas.width = this.backgroundImg.width + 20;
                 this.uCanvas.height = this.backgroundImg.height + 20;
                 this.udCanvas.width = this.backgroundImg.width + 20;
                 this.udCanvas.height = this.backgroundImg.height + 20;
                 this.uCtx.drawImage(this.backgroundImg, 10, 10, this.backgroundImg.width, this.backgroundImg.height);
-                this.drawPattern(this.uCtx);
+                this.drawPattern(this.uCtx, false);
             }
             this.bCtx.restore();
             this.bCtx.save();
-            this.bCtx.drawImage(this.uCanvas, 0, 0, this.backgroundImg.width + 20, this.backgroundImg.height + 20, 0, 0, w, h);
+            this.bCtx.drawImage(this.backgroundImg, 10 * sc, 10 * sc, this.backgroundImg.width * sc, this.backgroundImg.height * sc);
+            this.drawPattern(this.bCtx, true);
             this.dCtx.restore();
             this.dCtx.save();
             this.dCtx.drawImage(this.udCanvas, 0, 0, this.backgroundImg.width + 20, this.backgroundImg.height + 20, 0, 0, w, h);
-            this.drawColorAreas();
+            this.redrawColorAreas = false;
+            this.colorAreaList.forEach(function (colorArea) { return colorArea.draw(_this.bCtx, _this.uCtx); });
             this.drawObstacles();
             this.drawMarkers();
         };
-        SimulationScene.prototype.resizeAll = function (opt_resetScale) {
-            // only when opening the sim view we want to calculate the offsets and scale
-            opt_resetScale = opt_resetScale || ($('#simDiv').hasClass('shifting') && $('.rightMenuButton').hasClass('rightActive'));
-            if (opt_resetScale) {
-                var $simDiv = $('#simDiv');
-                var canvasOffset = $simDiv.offset();
-                var offsetY = canvasOffset.top;
-                this.playground.w = $simDiv.outerWidth();
-                this.playground.h = $(window).height() - offsetY;
-                var scaleX = this.playground.w / (this.ground.w + 20);
-                var scaleY = this.playground.h / (this.ground.h + 20);
-                this.sim.scale = Math.min(scaleX, scaleY) - 0.05;
-                var left = (this.playground.w - (this.backgroundImg.width + 20) * this.sim.scale) / 2.0;
-                var top_1 = (this.playground.h - (this.backgroundImg.height + 20) * this.sim.scale) / 2.0;
-                $('#canvasDiv').css({
-                    top: top_1 + 'px',
-                    left: left + 'px',
-                });
-                this.resetAllCanvas();
-            }
+        SimulationScene.prototype.centerBackground = function (backgroundChanged) {
+            var $simDiv = $('#simDiv');
+            var $canvasDiv = $('#canvasDiv');
+            var canvasOffset = $simDiv.offset();
+            var offsetY = canvasOffset.top;
+            this.playground.w = $simDiv.outerWidth() - 50;
+            this.playground.h = $(window).height() - offsetY;
+            var scaleX = this.playground.w / (this.backgroundImg.width + 20);
+            var scaleY = this.playground.h / (this.backgroundImg.height + 20);
+            this.sim.scale = Math.min(scaleX, scaleY);
+            var left = (this.playground.w - (this.backgroundImg.width + 20) * this.sim.scale) / 2.0 + 25;
+            var top = (this.playground.h - (this.backgroundImg.height + 20) * this.sim.scale) / 2.0;
+            $canvasDiv.css({
+                top: top + 'px',
+                left: left + 'px',
+            });
+            this.resetAllCanvas(backgroundChanged);
         };
         SimulationScene.prototype.setRobotPoses = function (importPoses) {
             var _this = this;
             importPoses.forEach(function (pose, index) {
                 if (_this.robots[index]) {
-                    var newPose = new robot_base_mobile_1.Pose(pose[0].x, pose[0].y, pose[0].theta);
-                    _this.robots[index].pose = newPose;
-                    var newInitialPose = new robot_base_mobile_1.Pose(pose[1].x, pose[1].y, pose[1].theta);
-                    _this.robots[index].initialPose = newInitialPose;
+                    _this.robots[index].pose = new robot_base_mobile_1.Pose(pose[0].x, pose[0].y, pose[0].theta);
+                    _this.robots[index].initialPose = new robot_base_mobile_1.Pose(pose[1].x, pose[1].y, pose[1].theta);
                 }
             });
         };
@@ -659,8 +663,8 @@ define(["require", "exports", "util", "jquery", "simulation.objects", "robot.bas
             this.markerList = [];
             this.ground.w = this.imgBackgroundList[this.currentBackground].width;
             this.ground.h = this.imgBackgroundList[this.currentBackground].height;
-            this.resetAllCanvas(this.imgBackgroundList[this.currentBackground]);
-            this.resizeAll(true);
+            this.backgroundImg = this.imgBackgroundList[this.currentBackground];
+            this.centerBackground(true);
             this.sim.setNewConfig(configData);
             if (workingScene) {
                 var myObstacle = this.obstacleList.find(function (obstacle) {
@@ -680,7 +684,6 @@ define(["require", "exports", "util", "jquery", "simulation.objects", "robot.bas
             var personalObstacleList = this.obstacleList.slice();
             this.robots.forEach(function (robot) { return personalObstacleList.push(robot.chassis); });
             personalObstacleList.push(this.ground);
-            var myMarkerList = this.markerList.slice();
             this.robots.forEach(function (robot) { return robot.updateActions(robot, dt, interpreterRunning); });
             this.robots.forEach(function (robot) {
                 return robot.updateSensors(interpreterRunning, dt, _this.uCtx, _this.udCtx, personalObstacleList, _this.markerList);
@@ -696,8 +699,6 @@ define(["require", "exports", "util", "jquery", "simulation.objects", "robot.bas
         };
         SimulationScene.prototype.resetPoseAndDrawings = function () {
             this.robots.forEach(function (robot) { return robot.resetPose(); });
-            this.dCtx.canvas.width = this.dCtx.canvas.width;
-            this.udCtx.canvas.width = this.udCtx.canvas.width;
         };
         SimulationScene.prototype.addMarker = function (markerId) {
             this.addSimulationObject(this.markerList, simulation_objects_1.SimObjectShape.Marker, simulation_objects_1.SimObjectType.Marker, markerId);

@@ -639,7 +639,7 @@ $.fn.draggable = function (opt) {
                     });
                 })
                 .on('mouseup touchend', function () {
-                    $(this).off('mousemove touchmove'); // Unbind events from document
+                    $(document).off('mousemove touchmove'); // Unbind events from document
                     if ($selected !== null) {
                         $selected.removeClass(opt.draggableClass);
                         $selected = null;
@@ -710,10 +710,10 @@ $.fn.closeRightView = function (opt_callBack) {
                 $('.rightMenuButton.rightActive').removeClass('rightActive');
             },
             step: function (now) {
-                that.width($('#main-section').outerWidth() - now);
+                $(window).trigger('resize');
+                that.width($('#main-section').outerWidth() - Math.ceil(now));
                 $('.rightMenuButton').css('right', now);
                 ratioWorkspace = $('#blockly').outerWidth() / $('#main-section').outerWidth();
-                $(window).trigger('resize');
             },
             done: function () {
                 that.width($('#main-section').outerWidth());
@@ -780,7 +780,7 @@ $.fn.openRightView = function ($view, initialViewWidth, opt_callBack) {
             duration: ANIMATION_DURATION,
             step: function (now, tween) {
                 $blockly.width($('#main-section').outerWidth() - now);
-                $('.rightMenuButton').css('right', now);
+                $('.rightMenuButton').css('right', Math.floor(now));
                 ratioWorkspace = $('#blockly').outerWidth() / $('#main-section').outerWidth();
                 $(window).trigger('resize');
             },

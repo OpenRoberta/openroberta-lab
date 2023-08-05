@@ -13,20 +13,20 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-define(["require", "exports", "robot.ev3", "robot.actuators", "robot.sensors", "robot.base.mobile"], function (require, exports, robot_ev3_1, robot_actuators_1, robot_sensors_1, robot_base_mobile_1) {
+define(["require", "exports", "robot.ev3", "./robot.actuators", "robot.sensors", "robot.base.mobile"], function (require, exports, robot_ev3_1, robot_actuators_1, robot_sensors_1, robot_base_mobile_1) {
     Object.defineProperty(exports, "__esModule", { value: true });
-    var MBOT = /** @class */ (function (_super) {
-        __extends(MBOT, _super);
-        function MBOT(id, configuration, interpreter, savedName, myListener) {
+    var RobotMbot = /** @class */ (function (_super) {
+        __extends(RobotMbot, _super);
+        function RobotMbot(id, configuration, interpreter, savedName, myListener) {
             return _super.call(this, id, configuration, interpreter, savedName, myListener) || this;
         }
-        MBOT.prototype.configure = function (configuration) {
+        RobotMbot.prototype.configure = function (configuration) {
             // due to no information from the configuration, track width and wheel diameter are fix:
             configuration['TRACKWIDTH'] = 11.5;
             configuration['WHEELDIAMETER'] = 6.5;
-            this.chassis = new robot_actuators_1.MbotChassis(this.id, configuration, this.pose);
-            this.RGBLedLeft = new robot_actuators_1.MbotRGBLed({ x: 20, y: -10 }, 2);
-            this.RGBLedRight = new robot_actuators_1.MbotRGBLed({ x: 20, y: 10 }, 1);
+            this.chassis = new robot_actuators_1.MbotChassis(this.id, configuration, 3, this.pose);
+            this.RGBLedLeft = new robot_actuators_1.MbotRGBLed({ x: 20, y: -10 }, true, '2');
+            this.RGBLedRight = new robot_actuators_1.MbotRGBLed({ x: 20, y: 10 }, true, '1');
             this.display = new robot_actuators_1.MbotDisplay(this.id, { x: 15, y: 50 });
             var sensors = configuration['SENSORS'];
             var _loop_1 = function (c) {
@@ -99,7 +99,7 @@ define(["require", "exports", "robot.ev3", "robot.actuators", "robot.sensors", "
             ];
             this.buttons = new robot_sensors_1.MbotButton(myButton, this.id);
         };
-        return MBOT;
+        return RobotMbot;
     }(robot_ev3_1.default));
-    exports.default = MBOT;
+    exports.default = RobotMbot;
 });

@@ -71,7 +71,7 @@ public final class Rob3rtaStackMachineVisitor extends AbstractStackMachineVisito
         } else {
             port = 2;
         }
-        JSONObject o = makeNode(C.LED_ON_ACTION).put(C.NAME, "rob3rta").put(C.PORT, port);
+        JSONObject o = makeNode(C.RGBLED_ON_ACTION).put(C.NAME, "rob3rta").put(C.PORT, port);
         return add(o);
     }
 
@@ -86,10 +86,10 @@ public final class Rob3rtaStackMachineVisitor extends AbstractStackMachineVisito
         if ( ledAction.mode.equals("ON") ) {
             JSONObject o = makeNode(C.EXPR).put(C.EXPR, "COLOR_CONST").put(C.VALUE, new JSONArray(Arrays.asList(0xFF, 0xFF, 0x99)));
             add(o);
-            JSONObject oOn = makeNode(C.LED_ON_ACTION).put(C.NAME, "rob3rta").put(C.PORT, port);
+            JSONObject oOn = makeNode(C.RGBLED_ON_ACTION).put(C.NAME, "rob3rta").put(C.PORT, port);
             return add(oOn);
         } else if ( ledAction.mode.equals("OFF") ) {
-            JSONObject oOff = makeNode(C.LED_OFF_ACTION).put(C.NAME, "rob3rta").put(C.PORT, port);
+            JSONObject oOff = makeNode(C.RGBLED_OFF_ACTION).put(C.NAME, "rob3rta").put(C.PORT, port);
             return add(oOff);
         }
         return null;
@@ -103,7 +103,7 @@ public final class Rob3rtaStackMachineVisitor extends AbstractStackMachineVisito
         } else {
             port = 2;
         }
-        JSONObject o = makeNode(C.LED_OFF_ACTION).put(C.NAME, "rob3rta").put(C.PORT, port);
+        JSONObject o = makeNode(C.RGBLED_OFF_ACTION).put(C.NAME, "rob3rta").put(C.PORT, port);
         return add(o);
     }
 

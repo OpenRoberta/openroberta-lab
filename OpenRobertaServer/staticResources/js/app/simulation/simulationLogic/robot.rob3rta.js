@@ -29,10 +29,10 @@ define(["require", "exports", "robot.sensors", "robot.actuators", "robot.base.st
             $.validator.addClassRules('range', { required: true, number: true });
             this.infraredSensor = new robot_sensors_1.Rob3rtaInfraredSensor();
             this.temperatureSensor = new robot_sensors_1.TemperatureSensor();
-            this.rgbLedLeft = new robot_actuators_1.RGBLed({ x: 575, y: 227 }, 1);
-            this.rgbLedRight = new robot_actuators_1.RGBLed({ x: 183, y: 273 }, 2);
-            this.ledLeft = new robot_actuators_1.RGBLed({ x: 470, y: 680 }, 4);
-            this.ledRight = new robot_actuators_1.RGBLed({ x: 370, y: 680 }, 3);
+            this.rgbLedLeft = new robot_actuators_1.RGBLed({ x: 575, y: 227 }, false, '1');
+            this.rgbLedRight = new robot_actuators_1.RGBLed({ x: 183, y: 273 }, false, '2');
+            this.ledLeft = new robot_actuators_1.RGBLed({ x: 470, y: 680 }, false, '4');
+            this.ledRight = new robot_actuators_1.RGBLed({ x: 370, y: 680 }, false, '3');
             var mySensorPins = [
                 {
                     x: 280,

@@ -1,14 +1,23 @@
 import { SelectionListener } from 'robot.base';
 import { Interpreter } from 'interpreter.interpreter';
 import RobotEv3 from 'robot.ev3';
-import { ThymioButtonLeds, ThymioChassis, ThymioCircleLeds, ThymioProxHLeds, ThymioRGBLeds, ThymioSoundLed, ThymioTemperatureLeds, WebAudio } from './robot.actuators';
-import { EV3Keys, TapSensor, ThymioInfraredSensors, ThymioLineSensor, VolumeMeterSensor } from 'robot.sensors';
+import {
+    ThymioButtonLeds,
+    ThymioChassis,
+    ThymioCircleLeds,
+    ThymioProxHLeds,
+    ThymioRGBLeds,
+    ThymioSoundLed,
+    ThymioTemperatureLeds,
+    WebAudio,
+} from './robot.actuators';
+import { EV3Keys, TapSensor, ThymioInfraredSensors, ThymioLineSensors, VolumeMeterSensor } from 'robot.sensors';
 import * as $ from 'jquery';
 
 export default class RobotThymio extends RobotEv3 {
     override readonly imgList = ['simpleBackgroundSmall', 'drawBackground', 'rescueBackground', 'mathBackground'];
     override webAudio: WebAudio = new WebAudio();
-    private lineSensor: ThymioLineSensor;
+    private lineSensor: ThymioLineSensors;
     private infraredSensors: ThymioInfraredSensors;
     private tapSensor: TapSensor;
     private soundSensor: VolumeMeterSensor;
@@ -28,8 +37,8 @@ export default class RobotThymio extends RobotEv3 {
         configuration['TRACKWIDTH'] = 9;
         configuration['WHEELDIAMETER'] = 4.3;
 
-        this.chassis = new ThymioChassis(this.id, configuration, this.pose);
-        this.lineSensor = new ThymioLineSensor({ x: 24, y: 0 });
+        this.chassis = new ThymioChassis(this.id, configuration, 1.5, this.pose);
+        this.lineSensor = new ThymioLineSensors({ x: 24, y: 0 });
         this.infraredSensors = new ThymioInfraredSensors();
         this.tapSensor = new TapSensor();
         this.soundSensor = new VolumeMeterSensor(this);
@@ -37,33 +46,33 @@ export default class RobotThymio extends RobotEv3 {
         let myButtons = [
             {
                 name: 'forward',
-                value: false
+                value: false,
             },
             {
                 name: 'backward',
-                value: false
+                value: false,
             },
             {
                 name: 'left',
-                value: false
+                value: false,
             },
             {
                 name: 'right',
-                value: false
+                value: false,
             },
             {
                 name: 'center',
-                value: false
-            }
+                value: false,
+            },
         ];
         this.buttons = new EV3Keys(myButtons, this.id);
         let thymio = this;
         for (let property in this['buttons']['keys']) {
             let $property = $('#' + this['buttons']['keys'][property].name + thymio.id);
-            $property.on('mousedown touchstart', function() {
+            $property.on('mousedown touchstart', function () {
                 thymio['buttons']['keys'][this.id.replace(/\d+$/, '')]['value'] = true;
             });
-            $property.on('mouseup touchend', function() {
+            $property.on('mouseup touchend', function () {
                 thymio['buttons']['keys'][this.id.replace(/\d+$/, '')]['value'] = false;
             });
         }

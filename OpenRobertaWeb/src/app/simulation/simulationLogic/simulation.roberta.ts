@@ -332,7 +332,9 @@ export class SimulationRoberta implements Simulation {
     }
 
     handleMouse(e) {
-        e.stopPropagation();
+        if (e.type !== 'mouseup' && e.type !== 'touchend') {
+            e.stopPropagation();
+        }
         e.preventDefault();
         if (!$('#robotLayer').data().hovered) {
             $('#robotLayer').css('cursor', 'auto');
@@ -406,8 +408,8 @@ export class SimulationRoberta implements Simulation {
         let zoom = false;
         if (delta > 0) {
             this.scale *= 1.025;
-            if (this.scale > 3) {
-                this.scale = 3;
+            if (this.scale > 5 * 3) {
+                this.scale = 5 * 3;
             }
             zoom = true;
         } else if (delta < 0) {
@@ -426,7 +428,7 @@ export class SimulationRoberta implements Simulation {
             position.left = position.left - wDif / 2;
             $('#canvasDiv').css({ top: position.top });
             $('#canvasDiv').css({ left: position.left });
-            this.scene.resetAllCanvas();
+            this.scene.resetAllCanvas(false);
         }
         return false;
     }

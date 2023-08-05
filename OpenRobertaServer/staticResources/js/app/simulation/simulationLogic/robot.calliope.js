@@ -115,7 +115,6 @@ define(["require", "exports", "robot.sensors", "./robot.actuators", "robot.base.
                     typeValue: 0,
                 },
             ];
-            console.log(configuration['SENSORS']);
             var _loop_1 = function (component) {
                 var sensorType = configuration['SENSORS'][component]['TYPE'];
                 var internal = component.substring(0, 1) === '_';
@@ -178,7 +177,7 @@ define(["require", "exports", "robot.sensors", "./robot.actuators", "robot.base.
                         this_2[myComponentName] = new robot_actuators_1.WebAudio();
                         break;
                     case 'RGBLED':
-                        this_2[myComponentName] = new robot_actuators_1.RGBLed({ x: 463, y: 643 });
+                        this_2[myComponentName] = new robot_actuators_1.RGBLed({ x: 463, y: 643 }, false);
                         break;
                     case 'ANALOG_INPUT': {
                         var myPinIndex = mySensorPins.findIndex(function (pin) { return pin.port === configuration['ACTUATORS'][component]['PIN1']; });

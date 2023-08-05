@@ -8,7 +8,7 @@ export default class RobotNxt extends RobotEv3 {
     override timer: Timer = new Timer(1);
 
     protected override configure(configuration: object): void {
-        this.chassis = new NXTChassis(this.id, configuration, this.pose);
+        this.chassis = new NXTChassis(this.id, configuration, 2, this.pose);
         let sensors: object = configuration['SENSORS'];
         for (const c in sensors) {
             console.log(sensors[c]['TYPE']);

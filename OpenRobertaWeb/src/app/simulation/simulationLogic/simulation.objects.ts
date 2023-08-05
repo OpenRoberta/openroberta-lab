@@ -161,18 +161,19 @@ export class SimObjectFactory {
         shape: SimObjectShape,
         type: SimObjectType,
         origin: Point,
+        maxSize?: number,
         optColor?: string,
         ...params: number[]
     ): BaseSimulationObject {
         switch (shape) {
             case SimObjectShape.Rectangle: {
-                return new RectangleSimulationObject(id, myScene, selectionListener, type, origin, optColor, ...params);
+                return new RectangleSimulationObject(id, myScene, selectionListener, type, origin, maxSize, optColor, ...params);
             }
             case SimObjectShape.Triangle: {
-                return new TriangleSimulationObject(id, myScene, selectionListener, type, origin, optColor, ...params);
+                return new TriangleSimulationObject(id, myScene, selectionListener, type, origin, maxSize, optColor, ...params);
             }
             case SimObjectShape.Circle: {
-                return new CircleSimulationObject(id, myScene, selectionListener, type, origin, optColor, ...params);
+                return new CircleSimulationObject(id, myScene, selectionListener, type, origin, maxSize, optColor, ...params);
             }
             case SimObjectShape.Marker: {
                 return new MarkerSimulationObject(id, myScene, selectionListener, type, origin);
@@ -193,6 +194,7 @@ export class SimObjectFactory {
                     x: -1000,
                     y: -1000,
                 },
+                null,
                 object.color,
                 ...[object.w, object.h]
             );
@@ -207,6 +209,7 @@ export class SimObjectFactory {
                     x: -1000,
                     y: -1000,
                 },
+                null,
                 object.color,
                 ...[object.ax, object.ay, object.bx, object.by, object.cx, object.cy]
             );
@@ -221,6 +224,7 @@ export class SimObjectFactory {
                     x: -1000,
                     y: -1000,
                 },
+                null,
                 object.color,
                 ...[object.r]
             );
@@ -250,10 +254,23 @@ export class RectangleSimulationObject extends BaseSimulationObject {
     theta: number = 0; // not used
     corners: Corner[] = [];
 
-    constructor(myId: number, myScene: any, mySelectionListener: SelectionListener, type: SimObjectType, p: Point, optColor?: string, ...params: number[]) {
+    constructor(
+        myId: number,
+        myScene: any,
+        mySelectionListener: SelectionListener,
+        type: SimObjectType,
+        p: Point,
+        maxSize?: number,
+        optColor?: string,
+        ...params: number[]
+    ) {
         super(myId, myScene, mySelectionListener, type, optColor);
         this.x = p.x;
         this.y = p.y;
+        if (maxSize) {
+            this.w = maxSize / 9;
+            this.h = maxSize / 9;
+        }
         if (params.length == 2) {
             this.w = params[0];
             this.h = params[1];
@@ -617,20 +634,29 @@ export class MarkerSimulationObject extends RectangleSimulationObject {
 }
 
 export class CircleSimulationObject extends BaseSimulationObject {
-    defaultRadius: number = 50;
     x: number;
     y: number;
-    r: number;
+    r: number = 50;
     corners: Corner[] = [];
 
-    constructor(myId: number, myScene: any, mySelectionListener: SelectionListener, type: SimObjectType, p: Point, optColor?, ...params: number[]) {
+    constructor(
+        myId: number,
+        myScene: any,
+        mySelectionListener: SelectionListener,
+        type: SimObjectType,
+        p: Point,
+        maxSize?: number,
+        optColor?,
+        ...params: number[]
+    ) {
         super(myId, myScene, mySelectionListener, type, optColor);
         this.x = p.x;
         this.y = p.y;
+        if (maxSize) {
+            this.r = maxSize / 18;
+        }
         if (params.length == 1) {
             this.r = params[0];
-        } else {
-            this.r = this.defaultRadius;
         }
         this.updateCorners();
     }
@@ -861,8 +887,20 @@ export class TriangleSimulationObject extends BaseSimulationObject {
     cy: number;
     corners: Corner[] = [];
 
-    constructor(myId: number, myScene: any, mySelectionListener: SelectionListener, type: SimObjectType, p: Point, optColor: string, ...params: number[]) {
+    constructor(
+        myId: number,
+        myScene: any,
+        mySelectionListener: SelectionListener,
+        type: SimObjectType,
+        p: Point,
+        maxSize?: number,
+        optColor?: string,
+        ...params: number[]
+    ) {
         super(myId, myScene, mySelectionListener, type, optColor);
+        if (maxSize) {
+            this.defaultSize = maxSize / 18;
+        }
         if (params.length == 6) {
             this.ax = params[0];
             this.ay = params[1];
@@ -870,7 +908,6 @@ export class TriangleSimulationObject extends BaseSimulationObject {
             this.by = params[3];
             this.cx = params[4];
             this.cy = params[5];
-            this.updateCorners();
         } else {
             this.ax = p.x - this.defaultSize;
             this.ay = p.y + this.defaultSize;

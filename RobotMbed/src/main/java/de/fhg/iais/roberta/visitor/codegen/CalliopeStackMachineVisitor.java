@@ -102,13 +102,13 @@ public class CalliopeStackMachineVisitor extends MbedStackMachineVisitor impleme
     @Override
     public Void visitRgbLedOnHiddenAction(RgbLedOnHiddenAction rgbLedOnHiddenAction) {
         rgbLedOnHiddenAction.colour.accept(this);
-        JSONObject o = makeNode(C.LED_ON_ACTION);
+        JSONObject o = makeNode(C.RGBLED_ON_ACTION);
         return add(o);
     }
 
     @Override
     public Void visitRgbLedOffHiddenAction(RgbLedOffHiddenAction rgbLedOffHiddenAction) {
-        JSONObject o = makeNode(C.LED_OFF_ACTION).put(C.NAME, "calliope");
+        JSONObject o = makeNode(C.RGBLED_OFF_ACTION).put(C.NAME, "calliope");
         return add(o);
     }
 

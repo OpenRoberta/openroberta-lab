@@ -114,12 +114,13 @@ export class Timer implements ISensor, IReset, IUpdateAction, ILabel {
     }
 }
 
-export abstract class DistanceSensor implements IExternalSensor, IDrawable {
+export abstract class DistanceSensor implements IExternalSensor, IDrawable, ILabel {
     readonly color: string = '#FF69B4';
     readonly port: string;
     readonly theta: number;
     readonly x: number;
     readonly y: number;
+    sensorLabel: boolean = true;
     cx: number = 0;
     cy: number = 0;
     distance: number = 0;
@@ -162,15 +163,17 @@ export abstract class DistanceSensor implements IExternalSensor, IDrawable {
             rCtx.lineTo(this.cx, this.cy);
             rCtx.stroke();
         }
-        rCtx.translate(this.rx, this.ry);
-        rCtx.rotate(myRobot.pose.theta);
-        rCtx.rotate(this.theta);
-        rCtx.translate(10, 0);
-        rCtx.rotate(-this.theta);
-        rCtx.translate(-5, 0);
-        rCtx.beginPath();
-        rCtx.fillStyle = '#555555';
-        rCtx.fillText(String(this.port.replace('ORT_', '')), 0, 4);
+        if (this.sensorLabel) {
+            rCtx.translate(this.rx, this.ry);
+            rCtx.rotate(myRobot.pose.theta);
+            rCtx.rotate(this.theta);
+            rCtx.translate(10, 0);
+            rCtx.rotate(-this.theta);
+            rCtx.translate(-5, 0);
+            rCtx.beginPath();
+            rCtx.fillStyle = '#555555';
+            rCtx.fillText(String(this.port.replace('ORT_', '')), 0, 4);
+        }
         rCtx.restore();
         rCtx.save();
         rCtx.translate(myRobot.pose.x, myRobot.pose.y);
@@ -317,13 +320,26 @@ export class UltrasonicSensor extends DistanceSensor {
 
 export class InfraredSensor extends DistanceSensor {
     private relative = true;
+    protected name: string;
 
-    constructor(port: string, x: number, y: number, theta: number, maxDistance: number, relative?: boolean) {
+    constructor(port: string, x: number, y: number, theta: number, maxDistance: number, relative?: boolean, name?: string) {
         super(port, x, y, theta, maxDistance);
+        this.name = name;
         this.relative = relative !== undefined ? relative : this.relative;
     }
 
     getLabel(): string {
+        if (this.name) {
+            return (
+                '<div><label>' +
+                this.name +
+                ' ' +
+                Blockly.Msg['SENSOR_INFRARED'] +
+                '</label><span>' +
+                UTIL.roundUltraSound(this.distance / 3.0, 0) +
+                ' cm</span></div>'
+            );
+        }
         return (
             '<div><label>' +
             this.port.replace('ORT_', '') +
@@ -366,11 +382,9 @@ export class InfraredSensor extends DistanceSensor {
 }
 
 export class ThymioInfraredSensor extends InfraredSensor {
-    name: string = '';
-
-    constructor(port: string, x: number, y: number, theta: number, maxDistance: number, name?: string) {
-        super(port, x, y, theta, maxDistance, true);
-        this.name = name !== undefined ? name : this.name;
+    constructor(port: string, x: number, y: number, theta: number, maxDistance: number, name: string) {
+        super(port, x, y, theta, maxDistance, true, name);
+        this.sensorLabel = false;
     }
 
     override getLabel(): string {
@@ -403,76 +417,183 @@ export class ThymioInfraredSensor extends InfraredSensor {
             values['infrared']['distance'][this.port] = 100;
         }
     }
+}
 
-    override draw(rCtx: CanvasRenderingContext2D, myRobot: RobotBaseMobile): void {
-        rCtx.restore();
-        rCtx.save();
-        rCtx.lineDashOffset = WAVE_LENGTH - this.wave;
-        rCtx.setLineDash([20, 40]);
-        for (let i = 0; i < this.u.length; i++) {
-            rCtx.beginPath();
-            rCtx.lineWidth = 0.5;
-            rCtx.strokeStyle = '#555555';
-            rCtx.moveTo(this.rx, this.ry);
-            rCtx.lineTo(this.u[i].x, this.u[i].y);
-            rCtx.stroke();
+export class EdisonInfraredSensor extends InfraredSensor {
+    constructor(port: string, x: number, y: number, theta: number, maxDistance: number, name: string) {
+        super(port, x, y, theta, maxDistance, false, name);
+        this.sensorLabel = false;
+    }
+
+    override getLabel(): string {
+        return '<div><label>&nbsp;-&nbsp;' + this.name + '</label><span>' + (this.distance / 3 < this.maxDistance) + '</span></div>';
+    }
+
+    override updateSensor(
+        running: boolean,
+        dt: number,
+        myRobot: RobotBase,
+        values: object,
+        uCtx: CanvasRenderingContext2D,
+        udCtx: CanvasRenderingContext2D,
+        personalObstacleList: any[]
+    ): void {
+        super.updateSensor(running, dt, myRobot, values, uCtx, udCtx, personalObstacleList);
+        const distance = this.distance / 3.0;
+        values['infrared'] = values['infrared'] || {};
+        values['infrared'][this.port] = values['infrared'][this.port] ? values['infrared'][this.port] : {};
+        if (distance < this.maxDistance) {
+            values['infrared'][this.port]['obstacle'] = true;
+        } else {
+            values['infrared'][this.port]['obstacle'] = false;
         }
-        if (this.cx && this.cy) {
-            rCtx.beginPath();
-            rCtx.lineWidth = 1;
-            rCtx.strokeStyle = 'black';
-            rCtx.moveTo(this.rx, this.ry);
-            rCtx.lineTo(this.cx, this.cy);
-            rCtx.stroke();
-        }
-        rCtx.restore();
-        rCtx.save();
-        rCtx.translate(myRobot.pose.x, myRobot.pose.y);
-        rCtx.rotate(myRobot.pose.theta);
     }
 }
 
-export class ThymioLineSensor implements ISensor, IDrawable, ILabel {
-    right: { line: number; light: number } = { line: 0, light: 0 };
-    left: { line: number; light: number } = { line: 0, light: 0 };
+export class LineSensor implements ISensor, IDrawable, ILabel {
+    line: boolean | number = false;
+    light: number = 0;
     readonly color: string;
     drawPriority: number = 4;
-    labelPriority: number;
+    labelPriority: number = 4;
     readonly port: string;
     readonly theta: number;
     readonly x: number;
     readonly y: number;
     rx: number = 0;
     ry: number = 0;
-    readonly dy: number = 6;
-    readonly r: number = 1.5;
+    readonly radius: number = 0;
+    readonly diameter: number = 0;
+    in: number[] = [];
 
-    constructor(location: Point) {
+    constructor(location: Point, diameter: number) {
         this.x = location.x;
         this.y = location.y;
+        this.diameter = diameter;
+        this.radius = this.diameter / 2;
+        for (let x = 0; x < this.diameter; x++) {
+            for (let y = 0; y < this.diameter; y++) {
+                let dx = x - Math.floor(this.radius);
+                let dy = y - Math.floor(this.radius);
+                let distanceSquared = dx * dx + dy * dy;
+                if (distanceSquared <= 1) {
+                    this.in.push((x + y * this.diameter) * 4);
+                }
+            }
+        }
     }
 
     draw(rCtx: CanvasRenderingContext2D, myRobot: RobotBase): void {
         rCtx.save();
         rCtx.beginPath();
         rCtx.lineWidth = 0.1;
-        rCtx.arc(this.x, this.y - this.dy / 2, this.r, 0, Math.PI * 2);
-        let leftLight = (this.left.light / 100) * 255;
-        rCtx.fillStyle = 'rgb(' + leftLight + ', ' + leftLight + ', ' + leftLight + ')';
+        rCtx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        let light = (this.light / 100) * 255;
+        rCtx.fillStyle = 'rgb(' + light + ', ' + light + ', ' + light + ')';
         rCtx.fill();
-        rCtx.strokeStyle = 'black';
-        rCtx.stroke();
-        rCtx.lineWidth = 0.5;
-        rCtx.beginPath();
-        rCtx.lineWidth = 0.1;
-        rCtx.arc(this.x, this.y + this.dy / 2, this.r, 0, Math.PI * 2);
-        let leftRight = (this.right.light / 100) * 255;
-        rCtx.fillStyle = 'rgb(' + leftRight + ', ' + leftRight + ', ' + leftRight + ')';
-        rCtx.fill();
-        rCtx.strokeStyle = 'black';
+        rCtx.strokeStyle = '#000000';
         rCtx.stroke();
         rCtx.restore();
     }
+
+    getLabel(): string {
+        return (
+            '<div><label>' +
+            Blockly.Msg['SENSOR_INFRARED'] +
+            '</label></div>' +
+            '<div><label>&nbsp;-&nbsp;' +
+            Blockly.Msg['BOTTOM_LEFT'] +
+            '</label></div>' +
+            '<div><label>&nbsp;--&nbsp;' +
+            Blockly.Msg.MODE_LINE +
+            '</label><span>' +
+            this.line +
+            '</span></div>' +
+            '<div><label>&nbsp;--&nbsp;' +
+            Blockly.Msg.MODE_LIGHT +
+            '</label><span>' +
+            this.light +
+            '</span></div>'
+        );
+    }
+
+    updateSensor(
+        running: boolean,
+        dt: number,
+        myRobot: RobotBase,
+        values: object,
+        uCtx: CanvasRenderingContext2D,
+        udCtx: CanvasRenderingContext2D,
+        personalObstacleList: any[]
+    ): void {
+        let robot: RobotBaseMobile = myRobot as RobotBaseMobile;
+        let sensor: PointRobotWorld = { rx: 0, ry: 0, x: this.x, y: this.y };
+        SIMATH.transform(robot.pose, sensor);
+        values['infrared'] = values['infrared'] || {};
+        let infraredSensor = this;
+        function setValue(side: string, location: Point) {
+            var red = 0;
+            var green = 0;
+            var blue = 0;
+            var colors = uCtx.getImageData(
+                Math.round(location.x - infraredSensor.radius),
+                Math.round(location.y - infraredSensor.radius),
+                infraredSensor.diameter,
+                infraredSensor.diameter
+            );
+            var colorsD = udCtx.getImageData(
+                Math.round(location.x - infraredSensor.radius),
+                Math.round(location.y - infraredSensor.radius),
+                infraredSensor.diameter,
+                infraredSensor.diameter
+            );
+            for (var i = 0; i <= colors.data.length; i += 4) {
+                if (colorsD.data[i + 3] === 255) {
+                    for (var j = i; j < i + 3; j++) {
+                        colors.data[j] = colorsD.data[j];
+                    }
+                }
+            }
+            for (var j = 0; j < colors.data.length; j += 12) {
+                for (var i = j; i < j + 12; i += 4) {
+                    if (infraredSensor.in.indexOf(i) >= 0) {
+                        red += colors.data[i + 0];
+                        green += colors.data[i + 1];
+                        blue += colors.data[i + 2];
+                    }
+                }
+            }
+            var num = colors.data.length / 4 - 4; // 12 are outside
+            red = red / num;
+            green = green / num;
+            blue = blue / num;
+
+            var lightValue = (red + green + blue) / 3 / 2.55;
+            if (lightValue < 50) {
+                infraredSensor['line'] = true;
+            } else {
+                infraredSensor['line'] = false;
+            }
+            infraredSensor['light'] = UTIL.round(lightValue, 0);
+            values['infrared']['light'] = values['infrared']['light'] ? values['infrared']['light'] : {};
+            values['infrared']['light'] = infraredSensor['light'];
+            values['infrared']['line'] = values['infrared']['line'] ? values['infrared']['line'] : {};
+            values['infrared']['line'] = infraredSensor['line'];
+        }
+        setValue('sensor', { x: sensor.rx, y: sensor.ry });
+    }
+}
+
+export class ThymioLineSensors implements ILabel, ISensor, IDrawable {
+    left: LineSensor;
+    right: LineSensor;
+
+    constructor(location: Point) {
+        this.left = new LineSensor({ x: location.x, y: location.y - 3 }, 3);
+        this.right = new LineSensor({ x: location.x, y: location.y + 3 }, 3);
+    }
+
+    labelPriority: number;
 
     getLabel(): string {
         return (
@@ -515,125 +636,27 @@ export class ThymioLineSensor implements ISensor, IDrawable, ILabel {
         values: object,
         uCtx: CanvasRenderingContext2D,
         udCtx: CanvasRenderingContext2D,
-        personalObstacleList: any[]
+        personalObstacleList: any[],
+        markerList: MarkerSimulationObject[]
     ): void {
-        let robot: RobotBaseMobile = myRobot as RobotBaseMobile;
-        let leftPoint: PointRobotWorld = { rx: 0, ry: 0, x: this.x, y: this.y - this.dy / 4 };
-        let rightPoint: PointRobotWorld = { rx: 0, ry: 0, x: this.x, y: this.y + this.dy / 4 };
-        SIMATH.transform(robot.pose, leftPoint);
-        SIMATH.transform(robot.pose, rightPoint);
-        values['infrared'] = values['infrared'] || {};
-        values['infrared'] = {};
-        let infraredSensor = this;
-        function setValue(side: string, location: Point) {
-            var red = 0;
-            var green = 0;
-            var blue = 0;
-            var colors = uCtx.getImageData(Math.round(location.x - 3), Math.round(location.y - 3), 6, 6);
-            var colorsD = udCtx.getImageData(Math.round(location.x - 3), Math.round(location.y - 3), 6, 6);
-            for (var i = 0; i <= colors.data.length; i += 4) {
-                if (colorsD.data[i + 3] === 255) {
-                    for (var j = i; j < i + 3; j++) {
-                        colors.data[j] = colorsD.data[j];
-                    }
-                }
-            }
-            var out = [0, 4, 16, 20, 24, 44, 92, 116, 120, 124, 136, 140]; // outside the circle
-            for (var j = 0; j < colors.data.length; j += 24) {
-                for (var i = j; i < j + 24; i += 4) {
-                    if (out.indexOf(i) < 0) {
-                        red += colors.data[i + 0];
-                        green += colors.data[i + 1];
-                        blue += colors.data[i + 2];
-                    }
-                }
-            }
-
-            var num = colors.data.length / 4 - 12; // 12 are outside
-            red = red / num;
-            green = green / num;
-            blue = blue / num;
-
-            var lightValue = (red + green + blue) / 3 / 2.55;
-            if (lightValue < 50) {
-                infraredSensor[side]['line'] = 1;
-            } else {
-                infraredSensor[side]['line'] = 0;
-            }
-            infraredSensor[side]['light'] = UTIL.round(lightValue, 0);
-            values['infrared']['light'] = values['infrared']['light'] ? values['infrared']['light'] : {};
-            values['infrared']['light'][side] = infraredSensor[side]['light'];
-            values['infrared']['line'] = values['infrared']['line'] ? values['infrared']['line'] : {};
-            values['infrared']['line'][side] = infraredSensor[side]['line'];
-        }
-        setValue('left', { x: leftPoint.rx, y: leftPoint.ry });
-        setValue('right', { x: rightPoint.rx, y: rightPoint.ry });
+        this.left.updateSensor(running, dt, myRobot, values, uCtx, udCtx, personalObstacleList);
+        this.right.updateSensor(running, dt, myRobot, values, uCtx, udCtx, personalObstacleList);
+        this.left.line = this.left.line ? 1 : 0;
+        this.right.line = this.right.line ? 1 : 0;
+        values['infrared']['light'] = {};
+        values['infrared']['light']['left'] = this.left.light;
+        values['infrared']['light']['right'] = this.right.light;
+        values['infrared']['line'] = {};
+        values['infrared']['line']['left'] = this.left.line;
+        values['infrared']['line']['right'] = this.right.line;
+        console.log(values);
     }
-}
 
-export class ThymioInfraredSensors implements ISensor, IDrawable, ILabel {
-    drawPriority: number;
-    labelPriority: number;
-    infraredSensorArray: DistanceSensor[] = [];
-
-    constructor() {
-        this.infraredSensorArray[0] = new ThymioInfraredSensor(
-            '0',
-            24 * Math.cos(-Math.PI / 4),
-            24 * Math.sin(-Math.PI / 4),
-            -Math.PI / 4,
-            14,
-            Blockly.Msg.FRONT_LEFT
-        );
-        this.infraredSensorArray[1] = new ThymioInfraredSensor(
-            '1',
-            26 * Math.cos(-Math.PI / 8),
-            26 * Math.sin(-Math.PI / 8),
-            -Math.PI / 8,
-            14,
-            Blockly.Msg.FRONT_LEFT_MIDDLE
-        );
-        this.infraredSensorArray[2] = new ThymioInfraredSensor('2', 26, 0, 0, 14, Blockly.Msg.FRONT_MIDDLE);
-        this.infraredSensorArray[3] = new ThymioInfraredSensor(
-            '3',
-            26 * Math.cos(Math.PI / 8),
-            26 * Math.sin(Math.PI / 8),
-            Math.PI / 8,
-            14,
-            Blockly.Msg.FRONT_RIGHT_MIDDLE
-        );
-        this.infraredSensorArray[4] = new ThymioInfraredSensor(
-            '4',
-            24 * Math.cos(Math.PI / 4),
-            24 * Math.sin(Math.PI / 4),
-            Math.PI / 4,
-            14,
-            Blockly.Msg.FRONT_RIGHT
-        );
-        this.infraredSensorArray[5] = new ThymioInfraredSensor('5', -9, -13, Math.PI, 14, Blockly.Msg.BACK_LEFT);
-        this.infraredSensorArray[6] = new ThymioInfraredSensor('6', -9, 13, Math.PI, 14, Blockly.Msg.BACK_RIGHT);
-    }
+    drawPriority: number = 4;
 
     draw(rCtx: CanvasRenderingContext2D, myRobot: RobotBase): void {
-        this.infraredSensorArray.forEach((sensor) => sensor.draw(rCtx, myRobot as RobotBaseMobile));
-    }
-
-    getLabel(): string {
-        let myLabel: string = '';
-        this.infraredSensorArray.forEach((sensor) => (myLabel += sensor.getLabel()));
-        return myLabel;
-    }
-
-    updateSensor(
-        running: boolean,
-        dt: number,
-        myRobot: RobotBase,
-        values: object,
-        uCtx: CanvasRenderingContext2D,
-        udCtx: CanvasRenderingContext2D,
-        personalObstacleList: any[]
-    ): void {
-        this.infraredSensorArray.forEach((sensor) => sensor.updateSensor(running, dt, myRobot, values, uCtx, udCtx, personalObstacleList));
+        this.left.draw(rCtx, myRobot);
+        this.right.draw(rCtx, myRobot);
     }
 }
 
@@ -763,12 +786,82 @@ export class MbotInfraredSensor implements IExternalSensor, IDrawable, ILabel {
     }
 }
 
-export class RobotinoInfraredSensor implements ISensor, IDrawable, ILabel {
+export abstract class InfraredSensors implements ISensor, IDrawable, ILabel {
     drawPriority: number;
     labelPriority: number;
     infraredSensorArray: DistanceSensor[] = [];
 
     constructor() {
+        this.configure();
+    }
+
+    abstract configure();
+
+    draw(rCtx: CanvasRenderingContext2D, myRobot: RobotBase): void {
+        this.infraredSensorArray.forEach((sensor) => sensor.draw(rCtx, myRobot as RobotBaseMobile));
+    }
+
+    getLabel(): string {
+        let myLabel: string = '<div><label>' + Blockly.Msg['SENSOR_INFRARED'] + '</label></div>';
+        this.infraredSensorArray.forEach((sensor) => (myLabel += sensor.getLabel()));
+        return myLabel;
+    }
+
+    updateSensor(
+        running: boolean,
+        dt: number,
+        myRobot: RobotBase,
+        values: object,
+        uCtx: CanvasRenderingContext2D,
+        udCtx: CanvasRenderingContext2D,
+        personalObstacleList: any[]
+    ): void {
+        this.infraredSensorArray.forEach((sensor) => sensor.updateSensor(running, dt, myRobot, values, uCtx, udCtx, personalObstacleList));
+    }
+}
+
+export class ThymioInfraredSensors extends InfraredSensors {
+    configure() {
+        this.infraredSensorArray[0] = new ThymioInfraredSensor(
+            '0',
+            24 * Math.cos(-Math.PI / 4),
+            24 * Math.sin(-Math.PI / 4),
+            -Math.PI / 4,
+            14,
+            Blockly.Msg.FRONT_LEFT
+        );
+        this.infraredSensorArray[1] = new ThymioInfraredSensor(
+            '1',
+            26 * Math.cos(-Math.PI / 8),
+            26 * Math.sin(-Math.PI / 8),
+            -Math.PI / 8,
+            14,
+            Blockly.Msg.FRONT_LEFT_MIDDLE
+        );
+        this.infraredSensorArray[2] = new ThymioInfraredSensor('2', 26, 0, 0, 14, Blockly.Msg.FRONT_MIDDLE);
+        this.infraredSensorArray[3] = new ThymioInfraredSensor(
+            '3',
+            26 * Math.cos(Math.PI / 8),
+            26 * Math.sin(Math.PI / 8),
+            Math.PI / 8,
+            14,
+            Blockly.Msg.FRONT_RIGHT_MIDDLE
+        );
+        this.infraredSensorArray[4] = new ThymioInfraredSensor(
+            '4',
+            24 * Math.cos(Math.PI / 4),
+            24 * Math.sin(Math.PI / 4),
+            Math.PI / 4,
+            14,
+            Blockly.Msg.FRONT_RIGHT
+        );
+        this.infraredSensorArray[5] = new ThymioInfraredSensor('5', -9, -13, Math.PI, 14, Blockly.Msg.BACK_LEFT);
+        this.infraredSensorArray[6] = new ThymioInfraredSensor('6', -9, 13, Math.PI, 14, Blockly.Msg.BACK_RIGHT);
+    }
+}
+
+export class RobotinoInfraredSensors extends InfraredSensors {
+    configure() {
         this.infraredSensorArray[0] = new InfraredSensor('1', 68 * Math.cos(0), 68 * Math.sin(0), 0, 30, false);
         this.infraredSensorArray[1] = new InfraredSensor(
             '2',
@@ -807,27 +900,13 @@ export class RobotinoInfraredSensor implements ISensor, IDrawable, ILabel {
         this.infraredSensorArray[7] = new InfraredSensor('7', 68 * Math.cos((Math.PI * 6) / 9), 68 * Math.sin((Math.PI * 6) / 9), (Math.PI * 6) / 9, 30, false);
         this.infraredSensorArray[6] = new InfraredSensor('6', 68 * Math.cos((Math.PI * 8) / 9), 68 * Math.sin((Math.PI * 8) / 9), (Math.PI * 8) / 9, 30, false);
     }
+}
 
-    draw(rCtx: CanvasRenderingContext2D, myRobot: RobotBase): void {
-        this.infraredSensorArray.forEach((sensor) => sensor.draw(rCtx, myRobot as RobotBaseMobile));
-    }
-
-    getLabel(): string {
-        let myLabel: string = '';
-        this.infraredSensorArray.forEach((sensor) => (myLabel += sensor.getLabel()));
-        return myLabel;
-    }
-
-    updateSensor(
-        running: boolean,
-        dt: number,
-        myRobot: RobotBase,
-        values: object,
-        uCtx: CanvasRenderingContext2D,
-        udCtx: CanvasRenderingContext2D,
-        personalObstacleList: any[]
-    ): void {
-        this.infraredSensorArray.forEach((sensor) => sensor.updateSensor(running, dt, myRobot, values, uCtx, udCtx, personalObstacleList));
+export class EdisonInfraredSensors extends InfraredSensors {
+    configure() {
+        this.infraredSensorArray[1] = new EdisonInfraredSensor('LEFT', 17, -8, 0, 3, Blockly.Msg.LEFT);
+        this.infraredSensorArray[0] = new EdisonInfraredSensor('FRONT', 18, 0, 0, 3, Blockly.Msg.SLOT_FRONT);
+        this.infraredSensorArray[2] = new EdisonInfraredSensor('RIGHT', 17, 8, 0, 3, Blockly.Msg.RIGHT);
     }
 }
 
@@ -1980,6 +2059,24 @@ export class SoundSensor extends VolumeMeterSensor implements IExternalSensor {
     }
 }
 
+export class SoundSensorBoolean extends VolumeMeterSensor {
+    override getLabel(): string {
+        return '<div><label>' + Blockly.Msg['SENSOR_SOUND'] + '</label><span>' + (this.volume > 25 ? 'true' : 'false') + '</span></div>';
+    }
+    override updateSensor(
+        running: boolean,
+        dt: number,
+        myRobot: RobotBase,
+        values: object,
+        uCtx: CanvasRenderingContext2D,
+        udCtx: CanvasRenderingContext2D,
+        personalObstacleList: any[]
+    ): void {
+        super.updateSensor(running, dt, myRobot, values, uCtx, udCtx, personalObstacleList);
+        values['sound']['volume'] = this.volume > 25 ? true : false;
+    }
+}
+
 function createSlider($slider: JQuery<HTMLElement>, $range: JQuery<HTMLElement>, sensor: ISensor, value: string, range: { min: number; max: number }) {
     $slider.on('mousedown touchstart', function (e) {
         e.stopPropagation();
@@ -2146,17 +2243,17 @@ export class CameraSensor implements ISensor, IUpdateAction, IDrawable, ILabel, 
         rCtx.closePath();
         rCtx.stroke();
         /* rCtx.beginPath();
-         rCtx.moveTo(0, 0);
-         rCtx.lineTo(300, 0);
+     rCtx.moveTo(0, 0);
+     rCtx.lineTo(300, 0);
+     rCtx.stroke();
+     rCtx.rotate(-(myRobot as RobotBaseMobile).pose.theta);
+     rCtx.translate(-(myRobot as RobotBaseMobile).pose.x, -(myRobot as RobotBaseMobile).pose.y);
+     rCtx.beginPath();
+     rCtx.strokeStyle = '#ff0000';
+     if (this.bB) {
+         rCtx.rect(this.bB.x, this.bB.y, this.bB.w, this.bB.h);
          rCtx.stroke();
-         rCtx.rotate(-(myRobot as RobotBaseMobile).pose.theta);
-         rCtx.translate(-(myRobot as RobotBaseMobile).pose.x, -(myRobot as RobotBaseMobile).pose.y);
-         rCtx.beginPath();
-         rCtx.strokeStyle = '#ff0000';
-         if (this.bB) {
-             rCtx.rect(this.bB.x, this.bB.y, this.bB.w, this.bB.h);
-             rCtx.stroke();
-         }*/
+     }*/
         rCtx.restore();
     }
 

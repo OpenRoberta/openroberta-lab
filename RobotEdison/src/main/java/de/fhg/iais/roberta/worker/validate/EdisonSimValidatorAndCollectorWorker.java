@@ -12,12 +12,12 @@ import de.fhg.iais.roberta.visitor.validate.CommonNepoValidatorAndCollectorVisit
 import de.fhg.iais.roberta.visitor.validate.EdisonValidatorAndCollectorVisitor;
 import de.fhg.iais.roberta.worker.AbstractValidatorAndCollectorWorker;
 
-public class EdisonValidatorAndCollectorWorker extends AbstractValidatorAndCollectorWorker {
+public class EdisonSimValidatorAndCollectorWorker extends AbstractValidatorAndCollectorWorker {
 
     @Override
     protected CommonNepoValidatorAndCollectorVisitor getVisitor(
         Project project, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
-        return new EdisonValidatorAndCollectorVisitor(project.getConfigurationAst(), beanBuilders, false);
+        return new EdisonValidatorAndCollectorVisitor(project.getConfigurationAst(), beanBuilders, true);
     }
 
     /**

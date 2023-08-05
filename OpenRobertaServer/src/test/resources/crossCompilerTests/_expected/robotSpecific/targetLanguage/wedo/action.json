@@ -1,377 +1,377 @@
 {"ops": [
-  {
-    "opc": "expr",
-    "expr": "NUM_CONST",
-    "value": "0"
-  },
-  {
-    "opc": "VarDeclaration",
-    "name": "numVar",
-    "type": "NUMBER"
-  },
-  {
-    "opc": "expr",
-    "expr": "BOOL_CONST",
-    "value": true
-  },
-  {
-    "opc": "VarDeclaration",
-    "name": "boolVar",
-    "type": "BOOLEAN"
-  },
-  {
-    "opc": "expr",
-    "expr": "STRING_CONST",
-    "value": ""
-  },
-  {
-    "opc": "VarDeclaration",
-    "name": "stringVar",
-    "type": "STRING"
-  },
-  {
-    "opc": "expr",
-    "expr": "COLOR_CONST",
-    "value": 10
-  },
-  {
-    "opc": "VarDeclaration",
-    "name": "colourVar",
-    "type": "COLOR"
-  },
-  {
-    "opc": "returnAddress",
-    "target": "rtn_1"
-  },
-  {
-    "opc": "call",
-    "target": "mthd_s_action"
-  },
-  {
-    "opc": "comment",
-    "text": "call",
-    "label": "rtn_1",
-    "type": "end"
-  },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "0"
+    },
+    {
+      "opc": "VarDeclaration",
+      "name": "numVar",
+      "type": "NUMBER"
+    },
+    {
+      "opc": "expr",
+      "expr": "BOOL_CONST",
+      "value": true
+    },
+    {
+      "opc": "VarDeclaration",
+      "name": "boolVar",
+      "type": "BOOLEAN"
+    },
+    {
+      "opc": "expr",
+      "expr": "STRING_CONST",
+      "value": ""
+    },
+    {
+      "opc": "VarDeclaration",
+      "name": "stringVar",
+      "type": "STRING"
+    },
+    {
+      "opc": "expr",
+      "expr": "COLOR_CONST",
+      "value": 10
+    },
+    {
+      "opc": "VarDeclaration",
+      "name": "colourVar",
+      "type": "COLOR"
+    },
+    {
+      "opc": "returnAddress",
+      "target": "rtn_1"
+    },
+    {
+      "opc": "call",
+      "target": "mthd_s_action"
+    },
+    {
+      "opc": "comment",
+      "text": "call",
+      "label": "rtn_1",
+      "type": "end"
+    },
   {"opc": "stop"},
-  {
-    "opc": "comment",
-    "text": "createMethodVoid",
-    "label": "mthd_s_action",
-    "type": "start"
-  },
-  {
-    "opc": "returnAddress",
-    "target": "rtn_3"
-  },
-  {
-    "opc": "call",
-    "target": "mthd_s_move"
-  },
-  {
-    "opc": "comment",
-    "text": "call",
-    "label": "rtn_3",
-    "type": "end"
-  },
-  {
-    "opc": "returnAddress",
-    "target": "rtn_4"
-  },
-  {
-    "opc": "call",
-    "target": "mthd_s_display"
-  },
-  {
-    "opc": "comment",
-    "text": "call",
-    "label": "rtn_4",
-    "type": "end"
-  },
-  {
-    "opc": "returnAddress",
-    "target": "rtn_5"
-  },
-  {
-    "opc": "call",
-    "target": "mthd_s_sounds"
-  },
-  {
-    "opc": "comment",
-    "text": "call",
-    "label": "rtn_5",
-    "type": "end"
-  },
-  {
-    "opc": "returnAddress",
-    "target": "rtn_6"
-  },
-  {
-    "opc": "call",
-    "target": "mthd_s_lights"
-  },
-  {
-    "opc": "comment",
-    "text": "call",
-    "label": "rtn_6",
-    "type": "end"
-  },
-  {
-    "opc": "comment",
-    "text": "createMethodVoid",
-    "label": "mthd_e_2",
-    "type": "start"
-  },
-  {
-    "opc": "return",
-    "values": false
-  },
-  {
-    "opc": "comment",
-    "text": "createMethodVoid",
-    "type": "end"
-  },
-  {
-    "opc": "comment",
-    "text": "createMethodVoid",
-    "label": "mthd_s_move",
-    "type": "start"
-  },
-  {
-    "opc": "expr",
-    "name": "numVar",
-    "expr": "Var"
-  },
-  {
-    "opc": "expr",
-    "name": "numVar",
-    "expr": "Var"
-  },
-  {
-    "opc": "motorOnAction",
-    "speedOnly": false,
-    "port": "1",
-    "name": "W"
-  },
-  {
-    "opc": "motorStop",
-    "port": "1",
-    "name": "W"
-  },
-  {
-    "opc": "expr",
-    "name": "numVar",
-    "expr": "Var"
-  },
-  {
-    "opc": "motorOnAction",
-    "speedOnly": true,
-    "port": "1",
-    "name": "W"
-  },
-  {
-    "opc": "motorStop",
-    "port": "1",
-    "name": "W"
-  },
-  {
-    "opc": "comment",
-    "text": "createMethodVoid",
-    "label": "mthd_e_7",
-    "type": "start"
-  },
-  {
-    "opc": "return",
-    "values": false
-  },
-  {
-    "opc": "comment",
-    "text": "createMethodVoid",
-    "type": "end"
-  },
-  {
-    "opc": "comment",
-    "text": "createMethodVoid",
-    "label": "mthd_s_display",
-    "type": "start"
-  },
-  {
-    "opc": "expr",
-    "name": "boolVar",
-    "expr": "Var"
-  },
+    {
+      "opc": "comment",
+      "text": "createMethodVoid",
+      "label": "mthd_s_action",
+      "type": "start"
+    },
+    {
+      "opc": "returnAddress",
+      "target": "rtn_3"
+    },
+    {
+      "opc": "call",
+      "target": "mthd_s_move"
+    },
+    {
+      "opc": "comment",
+      "text": "call",
+      "label": "rtn_3",
+      "type": "end"
+    },
+    {
+      "opc": "returnAddress",
+      "target": "rtn_4"
+    },
+    {
+      "opc": "call",
+      "target": "mthd_s_display"
+    },
+    {
+      "opc": "comment",
+      "text": "call",
+      "label": "rtn_4",
+      "type": "end"
+    },
+    {
+      "opc": "returnAddress",
+      "target": "rtn_5"
+    },
+    {
+      "opc": "call",
+      "target": "mthd_s_sounds"
+    },
+    {
+      "opc": "comment",
+      "text": "call",
+      "label": "rtn_5",
+      "type": "end"
+    },
+    {
+      "opc": "returnAddress",
+      "target": "rtn_6"
+    },
+    {
+      "opc": "call",
+      "target": "mthd_s_lights"
+    },
+    {
+      "opc": "comment",
+      "text": "call",
+      "label": "rtn_6",
+      "type": "end"
+    },
+    {
+      "opc": "comment",
+      "text": "createMethodVoid",
+      "label": "mthd_e_2",
+      "type": "start"
+    },
+    {
+      "opc": "return",
+      "values": false
+    },
+    {
+      "opc": "comment",
+      "text": "createMethodVoid",
+      "type": "end"
+    },
+    {
+      "opc": "comment",
+      "text": "createMethodVoid",
+      "label": "mthd_s_move",
+      "type": "start"
+    },
+    {
+      "opc": "expr",
+      "name": "numVar",
+      "expr": "Var"
+    },
+    {
+      "opc": "expr",
+      "name": "numVar",
+      "expr": "Var"
+    },
+    {
+      "opc": "motorOnAction",
+      "speedOnly": false,
+      "port": "1",
+      "name": "W"
+    },
+    {
+      "opc": "motorStop",
+      "port": "1",
+      "name": "W"
+    },
+    {
+      "opc": "expr",
+      "name": "numVar",
+      "expr": "Var"
+    },
+    {
+      "opc": "motorOnAction",
+      "speedOnly": true,
+      "port": "1",
+      "name": "W"
+    },
+    {
+      "opc": "motorStop",
+      "port": "1",
+      "name": "W"
+    },
+    {
+      "opc": "comment",
+      "text": "createMethodVoid",
+      "label": "mthd_e_7",
+      "type": "start"
+    },
+    {
+      "opc": "return",
+      "values": false
+    },
+    {
+      "opc": "comment",
+      "text": "createMethodVoid",
+      "type": "end"
+    },
+    {
+      "opc": "comment",
+      "text": "createMethodVoid",
+      "label": "mthd_s_display",
+      "type": "start"
+    },
+    {
+      "opc": "expr",
+      "name": "boolVar",
+      "expr": "Var"
+    },
   {"opc": "ShowTextAction"},
-  {
-    "opc": "expr",
-    "name": "colourVar",
-    "expr": "Var"
-  },
+    {
+      "opc": "expr",
+      "name": "colourVar",
+      "expr": "Var"
+    },
   {"opc": "ShowTextAction"},
-  {
-    "opc": "expr",
-    "name": "numVar",
-    "expr": "Var"
-  },
+    {
+      "opc": "expr",
+      "name": "numVar",
+      "expr": "Var"
+    },
   {"opc": "ShowTextAction"},
-  {
-    "opc": "expr",
-    "name": "stringVar",
-    "expr": "Var"
-  },
+    {
+      "opc": "expr",
+      "name": "stringVar",
+      "expr": "Var"
+    },
   {"opc": "ShowTextAction"},
   {"opc": "ClearDisplay"},
-  {
-    "opc": "comment",
-    "text": "createMethodVoid",
-    "label": "mthd_e_8",
-    "type": "start"
-  },
-  {
-    "opc": "return",
-    "values": false
-  },
-  {
-    "opc": "comment",
-    "text": "createMethodVoid",
-    "type": "end"
-  },
-  {
-    "opc": "comment",
-    "text": "createMethodVoid",
-    "label": "mthd_s_sounds",
-    "type": "start"
-  },
-  {
-    "opc": "expr",
-    "expr": "NUM_CONST",
-    "value": "261.626"
-  },
-  {
-    "opc": "expr",
-    "expr": "NUM_CONST",
-    "value": "2000"
-  },
-  {
-    "opc": "ToneAction",
-    "name": "W"
-  },
-  {
-    "opc": "expr",
-    "expr": "NUM_CONST",
-    "value": "293.665"
-  },
-  {
-    "opc": "expr",
-    "expr": "NUM_CONST",
-    "value": "1000"
-  },
-  {
-    "opc": "ToneAction",
-    "name": "W"
-  },
-  {
-    "opc": "expr",
-    "expr": "NUM_CONST",
-    "value": "329.628"
-  },
-  {
-    "opc": "expr",
-    "expr": "NUM_CONST",
-    "value": "500"
-  },
-  {
-    "opc": "ToneAction",
-    "name": "W"
-  },
-  {
-    "opc": "expr",
-    "expr": "NUM_CONST",
-    "value": "349.228"
-  },
-  {
-    "opc": "expr",
-    "expr": "NUM_CONST",
-    "value": "250"
-  },
-  {
-    "opc": "ToneAction",
-    "name": "W"
-  },
-  {
-    "opc": "expr",
-    "expr": "NUM_CONST",
-    "value": "391.995"
-  },
-  {
-    "opc": "expr",
-    "expr": "NUM_CONST",
-    "value": "125"
-  },
-  {
-    "opc": "ToneAction",
-    "name": "W"
-  },
-  {
-    "opc": "expr",
-    "name": "numVar",
-    "expr": "Var"
-  },
-  {
-    "opc": "expr",
-    "name": "numVar",
-    "expr": "Var"
-  },
-  {
-    "opc": "ToneAction",
-    "name": "W"
-  },
-  {
-    "opc": "comment",
-    "text": "createMethodVoid",
-    "label": "mthd_e_9",
-    "type": "start"
-  },
-  {
-    "opc": "return",
-    "values": false
-  },
-  {
-    "opc": "comment",
-    "text": "createMethodVoid",
-    "type": "end"
-  },
-  {
-    "opc": "comment",
-    "text": "createMethodVoid",
-    "label": "mthd_s_lights",
-    "type": "start"
-  },
-  {
-    "opc": "expr",
-    "name": "colourVar",
-    "expr": "Var"
-  },
-  {
-    "opc": "ledOnAction",
-    "name": "W"
-  },
-  {
-    "opc": "ledOffAction",
-    "name": "W"
-  },
-  {
-    "opc": "comment",
-    "text": "createMethodVoid",
-    "label": "mthd_e_10",
-    "type": "start"
-  },
-  {
-    "opc": "return",
-    "values": false
-  },
-  {
-    "opc": "comment",
-    "text": "createMethodVoid",
-    "type": "end"
-  }
+    {
+      "opc": "comment",
+      "text": "createMethodVoid",
+      "label": "mthd_e_8",
+      "type": "start"
+    },
+    {
+      "opc": "return",
+      "values": false
+    },
+    {
+      "opc": "comment",
+      "text": "createMethodVoid",
+      "type": "end"
+    },
+    {
+      "opc": "comment",
+      "text": "createMethodVoid",
+      "label": "mthd_s_sounds",
+      "type": "start"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "261.626"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "2000"
+    },
+    {
+      "opc": "ToneAction",
+      "name": "W"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "293.665"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "1000"
+    },
+    {
+      "opc": "ToneAction",
+      "name": "W"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "329.628"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "500"
+    },
+    {
+      "opc": "ToneAction",
+      "name": "W"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "349.228"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "250"
+    },
+    {
+      "opc": "ToneAction",
+      "name": "W"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "391.995"
+    },
+    {
+      "opc": "expr",
+      "expr": "NUM_CONST",
+      "value": "125"
+    },
+    {
+      "opc": "ToneAction",
+      "name": "W"
+    },
+    {
+      "opc": "expr",
+      "name": "numVar",
+      "expr": "Var"
+    },
+    {
+      "opc": "expr",
+      "name": "numVar",
+      "expr": "Var"
+    },
+    {
+      "opc": "ToneAction",
+      "name": "W"
+    },
+    {
+      "opc": "comment",
+      "text": "createMethodVoid",
+      "label": "mthd_e_9",
+      "type": "start"
+    },
+    {
+      "opc": "return",
+      "values": false
+    },
+    {
+      "opc": "comment",
+      "text": "createMethodVoid",
+      "type": "end"
+    },
+    {
+      "opc": "comment",
+      "text": "createMethodVoid",
+      "label": "mthd_s_lights",
+      "type": "start"
+    },
+    {
+      "opc": "expr",
+      "name": "colourVar",
+      "expr": "Var"
+    },
+    {
+      "opc": "rgbLedOnAction",
+      "name": "W"
+    },
+    {
+      "opc": "rgbLedOffAction",
+      "name": "W"
+    },
+    {
+      "opc": "comment",
+      "text": "createMethodVoid",
+      "label": "mthd_e_10",
+      "type": "start"
+    },
+    {
+      "opc": "return",
+      "values": false
+    },
+    {
+      "opc": "comment",
+      "text": "createMethodVoid",
+      "type": "end"
+    }
 ]}

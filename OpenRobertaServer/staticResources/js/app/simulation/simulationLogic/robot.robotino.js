@@ -49,7 +49,7 @@ define(["require", "exports", "robot.base.mobile", "robot.sensors", "./robot.act
         RobotRobotino.prototype.configure = function (configuration) {
             this.chassis = new robot_actuators_1.RobotinoChassis(this.id, this.pose);
             this.robotinoTouchSensor = new robot_sensors_1.RobotinoTouchSensor();
-            this.infraredSensor = new robot_sensors_1.RobotinoInfraredSensor();
+            this.infraredSensors = new robot_sensors_1.RobotinoInfraredSensors();
             this.odometrySensor = new robot_sensors_1.OdometrySensor();
             this.cameraSensor = new robot_sensors_1.CameraSensor(new robot_base_mobile_1.Pose(25, 0, 0), (2 * Math.PI) / 5);
             var numOptical = Object.keys(configuration['ACTUATORS']).filter(function (sensor) { return configuration['ACTUATORS'][sensor].TYPE == 'OPTICAL'; }).length;
