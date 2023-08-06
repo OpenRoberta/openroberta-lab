@@ -17,7 +17,6 @@ public class AliveData {
     private static final AtomicLong loginsDelta = new AtomicLong(0);
     private static final AtomicLong robotCommunicationStatesTotal = new AtomicLong(0);
     private static final AtomicLong robotCommunicationStatesDelta = new AtomicLong(0);
-    public static final AtomicLong transformerDatabaseLoadsTotal = new AtomicLong(0);
     public static final AtomicLong transformerExecutedTransformations = new AtomicLong(0);
     public static final AtomicLong transformerDatabaseSavesTotal = new AtomicLong(0);
 
@@ -32,9 +31,7 @@ public class AliveData {
         long actualLoginsDelta = loginsDelta.getAndSet(0);
         long actualAliveCallsDelta = aliveCallsDelta.incrementAndGet();
         long actualRobotCommunicationStatesTotal = robotCommunicationStatesDelta.get();
-        long actualRobotCommunicationStatesDelta =
-            actualRobotCommunicationStatesTotal - robotCommunicationStatesDelta.getAndSet(actualRobotCommunicationStatesTotal);
-        long actualTransformerDatabaseLoadsTotal = transformerDatabaseLoadsTotal.get();
+        long actualRobotCommunicationStatesDelta = actualRobotCommunicationStatesTotal - robotCommunicationStatesDelta.getAndSet(actualRobotCommunicationStatesTotal);
         long actualTransformerExecutedTransformations = transformerExecutedTransformations.get();
         long actualTransformerDatabaseSavesTotal = transformerDatabaseSavesTotal.get();
         String runningSince = running.elapsedSecFormatted();
@@ -44,7 +41,6 @@ public class AliveData {
         answer.put("loginsTotal", actualLoginsTotal).put("loginsDelta", actualLoginsDelta);
         answer.put("aliveCalls", actualAliveCallsDelta).put("runningSinceSec", runningSince).put("runningSinceHr", (running.elapsedSec() / 3600 + 1) + " h");
         answer.put("robotsDelta", actualRobotCommunicationStatesDelta).put("robotsTotal", actualRobotCommunicationStatesTotal);
-        answer.put("transformerDbLoads", actualTransformerDatabaseLoadsTotal);
         answer.put("transformerExecutions", actualTransformerExecutedTransformations);
         answer.put("transformerDbSaves", actualTransformerDatabaseSavesTotal);
         answer.put("serverDate", new Date().toString());

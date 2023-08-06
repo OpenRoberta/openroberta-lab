@@ -323,6 +323,7 @@ public class Util {
      *
      * @param resourceName
      * @return the content of the resource as one String
+     * @throws DbcException if the read fails
      */
     public static String readResourceContent(String resourceName) {
         final Class<?> clazz = Util.class;
@@ -334,7 +335,7 @@ public class Util {
                 sb.append(line).append(lineSeparator);
             }
             return sb.toString();
-        } catch ( IOException e ) {
+        } catch ( Exception e ) {
             throw new DbcException("reading resource failed for: " + resourceName, e);
         }
     }

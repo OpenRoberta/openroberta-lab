@@ -38,7 +38,11 @@ public class RobotFactory {
         this.blocklyDropdown2EnumFactory = new BlocklyDropdownFactory();
         this.beginnerToolbox = Util.readResourceContent(this.pluginProperties.getStringProperty("robot.program.toolbox.beginner"));
         this.expertToolbox = Util.readResourceContent(this.pluginProperties.getStringProperty("robot.program.toolbox.expert"));
-        this.programDefault = Util.readResourceContent(this.pluginProperties.getStringProperty("robot.program.default"));
+        if ( hasNN() ) {
+            this.programDefault = Util.readResourceContent(this.pluginProperties.getStringProperty("robot.program.default.nn"));
+        } else {
+            this.programDefault = Util.readResourceContent(this.pluginProperties.getStringProperty("robot.program.default"));
+        }
         this.configurationToolbox = Util.readResourceContent(this.pluginProperties.getStringProperty("robot.configuration.toolbox"));
         this.configurationDefault = Util.readResourceContent(this.pluginProperties.getStringProperty("robot.configuration.default"));
         loadWorkers();
