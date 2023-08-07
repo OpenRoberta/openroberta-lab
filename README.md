@@ -17,18 +17,29 @@ main project **openroberta-lab**.
 All of our production and test systems run on _Linux_ servers. Most of our developers use Linux laptops. The following instructions are valid for Linux
 machines. Nevertheless you can follow the steps on a Win* machine. Please leave out the installation of cross compilers, because not all exist/work on Win*.
 Without crosscompiler you can do almost everything (start the server, experiment with the frontend, create user, use the data base, change the lab by editing
-our sources, ...), except cross compilation of course (not completely correct: target code for Lego ev3 systems can be compiled, because it is Java).
+our sources, ...), except cross compilation of course.
 
 #### Prerequisites
 
-Tools you need:
+You need Java JDK >= 1.8 and JAVA JDK <= 13.0.2 (e.g. `openjdk-11-jdk`), Maven, Git and Python3 together with pip3 and python3-serial. A typical install on
+ubuntu:22.04 as superuser with apt is (other systems are similar):
 
-* Java JDK >= 1.8 (e.g. `openjdk-11-jdk` on Ubuntu) and JAVA JDK <= 13.0.2. For Windows, we recommend the Java
-  installation [found here](https://docs.microsoft.com/en-us/java/openjdk/download#openjdk-11015-lts).
-* Maven
-* NPM
-* Git
-* Web browser
+```bash
+apt-get update
+apt-get install openjdk-11-jdk
+apt-get install maven
+apt-get install git
+apt-get install maven
+apt-get install python-is-python3
+apt-get install python3-pip
+apt-get install python3-serial
+# check the installation:
+java --version
+mvn --version
+git --version
+python --version
+pip --version
+```
 
 ### Cross Compiler (optional)
 
@@ -49,15 +60,9 @@ to download them to a user-defined directory, such as `/opt/compilers/`, as this
     * download and unpack the
       latest [gcc-arm-none-eabi](https://developer.arm.com/tools-and-software/open-source-software/developer-tools/gnu-toolchain/gnu-rm/downloads) to a
       directory of your choice.
-* micro:bit
-    * `pip install uflash` (to install pip run `sudo apt install` with `python-pip` on Ubuntu 18.04 and `python3-pip` on 20.04)
 * EV3 c4ev3
     * `sudo apt-get install g++-arm-linux-gnueabi`
-* Edison
-    * `sudo apt-get install python` (Python 2 is needed, it is called `python` for Ubuntu 18.04 and `python2` for 20.04)
 * Bionics4Education
-    * `sudo apt-get install python-serial` (`python3-serial` for Ubuntu 20.04, in this case you should have `python` default to `python3`, test it by
-      running `python --version` and if it is `2.x` you can change it by running `sudo apt-get install python-is-python3`)
     * download and unpack [xtensa-esp32-elf](https://dl.espressif.com/dl/xtensa-esp32-elf-linux64-1.22.0-61-gab8375a-5.2.0.tar.gz) to a directory of your
       choice.
 
@@ -92,7 +97,7 @@ server. License information is available in the **docs** folder. Btw: if you use
     mvn clean install                                            # generate the server, at the end: build success
     npm install && npm run build                                 # build the frontend, some lines, must show no error
 
-Might take some time.
+Takes some time.
 
 #### Step 2: Make sure you have a database and start the server
 
