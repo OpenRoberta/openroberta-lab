@@ -6,13 +6,13 @@ motorA = spike.Motor('A')
 
 def run():
     # motor
-    motorB.run_for_rotations(1, 30)
-    motorA.run_for_degrees(360, 30)
-    motorB.start(30)
+    motorB.run_for_rotations(1, int(30))
+    motorA.run_for_degrees(360, int(30))
+    motorB.start(int(30))
     wait_for_seconds(500/1000)
     motorB.set_stop_action('coast')
     motorB.stop()
-    motorA.start_at_power(-30)
+    motorA.start_at_power(int(-30))
     wait_for_seconds(500/1000)
     motorA.set_stop_action('brake')
     motorA.stop()
