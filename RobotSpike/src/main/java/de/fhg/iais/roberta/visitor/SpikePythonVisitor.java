@@ -105,7 +105,7 @@ public final class SpikePythonVisitor extends AbstractPythonVisitor implements I
     public Void visitMotorDiffOnForAction(MotorDiffOnForAction motorDiffOnForAction) {
         src.add("diff_drive.move(");
         motorDiffOnForAction.distance.accept(this);
-        src.add(", 'cm', 0, ");
+        src.add(", 'cm', 0, int(");
         switch ( motorDiffOnForAction.direction ) {
             case "BACKWARD":
                 src.add("-(");
@@ -118,7 +118,7 @@ public final class SpikePythonVisitor extends AbstractPythonVisitor implements I
             default:
                 throw new DbcException("Invalid drive direction: " + motorDiffOnForAction.direction);
         }
-        src.add(")");
+        src.add("))");
         return null;
     }
 
@@ -137,8 +137,9 @@ public final class SpikePythonVisitor extends AbstractPythonVisitor implements I
             default:
                 throw new DbcException("Invalid turn direction: " + motorDiffTurnForAction.direction);
         }
+        src.add("int(");
         motorDiffTurnForAction.power.accept(this);
-        src.add(")");
+        src.add("))");
         return null;
     }
 
@@ -152,6 +153,7 @@ public final class SpikePythonVisitor extends AbstractPythonVisitor implements I
             src.add("diff_drive.start_at_power(");
             end = ", 0)";
         }
+        src.add("int(");
         switch ( motorDiffOnAction.direction ) {
             case "BACKWARD":
                 src.add("-(");
@@ -164,7 +166,7 @@ public final class SpikePythonVisitor extends AbstractPythonVisitor implements I
             default:
                 throw new DbcException("Invalid drive direction: " + motorDiffOnAction.direction);
         }
-        src.add(end);
+        src.add(")", end);
         return null;
     }
 
@@ -189,8 +191,9 @@ public final class SpikePythonVisitor extends AbstractPythonVisitor implements I
             src.add("diff_drive.start_at_power(");
             end = ", " + String.valueOf(turn) + ")";
         }
+        src.add("int(");
         motorDiffTurnAction.power.accept(this);
-        src.add(end);
+        src.add(")", end);
         return null;
     }
 
@@ -209,11 +212,11 @@ public final class SpikePythonVisitor extends AbstractPythonVisitor implements I
             default:
                 throw new DbcException("Invalid curve direction: " + motorDiffCurveForAction.direction);
         }
-        src.add(", 'cm', ");
+        src.add(", 'cm', int(");
         motorDiffCurveForAction.powerLeft.accept(this);
-        src.add(", ");
+        src.add("), int(");
         motorDiffCurveForAction.powerRight.accept(this);
-        src.add(")");
+        src.add("))");
         return null;
     }
 
@@ -350,21 +353,22 @@ public final class SpikePythonVisitor extends AbstractPythonVisitor implements I
         }
         switch ( motorDiffCurveAction.direction ) {
             case "BACKWARD":
-                src.add("-(");
+                src.add("int(-(");
                 motorDiffCurveAction.powerLeft.accept(this);
-                src.add("), -(");
+                src.add(")), int(-(");
                 motorDiffCurveAction.powerRight.accept(this);
                 src.add(")");
                 break;
             case "FORWARD":
+                src.add("int(");
                 motorDiffCurveAction.powerLeft.accept(this);
-                src.add(", ");
+                src.add("), int(");
                 motorDiffCurveAction.powerRight.accept(this);
                 break;
             default:
                 throw new DbcException("Invalid curve direction: " + motorDiffCurveAction.direction);
         }
-        src.add(")");
+        src.add("))");
         return null;
     }
 
@@ -403,9 +407,9 @@ public final class SpikePythonVisitor extends AbstractPythonVisitor implements I
 
         }
         motorOnForAction.value.accept(this);
-        this.src.add(", ");
+        this.src.add(", int(");
         motorOnForAction.power.accept(this);
-        this.src.add(")");
+        this.src.add("))");
         return null;
     }
 
@@ -417,8 +421,9 @@ public final class SpikePythonVisitor extends AbstractPythonVisitor implements I
         } else {
             src.add(".start_at_power(");
         }
+        src.add("int(");
         motorOnAction.power.accept(this);
-        src.add(")");
+        src.add("))");
         return null;
     }
 
