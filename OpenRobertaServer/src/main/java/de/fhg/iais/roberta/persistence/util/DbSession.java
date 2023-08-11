@@ -50,7 +50,7 @@ public class DbSession {
     // data for analyzing db session usage.
     private final long sessionId;
     private final long creationTime;
-    private StringBuilder actions = new StringBuilder();
+    private final StringBuilder actions = new StringBuilder();
     private long numberOfActions = 0;
 
     /**
@@ -101,6 +101,13 @@ public class DbSession {
      * commit the current transaction and close the session
      */
     public void close() {
+        close(true);
+    }
+
+    /**
+     * commit the current transaction and close the session
+     */
+    public void close(boolean logTransactionsThatRunTooLong) {
         if ( this.session != null ) {
             addTransaction("commit + close"); // for analyzing db session usage.
             Transaction transaction = this.session.getTransaction();
@@ -117,7 +124,7 @@ public class DbSession {
         long currentDbSessionsSinceLastDebugLog = dbSessionsSinceLastDebugLog.incrementAndGet();
         boolean logAnyway = currentDbSessionsSinceLastDebugLog >= DBSESSION_LOG_LIMIT;
         long sessionAge = new Date().getTime() - this.creationTime;
-        boolean logTooOld = sessionAge > DURATION_TIMEOUT_MSEC_FOR_LOGGING;
+        boolean logTooOld = sessionAge > DURATION_TIMEOUT_MSEC_FOR_LOGGING && logTransactionsThatRunTooLong;
         String reasonForLog = "";
         if ( logAnyway ) {
             dbSessionsSinceLastDebugLog.set(0);
@@ -167,7 +174,7 @@ public class DbSession {
     public <T> T get(Class<T> type, int id) {
         this.actions.append("get of " + type.getSimpleName() + " with id " + id + "\n"); // for analyzing db session usage.
         @SuppressWarnings("unchecked")
-        T entity = (T) this.session.get(type, id);
+        T entity = this.session.get(type, id);
         return entity;
     }
 
@@ -238,7 +245,7 @@ public class DbSession {
     }
 
     private void addSaveOrDelete(String cmd, Object object) {
-        addToLog(cmd, object == null ? "null" : (object.getClass().getSimpleName() + " " + object.toString()));
+        addToLog(cmd, object == null ? "null" : (object.getClass().getSimpleName() + " " + object));
     }
 
     /**

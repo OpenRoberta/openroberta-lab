@@ -8,7 +8,7 @@ import com.sun.jersey.core.spi.component.ComponentScope;
 import com.sun.jersey.spi.inject.Injectable;
 import com.sun.jersey.spi.inject.InjectableProvider;
 
-import de.fhg.iais.roberta.util.XsltTransformer;
+import de.fhg.iais.roberta.util.XsltAndJavaTransformer;
 
 @Provider
 public class XsltTransProvider implements InjectableProvider<XsltTrans, Parameter> {
@@ -20,14 +20,14 @@ public class XsltTransProvider implements InjectableProvider<XsltTrans, Paramete
 
     @Override
     public Injectable<?> getInjectable(ComponentContext ic, XsltTrans a, Parameter p) {
-        if ( XsltTransformer.class.isAssignableFrom(p.getParameterClass()) ) {
+        if ( XsltAndJavaTransformer.class.isAssignableFrom(p.getParameterClass()) ) {
             return getInjectableXsltTransformer();
         } else {
             return null;
         }
     }
 
-    private Injectable<XsltTransformer> getInjectableXsltTransformer() {
-        return () -> new XsltTransformer();
+    private Injectable<XsltAndJavaTransformer> getInjectableXsltTransformer() {
+        return () -> new XsltAndJavaTransformer();
     }
 }

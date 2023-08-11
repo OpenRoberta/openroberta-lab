@@ -32,7 +32,7 @@ import de.fhg.iais.roberta.testutil.JSONUtilForServer;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.ServerProperties;
 import de.fhg.iais.roberta.util.Util;
-import de.fhg.iais.roberta.util.XsltTransformer;
+import de.fhg.iais.roberta.util.XsltAndJavaTransformer;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 /**
@@ -90,7 +90,7 @@ public abstract class AbstractRestInterfaceTest {
             + "<value name=\\\"S1\\\"><block type=\\\"robBrick_touch\\\" id=\\\"2\\\" intask=\\\"true\\\"></block></value>"
             + "</block></instance></block_set>";
 
-    protected XsltTransformer xsltTransformer;
+    protected XsltAndJavaTransformer xsltAndJavaTransformer;
 
     protected TestConfiguration tc;
     protected DbSetup memoryDbSetup; // use to query the test data base, etc. Shortcut: Retrieved from TestConfiguration tc
@@ -129,7 +129,7 @@ public abstract class AbstractRestInterfaceTest {
         tc.deleteAllFromUserAndProgramTmpPasswords();
         this.memoryDbSetup = tc.getMemoryDbSetup();
 
-        this.xsltTransformer = new XsltTransformer();
+        this.xsltAndJavaTransformer = new XsltAndJavaTransformer();
 
         this.robotPlugins = ServerStarter.configureRobotPlugins(this.robotCommunicator, this.serverProperties, EMPTY_STRING_LIST);
         this.restProject = new ClientProgramController(this.serverProperties, robotPlugins);
@@ -296,7 +296,7 @@ public abstract class AbstractRestInterfaceTest {
      */
     protected void restProgram(HttpSessionState httpSession, String jsonAsString, String result, Key msgOpt) throws JSONException, Exception {
         if ( jsonAsString.contains("loadP") ) {
-            this.response = this.restProject.getProgram(newDbSession(), this.xsltTransformer, mkFRR(httpSession.getInitToken(), jsonAsString));
+            this.response = this.restProject.getProgram(newDbSession(), this.xsltAndJavaTransformer, mkFRR(httpSession.getInitToken(), jsonAsString));
         } else if ( jsonAsString.contains("shareP") ) {
             this.response = this.restProject.shareProgram(newDbSession(), mkFRR(httpSession.getInitToken(), jsonAsString));
         } else if ( jsonAsString.contains("deleteP") ) {

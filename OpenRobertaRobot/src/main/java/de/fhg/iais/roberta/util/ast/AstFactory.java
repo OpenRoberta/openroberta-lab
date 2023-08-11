@@ -184,8 +184,9 @@ public class AstFactory {
 
     public static String getConfigurationComponentTypeByBlocklyName(String blocklyName) {
         Assert.nonEmptyString(blocklyName, "Invalid blockly name for a configuration block");
-        String blockType = configurationComponentTypes.get(blocklyName).getFirst();
-        Assert.notNull(blockType, "No component type for configuration blockly name %s found", blocklyName);
+        Pair<String, String> configurationComponentType = configurationComponentTypes.get(blocklyName);
+        Assert.notNull(configurationComponentType, "No configuration component found for program block %s", blocklyName);
+        String blockType = configurationComponentType.getFirst();
         return blockType;
     }
 

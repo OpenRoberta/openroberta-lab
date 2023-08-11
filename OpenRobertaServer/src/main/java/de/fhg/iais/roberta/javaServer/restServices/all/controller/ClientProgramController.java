@@ -26,11 +26,8 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 import com.google.inject.name.Named;
 
-import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
-import de.fhg.iais.roberta.blockly.generated.Data;
 import de.fhg.iais.roberta.blockly.generated.Export;
-import de.fhg.iais.roberta.blockly.generated.Instance;
 import de.fhg.iais.roberta.factory.RobotFactory;
 import de.fhg.iais.roberta.generated.restEntities.BaseResponse;
 import de.fhg.iais.roberta.generated.restEntities.EntityResponse;
@@ -70,8 +67,7 @@ import de.fhg.iais.roberta.util.Statistics;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.UtilForHtmlXml;
 import de.fhg.iais.roberta.util.UtilForREST;
-import de.fhg.iais.roberta.util.UtilForXmlTransformation;
-import de.fhg.iais.roberta.util.XsltTransformer;
+import de.fhg.iais.roberta.util.XsltAndJavaTransformer;
 import de.fhg.iais.roberta.util.archiver.UserProgramsArchiver;
 import de.fhg.iais.roberta.util.basic.Pair;
 import de.fhg.iais.roberta.util.dbc.Assert;
@@ -178,7 +174,7 @@ public class ClientProgramController {
     @Path("/listing")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getProgram(@OraData DbSession dbSession, @XsltTrans XsltTransformer xsltTransformer, FullRestRequest request) {
+    public Response getProgram(@OraData DbSession dbSession, @XsltTrans XsltAndJavaTransformer xsltAndJavaTransformer, FullRestRequest request) {
         HttpSessionState httpSessionState = UtilForREST.handleRequestInit(dbSession, LOG, request, true);
         try {
             ListingResponse response = ListingResponse.make();
@@ -192,53 +188,44 @@ public class ClientProgramController {
                 String ownerName = dataPart.getString("owner");
                 String author = dataPart.getString("author");
                 String robot = getRobot(httpSessionState);
-                String robotName = httpSessionState.getRobotName();
                 Program program = programProcessor.getProgram(programName, ownerName, robot, author);
                 if ( program == null ) {
+                    Statistics.info("ProgramLoad", "failed", false);
                     return UtilForREST.makeBaseResponseForError(programProcessor.getMessage(), httpSessionState, null);
                 } else {
-                    String configName = program.getConfigName();
                     String programText = program.getProgramText();
+                    String configName = program.getConfigName();
                     String configText = programProcessor.getProgramsConfig(program);
-                    programText = xsltTransformer.transform(programText);
-                    if ( configText != null ) {
-                        configText = xsltTransformer.transform(configText);
-                    }
-                    BlockSet jaxbProgram = JaxbHelper.xml2Element(programText, BlockSet.class);
-                    if ( jaxbProgram != null ) {
-                        checkAndAddNnDataForPlugin(robotName, jaxbProgram);
-                        String xmlVersion = jaxbProgram.getXmlversion();
-                        programText = JaxbHelper.blockSet2xml(jaxbProgram);
-                        Pair<String, String> progConfPair = UtilForXmlTransformation.transformBetweenVersions(httpSessionState.getRobotFactory(), xmlVersion, programText, configText);
-                        String progXml = progConfPair == null ? JaxbHelper.blockSet2xml(jaxbProgram) : progConfPair.getFirst();
-                        configText = progConfPair == null ? configText : configName == null && configText == null ? null : progConfPair.getSecond();
-                        if ( feature_Toggle_rewrite_transformed_programs_into_the_database && progConfPair != null ) {
-                            programProcessor.replaceTransformedProgram(program, programText, configName, configText); // save the transformed program text and conf
+                    Pair<String, String> transformedProgAndConfig = xsltAndJavaTransformer.transform(httpSessionState.getRobotFactory(), programText, configText);
+                    String programTextTransformed = transformedProgAndConfig.getFirst();
+                    String configTextTransformed = transformedProgAndConfig.getSecond();
+                    if ( feature_Toggle_rewrite_transformed_programs_into_the_database ) {
+                        boolean programChanged = !programTextTransformed.equals(programText);
+                        boolean configChanged = configText == null ? configTextTransformed != null : !configText.equals(configTextTransformed);
+                        if ( programChanged || configChanged ) {
+                            programProcessor.replaceTransformedProgram(program, programTextTransformed, configName, configTextTransformed);
                             LOG.error("program with id " + program.getId() + " replaced in the database. Number of replacements: " + AliveData.transformerDatabaseSavesTotal.incrementAndGet());
                         }
-                        response.setProgXML(progXml);
-                        response.setConfigName(configName); // may be null, if an anonymous configuration is used
-                        response.setConfXML(configText); // may be null, if the default configuration is used
-                        response.setProgramName(program.getName());
-                        response.setLastChanged(program.getLastChanged().getTime());
-                        // count the views if the program is from the gallery!
-                        if ( ownerName.equals("Gallery") ) {
-                            programProcessor.addOneView(program);
-                        }
-                        UtilForREST.addResultInfo(response, programProcessor);
-                        Statistics.info("ProgramLoad", "success", programProcessor.succeeded());
-                        return UtilForREST.responseWithFrontendInfo(response, httpSessionState, null);
-                    } else {
-                        Statistics.info("ProgramLoad", "failed", programProcessor.succeeded());
-                        return UtilForREST.responseWithFrontendInfo(response, httpSessionState, null);
                     }
+                    response.setProgXML(programText);
+                    response.setConfigName(configName); // may be null, if an anonymous configuration is used
+                    response.setConfXML(configText); // may be null, if the default configuration is used
+                    response.setProgramName(program.getName());
+                    response.setLastChanged(program.getLastChanged().getTime());
+                    // count the views if the program is from the gallery!
+                    if ( ownerName.equals("Gallery") ) {
+                        programProcessor.addOneView(program);
+                    }
+                    UtilForREST.addResultInfo(response, programProcessor);
+                    Statistics.info("ProgramLoad", "success", programProcessor.succeeded());
+                    return UtilForREST.responseWithFrontendInfo(response, httpSessionState, null);
                 }
             }
         } catch ( Exception e ) {
             dbSession.rollback();
-            String errorTicketId = Util.getErrorTicketId();
-            LOG.error("Exception. Error ticket: {}", errorTicketId, e);
-            return UtilForREST.makeBaseResponseForError(Key.SERVER_ERROR, httpSessionState, null); // TODO: redesign error ticker number and add then: setParameters(errorTicketId);
+            Statistics.info("ProgramLoad", "failed", false);
+            LOG.error("get user program failed with exception", e);
+            return UtilForREST.makeBaseResponseForError(Key.SERVER_ERROR, httpSessionState, null);
         } finally {
             if ( dbSession != null ) {
                 dbSession.close();
@@ -415,69 +402,51 @@ public class ClientProgramController {
     @Path("/import")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response importProgram(@XsltTrans XsltTransformer xsltTransformer, FullRestRequest request) {
+    public Response importProgram(@XsltTrans XsltAndJavaTransformer xsltAndJavaTransformer, FullRestRequest request) {
         HttpSessionState httpSessionState = UtilForREST.handleRequestInit(LOG, request, true);
-        String errorDescription = "";
         try {
             ImportRequest importRequest = ImportRequest.make(request.getData());
-            String robot = getRobot(httpSessionState);
-            String xmlText = importRequest.getProgXML();
-            xmlText = UtilForHtmlXml.checkProgramTextForXSS(xmlText);
             String programName = importRequest.getProgramName();
             if ( !Util.isValidJavaIdentifier(programName) ) {
                 programName = "NEPOprog";
             }
-            String transformedXml = null;
-            Export jaxbImportExport = null;
-            try {
-                transformedXml = xsltTransformer.transform(xmlText);
-            } catch ( Exception e ) {
-                errorDescription = "xslt transform";
-            }
-            if ( transformedXml != null ) {
-                try {
-                    jaxbImportExport = JaxbHelper.xml2Element(transformedXml, Export.class);
-                } catch ( Exception e ) {
-                    errorDescription = "xml2jaxb";
-                }
-            }
-            if ( jaxbImportExport != null ) {
-                String robotType1 = jaxbImportExport.getProgram().getBlockSet().getRobottype();
-                String robotType2 = jaxbImportExport.getConfig().getBlockSet().getRobottype();
-                String robotName = httpSessionState.getRobotName();
-                if ( robotType1.equals(robot) && robotType2.equals(robot) ) {
-                    ImportResponse response = ImportResponse.make();
-                    response.setProgramName(programName);
-                    BlockSet jaxbProgram = jaxbImportExport.getProgram().getBlockSet();
-                    checkAndAddNnDataForPlugin(robotName, jaxbProgram);
-                    String progXml = JaxbHelper.blockSet2xml(jaxbProgram);
-                    String configXml = JaxbHelper.blockSet2xml(jaxbImportExport.getConfig().getBlockSet());
-                    Pair<String, String> progConfPair =
-                        UtilForXmlTransformation.transformBetweenVersions(httpSessionState.getRobotFactory(), jaxbProgram.getXmlversion(), progXml, configXml);
-                    progXml = progConfPair == null ? progXml : progConfPair.getFirst();
-                    configXml = progConfPair == null ? configXml : progConfPair.getSecond();
-                    response.setProgXML(progXml);
-                    response.setConfXML(configXml);
-                    UtilForREST.addSuccessInfo(response, Key.PROGRAM_IMPORT_SUCCESS);
-                    Statistics.info("ProgramImport", "success", true);
-                    return UtilForREST.responseWithFrontendInfo(response, httpSessionState, null);
-                } else {
-                    List<RobotFactory> members = httpSessionState.getRobotFactoriesOfGroup(robotType1);
-                    List<String> realNames = members.stream().map(RobotFactory::getRealName).collect(Collectors.toList());
-                    Statistics.info("ProgramImport", "success", false);
-                    ImportErrorResponse error = ImportErrorResponse.make();
-                    error.setRobotTypes(String.join(", ", realNames));
-                    UtilForREST.addErrorInfo(error, Key.PROGRAM_IMPORT_ERROR_WRONG_ROBOT_TYPE);
-                    return UtilForREST.responseWithFrontendInfo(error, httpSessionState, null);
-                }
+            String xmlText = importRequest.getProgXML();
+            xmlText = UtilForHtmlXml.checkProgramTextForXSS(xmlText);
+            Export jaxbImportExport = JaxbHelper.xml2Element(xmlText, Export.class);
+            Assert.notNull(jaxbImportExport, "import xml is invalid");
+            BlockSet jaxbProgram = jaxbImportExport.getProgram().getBlockSet();
+            BlockSet jaxbConfig = jaxbImportExport.getConfig().getBlockSet();
+            String robotType1 = jaxbProgram.getRobottype();
+            String robotType2 = jaxbConfig.getRobottype();
+            String robotGroup = httpSessionState.getRobotFactory().getGroup();
+            if ( robotType1.equals(robotGroup) && robotType2.equals(robotGroup) ) {
+                ImportResponse response = ImportResponse.make();
+                response.setProgramName(programName);
+                String progXml = JaxbHelper.blockSet2xml(jaxbProgram);
+                String configXml = JaxbHelper.blockSet2xml(jaxbImportExport.getConfig().getBlockSet());
+                Pair<String, String> transformed = xsltAndJavaTransformer.transform(httpSessionState.getRobotFactory(), progXml, configXml);
+                progXml = transformed.getFirst();
+                configXml = transformed.getSecond();
+                response.setProgXML(progXml);
+                response.setConfXML(configXml);
+                UtilForREST.addSuccessInfo(response, Key.PROGRAM_IMPORT_SUCCESS);
+                Statistics.info("ProgramImport", "success", true);
+                return UtilForREST.responseWithFrontendInfo(response, httpSessionState, null);
+            } else {
+                List<RobotFactory> members = httpSessionState.getRobotFactoriesOfGroup(robotType1);
+                List<String> realNames = members.stream().map(RobotFactory::getRealName).collect(Collectors.toList());
+                Statistics.info("ProgramImport", "success", false);
+                ImportErrorResponse error = ImportErrorResponse.make();
+                error.setRobotTypes(String.join(", ", realNames));
+                UtilForREST.addErrorInfo(error, Key.PROGRAM_IMPORT_ERROR_WRONG_ROBOT_TYPE);
+                return UtilForREST.responseWithFrontendInfo(error, httpSessionState, null);
             }
         } catch ( Exception e ) { // JaxbHelper methods throw Exception
-            errorDescription = "back transform";
+            LOG.error("program import failed. Probably no or user-edited XML", e);
+            ImportResponse response = ImportResponse.make();
+            UtilForREST.addErrorInfo(response, Key.PROGRAM_IMPORT_ERROR);
+            return UtilForREST.makeBaseResponseForError(Key.PROGRAM_IMPORT_ERROR, httpSessionState, null);
         }
-        LOG.error("program import failed (" + errorDescription + "). Probably no or user-edited XML");
-        ImportResponse response = ImportResponse.make();
-        UtilForREST.addErrorInfo(response, Key.PROGRAM_IMPORT_ERROR);
-        return UtilForREST.makeBaseResponseForError(Key.PROGRAM_IMPORT_ERROR, httpSessionState, null);
     }
 
     /**
@@ -795,21 +764,5 @@ public class ClientProgramController {
         return httpSessionState.getRobotFactory(httpSessionState.getRobotName()).getGroup().isEmpty()
             ? httpSessionState.getRobotName()
             : httpSessionState.getRobotFactory(httpSessionState.getRobotName()).getGroup();
-    }
-
-    private void checkAndAddNnDataForPlugin(String robotName, BlockSet jaxbImportExport) {
-        if ( this.robotPluginMap.get(robotName).hasNN() ) {
-            for ( Instance instance : jaxbImportExport.getInstance() ) {
-                if ( instance.getBlock().get(0).getType().contains("robControls_start") ) {
-                    Block startBlock = instance.getBlock().get(0);
-                    if ( startBlock.getData() == null ) {
-                        Data data = new Data();
-                        data.setValue(ServerProperties.DEFAULT_NEURAL_NETWORK);
-                        startBlock.setData(data);
-                    }
-                    return;
-                }
-            }
-        }
     }
 }

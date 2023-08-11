@@ -8,7 +8,7 @@ import org.junit.Test;
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.factory.RobotFactory;
 import de.fhg.iais.roberta.util.Util;
-import de.fhg.iais.roberta.util.XsltTransformer;
+import de.fhg.iais.roberta.util.XsltAndJavaTransformer;
 import de.fhg.iais.roberta.util.ast.AstFactory;
 import de.fhg.iais.roberta.util.test.UnitTestHelper;
 import de.fhg.iais.roberta.worker.MbedThree2ThreeOneTransformerWorker;
@@ -116,12 +116,12 @@ public class CalliopeThree2ThreeOneTransformerTest {
             + "    </instance>"
             + "</block_set>";
     private static RobotFactory testFactory;
-    private static XsltTransformer xsltTransformer;
+    private static XsltAndJavaTransformer xsltAndJavaTransformer;
 
     @BeforeClass
     public static void setupBefore() throws Exception {
         AstFactory.loadBlocks();
-        xsltTransformer = new XsltTransformer();
+        xsltAndJavaTransformer = new XsltAndJavaTransformer();
         testFactory = Util.configureRobotPlugin("calliope2017NoBlue", "", "", Collections.emptyList());
     }
 
@@ -139,7 +139,7 @@ public class CalliopeThree2ThreeOneTransformerTest {
 
         Project project =
             UnitTestHelper
-                .setupWithConfigAndProgramXML(testFactory, xsltTransformer, Util.readResourceContent("/transform/three2threeone/old_compass.xml"), OLD_CONFIGURATION_XML)
+                .setupWithConfigAndProgramXML(testFactory, xsltAndJavaTransformer, Util.readResourceContent("/transform/three2threeone/old_compass.xml"), OLD_CONFIGURATION_XML)
                 .build();
 
         new MbedThree2ThreeOneTransformerWorker().execute(project);
@@ -177,7 +177,7 @@ public class CalliopeThree2ThreeOneTransformerTest {
 
         Project project =
             UnitTestHelper
-                .setupWithConfigAndProgramXML(testFactory, xsltTransformer, Util.readResourceContent("/transform/three2threeone/old_led_rgbled.xml"), OLD_CONFIGURATION_XML)
+                .setupWithConfigAndProgramXML(testFactory, xsltAndJavaTransformer, Util.readResourceContent("/transform/three2threeone/old_led_rgbled.xml"), OLD_CONFIGURATION_XML)
                 .build();
 
         new MbedThree2ThreeOneTransformerWorker().execute(project);
@@ -198,7 +198,7 @@ public class CalliopeThree2ThreeOneTransformerTest {
 
         Project project =
             UnitTestHelper
-                .setupWithConfigAndProgramXML(testFactory, xsltTransformer, Util.readResourceContent("/transform/three2threeone/old_light.xml"), OLD_CONFIGURATION_XML)
+                .setupWithConfigAndProgramXML(testFactory, xsltAndJavaTransformer, Util.readResourceContent("/transform/three2threeone/old_light.xml"), OLD_CONFIGURATION_XML)
                 .build();
 
         new MbedThree2ThreeOneTransformerWorker().execute(project);
@@ -219,7 +219,7 @@ public class CalliopeThree2ThreeOneTransformerTest {
 
         Project project =
             UnitTestHelper
-                .setupWithConfigAndProgramXML(testFactory, xsltTransformer, Util.readResourceContent("/transform/three2threeone/old_sound.xml"), OLD_CONFIGURATION_XML)
+                .setupWithConfigAndProgramXML(testFactory, xsltAndJavaTransformer, Util.readResourceContent("/transform/three2threeone/old_sound.xml"), OLD_CONFIGURATION_XML)
                 .build();
 
         new MbedThree2ThreeOneTransformerWorker().execute(project);
@@ -240,7 +240,7 @@ public class CalliopeThree2ThreeOneTransformerTest {
 
         Project project =
             UnitTestHelper
-                .setupWithConfigAndProgramXML(testFactory, xsltTransformer, Util.readResourceContent("/transform/three2threeone/old_temperature.xml"), OLD_CONFIGURATION_XML)
+                .setupWithConfigAndProgramXML(testFactory, xsltAndJavaTransformer, Util.readResourceContent("/transform/three2threeone/old_temperature.xml"), OLD_CONFIGURATION_XML)
                 .build();
 
         new MbedThree2ThreeOneTransformerWorker().execute(project);
@@ -264,7 +264,7 @@ public class CalliopeThree2ThreeOneTransformerTest {
 
         Project project =
             UnitTestHelper
-                .setupWithConfigAndProgramXML(testFactory, xsltTransformer, Util.readResourceContent("/transform/three2threeone/old_ultrasonic.xml"), OLD_CONFIGURATION_XML)
+                .setupWithConfigAndProgramXML(testFactory, xsltAndJavaTransformer, Util.readResourceContent("/transform/three2threeone/old_ultrasonic.xml"), OLD_CONFIGURATION_XML)
 
                 .build();
 
@@ -292,7 +292,7 @@ public class CalliopeThree2ThreeOneTransformerTest {
 
         Project project =
             UnitTestHelper
-                .setupWithConfigAndProgramXML(testFactory, xsltTransformer, Util.readResourceContent("/transform/three2threeone/old_accelerometer.xml"), OLD_CONFIGURATION_XML)
+                .setupWithConfigAndProgramXML(testFactory, xsltAndJavaTransformer, Util.readResourceContent("/transform/three2threeone/old_accelerometer.xml"), OLD_CONFIGURATION_XML)
                 .build();
 
         new MbedThree2ThreeOneTransformerWorker().execute(project);
@@ -315,7 +315,7 @@ public class CalliopeThree2ThreeOneTransformerTest {
 
         Project project =
             UnitTestHelper
-                .setupWithConfigAndProgramXML(testFactory, xsltTransformer, Util.readResourceContent("/transform/three2threeone/old_gyro.xml"), OLD_CONFIGURATION_XML)
+                .setupWithConfigAndProgramXML(testFactory, xsltAndJavaTransformer, Util.readResourceContent("/transform/three2threeone/old_gyro.xml"), OLD_CONFIGURATION_XML)
                 .build();
 
         new MbedThree2ThreeOneTransformerWorker().execute(project);
@@ -340,7 +340,7 @@ public class CalliopeThree2ThreeOneTransformerTest {
 
         Project project =
             UnitTestHelper
-                .setupWithConfigAndProgramXML(testFactory, xsltTransformer, Util.readResourceContent("/transform/three2threeone/old_sounds.xml"), OLD_CONFIGURATION_XML)
+                .setupWithConfigAndProgramXML(testFactory, xsltAndJavaTransformer, Util.readResourceContent("/transform/three2threeone/old_sounds.xml"), OLD_CONFIGURATION_XML)
                 .build();
 
         new MbedThree2ThreeOneTransformerWorker().execute(project);
@@ -386,7 +386,7 @@ public class CalliopeThree2ThreeOneTransformerTest {
 
         Project project =
             UnitTestHelper
-                .setupWithConfigAndProgramXML(testFactory, xsltTransformer, Util.readResourceContent("/transform/three2threeone/old_wait_for.xml"), OLD_CONFIGURATION_XML)
+                .setupWithConfigAndProgramXML(testFactory, xsltAndJavaTransformer, Util.readResourceContent("/transform/three2threeone/old_wait_for.xml"), OLD_CONFIGURATION_XML)
                 .build();
 
         new MbedThree2ThreeOneTransformerWorker().execute(project);

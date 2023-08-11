@@ -7,15 +7,15 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.fhg.iais.roberta.util.UtilForHtmlXml;
-import de.fhg.iais.roberta.util.XsltTransformer;
+import de.fhg.iais.roberta.util.XsltAndJavaTransformer;
 
 public class XSSInDescriptionTest {
-    private static XsltTransformer XSLT_TRANSFORMER;
+    private static XsltAndJavaTransformer XSLT_TRANSFORMER;
     private static Pattern SCRIPT_MATCHER;
 
     @BeforeClass
     public static void setup() {
-        XSLT_TRANSFORMER = new XsltTransformer();
+        XSLT_TRANSFORMER = new XsltAndJavaTransformer();
         SCRIPT_MATCHER = Pattern.compile("\\bscript\\b");
     }
 
@@ -35,8 +35,8 @@ public class XSSInDescriptionTest {
         String cleanValidXml = UtilForHtmlXml.checkProgramTextForXSS(xssValidXml);
         String cleanInValidXml = UtilForHtmlXml.checkProgramTextForXSS(xssInvalidXml);
         // must be valid XML. Check that:
-        XSLT_TRANSFORMER.transform(cleanValidXml);
-        XSLT_TRANSFORMER.transform(cleanInValidXml);
+        XSLT_TRANSFORMER.transformXslt(cleanValidXml);
+        XSLT_TRANSFORMER.transformXslt(cleanInValidXml);
         assert (!SCRIPT_MATCHER.matcher(cleanValidXml).find());
         assert (!SCRIPT_MATCHER.matcher(cleanInValidXml).find());
     }

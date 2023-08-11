@@ -61,11 +61,11 @@
             <field name="SENSORPORT"/>
             <field name="SLOT"/>
         </block>
-        <block type="mbedActions_leds_off" id="@6op=+wd%BeWn*2w@uSb" intask="true">
-            <field name="ACTORPORT">0</field>
+        <block type="actions_rgbLed_hidden_off_calliope" id="@6op=+wd%BeWn*2w@uSb" intask="true">
+            <hide name="ACTORPORT" value="_R"/>
         </block>
-        <block type="mbedActions_leds_on" id=",8m4r@D6[TYulG4fLLGH" intask="true">
-            <field name="ACTORPORT">0</field>
+        <block type="actions_rgbLed_hidden_on_calliope" id=",8m4r@D6[TYulG4fLLGH" intask="true">
+            <hide name="ACTORPORT" value="_R"/>
             <value name="COLOUR">
                 <block type="mbedColour_picker" id="{hag|O}W^M,z5b.!vd/W" intask="true">
                     <field name="COLOUR">#009900</field>

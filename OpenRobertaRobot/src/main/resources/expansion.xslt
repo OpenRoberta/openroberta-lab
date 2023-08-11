@@ -382,14 +382,8 @@
     <xsl:template match="b:block[./@type = 'mbedActions_leds_on']">
         <xsl:copy>
             <xsl:apply-templates select="@*"/>
-            <xsl:if test="not(b:field/@name = 'ACTORPORT')">
-                <xsl:element name="{'field'}" namespace="">
-                    <xsl:attribute name="name">ACTORPORT</xsl:attribute>
-                    <xsl:text>0</xsl:text>
-                </xsl:element>
-            </xsl:if>
             <xsl:choose>
-                <xsl:when test="b:field[./@name = 'ACTORPORT']/text() = '_R'">
+                <xsl:when test="not(b:field/@name = 'ACTORPORT') or b:field[./@name = 'ACTORPORT']/text() = '_R' or b:field[./@name = 'ACTORPORT']/text() = '0'">
                     <xsl:attribute name="type">actions_rgbLed_hidden_on_calliope</xsl:attribute>
                     <xsl:element name="{'hide'}" namespace="">
                         <xsl:attribute name="name">ACTORPORT</xsl:attribute>
@@ -408,14 +402,8 @@
     <xsl:template match="b:block[./@type = 'mbedActions_leds_off']">
         <xsl:copy>
             <xsl:apply-templates select="@*"/>
-            <xsl:if test="not(b:field/@name = 'ACTORPORT')">
-                <xsl:element name="{'field'}" namespace="">
-                    <xsl:attribute name="name">ACTORPORT</xsl:attribute>
-                    <xsl:text>0</xsl:text>
-                </xsl:element>
-            </xsl:if>
             <xsl:choose>
-                <xsl:when test="b:field[./@name = 'ACTORPORT']/text() = '_R'">
+                <xsl:when test="not(b:field/@name = 'ACTORPORT') or b:field[./@name = 'ACTORPORT']/text() = '_R' or b:field[./@name = 'ACTORPORT']/text() = '0'">
                     <xsl:attribute name="type">actions_rgbLed_hidden_off_calliope</xsl:attribute>
                     <xsl:element name="{'hide'}" namespace="">
                         <xsl:attribute name="name">ACTORPORT</xsl:attribute>

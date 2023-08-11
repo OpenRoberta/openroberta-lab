@@ -22,7 +22,7 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.util.Util;
-import de.fhg.iais.roberta.util.XsltTransformer;
+import de.fhg.iais.roberta.util.XsltAndJavaTransformer;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.worker.IWorker;
 
@@ -123,11 +123,14 @@ public final class UnitTestHelper {
 
     public static Project.Builder setupWithConfigAndProgramXML(
         RobotFactory factory,
-        XsltTransformer xsltTransformer,
+        XsltAndJavaTransformer xsltAndJavaTransformer,
         String programXmlAsString,
         String configurationXmlAsString) {
-        programXmlAsString = xsltTransformer.transform(programXmlAsString);
-        configurationXmlAsString = xsltTransformer.transform(configurationXmlAsString);
+//        Pair<String, String> transformed = xsltAndJavaTransformer.transform(factory, programXmlAsString, configurationXmlAsString);
+//        programXmlAsString = transformed.getFirst();
+//        configurationXmlAsString = transformed.getSecond();
+        programXmlAsString = xsltAndJavaTransformer.transformXslt(programXmlAsString);
+        configurationXmlAsString = xsltAndJavaTransformer.transformXslt(configurationXmlAsString);
         return new Project.Builder().setConfigurationXml(configurationXmlAsString).setProgramXml(programXmlAsString).setFactory(factory);
     }
 
