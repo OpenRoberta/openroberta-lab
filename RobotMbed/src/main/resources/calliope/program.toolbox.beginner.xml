@@ -18,19 +18,14 @@
             </value>
         </block>
         <block type="mbedActions_display_clear"/>
-        <block type="actions_rgbLed_on">
+        <block type="actions_rgbLed_hidden_on_calliope">
             <value name="COLOUR">
                 <block type="mbedColour_picker">
                     <field name="COLOUR">#ff0000</field>
                 </block>
             </value>
         </block>
-        <block type="actions_rgbLed_off">
-            <value name="COLOUR">
-                <block type="mbedColour_picker">
-                    <field name="COLOUR">#ff0000</field>
-                </block>
-            </value>
+        <block type="actions_rgbLed_hidden_off_calliope">
         </block>
         <block type="mbedActions_play_note"/>
     </category>

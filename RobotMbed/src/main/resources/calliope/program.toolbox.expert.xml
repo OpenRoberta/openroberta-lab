@@ -90,6 +90,8 @@
                     </block>
                 </value>
             </block>
+            <block type="actions_rgbLed_hidden_off_calliope">
+            </block>
             <block type="actions_rgbLed_on">
                 <value name="COLOUR">
                     <block type="mbedColour_picker">
@@ -97,20 +99,9 @@
                     </block>
                 </value>
             </block>
-            <block type="actions_rgbLed_hidden_off_calliope">
-                <value name="COLOUR">
-                    <block type="mbedColour_picker">
-                        <field name="COLOUR">#ff0000</field>
-                    </block>
-                </value>
-            </block>
             <block type="actions_rgbLed_off">
-                <value name="COLOUR">
-                    <block type="mbedColour_picker">
-                        <field name="COLOUR">#ff0000</field>
-                    </block>
-                </value>
             </block>
+            <block type="actions_led"/>
             <block type="mbedActions_ledBar_set">
                 <value name="X">
                     <block type="math_number">
@@ -123,7 +114,6 @@
                     </block>
                 </value>
             </block>
-            <block type="actions_led"/>
         </category>
         <category name="TOOLBOX_MOVE" svg="true">
             <block type="mbedActions_motors_on">

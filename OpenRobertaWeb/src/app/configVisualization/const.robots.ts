@@ -267,7 +267,7 @@ export const ROBOTS = {
             { name: 'motor A', position: { x: 153.8, y: 210 } },
             { name: 'motor B', position: { x: 145, y: 209 } },
             { name: 'ultrasonic 1', position: { x: 245.7, y: 79.5 } },
-            { name: 'callibot', position: { x: 73.0, y: 79.5 } },
+            { name: 'callibot2', position: { x: 73.0, y: 79.5 } },
 
             // Adressable pins
             { name: '0', position: { x: 16.5, y: 139.2 } },
@@ -300,7 +300,7 @@ export const ROBOTS = {
             { name: 'A', position: { x: 57.5, y: 114.3 } },
             { name: 'B', position: { x: 260.5, y: 114.3 } },
             { name: 'buzzer', position: { x: 253.7, y: 155 } },
-            { name: 'rgbled', position: { x: 159.5, y: 172 } },
+            { name: 'rgbledh', position: { x: 159.5, y: 172 } },
             { name: 'light', position: { x: 158.5, y: 102.7 } },
             { name: 'temperature', position: { x: 116.5, y: 178.5 } },
             { name: 'accelerometer', position: { x: 86, y: 130.3 } },

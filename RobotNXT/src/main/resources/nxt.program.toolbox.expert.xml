@@ -146,7 +146,9 @@
             <block type="actions_rgbled_on_nxt">
                 <field name="ACTORPORT">3</field>
             </block>
-            <block type="actions_rgbled_off_nxt"/>
+            <block type="actions_rgbled_off_nxt">
+                <field name="ACTORPORT">3</field>
+            </block>
         </category>
     </category>
     <category name="TOOLBOX_SENSOR" svg="true">

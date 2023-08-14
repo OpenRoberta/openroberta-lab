@@ -32,6 +32,7 @@
                 </block>
             </value>
         </block>
+        <block type="actions_rgbLed_off_nao"/>
         <block type="actions_led_on_nao">
             <value name="INTENSITY">
                 <block type="math_number">
@@ -39,7 +40,6 @@
                 </block>
             </value>
         </block>
-        <block type="actions_rgbLed_off_nao"/>
         <block type="actions_led_off_nao"/>
         <block type="naoActions_randomEyes">
             <value name="DURATION">
