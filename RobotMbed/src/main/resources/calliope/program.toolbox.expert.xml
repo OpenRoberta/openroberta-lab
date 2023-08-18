@@ -313,7 +313,7 @@
         <block type="math_cast_toString"/>
         <block type="math_cast_toChar"/>
     </category>
-    <!--
+
     <category name="TOOLBOX_NN" svg="true">
         <block type="robActions_NNstep"></block>
         <block type="robActions_set_inputneuron_val"></block>
@@ -323,7 +323,7 @@
         <block type="robSensors_get_weight"></block>
         <block type="robSensors_get_bias"></block>
     </category>
-    -->
+
     <category name="TOOLBOX_TEXT" svg="true">
         <block type="text"/>
         <block type="text_comment"/>

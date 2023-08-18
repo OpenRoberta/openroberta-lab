@@ -85,13 +85,13 @@
             </value>
         </block>
     </category>
-    <!--
+
     <category name="TOOLBOX_NN" svg="true">
         <block type="robActions_NNstep"></block>
         <block type="robActions_set_inputneuron_val"></block>
         <block type="robSensors_get_outputneuron_val"></block>
     </category>
-    -->
+
     <category name="TOOLBOX_TEXT" svg="true">
         <block type="text"/>
         <block type="text_comment"/>
