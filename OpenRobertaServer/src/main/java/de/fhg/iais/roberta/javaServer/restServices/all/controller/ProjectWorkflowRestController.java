@@ -1,12 +1,23 @@
 package de.fhg.iais.roberta.javaServer.restServices.all.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -129,6 +140,8 @@ public class ProjectWorkflowRestController {
             response.setConfiguration(project.getConfigurationJSON());
             // TODO auto connection robots return COMPILERWORKFLOW_SUCCESS or COMPILERWORKFLOW_PROGRAM_GENERATION_SUCCESS
             // TODO which is not mapped to anything in the frontend, ROBOT_PUSH_RUN is mapped to the message that was used before workflows
+            response.setBinaryURL(project.getBinaryURL());
+
             if ( project.getResult() == Key.COMPILERWORKFLOW_SUCCESS || project.getResult() == Key.COMPILERWORKFLOW_PROGRAM_GENERATION_SUCCESS ) {
                 project.setResult(Key.ROBOT_PUSH_RUN);
             }
@@ -146,6 +159,29 @@ public class ProjectWorkflowRestController {
             }
         }
     }
+
+    @GET
+    @Path("/getBinary/{tempDirectory}/{token}/{programName}/{ending}")
+    public Response getBinaryFile(
+        @PathParam("tempDirectory") String tempDirectory,
+        @PathParam("token") String token,
+        @PathParam("programName") String programName,
+        @PathParam("ending") String ending
+    ) throws FileNotFoundException {
+
+        token = URLDecoder.decode(token);
+        tempDirectory = URLDecoder.decode(tempDirectory);
+
+        String srcFile = tempDirectory + token + "/" + programName + "/target/" + programName + "." + ending;
+        File binaryFile = new File(srcFile);
+
+        InputStream fileInputStream = new FileInputStream(binaryFile);
+        return Response
+            .ok(fileInputStream)
+            .header("Content-Disposition", "attachment; filename=\"" + binaryFile.getName() + "\"")
+            .build();
+    }
+
 
     @POST
     @Path("/stop")
