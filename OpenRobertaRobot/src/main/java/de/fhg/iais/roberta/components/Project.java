@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.components;
 
 import java.io.StringWriter;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -19,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.collect.ClassToInstanceMap;
 import com.google.common.collect.MutableClassToInstanceMap;
 
+import de.fhg.iais.roberta.bean.CompilerSetupBean;
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.NNBean;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
@@ -247,6 +249,12 @@ public final class Project {
     public String getCompiledHex() {
         return this.compiledHex;
     }
+    
+    public String getBinaryURL(){
+        String tokenAsUrl = URLEncoder.encode(token);
+        String tempDirectoryAsUrl = URLEncoder.encode(getWorkerResult(CompilerSetupBean.class).getTempDir());
+        return "rest/projectWorkflow/getBinary/" + tempDirectoryAsUrl + "/" + tokenAsUrl + "/" + this.programName + "/" + getBinaryFileExtension();
+    } 
 
     public void setCompiledHex(String compiledHex) {
         this.compiledHex = compiledHex;

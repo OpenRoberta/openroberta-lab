@@ -10,6 +10,8 @@ import * as WEBVIEW_C from 'webview.controller';
 import * as $ from 'jquery';
 import * as Blockly from 'blockly';
 import * as GUISTATE from 'guiState.model';
+import { robot, server } from 'guiState.model';
+import * as COMM from 'comm';
 
 var blocklyWorkspace;
 var interpreter;
@@ -218,8 +220,8 @@ function runForAutoConnection(result) {
             }, 5000);
             MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
         } else {
-            createDownloadLink(filename, result.compiledCode);
-
+            //TODO HIER EINFUEGEN???
+            createDownloadLink(filename, result.compiledCode, result.binaryUrl);
             var textH = $('#popupDownloadHeader').text();
             $('#popupDownloadHeader').text(textH.replace('$', $.trim(GUISTATE_C.getRobotRealName())));
             for (var i = 1; Blockly.Msg['POPUP_DOWNLOAD_STEP_' + i]; i++) {
@@ -300,7 +302,7 @@ function runForJSPlayConnection(result) {
             //Internet Explorer (all ver.) does not support playing WAV files in the browser
             //If the user uses IE11 the file will not be played, but downloaded instead
             //See: https://caniuse.com/#feat=wav, https://www.w3schools.com/html/html5_audio.asp
-            createDownloadLink(GUISTATE_C.getProgramName() + '.wav', wavFileContent);
+            createDownloadLink(GUISTATE_C.getProgramName() + '.wav', wavFileContent, null);
         } else {
             //All non-IE browsers can play WAV files in the browser, see: https://www.w3schools.com/html/html5_audio.asp
             $('#OKButtonModalFooter').addClass('hidden');
@@ -509,7 +511,7 @@ function timeout(callback, durationInMilliSec) {
  * @param content
  *            for the blob (for CONTENT_AS_BLOB)
  */
-function createDownloadLink(fileName, content) {
+function createDownloadLink(fileName, content, url) {
     if (!('msSaveOrOpenBlob' in navigator)) {
         $('#trA').removeClass('hidden');
     } else {
@@ -528,11 +530,13 @@ function createDownloadLink(fileName, content) {
             downloadLink = document.createElement('a');
             downloadLink.download = fileName;
             downloadLink.innerHTML = fileName;
-            downloadLink.href = window.URL.createObjectURL(contentAsBlob);
+            //downloadLink.href = window.URL.createObjectURL(contentAsBlob);
+            downloadLink.href = window.location.href + '' + url;
         }
     } else {
         downloadLink = document.createElement('a');
-        downloadLink.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(content));
+        //downloadLink.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(content));
+        downloadLink.setAttribute('href', window.location.href + '' + url);
         downloadLink.setAttribute('download', fileName);
         downloadLink.style.display = 'none';
     }

@@ -23,6 +23,7 @@ public class ProjectNepoResponse extends BaseResponse {
     protected String progXML;
     protected Map<String, JSONObject> confAnnos;
     protected String compiledCode;
+    protected String binaryUrl;
     protected JSONObject configuration;
 
     /**
@@ -69,6 +70,7 @@ public class ProjectNepoResponse extends BaseResponse {
         String progXML,
         Map<String, JSONObject> confAnnos,
         String compiledCode,
+        String binaryUrl,
         JSONObject configuration) {
         ProjectNepoResponse entity = new ProjectNepoResponse();
         entity.setCmd(cmd);
@@ -92,6 +94,7 @@ public class ProjectNepoResponse extends BaseResponse {
         entity.setProgXML(progXML);
         entity.setConfAnnos(confAnnos);
         entity.setCompiledCode(compiledCode);
+        entity.setBinaryURL(binaryUrl);
         entity.setConfiguration(configuration);
         entity.immutable();
         return entity;
@@ -162,6 +165,8 @@ public class ProjectNepoResponse extends BaseResponse {
                     }
                 } else if ( "compiledCode".equals(key) ) {
                     setCompiledCode(jsonO.getString(key));
+                } else if ("binaryUrl".equals(key)){
+                    setBinaryURL(jsonO.getString(key));
                 } else if ( "configuration".equals(key) ) {
                     setConfiguration(jsonO.optJSONObject(key));
                 } else {
@@ -349,6 +354,14 @@ public class ProjectNepoResponse extends BaseResponse {
         this.compiledCode = compiledCode;
         return this;
     }
+    
+    public ProjectNepoResponse setBinaryURL(String binaryUrl) {
+        if ( this.immutable ) {
+            throw new RuntimeException("compiledCode assigned to an immutable object: " + toString());
+        }
+        this.binaryUrl = binaryUrl;
+        return this;
+    }
 
     /**
      * GET configuration. Object must be immutable. Never return null or an undefined/default value.
@@ -450,6 +463,8 @@ public class ProjectNepoResponse extends BaseResponse {
                 }
             }
             jsonO.put("compiledCode", this.compiledCode);
+            jsonO.put("binaryUrl", this.binaryUrl);
+
             if ( this.configuration != null ) {
                 jsonO.put("configuration", this.configuration);
             }
