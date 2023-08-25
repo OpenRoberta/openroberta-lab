@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2023-08-14 07:38:50.044168",
+		"lastupdated": "2023-08-25 08:17:42.752596",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -922,6 +922,10 @@
 	"SIM_CONFIGURATION_WARNING_SENSOR_MISSING": "This sensor is not in the configuration! The behaviour of the program on the real robot will be different than expected!",
 	"SIM_CONFIGURATION_WARNING_WRONG_SENSOR_PORT": "In this block you have used a wrong sensor port! The behaviour of the program on the real robot will be different than expected, please check the robot configuration!",
 	"SIM_CONFIGURATION_WARNING_WRONG_INFRARED_SENSOR_PORT": "The infrared sensor is not connected in the configuration! The behaviour of the program on the real robot will be different than expected, please check the robot configuration!",
+	"SIM_VALUES_SENSOR": "Sensor Values",
+	"SIM_VALUES_SYSTEM": "System Values",
+	"SIM_VALUES_TIMER": "Timer Values",
+	"SIM_VALUES_VARIABLE": "Variable Values",
 	"SERVER_NOT_AVAILABLE": "The Open Roberta Lab is currently not available. </br>Your internet connection was interrupted. If you currently have an EV3 connected via the USB cable solve this with a click on the programming environment.<br>If this problem persists please check your internet connection and try to reload this website. If you have this problem again, please don't hesitate to contact us via mail:</br>support-o-r@iais.fraunhofer.de",
 	"MENU_MESSAGE_DOWNLOAD": "Your program has been successfully downloaded.",
 	"POPUP_PROGRAM_TERMINATED_UNEXPECTED": "The execution of the program on the robot has terminated unexpectedly!",
