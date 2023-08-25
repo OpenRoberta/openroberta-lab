@@ -1047,7 +1047,7 @@ export class EV3Chassis extends LegoChassis {
             let y = display.y;
             let $display = $('#display' + this.id);
             if (text) {
-                $display.html($display.html() + '<text x=' + x * 10 + ' "y=' + (y + 1) * 16 + '">' + text + '</text>');
+                $display.html($display.html() + '<text x=' + x * 10 + ' y=' + (y + 1) * 16 + '>' + text + '</text>');
             }
             if (display.picture) {
                 $display.html(this.display[display.picture]);

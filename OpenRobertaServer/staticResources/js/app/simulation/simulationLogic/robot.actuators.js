@@ -983,7 +983,7 @@ define(["require", "exports", "interpreter.constants", "simulation.math", "guiSt
                 var y = display.y;
                 var $display = $('#display' + this.id);
                 if (text) {
-                    $display.html($display.html() + '<text x=' + x * 10 + ' "y=' + (y + 1) * 16 + '">' + text + '</text>');
+                    $display.html($display.html() + '<text x=' + x * 10 + ' y=' + (y + 1) * 16 + '>' + text + '</text>');
                 }
                 if (display.picture) {
                     $display.html(this.display[display.picture]);
