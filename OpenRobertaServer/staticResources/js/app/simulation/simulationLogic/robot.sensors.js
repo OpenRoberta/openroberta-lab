@@ -1179,7 +1179,13 @@ define(["require", "exports", "robot.base.mobile", "interpreter.constants", "sim
             myPins.forEach(function (pin) {
                 if (pin.type !== 'TOUCH') {
                     var range = 1023;
-                    $mySensorGenerator.append('<label for="rangePin' + pin.port + '" style="margin: 12px 8px 8px 0">' + Blockly.Msg.SENSOR_PIN + ' ' + pin.name + '</label>');
+                    $mySensorGenerator.append('<label for="rangePin' +
+                        pin.port +
+                        '" style="margin: 12px 8px 8px 0" lkey="Blockly.Msg.SENSOR_PIN">' +
+                        Blockly.Msg.SENSOR_PIN +
+                        ' ' +
+                        pin.name +
+                        '</label>');
                     if (pin.type === 'DIGITAL_PIN') {
                         range = 1;
                     }
@@ -1401,25 +1407,25 @@ define(["require", "exports", "robot.base.mobile", "interpreter.constants", "sim
         function GestureSensor() {
             this.gesture = { up: true };
             this.labelPriority = 10;
-            $('#mbedButtons').append('<label style="margin: 12px 8px 8px 0">' +
+            $('#mbedButtons').append('<label style="margin: 12px 8px 8px 0" lkey="Blockly.Msg.SENSOR_GESTURE">' +
                 Blockly.Msg.SENSOR_GESTURE +
                 '</label>' + //
-                '<label class="btn simbtn active"><input type="radio" id="up" name="options" autocomplete="off">' +
+                '<label class="btn simbtn active" lkey="Blockly.Msg.SENSOR_GESTURE_UP"><input type="radio" id="up" name="options" autocomplete="off">' +
                 Blockly.Msg.SENSOR_GESTURE_UP +
                 '</label>' + //
-                '<label class="btn simbtn"><input type="radio" id="down" name="options" autocomplete="off" >' +
+                '<label class="btn simbtn" lkey="Blockly.Msg.SENSOR_GESTURE_DOWN"><input type="radio" id="down" name="options" autocomplete="off" >' +
                 Blockly.Msg.SENSOR_GESTURE_DOWN +
                 '</label>' + //
-                '<label class="btn simbtn"><input type="radio" id="face_down" name="options" autocomplete="off" >' +
+                '<label class="btn simbtn" lkey="Blockly.Msg.SENSOR_GESTURE_FACE_DOWN"><input type="radio" id="face_down" name="options" autocomplete="off" >' +
                 Blockly.Msg.SENSOR_GESTURE_FACE_DOWN +
                 '</label>' + //
-                '<label class="btn simbtn"><input type="radio" id="face_up" name="options" autocomplete="off" >' +
+                '<label class="btn simbtn" lkey="Blockly.Msg.SENSOR_GESTURE_FACE_UP"><input type="radio" id="face_up" name="options" autocomplete="off" >' +
                 Blockly.Msg.SENSOR_GESTURE_FACE_UP +
                 '</label>' + //
-                '<label class="btn simbtn"><input type="radio" id="shake" name="options" autocomplete="off" >' +
+                '<label class="btn simbtn" lkey="Blockly.Msg.SENSOR_GESTURE_SHAKE"><input type="radio" id="shake" name="options" autocomplete="off" >' +
                 Blockly.Msg.SENSOR_GESTURE_SHAKE +
                 '</label>' + //
-                '<label class="btn simbtn"><input type="radio" id="freefall" name="options" autocomplete="off" >' +
+                '<label class="btn simbtn" lkey="Blockly.Msg.SENSOR_GESTURE_FREEFALL"><input type="radio" id="freefall" name="options" autocomplete="off" >' +
                 Blockly.Msg.SENSOR_GESTURE_FREEFALL +
                 '</label>');
             var gestureSensor = this;
@@ -1447,7 +1453,7 @@ define(["require", "exports", "robot.base.mobile", "interpreter.constants", "sim
         function CompassSensor() {
             this.degree = 0;
             this.labelPriority = 11;
-            $('#mbedButtons').append('<label for="rangeCompass" style="margin: 12px 8px 8px 0">' +
+            $('#mbedButtons').append('<label for="rangeCompass" style="margin: 12px 8px 8px 0" lkey="Blockly.Msg.SENSOR_COMPASS">' +
                 Blockly.Msg.SENSOR_COMPASS +
                 '</label><input type="text" value="0" style="margin-bottom: 8px;margin-top: 12px; min-width: 45px; width: 45px; display: inline-block; border: 1px solid #333; border-radius: 2px; text-align: right; float: right; padding: 0" id="rangeCompass" name="rangeCompass" class="range" />' +
                 '<div style="margin:8px 0; "><input id="sliderCompass" type="range" min="0" max="360" value="0" step="5" /></div>');
@@ -1471,7 +1477,7 @@ define(["require", "exports", "robot.base.mobile", "interpreter.constants", "sim
             this.x = 342;
             this.y = 546;
             this.labelPriority = 12;
-            $('#mbedButtons').append('<label for="rangeLight" style="margin: 12px 8px 8px 0">' +
+            $('#mbedButtons').append('<label for="rangeLight" style="margin: 12px 8px 8px 0" lkey="Blockly.Msg.SENSOR_LIGHT">' +
                 Blockly.Msg.SENSOR_LIGHT +
                 '</label><input type="text" value="0" style="margin-bottom: 8px;margin-top: 12px; min-width: 45px; width: 45px; display: inline-block; border: 1px solid #333; border-radius: 2px; text-align: right; float: right; padding: 0;" id="rangeLight" name="rangeLight" class="range" />' +
                 '<div style="margin:8px 0; "><input id="sliderLight" type="range" min="0" max="100" value="0" /></div>');
@@ -1505,7 +1511,7 @@ define(["require", "exports", "robot.base.mobile", "interpreter.constants", "sim
             this.x = 342;
             this.y = 546;
             this.labelPriority = 12;
-            $('#mbedButtons').append('<label for="rangeLight" style="margin: 12px 8px 8px 0">' +
+            $('#mbedButtons').append('<label for="rangeLight" style="margin: 12px 8px 8px 0" lkey="Blockly.Msg.SENSOR_INFRARED">' +
                 Blockly.Msg.SENSOR_INFRARED +
                 '</label><input type="text" value="0" style="margin-bottom: 8px;margin-top: 12px; min-width: 45px; width: 45px; display: inline-block; border: 1px solid #333; border-radius: 2px; text-align: right; float: right; padding: 0;" id="rangeLight" name="rangeLight" class="range" />' +
                 '<div style="margin:8px 0; "><input id="sliderLight" type="range" min="0" max="1023" value="0" /></div>');
@@ -1526,7 +1532,7 @@ define(["require", "exports", "robot.base.mobile", "interpreter.constants", "sim
         function TemperatureSensor() {
             this.degree = 20;
             this.labelPriority = 13;
-            $('#mbedButtons').append('<label for="rangeTemperature" style="margin: 12px 8px 8px 0">' +
+            $('#mbedButtons').append('<label for="rangeTemperature" style="margin: 12px 8px 8px 0" lkey="Blockly.Msg.SENSOR_TEMPERATURE">' +
                 Blockly.Msg.SENSOR_TEMPERATURE +
                 '</label><input type="text" value="0" style="margin-bottom: 8px;margin-top: 12px; min-width: 45px; width: 45px; display: inline-block; border: 1px solid #333; border-radius: 2px; text-align: right; float: right; padding: 0;" id="rangeTemperature" name="rangeTemperature" class="range" />' +
                 '<div style="margin:8px 0; "><input id="sliderTemperature" type="range" min="-25" max="75" value="0" step="1" /></div>');

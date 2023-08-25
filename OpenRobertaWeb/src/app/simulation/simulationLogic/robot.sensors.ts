@@ -1507,7 +1507,13 @@ export class Pins extends TouchKeys implements IDrawable {
             if (pin.type !== 'TOUCH') {
                 let range = 1023;
                 $mySensorGenerator.append(
-                    '<label for="rangePin' + pin.port + '" style="margin: 12px 8px 8px 0">' + Blockly.Msg.SENSOR_PIN + ' ' + pin.name + '</label>'
+                    '<label for="rangePin' +
+                        pin.port +
+                        '" style="margin: 12px 8px 8px 0" lkey="Blockly.Msg.SENSOR_PIN">' +
+                        Blockly.Msg.SENSOR_PIN +
+                        ' ' +
+                        pin.name +
+                        '</label>'
                 );
                 if (pin.type === 'DIGITAL_PIN') {
                     range = 1;
@@ -1746,25 +1752,25 @@ export class GestureSensor implements ISensor, ILabel {
 
     constructor() {
         $('#mbedButtons').append(
-            '<label style="margin: 12px 8px 8px 0">' +
+            '<label style="margin: 12px 8px 8px 0" lkey="Blockly.Msg.SENSOR_GESTURE">' +
                 Blockly.Msg.SENSOR_GESTURE +
                 '</label>' + //
-                '<label class="btn simbtn active"><input type="radio" id="up" name="options" autocomplete="off">' +
+                '<label class="btn simbtn active" lkey="Blockly.Msg.SENSOR_GESTURE_UP"><input type="radio" id="up" name="options" autocomplete="off">' +
                 Blockly.Msg.SENSOR_GESTURE_UP +
                 '</label>' + //
-                '<label class="btn simbtn"><input type="radio" id="down" name="options" autocomplete="off" >' +
+                '<label class="btn simbtn" lkey="Blockly.Msg.SENSOR_GESTURE_DOWN"><input type="radio" id="down" name="options" autocomplete="off" >' +
                 Blockly.Msg.SENSOR_GESTURE_DOWN +
                 '</label>' + //
-                '<label class="btn simbtn"><input type="radio" id="face_down" name="options" autocomplete="off" >' +
+                '<label class="btn simbtn" lkey="Blockly.Msg.SENSOR_GESTURE_FACE_DOWN"><input type="radio" id="face_down" name="options" autocomplete="off" >' +
                 Blockly.Msg.SENSOR_GESTURE_FACE_DOWN +
                 '</label>' + //
-                '<label class="btn simbtn"><input type="radio" id="face_up" name="options" autocomplete="off" >' +
+                '<label class="btn simbtn" lkey="Blockly.Msg.SENSOR_GESTURE_FACE_UP"><input type="radio" id="face_up" name="options" autocomplete="off" >' +
                 Blockly.Msg.SENSOR_GESTURE_FACE_UP +
                 '</label>' + //
-                '<label class="btn simbtn"><input type="radio" id="shake" name="options" autocomplete="off" >' +
+                '<label class="btn simbtn" lkey="Blockly.Msg.SENSOR_GESTURE_SHAKE"><input type="radio" id="shake" name="options" autocomplete="off" >' +
                 Blockly.Msg.SENSOR_GESTURE_SHAKE +
                 '</label>' + //
-                '<label class="btn simbtn"><input type="radio" id="freefall" name="options" autocomplete="off" >' +
+                '<label class="btn simbtn" lkey="Blockly.Msg.SENSOR_GESTURE_FREEFALL"><input type="radio" id="freefall" name="options" autocomplete="off" >' +
                 Blockly.Msg.SENSOR_GESTURE_FREEFALL +
                 '</label>'
         );
@@ -1807,7 +1813,7 @@ export class CompassSensor implements ISensor, ILabel {
 
     constructor() {
         $('#mbedButtons').append(
-            '<label for="rangeCompass" style="margin: 12px 8px 8px 0">' +
+            '<label for="rangeCompass" style="margin: 12px 8px 8px 0" lkey="Blockly.Msg.SENSOR_COMPASS">' +
                 Blockly.Msg.SENSOR_COMPASS +
                 '</label><input type="text" value="0" style="margin-bottom: 8px;margin-top: 12px; min-width: 45px; width: 45px; display: inline-block; border: 1px solid #333; border-radius: 2px; text-align: right; float: right; padding: 0" id="rangeCompass" name="rangeCompass" class="range" />' +
                 '<div style="margin:8px 0; "><input id="sliderCompass" type="range" min="0" max="360" value="0" step="5" /></div>'
@@ -1844,7 +1850,7 @@ export class CalliopeLightSensor implements ISensor, ILabel, IDrawable {
 
     constructor() {
         $('#mbedButtons').append(
-            '<label for="rangeLight" style="margin: 12px 8px 8px 0">' +
+            '<label for="rangeLight" style="margin: 12px 8px 8px 0" lkey="Blockly.Msg.SENSOR_LIGHT">' +
                 Blockly.Msg.SENSOR_LIGHT +
                 '</label><input type="text" value="0" style="margin-bottom: 8px;margin-top: 12px; min-width: 45px; width: 45px; display: inline-block; border: 1px solid #333; border-radius: 2px; text-align: right; float: right; padding: 0;" id="rangeLight" name="rangeLight" class="range" />' +
                 '<div style="margin:8px 0; "><input id="sliderLight" type="range" min="0" max="100" value="0" /></div>'
@@ -1894,7 +1900,7 @@ export class Rob3rtaInfraredSensor implements ISensor, ILabel {
 
     constructor() {
         $('#mbedButtons').append(
-            '<label for="rangeLight" style="margin: 12px 8px 8px 0">' +
+            '<label for="rangeLight" style="margin: 12px 8px 8px 0" lkey="Blockly.Msg.SENSOR_INFRARED">' +
                 Blockly.Msg.SENSOR_INFRARED +
                 '</label><input type="text" value="0" style="margin-bottom: 8px;margin-top: 12px; min-width: 45px; width: 45px; display: inline-block; border: 1px solid #333; border-radius: 2px; text-align: right; float: right; padding: 0;" id="rangeLight" name="rangeLight" class="range" />' +
                 '<div style="margin:8px 0; "><input id="sliderLight" type="range" min="0" max="1023" value="0" /></div>'
@@ -1928,7 +1934,7 @@ export class TemperatureSensor implements ISensor, ILabel {
 
     constructor() {
         $('#mbedButtons').append(
-            '<label for="rangeTemperature" style="margin: 12px 8px 8px 0">' +
+            '<label for="rangeTemperature" style="margin: 12px 8px 8px 0" lkey="Blockly.Msg.SENSOR_TEMPERATURE">' +
                 Blockly.Msg.SENSOR_TEMPERATURE +
                 '</label><input type="text" value="0" style="margin-bottom: 8px;margin-top: 12px; min-width: 45px; width: 45px; display: inline-block; border: 1px solid #333; border-radius: 2px; text-align: right; float: right; padding: 0;" id="rangeTemperature" name="rangeTemperature" class="range" />' +
                 '<div style="margin:8px 0; "><input id="sliderTemperature" type="range" min="-25" max="75" value="0" step="1" /></div>'
@@ -2063,6 +2069,7 @@ export class SoundSensorBoolean extends VolumeMeterSensor {
     override getLabel(): string {
         return '<div><label>' + Blockly.Msg['SENSOR_SOUND'] + '</label><span>' + (this.volume > 25 ? 'true' : 'false') + '</span></div>';
     }
+
     override updateSensor(
         running: boolean,
         dt: number,
