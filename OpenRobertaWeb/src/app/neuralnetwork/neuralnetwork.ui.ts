@@ -875,15 +875,13 @@ export function saveNN2Blockly(neuralNetwork?: Network): void {
     if (rememberProgramWasReplaced) {
         return; // program was imported. Old NN should NOT be saved
     }
-    if (neuralNetwork) {
-        network = neuralNetwork;
-    }
+    let networkToSave: Network = neuralNetwork ? neuralNetwork : network;
     var startBlock = UTIL.getTheStartBlock();
     try {
-        state.weights = network.getWeightArray();
-        state.biases = network.getBiasArray();
-        state.inputs = network.getInputNames();
-        state.outputs = network.getOutputNames();
+        state.weights = networkToSave.getWeightArray();
+        state.biases = networkToSave.getBiasArray();
+        state.inputs = networkToSave.getInputNames();
+        state.outputs = networkToSave.getOutputNames();
         startBlock.data = JSON.stringify(state);
     } catch (e) {
         LOG.error('failed to create a JSON string from nn state');

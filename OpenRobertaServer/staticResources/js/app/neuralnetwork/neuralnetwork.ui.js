@@ -848,15 +848,13 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
         if (rememberProgramWasReplaced) {
             return; // program was imported. Old NN should NOT be saved
         }
-        if (neuralNetwork) {
-            network = neuralNetwork;
-        }
+        var networkToSave = neuralNetwork ? neuralNetwork : network;
         var startBlock = UTIL.getTheStartBlock();
         try {
-            state.weights = network.getWeightArray();
-            state.biases = network.getBiasArray();
-            state.inputs = network.getInputNames();
-            state.outputs = network.getOutputNames();
+            state.weights = networkToSave.getWeightArray();
+            state.biases = networkToSave.getBiasArray();
+            state.inputs = networkToSave.getInputNames();
+            state.outputs = networkToSave.getOutputNames();
             startBlock.data = JSON.stringify(state);
         }
         catch (e) {
