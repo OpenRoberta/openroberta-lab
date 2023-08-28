@@ -5,7 +5,7 @@
     <parent>
         <artifactId>OpenRobertaParent</artifactId>
         <groupId>de.fhg.iais.openroberta</groupId>
-        <version>5.2.4-SNAPSHOT</version>
+        <version>5.2.4</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
