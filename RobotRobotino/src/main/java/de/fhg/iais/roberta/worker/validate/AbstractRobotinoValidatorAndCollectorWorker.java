@@ -19,7 +19,7 @@ import de.fhg.iais.roberta.worker.AbstractValidatorAndCollectorWorker;
 
 public abstract class AbstractRobotinoValidatorAndCollectorWorker extends AbstractValidatorAndCollectorWorker {
 
-    private static final List<String> NON_BLOCKING_PROPERTIES = Collections.unmodifiableList(Arrays.asList("BN", "BU", "M1", "M2", "M3"));
+    private static final List<String> NON_BLOCKING_PROPERTIES = Collections.unmodifiableList(Arrays.asList("BN", "BU", "M1", "M2", "M3", "+", "-"));
 
     @Override
     abstract protected CommonNepoValidatorAndCollectorVisitor getVisitor(
