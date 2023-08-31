@@ -1,6 +1,6 @@
 define(["require", "exports", "message", "log", "jquery", "blockly", "interpreter.util", "jquery-validate", "bootstrap"], function (require, exports, MSG, LOG, $, Blockly, U) {
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.toFixedPrecision = exports.closeSimRobotWindow = exports.openSimRobotWindow = exports.removeLinks = exports.annotateBlocks = exports.clearAnnotations = exports.clearTabAlert = exports.alertTab = exports.isLocalStorageAvailable = exports.countBlocks = exports.getHashFrom = exports.download = exports.getBasename = exports.sgn = exports.roundUltraSound = exports.round = exports.response = exports.showMsgOnTop = exports.showSingleListModal = exports.showSingleModal = exports.setFocusOnElement = exports.checkVisibility = exports.calcDataTableHeight = exports.formatResultLog = exports.parseDate = exports.formatDate = exports.setObjectProperty = exports.getPropertyFromObject = exports.isEmpty = exports.clone = exports.base64decode = exports.renameNeuron = exports.getAllBlocks = exports.getTheStartBlock = exports.RGBAToHexA = exports.addVariableValue = exports.extendMouseEvent = exports.getWebAudio = exports.initMicrophone = exports.isEdge = exports.isIE = exports.checkInCircle = exports.arrayToCsv = exports.csvToArray = exports.activationDisplayName = exports.getLinesFromRectangle = void 0;
+    exports.toFixedPrecision = exports.closeSimRobotWindow = exports.openSimRobotWindow = exports.removeLinks = exports.annotateBlocks = exports.clearAnnotations = exports.clearTabAlert = exports.alertTab = exports.isLocalStorageAvailable = exports.countBlocks = exports.getHashFrom = exports.downloadFromUrl = exports.download = exports.getBasename = exports.sgn = exports.roundUltraSound = exports.round = exports.response = exports.showMsgOnTop = exports.showSingleListModal = exports.showSingleModal = exports.setFocusOnElement = exports.checkVisibility = exports.calcDataTableHeight = exports.formatResultLog = exports.parseDate = exports.formatDate = exports.setObjectProperty = exports.getPropertyFromObject = exports.isEmpty = exports.clone = exports.base64decode = exports.renameNeuron = exports.getAllBlocks = exports.getTheStartBlock = exports.RGBAToHexA = exports.addVariableValue = exports.extendMouseEvent = exports.getWebAudio = exports.initMicrophone = exports.isEdge = exports.isIE = exports.checkInCircle = exports.arrayToCsv = exports.csvToArray = exports.activationDisplayName = exports.getLinesFromRectangle = void 0;
     var ANIMATION_DURATION = 750;
     function getLinesFromRectangle(myObj) {
         return [
@@ -480,6 +480,20 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "interprete
         }
     }
     exports.download = download;
+    function downloadFromUrl(fileName, url) {
+        var downloadLink;
+        downloadLink = document.createElement('a');
+        downloadLink.download = fileName;
+        downloadLink.innerHTML = 'Download File';
+        downloadLink.href = url;
+        downloadLink.onclick = destroyClickedElement;
+        downloadLink.style.display = 'none';
+        document.body.appendChild(downloadLink);
+        setTimeout(function () {
+            downloadLink.click();
+        }, 0);
+    }
+    exports.downloadFromUrl = downloadFromUrl;
     function getHashFrom(string) {
         var hash = 0;
         for (var i = 0; i < string.length; i++) {

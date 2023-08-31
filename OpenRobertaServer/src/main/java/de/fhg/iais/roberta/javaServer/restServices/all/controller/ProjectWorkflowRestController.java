@@ -163,19 +163,19 @@ public class ProjectWorkflowRestController {
 
     @GET
     @Path("/getBinary/{tempDirectory}/{token}/{programName}/{ending}")
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
     public Response getBinaryFile(
         @PathParam("tempDirectory") String tempDirectory,
         @PathParam("token") String token,
         @PathParam("programName") String programName,
         @PathParam("ending") String ending
     ) throws FileNotFoundException {
-
         token = URLDecoder.decode(token);
         tempDirectory = URLDecoder.decode(tempDirectory);
 
         String srcFile = tempDirectory + token + "/" + programName + "/target/" + programName + "." + ending;
         File binaryFile = new File(srcFile);
-
+        
         InputStream fileInputStream = new FileInputStream(binaryFile);
         return Response
             .ok(fileInputStream)

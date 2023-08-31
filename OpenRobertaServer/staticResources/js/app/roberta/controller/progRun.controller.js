@@ -169,12 +169,9 @@ define(["require", "exports", "util", "log", "message", "program.controller", "p
         GUISTATE_C.setState(result);
         if (result.rc == 'ok') {
             var filename = (result.programName || GUISTATE_C.getProgramName()) + '.' + GUISTATE_C.getBinaryFileExtension();
-            if (GUISTATE_C.getBinaryFileExtension() === 'bin' || GUISTATE_C.getBinaryFileExtension() === 'uf2') {
-                result.compiledCode = UTIL.base64decode(result.compiledCode);
-            }
             if (GUISTATE_C.isProgramToDownload() || navigator.userAgent.toLowerCase().match(/iPad|iPhone|android/i) !== null) {
                 // either the user doesn't want to see the modal anymore or he uses a smartphone / tablet, where you cannot choose the download folder.
-                UTIL.download(filename, result.compiledCode);
+                UTIL.downloadFromUrl(filename, window.location.origin + '/' + result.binaryUrl);
                 setTimeout(function () {
                     GUISTATE_C.setConnectionState('wait');
                 }, 5000);
@@ -187,8 +184,7 @@ define(["require", "exports", "util", "log", "message", "program.controller", "p
                 MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
             }
             else {
-                //TODO HIER EINFUEGEN???
-                createDownloadLink(filename, result.compiledCode, result.binaryUrl);
+                createDownloadLink(filename, window.location.origin + '/' + result.binaryUrl);
                 var textH = $('#popupDownloadHeader').text();
                 $('#popupDownloadHeader').text(textH.replace('$', $.trim(GUISTATE_C.getRobotRealName())));
                 for (var i = 1; Blockly.Msg['POPUP_DOWNLOAD_STEP_' + i]; i++) {
@@ -261,7 +257,7 @@ define(["require", "exports", "util", "log", "message", "program.controller", "p
                 //Internet Explorer (all ver.) does not support playing WAV files in the browser
                 //If the user uses IE11 the file will not be played, but downloaded instead
                 //See: https://caniuse.com/#feat=wav, https://www.w3schools.com/html/html5_audio.asp
-                createDownloadLink(GUISTATE_C.getProgramName() + '.wav', wavFileContent, null);
+                createDownloadLinkWithBlob(GUISTATE_C.getProgramName() + '.wav', wavFileContent);
             }
             else {
                 //All non-IE browsers can play WAV files in the browser, see: https://www.w3schools.com/html/html5_audio.asp
@@ -308,6 +304,59 @@ define(["require", "exports", "util", "log", "message", "program.controller", "p
                 $('#OKButtonModalFooter').removeClass('hidden');
             });
             $('#save-client-compiled-program').modal('show');
+        }
+    }
+    /**
+     * Creates a blob from the file content for file download and a
+     * click-able html download link for the blob: <a download="PROGRAM_NAME"
+     * href="CONTENT_AS_BLOB" style="font-size:36px">PROGRAM_NAME</a>
+     *
+     *
+     * @param fileName
+     *            the file name (for PROGRAM_NAME)
+     * @param content
+     *            for the blob (for CONTENT_AS_BLOB)
+     */
+    function createDownloadLinkWithBlob(fileName, content) {
+        if (!('msSaveOrOpenBlob' in navigator)) {
+            $('#trA').removeClass('hidden');
+        }
+        else {
+            $('#trA').addClass('hidden');
+            UTIL.download(fileName, content);
+            GUISTATE_C.setConnectionState('error');
+        }
+        var downloadLink;
+        if ('Blob' in window) {
+            var contentAsBlob = new Blob([content], {
+                type: 'application/octet-stream',
+            });
+            if ('msSaveOrOpenBlob' in navigator) {
+                navigator.msSaveOrOpenBlob(contentAsBlob, fileName);
+            }
+            else {
+                downloadLink = document.createElement('a');
+                downloadLink.download = fileName;
+                downloadLink.innerHTML = fileName;
+                downloadLink.href = window.URL.createObjectURL(contentAsBlob);
+            }
+        }
+        else {
+            downloadLink = document.createElement('a');
+            downloadLink.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(content));
+            downloadLink.setAttribute('download', fileName);
+            downloadLink.style.display = 'none';
+        }
+        //create link with content
+        if (downloadLink && !('msSaveOrOpenBlob' in navigator)) {
+            var programLinkDiv = document.createElement('div');
+            programLinkDiv.setAttribute('id', 'programLink');
+            var linebreak = document.createElement('br');
+            programLinkDiv.setAttribute('style', 'text-align: center;');
+            programLinkDiv.appendChild(linebreak);
+            programLinkDiv.appendChild(downloadLink);
+            downloadLink.setAttribute('style', 'font-size:36px');
+            $('#downloadLink').append(programLinkDiv);
         }
     }
     function runForAgentConnection(result) {
@@ -442,52 +491,20 @@ define(["require", "exports", "util", "log", "message", "program.controller", "p
         }
     }
     /**
-     * Creates a blob from the program content for file download and a
-     * click-able html download link for the blob: <a download="PROGRAM_NAME"
-     * href="CONTENT_AS_BLOB" style="font-size:36px">PROGRAM_NAME</a>
-     *
-     * This is needed f.e. for Calliope where the file has to be downloaded and
-     * copied onto the brick manually
      *
      * @param fileName
      *            the file name (for PROGRAM_NAME)
-     * @param content
-     *            for the blob (for CONTENT_AS_BLOB)
+     * @param url
+     *            url directing to content path
      */
-    function createDownloadLink(fileName, content, url) {
-        if (!('msSaveOrOpenBlob' in navigator)) {
-            $('#trA').removeClass('hidden');
-        }
-        else {
-            $('#trA').addClass('hidden');
-            UTIL.download(fileName, content);
-            GUISTATE_C.setConnectionState('error');
-        }
-        var downloadLink;
-        if ('Blob' in window) {
-            var contentAsBlob = new Blob([content], {
-                type: 'application/octet-stream',
-            });
-            if ('msSaveOrOpenBlob' in navigator) {
-                navigator.msSaveOrOpenBlob(contentAsBlob, fileName);
-            }
-            else {
-                downloadLink = document.createElement('a');
-                downloadLink.download = fileName;
-                downloadLink.innerHTML = fileName;
-                //downloadLink.href = window.URL.createObjectURL(contentAsBlob);
-                downloadLink.href = window.location.href + '' + url;
-            }
-        }
-        else {
+    function createDownloadLink(fileName, url) {
+        if (url) {
+            var downloadLink;
             downloadLink = document.createElement('a');
-            //downloadLink.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(content));
-            downloadLink.setAttribute('href', window.location.href + '' + url);
-            downloadLink.setAttribute('download', fileName);
-            downloadLink.style.display = 'none';
-        }
-        //create link with content
-        if (downloadLink && !('msSaveOrOpenBlob' in navigator)) {
+            downloadLink.download = fileName;
+            downloadLink.innerHTML = fileName;
+            downloadLink.href = url;
+            //create link with content
             var programLinkDiv = document.createElement('div');
             programLinkDiv.setAttribute('id', 'programLink');
             var linebreak = document.createElement('br');
