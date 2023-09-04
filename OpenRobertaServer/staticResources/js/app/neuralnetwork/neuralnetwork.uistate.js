@@ -25,6 +25,7 @@ define(["require", "exports", "./neuralnetwork.helper"], function (require, expo
             this.weightSuppressMultOp = true;
             this.inputs = [];
             this.outputs = [];
+            this.hiddenNeurons = [];
             // if no JSON is available from the program, the default from above is taken
             if (json !== undefined && json != null) {
                 this.learningRate = json.learningRate !== undefined ? json.learningRate : this.learningRate;
@@ -48,6 +49,7 @@ define(["require", "exports", "./neuralnetwork.helper"], function (require, expo
                 this.weightSuppressMultOp = json.weightSuppressMultOp !== undefined ? json.weightSuppressMultOp : this.weightSuppressMultOp;
                 this.inputs = json.inputs !== undefined ? json.inputs : this.inputs;
                 this.outputs = json.outputs !== undefined ? json.outputs : this.outputs;
+                this.hiddenNeurons = json.hiddenNeurons !== undefined ? json.hiddenNeurons : this.hiddenNeurons;
                 // this.x = json.x !== undefined ? json.x : this.x;
             }
         }

@@ -665,7 +665,9 @@ function initMenuEvents() {
         'click',
         '',
         function (event) {
-            if ($('#tabNN').hasClass('tabClicked')) {
+            if ($('#tabProgram').hasClass('tabClicked')) {
+                $('.scroller-right').clickWrap();
+            } else if ($('#tabConfiguration').hasClass('tabClicked')) {
                 $('.scroller-right').clickWrap();
             } else if ($('#tabNN').hasClass('tabClicked')) {
                 $('.scroller-right').clickWrap();
@@ -673,6 +675,21 @@ function initMenuEvents() {
             $('#tabNN').clickWrap();
         },
         'tabNN clicked'
+    );
+    $('#menuTabNNLearn').onWrap(
+        'click',
+        '',
+        function (event) {
+            if ($('#tabProgram').hasClass('tabClicked')) {
+                $('.scroller-right').clickWrap();
+            } else if ($('#tabConfiguration').hasClass('tabClicked')) {
+                $('.scroller-right').clickWrap();
+            } else if ($('#tabNNlearn').hasClass('tabClicked')) {
+                $('.scroller-right').clickWrap();
+            }
+            $('#tabNNlearn').clickWrap();
+        },
+        'tabNNlearn clicked'
     );
 
     // Close submenu on mouseleave
@@ -854,7 +871,7 @@ function initMenuEvents() {
 
     // help Bootstrap to calculate the correct size for the collapse element when the screen height is smaller than the elements height.
     $('#navbarCollapse').on('shown.bs.collapse', function () {
-        var newHeight = Math.min($(this).height(), Math.max($('#blockly').height(), $('#brickly').height()));
+        var newHeight = Math.min($(this).height(), Math.max($('#blockly').height(), $('#brickly').height(), $('#nn').height()));
         $(this).css('height', newHeight);
     });
 

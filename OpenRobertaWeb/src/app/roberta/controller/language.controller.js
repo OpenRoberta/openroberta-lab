@@ -6,6 +6,7 @@ import * as CONFIGURATION_C from 'configuration.controller';
 import * as USER_C from 'user.controller';
 import * as NOTIFICATION_C from 'notification.controller';
 import * as Blockly from 'blockly';
+import * as NN_C from 'nn.controller';
 
 /**
  * Initialize language switching
@@ -100,6 +101,7 @@ function switchLanguage(language) {
         CONFIGURATION_C.reloadView();
         USER_C.initValidationMessages();
         NOTIFICATION_C.reloadNotifications();
+        NN_C.reloadViews();
         var value = Blockly.Msg.MENU_START_BRICK;
         if (value.indexOf('$') >= 0) {
             value = value.replace('$', GUISTATE_C.getRobotRealName());
@@ -122,8 +124,14 @@ function translate($domElement) {
 
     $domElement.find('[lkey]').each(function (index) {
         var lkey = $(this).attr('lkey');
-        var key = lkey.replace('Blockly.Msg.', '');
-        var value = Blockly.Msg[key];
+        var key, value;
+        if (lkey.toString().indexOf('+') > -1) {
+            key = lkey.split('+').map((k) => k.trim().replace('Blockly.Msg.', '')); //.forEach((k) => k.replace('Blockly.Msg.', ''));
+            value = key.map((k) => Blockly.Msg[k]).join('');
+        } else {
+            key = lkey.replace('Blockly.Msg.', '');
+            value = Blockly.Msg[key];
+        }
         if (value == undefined) {
             console.log('UNDEFINED    key : value = ' + key + ' : ' + value);
         }
@@ -168,6 +176,9 @@ function translate($domElement) {
             $('#iconDisplayRobotState').attr('data-original-title', value);
         } else if (lkey === 'Blockly.Msg.MENU_SIM_START_TOOLTIP') {
             $('#simControl').attr('data-original-title', value);
+            $('#goto-sim').attr('data-original-title', value).tooltip({ placement: 'top' });
+            $('#explore-goto-sim').attr('data-original-title', value).tooltip({ placement: 'top' });
+            $('#learn-goto-sim').attr('data-original-title', value).tooltip({ placement: 'top' });
         } else if (lkey === 'Blockly.Msg.MENU_SIM_STOP_TOOLTIP') {
             $('#simCancel').attr('data-original-title', value);
         } else if (lkey === 'Blockly.Msg.MENU_SIM_SCENE_TOOLTIP') {
@@ -237,6 +248,28 @@ function translate($domElement) {
             $('#confNameTable').find('.load').attr('data-original-title', value);
         } else if (lkey == 'Blockly.Msg.OLDER_THEN_14' || lkey == 'Blockly.Msg.YOUNGER_THEN_14') {
             $(this).html(value);
+        } else if (lkey == 'Blockly.Msg.NN_EXPLORE_RUN_FULL') {
+            $('#nn-explore-run-full').attr('data-original-title', value).tooltip({ placement: 'top' });
+        } else if (lkey == 'Blockly.Msg.NN_EXPLORE_RUN_LAYER') {
+            $('#nn-explore-run-layer').attr('data-original-title', value).tooltip({ placement: 'top' });
+        } else if (lkey == 'Blockly.Msg.NN_EXPLORE_RUN_NEURON') {
+            $('#nn-explore-run-neuron').attr('data-original-title', value).tooltip({ placement: 'top' });
+        } else if (lkey == 'Blockly.Msg.NN_EXPLORE_RESET_VALUES') {
+            $('#nn-explore-stop').attr('data-original-title', value).tooltip({ placement: 'top' });
+        } else if (lkey == 'Blockly.Msg.NN_LEARN_RUN') {
+            $('#nn-learn-run').attr('data-original-title', value).tooltip({ placement: 'top' });
+        } else if (lkey == 'Blockly.Msg.NN_LEARN_EPOCH') {
+            $('#nn-learn-run-epoch').attr('data-original-title', value).tooltip({ placement: 'top' });
+        } else if (lkey == 'Blockly.Msg.NN_LEARN_ONE_LINE') {
+            $('#nn-learn-run-one-line').attr('data-original-title', value).tooltip({ placement: 'top' });
+        } else if (lkey == 'Blockly.Msg.NN_LEARN_RESET_VALUES') {
+            $('#nn-learn-reset').attr('data-original-title', value).tooltip({ placement: 'top' });
+        } else if (lkey == 'Blockly.Msg.NN_LEARN_UPLOAD') {
+            $('#nn-explore-upload').attr('data-original-title', value).tooltip({ placement: 'top' });
+            $('#nn-learn-upload').attr('data-original-title', value).tooltip({ placement: 'top' });
+        } else if (lkey == 'Blockly.Msg.NN_LEARN_UPLOAD_POPUP') {
+            $('#nn-explore-upload-popup').attr('data-original-title', value).tooltip({ placement: 'top' });
+            $('#nn-learn-upload-popup').attr('data-original-title', value).tooltip({ placement: 'top' });
         } else if ($(this).data('translationTargets')) {
             var attributeTargets = $(this).data('translationTargets').split(' ');
             for (var key in attributeTargets) {

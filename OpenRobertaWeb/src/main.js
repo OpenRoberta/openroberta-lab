@@ -110,6 +110,7 @@ require.config({
         'neuralnetwork.nn': 'app/neuralnetwork/neuralnetwork.nn',
         'neuralnetwork.uistate': 'app/neuralnetwork/neuralnetwork.uistate',
         'neuralnetwork.ui': 'app/neuralnetwork/neuralnetwork.ui',
+        'neuralnetwork.linechart': 'app/neuralnetwork/neuralnetwork.linechart',
         'neuralnetwork.helper': 'app/neuralnetwork/neuralnetwork.helper',
         'neuralnetwork.msg': 'app/neuralnetwork/neuralnetwork.msg',
 

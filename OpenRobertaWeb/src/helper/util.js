@@ -111,6 +111,17 @@ function renameNeuron(oldName, newName) {
     }
 }
 
+export const activationDisplayName = { linear: 'Linear', relu: 'ReLU', tanh: 'Tanh', sigmoid: 'Sigmoid', bool: 'Bool(0,1)' };
+
+export const csvToArray = (data, delimiter = ';', omitFirstRow = false) =>
+    data
+        .slice(omitFirstRow ? data.indexOf('\n') + 1 : 0)
+        .split('\n')
+        .filter((val) => val.length !== 0)
+        .map((val) => val.split(delimiter));
+
+export const arrayToCsv = (data, delimiter = ';') => data.map((v) => v.join(delimiter)).join('\n');
+
 var ratioWorkspace = 1;
 var simRobotWindowPositions = [];
 /**

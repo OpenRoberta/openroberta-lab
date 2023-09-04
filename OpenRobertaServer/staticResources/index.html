@@ -237,7 +237,12 @@ limitations under the License.
                     <li class='divider visible-xs'></li>
                     <li><a href='#' class='visible-xs' id='menuTabProgram' lkey='Blockly.Msg.TAB_PROGRAM'>Program</a></li>
                     <li><a href='#' class='visible-xs' id='menuTabConfiguration' lkey='Blockly.Msg.TAB_CONFIGURATION'>Configuration</a></li>
-                    <li id='menuTabNNctxt' style='display: none;'><a href='#' class='visible-xs' id='menuTabNN' lkey='Blockly.Msg.TAB_NN'>Neural Network</a></li>
+                    <li id='menuTabNNctxt' style='display: none;'>
+                        <a href='#' class='visible-xs' id='menuTabNN' lkey='Blockly.Msg.TAB_NN + Blockly.Msg.TAB_NN_DEFINE'> </a>
+                    </li>
+                    <li id='menuTabNNLearnctxt' style='display: none;'>
+                        <a href='#' class='visible-xs' id='menuTabNNLearn' lkey='Blockly.Msg.TAB_NN + Blockly.Msg.TAB_NN_LEARN'> </a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -261,9 +266,17 @@ limitations under the License.
                     class='menuTab'>Configuration</span>&nbsp;<span
                     id='tabConfigurationName'></span>
                 </a></li>
-                <li id='tabNNctxt' style='display: none;'>
-                    <a data-toggle='tab' id='tabNN' href='#nn'> <span lkey='Blockly.Msg.TAB_NN' class='menuTab'>Neural Network</span>&nbsp;<span
-                        id='tabNnName'>NEPOnn</span></a>
+                <li id='tabNNctxt'>
+                    <a data-toggle='tab' id='tabNN' href='#nn'>
+                        <span lkey='Blockly.Msg.TAB_NN' class='menuTab'>Neural Network</span>&nbsp;
+                        <span lkey='Blockly.Msg.TAB_NN_DEFINE'>Define</span>
+                    </a>
+                </li>
+                <li id='tabNNlearnctxt'>
+                    <a data-toggle='tab' id='tabNNlearn' href='#nn-learn'>
+                        <span lkey='Blockly.Msg.TAB_NN' class='menuTab'>Neural Network</span>&nbsp;
+                        <span lkey='Blockly.Msg.TAB_NN_LEARN'>Learn</span>
+                    </a>
                 </li>
                 <li class='hidden'><a data-toggle='tab' id='tabProgList' href='#progList'>Listing of programs</a></li>
                 <li class='hidden'><a data-toggle='tab' id='tabConfList' href='#confList'>Listing of configurations</a></li>
@@ -647,9 +660,44 @@ limitations under the License.
         </div>
 
         <div id='nn' style='display: none;' class='tab-pane fade'>
-            <button class='nn-btn' id='goto-sim'>
+            <button class='nn-btn' id='goto-sim' lkey='Blockly.Msg.MENU_SIM_START_TOOLTIP' rel='tooltip' data-original-title='' title=''>
                 <span class='typcn typcn-simulation'></span>
             </button>
+            <div class='nn-explore-btns'>
+                <button class='nn-explore-btn' id='nn-explore-run-full' lkey='Blockly.Msg.NN_EXPLORE_RUN_FULL' rel='tooltip'
+                    data-original-title='' title=''>
+                    <span class='typcn typcn-xNN'></span>
+                </button>
+                <button class='nn-explore-btn' id='nn-explore-run-layer' lkey='Blockly.Msg.NN_EXPLORE_RUN_LAYER' rel='tooltip'
+                    data-original-title='' title=''>
+                    <span class='typcn typcn-flow-parallel'></span>
+                </button>
+                <button class='nn-explore-btn' id='nn-explore-run-neuron' lkey='Blockly.Msg.NN_EXPLORE_RUN_NEURON' rel='tooltip'
+                    data-original-title='' title=''>
+                    <span class='typcn typcn-arrow-forward-outline'></span>
+                </button>
+                <div id='nn-show-iteration-all' class='nn-control'>
+                    <span id='nn-show-iteration-label' class='nn-bold'></span>
+                    <div id='nn-show-iteration'></div>
+                </div>
+                <div id='nn-show-next-neuron-all' class='nn-control'>
+                    <span id='nn-show-next-neuron-label' class='nn-bold'></span>
+                    <div id='nn-show-next-neuron'></div>
+                </div>
+                <button class='nn-explore-btn' id='nn-explore-stop' lkey='Blockly.Msg.NN_EXPLORE_RESET_VALUES' rel='tooltip'
+                    data-original-title='' title=''>
+                    <span class='typcn typcn-media-stop'></span>
+                </button>
+                <button class='nn-explore-btn' id='nn-explore-upload' lkey='Blockly.Msg.NN_LEARN_UPLOAD' rel='tooltip'
+                    data-original-title='' title=''>
+                    <span class='typcn typcn-upload-outline'></span>
+                    <input type='file' id='nn-test-data-upload' accept='text/csv, text/plain' />
+                </button>
+                <button class='nn-explore-btn' id='nn-explore-upload-popup' lkey='Blockly.Msg.NN_LEARN_UPLOAD_POPUP' rel='tooltip'
+                    data-original-title='' title='' data-toggle='modal' data-target='#nn-explore-popup-modal' data-backdrop='false'>
+                    <span class='typcn typcn-th-large-outline'></span>
+                </button>
+            </div>
             <div id='nn-top-controls'>
                 <div id='nn-select-click' class='nn-control'>
                     <span id='nn-focus-label' class='nn-bold'></span>
@@ -659,6 +707,17 @@ limitations under the License.
                             <option value='CLICK_NODE'></option>
                             <option value='SHOW_ALL' selected='true'></option>
                         </select>
+                    </div>
+                </div>
+                <div id='nn-get-shape-all' class='nn-control'>
+                    <span id='nn-get-shape-label' class='nn-bold'></span>
+                    <div class='nn-input-div'>
+                        <input class='nn-input' id='nn-get-shape' />
+                        <span class='nn-shape-finished-button'>
+                            <button class='nn-btn nn-finish-button' id='nn-shape-finished-button'>
+                                <span class='typcn typcn-tick'></span>
+                            </button>
+                        </span>
                     </div>
                 </div>
                 <div id='nn-show-math-all' class='nn-control'>
@@ -696,15 +755,22 @@ limitations under the License.
                         </select>
                     </div>
                 </div>
-                <!--                <div class="nn-control">
-                                    <span id="nn-regularization-label" class="nn-bold"></span>
-                                    <div class="select">
-                                        <select id="regularizations">
-                                            <option value="none">None</option>
-                                            <option value="L1">L1</option>
-                                            <option value="L2">L2</option>
-                                        </select>
-                                    </div> -->
+                <div class='nn-control'>
+                    <span id='nn-random-values-generator-label' class='nn-bold'></span>
+                    <div>
+                        <div id='nn-random-values-from-to'>
+                            <span id='nn-random-values-from-span'></span>
+                            <input class='nn-input' id='nn-random-values-from' value='-1'>
+                            <span id='nn-random-values-to-span'></span>
+                            <input class='nn-input' id='nn-random-values-to' value='1'>
+                            <span class='nn-random-values-finished-button'>
+                            <button class='nn-btn nn-finish-button' id='nn-random-values-finished-button'>
+                                <span class='typcn typcn-tick'></span>
+                            </button>
+                        </span>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div id='nn-main-part'>
                 <div id='nn-features'>
@@ -714,18 +780,23 @@ limitations under the License.
                             <span class='nn-type'></span>
                             <input id='nn-input' />
                             <span class='nn-btn nn-type-button'>
-                                <button class='nn-btn' id='nn-type-plus'>
+                                <button class='nn-btn nn-top-control-button' id='nn-type-plus'>
                                     <span class='typcn typcn-plus'></span>
                                 </button>
                             </span>
                             <span class='nn-btn nn-type-button'>
-                                <button class='nn-btn' id='nn-type-minus'>
+                                <button class='nn-btn nn-top-control-button' id='nn-type-minus'>
                                     <span class='typcn typcn-minus'></span>
                                 </button>
                             </span>
                             <span class='nn-btn nn-type-button'>
-                                <button class='nn-btn' id='nn-type-finished'>
+                                <button class='nn-btn nn-top-control-button' id='nn-type-finished'>
                                     <span class='typcn typcn-tick'></span>
+                                </button>
+                            </span>
+                            <span class='nn-btn nn-type-button'>
+                                <button class='nn-btn nn-top-control-button nn-cancel' id='nn-type-cancel'>
+                                    <span class='typcn typcn-cancel'></span>
                                 </button>
                             </span>
                         </div>
@@ -733,11 +804,181 @@ limitations under the License.
                             <span class='nn-type'></span>
                             <input id='nn-name' />
                             <span class='nn-type-button'>
-                                <button class='nn-btn' id='nn-name-finished'>
+                                <button class='nn-btn nn-top-control-button' id='nn-name-finished'>
                                     <span class='typcn typcn-tick'></span>
                                 </button>
-                                <div class='nn-name-hint' id='nn-name-message'></div>
                             </span>
+                            <span class='nn-type-button'>
+                                <button class='nn-btn nn-top-control-button nn-cancel' id='nn-name-cancel'>
+                                    <span class='typcn typcn-cancel'></span>
+                                </button>
+                            </span>
+                            <div class='nn-name-hint' id='nn-name-message'></div>
+                        </div>
+                        <div class='nn-popup-modal' id='nn-explore-popup-modal'>
+                            <div class='modal-dialog nn-modal-dialog'>
+                                <div class='modal-content nn-modal-content'>
+                                    <div class='modal-header'>
+                                        <div id='nn-explore-table-popup-buttons'>
+                                            <span class='nn-btn nn-type-button'>
+                                                <button class='nn-btn nn-top-control-button' id='nn-explore-table-plus'>
+                                                    <span class='typcn typcn-plus'></span>
+                                                </button>
+                                            </span>
+                                            <span class='nn-btn nn-type-button'>
+                                                <button class='nn-btn nn-top-control-button' id='nn-explore-table-minus'>
+                                                    <span class='typcn typcn-minus'></span>
+                                                </button>
+                                            </span>
+                                            <span class='nn-type-button'>
+                                                <button class='nn-btn nn-top-control-button' id='nn-explore-table-download'>
+                                                    <span class='typcn typcn-download'></span>
+                                                </button>
+                                            </span>
+                                            <span class='nn-type-button'>
+                                                <button type='button' class='close' id='nn-explore-modal-close' aria-label='Close'>
+                                                    <span aria-hidden='true'>&times;</span>
+                                                </button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class='nn-modal-body'>
+                                        <table id='nn-explore-table-user-input'></table>
+                                    </div>
+                                    <div class='modal-footer nn-modal-footer'>
+                                        <button type='button' class='btn btn-default' id='nn-explore-modal-ok'>OK</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id='nn-learn' style='display: none;' class='tab-pane fade'>
+            <button class='nn-btn' id='learn-goto-sim' lkey='Blockly.Msg.MENU_SIM_START_TOOLTIP' rel='tooltip' data-original-title='' title=''>
+                <span class='typcn typcn-simulation'></span>
+            </button>
+            <div class='nn-learn-btns'>
+                <button class='nn-explore-btn' id='nn-learn-run' lkey='Blockly.Msg.NN_LEARN_RUN' rel='tooltip'
+                    data-original-title='' title=''>
+                    <span class='typcn typcn-media-fast-forward-outline'></span>
+                </button>
+                <button class='nn-explore-btn' id='nn-learn-run-epoch' lkey='Blockly.Msg.NN_LEARN_EPOCH' rel='tooltip'
+                    data-original-title='' title=''>
+                    <span class='typcn typcn-media-play-outline'></span>
+                </button>
+                <button class='nn-explore-btn' id='nn-learn-run-one-line' lkey='Blockly.Msg.NN_LEARN_ONE_LINE' rel='tooltip'
+                    data-original-title='' title=''>
+                    <span class='typcn typcn-media-play'></span>
+                </button>
+                <div id='nn-learn-show-iteration-all' class='nn-control'>
+                    <span id='nn-learn-show-iteration-label' class='nn-bold'></span>
+                    <div id='nn-learn-show-iteration'></div>
+                </div>
+                <button class='nn-explore-btn' id='nn-learn-reset' lkey='Blockly.Msg.NN_LEARN_RESET_VALUES' rel='tooltip'
+                    data-original-title='' title=''>
+                    <span class='typcn typcn-media-stop'></span>
+                </button>
+                <button class='nn-explore-btn' id='nn-learn-upload' lkey='Blockly.Msg.NN_LEARN_UPLOAD' rel='tooltip'
+                    data-original-title='' title=''>
+                    <span class='typcn typcn-upload-outline'></span>
+                    <input type='file' id='nn-training-data-upload' accept='text/csv, text/plain' />
+                </button>
+                <button class='nn-explore-btn' id='nn-learn-upload-popup' lkey='Blockly.Msg.NN_LEARN_UPLOAD_POPUP' rel='tooltip'
+                    data-original-title='' title='' data-toggle='modal' data-target='#nn-learn-popup-modal' data-backdrop='false'>
+                    <span class='typcn typcn-th-large-outline'></span>
+                </button>
+            </div>
+            <div id='nn-learn-top-controls'>
+                <div id='nn-learn-select-click' class='nn-control'>
+                    <span id='nn-learn-focus-label' class='nn-bold'></span>
+                    <div class='select'>
+                        <select class='nn-selection' id='nn-learn-focus'>
+                            <option value='CLICK_NODE'></option>
+                            <option value='SHOW_ALL' selected='true'></option>
+                        </select>
+                    </div>
+                </div>
+                <div id='nn-learn-show-activation-function' class='nn-control'>
+                    <span id='nn-learn-show-activation-label' class='nn-bold'></span>
+                    <div id='nn-learn-show-activation' class='nn-selection'></div>
+                </div>
+                <div id='nn-get-learning-rate-all' class='nn-control'>
+                    <span id='nn-get-learning-rate-label' class='nn-bold'></span>
+                    <div class='nn-input-div'>
+                        <input class='nn-input' id='nn-get-learning-rate' />
+                        <span class='nn-learning-rate-finished-button'>
+                            <button class='nn-btn nn-finish-button' id='nn-learning-rate-finished-button'>
+                                <span class='typcn typcn-tick'></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div id='nn-get-epoch-all' class='nn-control'>
+                    <span id='nn-get-epoch-label' class='nn-bold'></span>
+                    <div class='nn-input-div'>
+                        <input class='nn-input' id='nn-get-epoch' />
+                        <span class='nn-epoch-finished-button'>
+                            <button class='nn-btn nn-finish-button' id='nn-epoch-finished-button'>
+                                <span class='typcn typcn-tick'></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class='nn-control nn-metrics'>
+                    <div class='nn-output-stats'>
+                        <span id='nn-epoch-num' class='nn-bold'>Epoch #</span>
+                        <div class='value' id='nn-epochs'></div>
+                    </div>
+                    <div class='nn-output-stats'>
+                        <span id='nn-training-loss' class='nn-bold'>Training loss</span>
+                        <div class='value' id='nn-loss-train'></div>
+                    </div>
+                    <div id='nn-learn-training-loss-linechart'></div>
+                </div>
+            </div>
+            <div id='nn-learn-main-part'>
+                <div id='nn-learn-features'>
+                    <div id='nn-learn-network'>
+                        <svg id='nn-learn-svg'></svg>
+                        <div id='nn-learn-training-bias-linechart'></div>
+                        <div id='nn-learn-training-weight-linechart'></div>
+                        <div class='nn-popup-modal' id='nn-learn-popup-modal'>
+                            <div class='modal-dialog nn-modal-dialog'>
+                                <div class='modal-content nn-modal-content'>
+                                    <div class='modal-header'>
+                                        <div id='nn-learn-table-popup-buttons'>
+                                            <span class='nn-btn nn-type-button'>
+                                                <button class='nn-btn nn-top-control-button' id='nn-learn-table-plus'>
+                                                    <span class='typcn typcn-plus'></span>
+                                                </button>
+                                            </span>
+                                            <span class='nn-btn nn-type-button'>
+                                                <button class='nn-btn nn-top-control-button' id='nn-learn-table-minus'>
+                                                    <span class='typcn typcn-minus'></span>
+                                                </button>
+                                            </span>
+                                            <span class='nn-type-button'>
+                                                <button class='nn-btn nn-top-control-button' id='nn-learn-table-download'>
+                                                    <span class='typcn typcn-download'></span>
+                                                </button>
+                                            </span>
+                                            <span class='nn-type-button'>
+                                                <button type='button' class='close' id='nn-learn-modal-close' aria-label='Close'>
+                                                    <span aria-hidden='true'>&times;</span>
+                                                </button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class='nn-modal-body'>
+                                        <table id='nn-learn-table-user-input'></table>
+                                    </div>
+                                    <div class='modal-footer nn-modal-footer'>
+                                        <button type='button' class='btn btn-default' id='nn-learn-modal-ok'>OK</button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

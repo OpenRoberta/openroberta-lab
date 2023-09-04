@@ -452,18 +452,15 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
         if ( nnBean.getInputNeurons().contains(name) ) {
             return 0;
         }
+        for ( int i = 1; i <= nnBean.getNetworkShape().size(); i++ ) {
+            if ( nnBean.getHiddenNeuronsByLayer(i - 1).contains(name) ) {
+                return i;
+            }
+        }
         if ( nnBean.getOutputNeurons().contains(name) ) {
             return nnBean.getNetworkShape().size() + 1;
         }
-        if ( name.length() != 4 || name.charAt(0) != 'h' || name.charAt(2) != 'n' ) {
-            return -1;
-        }
-        int level = Integer.parseInt(name.substring(1, 2));
-        if ( level >= 1 && level <= nnBean.getNetworkShape().size() ) {
-            return level;
-        } else {
-            return -1;
-        }
+        return -1;
     }
 
     private void checkNeuronName(Phrase toBeChecked, boolean inputLegal, boolean hiddenLegal, boolean outputLegal, String name) {

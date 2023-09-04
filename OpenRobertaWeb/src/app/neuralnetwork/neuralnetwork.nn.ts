@@ -118,9 +118,10 @@ export class NNumber {
  * after every forward and back propagation run.
  */
 export class Node {
-    id: string; // may ONLY be changed, when names of input/output neurons are edited
+    id: string; // may ONLY be changed, when names of neurons are edited
     readonly inputLinks: Link[] = [];
     bias: NNumber = new NNumber();
+    biasHistory: number[] = [];
     readonly outputs: Link[] = [];
     totalInput: number;
     output: number = 0;
@@ -244,6 +245,7 @@ export class Link {
     readonly dest: Node;
 
     weight: NNumber = new NNumber();
+    weightHistory: number[] = [];
     isDead = false;
     /** Error derivative with respect to this weight. */
     errorDer = 0;
@@ -301,7 +303,7 @@ export class Network {
             network.push(currentLayer);
             let numNodes = shape[layerIdx];
             for (let i = 0; i < numNodes; i++) {
-                let nodeName = isInputLayer ? state.inputs[i] : isOutputLayer ? state.outputs[i] : 'h' + layerIdx + 'n' + (i + 1);
+                let nodeName = isInputLayer ? state.inputs[i] : isOutputLayer ? state.outputs[i] : state.hiddenNeurons[layerIdx - 1][i];
                 let node = new Node(nodeName, state.activation);
                 currentLayer.push(node);
                 if (layerIdx >= 1) {
@@ -348,11 +350,14 @@ export class Network {
      * derivatives with respect to each node, and each weight
      * in the network.
      */
-    backProp(target: number, errorFunc: H.ErrorFunction): void {
+    backProp(target: number[], errorFunc: H.ErrorFunction = H.Errors.SQUARE): void {
         // The output node is a special case. We use the user-defined error
         // function for the derivative.
-        let outputNode = this.network[this.network.length - 1][0];
-        outputNode.outputDer = errorFunc.der(outputNode.output, target);
+        let outputLayer = this.network[this.network.length - 1];
+        for (let i = 0; i < outputLayer.length; i++) {
+            let outputNode = outputLayer[i];
+            outputNode.outputDer = errorFunc.der(outputNode.output, target[i]);
+        }
 
         // Go through the layers backwards.
         for (let layerIdx = this.network.length - 1; layerIdx >= 1; layerIdx--) {
@@ -407,7 +412,8 @@ export class Network {
                 let node = currentLayer[i];
                 // Update the node's bias.
                 if (node.numAccumulatedDers > 0) {
-                    node.bias.setAsNumber((learningRate * node.accInputDer) / node.numAccumulatedDers);
+                    node.biasHistory.push(node.bias.get());
+                    node.bias.setAsNumber(node.bias.get() - (learningRate * node.accInputDer) / node.numAccumulatedDers);
                     node.accInputDer = 0;
                     node.numAccumulatedDers = 0;
                 }
@@ -420,6 +426,7 @@ export class Network {
                     let weightAsNumber = link.weight.get();
                     let regulDer = link.regularization ? link.regularization.der(weightAsNumber) : 0;
                     if (link.numAccumulatedDers > 0) {
+                        link.weightHistory.push(weightAsNumber);
                         // Update the weight based on dE/dw.
                         weightAsNumber = weightAsNumber - (learningRate / link.numAccumulatedDers) * link.accErrorDer;
                         // Further update the weight based on regularization.
@@ -437,6 +444,21 @@ export class Network {
                 }
             }
         }
+    }
+
+    getLoss(dataPoints: number[][]): number {
+        let loss = 0;
+        let outputLayer = this.network[this.network.length - 1];
+        dataPoints.forEach((inputOutputPair) => {
+            let inputsForLearning = inputOutputPair.slice(0, this.getInputNames().length);
+            let outputTargetValues = inputOutputPair.slice(this.getInputNames().length);
+            this.setInputValuesFromArray(inputsForLearning);
+            this.forwardProp();
+            outputLayer.forEach((outputNode, idx) => {
+                loss += Math.sqrt(H.Errors.SQUARE.error(outputNode.output, outputTargetValues[idx]));
+            });
+        });
+        return loss / dataPoints.length;
     }
 
     /** Iterates over every node in the network */
@@ -514,6 +536,20 @@ export class Network {
         return inputNames;
     }
 
+    getHiddenNeuronNames(): string[][] {
+        let hiddenNeuronNames: string[][] = [];
+        if (this.network != null && this.network.length > 2) {
+            for (let i = 1; i < this.network.length - 1; i++) {
+                let hiddenLayerNeurons: string[] = [];
+                for (let node of this.network[i]) {
+                    hiddenLayerNeurons.push(node.id);
+                }
+                hiddenNeuronNames.push(hiddenLayerNeurons);
+            }
+        }
+        return hiddenNeuronNames;
+    }
+
     getOutputNames(): string[] {
         let outputNames: string[] = [];
         if (this.network != null && this.network.length > 0) {
@@ -556,7 +592,7 @@ export class Network {
             return 0;
         }
     }
-    
+
     /**
      * finds a link and updates its weight. Called from the simulation
      * @param from id of the source of the link
@@ -609,7 +645,7 @@ export class Network {
         return null;
     }
 
-    private setWeightsFromArray(weightsAllLayers: string[][][]): void {
+    public setWeightsFromArray(weightsAllLayers: string[][][]): void {
         if (this.network != null && this.network.length > 0 && weightsAllLayers != null) {
             for (let i = 0; i < weightsAllLayers.length && i < this.network.length; i += 1) {
                 let layer = this.network[i];
@@ -636,7 +672,7 @@ export class Network {
         }
     }
 
-    private setBiasFromArray(biasesAllLayers: string[][]): void {
+    public setBiasFromArray(biasesAllLayers: string[][]): void {
         if (this.network != null && this.network.length > 0 && biasesAllLayers != null) {
             for (let i = 0; i < biasesAllLayers.length && i < this.network.length; i += 1) {
                 let layer = this.network[i];
@@ -652,6 +688,15 @@ export class Network {
                     }
                     node.bias.set(bias);
                 }
+            }
+        }
+    }
+
+    public setInputValuesFromArray(inputValuesArray: number[]): void {
+        if (this.network != null && this.network.length > 0 && inputValuesArray.length > 0) {
+            let inputLayer: Node[] = this.network[0];
+            for (let i = 0; i < inputValuesArray.length && i < inputLayer.length; i += 1) {
+                inputLayer[i].output = inputValuesArray[i];
             }
         }
     }

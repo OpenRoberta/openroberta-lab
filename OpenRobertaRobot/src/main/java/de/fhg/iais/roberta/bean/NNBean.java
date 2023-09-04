@@ -132,7 +132,7 @@ public class NNBean implements IProjectBean {
         private Float percTrainData = null;
         private String activationKey = null;
         private Integer numHiddenLayers = null;
-        private List<List<String>> hiddenNeurons = new ArrayList<List<String>>();
+        private List<List<String>> hiddenNeurons = new ArrayList<>();
 
         /**
          * data contains the NN definition. Save it for later usage.
@@ -147,6 +147,11 @@ public class NNBean implements IProjectBean {
                 this.weights = netStateDefinition.getJSONArray("weights");
                 this.bias = netStateDefinition.getJSONArray("biases");
                 netStateDefinition.getJSONArray("inputs").forEach(i -> inputNeurons.add((String) i));
+                netStateDefinition.getJSONArray("hiddenNeurons").forEach(h -> {
+                    List<String> hiddenLayerNeurons = new ArrayList<>();
+                    ((JSONArray) h).forEach(neuron -> hiddenLayerNeurons.add((String) neuron));
+                    hiddenNeurons.add(hiddenLayerNeurons);
+                });
                 netStateDefinition.getJSONArray("outputs").forEach(o -> outputNeurons.add((String) o));
                 netStateDefinition.getJSONArray("networkShape").forEach(c -> networkShape.add((Integer) c));
                 this.learningRate = netStateDefinition.getFloat("learningRate");
@@ -157,14 +162,6 @@ public class NNBean implements IProjectBean {
                 this.percTrainData = netStateDefinition.getFloat("percTrainData");
                 this.activationKey = netStateDefinition.getString("activationKey");
                 this.numHiddenLayers = netStateDefinition.getInt("numHiddenLayers");
-                for ( int layerIdx = 1; layerIdx <= networkShape.size(); layerIdx++ ) {
-                    List<String> hiddenNeuronsForLayer = new ArrayList<>();
-                    for ( int neuronIdx = 1; neuronIdx <= networkShape.get(layerIdx - 1); neuronIdx++ ) {
-                        String neuronName = "h" + layerIdx + "n" + neuronIdx;
-                        hiddenNeuronsForLayer.add(neuronName);
-                    }
-                    hiddenNeurons.add(hiddenNeuronsForLayer);
-                }
                 if ( !neuronNamesConsistent(inputNeurons, outputNeurons) ) {
                     return "NN_INVALID_NEURONNAME";
                 } else {

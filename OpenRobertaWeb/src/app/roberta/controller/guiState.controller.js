@@ -14,7 +14,6 @@ import * as NOTIFICATION_C from 'notification.controller';
 var LONG = 300000; // Ping time 5min
 var SHORT = 3000; // Ping time 3sec
 
-const activationDisplayName = { linear: 'Linear', relu: 'ReLU', tanh: 'Tanh', sigmoid: 'Sigmoid', bool: 'Bool(0,1)' };
 /**
  * Init robot
  */
@@ -415,22 +414,20 @@ function setRobot(robot, result, opt_init) {
     }
 
     if (GUISTATE.gui.nn) {
-        $('#tabNNctxt').show();
-        $('#menuTabNNctxt').show();
         $('#nn-activations').empty();
+        $('#menuTabNNctxt').show();
+        $('#menuTabNNLearnctxt').show();
         $.each(GUISTATE.gui.nnActivations, function (_, item) {
             $('#nn-activations').append(
                 $('<option>', {
                     value: item,
-                    text: activationDisplayName[item],
+                    text: UTIL.activationDisplayName[item],
                 })
             );
         });
-        $('#nn').show();
     } else {
-        $('#tabNNctxt').hide();
         $('#menuTabNNctxt').hide();
-        $('#nn').hide();
+        $('#menuTabNNLearnctxt').hide();
     }
     if (getHasRobotStopButton(robot)) {
         GUISTATE.gui.blocklyWorkspace && GUISTATE.gui.blocklyWorkspace.robControls.showStopProgram();
@@ -677,18 +674,38 @@ function setView(view) {
         $('#head-navigation-program-edit').css('display', 'none');
         $('#head-navigation-configuration-edit').css('display', 'inline');
         $('#menuTabProgram').parent().removeClass('disabled');
+        $('#menuTabNN').parent().removeClass('disabled');
+        $('#menuTabNNLearn').parent().removeClass('disabled');
         $('#menuTabConfiguration').parent().addClass('disabled');
         UTIL.clearTabAlert(view);
     } else if (view === 'tabProgram') {
         $('#head-navigation-configuration-edit').css('display', 'none');
         $('#head-navigation-program-edit').css('display', 'inline');
         $('#menuTabConfiguration').parent().removeClass('disabled');
+        $('#menuTabNN').parent().removeClass('disabled');
+        $('#menuTabNNLearn').parent().removeClass('disabled');
         $('#menuTabProgram').parent().addClass('disabled');
+    } else if (view === 'tabNN') {
+        $('#head-navigation-configuration-edit').css('display', 'none');
+        $('#head-navigation-program-edit').css('display', 'inline');
+        $('#menuTabConfiguration').parent().removeClass('disabled');
+        $('#menuTabProgram').parent().removeClass('disabled');
+        $('#menuTabNN').parent().addClass('disabled');
+        $('#menuTabNNLearn').parent().removeClass('disabled');
+    } else if (view === 'tabNNlearn') {
+        $('#head-navigation-configuration-edit').css('display', 'none');
+        $('#head-navigation-program-edit').css('display', 'inline');
+        $('#menuTabConfiguration').parent().removeClass('disabled');
+        $('#menuTabProgram').parent().removeClass('disabled');
+        $('#menuTabNN').parent().removeClass('disabled');
+        $('#menuTabNNLearn').parent().addClass('disabled');
     } else if (view === 'tabSourceCodeEditor') {
         $('#head-navigation-configuration-edit').css('display', 'none');
         $('#head-navigation-program-edit').css('display', 'inline');
         $('#menuTabProgram').parent().removeClass('disabled');
         $('#menuTabConfiguration').parent().removeClass('disabled');
+        $('#menuTabNN').parent().removeClass('disabled');
+        $('#menuTabNNLearn').parent().removeClass('disabled');
         $('#head-navigation-program-edit').addClass('disabled');
         $('.robotType').addClass('disabled');
         $('#head-navi-tooltip-program').attr('data-toggle', '');

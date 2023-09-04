@@ -3,7 +3,6 @@ define(["require", "exports", "util", "message", "guiState.model", "progHelp.con
     exports.getLegalTextsMap = exports.updateTutorialMenu = exports.updateMenuStatus = exports.setWebview = exports.inWebview = exports.getTheme = exports.getAvailableHelp = exports.getSocket = exports.setSocket = exports.getPingTime = exports.setPingTime = exports.doPing = exports.setPing = exports.isProgramToDownload = exports.setProgramToDownload = exports.getCommandLine = exports.getSignature = exports.getVendor = exports.getConnection = exports.getConnectionTypeEnum = exports.getListOfTutorials = exports.getWebotsUrl = exports.hasWebotsSim = exports.hasNN = exports.hasMarkerSim = exports.hasMultiSim = exports.hasSim = exports.checkSim = exports.setConfiguration = exports.setProgram = exports.setLogout = exports.setLogin = exports.getUserUserGroupOwner = exports.getUserUserGroup = exports.isUserMemberOfUserGroup = exports.isUserAccountActivated = exports.getUserAccountName = exports.getUserName = exports.isPublicServerVersion = exports.getServerVersion = exports.setStartWithoutPopup = exports.getStartWithoutPopup = exports.getConfigurationConf = exports.getProgramProg = exports.getConfigurationToolbox = exports.getProgramToolbox = exports.getRobots = exports.getProgramXML = exports.setProgramXML = exports.getConfigurationXML = exports.setConfigurationXML = exports.setRobotToken = exports.getRobotFWName = exports.setDefaultRobot = exports.getDefaultRobot = exports.getConfToolbox = exports.getToolbox = exports.getProgramToolboxLevel = exports.setProgramToolboxLevel = exports.setConfigurationNameDefault = exports.setConfigurationName = exports.getConfigurationName = exports.setProgramShareRelation = exports.getProgramShareRelation = exports.setProgramAuthorName = exports.getProgramAuthorName = exports.setProgramOwnerName = exports.getProgramOwnerName = exports.setProgramName = exports.getProgramName = exports.setProgramTimestamp = exports.getProgramTimestamp = exports.isUserLoggedIn = exports.getBinaryFileExtension = exports.getSourceCodeFileExtension = exports.getProgramSource = exports.setProgramSource = exports.getProgramShared = exports.setConfigurationSaved = exports.isConfigurationSaved = exports.setProgramSaved = exports.isProgramSaved = exports.getLanguage = exports.setLanguage = exports.getPrevView = exports.getView = exports.setView = exports.hasRobotDefaultFirmware = exports.getRobotVersion = exports.getRobotState = exports.getRobotBattery = exports.getRobotName = exports.getRobotTime = exports.isRobotDisconnected = exports.isConfigurationUsed = exports.isRobotConnected = exports.getRobotInfoEN = exports.getRobotInfoDE = exports.isRobotBeta = exports.getMenuRobotRealName = exports.getRobotRealName = exports.getRobotPort = exports.setRobotPort = exports.getRobotGroup = exports.getRobot = exports.setRunEnabled = exports.isRunEnabled = exports.setConnectionState = exports.findRobot = exports.findGroup = exports.setKioskMode = exports.setRobot = exports.setBricklyWorkspace = exports.getBricklyWorkspace = exports.setBlocklyWorkspace = exports.getBlocklyWorkspace = exports.setIsAgent = exports.getIsAgent = exports.setState = exports.isKioskMode = exports.isConfigurationAnonymous = exports.getConfigurationStandardName = exports.isConfigurationStandard = exports.isProgramWritable = exports.isProgramStandard = exports.setInitialState = exports.init = exports.resetDynamicProgramToolbox = exports.setDynamicProgramToolbox = exports.getRobotDeprecatedData = exports.isRobotDeprecated = void 0;
     var LONG = 300000; // Ping time 5min
     var SHORT = 3000; // Ping time 3sec
-    var activationDisplayName = { linear: 'Linear', relu: 'ReLU', tanh: 'Tanh', sigmoid: 'Sigmoid', bool: 'Bool(0,1)' };
     /**
      * Init robot
      */
@@ -402,21 +401,19 @@ define(["require", "exports", "util", "message", "guiState.model", "progHelp.con
             $('#robotWlan').addClass('hidden');
         }
         if (GUISTATE.gui.nn) {
-            $('#tabNNctxt').show();
-            $('#menuTabNNctxt').show();
             $('#nn-activations').empty();
+            $('#menuTabNNctxt').show();
+            $('#menuTabNNLearnctxt').show();
             $.each(GUISTATE.gui.nnActivations, function (_, item) {
                 $('#nn-activations').append($('<option>', {
                     value: item,
-                    text: activationDisplayName[item],
+                    text: UTIL.activationDisplayName[item],
                 }));
             });
-            $('#nn').show();
         }
         else {
-            $('#tabNNctxt').hide();
             $('#menuTabNNctxt').hide();
-            $('#nn').hide();
+            $('#menuTabNNLearnctxt').hide();
         }
         if (getHasRobotStopButton(robot)) {
             GUISTATE.gui.blocklyWorkspace && GUISTATE.gui.blocklyWorkspace.robControls.showStopProgram();
@@ -663,6 +660,8 @@ define(["require", "exports", "util", "message", "guiState.model", "progHelp.con
             $('#head-navigation-program-edit').css('display', 'none');
             $('#head-navigation-configuration-edit').css('display', 'inline');
             $('#menuTabProgram').parent().removeClass('disabled');
+            $('#menuTabNN').parent().removeClass('disabled');
+            $('#menuTabNNLearn').parent().removeClass('disabled');
             $('#menuTabConfiguration').parent().addClass('disabled');
             UTIL.clearTabAlert(view);
         }
@@ -670,13 +669,33 @@ define(["require", "exports", "util", "message", "guiState.model", "progHelp.con
             $('#head-navigation-configuration-edit').css('display', 'none');
             $('#head-navigation-program-edit').css('display', 'inline');
             $('#menuTabConfiguration').parent().removeClass('disabled');
+            $('#menuTabNN').parent().removeClass('disabled');
+            $('#menuTabNNLearn').parent().removeClass('disabled');
             $('#menuTabProgram').parent().addClass('disabled');
+        }
+        else if (view === 'tabNN') {
+            $('#head-navigation-configuration-edit').css('display', 'none');
+            $('#head-navigation-program-edit').css('display', 'inline');
+            $('#menuTabConfiguration').parent().removeClass('disabled');
+            $('#menuTabProgram').parent().removeClass('disabled');
+            $('#menuTabNN').parent().addClass('disabled');
+            $('#menuTabNNLearn').parent().removeClass('disabled');
+        }
+        else if (view === 'tabNNlearn') {
+            $('#head-navigation-configuration-edit').css('display', 'none');
+            $('#head-navigation-program-edit').css('display', 'inline');
+            $('#menuTabConfiguration').parent().removeClass('disabled');
+            $('#menuTabProgram').parent().removeClass('disabled');
+            $('#menuTabNN').parent().removeClass('disabled');
+            $('#menuTabNNLearn').parent().addClass('disabled');
         }
         else if (view === 'tabSourceCodeEditor') {
             $('#head-navigation-configuration-edit').css('display', 'none');
             $('#head-navigation-program-edit').css('display', 'inline');
             $('#menuTabProgram').parent().removeClass('disabled');
             $('#menuTabConfiguration').parent().removeClass('disabled');
+            $('#menuTabNN').parent().removeClass('disabled');
+            $('#menuTabNNLearn').parent().removeClass('disabled');
             $('#head-navigation-program-edit').addClass('disabled');
             $('.robotType').addClass('disabled');
             $('#head-navi-tooltip-program').attr('data-toggle', '');

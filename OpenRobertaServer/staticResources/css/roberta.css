@@ -924,13 +924,10 @@ button#simCustomObstacle.typcn:before {
 .nav#head-navigation-tabs {
     position: relative;
     width: auto;
-    overflow: hidden;
     white-space: nowrap;
     margin: 0;
     padding: 0;
     border: 0;
-    overflow: hidden;
-    padding: 0;
 }
 
 .nav#head-navigation-tabs > li > a {

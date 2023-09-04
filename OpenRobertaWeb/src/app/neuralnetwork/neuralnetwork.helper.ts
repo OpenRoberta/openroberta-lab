@@ -1,7 +1,7 @@
 /** Polyfill for TANH */
 (Math as any).tanh =
     (Math as any).tanh ||
-    function(x) {
+    function (x) {
         if (x === Infinity) {
             return 1;
         } else if (x === -Infinity) {
@@ -36,7 +36,7 @@ export interface RegularizationFunction {
 export class Errors {
     public static SQUARE: ErrorFunction = {
         error: (output: number, target: number) => 0.5 * Math.pow(output - target, 2),
-        der: (output: number, target: number) => output - target
+        der: (output: number, target: number) => output - target,
     };
 }
 
@@ -47,26 +47,26 @@ export class Activations {
         der: (x) => {
             let output = Activations.TANH.output(x);
             return 1 - output * output;
-        }
+        },
     };
     public static RELU: ActivationFunction = {
         output: (x) => Math.max(0, x),
-        der: (x) => (x <= 0 ? 0 : 1)
+        der: (x) => (x <= 0 ? 0 : 1),
     };
     public static SIGMOID: ActivationFunction = {
         output: (x) => 1 / (1 + Math.exp(-x)),
         der: (x) => {
             let output = Activations.SIGMOID.output(x);
             return output * (1 - output);
-        }
+        },
     };
     public static LINEAR: ActivationFunction = {
         output: (x) => x,
-        der: (_) => 1
+        der: (_) => 1,
     };
     public static BOOL: ActivationFunction = {
-        output: (x) => x < 1 ? 0 : 1,
-        der: (_) => 1
+        output: (x) => (x < 1 ? 0 : 1),
+        der: (_) => 1,
     };
 }
 
@@ -74,11 +74,11 @@ export class Activations {
 export class RegularizationFunction {
     public static L1: RegularizationFunction = {
         output: (w) => Math.abs(w),
-        der: (w) => (w < 0 ? -1 : w > 0 ? 1 : 0)
+        der: (w) => (w < 0 ? -1 : w > 0 ? 1 : 0),
     };
     public static L2: RegularizationFunction = {
         output: (w) => 0.5 * w * w,
-        der: (w) => w
+        der: (w) => w,
     };
 }
 
@@ -88,14 +88,14 @@ export let activations: { [key: string]: ActivationFunction } = {
     tanh: Activations.TANH,
     sigmoid: Activations.SIGMOID,
     linear: Activations.LINEAR,
-    bool: Activations.BOOL
+    bool: Activations.BOOL,
 };
 
 /** A map between names and regularization functions. */
 export let regularizations: { [key: string]: RegularizationFunction } = {
     none: null,
     L1: RegularizationFunction.L1,
-    L2: RegularizationFunction.L2
+    L2: RegularizationFunction.L2,
 };
 
 export function updValue(value: string, incr: number): string {

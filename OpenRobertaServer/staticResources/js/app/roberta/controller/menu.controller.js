@@ -583,7 +583,10 @@ define(["require", "exports", "message", "comm", "wrap", "robot.controller", "so
             $('#tabConfiguration').clickWrap();
         }, 'tabConfiguration clicked');
         $('#menuTabNN').onWrap('click', '', function (event) {
-            if ($('#tabNN').hasClass('tabClicked')) {
+            if ($('#tabProgram').hasClass('tabClicked')) {
+                $('.scroller-right').clickWrap();
+            }
+            else if ($('#tabConfiguration').hasClass('tabClicked')) {
                 $('.scroller-right').clickWrap();
             }
             else if ($('#tabNN').hasClass('tabClicked')) {
@@ -591,6 +594,18 @@ define(["require", "exports", "message", "comm", "wrap", "robot.controller", "so
             }
             $('#tabNN').clickWrap();
         }, 'tabNN clicked');
+        $('#menuTabNNLearn').onWrap('click', '', function (event) {
+            if ($('#tabProgram').hasClass('tabClicked')) {
+                $('.scroller-right').clickWrap();
+            }
+            else if ($('#tabConfiguration').hasClass('tabClicked')) {
+                $('.scroller-right').clickWrap();
+            }
+            else if ($('#tabNNlearn').hasClass('tabClicked')) {
+                $('.scroller-right').clickWrap();
+            }
+            $('#tabNNlearn').clickWrap();
+        }, 'tabNNlearn clicked');
         // Close submenu on mouseleave
         $('.navbar-fixed-top').on('mouseleave', function (event) {
             $('.navbar-fixed-top .dropdown').removeClass('open');
@@ -717,7 +732,7 @@ define(["require", "exports", "message", "comm", "wrap", "robot.controller", "so
         });
         // help Bootstrap to calculate the correct size for the collapse element when the screen height is smaller than the elements height.
         $('#navbarCollapse').on('shown.bs.collapse', function () {
-            var newHeight = Math.min($(this).height(), Math.max($('#blockly').height(), $('#brickly').height()));
+            var newHeight = Math.min($(this).height(), Math.max($('#blockly').height(), $('#brickly').height(), $('#nn').height()));
             $(this).css('height', newHeight);
         });
         $(document).onWrap('keydown', function (e) {

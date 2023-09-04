@@ -256,6 +256,9 @@
       "neuralnetwork.ui": [
         "app/neuralnetwork/neuralnetwork.ui"
       ],
+      "neuralnetwork.linechart": [
+        "app/neuralnetwork/neuralnetwork.linechart"
+      ],
       "confVisualization": [
         "app/configVisualization/confVisualization"
       ],

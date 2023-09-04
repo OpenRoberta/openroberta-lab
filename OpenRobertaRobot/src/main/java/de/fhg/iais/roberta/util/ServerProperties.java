@@ -17,7 +17,7 @@ public class ServerProperties {
     public static final String ROBOT_DEFAULT_PROPERTY_KEY = "robot.default";
     public static final String PLUGIN_TEMPDIR_PROPERTY_KEY = "plugin.tempdir";
     public static final String CROSSCOMPILER_RESOURCE_BASE = "robot.crosscompiler.resourcebase";
-    public static final String DEFAULT_NEURAL_NETWORK = "{\"learningRate\":0.03,\"regularizationRate\":0,\"noise\":0,\"batchSize\":10,\"discretize\":false,\"percTrainData\":50,\"activationKey\":\"linear\",\"activation\":{},\"regularization\":null,\"initUntil\":null,\"collectStats\":false,\"numHiddenLayers\":0,\"networkShape\":[],\"weights\":[[[\"1\"]],[[]]],\"biases\":[[\"0\"],[\"0\"]],\"precision\":\"2\",\"weightArcMaxSize\":8,\"weightSuppressMultOp\":true,\"inputs\":[\"n1\"],\"outputs\":[\"n2\"]}";
+    public static final String DEFAULT_NEURAL_NETWORK = "{\"learningRate\":0.03,\"regularizationRate\":0,\"noise\":0,\"batchSize\":10,\"discretize\":false,\"percTrainData\":50,\"activationKey\":\"linear\",\"activation\":{},\"regularization\":null,\"initUntil\":null,\"collectStats\":false,\"numHiddenLayers\":0,\"networkShape\":[],\"weights\":[[[\"1\"]],[[]]],\"biases\":[[\"0\"],[\"0\"]],\"precision\":\"2\",\"weightArcMaxSize\":8,\"weightSuppressMultOp\":true,\"inputs\":[\"n1\"],\"outputs\":[\"n2\"],\"hiddenNeurons\":[]}";
     private final Properties serverProperties;
     private final String defaultRobot;
     private final List<String> robotsOnWhiteList;

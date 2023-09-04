@@ -22,7 +22,7 @@ define(["require", "exports"], function (require, exports) {
         }
         Errors.SQUARE = {
             error: function (output, target) { return 0.5 * Math.pow(output - target, 2); },
-            der: function (output, target) { return output - target; }
+            der: function (output, target) { return output - target; },
         };
         return Errors;
     }());
@@ -36,26 +36,26 @@ define(["require", "exports"], function (require, exports) {
             der: function (x) {
                 var output = Activations.TANH.output(x);
                 return 1 - output * output;
-            }
+            },
         };
         Activations.RELU = {
             output: function (x) { return Math.max(0, x); },
-            der: function (x) { return (x <= 0 ? 0 : 1); }
+            der: function (x) { return (x <= 0 ? 0 : 1); },
         };
         Activations.SIGMOID = {
             output: function (x) { return 1 / (1 + Math.exp(-x)); },
             der: function (x) {
                 var output = Activations.SIGMOID.output(x);
                 return output * (1 - output);
-            }
+            },
         };
         Activations.LINEAR = {
             output: function (x) { return x; },
-            der: function (_) { return 1; }
+            der: function (_) { return 1; },
         };
         Activations.BOOL = {
-            output: function (x) { return x < 1 ? 0 : 1; },
-            der: function (_) { return 1; }
+            output: function (x) { return (x < 1 ? 0 : 1); },
+            der: function (_) { return 1; },
         };
         return Activations;
     }());
@@ -66,11 +66,11 @@ define(["require", "exports"], function (require, exports) {
         }
         RegularizationFunction.L1 = {
             output: function (w) { return Math.abs(w); },
-            der: function (w) { return (w < 0 ? -1 : w > 0 ? 1 : 0); }
+            der: function (w) { return (w < 0 ? -1 : w > 0 ? 1 : 0); },
         };
         RegularizationFunction.L2 = {
             output: function (w) { return 0.5 * w * w; },
-            der: function (w) { return w; }
+            der: function (w) { return w; },
         };
         return RegularizationFunction;
     }());
@@ -81,13 +81,13 @@ define(["require", "exports"], function (require, exports) {
         tanh: Activations.TANH,
         sigmoid: Activations.SIGMOID,
         linear: Activations.LINEAR,
-        bool: Activations.BOOL
+        bool: Activations.BOOL,
     };
     /** A map between names and regularization functions. */
     exports.regularizations = {
         none: null,
         L1: RegularizationFunction.L1,
-        L2: RegularizationFunction.L2
+        L2: RegularizationFunction.L2,
     };
     function updValue(value, incr) {
         var valueTrimmed = value.trim();

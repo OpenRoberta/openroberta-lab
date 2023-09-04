@@ -25,6 +25,7 @@ export class State {
 
     inputs = [];
     outputs = [];
+    hiddenNeurons: string[][] = [];
 
     constructor(json: any) {
         // if no JSON is available from the program, the default from above is taken
@@ -50,6 +51,7 @@ export class State {
             this.weightSuppressMultOp = json.weightSuppressMultOp !== undefined ? json.weightSuppressMultOp : this.weightSuppressMultOp;
             this.inputs = json.inputs !== undefined ? json.inputs : this.inputs;
             this.outputs = json.outputs !== undefined ? json.outputs : this.outputs;
+            this.hiddenNeurons = json.hiddenNeurons !== undefined ? json.hiddenNeurons : this.hiddenNeurons;
 
             // this.x = json.x !== undefined ? json.x : this.x;
         }
