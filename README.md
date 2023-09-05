@@ -29,7 +29,7 @@ apt-get update
 apt-get install openjdk-11-jdk
 apt-get install maven
 apt-get install git
-apt-get install maven
+apt-get install npm
 apt-get install python-is-python3
 apt-get install python3-pip
 apt-get install python3-serial
