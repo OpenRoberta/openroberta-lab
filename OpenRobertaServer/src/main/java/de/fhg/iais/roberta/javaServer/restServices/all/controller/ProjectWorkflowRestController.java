@@ -175,8 +175,15 @@ public class ProjectWorkflowRestController {
 
         String srcFile = tempDirectory + token + "/" + programName + "/target/" + programName + "." + ending;
         File binaryFile = new File(srcFile);
+        InputStream fileInputStream;
+        try {
+            fileInputStream = new FileInputStream(binaryFile);
+        } catch (FileNotFoundException e) {
+            srcFile = tempDirectory + token + "/" + programName + "/source/" + programName + "." + ending;
+            binaryFile = new File(srcFile);
+            fileInputStream = new FileInputStream(binaryFile);
+        }
         
-        InputStream fileInputStream = new FileInputStream(binaryFile);
         return Response
             .ok(fileInputStream)
             .header("Content-Disposition", "attachment; filename=\"" + binaryFile.getName() + "\"")

@@ -30,27 +30,23 @@ public abstract class MicrobitCompilerWorker implements ICompilerWorker {
      * run the build and create the complied hex file
      */
     private Key runBuild(Project project) {
-        CompilerSetupBean compilerWorkflowBean = project.getWorkerResult(CompilerSetupBean.class);
+        final CompilerSetupBean compilerWorkflowBean = project.getWorkerResult(CompilerSetupBean.class);
+        final String tempDir = compilerWorkflowBean.getTempDir();
         String compilerBinDir = compilerWorkflowBean.getCompilerBinDir();
         String compilerResourcesDir = compilerWorkflowBean.getCompilerResourcesDir();
         String sourceCode = project.getSourceCode().toString();
-
         String scriptName = compilerResourcesDir + "/compile.py";
 
         String[] executableWithParameters =
-            {
-                compilerBinDir + "python",
-                scriptName,
-                sourceCode,
-                version
-            };
-        project.setCompiledHex(this.getBinaryFromCrossCompiler(executableWithParameters));
-        if ( project.getCompiledHex() != null ) {
-            return Key.COMPILERWORKFLOW_SUCCESS;
-        } else {
-            Util.logCrosscompilerError(LOG, "no binary returned", sourceCode, project.isNativeEditorCode());
-            return Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
-        }
+                {
+                        compilerBinDir + "python",
+                        scriptName,
+                        sourceCode,
+                        version
+                };
+        
+        Util.storeGeneratedProgram(tempDir, this.getBinaryFromCrossCompiler(executableWithParameters), project.getToken(), project.getProgramName(), "." + project.getBinaryFileExtension());
+        return Key.COMPILERWORKFLOW_SUCCESS;
     }
 
     protected final String getBinaryFromCrossCompiler(String[] executableWithParameters) {
