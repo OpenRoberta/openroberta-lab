@@ -126,6 +126,8 @@
                     <field name="NAME">right</field>
                     <field name="BK">DI1</field>
                     <field name="WH">DI2</field>
+                    <field name="BN">+</field>
+                    <field name="BU">-</field>
                 </block>
             </instance>
             <instance x="710" y="277">
@@ -143,6 +145,8 @@
                     <field name="NAME">left</field>
                     <field name="BK">DI3</field>
                     <field name="WH">DI4</field>
+                    <field name="BN">+</field>
+                    <field name="BU">-</field>
                 </block>
             </instance>
             <instance x="710" y="401">
@@ -166,6 +170,9 @@
             <instance x="710" y="591">
                 <block type="robConf_omnidrive" id="1" intask="true" deletable="false">
                     <field name="NAME">_O</field>
+                    <field name="M1">M1</field>
+                    <field name="M2">M2</field>
+                    <field name="M3">M3</field>
                 </block>
             </instance>
             <instance x="242" y="626">
@@ -181,7 +188,7 @@
                 </block>
             </instance>
             <instance x="256" y="862">
-                <block type="robConf_digitalout" id=";.-iq|D~rA/3xEv-Eo~Q" error_attribute="true" intask="true">
+                <block type="robConf_digitalout" id=";.-iq|D~rA/3xEv-Eo~Q" intask="true">
                     <field name="NAME">S2</field>
                     <field name="OUTPUT">DI6</field>
                 </block>
