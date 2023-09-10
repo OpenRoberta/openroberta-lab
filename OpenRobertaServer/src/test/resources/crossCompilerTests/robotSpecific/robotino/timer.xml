@@ -92,16 +92,48 @@
         </block_set>
     </program>
     <config>
-        <block_set robottype="robotino" xmlversion="3.1" description="" tags="" xmlns="http://de.fhg.iais.roberta.blockly">
-            <instance x="116" y="670">
-                <block type="robConf_digitalin" id=";W]Md]W99gka0760@k(?" intask="true">
-                    <field name="NAME">A</field>
-                    <field name="INPUT">DQ1</field>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="robotino" xmlversion="3.1" description="" tags="">
+            <instance x="80" y="180">
+                <block type="robConf_infrared" id="MUj7v^54V8kK#0)V?6,i" intask="true" deletable="false">
+                    <field name="NAME">_I</field>
+                </block>
+            </instance>
+            <instance x="245" y="175">
+                <block type="robConf_robot" id="robot" intask="true">
+                    <field name="ROBOT">undefined</field>
                 </block>
             </instance>
             <instance x="80" y="221">
                 <block type="robConf_camera" id="KqMg3pZC0;P,U6g*@7Vl" intask="true" deletable="false">
                     <field name="NAME">_C</field>
+                </block>
+            </instance>
+            <instance x="80" y="270">
+                <block type="robConf_optical" id="4" intask="true">
+                    <field name="NAME">right</field>
+                    <field name="BK">DI1</field>
+                    <field name="WH">DI2</field>
+                    <field name="BN">+</field>
+                    <field name="BU">-</field>
+                </block>
+            </instance>
+            <instance x="710" y="277">
+                <block type="robConf_touch" id="13" intask="true" deletable="false">
+                    <field name="NAME">_T</field>
+                </block>
+            </instance>
+            <instance x="710" y="368">
+                <block type="robConf_odometry" id="D/}0Ep-xy}jG-aZbeLf" intask="true" deletable="false">
+                    <field name="NAME">_OD</field>
+                </block>
+            </instance>
+            <instance x="80" y="412">
+                <block type="robConf_optical" id="5" intask="true">
+                    <field name="NAME">left</field>
+                    <field name="BK">DI3</field>
+                    <field name="WH">DI4</field>
+                    <field name="BN">+</field>
+                    <field name="BU">-</field>
                 </block>
             </instance>
             <instance x="710" y="401">
@@ -122,26 +154,12 @@
                     <field name="PORT1">M3</field>
                 </block>
             </instance>
-            <instance x="80" y="180">
-                <block type="robConf_infrared" id="MUj7v^54V8kK#0)V?6,i" intask="true" deletable="false">
-                    <field name="NAME">_I</field>
-                </block>
-            </instance>
-            <instance x="80" y="270">
-                <block type="robConf_optical" id="4" intask="true">
-                    <field name="NAME">right</field>
-                    <field name="BK">DI1</field>
-                    <field name="WH">DI2</field>
-                </block>
-            </instance>
-            <instance x="245" y="175">
-                <block type="robConf_robot" id="robot" intask="true">
-                    <field name="NAME">undefined</field>
-                </block>
-            </instance>
             <instance x="710" y="591">
                 <block type="robConf_omnidrive" id="1" intask="true" deletable="false">
                     <field name="NAME">_O</field>
+                    <field name="M1">M1</field>
+                    <field name="M2">M2</field>
+                    <field name="M3">M3</field>
                 </block>
             </instance>
             <instance x="242" y="626">
@@ -150,21 +168,10 @@
                     <field name="OUTPUT">AI1</field>
                 </block>
             </instance>
-            <instance x="710" y="277">
-                <block type="robConf_touch" id="13" intask="true" deletable="false">
-                    <field name="NAME">_T</field>
-                </block>
-            </instance>
-            <instance x="710" y="368">
-                <block type="robConf_odometry" id="D/}0Ep-xy}jG-aZbeLf" intask="true" deletable="false">
-                    <field name="NAME">_OD</field>
-                </block>
-            </instance>
-            <instance x="80" y="412">
-                <block type="robConf_optical" id="5" intask="true">
-                    <field name="NAME">left</field>
-                    <field name="BK">DI3</field>
-                    <field name="WH">DI4</field>
+            <instance x="116" y="670">
+                <block type="robConf_digitalin" id=";W]Md]W99gka0760@k(?" intask="true">
+                    <field name="NAME">A</field>
+                    <field name="INPUT">DQ1</field>
                 </block>
             </instance>
             <instance x="256" y="862">
