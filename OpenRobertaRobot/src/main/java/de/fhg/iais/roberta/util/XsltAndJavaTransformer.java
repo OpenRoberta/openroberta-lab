@@ -85,7 +85,7 @@ public final class XsltAndJavaTransformer {
             xmlVersion = jaxbProgram.getXmlversion();
             Assert.notNull(jaxbProgram, "jaxb returns null for the program");
             checkAndAddNnDataForPlugin(factory.hasNN(), jaxbProgram);
-            jaxbProgram.setXmlversion("4.0"); // this is a bit too early, may cause problems, but later it is much more expensive
+            // jaxbProgram.setXmlversion("4.0"); // this is a bit too early, may cause problems, but later it is much more expensive
             programText = JaxbHelper.blockSet2xml(jaxbProgram);
         } catch ( Exception e ) {
             throw new DbcException("xslt transformation failed", e);
@@ -148,7 +148,7 @@ public final class XsltAndJavaTransformer {
      * (either Calliope* or Microbit*). Very old versions are those, which are neither "3.1" nor "4.*"
      */
     private static Pair<String, String> transformBetweenVersions(RobotFactory robotFactory, String xmlVersion, String programText, String configText) {
-        if ( robotFactory.hasWorkflow("transform") && !(xmlVersion.equals("3.1") || xmlVersion.startsWith("4.")) ) {
+        if ( robotFactory.hasWorkflow("transform") && !xmlVersion.startsWith("4.") ) {
             AliveData.transformerExecutedTransformations.incrementAndGet();
             Assert.isTrue(robotFactory.getConfigurationType().equals("new"));
             Project project = new Project.Builder()

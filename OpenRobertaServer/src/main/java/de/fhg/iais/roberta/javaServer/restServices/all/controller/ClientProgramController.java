@@ -207,9 +207,9 @@ public class ClientProgramController {
                             LOG.error("program with id " + program.getId() + " replaced in the database. Number of replacements: " + AliveData.transformerDatabaseSavesTotal.incrementAndGet());
                         }
                     }
-                    response.setProgXML(programText);
+                    response.setProgXML(programTextTransformed);
                     response.setConfigName(configName); // may be null, if an anonymous configuration is used
-                    response.setConfXML(configText); // may be null, if the default configuration is used
+                    response.setConfXML(configTextTransformed); // may be null, if the default configuration is used
                     response.setProgramName(program.getName());
                     response.setLastChanged(program.getLastChanged().getTime());
                     // count the views if the program is from the gallery!
