@@ -173,16 +173,11 @@ public class ProjectWorkflowRestController {
         token = URLDecoder.decode(token);
         tempDirectory = URLDecoder.decode(tempDirectory);
 
-        String srcFile = tempDirectory + token + "/" + programName + "/target/" + programName + "." + ending;
-        File binaryFile = new File(srcFile);
-        InputStream fileInputStream;
-        try {
-            fileInputStream = new FileInputStream(binaryFile);
-        } catch (FileNotFoundException e) {
-            srcFile = tempDirectory + token + "/" + programName + "/source/" + programName + "." + ending;
-            binaryFile = new File(srcFile);
-            fileInputStream = new FileInputStream(binaryFile);
+        File binaryFile = new File(tempDirectory + token + "/" + programName + "/target/" + programName + "." + ending);
+        if (!binaryFile.exists()){
+            binaryFile = new File(tempDirectory + token + "/" + programName + "/source/" + programName + "." + ending);
         }
+        InputStream fileInputStream = new FileInputStream(binaryFile);
         
         return Response
             .ok(fileInputStream)

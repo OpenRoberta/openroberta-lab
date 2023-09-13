@@ -249,7 +249,6 @@ define(["require", "exports", "util", "log", "message", "program.controller", "p
             MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
         }
         else {
-            var wavFileContent = UTIL.base64decode(result.compiledCode);
             var audio;
             $('#changedDownloadFolder').addClass('hidden');
             //This detects IE11 (and IE11 only), see: https://developer.mozilla.org/en-US/docs/Web/API/Window/crypto
@@ -257,16 +256,12 @@ define(["require", "exports", "util", "log", "message", "program.controller", "p
                 //Internet Explorer (all ver.) does not support playing WAV files in the browser
                 //If the user uses IE11 the file will not be played, but downloaded instead
                 //See: https://caniuse.com/#feat=wav, https://www.w3schools.com/html/html5_audio.asp
-                $('#trA').addClass('hidden');
-                UTIL.download(GUISTATE_C.getProgramName() + '.wav', wavFileContent);
+                UTIL.downloadFromUrl(GUISTATE_C.getProgramName() + '.wav', window.location.origin + '/' + result.binaryUrl);
             }
             else {
                 //All non-IE browsers can play WAV files in the browser, see: https://www.w3schools.com/html/html5_audio.asp
                 $('#OKButtonModalFooter').addClass('hidden');
-                var contentAsBlob = new Blob([wavFileContent], {
-                    type: 'audio/wav',
-                });
-                audio = new Audio(window.URL.createObjectURL(contentAsBlob));
+                audio = new Audio(result.binaryUrl);
                 createPlayButton(audio);
             }
             var textH = $('#popupDownloadHeader').text();
