@@ -16,14 +16,14 @@ import org.json.JSONObject;
 public class ResetPasswordRequest extends BaseRequest {
     protected String resetPasswordLink;
     protected String newPassword;
-
+    
     /**
      * the request description for the /resetPassword REST request
      */
     public static ResetPasswordRequest make() {
         return new ResetPasswordRequest();
     }
-
+    
     /**
      * the request description for the /resetPassword REST request
      */
@@ -31,15 +31,15 @@ public class ResetPasswordRequest extends BaseRequest {
         try {
             JSONObject jsonO = new JSONObject(jsonS);
             return make(jsonO);
-        } catch ( JSONException e ) {
+        } catch (JSONException e) {
             throw new RuntimeException("JSON parse error when parsing: " + jsonS, e);
         }
     }
-
+    
     /**
      * the request description for the /resetPassword REST request
      */
-    public static ResetPasswordRequest makeFromProperties(String cmd, String resetPasswordLink, String newPassword) {
+    public static ResetPasswordRequest makeFromProperties(String cmd,String resetPasswordLink,String newPassword) {
         ResetPasswordRequest entity = new ResetPasswordRequest();
         entity.setCmd(cmd);
         entity.setResetPasswordLink(resetPasswordLink);
@@ -47,14 +47,14 @@ public class ResetPasswordRequest extends BaseRequest {
         entity.immutable();
         return entity;
     }
-
+    
     /**
      * the request description for the /resetPassword REST request
      */
     public static ResetPasswordRequest make(JSONObject jsonO) {
         return make().merge(jsonO).immutable();
     }
-
+    
     /**
      * merge the properties of a JSON-object into this bean. The bean must be "under construction".
      * The keys of the JSON-Object must be valid. The bean remains "under construction".<br>
@@ -62,37 +62,37 @@ public class ResetPasswordRequest extends BaseRequest {
      */
     public ResetPasswordRequest merge(JSONObject jsonO) {
         try {
-            for ( String key : JSONObject.getNames(jsonO) ) {
-                if ( "_version".equals(key) ) {
-                } else if ( "cmd".equals(key) ) {
+            for (String key : JSONObject.getNames(jsonO)) {
+                if ("_version".equals(key)) {
+                } else if ("cmd".equals(key)) {
                     setCmd(jsonO.optString(key));
-                } else if ( "resetPasswordLink".equals(key) ) {
+                } else if ("resetPasswordLink".equals(key)) {
                     setResetPasswordLink(jsonO.getString(key));
-                } else if ( "newPassword".equals(key) ) {
+                } else if ("newPassword".equals(key)) {
                     setNewPassword(jsonO.optString(key));
                 } else {
                     throw new RuntimeException("JSON parse error. Found invalid key: " + key + " in " + jsonO);
                 }
             }
             return this;
-        } catch ( Exception e ) {
+        } catch (Exception e) {
             throw new RuntimeException("JSON parse / casting error when parsing: " + jsonO, e);
         }
     }
-
+    
     /**
      * moves a bean from state "under construction" to state "immutable".<br>
      * Checks whether all required fields are set. All lists are made immutable.<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
     public ResetPasswordRequest immutable() {
-        if ( this.immutable ) {
+        if (this.immutable) {
             return this;
         }
         this.immutable = true;
         return validate();
     }
-
+    
     /**
      * Checks whether all required fields are set.<br>
      * Throws a runtime exception if inconsistencies are detected.
@@ -102,7 +102,7 @@ public class ResetPasswordRequest extends BaseRequest {
         if ( !this.immutable ) {
             _message = "ResetPasswordRequest-object is already immutable: " + toString();
         }
-        if ( resetPasswordLink == null ) {
+        if ( resetPasswordLink == null) {
             _message = "required property resetPasswordLink of ResetPasswordRequest-object is not set: " + toString();
         }
         if ( _message != null ) {
@@ -111,38 +111,38 @@ public class ResetPasswordRequest extends BaseRequest {
         }
         return this;
     }
-
+    
     /**
      * GET resetPasswordLink. Object must be immutable. Never return null or an undefined/default value.
      */
     public String getResetPasswordLink() {
-        if ( !this.immutable ) {
+        if (!this.immutable) {
             throw new RuntimeException("no resetPasswordLink from an object under construction: " + toString());
         }
         return this.resetPasswordLink;
     }
-
+    
     /**
      * SET resetPasswordLink. Object must be mutable.
      */
     public ResetPasswordRequest setResetPasswordLink(String resetPasswordLink) {
-        if ( this.immutable ) {
+        if (this.immutable) {
             throw new RuntimeException("resetPasswordLink assigned to an immutable object: " + toString());
         }
         this.resetPasswordLink = resetPasswordLink;
         return this;
     }
-
+    
     /**
      * GET newPassword. Object must be immutable. Never return null or an undefined/default value.
      */
     public String getNewPassword() {
-        if ( !this.immutable ) {
+        if (!this.immutable) {
             throw new RuntimeException("no newPassword from an object under construction: " + toString());
         }
         return this.newPassword;
     }
-
+    
     /**
      * is the property defined? The property maybe undefined as it is not a required property
      *
@@ -151,55 +151,54 @@ public class ResetPasswordRequest extends BaseRequest {
     public boolean newPasswordDefined() {
         return this.newPassword != null;
     }
-
+    
     /**
      * SET newPassword. Object must be mutable.
      */
     public ResetPasswordRequest setNewPassword(String newPassword) {
-        if ( this.immutable ) {
+        if (this.immutable) {
             throw new RuntimeException("newPassword assigned to an immutable object: " + toString());
         }
         this.newPassword = newPassword;
         return this;
     }
-
+    
     /**
      * generates a JSON-object from an immutable bean.<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
     public JSONObject toJson() {
-        if ( !this.immutable ) {
+        if (!this.immutable) {
             throw new RuntimeException("no JSON from an object under construction: " + toString());
         }
         JSONObject jsonO = new JSONObject();
         try {
             jsonO.put("_version", "1");
-            if ( this.cmd != null ) {
+            if (this.cmd != null) {
                 jsonO.put("cmd", this.cmd);
             }
             jsonO.put("resetPasswordLink", this.resetPasswordLink);
-            if ( this.newPassword != null ) {
+            if (this.newPassword != null) {
                 jsonO.put("newPassword", this.newPassword);
             }
-        } catch ( JSONException e ) {
+        } catch (JSONException e) {
             throw new RuntimeException("JSON unparse error when unparsing: " + this, e);
         }
         return jsonO;
     }
-
+    
     @Override
     public String toString() {
         return "ResetPasswordRequest [immutable=" + this.immutable + ", cmd=" + this.cmd + ", resetPasswordLink=" + this.resetPasswordLink + ", newPassword=" + this.newPassword + " ]";
     }
-
     @Override
     public int hashCode() {
         throw new RuntimeException("no hashCode from transport beans!");
     }
-
+    
     @Override
     public boolean equals(Object obj) {
         throw new RuntimeException("no equals from transport beans!");
     }
-
+    
 }

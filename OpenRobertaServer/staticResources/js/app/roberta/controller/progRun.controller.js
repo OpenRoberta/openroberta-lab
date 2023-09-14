@@ -171,7 +171,7 @@ define(["require", "exports", "util", "log", "message", "program.controller", "p
             var filename = (result.programName || GUISTATE_C.getProgramName()) + '.' + GUISTATE_C.getBinaryFileExtension();
             if (GUISTATE_C.isProgramToDownload() || navigator.userAgent.toLowerCase().match(/iPad|iPhone|android/i) !== null) {
                 // either the user doesn't want to see the modal anymore or he uses a smartphone / tablet, where you cannot choose the download folder.
-                UTIL.downloadFromUrl(filename, window.location.origin + '/' + result.binaryUrl);
+                UTIL.downloadFromUrl(filename, window.location.origin + '/' + result.binaryURL);
                 setTimeout(function () {
                     GUISTATE_C.setConnectionState('wait');
                 }, 5000);
@@ -184,7 +184,7 @@ define(["require", "exports", "util", "log", "message", "program.controller", "p
                 MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
             }
             else {
-                createDownloadLink(filename, window.location.origin + '/' + result.binaryUrl);
+                createDownloadLink(filename, window.location.origin + '/' + result.binaryURL);
                 var textH = $('#popupDownloadHeader').text();
                 $('#popupDownloadHeader').text(textH.replace('$', $.trim(GUISTATE_C.getRobotRealName())));
                 for (var i = 1; Blockly.Msg['POPUP_DOWNLOAD_STEP_' + i]; i++) {
@@ -256,12 +256,12 @@ define(["require", "exports", "util", "log", "message", "program.controller", "p
                 //Internet Explorer (all ver.) does not support playing WAV files in the browser
                 //If the user uses IE11 the file will not be played, but downloaded instead
                 //See: https://caniuse.com/#feat=wav, https://www.w3schools.com/html/html5_audio.asp
-                UTIL.downloadFromUrl(GUISTATE_C.getProgramName() + '.wav', window.location.origin + '/' + result.binaryUrl);
+                UTIL.downloadFromUrl(GUISTATE_C.getProgramName() + '.wav', window.location.origin + '/' + result.binaryURL);
             }
             else {
                 //All non-IE browsers can play WAV files in the browser, see: https://www.w3schools.com/html/html5_audio.asp
                 $('#OKButtonModalFooter').addClass('hidden');
-                audio = new Audio(result.binaryUrl);
+                audio = new Audio(result.binaryURL);
                 createPlayButton(audio);
             }
             var textH = $('#popupDownloadHeader').text();

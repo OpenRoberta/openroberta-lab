@@ -15,14 +15,14 @@ import org.json.JSONObject;
  */
 public class ActivateUserRequest extends BaseRequest {
     protected String userActivationLink;
-
+    
     /**
      * the request description for the /activateUser REST request
      */
     public static ActivateUserRequest make() {
         return new ActivateUserRequest();
     }
-
+    
     /**
      * the request description for the /activateUser REST request
      */
@@ -30,29 +30,29 @@ public class ActivateUserRequest extends BaseRequest {
         try {
             JSONObject jsonO = new JSONObject(jsonS);
             return make(jsonO);
-        } catch ( JSONException e ) {
+        } catch (JSONException e) {
             throw new RuntimeException("JSON parse error when parsing: " + jsonS, e);
         }
     }
-
+    
     /**
      * the request description for the /activateUser REST request
      */
-    public static ActivateUserRequest makeFromProperties(String cmd, String userActivationLink) {
+    public static ActivateUserRequest makeFromProperties(String cmd,String userActivationLink) {
         ActivateUserRequest entity = new ActivateUserRequest();
         entity.setCmd(cmd);
         entity.setUserActivationLink(userActivationLink);
         entity.immutable();
         return entity;
     }
-
+    
     /**
      * the request description for the /activateUser REST request
      */
     public static ActivateUserRequest make(JSONObject jsonO) {
         return make().merge(jsonO).immutable();
     }
-
+    
     /**
      * merge the properties of a JSON-object into this bean. The bean must be "under construction".
      * The keys of the JSON-Object must be valid. The bean remains "under construction".<br>
@@ -60,35 +60,35 @@ public class ActivateUserRequest extends BaseRequest {
      */
     public ActivateUserRequest merge(JSONObject jsonO) {
         try {
-            for ( String key : JSONObject.getNames(jsonO) ) {
-                if ( "_version".equals(key) ) {
-                } else if ( "cmd".equals(key) ) {
+            for (String key : JSONObject.getNames(jsonO)) {
+                if ("_version".equals(key)) {
+                } else if ("cmd".equals(key)) {
                     setCmd(jsonO.optString(key));
-                } else if ( "userActivationLink".equals(key) ) {
+                } else if ("userActivationLink".equals(key)) {
                     setUserActivationLink(jsonO.getString(key));
                 } else {
                     throw new RuntimeException("JSON parse error. Found invalid key: " + key + " in " + jsonO);
                 }
             }
             return this;
-        } catch ( Exception e ) {
+        } catch (Exception e) {
             throw new RuntimeException("JSON parse / casting error when parsing: " + jsonO, e);
         }
     }
-
+    
     /**
      * moves a bean from state "under construction" to state "immutable".<br>
      * Checks whether all required fields are set. All lists are made immutable.<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
     public ActivateUserRequest immutable() {
-        if ( this.immutable ) {
+        if (this.immutable) {
             return this;
         }
         this.immutable = true;
         return validate();
     }
-
+    
     /**
      * Checks whether all required fields are set.<br>
      * Throws a runtime exception if inconsistencies are detected.
@@ -98,7 +98,7 @@ public class ActivateUserRequest extends BaseRequest {
         if ( !this.immutable ) {
             _message = "ActivateUserRequest-object is already immutable: " + toString();
         }
-        if ( userActivationLink == null ) {
+        if ( userActivationLink == null) {
             _message = "required property userActivationLink of ActivateUserRequest-object is not set: " + toString();
         }
         if ( _message != null ) {
@@ -107,62 +107,61 @@ public class ActivateUserRequest extends BaseRequest {
         }
         return this;
     }
-
+    
     /**
      * GET userActivationLink. Object must be immutable. Never return null or an undefined/default value.
      */
     public String getUserActivationLink() {
-        if ( !this.immutable ) {
+        if (!this.immutable) {
             throw new RuntimeException("no userActivationLink from an object under construction: " + toString());
         }
         return this.userActivationLink;
     }
-
+    
     /**
      * SET userActivationLink. Object must be mutable.
      */
     public ActivateUserRequest setUserActivationLink(String userActivationLink) {
-        if ( this.immutable ) {
+        if (this.immutable) {
             throw new RuntimeException("userActivationLink assigned to an immutable object: " + toString());
         }
         this.userActivationLink = userActivationLink;
         return this;
     }
-
+    
     /**
      * generates a JSON-object from an immutable bean.<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
     public JSONObject toJson() {
-        if ( !this.immutable ) {
+        if (!this.immutable) {
             throw new RuntimeException("no JSON from an object under construction: " + toString());
         }
         JSONObject jsonO = new JSONObject();
         try {
             jsonO.put("_version", "1");
-            if ( this.cmd != null ) {
+            if (this.cmd != null) {
                 jsonO.put("cmd", this.cmd);
             }
             jsonO.put("userActivationLink", this.userActivationLink);
-        } catch ( JSONException e ) {
+        } catch (JSONException e) {
             throw new RuntimeException("JSON unparse error when unparsing: " + this, e);
         }
         return jsonO;
     }
-
+    
     @Override
     public String toString() {
         return "ActivateUserRequest [immutable=" + this.immutable + ", cmd=" + this.cmd + ", userActivationLink=" + this.userActivationLink + " ]";
     }
-
     @Override
     public int hashCode() {
         throw new RuntimeException("no hashCode from transport beans!");
     }
-
+    
     @Override
     public boolean equals(Object obj) {
         throw new RuntimeException("no equals from transport beans!");
     }
-
+    
 }

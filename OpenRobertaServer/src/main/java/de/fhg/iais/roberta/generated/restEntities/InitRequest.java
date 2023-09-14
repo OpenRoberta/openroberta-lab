@@ -22,14 +22,14 @@ public class InitRequest {
     protected boolean immutable = false;
     protected List<String> log;
     protected JSONObject data;
-
+    
     /**
      * full request for the /init REST request with logging and request data, but no initToken
      */
     public static InitRequest make() {
         return new InitRequest();
     }
-
+    
     /**
      * full request for the /init REST request with logging and request data, but no initToken
      */
@@ -37,29 +37,29 @@ public class InitRequest {
         try {
             JSONObject jsonO = new JSONObject(jsonS);
             return make(jsonO);
-        } catch ( JSONException e ) {
+        } catch (JSONException e) {
             throw new RuntimeException("JSON parse error when parsing: " + jsonS, e);
         }
     }
-
+    
     /**
      * full request for the /init REST request with logging and request data, but no initToken
      */
-    public static InitRequest makeFromProperties(List<String> log, JSONObject data) {
+    public static InitRequest makeFromProperties(List<String> log,JSONObject data) {
         InitRequest entity = new InitRequest();
         entity.setLog(log);
         entity.setData(data);
         entity.immutable();
         return entity;
     }
-
+    
     /**
      * full request for the /init REST request with logging and request data, but no initToken
      */
     public static InitRequest make(JSONObject jsonO) {
         return make().merge(jsonO).immutable();
     }
-
+    
     /**
      * merge the properties of a JSON-object into this bean. The bean must be "under construction".
      * The keys of the JSON-Object must be valid. The bean remains "under construction".<br>
@@ -67,43 +67,43 @@ public class InitRequest {
      */
     public InitRequest merge(JSONObject jsonO) {
         try {
-            for ( String key : JSONObject.getNames(jsonO) ) {
-                if ( "_version".equals(key) ) {
-                } else if ( "log".equals(key) ) {
+            for (String key : JSONObject.getNames(jsonO)) {
+                if ("_version".equals(key)) {
+                } else if ("log".equals(key)) {
                     JSONArray array = jsonO.optJSONArray(key);
-                    if ( array != null && array.length() > 0 ) {
-                        for ( int i = 0; i < array.length(); i++ ) {
+                    if (array != null && array.length() > 0) {
+                        for (int i = 0; i < array.length(); i++) {
                             addLog(array.getString(i));
                         }
                     } else {
                         setLog(new ArrayList<String>());
                     }
-                } else if ( "data".equals(key) ) {
+                } else if ("data".equals(key)) {
                     setData(jsonO.getJSONObject(key));
                 } else {
                     throw new RuntimeException("JSON parse error. Found invalid key: " + key + " in " + jsonO);
                 }
             }
             return this;
-        } catch ( Exception e ) {
+        } catch (Exception e) {
             throw new RuntimeException("JSON parse / casting error when parsing: " + jsonO, e);
         }
     }
-
+    
     /**
      * moves a bean from state "under construction" to state "immutable".<br>
      * Checks whether all required fields are set. All lists are made immutable.<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
     public InitRequest immutable() {
-        if ( this.immutable ) {
+        if (this.immutable) {
             return this;
         }
         this.immutable = true;
         this.log = (this.log != null) ? Collections.unmodifiableList(this.log) : null;
         return validate();
     }
-
+    
     /**
      * Checks whether all required fields are set.<br>
      * Throws a runtime exception if inconsistencies are detected.
@@ -113,10 +113,10 @@ public class InitRequest {
         if ( !this.immutable ) {
             _message = "InitRequest-object is already immutable: " + toString();
         }
-        if ( log == null ) {
+        if ( log == null) {
             _message = "required property log of InitRequest-object is not set: " + toString();
         }
-        if ( data == null ) {
+        if ( data == null) {
             _message = "required property data of InitRequest-object is not set: " + toString();
         }
         if ( _message != null ) {
@@ -125,22 +125,22 @@ public class InitRequest {
         }
         return this;
     }
-
+    
     /**
      * GET log. Object must be immutable. Never return null or an undefined/default value.
      */
     public List<String> getLog() {
-        if ( !this.immutable ) {
+        if (!this.immutable) {
             throw new RuntimeException("no log from an object under construction: " + toString());
         }
         return this.log;
     }
-
+    
     /**
      * SET log. Object must be mutable.
      */
     public InitRequest setLog(List<String> log) {
-        if ( this.immutable ) {
+        if (this.immutable) {
             throw new RuntimeException("log assigned to an immutable object: " + toString());
         }
         if ( this.log == null ) {
@@ -149,12 +149,12 @@ public class InitRequest {
         this.log.addAll(log);
         return this;
     }
-
+    
     /**
      * ADD log. Object must be mutable.
      */
     public InitRequest addLog(String log) {
-        if ( this.immutable ) {
+        if (this.immutable) {
             throw new RuntimeException("log assigned to an immutable object: " + toString());
         }
         if ( this.log == null ) {
@@ -163,12 +163,12 @@ public class InitRequest {
         this.log.add(log);
         return this;
     }
-
+    
     /**
      * ADD ALL log. Object must be mutable.
      */
     public InitRequest addAllLog(List<String> log) {
-        if ( this.immutable ) {
+        if (this.immutable) {
             throw new RuntimeException("log assigned to an immutable object: " + toString());
         }
         if ( this.log == null ) {
@@ -177,34 +177,34 @@ public class InitRequest {
         this.log.addAll(log);
         return this;
     }
-
+    
     /**
      * GET data. Object must be immutable. Never return null or an undefined/default value.
      */
     public JSONObject getData() {
-        if ( !this.immutable ) {
+        if (!this.immutable) {
             throw new RuntimeException("no data from an object under construction: " + toString());
         }
         return this.data;
     }
-
+    
     /**
      * SET data. Object must be mutable.
      */
     public InitRequest setData(JSONObject data) {
-        if ( this.immutable ) {
+        if (this.immutable) {
             throw new RuntimeException("data assigned to an immutable object: " + toString());
         }
         this.data = data;
         return this;
     }
-
+    
     /**
      * generates a JSON-object from an immutable bean.<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
     public JSONObject toJson() {
-        if ( !this.immutable ) {
+        if (!this.immutable) {
             throw new RuntimeException("no JSON from an object under construction: " + toString());
         }
         JSONObject jsonO = new JSONObject();
@@ -212,31 +212,30 @@ public class InitRequest {
             jsonO.put("_version", "1");
             {
                 JSONArray array = new JSONArray();
-                for ( String item : this.log ) {
+                for (String item : this.log) {
                     array.put(item);
                 }
                 jsonO.put("log", array);
             }
             jsonO.put("data", this.data);
-        } catch ( JSONException e ) {
+        } catch (JSONException e) {
             throw new RuntimeException("JSON unparse error when unparsing: " + this, e);
         }
         return jsonO;
     }
-
+    
     @Override
     public String toString() {
         return "InitRequest [immutable=" + this.immutable + ", log=" + this.log + ", data=" + this.data + " ]";
     }
-
     @Override
     public int hashCode() {
         throw new RuntimeException("no hashCode from transport beans!");
     }
-
+    
     @Override
     public boolean equals(Object obj) {
         throw new RuntimeException("no equals from transport beans!");
     }
-
+    
 }

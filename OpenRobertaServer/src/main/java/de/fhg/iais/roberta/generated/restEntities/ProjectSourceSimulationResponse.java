@@ -23,16 +23,16 @@ public class ProjectSourceSimulationResponse extends BaseResponse {
     protected String javaScriptProgram;
     protected String fileExtension;
     protected String progXML;
-    protected Map<String, JSONObject> confAnnos;
+    protected Map<String,JSONObject> confAnnos;
     protected JSONObject configuration;
-
+    
     /**
      * the response for the /projectWorkflow/sourceSimulation REST request
      */
     public static ProjectSourceSimulationResponse make() {
         return new ProjectSourceSimulationResponse();
     }
-
+    
     /**
      * the response for the /projectWorkflow/sourceSimulation REST request
      */
@@ -40,38 +40,15 @@ public class ProjectSourceSimulationResponse extends BaseResponse {
         try {
             JSONObject jsonO = new JSONObject(jsonS);
             return make(jsonO);
-        } catch ( JSONException e ) {
+        } catch (JSONException e) {
             throw new RuntimeException("JSON parse error when parsing: " + jsonS, e);
         }
     }
-
+    
     /**
      * the response for the /projectWorkflow/sourceSimulation REST request
      */
-    public static ProjectSourceSimulationResponse makeFromProperties(
-        String cmd,
-        String rc,
-        String message,
-        String cause,
-        JSONObject parameters,
-        String initToken,
-        long serverTime,
-        String serverVersion,
-        long robotWait,
-        String robotBattery,
-        String robotName,
-        String robotVersion,
-        String robotFirmwareName,
-        JSONObject robotSensorvalues,
-        int robotNepoexitvalue,
-        String robotState,
-        boolean notificationsAvailable,
-        String programName,
-        String javaScriptProgram,
-        String fileExtension,
-        String progXML,
-        Map<String, JSONObject> confAnnos,
-        JSONObject configuration) {
+    public static ProjectSourceSimulationResponse makeFromProperties(String cmd,String rc,String message,String cause,JSONObject parameters,String initToken,long serverTime,String serverVersion,long robotWait,String robotBattery,String robotName,String robotVersion,String robotFirmwareName,JSONObject robotSensorvalues,int robotNepoexitvalue,String robotState,boolean notificationsAvailable,String programName,String javaScriptProgram,String fileExtension,String progXML,Map<String,JSONObject> confAnnos,JSONObject configuration) {
         ProjectSourceSimulationResponse entity = new ProjectSourceSimulationResponse();
         entity.setCmd(cmd);
         entity.setRc(rc);
@@ -99,14 +76,14 @@ public class ProjectSourceSimulationResponse extends BaseResponse {
         entity.immutable();
         return entity;
     }
-
+    
     /**
      * the response for the /projectWorkflow/sourceSimulation REST request
      */
     public static ProjectSourceSimulationResponse make(JSONObject jsonO) {
         return make().merge(jsonO).immutable();
     }
-
+    
     /**
      * merge the properties of a JSON-object into this bean. The bean must be "under construction".
      * The keys of the JSON-Object must be valid. The bean remains "under construction".<br>
@@ -114,84 +91,84 @@ public class ProjectSourceSimulationResponse extends BaseResponse {
      */
     public ProjectSourceSimulationResponse merge(JSONObject jsonO) {
         try {
-            for ( String key : JSONObject.getNames(jsonO) ) {
-                if ( "_version".equals(key) ) {
-                } else if ( "cmd".equals(key) ) {
+            for (String key : JSONObject.getNames(jsonO)) {
+                if ("_version".equals(key)) {
+                } else if ("cmd".equals(key)) {
                     setCmd(jsonO.optString(key));
-                } else if ( "rc".equals(key) ) {
+                } else if ("rc".equals(key)) {
                     setRc(jsonO.getString(key));
-                } else if ( "message".equals(key) ) {
+                } else if ("message".equals(key)) {
                     setMessage(jsonO.optString(key));
-                } else if ( "cause".equals(key) ) {
+                } else if ("cause".equals(key)) {
                     setCause(jsonO.optString(key));
-                } else if ( "parameters".equals(key) ) {
+                } else if ("parameters".equals(key)) {
                     setParameters(jsonO.optJSONObject(key));
-                } else if ( "initToken".equals(key) ) {
+                } else if ("initToken".equals(key)) {
                     setInitToken(jsonO.getString(key));
-                } else if ( "server.time".equals(key) ) {
+                } else if ("server.time".equals(key)) {
                     setServerTime(jsonO.getLong(key));
-                } else if ( "server.version".equals(key) ) {
+                } else if ("server.version".equals(key)) {
                     setServerVersion(jsonO.getString(key));
-                } else if ( "robot.wait".equals(key) ) {
+                } else if ("robot.wait".equals(key)) {
                     setRobotWait(jsonO.optLong(key));
-                } else if ( "robot.battery".equals(key) ) {
+                } else if ("robot.battery".equals(key)) {
                     setRobotBattery(jsonO.optString(key));
-                } else if ( "robot.name".equals(key) ) {
+                } else if ("robot.name".equals(key)) {
                     setRobotName(jsonO.optString(key));
-                } else if ( "robot.version".equals(key) ) {
+                } else if ("robot.version".equals(key)) {
                     setRobotVersion(jsonO.optString(key));
-                } else if ( "robot.firmwareName".equals(key) ) {
+                } else if ("robot.firmwareName".equals(key)) {
                     setRobotFirmwareName(jsonO.optString(key));
-                } else if ( "robot.sensorvalues".equals(key) ) {
+                } else if ("robot.sensorvalues".equals(key)) {
                     setRobotSensorvalues(jsonO.optJSONObject(key));
-                } else if ( "robot.nepoexitvalue".equals(key) ) {
+                } else if ("robot.nepoexitvalue".equals(key)) {
                     setRobotNepoexitvalue(jsonO.optInt(key));
-                } else if ( "robot.state".equals(key) ) {
+                } else if ("robot.state".equals(key)) {
                     setRobotState(jsonO.optString(key));
-                } else if ( "notifications.available".equals(key) ) {
+                } else if ("notifications.available".equals(key)) {
                     setNotificationsAvailable(jsonO.optBoolean(key));
-                } else if ( "programName".equals(key) ) {
+                } else if ("programName".equals(key)) {
                     setProgramName(jsonO.optString(key));
-                } else if ( "javaScriptProgram".equals(key) ) {
+                } else if ("javaScriptProgram".equals(key)) {
                     setJavaScriptProgram(jsonO.getString(key));
-                } else if ( "fileExtension".equals(key) ) {
+                } else if ("fileExtension".equals(key)) {
                     setFileExtension(jsonO.getString(key));
-                } else if ( "progXML".equals(key) ) {
+                } else if ("progXML".equals(key)) {
                     setProgXML(jsonO.getString(key));
-                } else if ( "confAnnos".equals(key) ) {
+                } else if ("confAnnos".equals(key)) {
                     JSONObject map = jsonO.optJSONObject(key);
                     if ( map != null ) {
                         Iterator<String> it = map.keys();
-                        while ( it.hasNext() ) {
+                        while (it.hasNext()) {
                             String subKey = it.next();
                             putConfAnnos(subKey, map.getJSONObject(subKey));
                         }
                     }
-                } else if ( "configuration".equals(key) ) {
+                } else if ("configuration".equals(key)) {
                     setConfiguration(jsonO.getJSONObject(key));
                 } else {
                     throw new RuntimeException("JSON parse error. Found invalid key: " + key + " in " + jsonO);
                 }
             }
             return this;
-        } catch ( Exception e ) {
+        } catch (Exception e) {
             throw new RuntimeException("JSON parse / casting error when parsing: " + jsonO, e);
         }
     }
-
+    
     /**
      * moves a bean from state "under construction" to state "immutable".<br>
      * Checks whether all required fields are set. All lists are made immutable.<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
     public ProjectSourceSimulationResponse immutable() {
-        if ( this.immutable ) {
+        if (this.immutable) {
             return this;
         }
         this.immutable = true;
         return validate();
     }
-
+    
     /**
      * Checks whether all required fields are set.<br>
      * Throws a runtime exception if inconsistencies are detected.
@@ -201,31 +178,31 @@ public class ProjectSourceSimulationResponse extends BaseResponse {
         if ( !this.immutable ) {
             _message = "ProjectSourceSimulationResponse-object is already immutable: " + toString();
         }
-        if ( rc == null ) {
+        if ( rc == null) {
             _message = "required property rc of ProjectSourceSimulationResponse-object is not set: " + toString();
         }
-        if ( initToken == null ) {
+        if ( initToken == null) {
             _message = "required property initToken of ProjectSourceSimulationResponse-object is not set: " + toString();
         }
-        if ( !serverTimeDefined ) {
+        if ( !serverTimeDefined) {
             _message = "required property serverTime of ProjectSourceSimulationResponse-object is not set: " + toString();
         }
-        if ( serverVersion == null ) {
+        if ( serverVersion == null) {
             _message = "required property serverVersion of ProjectSourceSimulationResponse-object is not set: " + toString();
         }
-        if ( javaScriptProgram == null ) {
+        if ( javaScriptProgram == null) {
             _message = "required property javaScriptProgram of ProjectSourceSimulationResponse-object is not set: " + toString();
         }
-        if ( fileExtension == null ) {
+        if ( fileExtension == null) {
             _message = "required property fileExtension of ProjectSourceSimulationResponse-object is not set: " + toString();
         }
-        if ( progXML == null ) {
+        if ( progXML == null) {
             _message = "required property progXML of ProjectSourceSimulationResponse-object is not set: " + toString();
         }
-        if ( confAnnos == null ) {
+        if ( confAnnos == null) {
             _message = "required property confAnnos of ProjectSourceSimulationResponse-object is not set: " + toString();
         }
-        if ( configuration == null ) {
+        if ( configuration == null) {
             _message = "required property configuration of ProjectSourceSimulationResponse-object is not set: " + toString();
         }
         if ( _message != null ) {
@@ -234,17 +211,17 @@ public class ProjectSourceSimulationResponse extends BaseResponse {
         }
         return this;
     }
-
+    
     /**
      * GET programName. Object must be immutable. Never return null or an undefined/default value.
      */
     public String getProgramName() {
-        if ( !this.immutable ) {
+        if (!this.immutable) {
             throw new RuntimeException("no programName from an object under construction: " + toString());
         }
         return this.programName;
     }
-
+    
     /**
      * is the property defined? The property maybe undefined as it is not a required property
      *
@@ -253,199 +230,199 @@ public class ProjectSourceSimulationResponse extends BaseResponse {
     public boolean programNameDefined() {
         return this.programName != null;
     }
-
+    
     /**
      * SET programName. Object must be mutable.
      */
     public ProjectSourceSimulationResponse setProgramName(String programName) {
-        if ( this.immutable ) {
+        if (this.immutable) {
             throw new RuntimeException("programName assigned to an immutable object: " + toString());
         }
         this.programName = programName;
         return this;
     }
-
+    
     /**
      * GET javaScriptProgram. Object must be immutable. Never return null or an undefined/default value.
      */
     public String getJavaScriptProgram() {
-        if ( !this.immutable ) {
+        if (!this.immutable) {
             throw new RuntimeException("no javaScriptProgram from an object under construction: " + toString());
         }
         return this.javaScriptProgram;
     }
-
+    
     /**
      * SET javaScriptProgram. Object must be mutable.
      */
     public ProjectSourceSimulationResponse setJavaScriptProgram(String javaScriptProgram) {
-        if ( this.immutable ) {
+        if (this.immutable) {
             throw new RuntimeException("javaScriptProgram assigned to an immutable object: " + toString());
         }
         this.javaScriptProgram = javaScriptProgram;
         return this;
     }
-
+    
     /**
      * GET fileExtension. Object must be immutable. Never return null or an undefined/default value.
      */
     public String getFileExtension() {
-        if ( !this.immutable ) {
+        if (!this.immutable) {
             throw new RuntimeException("no fileExtension from an object under construction: " + toString());
         }
         return this.fileExtension;
     }
-
+    
     /**
      * SET fileExtension. Object must be mutable.
      */
     public ProjectSourceSimulationResponse setFileExtension(String fileExtension) {
-        if ( this.immutable ) {
+        if (this.immutable) {
             throw new RuntimeException("fileExtension assigned to an immutable object: " + toString());
         }
         this.fileExtension = fileExtension;
         return this;
     }
-
+    
     /**
      * GET progXML. Object must be immutable. Never return null or an undefined/default value.
      */
     public String getProgXML() {
-        if ( !this.immutable ) {
+        if (!this.immutable) {
             throw new RuntimeException("no progXML from an object under construction: " + toString());
         }
         return this.progXML;
     }
-
+    
     /**
      * SET progXML. Object must be mutable.
      */
     public ProjectSourceSimulationResponse setProgXML(String progXML) {
-        if ( this.immutable ) {
+        if (this.immutable) {
             throw new RuntimeException("progXML assigned to an immutable object: " + toString());
         }
         this.progXML = progXML;
         return this;
     }
-
+    
     /**
      * GET confAnnos. Object must be immutable. Never return null or an undefined/default value.
      */
-    public Map<String, JSONObject> getConfAnnos() {
-        if ( !this.immutable ) {
+    public Map<String,JSONObject> getConfAnnos() {
+        if (!this.immutable) {
             throw new RuntimeException("no confAnnos from an object under construction: " + toString());
         }
         return this.confAnnos;
     }
-
+    
     /**
      * SET confAnnos. Object must be mutable.
      */
-    public ProjectSourceSimulationResponse setConfAnnos(Map<String, JSONObject> confAnnos) {
-        if ( this.immutable ) {
+    public ProjectSourceSimulationResponse setConfAnnos(Map<String,JSONObject> confAnnos) {
+        if (this.immutable) {
             throw new RuntimeException("confAnnos assigned to an immutable object: " + toString());
         }
         if ( this.confAnnos == null ) {
-            this.confAnnos = new HashMap<String, JSONObject>();
+            this.confAnnos = new HashMap<String,JSONObject>();
         }
         {
-            for ( Entry<String, JSONObject> entry : confAnnos.entrySet() ) {
+            for ( Entry<String,JSONObject> entry : confAnnos.entrySet() ) {
                 this.confAnnos.put(entry.getKey(), entry.getValue());
             }
         }
         return this;
     }
-
+    
     /**
      * PUT confAnnos. Object must be mutable.
      */
     public ProjectSourceSimulationResponse putConfAnnos(String key, JSONObject value) {
-        if ( this.immutable ) {
+        if (this.immutable) {
             throw new RuntimeException("confAnnos assigned to an immutable object: " + toString());
         }
         if ( this.confAnnos == null ) {
-            this.confAnnos = new HashMap<String, JSONObject>();
+            this.confAnnos = new HashMap<String,JSONObject>();
         }
         this.confAnnos.put(key, value);
         return this;
     }
-
+    
     /**
      * GET configuration. Object must be immutable. Never return null or an undefined/default value.
      */
     public JSONObject getConfiguration() {
-        if ( !this.immutable ) {
+        if (!this.immutable) {
             throw new RuntimeException("no configuration from an object under construction: " + toString());
         }
         return this.configuration;
     }
-
+    
     /**
      * SET configuration. Object must be mutable.
      */
     public ProjectSourceSimulationResponse setConfiguration(JSONObject configuration) {
-        if ( this.immutable ) {
+        if (this.immutable) {
             throw new RuntimeException("configuration assigned to an immutable object: " + toString());
         }
         this.configuration = configuration;
         return this;
     }
-
+    
     /**
      * generates a JSON-object from an immutable bean.<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
     public JSONObject toJson() {
-        if ( !this.immutable ) {
+        if (!this.immutable) {
             throw new RuntimeException("no JSON from an object under construction: " + toString());
         }
         JSONObject jsonO = new JSONObject();
         try {
             jsonO.put("_version", "1");
-            if ( this.cmd != null ) {
+            if (this.cmd != null) {
                 jsonO.put("cmd", this.cmd);
             }
             jsonO.put("rc", this.rc);
-            if ( this.message != null ) {
+            if (this.message != null) {
                 jsonO.put("message", this.message);
             }
-            if ( this.cause != null ) {
+            if (this.cause != null) {
                 jsonO.put("cause", this.cause);
             }
-            if ( this.parameters != null ) {
+            if (this.parameters != null) {
                 jsonO.put("parameters", this.parameters);
             }
             jsonO.put("initToken", this.initToken);
             jsonO.put("server.time", this.serverTime);
             jsonO.put("server.version", this.serverVersion);
-            if ( this.robotWaitDefined ) {
+            if (this.robotWaitDefined) {
                 jsonO.put("robot.wait", this.robotWait);
             }
-            if ( this.robotBattery != null ) {
+            if (this.robotBattery != null) {
                 jsonO.put("robot.battery", this.robotBattery);
             }
-            if ( this.robotName != null ) {
+            if (this.robotName != null) {
                 jsonO.put("robot.name", this.robotName);
             }
-            if ( this.robotVersion != null ) {
+            if (this.robotVersion != null) {
                 jsonO.put("robot.version", this.robotVersion);
             }
-            if ( this.robotFirmwareName != null ) {
+            if (this.robotFirmwareName != null) {
                 jsonO.put("robot.firmwareName", this.robotFirmwareName);
             }
-            if ( this.robotSensorvalues != null ) {
+            if (this.robotSensorvalues != null) {
                 jsonO.put("robot.sensorvalues", this.robotSensorvalues);
             }
-            if ( this.robotNepoexitvalueDefined ) {
+            if (this.robotNepoexitvalueDefined) {
                 jsonO.put("robot.nepoexitvalue", this.robotNepoexitvalue);
             }
-            if ( this.robotState != null ) {
+            if (this.robotState != null) {
                 jsonO.put("robot.state", this.robotState);
             }
-            if ( this.notificationsAvailableDefined ) {
+            if (this.notificationsAvailableDefined) {
                 jsonO.put("notifications.available", this.notificationsAvailable);
             }
-            if ( this.programName != null ) {
+            if (this.programName != null) {
                 jsonO.put("programName", this.programName);
             }
             jsonO.put("javaScriptProgram", this.javaScriptProgram);
@@ -453,31 +430,30 @@ public class ProjectSourceSimulationResponse extends BaseResponse {
             jsonO.put("progXML", this.progXML);
             {
                 JSONObject map = new JSONObject();
-                for ( Entry<String, JSONObject> entry : confAnnos.entrySet() ) {
+                for ( Entry<String,JSONObject> entry : confAnnos.entrySet() ) {
                     map.put(entry.getKey(), entry.getValue());
                 }
                 jsonO.put("confAnnos", map);
             }
             jsonO.put("configuration", this.configuration);
-        } catch ( JSONException e ) {
+        } catch (JSONException e) {
             throw new RuntimeException("JSON unparse error when unparsing: " + this, e);
         }
         return jsonO;
     }
-
+    
     @Override
     public String toString() {
         return "ProjectSourceSimulationResponse [immutable=" + this.immutable + ", cmd=" + this.cmd + ", rc=" + this.rc + ", message=" + this.message + ", cause=" + this.cause + ", parameters=" + this.parameters + ", initToken=" + this.initToken + ", serverTime=" + this.serverTime + ", serverVersion=" + this.serverVersion + ", robotWait=" + this.robotWait + ", robotBattery=" + this.robotBattery + ", robotName=" + this.robotName + ", robotVersion=" + this.robotVersion + ", robotFirmwareName=" + this.robotFirmwareName + ", robotSensorvalues=" + this.robotSensorvalues + ", robotNepoexitvalue=" + this.robotNepoexitvalue + ", robotState=" + this.robotState + ", notificationsAvailable=" + this.notificationsAvailable + ", programName=" + this.programName + ", javaScriptProgram=" + this.javaScriptProgram + ", fileExtension=" + this.fileExtension + ", progXML=" + this.progXML + ", confAnnos=" + this.confAnnos + ", configuration=" + this.configuration + " ]";
     }
-
     @Override
     public int hashCode() {
         throw new RuntimeException("no hashCode from transport beans!");
     }
-
+    
     @Override
     public boolean equals(Object obj) {
         throw new RuntimeException("no equals from transport beans!");
     }
-
+    
 }

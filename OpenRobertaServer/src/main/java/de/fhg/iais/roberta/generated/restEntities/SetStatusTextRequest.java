@@ -18,14 +18,14 @@ public class SetStatusTextRequest extends BaseRequest {
     protected String german;
     protected long timestamp;
     protected boolean timestampDefined = false;
-
+    
     /**
      * the request description for the /setStatusText REST request
      */
     public static SetStatusTextRequest make() {
         return new SetStatusTextRequest();
     }
-
+    
     /**
      * the request description for the /setStatusText REST request
      */
@@ -33,15 +33,15 @@ public class SetStatusTextRequest extends BaseRequest {
         try {
             JSONObject jsonO = new JSONObject(jsonS);
             return make(jsonO);
-        } catch ( JSONException e ) {
+        } catch (JSONException e) {
             throw new RuntimeException("JSON parse error when parsing: " + jsonS, e);
         }
     }
-
+    
     /**
      * the request description for the /setStatusText REST request
      */
-    public static SetStatusTextRequest makeFromProperties(String cmd, String english, String german, long timestamp) {
+    public static SetStatusTextRequest makeFromProperties(String cmd,String english,String german,long timestamp) {
         SetStatusTextRequest entity = new SetStatusTextRequest();
         entity.setCmd(cmd);
         entity.setEnglish(english);
@@ -50,14 +50,14 @@ public class SetStatusTextRequest extends BaseRequest {
         entity.immutable();
         return entity;
     }
-
+    
     /**
      * the request description for the /setStatusText REST request
      */
     public static SetStatusTextRequest make(JSONObject jsonO) {
         return make().merge(jsonO).immutable();
     }
-
+    
     /**
      * merge the properties of a JSON-object into this bean. The bean must be "under construction".
      * The keys of the JSON-Object must be valid. The bean remains "under construction".<br>
@@ -65,39 +65,39 @@ public class SetStatusTextRequest extends BaseRequest {
      */
     public SetStatusTextRequest merge(JSONObject jsonO) {
         try {
-            for ( String key : JSONObject.getNames(jsonO) ) {
-                if ( "_version".equals(key) ) {
-                } else if ( "cmd".equals(key) ) {
+            for (String key : JSONObject.getNames(jsonO)) {
+                if ("_version".equals(key)) {
+                } else if ("cmd".equals(key)) {
                     setCmd(jsonO.optString(key));
-                } else if ( "english".equals(key) ) {
+                } else if ("english".equals(key)) {
                     setEnglish(jsonO.getString(key));
-                } else if ( "german".equals(key) ) {
+                } else if ("german".equals(key)) {
                     setGerman(jsonO.getString(key));
-                } else if ( "timestamp".equals(key) ) {
+                } else if ("timestamp".equals(key)) {
                     setTimestamp(jsonO.getLong(key));
                 } else {
                     throw new RuntimeException("JSON parse error. Found invalid key: " + key + " in " + jsonO);
                 }
             }
             return this;
-        } catch ( Exception e ) {
+        } catch (Exception e) {
             throw new RuntimeException("JSON parse / casting error when parsing: " + jsonO, e);
         }
     }
-
+    
     /**
      * moves a bean from state "under construction" to state "immutable".<br>
      * Checks whether all required fields are set. All lists are made immutable.<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
     public SetStatusTextRequest immutable() {
-        if ( this.immutable ) {
+        if (this.immutable) {
             return this;
         }
         this.immutable = true;
         return validate();
     }
-
+    
     /**
      * Checks whether all required fields are set.<br>
      * Throws a runtime exception if inconsistencies are detected.
@@ -107,13 +107,13 @@ public class SetStatusTextRequest extends BaseRequest {
         if ( !this.immutable ) {
             _message = "SetStatusTextRequest-object is already immutable: " + toString();
         }
-        if ( english == null ) {
+        if ( english == null) {
             _message = "required property english of SetStatusTextRequest-object is not set: " + toString();
         }
-        if ( german == null ) {
+        if ( german == null) {
             _message = "required property german of SetStatusTextRequest-object is not set: " + toString();
         }
-        if ( !timestampDefined ) {
+        if ( !timestampDefined) {
             _message = "required property timestamp of SetStatusTextRequest-object is not set: " + toString();
         }
         if ( _message != null ) {
@@ -122,107 +122,106 @@ public class SetStatusTextRequest extends BaseRequest {
         }
         return this;
     }
-
+    
     /**
      * GET english. Object must be immutable. Never return null or an undefined/default value.
      */
     public String getEnglish() {
-        if ( !this.immutable ) {
+        if (!this.immutable) {
             throw new RuntimeException("no english from an object under construction: " + toString());
         }
         return this.english;
     }
-
+    
     /**
      * SET english. Object must be mutable.
      */
     public SetStatusTextRequest setEnglish(String english) {
-        if ( this.immutable ) {
+        if (this.immutable) {
             throw new RuntimeException("english assigned to an immutable object: " + toString());
         }
         this.english = english;
         return this;
     }
-
+    
     /**
      * GET german. Object must be immutable. Never return null or an undefined/default value.
      */
     public String getGerman() {
-        if ( !this.immutable ) {
+        if (!this.immutable) {
             throw new RuntimeException("no german from an object under construction: " + toString());
         }
         return this.german;
     }
-
+    
     /**
      * SET german. Object must be mutable.
      */
     public SetStatusTextRequest setGerman(String german) {
-        if ( this.immutable ) {
+        if (this.immutable) {
             throw new RuntimeException("german assigned to an immutable object: " + toString());
         }
         this.german = german;
         return this;
     }
-
+    
     /**
      * GET timestamp. Object must be immutable. Never return null or an undefined/default value.
      */
     public long getTimestamp() {
-        if ( !this.immutable ) {
+        if (!this.immutable) {
             throw new RuntimeException("no timestamp from an object under construction: " + toString());
         }
         return this.timestamp;
     }
-
+    
     /**
      * SET timestamp. Object must be mutable.
      */
     public SetStatusTextRequest setTimestamp(long timestamp) {
-        if ( this.immutable ) {
+        if (this.immutable) {
             throw new RuntimeException("timestamp assigned to an immutable object: " + toString());
         }
         this.timestamp = timestamp;
         this.timestampDefined = true;
         return this;
     }
-
+    
     /**
      * generates a JSON-object from an immutable bean.<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
     public JSONObject toJson() {
-        if ( !this.immutable ) {
+        if (!this.immutable) {
             throw new RuntimeException("no JSON from an object under construction: " + toString());
         }
         JSONObject jsonO = new JSONObject();
         try {
             jsonO.put("_version", "1");
-            if ( this.cmd != null ) {
+            if (this.cmd != null) {
                 jsonO.put("cmd", this.cmd);
             }
             jsonO.put("english", this.english);
             jsonO.put("german", this.german);
             jsonO.put("timestamp", this.timestamp);
-        } catch ( JSONException e ) {
+        } catch (JSONException e) {
             throw new RuntimeException("JSON unparse error when unparsing: " + this, e);
         }
         return jsonO;
     }
-
+    
     @Override
     public String toString() {
         return "SetStatusTextRequest [immutable=" + this.immutable + ", cmd=" + this.cmd + ", english=" + this.english + ", german=" + this.german + ", timestamp=" + this.timestamp + " ]";
     }
-
     @Override
     public int hashCode() {
         throw new RuntimeException("no hashCode from transport beans!");
     }
-
+    
     @Override
     public boolean equals(Object obj) {
         throw new RuntimeException("no equals from transport beans!");
     }
-
+    
 }

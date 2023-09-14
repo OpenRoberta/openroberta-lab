@@ -20,14 +20,14 @@ import org.json.JSONObject;
  */
 public class UserGroupsRequest extends BaseRequest {
     protected List<String> groupNames;
-
+    
     /**
      * the request description for the /userGroup/deleteUserGroups REST request
      */
     public static UserGroupsRequest make() {
         return new UserGroupsRequest();
     }
-
+    
     /**
      * the request description for the /userGroup/deleteUserGroups REST request
      */
@@ -35,29 +35,29 @@ public class UserGroupsRequest extends BaseRequest {
         try {
             JSONObject jsonO = new JSONObject(jsonS);
             return make(jsonO);
-        } catch ( JSONException e ) {
+        } catch (JSONException e) {
             throw new RuntimeException("JSON parse error when parsing: " + jsonS, e);
         }
     }
-
+    
     /**
      * the request description for the /userGroup/deleteUserGroups REST request
      */
-    public static UserGroupsRequest makeFromProperties(String cmd, List<String> groupNames) {
+    public static UserGroupsRequest makeFromProperties(String cmd,List<String> groupNames) {
         UserGroupsRequest entity = new UserGroupsRequest();
         entity.setCmd(cmd);
         entity.setGroupNames(groupNames);
         entity.immutable();
         return entity;
     }
-
+    
     /**
      * the request description for the /userGroup/deleteUserGroups REST request
      */
     public static UserGroupsRequest make(JSONObject jsonO) {
         return make().merge(jsonO).immutable();
     }
-
+    
     /**
      * merge the properties of a JSON-object into this bean. The bean must be "under construction".
      * The keys of the JSON-Object must be valid. The bean remains "under construction".<br>
@@ -65,14 +65,14 @@ public class UserGroupsRequest extends BaseRequest {
      */
     public UserGroupsRequest merge(JSONObject jsonO) {
         try {
-            for ( String key : JSONObject.getNames(jsonO) ) {
-                if ( "_version".equals(key) ) {
-                } else if ( "cmd".equals(key) ) {
+            for (String key : JSONObject.getNames(jsonO)) {
+                if ("_version".equals(key)) {
+                } else if ("cmd".equals(key)) {
                     setCmd(jsonO.optString(key));
-                } else if ( "groupNames".equals(key) ) {
+                } else if ("groupNames".equals(key)) {
                     JSONArray array = jsonO.optJSONArray(key);
-                    if ( array != null && array.length() > 0 ) {
-                        for ( int i = 0; i < array.length(); i++ ) {
+                    if (array != null && array.length() > 0) {
+                        for (int i = 0; i < array.length(); i++) {
                             addGroupNames(array.getString(i));
                         }
                     } else {
@@ -83,25 +83,25 @@ public class UserGroupsRequest extends BaseRequest {
                 }
             }
             return this;
-        } catch ( Exception e ) {
+        } catch (Exception e) {
             throw new RuntimeException("JSON parse / casting error when parsing: " + jsonO, e);
         }
     }
-
+    
     /**
      * moves a bean from state "under construction" to state "immutable".<br>
      * Checks whether all required fields are set. All lists are made immutable.<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
     public UserGroupsRequest immutable() {
-        if ( this.immutable ) {
+        if (this.immutable) {
             return this;
         }
         this.immutable = true;
         this.groupNames = (this.groupNames != null) ? Collections.unmodifiableList(this.groupNames) : null;
         return validate();
     }
-
+    
     /**
      * Checks whether all required fields are set.<br>
      * Throws a runtime exception if inconsistencies are detected.
@@ -111,7 +111,7 @@ public class UserGroupsRequest extends BaseRequest {
         if ( !this.immutable ) {
             _message = "UserGroupsRequest-object is already immutable: " + toString();
         }
-        if ( groupNames == null ) {
+        if ( groupNames == null) {
             _message = "required property groupNames of UserGroupsRequest-object is not set: " + toString();
         }
         if ( _message != null ) {
@@ -120,22 +120,22 @@ public class UserGroupsRequest extends BaseRequest {
         }
         return this;
     }
-
+    
     /**
      * GET groupNames. Object must be immutable. Never return null or an undefined/default value.
      */
     public List<String> getGroupNames() {
-        if ( !this.immutable ) {
+        if (!this.immutable) {
             throw new RuntimeException("no groupNames from an object under construction: " + toString());
         }
         return this.groupNames;
     }
-
+    
     /**
      * SET groupNames. Object must be mutable.
      */
     public UserGroupsRequest setGroupNames(List<String> groupNames) {
-        if ( this.immutable ) {
+        if (this.immutable) {
             throw new RuntimeException("groupNames assigned to an immutable object: " + toString());
         }
         if ( this.groupNames == null ) {
@@ -144,12 +144,12 @@ public class UserGroupsRequest extends BaseRequest {
         this.groupNames.addAll(groupNames);
         return this;
     }
-
+    
     /**
      * ADD groupNames. Object must be mutable.
      */
     public UserGroupsRequest addGroupNames(String groupNames) {
-        if ( this.immutable ) {
+        if (this.immutable) {
             throw new RuntimeException("groupNames assigned to an immutable object: " + toString());
         }
         if ( this.groupNames == null ) {
@@ -158,12 +158,12 @@ public class UserGroupsRequest extends BaseRequest {
         this.groupNames.add(groupNames);
         return this;
     }
-
+    
     /**
      * ADD ALL groupNames. Object must be mutable.
      */
     public UserGroupsRequest addAllGroupNames(List<String> groupNames) {
-        if ( this.immutable ) {
+        if (this.immutable) {
             throw new RuntimeException("groupNames assigned to an immutable object: " + toString());
         }
         if ( this.groupNames == null ) {
@@ -172,47 +172,46 @@ public class UserGroupsRequest extends BaseRequest {
         this.groupNames.addAll(groupNames);
         return this;
     }
-
+    
     /**
      * generates a JSON-object from an immutable bean.<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
     public JSONObject toJson() {
-        if ( !this.immutable ) {
+        if (!this.immutable) {
             throw new RuntimeException("no JSON from an object under construction: " + toString());
         }
         JSONObject jsonO = new JSONObject();
         try {
             jsonO.put("_version", "1");
-            if ( this.cmd != null ) {
+            if (this.cmd != null) {
                 jsonO.put("cmd", this.cmd);
             }
             {
                 JSONArray array = new JSONArray();
-                for ( String item : this.groupNames ) {
+                for (String item : this.groupNames) {
                     array.put(item);
                 }
                 jsonO.put("groupNames", array);
             }
-        } catch ( JSONException e ) {
+        } catch (JSONException e) {
             throw new RuntimeException("JSON unparse error when unparsing: " + this, e);
         }
         return jsonO;
     }
-
+    
     @Override
     public String toString() {
         return "UserGroupsRequest [immutable=" + this.immutable + ", cmd=" + this.cmd + ", groupNames=" + this.groupNames + " ]";
     }
-
     @Override
     public int hashCode() {
         throw new RuntimeException("no hashCode from transport beans!");
     }
-
+    
     @Override
     public boolean equals(Object obj) {
         throw new RuntimeException("no equals from transport beans!");
     }
-
+    
 }

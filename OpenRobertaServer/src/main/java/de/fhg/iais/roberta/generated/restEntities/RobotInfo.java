@@ -24,14 +24,14 @@ public class RobotInfo {
     protected JSONObject sensorvalues;
     protected int nepoexitvalue;
     protected boolean nepoexitvalueDefined = false;
-
+    
     /**
      * for future use! Replaces the bad dottet names. Data about the state of the robot
      */
     public static RobotInfo make() {
         return new RobotInfo();
     }
-
+    
     /**
      * for future use! Replaces the bad dottet names. Data about the state of the robot
      */
@@ -39,22 +39,15 @@ public class RobotInfo {
         try {
             JSONObject jsonO = new JSONObject(jsonS);
             return make(jsonO);
-        } catch ( JSONException e ) {
+        } catch (JSONException e) {
             throw new RuntimeException("JSON parse error when parsing: " + jsonS, e);
         }
     }
-
+    
     /**
      * for future use! Replaces the bad dottet names. Data about the state of the robot
      */
-    public static RobotInfo makeFromProperties(
-        long wait,
-        String battery,
-        String name,
-        String version,
-        String firmwareName,
-        JSONObject sensorvalues,
-        int nepoexitvalue) {
+    public static RobotInfo makeFromProperties(long wait,String battery,String name,String version,String firmwareName,JSONObject sensorvalues,int nepoexitvalue) {
         RobotInfo entity = new RobotInfo();
         entity.setWait(wait);
         entity.setBattery(battery);
@@ -66,14 +59,14 @@ public class RobotInfo {
         entity.immutable();
         return entity;
     }
-
+    
     /**
      * for future use! Replaces the bad dottet names. Data about the state of the robot
      */
     public static RobotInfo make(JSONObject jsonO) {
         return make().merge(jsonO).immutable();
     }
-
+    
     /**
      * merge the properties of a JSON-object into this bean. The bean must be "under construction".
      * The keys of the JSON-Object must be valid. The bean remains "under construction".<br>
@@ -81,45 +74,45 @@ public class RobotInfo {
      */
     public RobotInfo merge(JSONObject jsonO) {
         try {
-            for ( String key : JSONObject.getNames(jsonO) ) {
-                if ( "_version".equals(key) ) {
-                } else if ( "wait".equals(key) ) {
+            for (String key : JSONObject.getNames(jsonO)) {
+                if ("_version".equals(key)) {
+                } else if ("wait".equals(key)) {
                     setWait(jsonO.getLong(key));
-                } else if ( "battery".equals(key) ) {
+                } else if ("battery".equals(key)) {
                     setBattery(jsonO.getString(key));
-                } else if ( "name".equals(key) ) {
+                } else if ("name".equals(key)) {
                     setName(jsonO.getString(key));
-                } else if ( "version".equals(key) ) {
+                } else if ("version".equals(key)) {
                     setVersion(jsonO.getString(key));
-                } else if ( "firmwareName".equals(key) ) {
+                } else if ("firmwareName".equals(key)) {
                     setFirmwareName(jsonO.getString(key));
-                } else if ( "sensorvalues".equals(key) ) {
+                } else if ("sensorvalues".equals(key)) {
                     setSensorvalues(jsonO.getJSONObject(key));
-                } else if ( "nepoexitvalue".equals(key) ) {
+                } else if ("nepoexitvalue".equals(key)) {
                     setNepoexitvalue(jsonO.getInt(key));
                 } else {
                     throw new RuntimeException("JSON parse error. Found invalid key: " + key + " in " + jsonO);
                 }
             }
             return this;
-        } catch ( Exception e ) {
+        } catch (Exception e) {
             throw new RuntimeException("JSON parse / casting error when parsing: " + jsonO, e);
         }
     }
-
+    
     /**
      * moves a bean from state "under construction" to state "immutable".<br>
      * Checks whether all required fields are set. All lists are made immutable.<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
     public RobotInfo immutable() {
-        if ( this.immutable ) {
+        if (this.immutable) {
             return this;
         }
         this.immutable = true;
         return validate();
     }
-
+    
     /**
      * Checks whether all required fields are set.<br>
      * Throws a runtime exception if inconsistencies are detected.
@@ -129,25 +122,25 @@ public class RobotInfo {
         if ( !this.immutable ) {
             _message = "RobotInfo-object is already immutable: " + toString();
         }
-        if ( !waitDefined ) {
+        if ( !waitDefined) {
             _message = "required property wait of RobotInfo-object is not set: " + toString();
         }
-        if ( battery == null ) {
+        if ( battery == null) {
             _message = "required property battery of RobotInfo-object is not set: " + toString();
         }
-        if ( name == null ) {
+        if ( name == null) {
             _message = "required property name of RobotInfo-object is not set: " + toString();
         }
-        if ( version == null ) {
+        if ( version == null) {
             _message = "required property version of RobotInfo-object is not set: " + toString();
         }
-        if ( firmwareName == null ) {
+        if ( firmwareName == null) {
             _message = "required property firmwareName of RobotInfo-object is not set: " + toString();
         }
-        if ( sensorvalues == null ) {
+        if ( sensorvalues == null) {
             _message = "required property sensorvalues of RobotInfo-object is not set: " + toString();
         }
-        if ( !nepoexitvalueDefined ) {
+        if ( !nepoexitvalueDefined) {
             _message = "required property nepoexitvalue of RobotInfo-object is not set: " + toString();
         }
         if ( _message != null ) {
@@ -156,162 +149,162 @@ public class RobotInfo {
         }
         return this;
     }
-
+    
     /**
      * GET wait. Object must be immutable. Never return null or an undefined/default value.
      */
     public long getWait() {
-        if ( !this.immutable ) {
+        if (!this.immutable) {
             throw new RuntimeException("no wait from an object under construction: " + toString());
         }
         return this.wait;
     }
-
+    
     /**
      * SET wait. Object must be mutable.
      */
     public RobotInfo setWait(long wait) {
-        if ( this.immutable ) {
+        if (this.immutable) {
             throw new RuntimeException("wait assigned to an immutable object: " + toString());
         }
         this.wait = wait;
         this.waitDefined = true;
         return this;
     }
-
+    
     /**
      * GET battery. Object must be immutable. Never return null or an undefined/default value.
      */
     public String getBattery() {
-        if ( !this.immutable ) {
+        if (!this.immutable) {
             throw new RuntimeException("no battery from an object under construction: " + toString());
         }
         return this.battery;
     }
-
+    
     /**
      * SET battery. Object must be mutable.
      */
     public RobotInfo setBattery(String battery) {
-        if ( this.immutable ) {
+        if (this.immutable) {
             throw new RuntimeException("battery assigned to an immutable object: " + toString());
         }
         this.battery = battery;
         return this;
     }
-
+    
     /**
      * GET name. Object must be immutable. Never return null or an undefined/default value.
      */
     public String getName() {
-        if ( !this.immutable ) {
+        if (!this.immutable) {
             throw new RuntimeException("no name from an object under construction: " + toString());
         }
         return this.name;
     }
-
+    
     /**
      * SET name. Object must be mutable.
      */
     public RobotInfo setName(String name) {
-        if ( this.immutable ) {
+        if (this.immutable) {
             throw new RuntimeException("name assigned to an immutable object: " + toString());
         }
         this.name = name;
         return this;
     }
-
+    
     /**
      * GET version. Object must be immutable. Never return null or an undefined/default value.
      */
     public String getVersion() {
-        if ( !this.immutable ) {
+        if (!this.immutable) {
             throw new RuntimeException("no version from an object under construction: " + toString());
         }
         return this.version;
     }
-
+    
     /**
      * SET version. Object must be mutable.
      */
     public RobotInfo setVersion(String version) {
-        if ( this.immutable ) {
+        if (this.immutable) {
             throw new RuntimeException("version assigned to an immutable object: " + toString());
         }
         this.version = version;
         return this;
     }
-
+    
     /**
      * GET firmwareName. Object must be immutable. Never return null or an undefined/default value.
      */
     public String getFirmwareName() {
-        if ( !this.immutable ) {
+        if (!this.immutable) {
             throw new RuntimeException("no firmwareName from an object under construction: " + toString());
         }
         return this.firmwareName;
     }
-
+    
     /**
      * SET firmwareName. Object must be mutable.
      */
     public RobotInfo setFirmwareName(String firmwareName) {
-        if ( this.immutable ) {
+        if (this.immutable) {
             throw new RuntimeException("firmwareName assigned to an immutable object: " + toString());
         }
         this.firmwareName = firmwareName;
         return this;
     }
-
+    
     /**
      * GET sensorvalues. Object must be immutable. Never return null or an undefined/default value.
      */
     public JSONObject getSensorvalues() {
-        if ( !this.immutable ) {
+        if (!this.immutable) {
             throw new RuntimeException("no sensorvalues from an object under construction: " + toString());
         }
         return this.sensorvalues;
     }
-
+    
     /**
      * SET sensorvalues. Object must be mutable.
      */
     public RobotInfo setSensorvalues(JSONObject sensorvalues) {
-        if ( this.immutable ) {
+        if (this.immutable) {
             throw new RuntimeException("sensorvalues assigned to an immutable object: " + toString());
         }
         this.sensorvalues = sensorvalues;
         return this;
     }
-
+    
     /**
      * GET nepoexitvalue. Object must be immutable. Never return null or an undefined/default value.
      */
     public int getNepoexitvalue() {
-        if ( !this.immutable ) {
+        if (!this.immutable) {
             throw new RuntimeException("no nepoexitvalue from an object under construction: " + toString());
         }
         return this.nepoexitvalue;
     }
-
+    
     /**
      * SET nepoexitvalue. Object must be mutable.
      */
     public RobotInfo setNepoexitvalue(int nepoexitvalue) {
-        if ( this.immutable ) {
+        if (this.immutable) {
             throw new RuntimeException("nepoexitvalue assigned to an immutable object: " + toString());
         }
         this.nepoexitvalue = nepoexitvalue;
         this.nepoexitvalueDefined = true;
         return this;
     }
-
+    
     /**
      * generates a JSON-object from an immutable bean.<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
     public JSONObject toJson() {
-        if ( !this.immutable ) {
+        if (!this.immutable) {
             throw new RuntimeException("no JSON from an object under construction: " + toString());
         }
         JSONObject jsonO = new JSONObject();
@@ -324,25 +317,24 @@ public class RobotInfo {
             jsonO.put("firmwareName", this.firmwareName);
             jsonO.put("sensorvalues", this.sensorvalues);
             jsonO.put("nepoexitvalue", this.nepoexitvalue);
-        } catch ( JSONException e ) {
+        } catch (JSONException e) {
             throw new RuntimeException("JSON unparse error when unparsing: " + this, e);
         }
         return jsonO;
     }
-
+    
     @Override
     public String toString() {
         return "RobotInfo [immutable=" + this.immutable + ", wait=" + this.wait + ", battery=" + this.battery + ", name=" + this.name + ", version=" + this.version + ", firmwareName=" + this.firmwareName + ", sensorvalues=" + this.sensorvalues + ", nepoexitvalue=" + this.nepoexitvalue + " ]";
     }
-
     @Override
     public int hashCode() {
         throw new RuntimeException("no hashCode from transport beans!");
     }
-
+    
     @Override
     public boolean equals(Object obj) {
         throw new RuntimeException("no equals from transport beans!");
     }
-
+    
 }

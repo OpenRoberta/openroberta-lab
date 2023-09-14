@@ -137,12 +137,10 @@ public class ProjectWorkflowRestController {
             response.setCmd("runPBack");
             response.setProgXML(project.getAnnotatedProgramAsXml());
             response.setConfAnnos(project.getConfAnnotationList());
-            response.setCompiledCode(project.getCompiledHex());
             response.setConfiguration(project.getConfigurationJSON());
             // TODO auto connection robots return COMPILERWORKFLOW_SUCCESS or COMPILERWORKFLOW_PROGRAM_GENERATION_SUCCESS
             // TODO which is not mapped to anything in the frontend, ROBOT_PUSH_RUN is mapped to the message that was used before workflows
             response.setBinaryURL(project.getBinaryURL());
-
             if ( project.getResult() == Key.COMPILERWORKFLOW_SUCCESS || project.getResult() == Key.COMPILERWORKFLOW_PROGRAM_GENERATION_SUCCESS ) {
                 project.setResult(Key.ROBOT_PUSH_RUN);
             }
@@ -242,7 +240,6 @@ public class ProjectWorkflowRestController {
             ProjectService.executeWorkflow("compile", project);
             response.setCmd("compileP");
             response.setProgXML(project.getAnnotatedProgramAsXml());
-            response.setCompiledCode(project.getCompiledHex());
             addProjectResultToResponse(response, project);
             final int programLength = StringUtils.countMatches(project.getAnnotatedProgramAsXml(), "<block ");
             Statistics.info("ProgramCompile", "LoggedIn", httpSessionState.isUserLoggedIn(), "success", project.hasSucceeded(), "programLength", programLength);

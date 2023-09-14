@@ -16,14 +16,14 @@ import org.json.JSONObject;
 public class ConfRequest extends BaseRequest {
     protected String name;
     protected String owner;
-
+    
     /**
      * the request description for the /loadC REST request
      */
     public static ConfRequest make() {
         return new ConfRequest();
     }
-
+    
     /**
      * the request description for the /loadC REST request
      */
@@ -31,15 +31,15 @@ public class ConfRequest extends BaseRequest {
         try {
             JSONObject jsonO = new JSONObject(jsonS);
             return make(jsonO);
-        } catch ( JSONException e ) {
+        } catch (JSONException e) {
             throw new RuntimeException("JSON parse error when parsing: " + jsonS, e);
         }
     }
-
+    
     /**
      * the request description for the /loadC REST request
      */
-    public static ConfRequest makeFromProperties(String cmd, String name, String owner) {
+    public static ConfRequest makeFromProperties(String cmd,String name,String owner) {
         ConfRequest entity = new ConfRequest();
         entity.setCmd(cmd);
         entity.setName(name);
@@ -47,14 +47,14 @@ public class ConfRequest extends BaseRequest {
         entity.immutable();
         return entity;
     }
-
+    
     /**
      * the request description for the /loadC REST request
      */
     public static ConfRequest make(JSONObject jsonO) {
         return make().merge(jsonO).immutable();
     }
-
+    
     /**
      * merge the properties of a JSON-object into this bean. The bean must be "under construction".
      * The keys of the JSON-Object must be valid. The bean remains "under construction".<br>
@@ -62,37 +62,37 @@ public class ConfRequest extends BaseRequest {
      */
     public ConfRequest merge(JSONObject jsonO) {
         try {
-            for ( String key : JSONObject.getNames(jsonO) ) {
-                if ( "_version".equals(key) ) {
-                } else if ( "cmd".equals(key) ) {
+            for (String key : JSONObject.getNames(jsonO)) {
+                if ("_version".equals(key)) {
+                } else if ("cmd".equals(key)) {
                     setCmd(jsonO.optString(key));
-                } else if ( "name".equals(key) ) {
+                } else if ("name".equals(key)) {
                     setName(jsonO.getString(key));
-                } else if ( "owner".equals(key) ) {
+                } else if ("owner".equals(key)) {
                     setOwner(jsonO.optString(key));
                 } else {
                     throw new RuntimeException("JSON parse error. Found invalid key: " + key + " in " + jsonO);
                 }
             }
             return this;
-        } catch ( Exception e ) {
+        } catch (Exception e) {
             throw new RuntimeException("JSON parse / casting error when parsing: " + jsonO, e);
         }
     }
-
+    
     /**
      * moves a bean from state "under construction" to state "immutable".<br>
      * Checks whether all required fields are set. All lists are made immutable.<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
     public ConfRequest immutable() {
-        if ( this.immutable ) {
+        if (this.immutable) {
             return this;
         }
         this.immutable = true;
         return validate();
     }
-
+    
     /**
      * Checks whether all required fields are set.<br>
      * Throws a runtime exception if inconsistencies are detected.
@@ -102,7 +102,7 @@ public class ConfRequest extends BaseRequest {
         if ( !this.immutable ) {
             _message = "ConfRequest-object is already immutable: " + toString();
         }
-        if ( name == null ) {
+        if ( name == null) {
             _message = "required property name of ConfRequest-object is not set: " + toString();
         }
         if ( _message != null ) {
@@ -111,38 +111,38 @@ public class ConfRequest extends BaseRequest {
         }
         return this;
     }
-
+    
     /**
      * GET name. Object must be immutable. Never return null or an undefined/default value.
      */
     public String getName() {
-        if ( !this.immutable ) {
+        if (!this.immutable) {
             throw new RuntimeException("no name from an object under construction: " + toString());
         }
         return this.name;
     }
-
+    
     /**
      * SET name. Object must be mutable.
      */
     public ConfRequest setName(String name) {
-        if ( this.immutable ) {
+        if (this.immutable) {
             throw new RuntimeException("name assigned to an immutable object: " + toString());
         }
         this.name = name;
         return this;
     }
-
+    
     /**
      * GET owner. Object must be immutable. Never return null or an undefined/default value.
      */
     public String getOwner() {
-        if ( !this.immutable ) {
+        if (!this.immutable) {
             throw new RuntimeException("no owner from an object under construction: " + toString());
         }
         return this.owner;
     }
-
+    
     /**
      * is the property defined? The property maybe undefined as it is not a required property
      *
@@ -151,55 +151,54 @@ public class ConfRequest extends BaseRequest {
     public boolean ownerDefined() {
         return this.owner != null;
     }
-
+    
     /**
      * SET owner. Object must be mutable.
      */
     public ConfRequest setOwner(String owner) {
-        if ( this.immutable ) {
+        if (this.immutable) {
             throw new RuntimeException("owner assigned to an immutable object: " + toString());
         }
         this.owner = owner;
         return this;
     }
-
+    
     /**
      * generates a JSON-object from an immutable bean.<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
     public JSONObject toJson() {
-        if ( !this.immutable ) {
+        if (!this.immutable) {
             throw new RuntimeException("no JSON from an object under construction: " + toString());
         }
         JSONObject jsonO = new JSONObject();
         try {
             jsonO.put("_version", "1");
-            if ( this.cmd != null ) {
+            if (this.cmd != null) {
                 jsonO.put("cmd", this.cmd);
             }
             jsonO.put("name", this.name);
-            if ( this.owner != null ) {
+            if (this.owner != null) {
                 jsonO.put("owner", this.owner);
             }
-        } catch ( JSONException e ) {
+        } catch (JSONException e) {
             throw new RuntimeException("JSON unparse error when unparsing: " + this, e);
         }
         return jsonO;
     }
-
+    
     @Override
     public String toString() {
         return "ConfRequest [immutable=" + this.immutable + ", cmd=" + this.cmd + ", name=" + this.name + ", owner=" + this.owner + " ]";
     }
-
     @Override
     public int hashCode() {
         throw new RuntimeException("no hashCode from transport beans!");
     }
-
+    
     @Override
     public boolean equals(Object obj) {
         throw new RuntimeException("no equals from transport beans!");
     }
-
+    
 }

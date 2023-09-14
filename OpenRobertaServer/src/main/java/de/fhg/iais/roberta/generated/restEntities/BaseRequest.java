@@ -16,14 +16,14 @@ import org.json.JSONObject;
 public class BaseRequest {
     protected boolean immutable = false;
     protected String cmd;
-
+    
     /**
      * basic request
      */
     public static BaseRequest make() {
         return new BaseRequest();
     }
-
+    
     /**
      * basic request
      */
@@ -31,11 +31,11 @@ public class BaseRequest {
         try {
             JSONObject jsonO = new JSONObject(jsonS);
             return make(jsonO);
-        } catch ( JSONException e ) {
+        } catch (JSONException e) {
             throw new RuntimeException("JSON parse error when parsing: " + jsonS, e);
         }
     }
-
+    
     /**
      * basic request
      */
@@ -45,14 +45,14 @@ public class BaseRequest {
         entity.immutable();
         return entity;
     }
-
+    
     /**
      * basic request
      */
     public static BaseRequest make(JSONObject jsonO) {
         return make().merge(jsonO).immutable();
     }
-
+    
     /**
      * merge the properties of a JSON-object into this bean. The bean must be "under construction".
      * The keys of the JSON-Object must be valid. The bean remains "under construction".<br>
@@ -60,33 +60,33 @@ public class BaseRequest {
      */
     public BaseRequest merge(JSONObject jsonO) {
         try {
-            for ( String key : JSONObject.getNames(jsonO) ) {
-                if ( "_version".equals(key) ) {
-                } else if ( "cmd".equals(key) ) {
+            for (String key : JSONObject.getNames(jsonO)) {
+                if ("_version".equals(key)) {
+                } else if ("cmd".equals(key)) {
                     setCmd(jsonO.optString(key));
                 } else {
                     throw new RuntimeException("JSON parse error. Found invalid key: " + key + " in " + jsonO);
                 }
             }
             return this;
-        } catch ( Exception e ) {
+        } catch (Exception e) {
             throw new RuntimeException("JSON parse / casting error when parsing: " + jsonO, e);
         }
     }
-
+    
     /**
      * moves a bean from state "under construction" to state "immutable".<br>
      * Checks whether all required fields are set. All lists are made immutable.<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
     public BaseRequest immutable() {
-        if ( this.immutable ) {
+        if (this.immutable) {
             return this;
         }
         this.immutable = true;
         return validate();
     }
-
+    
     /**
      * Checks whether all required fields are set.<br>
      * Throws a runtime exception if inconsistencies are detected.
@@ -102,17 +102,17 @@ public class BaseRequest {
         }
         return this;
     }
-
+    
     /**
      * GET cmd. Object must be immutable. Never return null or an undefined/default value.
      */
     public String getCmd() {
-        if ( !this.immutable ) {
+        if (!this.immutable) {
             throw new RuntimeException("no cmd from an object under construction: " + toString());
         }
         return this.cmd;
     }
-
+    
     /**
      * is the property defined? The property maybe undefined as it is not a required property
      *
@@ -121,51 +121,50 @@ public class BaseRequest {
     public boolean cmdDefined() {
         return this.cmd != null;
     }
-
+    
     /**
      * SET cmd. Object must be mutable.
      */
     public BaseRequest setCmd(String cmd) {
-        if ( this.immutable ) {
+        if (this.immutable) {
             throw new RuntimeException("cmd assigned to an immutable object: " + toString());
         }
         this.cmd = cmd;
         return this;
     }
-
+    
     /**
      * generates a JSON-object from an immutable bean.<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
     public JSONObject toJson() {
-        if ( !this.immutable ) {
+        if (!this.immutable) {
             throw new RuntimeException("no JSON from an object under construction: " + toString());
         }
         JSONObject jsonO = new JSONObject();
         try {
             jsonO.put("_version", "1");
-            if ( this.cmd != null ) {
+            if (this.cmd != null) {
                 jsonO.put("cmd", this.cmd);
             }
-        } catch ( JSONException e ) {
+        } catch (JSONException e) {
             throw new RuntimeException("JSON unparse error when unparsing: " + this, e);
         }
         return jsonO;
     }
-
+    
     @Override
     public String toString() {
         return "BaseRequest [immutable=" + this.immutable + ", cmd=" + this.cmd + " ]";
     }
-
     @Override
     public int hashCode() {
         throw new RuntimeException("no hashCode from transport beans!");
     }
-
+    
     @Override
     public boolean equals(Object obj) {
         throw new RuntimeException("no equals from transport beans!");
     }
-
+    
 }
