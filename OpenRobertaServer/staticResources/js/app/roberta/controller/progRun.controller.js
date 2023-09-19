@@ -441,22 +441,28 @@ define(["require", "exports", "util", "log", "message", "program.controller", "p
      *            url directing to content path
      */
     function createDownloadLink(fileName, url) {
-        if (url) {
-            var downloadLink;
-            downloadLink = document.createElement('a');
-            downloadLink.download = fileName;
-            downloadLink.innerHTML = fileName;
-            downloadLink.href = url;
-            //create link with content
-            var programLinkDiv = document.createElement('div');
-            programLinkDiv.setAttribute('id', 'programLink');
-            var linebreak = document.createElement('br');
-            programLinkDiv.setAttribute('style', 'text-align: center;');
-            programLinkDiv.appendChild(linebreak);
-            programLinkDiv.appendChild(downloadLink);
-            downloadLink.setAttribute('style', 'font-size:36px');
-            $('#downloadLink').append(programLinkDiv);
+        if (!('msSaveOrOpenBlob' in navigator)) {
+            $('#trA').removeClass('hidden');
         }
+        else {
+            $('#trA').addClass('hidden');
+            UTIL.downloadFromUrl(fileName, url);
+            GUISTATE_C.setConnectionState('error');
+        }
+        var downloadLink;
+        downloadLink = document.createElement('a');
+        downloadLink.download = fileName;
+        downloadLink.innerHTML = fileName;
+        downloadLink.href = url;
+        //create link with content
+        var programLinkDiv = document.createElement('div');
+        programLinkDiv.setAttribute('id', 'programLink');
+        var linebreak = document.createElement('br');
+        programLinkDiv.setAttribute('style', 'text-align: center;');
+        programLinkDiv.appendChild(linebreak);
+        programLinkDiv.appendChild(downloadLink);
+        downloadLink.setAttribute('style', 'font-size:36px');
+        $('#downloadLink').append(programLinkDiv);
     }
     /**
      * Creates a Play button for an Audio object so that the sound can be played
