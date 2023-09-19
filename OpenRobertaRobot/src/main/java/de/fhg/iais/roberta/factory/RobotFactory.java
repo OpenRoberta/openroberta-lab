@@ -109,7 +109,7 @@ public class RobotFactory {
         return this.pluginProperties.getStringProperty("robot.nn") != null && this.pluginProperties.getStringProperty("robot.nn").equals("true");
     }
 
-    public final JSONArray getNNActivations() {
+    public final JSONArray getAvailableNNActivationFunctions() {
         if ( hasNN() ) {
             String values = this.pluginProperties.getStringProperty("robot.nn.activations");
             List<String> activations = Stream.of(values.trim().split("\\s*,\\s*")).collect(Collectors.toList());
