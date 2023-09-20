@@ -252,8 +252,12 @@ public final class Project {
     
     public String getBinaryURL(){
         String tokenAsUrl = URLEncoder.encode(token);
-        String tempDirectoryAsUrl = URLEncoder.encode(getWorkerResult(CompilerSetupBean.class).getTempDir());
-        return "rest/projectWorkflow/getBinary/" + tempDirectoryAsUrl + "/" + tokenAsUrl + "/" + this.programName + "/" + getBinaryFileExtension();
+        try {
+            String tempDirectoryAsUrl = URLEncoder.encode(getWorkerResult(CompilerSetupBean.class).getTempDir());
+            return "rest/projectWorkflow/getBinary/" + tempDirectoryAsUrl + "/" + tokenAsUrl + "/" + this.programName + "/" + getBinaryFileExtension();
+        } catch (DbcException e){
+            return "";
+        }
     } 
 
     public void setCompiledHex(String compiledHex) {
