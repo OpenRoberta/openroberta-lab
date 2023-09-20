@@ -36,7 +36,7 @@ public class ArduinoCompilerWorker implements ICompilerWorker {
         String programName = project.getProgramName();
         String token = project.getToken();
         final String crosscompilerSource = project.getSourceCode().toString();
-        Util.storeGeneratedProgram(tempDir, crosscompilerSource, token, programName, "." + project.getSourceCodeFileExtension());
+        Util.storeGeneratedProgram(project, tempDir, crosscompilerSource, token, programName, "." + project.getSourceCodeFileExtension());
         String scriptName = Util.getOsSpecificAbsolutePath(compilerResourcesDir + "arduino-resources/build_project.sh");
 
         String boardVariant = "";

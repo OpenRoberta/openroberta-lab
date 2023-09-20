@@ -48,7 +48,7 @@ public class Ev3C4ev3CompilerWorker implements ICompilerWorker {
         final String token = project.getToken();
         final String programName = project.getProgramName();
         final String crosscompilerSource = project.getSourceCode().toString();
-        Util.storeGeneratedProgram(tempDir, crosscompilerSource, token, programName, "." + project.getSourceCodeFileExtension());
+        Util.storeGeneratedProgram(project, tempDir, crosscompilerSource, token, programName, "." + project.getSourceCodeFileExtension());
         String sourceCodeFileName = tempDir + token + "/" + programName + "/source/" + programName + "." + project.getSourceCodeFileExtension();
         String binaryFileName = tempDir + token + "/" + programName + "/target/" + programName + ".elf";
         Pair<Boolean, String> result = compiler.compile(sourceCodeFileName, binaryFileName, crosscompilerSource);

@@ -35,6 +35,7 @@ import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
 
+import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.factory.RobotFactory;
 import de.fhg.iais.roberta.util.basic.Pair;
 import de.fhg.iais.roberta.util.dbc.Assert;
@@ -82,13 +83,14 @@ public class Util {
      * @param programName
      * @param ext
      */
-    public static void storeGeneratedProgram(String tempDirectory, String generatedSourceCode, String token, String programName, String ext) {
+    public static void storeGeneratedProgram(Project project, String tempDirectory, String generatedSourceCode, String token, String programName, String ext) {
         try {
             File sourceFile = new File(tempDirectory + token + "/" + programName + "/source/" + programName + ext);
             Path path = Paths.get(tempDirectory + token + "/" + programName + "/target/");
             try {
                 Files.createDirectories(path);
                 FileUtils.writeStringToFile(sourceFile, generatedSourceCode, StandardCharsets.UTF_8.displayName());
+                project.setBinaryURL(path + "/" + programName + "." + project.getBinaryFileExtension());
             } catch ( IOException e ) {
                 String msg = "could not write source code to file system";
                 LOG.error(msg, e);
@@ -100,6 +102,22 @@ public class Util {
         }
     }
 
+    public static void storeCompiledProgram(Project project, String tempDirectory, String compiledCode, String token, String programName, String ext) {
+        try {
+            File targetFile = new File(tempDirectory + token + "/" + programName + "/target/" + programName + ext);
+            try {
+                FileUtils.writeStringToFile(targetFile, compiledCode, StandardCharsets.UTF_8.displayName());
+                project.setBinaryURL(targetFile.getPath());
+            } catch ( IOException e ) {
+                String msg = "could not write source code to file system";
+                LOG.error(msg, e);
+                throw new DbcException(msg, e);
+            }
+            LOG.info("stored under: " + targetFile.getPath());
+        } catch ( Exception e ) {
+            LOG.error("Storing the final program " + programName + " into directory " + token + " failed", e);
+        }
+    }
     /**
      * load the OpenRoberta properties. The URI of the properties refers either to the file system or to the classpath. It is used in both production and test.
      * <br>

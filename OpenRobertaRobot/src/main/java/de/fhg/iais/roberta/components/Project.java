@@ -65,6 +65,7 @@ public final class Project {
     private ConfigurationAst configuration = null;
     private StringBuilder sourceCodeBuilder = new StringBuilder();
     private String compiledHex = "";
+    private String binaryURL = "";
     private Key result = Key.COMPILERWORKFLOW_PROJECT_BUILD_SUCCESS;
     private int errorCounter = 0;
     private JSONObject configurationJSON;
@@ -251,14 +252,12 @@ public final class Project {
     }
     
     public String getBinaryURL(){
-        String tokenAsUrl = URLEncoder.encode(token);
-        try {
-            String tempDirectoryAsUrl = URLEncoder.encode(getWorkerResult(CompilerSetupBean.class).getTempDir());
-            return "rest/projectWorkflow/getBinary/" + tempDirectoryAsUrl + "/" + tokenAsUrl + "/" + this.programName + "/" + getBinaryFileExtension();
-        } catch (DbcException e){
-            return "";
-        }
-    } 
+        return this.binaryURL;
+    }
+    public void setBinaryURL(String path){
+        this.binaryURL = "rest/projectWorkflow/getBinary/" + URLEncoder.encode(path);
+    }
+    
 
     public void setCompiledHex(String compiledHex) {
         this.compiledHex = compiledHex;

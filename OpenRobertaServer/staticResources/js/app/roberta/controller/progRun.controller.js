@@ -183,7 +183,7 @@ define(["require", "exports", "util", "log", "message", "program.controller", "p
                 }, 5000);
                 MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
             }
-            else {
+            else if (result.binaryURL) {
                 createDownloadLink(filename, window.location.origin + '/' + result.binaryURL);
                 var textH = $('#popupDownloadHeader').text();
                 $('#popupDownloadHeader').text(textH.replace('$', $.trim(GUISTATE_C.getRobotRealName())));
@@ -224,6 +224,10 @@ define(["require", "exports", "util", "log", "message", "program.controller", "p
                     MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
                 });
                 $('#save-client-compiled-program').modal('show');
+            }
+            else {
+                GUISTATE_C.setConnectionState('wait');
+                MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
             }
         }
         else {

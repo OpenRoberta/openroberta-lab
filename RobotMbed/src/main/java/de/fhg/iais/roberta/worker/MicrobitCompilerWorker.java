@@ -45,7 +45,7 @@ public abstract class MicrobitCompilerWorker implements ICompilerWorker {
                         version
                 };
         
-        Util.storeGeneratedProgram(tempDir, this.getBinaryFromCrossCompiler(executableWithParameters), project.getToken(), project.getProgramName(), "." + project.getBinaryFileExtension());
+        Util.storeCompiledProgram(project, tempDir, this.getBinaryFromCrossCompiler(executableWithParameters), project.getToken(), project.getProgramName(), "." + project.getBinaryFileExtension());
         return Key.COMPILERWORKFLOW_SUCCESS;
     }
 
