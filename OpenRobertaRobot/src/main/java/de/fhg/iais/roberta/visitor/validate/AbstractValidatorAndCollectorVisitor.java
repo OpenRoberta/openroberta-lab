@@ -194,7 +194,7 @@ public abstract class AbstractValidatorAndCollectorVisitor extends BaseVisitor<V
     }
 
     private final void mkEmptyOrDisabledCheck(Phrase superPhrase, Phrase subPhrase) {
-        if ( subPhrase instanceof EmptyExpr || subPhrase.getProperty().isDisabled() ) {
+        if ( subPhrase instanceof EmptyExpr || (subPhrase instanceof Expr && subPhrase.getProperty().isDisabled()) ) {
             addErrorToPhrase(superPhrase, "ERROR_MISSING_PARAMETER");
         } else if ( subPhrase instanceof ExprList ) {
             for ( Expr expr : ((ExprList) subPhrase).get() ) {
