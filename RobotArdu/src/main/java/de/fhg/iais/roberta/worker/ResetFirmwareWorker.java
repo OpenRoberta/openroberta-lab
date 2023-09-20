@@ -24,6 +24,7 @@ public class ResetFirmwareWorker implements IWorker {
         Key resultKey;
         try {
             FileUtils.copyFileToDirectory(source, dest);
+            project.setBinaryURLPath(dest.getPath());
             resultKey = Key.FIRMWARE_RESET_SUCCESS;
         } catch ( IOException e ) {
             resultKey = Key.FIRMWARE_RESET_ERROR;

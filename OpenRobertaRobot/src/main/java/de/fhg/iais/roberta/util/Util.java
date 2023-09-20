@@ -90,7 +90,7 @@ public class Util {
             try {
                 Files.createDirectories(path);
                 FileUtils.writeStringToFile(sourceFile, generatedSourceCode, StandardCharsets.UTF_8.displayName());
-                project.setBinaryURL(path + "/" + programName + "." + project.getBinaryFileExtension());
+                project.setBinaryURLPath(path + "/" + programName + "." + project.getBinaryFileExtension());
             } catch ( IOException e ) {
                 String msg = "could not write source code to file system";
                 LOG.error(msg, e);
@@ -107,7 +107,7 @@ public class Util {
             File targetFile = new File(tempDirectory + token + "/" + programName + "/target/" + programName + ext);
             try {
                 FileUtils.writeStringToFile(targetFile, compiledCode, StandardCharsets.UTF_8.displayName());
-                project.setBinaryURL(targetFile.getPath());
+                project.setBinaryURLPath(targetFile.getPath());
             } catch ( IOException e ) {
                 String msg = "could not write source code to file system";
                 LOG.error(msg, e);

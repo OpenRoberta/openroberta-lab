@@ -20,7 +20,6 @@ import org.slf4j.LoggerFactory;
 import com.google.common.collect.ClassToInstanceMap;
 import com.google.common.collect.MutableClassToInstanceMap;
 
-import de.fhg.iais.roberta.bean.CompilerSetupBean;
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.NNBean;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
@@ -254,7 +253,7 @@ public final class Project {
     public String getBinaryURL(){
         return this.binaryURL;
     }
-    public void setBinaryURL(String path){
+    public void setBinaryURLPath(String path){
         this.binaryURL = "rest/projectWorkflow/getBinary/" + URLEncoder.encode(path);
     }
     

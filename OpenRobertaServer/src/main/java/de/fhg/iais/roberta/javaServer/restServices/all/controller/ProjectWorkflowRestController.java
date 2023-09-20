@@ -321,7 +321,6 @@ public class ProjectWorkflowRestController {
             ProjectService.executeWorkflow("reset", project);
             response.setCmd("reset");
             response.setProgramName(project.getProgramName());
-            response.setCompiledCode(project.getCompiledHex());
             response.setBinaryURL(project.getBinaryURL());
             addProjectResultToResponse(response, project);
             Statistics.info("ProgramReset", "LoggedIn", httpSessionState.isUserLoggedIn(), "success", project.hasSucceeded());

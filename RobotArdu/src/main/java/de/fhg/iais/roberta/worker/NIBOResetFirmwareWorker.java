@@ -26,10 +26,12 @@ public class NIBOResetFirmwareWorker implements IWorker {
         String path = properties.getCompilerResourceDir() + "/" + project.getCompiledProgramPath() + "." + project.getBinaryFileExtension();
         final File source = new File(path);
         final File dest = new File(properties.getTempDir() + project.getToken() + "/" + project.getProgramName() + "/target");
-
+        
+        
         try {
             project.setCompiledHex(Util.getBase64EncodedHex(path, NIBOHexPrefix.getHexPrefixForRobot(project.getRobot())));
             FileUtils.copyFileToDirectory(source, dest);
+            project.setBinaryURLPath(dest.getPath());
             resultKey = Key.FIRMWARE_RESET_SUCCESS;
         } catch ( IllegalArgumentException | IOException e ) {
             LOG.error("Reading default firmware for NIBO robots failed", e);
