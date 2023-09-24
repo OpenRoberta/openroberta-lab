@@ -85,37 +85,25 @@ public class Util {
      */
     public static void storeGeneratedProgram(Project project, String tempDirectory, String generatedSourceCode, String token, String programName, String ext) {
         try {
-            File sourceFile = new File(tempDirectory + token + "/" + programName + "/source/" + programName + ext);
+            File fileToStore;
             Path path = Paths.get(tempDirectory + token + "/" + programName + "/target/");
-            try {
+            if ( ("." + project.getBinaryFileExtension()).equals(ext)) {
+                fileToStore = new File(path.resolve(programName + ext).toString());
+            } else {
+                fileToStore = new File(tempDirectory + token + "/" + programName + "/source/" + programName + ext);
                 Files.createDirectories(path);
-                FileUtils.writeStringToFile(sourceFile, generatedSourceCode, StandardCharsets.UTF_8.displayName());
-                project.setBinaryURLPath(path + "/" + programName + "." + project.getBinaryFileExtension());
+            }
+            try {
+                FileUtils.writeStringToFile(fileToStore, generatedSourceCode, StandardCharsets.UTF_8.displayName());
+                project.setBinaryURLPath(path.resolve(programName + "." + project.getBinaryFileExtension()).toString());
             } catch ( IOException e ) {
                 String msg = "could not write source code to file system";
                 LOG.error(msg, e);
                 throw new DbcException(msg, e);
             }
-            LOG.info("stored under: " + sourceFile.getPath());
+            LOG.info("stored under: " + fileToStore.getPath());
         } catch ( Exception e ) {
             LOG.error("Storing the generated program " + programName + " into directory " + token + " failed", e);
-        }
-    }
-
-    public static void storeCompiledProgram(Project project, String tempDirectory, String compiledCode, String token, String programName, String ext) {
-        try {
-            File targetFile = new File(tempDirectory + token + "/" + programName + "/target/" + programName + ext);
-            try {
-                FileUtils.writeStringToFile(targetFile, compiledCode, StandardCharsets.UTF_8.displayName());
-                project.setBinaryURLPath(targetFile.getPath());
-            } catch ( IOException e ) {
-                String msg = "could not write source code to file system";
-                LOG.error(msg, e);
-                throw new DbcException(msg, e);
-            }
-            LOG.info("stored under: " + targetFile.getPath());
-        } catch ( Exception e ) {
-            LOG.error("Storing the final program " + programName + " into directory " + token + " failed", e);
         }
     }
     /**
