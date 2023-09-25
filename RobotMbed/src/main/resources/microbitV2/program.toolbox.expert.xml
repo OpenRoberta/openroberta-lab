@@ -103,7 +103,6 @@
         <block type='robSensors_pintouch_getSample'></block>
         <block type='robSensors_set_pin_mode'></block>
         <block type='robSensors_logotouch_getSample'></block>
-        <block type='robSensors_set_logo_mode'></block>
         <block type='robSensors_pin_getSample'>
             <mutation mode="DIGITAL"/>
             <field name="MODE">DIGITAL</field>
