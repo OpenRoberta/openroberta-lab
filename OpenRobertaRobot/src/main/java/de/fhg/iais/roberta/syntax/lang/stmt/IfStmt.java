@@ -74,7 +74,8 @@ public final class IfStmt extends Stmt {
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
 
-        if ( getProperty().getBlockType().equals(BlocklyConstants.LOGIC_TERNARY) ) {
+        BlocklyProperties blocklyProperties = getProperty();
+        if ( blocklyProperties.blockType.equals(BlocklyConstants.LOGIC_TERNARY) ) {
             Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.IF, this.expr.get(0));
             Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.THEN, this.thenList.get(0).get().get(0));
             Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.ELSE, this.elseList.get().get(0));

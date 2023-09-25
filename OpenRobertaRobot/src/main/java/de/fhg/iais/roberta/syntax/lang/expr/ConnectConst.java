@@ -17,7 +17,7 @@ public final class ConnectConst extends Expr {
     public final String dataValue;
 
     public ConnectConst(BlocklyProperties properties, String value, String dataValue) {
-        super(properties);
+        super(properties, BlocklyType.CONNECTION);
         Assert.isTrue(!value.equals(""));
         this.value = value;
         this.dataValue = dataValue;
@@ -32,10 +32,5 @@ public final class ConnectConst extends Expr {
     @Override
     public int getPrecedence() {
         return 999;
-    }
-
-    @Override
-    public BlocklyType getVarType() {
-        return BlocklyType.CONNECTION;
     }
 }

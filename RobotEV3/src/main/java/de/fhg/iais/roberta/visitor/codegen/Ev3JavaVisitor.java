@@ -782,7 +782,7 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
             default:
                 // nothing to do
         }
-        if ( indexOfFunct.find.getVarType() == BlocklyType.NUMBER ) {
+        if ( indexOfFunct.find.getBlocklyType() == BlocklyType.NUMBER ) {
             this.src.add(" (float) ");
         }
         indexOfFunct.find.accept(this);
@@ -819,19 +819,23 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
 
         if ( listCreate.exprList.get().size() > 0 ) {
             this.src.add("Arrays.");
-            if ( listCreate.getVarType() == BlocklyType.CONNECTION ) {
+            if ( listCreate.getBlocklyType() == BlocklyType.CONNECTION ) {
                 this.src.add("<NXTConnection>");
-            } else if ( listCreate.getVarType() == BlocklyType.COLOR ) {
+            } else if ( listCreate.getBlocklyType() == BlocklyType.COLOR ) {
                 this.src.add("<PickColor>");
-            } else if ( listCreate.getVarType() == BlocklyType.STRING ) {
-                this.src.add("<String>");
-            } else if ( listCreate.getVarType() == BlocklyType.BOOLEAN ) {
-                this.src.add("<Boolean>");
+            } else {
+                if ( listCreate.getBlocklyType() == BlocklyType.STRING ) {
+                    this.src.add("<String>");
+                } else {
+                    if ( listCreate.getBlocklyType() == BlocklyType.BOOLEAN ) {
+                        this.src.add("<Boolean>");
+                    }
+                }
             }
 
             this.src.add("asList(");
             // manually go through value list to cast numbers to float
-            if ( listCreate.getVarType() == BlocklyType.NUMBER ) {
+            if ( listCreate.getBlocklyType() == BlocklyType.NUMBER ) {
                 List<Expr> expressions = listCreate.exprList.get();
                 for ( int i = 0; i < expressions.size(); i++ ) {
                     this.src.add("(float) ");
@@ -933,7 +937,7 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
                 break;
         }
 
-        if ( listSetIndex.param.get(1).getVarType() == BlocklyType.NUMBER ) {
+        if ( listSetIndex.param.get(1).getBlocklyType() == BlocklyType.NUMBER ) {
             this.src.add("(float) ");
         }
 

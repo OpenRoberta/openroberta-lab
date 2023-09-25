@@ -106,6 +106,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.basic.C;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
@@ -152,14 +153,17 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
 
     private boolean shouldBeHighlighted(Phrase visitable) {
         boolean isNotMainTask = !(visitable instanceof MainTask);
-        return isNotMainTask && !currentlyHighlightedBlocks.contains(visitable.getProperty().getBlocklyId());
+        if ( !isNotMainTask ) return false;
+        BlocklyProperties blocklyProperties = visitable.getProperty();
+        return !currentlyHighlightedBlocks.contains(blocklyProperties.blocklyId);
     }
 
     @Override
     protected final boolean preVisitCheck(Phrase visitable) {
         boolean shouldHighlight = shouldBeHighlighted(visitable);
         if ( shouldHighlight ) {
-            String blocklyId = visitable.getProperty().getBlocklyId();
+            BlocklyProperties blocklyProperties = visitable.getProperty();
+            String blocklyId = blocklyProperties.blocklyId;
             if ( debugger && isValidBlocklyId(blocklyId) ) {
                 toHighlightBlocks.add(blocklyId);
                 currentlyHighlightedBlocks.add(blocklyId);
@@ -174,7 +178,8 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
 
     @Override
     protected final void postVisitCheck(Phrase visitable) {
-        String blocklyId = visitable.getProperty().getBlocklyId();
+        BlocklyProperties blocklyProperties = visitable.getProperty();
+        String blocklyId = blocklyProperties.blocklyId;
         if ( debugger && isValidBlocklyId(blocklyId) ) {
             if ( !codeBuilder.isEmpty() ) {
                 JSONObject lastElement = codeBuilder.getLast();
@@ -293,7 +298,7 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
         } else {
             var.value.accept(this);
         }
-        JSONObject o = makeNode(C.VAR_DECLARATION).put(C.TYPE, var.typeVar).put(C.NAME, var.name);
+        JSONObject o = makeNode(C.VAR_DECLARATION).put(C.TYPE, var.getBlocklyType()).put(C.NAME, var.name);
         return add(o);
     }
 
@@ -539,7 +544,8 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
     @Override
     public final Void visitRepeatStmt(RepeatStmt repeatStmt) {
         Mode mode = repeatStmt.mode;
-        String blocklyId = repeatStmt.getProperty().getBlocklyId();
+        BlocklyProperties blocklyProperties = repeatStmt.getProperty();
+        String blocklyId = blocklyProperties.blocklyId;
 
         switch ( mode ) {
             case FOR:
@@ -563,7 +569,7 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
 
                 // initialize Var
                 initialValue.accept(this);
-                add(makeNode(C.VAR_DECLARATION).put(C.TYPE, initialValue.getVarType()).put(C.NAME, variableName));
+                add(makeNode(C.VAR_DECLARATION).put(C.TYPE, initialValue.getBlocklyType()).put(C.NAME, variableName));
 
                 // check the termination Expr
                 appComment(C.REPEAT_STMT).put(C.LABEL, "r_l_" + uniqueCompoundNumber);
@@ -1012,7 +1018,7 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
             .stream()
             .map(parameter -> (VarDeclaration) parameter)
             .forEach(parameter -> {
-                JSONObject o = makeNode(C.VAR_DECLARATION).put(C.TYPE, parameter.typeVar).put(C.NAME, parameter.name);
+                JSONObject o = makeNode(C.VAR_DECLARATION).put(C.TYPE, parameter.getBlocklyType()).put(C.NAME, parameter.name);
                 add(o);
             });
         methodVoid.body.accept(this);
@@ -1042,7 +1048,7 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
             .stream()
             .map(parameter -> (VarDeclaration) parameter)
             .forEach(parameter -> {
-                JSONObject o = makeNode(C.VAR_DECLARATION).put(C.TYPE, parameter.typeVar).put(C.NAME, parameter.name);
+                JSONObject o = makeNode(C.VAR_DECLARATION).put(C.TYPE, parameter.getBlocklyType()).put(C.NAME, parameter.name);
                 add(o);
             });
         methodReturn.body.accept(this);
@@ -1125,7 +1131,8 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
 
     private void addDebugStatement(Phrase phrase) {
         if ( debugger ) {
-            possibleDebugStops.add(phrase.getProperty().getBlocklyId());
+            BlocklyProperties blocklyProperties = phrase.getProperty();
+            possibleDebugStops.add(blocklyProperties.blocklyId);
             add(makeNode(C.COMMENT));
         }
     }

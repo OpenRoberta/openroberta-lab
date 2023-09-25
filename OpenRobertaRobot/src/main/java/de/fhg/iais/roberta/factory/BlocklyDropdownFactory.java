@@ -18,7 +18,6 @@ import de.fhg.iais.roberta.inter.mode.action.IRelayMode;
 import de.fhg.iais.roberta.inter.mode.action.ITurnDirection;
 import de.fhg.iais.roberta.inter.mode.general.IDirection;
 import de.fhg.iais.roberta.inter.mode.general.IIndexLocation;
-import de.fhg.iais.roberta.inter.mode.general.IListElementOperations;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.inter.mode.general.IWorkingState;
 import de.fhg.iais.roberta.mode.action.BrickLedColor;
@@ -86,7 +85,7 @@ public class BlocklyDropdownFactory {
      * @param operation string name
      * @return operation from the enum {@link IListElementOperations}
      */
-    public IListElementOperations getListElementOpertaion(String operation) {
+    public ListElementOperations getListElementOpertaion(String operation) {
         return getModeValue(operation, ListElementOperations.class);
     }
 

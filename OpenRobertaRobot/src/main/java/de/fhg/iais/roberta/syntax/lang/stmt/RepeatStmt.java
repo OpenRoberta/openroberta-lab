@@ -153,7 +153,8 @@ public final class RepeatStmt extends Stmt {
         }
         switch ( this.mode ) {
             case TIMES:
-                if ( getProperty().getBlockType().equals(BlocklyConstants.CONTROLS_REPEAT) ) {
+                BlocklyProperties blocklyProperties = getProperty();
+                if ( blocklyProperties.blockType.equals(BlocklyConstants.CONTROLS_REPEAT) ) {
                     Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.TIMES, ((NumConst) (((ExprList) this.expr).get().get(2))).value);
                 } else {
                     Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.TIMES, (((ExprList) this.expr).get().get(2)));
@@ -182,9 +183,9 @@ public final class RepeatStmt extends Stmt {
             case FOR_EACH:
                 Binary exprBinary = (Binary) this.expr;
                 Mutation mutation = new Mutation();
-                mutation.setListType(((VarDeclaration) exprBinary.left).typeVar.getBlocklyName());
+                mutation.setListType(((VarDeclaration) exprBinary.left).getBlocklyType().getBlocklyName());
                 jaxbDestination.setMutation(mutation);
-                Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.TYPE, ((VarDeclaration) exprBinary.left).typeVar.getBlocklyName());
+                Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.TYPE, ((VarDeclaration) exprBinary.left).getBlocklyType().getBlocklyName());
                 Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.VAR, ((VarDeclaration) exprBinary.left).name);
                 Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.LIST, exprBinary.getRight());
                 break;

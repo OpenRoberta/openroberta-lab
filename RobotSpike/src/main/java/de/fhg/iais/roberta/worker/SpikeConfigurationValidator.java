@@ -12,6 +12,7 @@ import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.util.Key;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 
 public class SpikeConfigurationValidator {
     private static final Set<String> OVERLAPPING_PINS = Stream.of("A", "B", "C", "D", "E", "F").collect(Collectors.toCollection(HashSet::new));
@@ -37,7 +38,8 @@ public class SpikeConfigurationValidator {
                 } else {
                     project.addToErrorCounter(1, null);
                     project.setResult(Key.PROGRAM_INVALID_STATEMETNS);
-                    String blockId = configurationComponent.getProperty().getBlocklyId();
+                    BlocklyProperties blocklyProperties = configurationComponent.getProperty();
+                    String blockId = blocklyProperties.blocklyId;
                     if ( !availablePins.contains(v) ) {
                         project.addToConfAnnotationList(blockId, NepoInfo.error("CONFIGURATION_ERROR_MISSING_PIN"));
                     } else {
@@ -49,7 +51,8 @@ public class SpikeConfigurationValidator {
         if ( blockPins.stream().distinct().count() != blockPins.size() ) {
             project.addToErrorCounter(1, null);
             project.setResult(Key.PROGRAM_INVALID_STATEMETNS);
-            String blockId = configurationComponent.getProperty().getBlocklyId();
+            BlocklyProperties blocklyProperties = configurationComponent.getProperty();
+            String blockId = blocklyProperties.blocklyId;
             project.addToConfAnnotationList(blockId, NepoInfo.error("CONFIGURATION_ERROR_OVERLAPPING_PORTS"));
         }
     }

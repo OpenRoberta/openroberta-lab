@@ -26,6 +26,7 @@ public final class ListRepeat extends Function {
 
     public ListRepeat(BlocklyType typeVar, List<Expr> param, BlocklyProperties properties) {
         super(properties);
+        this.setBlocklyType(BlocklyType.CAPTURED_TYPE);
         Assert.isTrue(param != null);
         this.param = param;
         this.typeVar = typeVar;

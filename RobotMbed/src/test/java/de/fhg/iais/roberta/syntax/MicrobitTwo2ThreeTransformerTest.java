@@ -11,6 +11,7 @@ import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.factory.RobotFactory;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.ast.AstFactory;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.test.UnitTestHelper;
 import de.fhg.iais.roberta.worker.MbedTwo2ThreeTransformerWorker;
 
@@ -364,6 +365,7 @@ public class MicrobitTwo2ThreeTransformerTest {
 
         new MbedTwo2ThreeTransformerWorker().execute(project);
         UnitTestHelper.checkAstEquality(project.getProgramAst().getTree().toString(), expectedProgramAst);
-        Assert.assertEquals("robControls_wait_for", project.getProgramAst().getTree().get(0).get(2).getProperty().getBlockType());
+        BlocklyProperties blocklyProperties = project.getProgramAst().getTree().get(0).get(2).getProperty();
+        Assert.assertEquals("robControls_wait_for", blocklyProperties.blockType);
     }
 }

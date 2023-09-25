@@ -15,7 +15,7 @@ public final class ActionExpr extends Expr {
     public final Action action;
 
     public ActionExpr(Action action) {
-        super(action.getProperty());
+        super(action.getProperty(), BlocklyType.CAPTURED_TYPE);
         Assert.isTrue(action.isReadOnly());
         this.action = action;
         setReadOnly();
@@ -39,10 +39,5 @@ public final class ActionExpr extends Expr {
     @Override
     public Block ast2xml() {
         return this.action.ast2xml();
-    }
-
-    @Override
-    public BlocklyType getVarType() {
-        return BlocklyType.CAPTURED_TYPE;
     }
 }

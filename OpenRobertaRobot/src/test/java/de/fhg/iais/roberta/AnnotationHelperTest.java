@@ -49,6 +49,7 @@ import de.fhg.iais.roberta.transformer.NepoAnnotationException;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.ast.AstFactory;
 import de.fhg.iais.roberta.util.ast.BlockDescriptor;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
 import de.fhg.iais.roberta.util.syntax.Assoc;
@@ -113,7 +114,7 @@ public class AnnotationHelperTest {
 
     @Test
     public void getVarType_annotationNotPresence() {
-        assertThatThrownBy(() -> AnnotationHelper.getReturnType(TestPhraseNotAnnotated.class)).isInstanceOf(DbcException.class);
+        assertThat(AnnotationHelper.getReturnType(TestPhraseNotAnnotated.class)).isEqualTo(BlocklyType.NOTHING);
     }
 
     @Test
@@ -218,13 +219,20 @@ public class AnnotationHelperTest {
         assertThat(resultPhrase).isInstanceOf(TestPhraseField.class);
         TestPhraseField testPhrase = (TestPhraseField) resultPhrase;
         assertThat(testPhrase.type).isEqualTo("WHATEVER");
-        assertThat(testPhrase.getProperty().getComment().getValue()).isEqualTo("Test");
-        assertThat(testPhrase.getProperty().getComment().getH()).isEqualTo("80");
-        assertThat(testPhrase.getProperty().getComment().getW()).isEqualTo("160");
-        assertThat(testPhrase.getProperty().getComment().isPinned()).isEqualTo(false);
-        assertThat(testPhrase.getProperty().isInTask()).isEqualTo(true);
-        assertThat(testPhrase.getProperty().getBlocklyId()).isEqualTo("b2Ieob%0r|errWxr`reW");
-        assertThat(testPhrase.getProperty().getBlockType()).isEqualTo("TEST_PHRASE_FIELD");
+        BlocklyProperties blocklyProperties3 = testPhrase.getProperty();
+        assertThat(blocklyProperties3.blocklyRegion.comment.getValue()).isEqualTo("Test");
+        BlocklyProperties blocklyProperties2 = testPhrase.getProperty();
+        assertThat(blocklyProperties2.blocklyRegion.comment.getH()).isEqualTo("80");
+        BlocklyProperties blocklyProperties1 = testPhrase.getProperty();
+        assertThat(blocklyProperties1.blocklyRegion.comment.getW()).isEqualTo("160");
+        BlocklyProperties blocklyProperties = testPhrase.getProperty();
+        assertThat(blocklyProperties.blocklyRegion.comment.isPinned()).isEqualTo(false);
+        BlocklyProperties blocklyProperties4 = testPhrase.getProperty();
+        assertThat(blocklyProperties4.blocklyRegion.inTask).isEqualTo(true);
+        BlocklyProperties blocklyProperties6 = testPhrase.getProperty();
+        assertThat(blocklyProperties6.blocklyId).isEqualTo("b2Ieob%0r|errWxr`reW");
+        BlocklyProperties blocklyProperties5 = testPhrase.getProperty();
+        assertThat(blocklyProperties5.blockType).isEqualTo("TEST_PHRASE_FIELD");
 
         BlockDescriptor blockDescriptor = testPhrase.getKind();
         assertThat(blockDescriptor.hasName("TEST_PHRASE_FIELD")).isEqualTo(true);

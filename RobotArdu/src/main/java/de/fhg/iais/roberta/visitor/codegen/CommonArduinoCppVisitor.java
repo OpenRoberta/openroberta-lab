@@ -48,6 +48,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.RfidSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.syntax.SC;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -78,7 +79,8 @@ public abstract class CommonArduinoCppVisitor extends NepoArduinoCppVisitor impl
         nlIndent();
         this.src.add("_printToDisplay(", "_lcd_", showTextAction.port, ", ");
         showTextAction.msg.accept(this);
-        if ( showTextAction.getProperty().getBlockType().contains("oledssd1306i2c") ) {
+        BlocklyProperties blocklyProperties = showTextAction.getProperty();
+        if ( blocklyProperties.blockType.contains("oledssd1306i2c") ) {
             this.src.add(", true");
         }
         this.src.add(");");
@@ -89,7 +91,8 @@ public abstract class CommonArduinoCppVisitor extends NepoArduinoCppVisitor impl
     @Override
     public final Void visitClearDisplayAction(ClearDisplayAction clearDisplayAction) {
         this.src.add("_lcd_", clearDisplayAction.port);
-        if ( clearDisplayAction.getProperty().getBlockType().contains("oledssd1306i2c") ) {
+        BlocklyProperties blocklyProperties = clearDisplayAction.getProperty();
+        if ( blocklyProperties.blockType.contains("oledssd1306i2c") ) {
             this.src.add(".clearDisplay();");
             nlIndent();
             this.src.add("_lcd_", clearDisplayAction.port, (".display();"));

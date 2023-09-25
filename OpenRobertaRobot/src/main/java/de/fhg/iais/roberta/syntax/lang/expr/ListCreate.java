@@ -25,14 +25,12 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  */
 @NepoBasic(name = "LIST_CREATE", category = "EXPR", blocklyNames = {"robLists_create_with", "lists_create_with"})
 public final class ListCreate extends Expr {
-    public final BlocklyType typeVar;
     public final ExprList exprList;
 
     public ListCreate(BlocklyType typeVar, ExprList exprList, BlocklyProperties properties) {
-        super(properties);
+        super(properties, typeVar);
         Assert.isTrue(exprList != null && exprList.isReadOnly() && typeVar != null);
         this.exprList = exprList;
-        this.typeVar = typeVar;
         setReadOnly();
     }
 
@@ -47,13 +45,8 @@ public final class ListCreate extends Expr {
     }
 
     @Override
-    public BlocklyType getVarType() {
-        return this.typeVar;
-    }
-
-    @Override
     public String toString() {
-        return "ListCreate [" + this.typeVar + ", " + this.exprList + "]";
+        return "ListCreate [" + this.getBlocklyType() + ", " + this.exprList + "]";
     }
 
     public static Phrase xml2ast(Block block, Jaxb2ProgramAst helper) {
@@ -64,17 +57,17 @@ public final class ListCreate extends Expr {
 
     @Override
     public Block ast2xml() {
+        String blocklyName = this.getBlocklyType().getBlocklyName();
         Block jaxbDestination = new Block();
-
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
 
         ExprList exprList = this.exprList;
         int numOfItems = exprList.get().size();
         Mutation mutation = new Mutation();
         mutation.setItems(BigInteger.valueOf(numOfItems));
-        mutation.setListType(this.typeVar.getBlocklyName());
+        mutation.setListType(blocklyName);
         jaxbDestination.setMutation(mutation);
-        Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.LIST_TYPE, this.typeVar.getBlocklyName());
+        Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.LIST_TYPE, blocklyName);
         for ( int i = 0; i < numOfItems; i++ ) {
             Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.ADD + i, exprList.get().get(i));
         }

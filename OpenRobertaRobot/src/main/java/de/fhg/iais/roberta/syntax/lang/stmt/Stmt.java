@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.syntax.lang.stmt;
 
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 
 /**
@@ -12,6 +13,7 @@ public abstract class Stmt extends Phrase {
 
     public Stmt(BlocklyProperties properties) {
         super(properties);
+        this.setBlocklyType(BlocklyType.VOID);
     }
 
 }

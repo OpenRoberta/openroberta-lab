@@ -23,15 +23,13 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  */
 @NepoBasic(name = "VAR", category = "EXPR", blocklyNames = {"variables_get"})
 public final class Var extends Expr {
-    public final BlocklyType typeVar;
     public final String name;
     public final static String CODE_SAFE_PREFIX = "___";
 
-    public Var(BlocklyType typeVar, String value, BlocklyProperties properties) {
-        super(properties);
-        Assert.isTrue(!value.equals("") && typeVar != null);
+    public Var(BlocklyType blocklyType, String value, BlocklyProperties properties) {
+        super(properties, blocklyType);
+        Assert.isTrue(!value.equals("") && blocklyType != null);
         this.name = Util.sanitizeProgramProperty(value);
-        this.typeVar = typeVar;
         setReadOnly();
     }
 
@@ -50,11 +48,6 @@ public final class Var extends Expr {
     }
 
     @Override
-    public BlocklyType getVarType() {
-        return this.typeVar;
-    }
-
-    @Override
     public String toString() {
         return "Var [" + this.name + "]";
     }
@@ -70,7 +63,7 @@ public final class Var extends Expr {
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
 
         Mutation mutation = new Mutation();
-        mutation.setDatatype(getVarType().getBlocklyName());
+        mutation.setDatatype(getBlocklyType().getBlocklyName());
         jaxbDestination.setMutation(mutation);
 
         Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.VAR, this.name);

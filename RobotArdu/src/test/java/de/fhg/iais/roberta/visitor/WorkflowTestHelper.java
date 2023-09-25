@@ -39,7 +39,7 @@ public class WorkflowTestHelper {
         StmtList variables = new StmtList();
         variables.setReadOnly();
 
-        MainTask mainTask = new MainTask(BlocklyProperties.make("MAIN_FOR_TEST", "1"), variables, "false", null);
+        MainTask mainTask = new MainTask(BlocklyProperties.make("MAIN_FOR_TEST", "1", null), variables, "false", null);
         phrases = new ArrayList<>(Arrays.asList(new Location("0", "0"), mainTask));
         configurationComponents = new ArrayList<>();
     }
@@ -101,7 +101,7 @@ public class WorkflowTestHelper {
         return project;
     }
 
-    protected final static BlocklyProperties bp = BlocklyProperties.make("BLOCK_FOR_TEST", "1");
+    protected final static BlocklyProperties bp = BlocklyProperties.make("BLOCK_FOR_TEST", "1", null);
 
     protected void assertHasUsedSensor(Project project, String userDefinedPort, String type, String mode) {
         UsedHardwareBean usedHardwareBean = getUsedHardwareBean(project);

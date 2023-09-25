@@ -39,6 +39,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.syntax.SC;
 import de.fhg.iais.roberta.visitor.hardware.IMbotVisitor;
@@ -165,7 +166,8 @@ public class MbotValidatorAndCollectorVisitor extends ArduinoDifferentialMotorVa
 
     @Override
     public Void visitLEDMatrixImage(LEDMatrixImage ledMatrixImage) {
-        usedHardwareBuilder.addUsedIDImage(ledMatrixImage.getProperty().getBlocklyId(), ledMatrixImage.image);
+        BlocklyProperties blocklyProperties = ledMatrixImage.getProperty();
+        usedHardwareBuilder.addUsedIDImage(blocklyProperties.blocklyId, ledMatrixImage.image);
         return null;
     }
 

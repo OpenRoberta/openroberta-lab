@@ -14,7 +14,6 @@ import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.util.syntax.Assoc;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.syntax.FunctionNames;
 
@@ -25,20 +24,11 @@ public final class MathSingleFunct extends Function {
 
     public MathSingleFunct(FunctionNames name, List<Expr> param, BlocklyProperties properties) {
         super(properties);
+        this.setBlocklyType(name.signature.returnType);
         Assert.isTrue(name != null && param != null);
         this.functName = name;
         this.param = param;
         setReadOnly();
-    }
-
-    @Override
-    public int getPrecedence() {
-        return this.functName.getPrecedence();
-    }
-
-    @Override
-    public Assoc getAssoc() {
-        return this.functName.getAssoc();
     }
 
     @Override

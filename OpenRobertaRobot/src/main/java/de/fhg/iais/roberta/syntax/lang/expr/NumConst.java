@@ -14,7 +14,7 @@ public final class NumConst extends Expr {
     public final String value;
 
     public NumConst(BlocklyProperties properties, String value) {
-        super(properties == null ? BlocklyProperties.make("NUM_CONST", "1") : properties);
+        super(properties == null ? BlocklyProperties.make("math_number", "1", null) : properties);
         Assert.isTrue(!value.equals(""));
         this.value = Util.sanitizeProgramProperty(value, this.getKind().getName());
         setReadOnly();

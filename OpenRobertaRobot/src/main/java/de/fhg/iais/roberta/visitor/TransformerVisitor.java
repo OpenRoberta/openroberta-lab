@@ -340,11 +340,11 @@ public abstract class TransformerVisitor implements IVisitor<Phrase> {
     }
 
     public Phrase visitVar(Var var) {
-        return new Var(var.getVarType(), var.name, var.getProperty());
+        return new Var(var.getBlocklyType(), var.name, var.getProperty());
     }
 
     public Phrase visitVarDeclaration(VarDeclaration var) {
-        return new VarDeclaration(var.typeVar, var.name, var.value.modify(this), var.next, var.global, var.getProperty());
+        return new VarDeclaration(var.getBlocklyType(), var.name, var.value.modify(this), var.next, var.global, var.getProperty());
     }
 
     public Phrase visitUnary(Unary unary) {
@@ -490,7 +490,7 @@ public abstract class TransformerVisitor implements IVisitor<Phrase> {
     }
 
     public Phrase visitListCreate(ListCreate listCreate) {
-        return new ListCreate(listCreate.typeVar, (ExprList) listCreate.exprList.modify(this), listCreate.getProperty());
+        return new ListCreate(listCreate.getBlocklyType(), (ExprList) listCreate.exprList.modify(this), listCreate.getProperty());
     }
 
     public Phrase visitListGetIndex(ListGetIndex listGetIndex) {
@@ -621,7 +621,7 @@ public abstract class TransformerVisitor implements IVisitor<Phrase> {
 
     public Phrase visitEvalExpr(EvalExpr evalExpr) {
         try {
-            return EvalExpr.make(evalExpr.expr, evalExpr.type, evalExpr.getProperty());
+            return EvalExpr.make(evalExpr.exprAsString, evalExpr.getBlocklyType(), evalExpr.getProperty());
         } catch ( Exception e ) {
             throw new DbcException("Could not modify EvalExpr!", e);
         }

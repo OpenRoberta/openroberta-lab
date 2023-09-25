@@ -54,9 +54,7 @@ public abstract class NIBOCommonCppVisitor extends NepoArduinoCppVisitor impleme
             case PRIM:
             case NOTHING:
             case CAPTURED_TYPE:
-            case R:
-            case S:
-            case T:
+            case CAPTURED_TYPE_ARRAY_ITEM:
                 return "";
             case BOOLEAN:
                 return "bool";

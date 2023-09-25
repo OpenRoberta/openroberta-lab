@@ -375,7 +375,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
     }
 
     private void convertToString(Binary binary) {
-        switch ( binary.getRight().getVarType() ) {
+        switch ( binary.getRight().getBlocklyType() ) {
             case BOOLEAN:
             case NUMBER:
             case NUMBER_INT:
@@ -523,7 +523,7 @@ public class Ev3C4ev3Visitor extends AbstractCppVisitor implements IEv3Visitor<V
 
     @Override
     public Void visitListCreate(ListCreate listCreate) {
-        this.src.add("(", getListCreateCasting(listCreate.getVarType()));
+        this.src.add("(", getListCreateCasting(listCreate.getBlocklyType()));
         super.visitListCreate(listCreate);
         this.src.add(")");
         return null;

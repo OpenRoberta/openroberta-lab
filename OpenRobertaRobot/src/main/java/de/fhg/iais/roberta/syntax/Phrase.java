@@ -1,40 +1,52 @@
 package de.fhg.iais.roberta.syntax;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.transformer.AnnotationHelper;
+import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.typecheck.NepoInfos;
 import de.fhg.iais.roberta.util.ast.AstFactory;
 import de.fhg.iais.roberta.util.ast.BlockDescriptor;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.TransformerVisitor;
 
 /**
- * the top class of all class used to represent the AST (abstract syntax tree) of a program. After construction an AST should be immutable.
- * An object of a subclass of {@link Phrase} is initially writable, after the construction of the object has finished,
- * {@link #setReadOnly()} is called. This cannot be undone later. It is expected that all subclasses of {@link #Phrase} do the following:<br>
- * - if in construction phase, they should use {@link #mayChange()} to assert that.<br>
+ * the top class of all class used to represent the AST (abstract syntax tree) of a program. After construction an AST object is immutable (except {@link #infos}
+ * and {@link #blocklyType}.<br>
+ * An object of a subclass of this class is initially writable, after the construction of the object has finished,
+ * {@link #setReadOnly()} is called. This cannot be undone later. It is expected that all subclasses of this class do the following:<br>
+ * - in the construction phase, they should use {@link #mayChange()} to assert that they are in the construction phase.<br>
  * - if the construction has finished and {@link #setReadOnly()} has been called, they should use {@link #isReadOnly()} to assert their immutability.<br>
  * <br>
- * To find out which kind a {@link #Phrase}-object is use {@link #getBlockDescriptor()}
+ * The kind of the Phrase-object is described in the sub-object {@link #blockDescriptor}
  */
 abstract public class Phrase {
-    private static final Logger LOG = LoggerFactory.getLogger(Phrase.class);
     private boolean readOnly = false;
     private final BlocklyProperties property;
     private final BlockDescriptor blockDescriptor;
-
-    private final NepoInfos infos = new NepoInfos(); // the content of the info object is MUTABLE !!!
+    /**
+     * Infos related to this AST-object. The info object is (internally) MUTABLE to store messages of the various visitors!!!
+     */
+    private final NepoInfos infos = new NepoInfos();
+    /**
+     * The type of this AST-object.
+     * <ul>
+     *     <li>if its is unknown, it is NOTHING</li>
+     *     <li>some AST-objects know their type (e.g. numeric constants as '5' have type NUMBER) and store it</li>
+     *     <li>some AST-objects get their type, when they are type-checked, i.e. when the TypeheckVisitor  traverses the AST-tree</li>
+     * </ul>
+     * <b>UNDER CONSTRUCTION, ask rbudde!</b>
+     */
+    private BlocklyType blocklyType = null;
 
     /**
-     * This constructor set the kind of the object used in the AST (abstract syntax tree). All possible kinds can be found in {@link BlockDescriptor}.
+     * This constructor saves meta information about AST-objects (subclasses of this class Phrase). The {@link #blockDescriptor} is generated from the
+     * various annotations of the concrete AST-classes
      *
-     * @param comment that the user added to the block
+     * @param property describes representation-related properties of an object
      */
     public Phrase(BlocklyProperties property) {
         Assert.isTrue(property != null, "block property is null!");
@@ -43,11 +55,12 @@ abstract public class Phrase {
     }
 
     /**
-     * only for ConfigurationsComponent and TODO: remove as fast as possible
+     * This constructor saves meta information about AST-objects (subclasses of this class Phrase).<br>
+     * <b>this constructor should only be used for ConfigurationsComponents</b><br>
+     * TODO: remove as fast as possible and replace by annotations
      *
-     * @param blockDescriptor
-     * @param property
-     * @param comment
+     * @param blockDescriptor the descriptor for the ConfigurationsComponent
+     * @param property the representation-related properties of the ConfigurationsComponent
      */
     public Phrase(BlockDescriptor blockDescriptor, BlocklyProperties property) {
         Assert.isTrue(property != null, "block property is null!");
@@ -84,6 +97,28 @@ abstract public class Phrase {
     }
 
     /**
+     * @return the current type of this phrase. May change during type-checking.
+     */
+    public final BlocklyType getBlocklyType() {
+        return this.blocklyType;
+    }
+
+    protected void setBlocklyType(BlocklyType blocklyType) {
+        if ( this.blocklyType == null ) {
+            this.blocklyType = blocklyType;
+            return;
+        }
+        if ( this.blocklyType.equals(blocklyType) ) {
+            return;
+        }
+        if ( this.blocklyType.equals(BlocklyType.NOTHING) || this.blocklyType.equals(BlocklyType.CAPTURED_TYPE) ) {
+            this.blocklyType = blocklyType;
+            return;
+        }
+        throw new DbcException("blocklyTypes inconsistent. Was: " + this.blocklyType + ", should be set to: " + blocklyType);
+    }
+
+    /**
      * @return true if name of this phrase (as found in its block descriptor) is equals to one of the names given as parameter
      */
     public final boolean hasName(String... namesToCheck) {
@@ -115,7 +150,10 @@ abstract public class Phrase {
      */
     public final <V> V accept(IVisitor<V> visitor) {
         // LOG.info("{}", this);
-        if ( getProperty().isDisabled() || (getProperty().isInTask() != null && getProperty().isInTask() == false) ) {
+        BlocklyProperties blocklyProperties = getProperty();
+        BlocklyProperties blocklyProperties1 = getProperty();
+        BlocklyProperties blocklyProperties2 = getProperty();
+        if ( blocklyProperties.blocklyRegion.disabled || (blocklyProperties2.blocklyRegion.inTask != null && blocklyProperties1.blocklyRegion.inTask == false) ) {
             return null;
         }
         return visitor.visit(this);

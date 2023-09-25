@@ -18,7 +18,7 @@ public final class PredefinedImage extends Expr {
     public final String imageName;
 
     public PredefinedImage(BlocklyProperties properties, String imageName) {
-        super(properties);
+        super(properties, BlocklyType.STRING);
         Assert.notNull(imageName);
         this.imageName = imageName;
         setReadOnly();
@@ -40,11 +40,6 @@ public final class PredefinedImage extends Expr {
     @Override
     public int getPrecedence() {
         return 999;
-    }
-
-    @Override
-    public BlocklyType getVarType() {
-        return BlocklyType.STRING;
     }
 
     public enum PredefinedImageNames {

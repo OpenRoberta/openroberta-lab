@@ -96,7 +96,7 @@ public interface ILanguageVisitor<V> extends IVisitor<V> {
     }
 
     default V visitEvalExpr(EvalExpr evalExpr) {
-        evalExpr.exprBlock.accept(this);
+        evalExpr.exprAsBlock.accept(this);
         return null;
     }
 

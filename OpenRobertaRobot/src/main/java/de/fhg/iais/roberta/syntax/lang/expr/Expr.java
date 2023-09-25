@@ -13,6 +13,12 @@ public abstract class Expr extends Phrase {
 
     public Expr(BlocklyProperties properties) {
         super(properties);
+        this.setBlocklyType(AnnotationHelper.getReturnType(this.getClass()));
+    }
+
+    public Expr(BlocklyProperties properties, BlocklyType blocklyType) {
+        super(properties);
+        this.setBlocklyType(blocklyType);
     }
 
     /**
@@ -33,16 +39,6 @@ public abstract class Expr extends Phrase {
      */
     public Assoc getAssoc() {
         return AnnotationHelper.getAssoc(this.getClass());
-    }
-
-    /**
-     * get the BlocklyType (used for typechecking ...) of this expression
-     * <b>This is the default implementation of annotated AST classes</b>
-     *
-     * @return the BlocklyType
-     */
-    public BlocklyType getVarType() {
-        return AnnotationHelper.getReturnType(this.getClass());
     }
 
 }

@@ -12,8 +12,8 @@ import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.syntax.Assoc;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
+import de.fhg.iais.roberta.util.syntax.Assoc;
 
 /**
  * This class represents the <b>mbedImage_image</b> block from Blockly into the AST (abstract syntax tree). Object from this class will generate an image.<br/>
@@ -24,7 +24,7 @@ public final class Image extends Expr {
     public final String[][] image;
 
     public Image(String[][] image, BlocklyProperties properties) {
-        super(properties);
+        super(properties, BlocklyType.IMAGE);
         this.image = image;
         setReadOnly();
     }
@@ -37,11 +37,6 @@ public final class Image extends Expr {
     @Override
     public Assoc getAssoc() {
         return Assoc.NONE;
-    }
-
-    @Override
-    public BlocklyType getVarType() {
-        return BlocklyType.IMAGE;
     }
 
     @Override

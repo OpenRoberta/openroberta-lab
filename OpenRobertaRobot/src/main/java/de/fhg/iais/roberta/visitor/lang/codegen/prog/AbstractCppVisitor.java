@@ -67,6 +67,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.TextAppendStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.FunctionNames;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.AbstractLanguageVisitor;
@@ -177,7 +178,7 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
         this.src.add("_createListRepeat(");
         listRepeat.getCounter().accept(this);
         this.src.add(", ");
-        BlocklyType itemType = listRepeat.getElement().getVarType();
+        BlocklyType itemType = listRepeat.getElement().getBlocklyType();
         if ( itemType.equals(BlocklyType.NUMBER) || itemType.equals(BlocklyType.STRING) ) {
             this.src.add("(", getLanguageVarTypeFromBlocklyType(itemType), ") ");
         }
@@ -714,7 +715,8 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
     @Override
     public Void visitMethodStmt(MethodStmt methodStmt) {
         super.visitMethodStmt(methodStmt);
-        if ( methodStmt.getProperty().getBlockType().equals("robProcedures_ifreturn") ) {
+        BlocklyProperties blocklyProperties = methodStmt.getProperty();
+        if ( blocklyProperties.blockType.equals("robProcedures_ifreturn") ) {
             this.src.add(";");
         }
         return null;
@@ -806,9 +808,7 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
             case PRIM:
             case NOTHING:
             case CAPTURED_TYPE:
-            case R:
-            case S:
-            case T:
+            case CAPTURED_TYPE_ARRAY_ITEM:
                 return "";
             case ARRAY:
                 return "std::list<double>";

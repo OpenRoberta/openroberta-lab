@@ -57,7 +57,7 @@ public final class AssignStmt extends Stmt {
     public Block ast2xml() {
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
-        String varType = this.name.getVarType().getBlocklyName();
+        String varType = this.name.getBlocklyType().getBlocklyName();
 
         Mutation mutation = new Mutation();
         mutation.setDatatype(varType);

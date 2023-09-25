@@ -51,6 +51,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
 import de.fhg.iais.roberta.syntax.lang.stmt.TernaryExpr;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.visitor.SourceBuilder;
@@ -77,7 +78,14 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> implemen
             programPhrases
                 .stream()
                 .flatMap(e -> e.subList(1, e.size()).stream())
-                .filter(p -> p.getProperty().isInTask() == null || p.getProperty().isInTask() && !p.getProperty().isDisabled()) //TODO check if we can avoid null value for inTask
+                .filter(p -> {
+                    BlocklyProperties blocklyProperties2 = p.getProperty();
+                    if ( blocklyProperties2.blocklyRegion.inTask == null ) return true;
+                    BlocklyProperties blocklyProperties1 = p.getProperty();
+                    if ( !blocklyProperties1.blocklyRegion.inTask ) return false;
+                    BlocklyProperties blocklyProperties = p.getProperty();
+                    return !blocklyProperties.blocklyRegion.disabled;
+                }) //TODO check if we can avoid null value for inTask
                 .collect(Collectors.toList());
     }
 
@@ -447,7 +455,7 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> implemen
 
     @Override
     public Void visitVarDeclaration(VarDeclaration var) {
-        src.add(getLanguageVarTypeFromBlocklyType(var.typeVar), " ", var.getCodeSafeName());
+        src.add(getLanguageVarTypeFromBlocklyType(var.getBlocklyType()), " ", var.getCodeSafeName());
         if ( !var.value.getKind().hasName("EMPTY_EXPR") ) {
             src.add(" = ");
             if ( var.value.getKind().hasName("EXPR_LIST") ) {

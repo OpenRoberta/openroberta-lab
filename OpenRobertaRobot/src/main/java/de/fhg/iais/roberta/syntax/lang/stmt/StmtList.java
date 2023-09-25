@@ -18,7 +18,7 @@ public final class StmtList extends Stmt {
     public final List<Stmt> sl = new ArrayList<Stmt>();
 
     public StmtList() {
-        super(BlocklyProperties.make("STMT_LIST", "1"));
+        super(BlocklyProperties.make("STMT_LIST", "1", null));
     }
 
     /**

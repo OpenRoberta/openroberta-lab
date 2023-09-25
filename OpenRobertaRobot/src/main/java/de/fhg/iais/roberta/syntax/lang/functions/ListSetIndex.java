@@ -8,7 +8,7 @@ import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
 import de.fhg.iais.roberta.inter.mode.general.IIndexLocation;
-import de.fhg.iais.roberta.inter.mode.general.IListElementOperations;
+import de.fhg.iais.roberta.mode.general.ListElementOperations;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
@@ -24,13 +24,14 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "LIST_SET_INDEX", category = "FUNCTION", blocklyNames = {"lists_setIndex", "robLists_setIndex"})
 public final class ListSetIndex extends Function {
-    public final IListElementOperations mode;
+    public final ListElementOperations mode;
     public final IIndexLocation location;
 
     public final List<Expr> param;
 
-    public ListSetIndex(IListElementOperations mode, IIndexLocation name, List<Expr> param, BlocklyProperties properties) {
+    public ListSetIndex(ListElementOperations mode, IIndexLocation name, List<Expr> param, BlocklyProperties properties) {
         super(properties);
+        this.setBlocklyType(BlocklyType.VOID);
         Assert.isTrue(mode != null && name != null && param != null);
         this.mode = mode;
         this.location = name;

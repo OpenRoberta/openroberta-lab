@@ -16,7 +16,7 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.Assoc;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-@NepoBasic(name = "TEXT_JOIN_FUNCT", category = "FUNCTION", blocklyNames = {"robText_join", "text_join"})
+@NepoBasic(name = "TEXT_JOIN_FUNCT", category = "FUNCTION", blocklyNames = {"robText_join", "text_join"}, blocklyType = BlocklyType.STRING)
 public final class TextJoinFunct extends Function {
     public final ExprList param;
 

@@ -50,7 +50,7 @@ public class ConfigurationComponent extends Phrase {
             internalPortName,
             userDefinedPortName,
             componentProperties,
-            BlocklyProperties.make(name, "1"),
+            BlocklyProperties.make(name, "1", null),
             0,
             0);
     }

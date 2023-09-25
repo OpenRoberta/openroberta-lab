@@ -1,8 +1,8 @@
 package de.fhg.iais.roberta.visitor;
 
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.google.common.collect.ClassToInstanceMap;
 
@@ -857,12 +857,11 @@ public final class ThymioAsebaVisitor extends AbstractAsebaVisitor implements IT
     }
 
     private void generateVariablesForUsage(List<Phrase> exprList) {
-        List<String> listVariablesWithoutDuplicates = new ArrayList<>(
-            new LinkedHashSet<>(this.getBean(UsedHardwareBean.class).getDeclaredVariables()));
+        Set<String> variablesWithoutDuplicates = this.getBean(UsedHardwareBean.class).getDeclaredVariables();
         for ( String global : this.getBean(UsedHardwareBean.class).getMarkedVariablesAsGlobal() ) {
-            listVariablesWithoutDuplicates.remove(global);
+            variablesWithoutDuplicates.remove(global);
         }
-        listVariablesWithoutDuplicates.forEach(var -> {
+        variablesWithoutDuplicates.forEach(var -> {
             nlIndent();
             this.src.add("var ___", var);
             if ( var.equals("color_") ) {

@@ -19,7 +19,7 @@ public final class MathPowerFunct extends Expr {
     public final List<Expr> param;
 
     public MathPowerFunct(BlocklyProperties properties, FunctionNames name, List<Expr> param) {
-        super(properties);
+        super(properties, BlocklyType.NUMBER);
         Assert.isTrue(name != null && param != null);
         this.functName = name;
         this.param = param;
@@ -28,7 +28,7 @@ public final class MathPowerFunct extends Expr {
 
     @Override
     public int getPrecedence() {
-        return this.functName.getPrecedence();
+        return 300;
     }
 
     @Override
@@ -37,13 +37,8 @@ public final class MathPowerFunct extends Expr {
     }
 
     @Override
-    public BlocklyType getVarType() {
-        return BlocklyType.NOTHING;
-    }
-
-    @Override
     public Assoc getAssoc() {
-        return this.functName.getAssoc();
+        return Assoc.RIGHT;
     }
 
     @Override

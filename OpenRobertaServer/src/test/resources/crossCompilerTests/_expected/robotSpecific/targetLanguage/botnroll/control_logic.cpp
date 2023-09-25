@@ -83,15 +83,15 @@ void ____control() {
 }
 
 void ____logic() {
-    one.lcd1(___numberVar == ___numberVar);
-    one.lcd1(___numberVar != ___numberVar);
-    one.lcd1(___numberVar < ___numberVar);
-    one.lcd1(___numberVar <= ___numberVar);
-    one.lcd1(___numberVar > ___numberVar);
-    one.lcd1(___numberVar >= ___numberVar);
-    one.lcd1(___booleanVar && ___booleanVar);
-    one.lcd1(___booleanVar || ___booleanVar);
-    one.lcd1(! ___booleanVar);
+    one.lcd1(bnr.boolToString(___numberVar == ___numberVar));
+    one.lcd1(bnr.boolToString(___numberVar != ___numberVar));
+    one.lcd1(bnr.boolToString(___numberVar < ___numberVar));
+    one.lcd1(bnr.boolToString(___numberVar <= ___numberVar));
+    one.lcd1(bnr.boolToString(___numberVar > ___numberVar));
+    one.lcd1(bnr.boolToString(___numberVar >= ___numberVar));
+    one.lcd1(bnr.boolToString(___booleanVar && ___booleanVar));
+    one.lcd1(bnr.boolToString(___booleanVar || ___booleanVar));
+    one.lcd1(bnr.boolToString(! ___booleanVar));
     one.lcd1(bnr.boolToString(true));
     one.lcd1(bnr.boolToString(false));
     one.lcd1(NULL);

@@ -64,6 +64,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.TernaryExpr;
 import de.fhg.iais.roberta.syntax.lang.stmt.TextAppendStmt;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.ast.BlockDescriptor;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.FunctionNames;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.AbstractLanguageVisitor;
@@ -287,7 +288,7 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
         this.src.add("new ArrayList<>(Collections.nCopies( (int) ");
         listRepeat.param.get(1).accept(this);
         this.src.add(", ");
-        if ( listRepeat.param.get(0).getVarType() == BlocklyType.NUMBER ) {
+        if ( listRepeat.param.get(0).getBlocklyType() == BlocklyType.NUMBER ) {
             this.src.add(" (float) ");
         }
         listRepeat.param.get(0).accept(this);
@@ -550,7 +551,8 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
     @Override
     public Void visitMethodStmt(MethodStmt methodStmt) {
         super.visitMethodStmt(methodStmt);
-        if ( methodStmt.getProperty().getBlockType().equals("robProcedures_ifreturn") ) {
+        BlocklyProperties blocklyProperties = methodStmt.getProperty();
+        if ( blocklyProperties.blockType.equals("robProcedures_ifreturn") ) {
             this.src.add(";");
         }
         return null;
@@ -616,9 +618,7 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
             case PRIM:
             case NOTHING:
             case CAPTURED_TYPE:
-            case R:
-            case S:
-            case T:
+            case CAPTURED_TYPE_ARRAY_ITEM:
                 return "";
             case ARRAY:
                 return "List";
@@ -656,7 +656,7 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
             case "STRING_CONST":
                 return true;
             case "VAR":
-                return e.getVarType() == BlocklyType.STRING;
+                return e.getBlocklyType() == BlocklyType.STRING;
             case "FUNCTION_EXPR":
                 BlockDescriptor functionKind = ((FunctionExpr) e).getFunction().getKind();
                 return functionKind.hasName("TEXT_JOIN_FUNCT", "LIST_INDEX_OF");

@@ -24,7 +24,7 @@ public final class Image extends Expr {
     public final String[][] image;
 
     public Image(String[][] image, BlocklyProperties properties) {
-        super(properties);
+        super(properties, BlocklyType.IMAGE);
         this.image = image;
         setReadOnly();
     }
@@ -37,11 +37,6 @@ public final class Image extends Expr {
     @Override
     public Assoc getAssoc() {
         return Assoc.NONE;
-    }
-
-    @Override
-    public BlocklyType getVarType() {
-        return BlocklyType.IMAGE;
     }
 
     @Override

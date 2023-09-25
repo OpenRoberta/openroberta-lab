@@ -16,7 +16,7 @@ public final class SensorExpr extends Expr {
     public final Sensor sensor;
 
     public SensorExpr(Sensor sens) {
-        super(sens.getProperty());
+        super(sens.getProperty(), BlocklyType.NOTHING);
         Assert.isTrue(sens.isReadOnly());
         this.sensor = sens;
         setReadOnly();
@@ -30,11 +30,6 @@ public final class SensorExpr extends Expr {
     @Override
     public Assoc getAssoc() {
         return Assoc.NONE;
-    }
-
-    @Override
-    public BlocklyType getVarType() {
-        return BlocklyType.NOTHING;
     }
 
     @Override

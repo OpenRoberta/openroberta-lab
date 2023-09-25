@@ -10,6 +10,7 @@ import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyRegion;
 import de.fhg.iais.roberta.util.basic.Pair;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
@@ -313,9 +314,11 @@ public final class MbedTwo2ThreeTransformerHelper {
             // Register the default components for any of the ports
             String pin1 = confComp.getOptProperty("PIN1");
             if ( pin1 == null ) {
-                this.createdComps.put(Pair.of(confComp.getProperty().getBlockType(), "default"), confComp);
+                BlocklyProperties blocklyProperties = confComp.getProperty();
+                this.createdComps.put(Pair.of(blocklyProperties.blockType, "default"), confComp);
             } else {
-                this.createdComps.put(Pair.of(confComp.getProperty().getBlockType(), pin1), confComp);
+                BlocklyProperties blocklyProperties = confComp.getProperty();
+                this.createdComps.put(Pair.of(blocklyProperties.blockType, pin1), confComp);
             }
         }
         this.maxX = mX;
@@ -421,7 +424,8 @@ public final class MbedTwo2ThreeTransformerHelper {
             name = getName(port, confBlocklyName);
             properties = Collections.singletonMap("PIN1", port);
         }
-        BlocklyProperties blocklyProperties = new BlocklyProperties(confBlocklyName, name, false, false, false, true, true, true, false, false, null);
+        BlocklyRegion br = new BlocklyRegion(false, false, false, true, true, true, false, false, null);
+        BlocklyProperties blocklyProperties = new BlocklyProperties(confBlocklyName, name, br, null);
         return new ConfigurationComponent(confType, category, name, name, properties, blocklyProperties, xPos, yPos);
     }
 }

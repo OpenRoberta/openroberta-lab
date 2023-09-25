@@ -80,7 +80,8 @@ public final class DriveAction extends Action {
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
 
-        if ( getProperty().getBlockType().equals(BlocklyConstants.ROB_ACTIONS_MOTOR_DIFF_ON_FOR) ) {
+        BlocklyProperties blocklyProperties = getProperty();
+        if ( blocklyProperties.blockType.equals(BlocklyConstants.ROB_ACTIONS_MOTOR_DIFF_ON_FOR) ) {
             Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.DIRECTION, this.direction.toString() == "FOREWARD" ? this.direction.toString() : "BACKWARDS");
         } else {
             Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.DIRECTION, this.direction.toString());

@@ -71,7 +71,7 @@ public class ThymioValidatorAndCollectorVisitor extends CommonNepoValidatorAndCo
     @Override
     public Void visitRgbColor(RgbColor rgbColor) {
         super.visitRgbColor(rgbColor);
-        usedHardwareBuilder.addDeclaredVariable("color_");
+        usedHardwareBuilder.addDeclaredVariable("color_", BlocklyType.COLOR);
         return null;
     }
 
@@ -79,14 +79,14 @@ public class ThymioValidatorAndCollectorVisitor extends CommonNepoValidatorAndCo
     public Void visitWaitTimeStmt(WaitTimeStmt waitTimeStmt) {
         super.visitWaitTimeStmt(waitTimeStmt);
         //requiredComponentVisited(waitTimeStmt, waitTimeStmt.time);
-        usedHardwareBuilder.addDeclaredVariable("duration_");
+        usedHardwareBuilder.addDeclaredVariable("duration_", BlocklyType.NUMBER);
         return null;
     }
 
     @Override
     public Void visitColorConst(ColorConst colorConst) {
         super.visitColorConst(colorConst);
-        usedHardwareBuilder.addDeclaredVariable("color_");
+        usedHardwareBuilder.addDeclaredVariable("color_", BlocklyType.COLOR);
         return null;
     }
 
@@ -121,7 +121,7 @@ public class ThymioValidatorAndCollectorVisitor extends CommonNepoValidatorAndCo
         requiredComponentVisited(listCreate, listCreate.exprList);
         int listSize = listCreate.exprList.get().size();
         for ( int i = 0; i < listSize; i++ ) {
-            if ( (listCreate.typeVar.toString().equals("NUMBER") && !listCreate.exprList.get().get(i).getKind().hasName("NUM_CONST")) || (listCreate.typeVar.toString().equals("COLOR") && !listCreate.exprList.get().get(i).getKind().hasName("COLOR_CONST")) ) {
+            if ( (listCreate.getBlocklyType().toString().equals("NUMBER") && !listCreate.exprList.get().get(i).getKind().hasName("NUM_CONST")) || (listCreate.getBlocklyType().toString().equals("COLOR") && !listCreate.exprList.get().get(i).getKind().hasName("COLOR_CONST")) ) {
                 addErrorToPhrase(listCreate.exprList.get().get(i), "NO_CONST_NOT_SUPPORTED");
             }
         }
@@ -163,7 +163,7 @@ public class ThymioValidatorAndCollectorVisitor extends CommonNepoValidatorAndCo
     @Override
     public Void visitVarDeclaration(VarDeclaration varDeclaration) {
         super.visitVarDeclaration(varDeclaration);
-        if ( (varDeclaration.typeVar == BlocklyType.NUMBER && !varDeclaration.value.getKind().hasName("NUM_CONST")) || (varDeclaration.typeVar == BlocklyType.COLOR && !varDeclaration.value.getKind().hasName("COLOR_CONST")) ) {
+        if ( (varDeclaration.getBlocklyType() == BlocklyType.NUMBER && !varDeclaration.value.getKind().hasName("NUM_CONST")) || (varDeclaration.getBlocklyType() == BlocklyType.COLOR && !varDeclaration.value.getKind().hasName("COLOR_CONST")) ) {
             addErrorToPhrase(varDeclaration.value, "NO_CONST_NOT_SUPPORTED");
         }
         usedHardwareBuilder.addMarkedVariableAsGlobal(varDeclaration.name);
@@ -181,7 +181,7 @@ public class ThymioValidatorAndCollectorVisitor extends CommonNepoValidatorAndCo
         if ( curveAction.paramRight.getDuration() != null ) {
             requiredComponentVisited(curveAction, curveAction.paramRight.getDuration().getValue());
             usedMethodBuilder.addUsedMethod(ThymioMethods.STOP);
-            usedHardwareBuilder.addDeclaredVariable("duration_");
+            usedHardwareBuilder.addDeclaredVariable("duration_", BlocklyType.NUMBER);
         } else {
             usedHardwareBuilder.addUsedActor(new UsedActor(SC.BOTH, SC.MOTOR));
         }
@@ -194,7 +194,7 @@ public class ThymioValidatorAndCollectorVisitor extends CommonNepoValidatorAndCo
         if ( driveAction.param.getDuration() != null ) {
             requiredComponentVisited(driveAction, driveAction.param.getDuration().getValue());
             usedMethodBuilder.addUsedMethod(ThymioMethods.STOP);
-            usedHardwareBuilder.addDeclaredVariable("duration_");
+            usedHardwareBuilder.addDeclaredVariable("duration_", BlocklyType.NUMBER);
         } else {
             usedHardwareBuilder.addUsedActor(new UsedActor(SC.BOTH, SC.MOTOR));
         }
@@ -215,7 +215,7 @@ public class ThymioValidatorAndCollectorVisitor extends CommonNepoValidatorAndCo
     public Void visitRgbLedOnAction(RgbLedOnAction rgbLedOnAction) {
         requiredComponentVisited(rgbLedOnAction, rgbLedOnAction.colour);
         usedHardwareBuilder.addUsedActor(new UsedActor(rgbLedOnAction.port, SC.RGBLED));
-        usedHardwareBuilder.addDeclaredVariable("color_");
+        usedHardwareBuilder.addDeclaredVariable("color_", BlocklyType.COLOR);
         return null;
     }
 
@@ -235,7 +235,7 @@ public class ThymioValidatorAndCollectorVisitor extends CommonNepoValidatorAndCo
         requiredComponentVisited(motorOnAction, motorOnAction.param.getSpeed());
         if ( motorOnAction.param.getDuration() != null ) {
             requiredComponentVisited(motorOnAction, motorOnAction.param.getDuration().getValue());
-            usedHardwareBuilder.addDeclaredVariable("duration_");
+            usedHardwareBuilder.addDeclaredVariable("duration_", BlocklyType.NUMBER);
         } else {
             usedHardwareBuilder.addUsedActor(new UsedActor(SC.BOTH, SC.MOTOR));
         }
@@ -254,26 +254,26 @@ public class ThymioValidatorAndCollectorVisitor extends CommonNepoValidatorAndCo
 
     @Override
     public Void visitPlayFileAction(PlayFileAction playFileAction) {
-        usedHardwareBuilder.addDeclaredVariable("duration_");
+        usedHardwareBuilder.addDeclaredVariable("duration_", BlocklyType.NUMBER);
         return null;
     }
 
     @Override
     public Void visitPlayNoteAction(PlayNoteAction playNoteAction) {
-        usedHardwareBuilder.addDeclaredVariable("duration_");
+        usedHardwareBuilder.addDeclaredVariable("duration_", BlocklyType.NUMBER);
         return null;
     }
 
     @Override
     public Void visitPlayRecordingAction(PlayRecordingAction playRecordingAction) {
         requiredComponentVisited(playRecordingAction, playRecordingAction.filename);
-        usedHardwareBuilder.addDeclaredVariable("duration_");
+        usedHardwareBuilder.addDeclaredVariable("duration_", BlocklyType.NUMBER);
         return null;
     }
 
     @Override
     public Void visitLedButtonOnAction(LedButtonOnAction ledButtonOnAction) {
-        usedHardwareBuilder.addDeclaredVariable("led_");
+        usedHardwareBuilder.addDeclaredVariable("led_", BlocklyType.NUMBER);
         usedHardwareBuilder.addUsedActor(new UsedActor(ledButtonOnAction.getKind().getName(), ledButtonOnAction.getKind().getName()));
         return null;
     }
@@ -304,7 +304,7 @@ public class ThymioValidatorAndCollectorVisitor extends CommonNepoValidatorAndCo
     public Void visitToneAction(ToneAction toneAction) {
         requiredComponentVisited(toneAction, toneAction.duration, toneAction.frequency);
         usedHardwareBuilder.addUsedActor(new UsedActor(toneAction.port, SC.BUZZER));
-        usedHardwareBuilder.addDeclaredVariable("duration_");
+        usedHardwareBuilder.addDeclaredVariable("duration_", BlocklyType.NUMBER);
         return null;
     }
 
@@ -314,7 +314,7 @@ public class ThymioValidatorAndCollectorVisitor extends CommonNepoValidatorAndCo
         if ( turnAction.param.getDuration() != null ) {
             requiredComponentVisited(turnAction, turnAction.param.getDuration().getValue());
             usedMethodBuilder.addUsedMethod(ThymioMethods.STOP);
-            usedHardwareBuilder.addDeclaredVariable("duration_");
+            usedHardwareBuilder.addDeclaredVariable("duration_", BlocklyType.NUMBER);
         } else {
             usedHardwareBuilder.addUsedActor(new UsedActor(SC.BOTH, SC.MOTOR));
         }
@@ -334,7 +334,7 @@ public class ThymioValidatorAndCollectorVisitor extends CommonNepoValidatorAndCo
     @Override
     public Void visitLedCircleOnAction(LedCircleOnAction ledCircleOnAction) {
         requiredComponentVisited(ledCircleOnAction, ledCircleOnAction.led1, ledCircleOnAction.led2, ledCircleOnAction.led3, ledCircleOnAction.led4, ledCircleOnAction.led5, ledCircleOnAction.led6, ledCircleOnAction.led7, ledCircleOnAction.led8);
-        usedHardwareBuilder.addDeclaredVariable("led_");
+        usedHardwareBuilder.addDeclaredVariable("led_", BlocklyType.NUMBER);
         usedHardwareBuilder.addUsedActor(new UsedActor(ledCircleOnAction.getKind().getName(), ledCircleOnAction.getKind().getName()));
         return null;
     }
@@ -343,7 +343,7 @@ public class ThymioValidatorAndCollectorVisitor extends CommonNepoValidatorAndCo
     public Void visitLedSoundOnAction(LedSoundOnAction ledSoundOnAction) {
         requiredComponentVisited(ledSoundOnAction, ledSoundOnAction.led1);
         usedHardwareBuilder.addUsedActor(new UsedActor(ledSoundOnAction.getKind().getName(), ledSoundOnAction.getKind().getName()));
-        usedHardwareBuilder.addDeclaredVariable("led_");
+        usedHardwareBuilder.addDeclaredVariable("led_", BlocklyType.NUMBER);
         return null;
     }
 
@@ -351,7 +351,7 @@ public class ThymioValidatorAndCollectorVisitor extends CommonNepoValidatorAndCo
     public Void visitLedTemperatureOnAction(LedTemperatureOnAction ledTemperatureOnAction) {
         requiredComponentVisited(ledTemperatureOnAction, ledTemperatureOnAction.led1, ledTemperatureOnAction.led2);
         usedHardwareBuilder.addUsedActor(new UsedActor(ledTemperatureOnAction.getKind().getName(), ledTemperatureOnAction.getKind().getName()));
-        usedHardwareBuilder.addDeclaredVariable("led_");
+        usedHardwareBuilder.addDeclaredVariable("led_", BlocklyType.NUMBER);
         return null;
     }
 
@@ -359,7 +359,7 @@ public class ThymioValidatorAndCollectorVisitor extends CommonNepoValidatorAndCo
     public Void visitLedProxHOnAction(LedProxHOnAction ledProxHOnAction) {
         requiredComponentVisited(ledProxHOnAction, ledProxHOnAction.led1, ledProxHOnAction.led2, ledProxHOnAction.led3, ledProxHOnAction.led4, ledProxHOnAction.led5, ledProxHOnAction.led6, ledProxHOnAction.led7, ledProxHOnAction.led8);
         usedHardwareBuilder.addUsedActor(new UsedActor(ledProxHOnAction.getKind().getName(), ledProxHOnAction.getKind().getName()));
-        usedHardwareBuilder.addDeclaredVariable("led_");
+        usedHardwareBuilder.addDeclaredVariable("led_", BlocklyType.NUMBER);
         return null;
     }
 
@@ -367,7 +367,7 @@ public class ThymioValidatorAndCollectorVisitor extends CommonNepoValidatorAndCo
     public Void visitLedProxVOnAction(LedProxVOnAction ledProxVOnAction) {
         requiredComponentVisited(ledProxVOnAction, ledProxVOnAction.led1, ledProxVOnAction.led2);
         usedHardwareBuilder.addUsedActor(new UsedActor(ledProxVOnAction.getKind().getName(), ledProxVOnAction.getKind().getName()));
-        usedHardwareBuilder.addDeclaredVariable("led_");
+        usedHardwareBuilder.addDeclaredVariable("led_", BlocklyType.NUMBER);
         return null;
     }
 

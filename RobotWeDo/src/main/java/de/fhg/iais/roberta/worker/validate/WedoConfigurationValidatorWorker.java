@@ -5,6 +5,7 @@ import java.util.HashMap;
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.util.Key;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 
 public class WedoConfigurationValidatorWorker {
 
@@ -28,7 +29,8 @@ public class WedoConfigurationValidatorWorker {
                 } else {
                     project.addToErrorCounter(1, null);
                     project.setResult(Key.PROGRAM_INVALID_STATEMETNS);
-                    String blockId = configurationComponent.getProperty().getBlocklyId();
+                    BlocklyProperties blocklyProperties = configurationComponent.getProperty();
+                    String blockId = blocklyProperties.blocklyId;
                     project.addToConfAnnotationList(blockId, NepoInfo.error("CONFIGURATION_ERROR_OVERLAPPING_PORTS"));
                 }
             }

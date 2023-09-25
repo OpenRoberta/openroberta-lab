@@ -203,8 +203,8 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
 
     @Override
     public Void visitVarDeclaration(VarDeclaration var) {
-        this.src.add(getLanguageVarTypeFromBlocklyType(var.typeVar));
-        if ( var.typeVar.isArray() && var.value.getKind().hasName("EMPTY_EXPR") ) {
+        this.src.add(getLanguageVarTypeFromBlocklyType(var.getBlocklyType()));
+        if ( var.getBlocklyType().isArray() && var.value.getKind().hasName("EMPTY_EXPR") ) {
             this.src.add(" &");
         }
         this.src.add(" ", var.getCodeSafeName());
@@ -363,7 +363,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
     @Override
     public Void visitDisplayTextAction(DisplayTextAction displayTextAction) {
         String ending = ")";
-        final String varType = displayTextAction.msg.getVarType().toString();
+        final String varType = displayTextAction.msg.getBlocklyType().toString();
         this.src.add("_uBit.display.");
         appendTextDisplayType(displayTextAction);
         if ( !varType.equals("STRING") ) {
@@ -1138,9 +1138,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
             case PRIM:
             case NOTHING:
             case CAPTURED_TYPE:
-            case R:
-            case S:
-            case T:
+            case CAPTURED_TYPE_ARRAY_ITEM:
                 return "";
             case ARRAY:
                 return "std::list<>";
@@ -1353,7 +1351,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
     private void writeToSerial(Expr valueToWrite) {
         if ( valueToWrite instanceof RgbColor
             || valueToWrite instanceof ColorConst
-            || valueToWrite instanceof Var && valueToWrite.getVarType().equals(BlocklyType.COLOR) ) {
+            || valueToWrite instanceof Var && valueToWrite.getBlocklyType().equals(BlocklyType.COLOR) ) {
             this.src.add("_uBit.serial.setTxBufferSize(ManagedString(_castColorToString(");
             valueToWrite.accept(this);
             this.src.add(")).length() + 2);");
@@ -1408,7 +1406,7 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
 
     @Override
     public Void visitAssertStmt(AssertStmt assertStmt) {
-        if ( ((Binary) assertStmt.asserts).left.getVarType().equals(BlocklyType.COLOR) ) {
+        if ( ((Binary) assertStmt.asserts).left.getBlocklyType().equals(BlocklyType.COLOR) ) {
             this.src.add("assertNepo((");
             assertStmt.asserts.accept(this);
             this.src.add("), \"", assertStmt.msg, "\", \"");

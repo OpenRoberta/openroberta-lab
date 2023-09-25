@@ -8,7 +8,7 @@ import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
 import de.fhg.iais.roberta.inter.mode.general.IIndexLocation;
-import de.fhg.iais.roberta.inter.mode.general.IListElementOperations;
+import de.fhg.iais.roberta.mode.general.ListElementOperations;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
@@ -24,19 +24,26 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "LIST_INDEX_OF", category = "FUNCTION", blocklyNames = {"robLists_getIndex", "lists_getIndex"})
 public final class ListGetIndex extends Function {
-    public final IListElementOperations mode;
+    public final ListElementOperations mode;
     public final IIndexLocation location;
     public final String dataType;
 
     public final List<Expr> param;
 
     public ListGetIndex(
-        IListElementOperations mode,
+        ListElementOperations mode,
         IIndexLocation name,
         List<Expr> param,
         String dataType,
         BlocklyProperties properties) {
         super(properties);
+        if ( mode.isStatement() ) {
+            this.setBlocklyType(BlocklyType.VOID);
+        } else if ( dataType == null ) {
+            this.setBlocklyType(BlocklyType.NOTHING);
+        } else {
+            this.setBlocklyType(BlocklyType.get(dataType));
+        }
         Assert.isTrue(mode != null && name != null && param != null);
         this.mode = mode;
         this.location = name;
@@ -45,7 +52,7 @@ public final class ListGetIndex extends Function {
         setReadOnly();
     }
 
-    public IListElementOperations getElementOperation() {
+    public ListElementOperations getElementOperation() {
         return this.mode;
     }
 
@@ -61,7 +68,7 @@ public final class ListGetIndex extends Function {
 
     @Override
     public BlocklyType getReturnType() {
-        return this.param.get(0).getVarType();
+        return this.param.get(0).getBlocklyType();
     }
 
     @Override
@@ -90,7 +97,7 @@ public final class ListGetIndex extends Function {
 
         Mutation mutation = new Mutation();
         mutation.setAt(false);
-        mutation.setStatement(getElementOperation().isStatment());
+        mutation.setStatement(getElementOperation().isStatement());
         mutation.setDatatype(this.dataType);
         Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.MODE, getElementOperation().toString());
         Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.WHERE, this.location.toString());

@@ -405,8 +405,7 @@ public class MbedTwo2ThreeTransformerVisitor extends MbedTransformerVisitor {
     }
 
     private BlocklyProperties modifyPropertyType(BlocklyProperties oldProperty, String newType) {
-        // TODO blockly type is hardcoded in this solution, do it differently?
-        return new BlocklyProperties(newType, oldProperty.getBlocklyId(), oldProperty.isDisabled(), oldProperty.isCollapsed(), oldProperty.isInline(), oldProperty.isDeletable(), oldProperty.isMovable(), oldProperty.isInTask(), oldProperty.isShadow(), oldProperty.isErrorAttribute(), oldProperty.getComment());
+        return new BlocklyProperties(newType, oldProperty.blocklyId, oldProperty.blocklyRegion, oldProperty.textRegion);
     }
 
     /**

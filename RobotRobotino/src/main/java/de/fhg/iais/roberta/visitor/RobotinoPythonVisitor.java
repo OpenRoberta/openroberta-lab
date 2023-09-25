@@ -121,7 +121,7 @@ public final class RobotinoPythonVisitor extends AbstractPythonVisitor implement
     public Void visitVarDeclaration(VarDeclaration var) {
         this.usedGlobalVarInFunctions.add(var.getCodeSafeName());
         this.src.add(var.getCodeSafeName());
-        if ( var.getVarType().getBlocklyName().contains("Array") ) {
+        if ( var.getBlocklyType().getBlocklyName().contains("Array") ) {
             this.src.add(" = []");
         } else {
             this.src.add(" = None");

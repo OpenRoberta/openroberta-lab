@@ -16,7 +16,7 @@ public final class MethodExpr extends Expr {
     public final Method method;
 
     public MethodExpr(Method method) {
-        super(method.getProperty());
+        super(method.getProperty(), BlocklyType.NOTHING);
         Assert.isTrue(method.isReadOnly());
         this.method = method;
         setReadOnly();
@@ -37,11 +37,6 @@ public final class MethodExpr extends Expr {
     @Override
     public Assoc getAssoc() {
         return Assoc.NONE;
-    }
-
-    @Override
-    public BlocklyType getVarType() {
-        return BlocklyType.NOTHING;
     }
 
     @Override

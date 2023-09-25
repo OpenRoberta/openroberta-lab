@@ -69,7 +69,6 @@ import de.fhg.iais.roberta.syntax.lang.functions.TextJoinFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextStringCastNumberFunct;
 import de.fhg.iais.roberta.syntax.lang.stmt.AssertStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
-import de.fhg.iais.roberta.syntax.lang.stmt.NNStepStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.TextAppendStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
@@ -174,13 +173,13 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
         for ( VarDeclaration var : this.getBean(UsedHardwareBean.class).getVisitedVars() ) {
             nlIndent();
             if ( !var.value.getKind().hasName("EMPTY_EXPR") ) {
-                if ( var.typeVar.isArray() ) {
-                    this.src.add(getLanguageVarTypeFromBlocklyType(var.typeVar), " ", "__");
+                if ( var.getBlocklyType().isArray() ) {
+                    this.src.add(getLanguageVarTypeFromBlocklyType(var.getBlocklyType()), " ", "__");
                 }
-                this.src.add("___", var.name, var.typeVar.isArray() ? "[]" : "", " = ");
+                this.src.add("___", var.name, var.getBlocklyType().isArray() ? "[]" : "", " = ");
                 var.value.accept(this);
                 this.src.add(";");
-                if ( var.typeVar.isArray() ) {
+                if ( var.getBlocklyType().isArray() ) {
                     nlIndent();
                     this.src.add("___", var.name, " = _____", var.name, ";");
                 }
@@ -191,8 +190,8 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
 
     @Override
     public Void visitVarDeclaration(VarDeclaration var) {
-        this.src.add(getLanguageVarTypeFromBlocklyType(var.typeVar), " ", var.getCodeSafeName());
-        if ( var.typeVar.isArray() ) {
+        this.src.add(getLanguageVarTypeFromBlocklyType(var.getBlocklyType()), " ", var.getCodeSafeName());
+        if ( var.getBlocklyType().isArray() ) {
             this.src.add("[");
             if ( !var.value.getKind().hasName("EMPTY_EXPR") ) {
                 ListCreate list = (ListCreate) var.value;
@@ -232,7 +231,7 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
     public Void visitTextAppendStmt(TextAppendStmt textAppendStmt) {
         textAppendStmt.var.accept(this);
         this.src.add(" += ");
-        String numToStr = textAppendStmt.text.getVarType().toString().contains("NUMBER") ? "NumToStr(" : "";
+        String numToStr = textAppendStmt.text.getBlocklyType().toString().contains("NUMBER") ? "NumToStr(" : "";
         src.add(numToStr);
         textAppendStmt.text.accept(this);
         if ( numToStr != "" ) {
@@ -325,7 +324,8 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
 
     public static String getMethodForShowText(ShowTextAction showTextAction) {
         String methodName;
-        switch ( showTextAction.msg.getVarType() ) {
+        String msgString = showTextAction.msg.toString();
+        switch ( showTextAction.msg.getBlocklyType() ) {
             case ARRAY_STRING:
             case STRING:
                 methodName = "TextOut";
@@ -338,47 +338,49 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
                 methodName = "ColorOut";
                 break;
             case NOTHING:
-                if ( showTextAction.msg.getProperty().getBlockType().contains("isPressed")
-                    || showTextAction.msg.getProperty().getBlockType().contains("logic_ternary") ) {
+                String blockType = showTextAction.msg.getProperty().blockType;
+                if ( blockType.contains("isPressed") || blockType.contains("logic_ternary") ) {
                     methodName = "BoolOut";
-                } else if ( showTextAction.msg.getProperty().getBlockType().contains("colour") ) {
-                    methodName = "ColorOut";
-                } else if ( showTextAction.msg.getProperty().getBlockType().contains("robSensors")
-                    || showTextAction.msg.getProperty().getBlockType().contains("robActions")
-                    || showTextAction.msg.toString().contains("POWER") ) {
-                    methodName = "NumOut";
                 } else {
-                    methodName = "TextOut";
+                    if ( blockType.contains("colour") ) {
+                        methodName = "ColorOut";
+                    } else {
+                        if ( blockType.contains("robSensors") || blockType.contains("robActions") || msgString.contains("POWER") ) {
+                            methodName = "NumOut";
+                        } else {
+                            methodName = "TextOut";
+                        }
+                    }
                 }
                 break;
             case CAPTURED_TYPE:
-                if ( showTextAction.msg.toString().contains("Number")
-                    || showTextAction.msg.toString().contains("ADD")
-                    || showTextAction.msg.toString().contains("MINUS")
-                    || showTextAction.msg.toString().contains("MULTIPLY")
-                    || showTextAction.msg.toString().contains("DIVIDE")
-                    || showTextAction.msg.toString().contains("MOD")
-                    || showTextAction.msg.toString().contains("NEG")
-                    || showTextAction.msg.toString().contains("LISTS_LENGTH")
-                    || showTextAction.msg.toString().contains("IndexOfFunct")
-                    || showTextAction.msg.toString().contains("[ListGetIndex [GET, FROM_START, [ListCreate [NUMBER")
-                    || showTextAction.msg.toString().contains("[ListGetIndex [GET, FROM_START, [ListCreate [CONNECTION")
-                    || showTextAction.msg.toString().contains("MotorGetPower")
-                    || showTextAction.msg.toString().contains("VolumeAction") ) {
+                if ( msgString.contains("Number")
+                    || msgString.contains("ADD")
+                    || msgString.contains("MINUS")
+                    || msgString.contains("MULTIPLY")
+                    || msgString.contains("DIVIDE")
+                    || msgString.contains("MOD")
+                    || msgString.contains("NEG")
+                    || msgString.contains("LISTS_LENGTH")
+                    || msgString.contains("IndexOfFunct")
+                    || msgString.contains("[ListGetIndex [GET, FROM_START, [ListCreate [NUMBER")
+                    || msgString.contains("[ListGetIndex [GET, FROM_START, [ListCreate [CONNECTION")
+                    || msgString.contains("MotorGetPower")
+                    || msgString.contains("VolumeAction") ) {
                     methodName = "NumOut";
-                } else if ( showTextAction.msg.toString().contains("Boolean")
-                    || showTextAction.msg.toString().contains("EQ")
-                    || showTextAction.msg.toString().contains("NEQ")
-                    || showTextAction.msg.toString().contains("LT")
-                    || showTextAction.msg.toString().contains("LTE")
-                    || showTextAction.msg.toString().contains("GT")
-                    || showTextAction.msg.toString().contains("GTE")
-                    || showTextAction.msg.toString().contains("LIST_IS_EMPTY")
-                    || showTextAction.msg.toString().contains("AND")
-                    || showTextAction.msg.toString().contains("OR")
-                    || showTextAction.msg.toString().contains("NOT")
-                    || showTextAction.msg.toString().contains("[ListGetIndex [GET, FROM_START, [ListCreate [BOOLEAN")
-                    || showTextAction.msg.toString().contains("BluetoothCheckConnectAction") ) {
+                } else if ( msgString.contains("Boolean")
+                    || msgString.contains("EQ")
+                    || msgString.contains("NEQ")
+                    || msgString.contains("LT")
+                    || msgString.contains("LTE")
+                    || msgString.contains("GT")
+                    || msgString.contains("GTE")
+                    || msgString.contains("LIST_IS_EMPTY")
+                    || msgString.contains("AND")
+                    || msgString.contains("OR")
+                    || msgString.contains("NOT")
+                    || msgString.contains("[ListGetIndex [GET, FROM_START, [ListCreate [BOOLEAN")
+                    || msgString.contains("BluetoothCheckConnectAction") ) {
                     methodName = "BoolOut";
                 } else {
                     methodName = "TextOut";
@@ -802,7 +804,7 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
 
     @Override
     public Void visitIndexOfFunct(IndexOfFunct indexOfFunct) {
-        BlocklyType arrayType = indexOfFunct.value.getVarType();
+        BlocklyType arrayType = indexOfFunct.value.getBlocklyType();
         String methodName = "ArrFindFirst";
         if ( indexOfFunct.location == IndexLocation.LAST ) {
             methodName = "ArrFindLast";
@@ -1240,9 +1242,7 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
             case PRIM:
             case NOTHING:
             case CAPTURED_TYPE:
-            case R:
-            case S:
-            case T:
+            case CAPTURED_TYPE_ARRAY_ITEM:
                 return "";
             case ARRAY:
             case ARRAY_COLOUR:

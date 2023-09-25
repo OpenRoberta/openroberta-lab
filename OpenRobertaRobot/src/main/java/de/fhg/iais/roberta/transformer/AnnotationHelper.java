@@ -20,6 +20,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
+import de.fhg.iais.roberta.transformer.forClass.NepoConfiguration;
 import de.fhg.iais.roberta.transformer.forClass.NepoExpr;
 import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
 import de.fhg.iais.roberta.transformer.forField.NepoData;
@@ -54,6 +55,23 @@ public class AnnotationHelper {
             }
         }
         return false;
+    }
+
+    public static String[] getBlocklyNamesOfAstClass(Class<?> clazz) {
+        for ( Annotation anno : clazz.getAnnotations() ) {
+            if ( anno instanceof NepoBasic ) {
+                return ((NepoBasic) anno).blocklyNames();
+            } else if ( anno instanceof NepoConfiguration ) {
+                return ((NepoConfiguration) anno).blocklyNames();
+            } else if ( anno instanceof NepoExpr ) {
+                return ((NepoExpr) anno).blocklyNames();
+            } else if ( anno instanceof NepoPhrase ) {
+                return ((NepoPhrase) anno).blocklyNames();
+            } else {
+                throw new DbcException("invalid annotation for ast classes");
+            }
+        }
+        throw new DbcException("no annotation for ast classes");
     }
 
     /**
@@ -145,7 +163,8 @@ public class AnnotationHelper {
 
     /**
      * get the BlocklyType (used for typechecking ...) of this expression
-     * <b>This is the default implementation of annotated AST classes used in {@link Expr}</b>
+     * <b>This is the default implementation of annotated AST classes.</b>
+     * It returns NOTHING, if no type information is found in the annotations.
      *
      * @return the BlocklyType
      */
@@ -159,7 +178,7 @@ public class AnnotationHelper {
                 return ((NepoBasic) anno).blocklyType();
             }
         }
-        throw new DbcException("the default implementation of getVarType() fails with the NOT annotated class " + clazz.getSimpleName());
+        return BlocklyType.NOTHING;
     }
 
     /**

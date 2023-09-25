@@ -25,7 +25,6 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
  */
 @NepoBasic(name = "VAR_DECLARATION", category = "EXPR", blocklyNames = {"robLocalVariables_declare", "robGlobalvariables_declare"})
 public final class VarDeclaration extends Expr {
-    public final BlocklyType typeVar;
     public final String name;
     public final Phrase value;
     public final boolean next;
@@ -33,16 +32,15 @@ public final class VarDeclaration extends Expr {
     public final static String CODE_SAFE_PREFIX = "___";
 
     public VarDeclaration(
-        BlocklyType typeVar,
+        BlocklyType blocklyType,
         String name,
         Phrase value,
         boolean next,
         boolean global,
         BlocklyProperties properties) {
-        super(properties);
-        Assert.isTrue(!name.equals("") && typeVar != null && value.isReadOnly());
+        super(properties, blocklyType);
+        Assert.isTrue(!name.equals("") && blocklyType != null && value.isReadOnly());
         this.name = Util.sanitizeProgramProperty(name);
-        this.typeVar = typeVar;
         this.value = value;
         this.next = next;
         this.global = global;
@@ -64,13 +62,8 @@ public final class VarDeclaration extends Expr {
     }
 
     @Override
-    public BlocklyType getVarType() {
-        return this.typeVar;
-    }
-
-    @Override
     public String toString() {
-        return "VarDeclaration [" + this.typeVar + ", " + this.name + ", " + this.value + ", " + this.next + ", " + this.global + "]";
+        return "VarDeclaration [" + this.getBlocklyType() + ", " + this.name + ", " + this.value + ", " + this.next + ", " + this.global + "]";
     }
 
     public static Phrase xml2ast(Block block, Jaxb2ProgramAst helper) {
@@ -87,15 +80,15 @@ public final class VarDeclaration extends Expr {
 
     @Override
     public Block ast2xml() {
-
+        String blocklyName = this.getBlocklyType().getBlocklyName();
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
         Mutation mutation = new Mutation();
         mutation.setNext(this.next);
-        mutation.setDeclarationType(this.typeVar.getBlocklyName());
+        mutation.setDeclarationType(blocklyName);
         jaxbDestination.setMutation(mutation);
         Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.VAR, this.name);
-        Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.TYPE, this.typeVar.getBlocklyName());
+        Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.TYPE, blocklyName);
         Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.VALUE, this.value);
 
         return jaxbDestination;

@@ -25,6 +25,7 @@ import de.fhg.iais.roberta.syntax.lang.methods.Method;
 import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyRegion;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
@@ -221,7 +222,8 @@ public class Jaxb2Ast {
      * @param block the blockly block
      */
     public static BlocklyProperties extractBlocklyProperties(Block block) {
-        return new BlocklyProperties(block.getType(), block.getId(), isDisabled(block), isCollapsed(block), isInline(block), isDeletable(block), isMovable(block), isInTask(block), isShadow(block), isErrorAttribute(block), block.getComment());
+        BlocklyRegion br = new BlocklyRegion(isDisabled(block), isCollapsed(block), isInline(block), isDeletable(block), isMovable(block), isInTask(block), isShadow(block), isErrorAttribute(block), block.getComment());
+        return new BlocklyProperties(block.getType(), block.getId(), br, null);
     }
 
     public static int getElseIf(Mutation mutation) {

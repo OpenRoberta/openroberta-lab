@@ -29,7 +29,7 @@ public final class LEDMatrixImage extends Expr {
     public final String[][] image;
 
     public LEDMatrixImage(String[][] image, BlocklyProperties properties) {
-        super(properties);
+        super(properties, BlocklyType.IMAGE);
         this.image = image;
         setReadOnly();
     }
@@ -42,11 +42,6 @@ public final class LEDMatrixImage extends Expr {
     @Override
     public Assoc getAssoc() {
         return Assoc.NONE;
-    }
-
-    @Override
-    public BlocklyType getVarType() {
-        return BlocklyType.IMAGE;
     }
 
     @Override

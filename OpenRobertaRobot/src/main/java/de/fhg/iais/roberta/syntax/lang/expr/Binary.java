@@ -35,7 +35,7 @@ public final class Binary extends Expr {
     public final String operationRange;
 
     public Binary(Op op, Expr left, Expr right, String operationRange, BlocklyProperties properties) {
-        super(properties);
+        super(properties, op.sig.returnType);
         Assert.isTrue(op != null && left != null && right != null && left.isReadOnly() && right.isReadOnly());
         this.op = op;
         this.left = left;
@@ -60,11 +60,6 @@ public final class Binary extends Expr {
     @Override
     public Assoc getAssoc() {
         return this.op.getAssoc();
-    }
-
-    @Override
-    public BlocklyType getVarType() {
-        return BlocklyType.CAPTURED_TYPE;
     }
 
     @Override
@@ -95,7 +90,8 @@ public final class Binary extends Expr {
         MINUS_ASSIGNMENT(1, Assoc.RIGHT, Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER, BlocklyType.NUMBER), "-="),
         MULTIPLY_ASSIGNMENT(1, Assoc.RIGHT, Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER, BlocklyType.NUMBER), "*="),
         DIVIDE_ASSIGNMENT(1, Assoc.RIGHT, Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER, BlocklyType.NUMBER), "/="),
-        MOD_ASSIGNMENT(1, Assoc.RIGHT, Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER, BlocklyType.NUMBER), "%=");
+        MOD_ASSIGNMENT(1, Assoc.RIGHT, Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER, BlocklyType.NUMBER), "%="),
+        POWER(1, Assoc.RIGHT, Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER, BlocklyType.NUMBER), "^");
 
         public final String[] values;
         public final int precedence;

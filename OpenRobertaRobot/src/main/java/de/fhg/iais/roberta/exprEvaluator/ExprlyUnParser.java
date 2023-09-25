@@ -700,6 +700,11 @@ public class ExprlyUnParser {
         names.put(FunctionNames.ROUNDDOWN, "roundDown");
         names.put(FunctionNames.ROUND, "round");
         names.put(FunctionNames.RANDOM, "randItem");
+        names.put(FunctionNames.INDEXOF, "indexOfFirst");
+        names.put(FunctionNames.GETLISTELEMENT, "getIndex");
+        names.put(FunctionNames.GETFIRST, "getIndexFirst");
+        names.put(FunctionNames.GETLAST, "getIndexLast");
+
         fnames = Collections.unmodifiableMap(names);
     }
 

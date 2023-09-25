@@ -2,60 +2,76 @@ package de.fhg.iais.roberta.util.syntax;
 
 import java.util.Locale;
 
+import de.fhg.iais.roberta.typecheck.BlocklyType;
+import de.fhg.iais.roberta.typecheck.Sig;
+import static de.fhg.iais.roberta.typecheck.Sig.VOID;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public enum FunctionNames {
-    TIME( 80, Assoc.NONE ),
-    DIVISIBLE_BY( 80, Assoc.NONE ),
-    MAX( 80, Assoc.NONE ),
-    MIN( 80, Assoc.NONE ),
-    LISTS_REPEAT( 1, Assoc.LEFT ),
-    RANDOM( 1, Assoc.LEFT ),
-    RANDOM_DOUBLE( 1, Assoc.LEFT ),
-    EVEN( 10, Assoc.LEFT ),
-    ODD( 10, Assoc.LEFT ),
-    PRIME( 10, Assoc.LEFT ),
-    WHOLE( 10, Assoc.LEFT ),
-    POSITIVE( 10, Assoc.LEFT ),
-    NEGATIVE( 10, Assoc.LEFT ),
-    SUM( 10, Assoc.LEFT ),
-    AVERAGE( 10, Assoc.LEFT ),
-    MEDIAN( 10, Assoc.LEFT ),
-    MODE( 10, Assoc.LEFT ),
-    STD_DEV( 10, Assoc.LEFT ),
-    SQUARE( 10, Assoc.LEFT ),
-    ROOT( 10, Assoc.LEFT, "SQRT" ),
-    ABS( 10, Assoc.LEFT ),
-    LN( 10, Assoc.LEFT ),
-    LOG10( 10, Assoc.LEFT ),
-    EXP( 10, Assoc.LEFT ),
-    POW10( 10, Assoc.LEFT ),
-    SIN( 10, Assoc.LEFT ),
-    COS( 10, Assoc.LEFT ),
-    TAN( 10, Assoc.LEFT ),
-    ASIN( 10, Assoc.LEFT ),
-    ACOS( 10, Assoc.LEFT ),
-    ATAN( 10, Assoc.LEFT ),
-    POWER( 300, Assoc.RIGHT, "^" ),
-    ROUND( 10, Assoc.LEFT ),
-    ROUNDUP( 10, Assoc.LEFT, "CEIL" ),
-    ROUNDDOWN( 10, Assoc.LEFT, "FLOOR" ),
-    LIST_IS_EMPTY( 10, Assoc.LEFT, BlocklyConstants.LISTS_IS_EMPTY, BlocklyConstants.ROB_LISTS_IS_EMPTY ),
-    LEFT( 10, Assoc.LEFT ),
-    RIGHT( 10, Assoc.LEFT ),
-    TEXT( 10, Assoc.LEFT, "TEXT" ),
-    NUMBER( 10, Assoc.LEFT, "NUMBER" ),
-    LIST_LENGTH( 10, Assoc.LEFT, BlocklyConstants.LISTS_LENGTH, BlocklyConstants.ROB_LISTS_LENGTH ),
-    GET_SUBLIST( 10, Assoc.LEFT ),
-    CAST( 10, Assoc.LEFT );
-
+    TIME(VOID),
+    DIVISIBLE_BY(Sig.of(BlocklyType.BOOLEAN, BlocklyType.NUMBER, BlocklyType.NUMBER)),
+    MAX(Sig.of(BlocklyType.NUMBER, BlocklyType.ARRAY_NUMBER)),
+    MIN(Sig.of(BlocklyType.NUMBER, BlocklyType.ARRAY_NUMBER)),
+    LISTS_REPEAT(Sig.of(BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE, BlocklyType.NUMBER)),
+    RANDOM(Sig.of(BlocklyType.CAPTURED_TYPE_ARRAY_ITEM, BlocklyType.CAPTURED_TYPE)),
+    RANDOM_DOUBLE(VOID),
+    EVEN(Sig.of(BlocklyType.BOOLEAN, BlocklyType.NUMBER)),
+    ODD(Sig.of(BlocklyType.BOOLEAN, BlocklyType.NUMBER)),
+    PRIME(Sig.of(BlocklyType.BOOLEAN, BlocklyType.NUMBER)),
+    WHOLE(Sig.of(BlocklyType.BOOLEAN, BlocklyType.NUMBER)),
+    POSITIVE(Sig.of(BlocklyType.BOOLEAN, BlocklyType.NUMBER)),
+    NEGATIVE(Sig.of(BlocklyType.BOOLEAN, BlocklyType.NUMBER)),
+    SUM(Sig.of(BlocklyType.NUMBER, BlocklyType.ARRAY_NUMBER)),
+    AVERAGE(Sig.of(BlocklyType.NUMBER, BlocklyType.ARRAY_NUMBER)),
+    MEDIAN(Sig.of(BlocklyType.NUMBER, BlocklyType.ARRAY_NUMBER)),
+    MODE(VOID),
+    STD_DEV(Sig.of(BlocklyType.NUMBER, BlocklyType.ARRAY_NUMBER)),
+    SQUARE(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER)),
+    ROOT(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER), "SQRT"),
+    ABS(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER)),
+    LN(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER)),
+    LOG10(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER)),
+    EXP(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER)),
+    POW10(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER)),
+    SIN(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER)),
+    COS(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER)),
+    TAN(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER)),
+    ASIN(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER)),
+    ACOS(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER)),
+    ATAN(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER)),
+    POWER(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER, BlocklyType.NUMBER), "^"),
+    ROUND(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER)),
+    ROUNDUP(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER), "CEIL"),
+    ROUNDDOWN(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER), "FLOOR"),
+    LIST_IS_EMPTY(Sig.of(BlocklyType.BOOLEAN, BlocklyType.CAPTURED_TYPE)),
+    LEFT(VOID),
+    RIGHT(VOID),
+    TEXT(VOID, "TEXT"),
+    NUMBER(VOID, "NUMBER"),
+    LIST_LENGTH(Sig.of(BlocklyType.NUMBER, BlocklyType.CAPTURED_TYPE)),
+    GET_SUBLIST(Sig.of(BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE, BlocklyType.NUMBER, BlocklyType.NUMBER)),
+    CAST(VOID),
+    INDEXOF(Sig.of(BlocklyType.NUMBER, BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE_ARRAY_ITEM)),
+    GETLISTELEMENT(Sig.of(BlocklyType.CAPTURED_TYPE_ARRAY_ITEM, BlocklyType.CAPTURED_TYPE, BlocklyType.NUMBER)),
+    GETFIRST(Sig.of(BlocklyType.CAPTURED_TYPE_ARRAY_ITEM, BlocklyType.CAPTURED_TYPE)),
+    GETLAST(Sig.of(BlocklyType.CAPTURED_TYPE_ARRAY_ITEM, BlocklyType.CAPTURED_TYPE)),
+    SUBFIRSTORLAST(Sig.of(BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE, BlocklyType.NUMBER)),
+    SUBFIRSTANDLAST(Sig.of(BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE)),
+    TEXTJOIN(Sig.of(BlocklyType.STRING, BlocklyType.CAPTURED_TYPE)),
+    CONSTRAIN(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER, BlocklyType.NUMBER, BlocklyType.NUMBER)),
+    GETRGB(Sig.of(BlocklyType.ARRAY_NUMBER)),
+    RANDOMINT(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER, BlocklyType.NUMBER)),
+    PI(Sig.of(BlocklyType.NUMBER)),
+    GOLDEN_RATIO(Sig.of(BlocklyType.NUMBER)),
+    SQRT2(Sig.of(BlocklyType.NUMBER)),
+    SQRT1_2(Sig.of(BlocklyType.NUMBER)),
+    INFINITY(Sig.of(BlocklyType.NUMBER)),
+    E(Sig.of(BlocklyType.NUMBER));
     private final String[] values;
-    private final int precedence;
-    private final Assoc assoc;
+    public final Sig signature;
 
-    private FunctionNames(int precedence, Assoc assoc, String... values) {
-        this.precedence = precedence;
-        this.assoc = assoc;
+    private FunctionNames(Sig signature, String... values) {
+        this.signature = signature;
         this.values = values;
     }
 
@@ -68,20 +84,6 @@ public enum FunctionNames {
         } else {
             return this.values[0];
         }
-    }
-
-    /**
-     * @return precedence of the operator
-     */
-    public int getPrecedence() {
-        return this.precedence;
-    }
-
-    /**
-     * @return association of the operator
-     */
-    public Assoc getAssoc() {
-        return this.assoc;
     }
 
     /**

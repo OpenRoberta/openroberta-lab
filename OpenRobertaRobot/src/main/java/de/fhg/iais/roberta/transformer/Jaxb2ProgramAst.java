@@ -292,7 +292,7 @@ public class Jaxb2ProgramAst {
     public static ExprList argumentsToExprList(List<Arg> arguments) {
         ExprList parameters = new ExprList();
         for ( Arg arg : arguments ) {
-            Var parametar = new Var(BlocklyType.get(arg.getType()), arg.getName(), BlocklyProperties.make("PARAMETER", "1"));
+            Var parametar = new Var(BlocklyType.get(arg.getType()), arg.getName(), BlocklyProperties.make("PARAMETER", "1", null));
             parameters.addExpr(parametar);
         }
         parameters.setReadOnly();

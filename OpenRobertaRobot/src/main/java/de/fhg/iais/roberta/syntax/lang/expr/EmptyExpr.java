@@ -17,7 +17,7 @@ public final class EmptyExpr extends Expr {
     public final BlocklyType defVal;
 
     public EmptyExpr(BlocklyType defVal) {
-        super(BlocklyProperties.make("EMPTY_EXPR", "1"));
+        super(BlocklyProperties.make("EMPTY_EXPR", "1", null), BlocklyType.NOTHING);
         Assert.isTrue(defVal != null);
         this.defVal = defVal;
         setReadOnly();
@@ -41,11 +41,6 @@ public final class EmptyExpr extends Expr {
     }
 
     @Override
-    public BlocklyType getVarType() {
-        return BlocklyType.NOTHING;
-    }
-
-    @Override
     public String toString() {
         return "EmptyExpr [defVal=" + this.defVal + "]";
     }
@@ -54,5 +49,4 @@ public final class EmptyExpr extends Expr {
     public Block ast2xml() {
         return null;
     }
-
 }

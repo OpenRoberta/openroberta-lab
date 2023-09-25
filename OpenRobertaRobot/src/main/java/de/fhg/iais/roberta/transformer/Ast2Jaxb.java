@@ -48,10 +48,10 @@ public final class Ast2Jaxb {
         if ( property == null ) {
             return;
         }
-        setProperties(phrase, block, property.getBlockType());
+        setProperties(phrase, block, property.blockType);
         addError(phrase, block);
         addWarning(phrase, block);
-        block.setComment(property.getComment());
+        block.setComment(property.blocklyRegion.comment);
     }
 
     /**
@@ -294,7 +294,8 @@ public final class Ast2Jaxb {
 
     private static void setProperties(Phrase astSource, Block block, String type) {
         block.setType(type);
-        block.setId(astSource.getProperty().getBlocklyId());
+        BlocklyProperties blocklyProperties = astSource.getProperty();
+        block.setId(blocklyProperties.blocklyId);
         setDisabled(astSource, block);
         setCollapsed(astSource, block);
         setInline(astSource, block);
@@ -304,38 +305,50 @@ public final class Ast2Jaxb {
     }
 
     private static void setInline(Phrase astObject, Block block) {
-        if ( astObject.getProperty().isInline() != null ) {
-            block.setInline(astObject.getProperty().isInline());
+        BlocklyProperties blocklyProperties1 = astObject.getProperty();
+        if ( blocklyProperties1.blocklyRegion.inline != null ) {
+            BlocklyProperties blocklyProperties = astObject.getProperty();
+            block.setInline(blocklyProperties.blocklyRegion.inline);
         }
     }
 
     private static void setCollapsed(Phrase astObject, Block block) {
-        if ( astObject.getProperty().isCollapsed() ) {
-            block.setCollapsed(astObject.getProperty().isCollapsed());
+        BlocklyProperties blocklyProperties1 = astObject.getProperty();
+        if ( blocklyProperties1.blocklyRegion.collapsed ) {
+            BlocklyProperties blocklyProperties = astObject.getProperty();
+            block.setCollapsed(blocklyProperties.blocklyRegion.collapsed);
         }
     }
 
     private static void setDisabled(Phrase astObject, Block block) {
-        if ( astObject.getProperty().isDisabled() ) {
-            block.setDisabled(astObject.getProperty().isDisabled());
+        BlocklyProperties blocklyProperties1 = astObject.getProperty();
+        if ( blocklyProperties1.blocklyRegion.disabled ) {
+            BlocklyProperties blocklyProperties = astObject.getProperty();
+            block.setDisabled(blocklyProperties.blocklyRegion.disabled);
         }
     }
 
     private static void setInTask(Phrase astObject, Block block) {
-        if ( astObject.getProperty().isInTask() != null ) {
-            block.setIntask(astObject.getProperty().isInTask());
+        BlocklyProperties blocklyProperties1 = astObject.getProperty();
+        if ( blocklyProperties1.blocklyRegion.inTask != null ) {
+            BlocklyProperties blocklyProperties = astObject.getProperty();
+            block.setIntask(blocklyProperties.blocklyRegion.inTask);
         }
     }
 
     private static void setDeletable(Phrase astObject, Block block) {
-        if ( astObject.getProperty().isDeletable() != null ) {
-            block.setDeletable(astObject.getProperty().isDeletable());
+        BlocklyProperties blocklyProperties1 = astObject.getProperty();
+        if ( blocklyProperties1.blocklyRegion.deletable != null ) {
+            BlocklyProperties blocklyProperties = astObject.getProperty();
+            block.setDeletable(blocklyProperties.blocklyRegion.deletable);
         }
     }
 
     private static void setMovable(Phrase astObject, Block block) {
-        if ( astObject.getProperty().isMovable() != null ) {
-            block.setMovable(astObject.getProperty().isMovable());
+        BlocklyProperties blocklyProperties1 = astObject.getProperty();
+        if ( blocklyProperties1.blocklyRegion.movable != null ) {
+            BlocklyProperties blocklyProperties = astObject.getProperty();
+            block.setMovable(blocklyProperties.blocklyRegion.movable);
         }
     }
 

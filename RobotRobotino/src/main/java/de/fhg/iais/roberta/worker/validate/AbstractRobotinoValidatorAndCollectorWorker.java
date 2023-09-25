@@ -13,6 +13,7 @@ import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.util.Key;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.visitor.RobotinoMethods;
 import de.fhg.iais.roberta.visitor.validate.CommonNepoValidatorAndCollectorVisitor;
 import de.fhg.iais.roberta.worker.AbstractValidatorAndCollectorWorker;
@@ -49,7 +50,8 @@ public abstract class AbstractRobotinoValidatorAndCollectorWorker extends Abstra
                 continue;
             }
             if ( takenPins.contains(property.getValue()) ) {
-                String blockId = configurationComponent.getProperty().getBlocklyId();
+                BlocklyProperties blocklyProperties = configurationComponent.getProperty();
+                String blockId = blocklyProperties.blocklyId;
                 project.addToErrorCounter(1, null);
                 project.setResult(Key.PROGRAM_INVALID_STATEMETNS);
                 project.addToConfAnnotationList(blockId, NepoInfo.error("CONFIGURATION_ERROR_OVERLAPPING_PORTS"));

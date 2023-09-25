@@ -207,35 +207,39 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
 
     @Override
     public Void visitAssignStmt(AssignStmt assignStmt) {
-        if ( assignStmt.name.getVarType() == BlocklyType.COLOR ) {
+        if ( assignStmt.name.getBlocklyType() == BlocklyType.COLOR ) {
             assignStmt.expr.accept(this);
             nlIndent();
             this.src.add(((Var) assignStmt.name).getCodeSafeName(), " = ___color_");
-        } else if ( assignStmt.name.getVarType() == BlocklyType.NUMBER ) {
+        } else if ( assignStmt.name.getBlocklyType() == BlocklyType.NUMBER ) {
             assignStmt.expr.accept(this);
             nlIndent();
             this.src.add(((Var) assignStmt.name).getCodeSafeName(), " = _A");
-        } else if ( assignStmt.name.getVarType() == BlocklyType.ARRAY_NUMBER ) {
-            this.src.add(((Var) assignStmt.name).getCodeSafeName(), " = ");
-            assignStmt.expr.accept(this);
-            nlIndent();
-        } else if ( assignStmt.name.getVarType() == BlocklyType.ARRAY_COLOUR ) {
-            if ( assignStmt.expr.getClass().equals(Var.class) ) {
-                this.src.add(((Var) assignStmt.name).getCodeSafeName(), "_r = ", ((Var) assignStmt.expr).getCodeSafeName(), "_r");
+        } else {
+            if ( assignStmt.name.getBlocklyType() == BlocklyType.ARRAY_NUMBER ) {
+                this.src.add(((Var) assignStmt.name).getCodeSafeName(), " = ");
+                assignStmt.expr.accept(this);
                 nlIndent();
-                this.src.add(((Var) assignStmt.name).getCodeSafeName(), "_g = ", ((Var) assignStmt.expr).getCodeSafeName(), "_g");
-                nlIndent();
-                this.src.add(((Var) assignStmt.name).getCodeSafeName(), "_b = ", ((Var) assignStmt.expr).getCodeSafeName(), "_b");
             } else {
-                if ( assignStmt.expr.getClass().equals(ListCreate.class) ) {
-                    this.visitListCreateColor(((Var) assignStmt.name).getCodeSafeName(), (ListCreate) assignStmt.expr, false);
-                } else if ( assignStmt.expr.getClass().equals(FunctionExpr.class) ) {
-                    ListRepeat listRepeat = (ListRepeat) ((FunctionExpr) assignStmt.expr).function;
-                    this.visitListRepeatColor(((Var) assignStmt.name).getCodeSafeName(), listRepeat, false);
+                if ( assignStmt.name.getBlocklyType() == BlocklyType.ARRAY_COLOUR ) {
+                    if ( assignStmt.expr.getClass().equals(Var.class) ) {
+                        this.src.add(((Var) assignStmt.name).getCodeSafeName(), "_r = ", ((Var) assignStmt.expr).getCodeSafeName(), "_r");
+                        nlIndent();
+                        this.src.add(((Var) assignStmt.name).getCodeSafeName(), "_g = ", ((Var) assignStmt.expr).getCodeSafeName(), "_g");
+                        nlIndent();
+                        this.src.add(((Var) assignStmt.name).getCodeSafeName(), "_b = ", ((Var) assignStmt.expr).getCodeSafeName(), "_b");
+                    } else {
+                        if ( assignStmt.expr.getClass().equals(ListCreate.class) ) {
+                            this.visitListCreateColor(((Var) assignStmt.name).getCodeSafeName(), (ListCreate) assignStmt.expr, false);
+                        } else if ( assignStmt.expr.getClass().equals(FunctionExpr.class) ) {
+                            ListRepeat listRepeat = (ListRepeat) ((FunctionExpr) assignStmt.expr).function;
+                            this.visitListRepeatColor(((Var) assignStmt.name).getCodeSafeName(), listRepeat, false);
+                        }
+                    }
+                } else {
+                    throw new DbcException("Invalid variable type used");
                 }
             }
-        } else {
-            throw new DbcException("Invalid variable type used");
         }
         return null;
     }
@@ -318,9 +322,9 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
 
     @Override
     public Void visitVar(Var var) {
-        if ( var.getVarType() == (BlocklyType.NUMBER) ) {
+        if ( var.getBlocklyType() == (BlocklyType.NUMBER) ) {
             this.src.add("_A = ", var.getCodeSafeName());
-        } else if ( var.getVarType() == (BlocklyType.COLOR) ) {
+        } else if ( var.getBlocklyType() == (BlocklyType.COLOR) ) {
             this.src.add("___color_ = ", var.getCodeSafeName());
         } else {
             this.src.add(var.getCodeSafeName());
@@ -454,7 +458,7 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
 
     @Override
     public Void visitListCreate(ListCreate listCreate) {
-        if ( listCreate.typeVar.toString().equals("NUMBER") ) {
+        if ( listCreate.getBlocklyType().toString().equals("NUMBER") ) {
             int listSize = listCreate.exprList.get().size();
             this.src.add("[");
             for ( int i = 0; i < listSize; i++ ) {
@@ -467,7 +471,7 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
                 }
             }
             this.src.add("]");
-        } else if ( listCreate.typeVar.toString().equals("COLOR") ) {
+        } else if ( listCreate.getBlocklyType().toString().equals("COLOR") ) {
             throw new DbcException("ListCreate can only be evaluated from a function!");
         }
         return null;
@@ -578,7 +582,7 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
     public Void visitListGetIndex(ListGetIndex listGetIndex) {
         listGetIndex.param.get(1).accept(this);
         nlIndent();
-        if ( listGetIndex.param.get(0).getVarType().toString().equals("ARRAY_COLOUR") ) {
+        if ( listGetIndex.param.get(0).getBlocklyType().toString().equals("ARRAY_COLOUR") ) {
             this.src.add("___color_[0] = ");
             listGetIndex.param.get(0).accept(this);
             this.src.add("_r[_A]");
@@ -591,7 +595,7 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
             listGetIndex.param.get(0).accept(this);
             this.src.add("_b[_A]");
             nlIndent();
-        } else if ( listGetIndex.param.get(0).getVarType().toString().equals("ARRAY_NUMBER") ) {
+        } else if ( listGetIndex.param.get(0).getBlocklyType().toString().equals("ARRAY_NUMBER") ) {
             if ( listGetIndex.mode == GET ) {
                 this.src.add("_A = ");
                 listGetIndex.param.get(0).accept(this);
@@ -629,7 +633,7 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
     public Void visitListSetIndex(ListSetIndex listSetIndex) {
         listSetIndex.param.get(1).accept(this);
         nlIndent();
-        if ( listSetIndex.param.get(0).getVarType().toString().equals("ARRAY_COLOUR") ) {
+        if ( listSetIndex.param.get(0).getBlocklyType().toString().equals("ARRAY_COLOUR") ) {
             listSetIndex.param.get(2).accept(this);
             nlIndent();
             listSetIndex.param.get(0).accept(this);
@@ -641,7 +645,7 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
             listSetIndex.param.get(0).accept(this);
             this.src.add("_b[_A] = ___color_[2]");
             nlIndent();
-        } else if ( listSetIndex.param.get(0).getVarType().toString().equals("ARRAY_NUMBER") ) {
+        } else if ( listSetIndex.param.get(0).getBlocklyType().toString().equals("ARRAY_NUMBER") ) {
             this.nestedBinaryCounterPlus();
             this.src.add("_B[", this.nestedBinaryCounter, "] = _A");
             nlIndent();
@@ -1111,7 +1115,7 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
 
     @Override
     public Void visitVarDeclaration(VarDeclaration var) {
-        if ( var.typeVar == BlocklyType.NUMBER || var.typeVar == BlocklyType.COLOR ) {
+        if ( var.getBlocklyType() == BlocklyType.NUMBER || var.getBlocklyType() == BlocklyType.COLOR ) {
             if ( var.value.getKind().hasName("NUM_CONST") ) {
                 this.src.add("var ", var.getCodeSafeName(), " = ");
                 this.src.add(((NumConst) var.value).value);
@@ -1121,10 +1125,10 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
                 nlIndent();
             }
         } else if ( var.value.getKind().getName().equals("LIST_CREATE") ) {
-            if ( ((ListCreate) var.value).typeVar.toString().equals("COLOR") ) {
+            if ( ((ListCreate) var.value).getBlocklyType().toString().equals("COLOR") ) {
                 this.visitListCreateColor(var.getCodeSafeName(), ((ListCreate) var.value), true);
                 return null;
-            } else if ( ((ListCreate) var.value).typeVar.toString().equals("NUMBER") ) {
+            } else if ( ((ListCreate) var.value).getBlocklyType().toString().equals("NUMBER") ) {
                 this.src.add("var ", var.getCodeSafeName(), "[] = ");
                 var.value.accept(this);
             } else {

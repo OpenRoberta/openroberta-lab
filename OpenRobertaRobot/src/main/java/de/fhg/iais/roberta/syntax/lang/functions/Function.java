@@ -19,7 +19,7 @@ public abstract class Function extends Phrase {
      */
     public Function(BlocklyProperties properties) {
         super(properties);
-
+        this.setBlocklyType(AnnotationHelper.getReturnType(this.getClass()));
     }
 
     /**

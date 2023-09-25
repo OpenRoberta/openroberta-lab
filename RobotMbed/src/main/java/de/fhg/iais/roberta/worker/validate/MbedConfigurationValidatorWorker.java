@@ -1,15 +1,21 @@
 package de.fhg.iais.roberta.worker.validate;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.util.Key;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.syntax.SC;
-
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class MbedConfigurationValidatorWorker {
     private static final String PORT = "PIN1";
@@ -72,7 +78,8 @@ public class MbedConfigurationValidatorWorker {
     private void throwOverlappingPortsError(ConfigurationComponent configurationComponent) {
         project.addToErrorCounter(1, null);
         project.setResult(Key.PROGRAM_INVALID_STATEMETNS);
-        String blockId = configurationComponent.getProperty().getBlocklyId();
+        BlocklyProperties blocklyProperties = configurationComponent.getProperty();
+        String blockId = blocklyProperties.blocklyId;
         project.addToConfAnnotationList(blockId, NepoInfo.error("CONFIGURATION_ERROR_OVERLAPPING_PORTS"));
     }
 }

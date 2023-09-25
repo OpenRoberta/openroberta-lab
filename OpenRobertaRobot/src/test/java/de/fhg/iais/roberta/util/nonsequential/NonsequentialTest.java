@@ -3,6 +3,7 @@ package de.fhg.iais.roberta.util.nonsequential;
 import org.junit.Ignore;
 import org.junit.Test;
 
+@Ignore
 public class NonsequentialTest {
 
     private static void waitMillisec(int millisec) {

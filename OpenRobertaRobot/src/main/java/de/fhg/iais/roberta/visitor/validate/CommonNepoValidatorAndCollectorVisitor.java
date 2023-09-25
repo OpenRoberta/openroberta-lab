@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.visitor.validate;
 
 import java.util.HashMap;
+import java.util.List;
 
 import com.google.common.collect.ClassToInstanceMap;
 
@@ -8,7 +9,6 @@ import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.NNBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
-import de.fhg.iais.roberta.inter.mode.general.IListElementOperations;
 import de.fhg.iais.roberta.mode.general.ListElementOperations;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
@@ -18,6 +18,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.BoolConst;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.EmptyList;
+import de.fhg.iais.roberta.syntax.lang.expr.EvalExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
 import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
@@ -76,6 +77,9 @@ import de.fhg.iais.roberta.syntax.lang.stmt.TextAppendStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
+import de.fhg.iais.roberta.typecheck.InfoCollector;
+import de.fhg.iais.roberta.typecheck.NepoInfo;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.FunctionNames;
 import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 
@@ -96,6 +100,17 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
     @Override
     public Void visitAssertStmt(AssertStmt assertStmt) {
         requiredComponentVisited(assertStmt, assertStmt.asserts);
+        return null;
+    }
+
+    @Override
+    public Void visitEvalExpr(EvalExpr evalExpr) {
+        requiredComponentVisited(evalExpr, evalExpr.exprAsBlock);
+        TypecheckCommonLanguageVisitor.makeVisitorAndTypecheck(evalExpr.exprAsBlock, beanBuilders);
+        List<NepoInfo> infosOfSubAst = InfoCollector.collectInfos(evalExpr);
+        if ( !infosOfSubAst.isEmpty() ) {
+            addErrorToPhrase(evalExpr, "PROGRAM_ERROR_EXPRBLOCK_TYPECHECK");
+        }
         return null;
     }
 
@@ -216,11 +231,8 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
 
     @Override
     public Void visitListGetIndex(ListGetIndex listGetIndex) {
-        IListElementOperations iOp = listGetIndex.getElementOperation();
-        if ( iOp instanceof ListElementOperations ) {
-            ListElementOperations op = (ListElementOperations) iOp;
-            this.usedMethodBuilder.addUsedMethod(op);
-        }
+        ListElementOperations op = listGetIndex.getElementOperation();
+        this.usedMethodBuilder.addUsedMethod(op);
         requiredComponentVisited(listGetIndex, listGetIndex.param);
         if ( listGetIndex.param.get(0).toString().contains("ListCreate ") ||
             listGetIndex.param.get(0).toString().contains("ListRepeat ") ) {
@@ -238,11 +250,8 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
 
     @Override
     public Void visitListSetIndex(ListSetIndex listSetIndex) {
-        IListElementOperations iOp = listSetIndex.mode;
-        if ( iOp instanceof ListElementOperations ) {
-            ListElementOperations op = (ListElementOperations) iOp;
-            this.usedMethodBuilder.addUsedMethod(op);
-        }
+        ListElementOperations op = listSetIndex.mode;
+        this.usedMethodBuilder.addUsedMethod(op);
         requiredComponentVisited(listSetIndex, listSetIndex.param);
         if ( listSetIndex.param.get(0).toString().contains("ListCreate ") ||
             listSetIndex.param.get(0).toString().contains("ListRepeat ") ) {
@@ -505,7 +514,7 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
         if ( repeatStmt.expr.getKind().hasName("EXPR_LIST") ) {
             ExprList exprList = (ExprList) repeatStmt.expr;
             varName = ((Var) exprList.get().get(0)).name;
-            this.getBuilder(UsedHardwareBean.Builder.class).addDeclaredVariable(varName);
+            this.getBuilder(UsedHardwareBean.Builder.class).addDeclaredVariable(varName, BlocklyType.NUMBER);
             this.getBuilder(UsedHardwareBean.Builder.class).addInScopeVariable(varName);
         } else if ( repeatStmt.mode == RepeatStmt.Mode.FOR_EACH ) {
             varName = ((VarDeclaration) ((Binary) repeatStmt.expr).left).name;
@@ -601,23 +610,24 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
         if ( var.global ) {
             this.getBuilder(UsedHardwareBean.Builder.class).addVisitedVariable(var);
         }
-        if ( var.getVarType().equals(BlocklyType.ARRAY)
-            || var.getVarType().equals(BlocklyType.ARRAY_BOOLEAN)
-            || var.getVarType().equals(BlocklyType.ARRAY_NUMBER)
-            || var.getVarType().equals(BlocklyType.ARRAY_COLOUR)
-            || var.getVarType().equals(BlocklyType.ARRAY_CONNECTION)
-            || var.getVarType().equals(BlocklyType.ARRAY_IMAGE)
-            || var.getVarType().equals(BlocklyType.ARRAY_STRING) ) {
+        if ( var.getBlocklyType().equals(BlocklyType.ARRAY)
+            || var.getBlocklyType().equals(BlocklyType.ARRAY_BOOLEAN)
+            || var.getBlocklyType().equals(BlocklyType.ARRAY_NUMBER)
+            || var.getBlocklyType().equals(BlocklyType.ARRAY_COLOUR)
+            || var.getBlocklyType().equals(BlocklyType.ARRAY_CONNECTION)
+            || var.getBlocklyType().equals(BlocklyType.ARRAY_IMAGE)
+            || var.getBlocklyType().equals(BlocklyType.ARRAY_STRING) ) {
             this.getBuilder(UsedHardwareBean.Builder.class).setListsUsed(true);
         }
         // TODO: dangerous check to detect local decls (fct params e.g.). Better don't reuse the blockly block for global vars
-        String blocktype = var.getProperty().getBlockType();
+        BlocklyProperties blocklyProperties = var.getProperty();
+        String blocktype = blocklyProperties.blockType;
         boolean allowedEmptyExprInHiddenDecls = blocktype.equals("robLocalVariables_declare") || blocktype.equals("robControls_forEach");
         if ( !allowedEmptyExprInHiddenDecls ) {
             requiredComponentVisited(var, var.value);
         }
         this.getBuilder(UsedHardwareBean.Builder.class).addGlobalVariable(var.name);
-        this.getBuilder(UsedHardwareBean.Builder.class).addDeclaredVariable(var.name);
+        this.getBuilder(UsedHardwareBean.Builder.class).addDeclaredVariable(var.name, var.getBlocklyType());
         this.getBuilder(UsedHardwareBean.Builder.class).addInScopeVariable(var.name);
         return null;
     }

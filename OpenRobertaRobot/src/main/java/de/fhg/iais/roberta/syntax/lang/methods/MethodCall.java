@@ -98,7 +98,7 @@ public final class MethodCall extends Method {
             for ( Expr parameter : this.oraParameters.get() ) {
                 Arg arg = new Arg();
                 arg.setName(((Var) parameter).name);
-                arg.setType(((Var) parameter).getVarType().getBlocklyName());
+                arg.setType(((Var) parameter).getBlocklyType().getBlocklyName());
                 mutation.getArg().add(arg);
             }
         }

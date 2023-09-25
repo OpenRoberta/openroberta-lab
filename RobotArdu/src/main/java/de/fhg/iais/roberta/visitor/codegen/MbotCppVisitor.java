@@ -52,6 +52,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.syntax.MotorDuration;
 import de.fhg.iais.roberta.util.syntax.SC;
@@ -117,9 +118,7 @@ public final class MbotCppVisitor extends NepoArduinoCppVisitor implements IMbot
             case PRIM:
             case NOTHING:
             case CAPTURED_TYPE:
-            case R:
-            case S:
-            case T:
+            case CAPTURED_TYPE_ARRAY_ITEM:
                 return "";
             case ARRAY:
                 return "std::list<double>";
@@ -374,7 +373,7 @@ public final class MbotCppVisitor extends NepoArduinoCppVisitor implements IMbot
     @Override
     public Void visitLEDMatrixTextAction(LEDMatrixTextAction ledMatrixTextAction) {
         this.src.add("drawStrLEDMatrix(&__meLEDMatrix_", ledMatrixTextAction.port, ", ");
-        if ( !ledMatrixTextAction.msg.getVarType().equals(BlocklyType.STRING) ) {
+        if ( !ledMatrixTextAction.msg.getBlocklyType().equals(BlocklyType.STRING) ) {
             this.src.add("String(");
             ledMatrixTextAction.msg.accept(this);
             this.src.add(")");
@@ -388,7 +387,8 @@ public final class MbotCppVisitor extends NepoArduinoCppVisitor implements IMbot
     @Override
     public Void visitLEDMatrixImage(LEDMatrixImage ledMatrixImage) {
         Map<String, String[][]> usedIDImages = this.getBean(UsedHardwareBean.class).getUsedIDImages();
-        this.src.add("__ledMatrix", this.imageList.get(ledMatrixImage.getProperty().getBlocklyId()));
+        BlocklyProperties blocklyProperties = ledMatrixImage.getProperty();
+        this.src.add("__ledMatrix", this.imageList.get(blocklyProperties.blocklyId));
         return null;
     }
 

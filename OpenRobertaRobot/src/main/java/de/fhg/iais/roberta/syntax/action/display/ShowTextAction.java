@@ -27,7 +27,6 @@ public final class ShowTextAction extends Action {
 
     public ShowTextAction(
         BlocklyProperties properties,
-        
         Expr msg,
         Expr column,
         Expr row,

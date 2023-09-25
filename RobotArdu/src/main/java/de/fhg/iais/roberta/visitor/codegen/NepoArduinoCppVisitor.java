@@ -62,7 +62,7 @@ public abstract class NepoArduinoCppVisitor extends AbstractCppVisitor {
 
     @Override
     public Void visitVarDeclaration(VarDeclaration var) {
-        this.src.add(getLanguageVarTypeFromBlocklyType(var.typeVar));
+        this.src.add(getLanguageVarTypeFromBlocklyType(var.getBlocklyType()));
         this.src.add(" ", var.getCodeSafeName());
         return null;
     }
@@ -101,7 +101,7 @@ public abstract class NepoArduinoCppVisitor extends AbstractCppVisitor {
     }
 
     private void convertToString(Expr expr) {
-        switch ( expr.getVarType() ) {
+        switch ( expr.getBlocklyType() ) {
             case BOOLEAN:
             case NUMBER:
             case NUMBER_INT:

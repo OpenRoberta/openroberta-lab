@@ -6,6 +6,6 @@ import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 @NepoBasic(name = "OTHER_SENSOR", category = "CONFIGURATION_SENSOR", blocklyNames = {"other_sensor"})
 public final class OtherSensor extends Phrase {
     public OtherSensor() {
-        super(BlocklyProperties.make("OTHER_SENSOR", "1"));
+        super(BlocklyProperties.make("OTHER_SENSOR", "1", null));
     }
 }

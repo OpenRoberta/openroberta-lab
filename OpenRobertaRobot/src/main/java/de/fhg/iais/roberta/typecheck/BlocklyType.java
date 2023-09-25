@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.typecheck;
 
 import java.util.Locale;
 
+import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 
 /**
@@ -43,43 +44,54 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
  */
 public enum BlocklyType {
     // @formatter:off
-    ANY("", false),
-    COMPARABLE("", false,ANY),
-    ADDABLE("", false,ANY),
-    ARRAY("Array", false,COMPARABLE),
-    ARRAY_NUMBER("Array_Number",true, COMPARABLE),
-    ARRAY_STRING("Array_String", true,COMPARABLE),
-    ARRAY_COLOUR("Array_Colour", true,COMPARABLE),
-    ARRAY_BOOLEAN("Array_Boolean", true,COMPARABLE),
-    ARRAY_IMAGE("Array_Image", true, COMPARABLE),
-    ARRAY_CONNECTION("Array_Connection", true, COMPARABLE),
-    BOOLEAN("Boolean", false,COMPARABLE),
-    NUMBER("Number", false,COMPARABLE, ADDABLE),
-    NUMBER_INT("Number",false, COMPARABLE, ADDABLE),
-    STRING("String", false,COMPARABLE, ADDABLE),
-    COLOR("Colour", false,ANY), //
-    IMAGE("Image", false, ANY),
-    PREDEFINED_IMAGE("PredefinedImage", false, ANY),
-    NULL("", false,STRING, COLOR),
-    REF("", false,NULL),
-    PRIM("",false, NUMBER, BOOLEAN),
-    NOTHING("", false, REF, PRIM),
-    VOID("",false),
-    CONNECTION("Connection",false, ANY),
-    CAPTURED_TYPE("",false),
-    R("",false),
-    S("",false),
-    T("",false);
+    ANY(""),
+    COMPARABLE("",ANY),
+    ADDABLE("",ANY),
+
+    BOOLEAN("Boolean",COMPARABLE),
+    NUMBER("Number",COMPARABLE, ADDABLE),
+    NUMBER_INT("Number", COMPARABLE, ADDABLE),
+    STRING("String",COMPARABLE, ADDABLE),
+    COLOR("Colour",ANY), //
+    IMAGE("Image", ANY),
+    CONNECTION("Connection", ANY),
+    PREDEFINED_IMAGE("PredefinedImage", ANY),
+
+    NULL("",STRING, COLOR),
+    REF("",NULL),
+    PRIM("", NUMBER, BOOLEAN),
+    NOTHING("Void", REF, PRIM),
+    VOID(""),
+    CAPTURED_TYPE(""),
+    CAPTURED_TYPE_ARRAY_ITEM(""),
+
+    ARRAY("Array",CAPTURED_TYPE,true,COMPARABLE),
+    ARRAY_NUMBER("Array_Number",NUMBER,true,COMPARABLE),
+    ARRAY_STRING("Array_String", STRING,true,COMPARABLE),
+    ARRAY_COLOUR("Array_Colour", COLOR,true,COMPARABLE),
+    ARRAY_BOOLEAN("Array_Boolean",BOOLEAN,true,COMPARABLE),
+    ARRAY_IMAGE("Array_Image", IMAGE,true,COMPARABLE),
+    ARRAY_CONNECTION("Array_Connection", CONNECTION,true,COMPARABLE);
     // @formatter:on
 
     private final String blocklyName;
     private final BlocklyType[] superTypes;
+    private final BlocklyType arrayElementType;
     private final boolean array;
 
-    private BlocklyType(String blocklyName, boolean array, BlocklyType... superTypes) {
+    private BlocklyType(String blocklyName, BlocklyType... superTypes) {
         this.blocklyName = blocklyName;
         this.superTypes = superTypes;
-        this.array = array;
+        arrayElementType = null;
+        this.array = false;
+    }
+
+    private BlocklyType(String blocklyName, BlocklyType arrayElementType, boolean array, BlocklyType... superTypes) {
+        Assert.isTrue(array);
+        this.blocklyName = blocklyName;
+        this.superTypes = superTypes;
+        this.arrayElementType = arrayElementType;
+        this.array = true;
     }
 
     /**
@@ -95,6 +107,25 @@ public enum BlocklyType {
 
     public boolean isArray() {
         return this.array;
+    }
+
+    public BlocklyType getMatchingArrayTypeForElementType() {
+        for ( BlocklyType bt : BlocklyType.values() ) {
+            if ( this.equals(bt.arrayElementType) ) {
+                return bt;
+            }
+        }
+        throw new DbcException("for element type " + this + " no matching array type");
+    }
+
+    public BlocklyType getMatchingElementTypeForArrayType() {
+        Assert.isTrue(this.isArray());
+        for ( BlocklyType bt : BlocklyType.values() ) {
+            if ( this.equals(bt) ) {
+                return this.arrayElementType;
+            }
+        }
+        throw new DbcException("for array type " + this + " no matching element type");
     }
 
     /**
@@ -117,5 +148,14 @@ public enum BlocklyType {
             }
         }
         throw new DbcException("Invalid variableType: " + variableType);
+    }
+
+    public static BlocklyType getByBlocklyName(String blocklyName) {
+        for ( BlocklyType ap : BlocklyType.values() ) {
+            if ( ap.getBlocklyName().toUpperCase().equals(blocklyName.toUpperCase()) ) {
+                return ap;
+            }
+        }
+        throw new DbcException("blockly type name is invalid: " + blocklyName);
     }
 }

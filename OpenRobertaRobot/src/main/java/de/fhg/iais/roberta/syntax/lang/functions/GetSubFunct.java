@@ -18,7 +18,6 @@ import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.util.syntax.Assoc;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.syntax.FunctionNames;
 
@@ -33,21 +32,12 @@ public final class GetSubFunct extends Function {
 
     public GetSubFunct(FunctionNames name, List<IMode> strParam, List<Expr> param, BlocklyProperties properties) {
         super(properties);
+        this.setBlocklyType(name.signature.returnType);
         Assert.isTrue(name != null && param != null && strParam != null);
         this.functName = name;
         this.param = param;
         this.strParam = strParam;
         setReadOnly();
-    }
-
-    @Override
-    public int getPrecedence() {
-        return this.functName.getPrecedence();
-    }
-
-    @Override
-    public Assoc getAssoc() {
-        return this.functName.getAssoc();
     }
 
     @Override

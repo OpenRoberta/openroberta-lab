@@ -14,7 +14,7 @@ public final class StmtExpr extends Expr {
     public final Stmt stmt;
 
     public StmtExpr(Stmt stmt) {
-        super(stmt.getProperty());
+        super(stmt.getProperty(), BlocklyType.NOTHING);
         Assert.isTrue(stmt.isReadOnly());
         this.stmt = stmt;
         setReadOnly();
@@ -28,11 +28,6 @@ public final class StmtExpr extends Expr {
     @Override
     public Assoc getAssoc() {
         return Assoc.NONE;
-    }
-
-    @Override
-    public BlocklyType getVarType() {
-        return BlocklyType.NOTHING;
     }
 
     @Override

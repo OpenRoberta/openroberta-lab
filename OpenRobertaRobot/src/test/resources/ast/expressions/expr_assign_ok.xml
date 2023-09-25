@@ -1,0 +1,23 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="nao" xmlversion="3.1" description="" tags="">
+    <instance x="98" y="31">
+        <block type="variables_set" id="MPjsm%R)p6f[c%48MR^5" intask="true">
+            <mutation datatype="Number"/>
+            <field name="VAR">n</field>
+            <value name="VALUE">
+                <block type="math_arithmetic" id="0Dq5@FL?+w|.`3%mV;D^" intask="true">
+                    <field name="OP">ADD</field>
+                    <value name="A">
+                        <block type="math_number" id="f=W(^{eFf4H4z9]Ds,/U" intask="true">
+                            <field name="NUM">1</field>
+                        </block>
+                    </value>
+                    <value name="B">
+                        <block type="math_number" id="}2XA-?uIKw-Kdq3Q+:SW" intask="true">
+                            <field name="NUM">2</field>
+                        </block>
+                    </value>
+                </block>
+            </value>
+        </block>
+    </instance>
+</block_set>

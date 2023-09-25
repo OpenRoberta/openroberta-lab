@@ -13,6 +13,7 @@ import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.util.Key;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.SC;
 
 public class ArduinoConfigurationValidator {
@@ -49,7 +50,7 @@ public class ArduinoConfigurationValidator {
         if ( buzzer.size() > 0 && servo.size() > 0 && ir.size() > 0 ) {
             project.addToErrorCounter(1, null);
             project.setResult(Key.PROGRAM_INVALID_STATEMETNS);
-            Stream.of(buzzer, servo, ir).flatMap(i -> i.stream()).map(cc -> cc.getProperty().getBlocklyId())
+            Stream.of(buzzer, servo, ir).flatMap(i -> i.stream()).map(cc -> cc.getProperty().blocklyId)
                 .forEach(id -> project.addToConfAnnotationList(id, NepoInfo.error("CONFIGURATION_ERROR_TIMER_CONFLICT")));
         }
     }
@@ -65,7 +66,8 @@ public class ArduinoConfigurationValidator {
                 } else {
                     project.addToErrorCounter(1, null);
                     project.setResult(Key.PROGRAM_INVALID_STATEMETNS);
-                    String blockId = configurationComponent.getProperty().getBlocklyId();
+                    BlocklyProperties blocklyProperties = configurationComponent.getProperty();
+                    String blockId = blocklyProperties.blocklyId;
                     if ( !availablePins.contains(v) ) {
                         project.addToConfAnnotationList(blockId, NepoInfo.error("CONFIGURATION_ERROR_MISSING_PIN"));
                     } else {
@@ -77,7 +79,8 @@ public class ArduinoConfigurationValidator {
         if ( blockPins.stream().distinct().count() != blockPins.size() ) {
             project.addToErrorCounter(1, null);
             project.setResult(Key.PROGRAM_INVALID_STATEMETNS);
-            String blockId = configurationComponent.getProperty().getBlocklyId();
+            BlocklyProperties blocklyProperties = configurationComponent.getProperty();
+            String blockId = blocklyProperties.blocklyId;
             project.addToConfAnnotationList(blockId, NepoInfo.error("CONFIGURATION_ERROR_OVERLAPPING_PORTS"));
         }
     }
@@ -90,7 +93,8 @@ public class ArduinoConfigurationValidator {
                 if ( v.equals(SC.LED_BUILTIN) && !project.getRobot().equals("unowifirev2") ) {
                     project.addToErrorCounter(1, null);
                     project.setResult(Key.PROGRAM_INVALID_STATEMETNS);
-                    project.addToConfAnnotationList(configurationComponent.getProperty().getBlocklyId(), NepoInfo.error("CONFIGURATION_ERROR_NO_BUILTIN_RGBLED"));
+                    BlocklyProperties blocklyProperties = configurationComponent.getProperty();
+                    project.addToConfAnnotationList(blocklyProperties.blocklyId, NepoInfo.error("CONFIGURATION_ERROR_NO_BUILTIN_RGBLED"));
                 }
             });
         }

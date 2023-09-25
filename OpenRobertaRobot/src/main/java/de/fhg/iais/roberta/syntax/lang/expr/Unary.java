@@ -9,6 +9,7 @@ import de.fhg.iais.roberta.transformer.ExprParam;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
+import de.fhg.iais.roberta.typecheck.Sig;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
@@ -30,7 +31,7 @@ public final class Unary extends Expr {
     public final Expr expr;
 
     public Unary(Op op, Expr expr, BlocklyProperties properties) {
-        super(properties);
+        super(properties, op.sig.returnType);
         Assert.isTrue(op != null && expr != null && expr.isReadOnly());
         this.op = op;
         this.expr = expr;
@@ -48,11 +49,6 @@ public final class Unary extends Expr {
     }
 
     @Override
-    public BlocklyType getVarType() {
-        return BlocklyType.CAPTURED_TYPE;
-    }
-
-    @Override
     public String toString() {
         return "Unary [" + this.op + ", " + this.expr + "]";
     }
@@ -61,19 +57,21 @@ public final class Unary extends Expr {
      * Operators for the unary expression.
      */
     public static enum Op {
-        PLUS(10, Assoc.LEFT, "+"),
-        NEG(10, Assoc.LEFT, "-"),
-        NOT(300, Assoc.RIGHT, "!", "not"),
-        POSTFIX_INCREMENTS(1, Assoc.LEFT, "++"),
-        PREFIX_INCREMENTS(1, Assoc.RIGHT, "++");
+        PLUS(10, Assoc.LEFT, Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER), "+"),
+        NEG(10, Assoc.LEFT, Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER), "-"),
+        NOT(300, Assoc.RIGHT, Sig.of(BlocklyType.BOOLEAN, BlocklyType.BOOLEAN), "!", "not"),
+        POSTFIX_INCREMENTS(1, Assoc.LEFT, Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER), "++"),
+        PREFIX_INCREMENTS(1, Assoc.RIGHT, Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER), "++");
 
-        public final String[] values;
         public final int precedence;
         public final Assoc assoc;
+        public final Sig sig;
+        public final String[] values;
 
-        private Op(int precedence, Assoc assoc, String... values) {
+        private Op(int precedence, Assoc assoc, Sig sig, String... values) {
             this.precedence = precedence;
             this.assoc = assoc;
+            this.sig = sig;
             this.values = values;
         }
 
@@ -132,7 +130,8 @@ public final class Unary extends Expr {
     public Block ast2xml() {
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
-        if ( getProperty().getBlockType().equals(BlocklyConstants.MATH_SINGLE) ) {
+        BlocklyProperties blocklyProperties = getProperty();
+        if ( blocklyProperties.blockType.equals(BlocklyConstants.MATH_SINGLE) ) {
             Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.OP, this.op.name());
             Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.NUM, this.expr);
         } else {

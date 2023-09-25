@@ -60,7 +60,7 @@ public final class BotnrollCppVisitor extends NepoArduinoCppVisitor implements I
     @Override
     public Void visitShowTextAction(ShowTextAction showTextAction) {
         String toChar = "";
-        String varType = showTextAction.msg.getVarType().toString();
+        String msgType = showTextAction.msg.getBlocklyType().toString();
         boolean isVar = showTextAction.msg.hasName("VAR");
         String mode = null;
         Expr tt = showTextAction.msg;
@@ -80,12 +80,12 @@ public final class BotnrollCppVisitor extends NepoArduinoCppVisitor implements I
 
         this.src.add("(");
 
-        if ( isVar && varType.equals("STRING")
+        if ( isVar && msgType.equals("STRING")
             || mode != null && !mode.equals("RED") && !mode.equals("RGB") && !mode.equals("COLOUR") && !mode.equals("LIGHT") ) {
             toChar = ".c_str()";
         }
 
-        if ( varType.equals("BOOLEAN") ) {
+        if ( msgType.equals("BOOLEAN") ) {
             this.src.add("bnr.boolToString(");
             showTextAction.msg.accept(this);
             this.src.add(")");

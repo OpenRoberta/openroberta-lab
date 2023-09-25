@@ -13,6 +13,7 @@ import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.util.Key;
+import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.visitor.SpikeMethods;
 import de.fhg.iais.roberta.visitor.SpikeValidatorAndCollectorVisitor;
 import de.fhg.iais.roberta.visitor.validate.CommonNepoValidatorAndCollectorVisitor;
@@ -57,7 +58,8 @@ public class SpikeValidatorAndCollectorWorker extends AbstractValidatorAndCollec
                 }
             }
             if ( rightMotorMissing || leftMotorMissing || !diffDriveCompUnique ) {
-                String blockId = diffDrive.getProperty().getBlocklyId();
+                BlocklyProperties blocklyProperties = diffDrive.getProperty();
+                String blockId = blocklyProperties.blocklyId;
                 project.setResult(Key.PROGRAM_INVALID_STATEMETNS);
                 project.addToErrorCounter(1, null);
                 if ( leftMotorMissing ) {
@@ -71,7 +73,8 @@ public class SpikeValidatorAndCollectorWorker extends AbstractValidatorAndCollec
                 }
             }
             if ( diffDrive.getProperty("MOTOR_L").equals(diffDrive.getProperty(("MOTOR_R"))) ) {
-                String blockId = diffDrive.getProperty().getBlocklyId();
+                BlocklyProperties blocklyProperties = diffDrive.getProperty();
+                String blockId = blocklyProperties.blocklyId;
                 project.addToErrorCounter(1, null);
                 project.setResult(Key.PROGRAM_INVALID_STATEMETNS);
                 project.addToConfAnnotationList(blockId, NepoInfo.error("CONFIGURATION_ERROR_OVERLAPPING_PORTS"));
@@ -86,7 +89,8 @@ public class SpikeValidatorAndCollectorWorker extends AbstractValidatorAndCollec
                 continue;
             }
             if ( takenPins.contains(property.getValue()) ) {
-                String blockId = configurationComponent.getProperty().getBlocklyId();
+                BlocklyProperties blocklyProperties = configurationComponent.getProperty();
+                String blockId = blocklyProperties.blocklyId;
                 project.addToErrorCounter(1, null);
                 project.setResult(Key.PROGRAM_INVALID_STATEMETNS);
                 project.addToConfAnnotationList(blockId, NepoInfo.error("CONFIGURATION_ERROR_OVERLAPPING_PORTS"));

@@ -17,7 +17,7 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.Assoc;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-@NepoBasic(name = "TEXT_PRINT_FUNCT", category = "FUNCTION", blocklyNames = {"text_print"})
+@NepoBasic(name = "TEXT_PRINT_FUNCT", category = "FUNCTION", blocklyNames = {"text_print"}, blocklyType = BlocklyType.VOID)
 public final class TextPrintFunct extends Function {
     public final List<Expr> param;
 

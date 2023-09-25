@@ -10,9 +10,9 @@ var _state = 2       # current state of the program flow
 var _time            # current elapsed time
 var _method_count = -1
 var _return_state[2]
-var ___duration_
-var ___led_[8]
 var ___color_[3]
+var ___led_[8]
+var ___duration_
 timer.period[0] = 10 # ms time between state executions
 
 onevent timer0
