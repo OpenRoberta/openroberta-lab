@@ -21,7 +21,6 @@ import org.json.JSONObject;
 public class ProjectNativeResponse extends BaseResponse {
     protected String programName;
     protected Map<String,JSONObject> confAnnos;
-    protected String compiledCode;
     protected String binaryURL;
     
     /**
@@ -46,7 +45,7 @@ public class ProjectNativeResponse extends BaseResponse {
     /**
      * the response for the /projectWorkflow/runNative, ../compileNative and ../reset REST request
      */
-    public static ProjectNativeResponse makeFromProperties(String cmd,String rc,String message,String cause,JSONObject parameters,String initToken,long serverTime,String serverVersion,long robotWait,String robotBattery,String robotName,String robotVersion,String robotFirmwareName,JSONObject robotSensorvalues,int robotNepoexitvalue,String robotState,boolean notificationsAvailable,String programName,Map<String,JSONObject> confAnnos,String compiledCode,String binaryURL) {
+    public static ProjectNativeResponse makeFromProperties(String cmd,String rc,String message,String cause,JSONObject parameters,String initToken,long serverTime,String serverVersion,long robotWait,String robotBattery,String robotName,String robotVersion,String robotFirmwareName,JSONObject robotSensorvalues,int robotNepoexitvalue,String robotState,boolean notificationsAvailable,String programName,Map<String,JSONObject> confAnnos,String binaryURL) {
         ProjectNativeResponse entity = new ProjectNativeResponse();
         entity.setCmd(cmd);
         entity.setRc(rc);
@@ -67,7 +66,6 @@ public class ProjectNativeResponse extends BaseResponse {
         entity.setNotificationsAvailable(notificationsAvailable);
         entity.setProgramName(programName);
         entity.setConfAnnos(confAnnos);
-        entity.setCompiledCode(compiledCode);
         entity.setBinaryURL(binaryURL);
         entity.immutable();
         return entity;
@@ -134,8 +132,6 @@ public class ProjectNativeResponse extends BaseResponse {
                             putConfAnnos(subKey, map.getJSONObject(subKey));
                         }
                     }
-                } else if ("compiledCode".equals(key)) {
-                    setCompiledCode(jsonO.optString(key));
                 } else if ("binaryURL".equals(key)) {
                     setBinaryURL(jsonO.getString(key));
                 } else {
@@ -274,36 +270,6 @@ public class ProjectNativeResponse extends BaseResponse {
     }
     
     /**
-     * GET compiledCode. Object must be immutable. Never return null or an undefined/default value.
-     */
-    public String getCompiledCode() {
-        if (!this.immutable) {
-            throw new RuntimeException("no compiledCode from an object under construction: " + toString());
-        }
-        return this.compiledCode;
-    }
-    
-    /**
-     * is the property defined? The property maybe undefined as it is not a required property
-     *
-     * @return true if the property is defined (has been set)
-     */
-    public boolean compiledCodeDefined() {
-        return this.compiledCode != null;
-    }
-    
-    /**
-     * SET compiledCode. Object must be mutable.
-     */
-    public ProjectNativeResponse setCompiledCode(String compiledCode) {
-        if (this.immutable) {
-            throw new RuntimeException("compiledCode assigned to an immutable object: " + toString());
-        }
-        this.compiledCode = compiledCode;
-        return this;
-    }
-    
-    /**
      * GET binaryURL. Object must be immutable. Never return null or an undefined/default value.
      */
     public String getBinaryURL() {
@@ -390,9 +356,6 @@ public class ProjectNativeResponse extends BaseResponse {
                     jsonO.put("confAnnos", map);
                 }
             }
-            if (this.compiledCode != null) {
-                jsonO.put("compiledCode", this.compiledCode);
-            }
             jsonO.put("binaryURL", this.binaryURL);
         } catch (JSONException e) {
             throw new RuntimeException("JSON unparse error when unparsing: " + this, e);
@@ -402,7 +365,7 @@ public class ProjectNativeResponse extends BaseResponse {
     
     @Override
     public String toString() {
-        return "ProjectNativeResponse [immutable=" + this.immutable + ", cmd=" + this.cmd + ", rc=" + this.rc + ", message=" + this.message + ", cause=" + this.cause + ", parameters=" + this.parameters + ", initToken=" + this.initToken + ", serverTime=" + this.serverTime + ", serverVersion=" + this.serverVersion + ", robotWait=" + this.robotWait + ", robotBattery=" + this.robotBattery + ", robotName=" + this.robotName + ", robotVersion=" + this.robotVersion + ", robotFirmwareName=" + this.robotFirmwareName + ", robotSensorvalues=" + this.robotSensorvalues + ", robotNepoexitvalue=" + this.robotNepoexitvalue + ", robotState=" + this.robotState + ", notificationsAvailable=" + this.notificationsAvailable + ", programName=" + this.programName + ", confAnnos=" + this.confAnnos + ", compiledCode=" + this.compiledCode + ", binaryURL=" + this.binaryURL + " ]";
+        return "ProjectNativeResponse [immutable=" + this.immutable + ", cmd=" + this.cmd + ", rc=" + this.rc + ", message=" + this.message + ", cause=" + this.cause + ", parameters=" + this.parameters + ", initToken=" + this.initToken + ", serverTime=" + this.serverTime + ", serverVersion=" + this.serverVersion + ", robotWait=" + this.robotWait + ", robotBattery=" + this.robotBattery + ", robotName=" + this.robotName + ", robotVersion=" + this.robotVersion + ", robotFirmwareName=" + this.robotFirmwareName + ", robotSensorvalues=" + this.robotSensorvalues + ", robotNepoexitvalue=" + this.robotNepoexitvalue + ", robotState=" + this.robotState + ", notificationsAvailable=" + this.notificationsAvailable + ", programName=" + this.programName + ", confAnnos=" + this.confAnnos + ", binaryURL=" + this.binaryURL + " ]";
     }
     @Override
     public int hashCode() {
