@@ -149,6 +149,7 @@ define(["require", "exports", "message", "log", "guiState.controller", "program.
             if (tutorial.step[step].instruction) {
                 if (tutorial.step[step].toolbox) {
                     try {
+                        GUISTATE_C.setDynamicProgramToolbox(tutorial.step[step].toolbox);
                         PROG_C.loadExternalToolbox(tutorial.step[step].toolbox);
                         Blockly.mainWorkspace.options.maxBlocks = tutorial.step[step].maxBlocks;
                     }
@@ -440,6 +441,7 @@ define(["require", "exports", "message", "log", "guiState.controller", "program.
         $('#head-navigation').fadeIn(750);
         $('#tutorialButton').fadeOut();
         $('.blocklyToolboxDiv>.levelTabs').removeClass('invisible');
+        GUISTATE_C.resetDynamicProgramToolbox();
         PROG_C.loadExternalToolbox(GUISTATE_C.getProgramToolbox());
         Blockly.mainWorkspace.options.maxBlocks = undefined;
         if (GUISTATE_C.isKioskMode()) {

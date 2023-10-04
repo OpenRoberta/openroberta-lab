@@ -948,7 +948,19 @@ function getRobotsByName() {
 }
 
 function getProgramToolbox() {
-    return GUISTATE.gui.program.toolbox[GUISTATE.program.toolbox.level];
+    if (GUISTATE.gui.program.dynamicToolbox) {
+        return GUISTATE.gui.program.dynamicToolbox;
+    } else {
+        return GUISTATE.gui.program.toolbox[GUISTATE.program.toolbox.level];
+    }
+}
+
+export function setDynamicProgramToolbox(toolbox) {
+    GUISTATE.gui.program['dynamicToolbox'] = toolbox;
+}
+
+export function resetDynamicProgramToolbox() {
+    delete GUISTATE.gui.program['dynamicToolbox'];
 }
 
 function getConfigurationToolbox() {
