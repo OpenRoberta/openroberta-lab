@@ -13,7 +13,7 @@ function isDefined {
 # a safe method, but doesn't distinguish between wsl2 and docker
 # if [[ -f /proc/1/sched && $(cat /proc/1/sched | head -n 1 | grep init) ]]
 # the folowing line distinguishes between wsl2 and docker, but uses a deprecated feature
-if [ -f /.dockerenv]
+if [ -f /.dockerenv ]
 then
    echo 'running in a docker container - exit 12 to avoid problems :-)'
    exit 12
