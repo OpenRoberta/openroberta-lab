@@ -124,6 +124,7 @@ public class ProjectWorkflowRestController {
             Project project = request2project(wfRequest, dbSession, httpSessionState, this.robotCommunicator, true, false);
             ProjectService.executeWorkflow("run", project);
             response.setCmd("runPBack");
+            response.setProgXML(project.getAnnotatedProgramAsXml());
             response.setConfAnnos(project.getConfAnnotationList());
             response.setCompiledCode(project.getCompiledHex());
             response.setConfiguration(project.getConfigurationJSON());
