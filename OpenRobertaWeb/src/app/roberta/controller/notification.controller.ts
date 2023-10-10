@@ -42,8 +42,12 @@ export function getDeprecatedNotifications(robot, language) {
 
 function loadAndInitNotifications() {
     notificationModel.getNotifications((result) => {
-        activeNotifications = initNotifications(result.notifications.notifications);
-        activeDeprecated = result.notifications.deprecated;
+        if (result.notifications.notifications) {
+            activeNotifications = initNotifications(result.notifications.notifications);
+        }
+        if (result.notifications.deprecated) {
+            activeDeprecated = result.notifications.deprecated;
+        }
     });
 }
 

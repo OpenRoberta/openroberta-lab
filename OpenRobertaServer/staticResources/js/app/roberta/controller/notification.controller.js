@@ -47,8 +47,12 @@ define(["require", "exports", "guiState.model", "guiState.controller", "notifica
     exports.getDeprecatedNotifications = getDeprecatedNotifications;
     function loadAndInitNotifications() {
         notificationModel.getNotifications(function (result) {
-            activeNotifications = initNotifications(result.notifications.notifications);
-            activeDeprecated = result.notifications.deprecated;
+            if (result.notifications.notifications) {
+                activeNotifications = initNotifications(result.notifications.notifications);
+            }
+            if (result.notifications.deprecated) {
+                activeDeprecated = result.notifications.deprecated;
+            }
         });
     }
     function init() {
