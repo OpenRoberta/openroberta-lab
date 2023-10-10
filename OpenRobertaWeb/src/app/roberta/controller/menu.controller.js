@@ -363,7 +363,7 @@ function initMenuEvents() {
                     ' div.goog-menuitem-content, div.goog-menuitem, img'
             ).length > 0
         ) {
-            if ($(e.target).filter('.blocklyhtmlinput').length > 0 && !(e.metaKey || e.ctrlKey)) {
+            if ($(e.target).filter('.blocklyHtmlInput').length > 0 && !e.metaKey) {
                 return;
             }
             Blockly.hideChaff();

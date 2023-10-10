@@ -327,7 +327,7 @@ define(["require", "exports", "message", "comm", "wrap", "robot.controller", "so
         $('.blocklyButtonBack, .blocklyWidgetDiv, #head-navigation, #main-section, #tutorial-navigation').on('mousedown touchstart keydown', function (e) {
             if ($(e.target).not('.blocklyTreeLabel, .blocklytreerow, .toolboxicon, .goog-palette-colorswatch, .goog-menu-vertical, .goog-menuitem-checkbox,' +
                 ' div.goog-menuitem-content, div.goog-menuitem, img').length > 0) {
-                if ($(e.target).filter('.blocklyhtmlinput').length > 0 && !(e.metaKey || e.ctrlKey)) {
+                if ($(e.target).filter('.blocklyHtmlInput').length > 0 && !e.metaKey) {
                     return;
                 }
                 Blockly.hideChaff();
