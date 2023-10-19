@@ -3,20 +3,13 @@ import { IDrawable, ILabel, IReset, IUpdateAction, RobotBase } from 'robot.base'
 import * as C from 'interpreter.constants';
 import * as SIMATH from 'simulation.math';
 import * as GUISTATE_C from 'guiState.controller';
-import {
-    CircleSimulationObject,
-    Ground,
-    IMovable,
-    ISimulationObstacle,
-    MarkerSimulationObject,
-    RectangleSimulationObject,
-    TriangleSimulationObject,
-} from 'simulation.objects';
+import { CircleSimulationObject, Ground, IMovable, ISimulationObstacle, MarkerSimulationObject, RectangleSimulationObject, TriangleSimulationObject } from 'simulation.objects';
 import * as UTIL from 'util.roberta';
-import { ISensor } from 'robot.sensors';
 import * as $ from 'jquery';
 // @ts-ignore
 import * as Blockly from 'blockly';
+import { ISensor } from 'robot.sensors';
+import { WebAudioBase } from '../../roberta/ts/baseInterfaces';
 
 export abstract class ChassisMobile implements IUpdateAction, ISensor, IDrawable, IReset, ISimulationObstacle {
     abstract backLeft: PointRobotWorldBumped;
@@ -43,26 +36,26 @@ export abstract class ChassisMobile implements IUpdateAction, ISensor, IDrawable
                 x1: this.backLeft.rx,
                 x2: this.frontLeft.rx,
                 y1: this.backLeft.ry,
-                y2: this.frontLeft.ry,
+                y2: this.frontLeft.ry
             },
             {
                 x1: this.frontLeft.rx,
                 x2: this.frontRight.rx,
                 y1: this.frontLeft.ry,
-                y2: this.frontRight.ry,
+                y2: this.frontRight.ry
             },
             {
                 x1: this.frontRight.rx,
                 x2: this.backRight.rx,
                 y1: this.frontRight.ry,
-                y2: this.backRight.ry,
+                y2: this.backRight.ry
             },
             {
                 x1: this.backRight.rx,
                 x2: this.backLeft.rx,
                 y1: this.backRight.ry,
-                y2: this.backLeft.ry,
-            },
+                y2: this.backLeft.ry
+            }
         ];
     }
 
@@ -123,7 +116,7 @@ export abstract class ChassisDiffDrive extends ChassisMobile {
         left: 0,
         right: 0,
         rightAngle: 0,
-        leftAngle: 0,
+        leftAngle: 0
     };
     protected manipulator: { port: string; speed: number; angle: number };
     protected readonly TRACKWIDTH: number;
@@ -422,7 +415,7 @@ export abstract class ChassisDiffDrive extends ChassisMobile {
             this.wheelFrontRight,
             this.wheelFrontLeft,
             this.wheelBackLeft,
-            this.wheelBackRight,
+            this.wheelBackRight
         ];
         if (this['grabberLeft'] && this['grabberRight']) {
             myCheckPoints.push(this['grabberLeft']);
@@ -458,7 +451,7 @@ export abstract class ChassisDiffDrive extends ChassisMobile {
                     [this.frontLeft, this.frontRight, this.frontMiddle],
                     [this.backLeft, this.backRight, this.backMiddle],
                     [this.wheelFrontRight, this.wheelBackRight],
-                    [this.wheelFrontLeft, this.wheelBackLeft],
+                    [this.wheelFrontLeft, this.wheelBackLeft]
                 ];
                 if (this['grabberLeft'] && this['grabberRight']) {
                     myCheckLines.push([this['grabberLeft'], this['grabberRight']]);
@@ -484,15 +477,15 @@ export abstract class ChassisDiffDrive extends ChassisMobile {
                                 p = SIMATH.getDistanceToLine(
                                     {
                                         x: checkLine[2].rx,
-                                        y: checkLine[2].ry,
+                                        y: checkLine[2].ry
                                     },
                                     {
                                         x: obstacleLines[k].x1,
-                                        y: obstacleLines[k].y1,
+                                        y: obstacleLines[k].y1
                                     },
                                     {
                                         x: obstacleLines[k].x2,
-                                        y: obstacleLines[k].y2,
+                                        y: obstacleLines[k].y2
                                     }
                                 );
                                 if (SIMATH.sqr(checkLine[2].rx - p.x) + SIMATH.sqr(checkLine[2].ry - p.y) < dt * (myObstacle.getTolerance() + thisTolerance)) {
@@ -553,7 +546,7 @@ export class RobotinoChassis extends ChassisMobile {
         w: 136,
         h: 136,
         radius: 68,
-        color: '#DDDDDD',
+        color: '#DDDDDD'
     };
     topView: string;
     bumpedAngle: number[] = [];
@@ -571,28 +564,28 @@ export class RobotinoChassis extends ChassisMobile {
         y: -68,
         rx: 0,
         ry: 0,
-        bumped: false,
+        bumped: false
     };
     backRight: PointRobotWorldBumped = {
         x: -68,
         y: 68,
         rx: 0,
         ry: 0,
-        bumped: false,
+        bumped: false
     };
     frontLeft: PointRobotWorldBumped = {
         x: 68,
         y: -68,
         rx: 0,
         ry: 0,
-        bumped: false,
+        bumped: false
     };
     frontRight: PointRobotWorldBumped = {
         x: 68,
         y: 68,
         rx: 0,
         ry: 0,
-        bumped: false,
+        bumped: false
     };
     img = new Image();
 
@@ -841,7 +834,7 @@ export class RobotinoChassis extends ChassisMobile {
                         { x: myObstacle.x, y: myObstacle.y },
                         { x: myObstacle.x + myObstacle.w, y: myObstacle.y + myObstacle.h },
                         { x: myObstacle.x + myObstacle.w, y: myObstacle.y },
-                        { x: myObstacle.x, y: myObstacle.y + myObstacle.h },
+                        { x: myObstacle.x, y: myObstacle.y + myObstacle.h }
                     ];
                     for (let i = 0; i < 4; i++) {
                         if (
@@ -858,7 +851,7 @@ export class RobotinoChassis extends ChassisMobile {
                     let myPoints: Point[] = [
                         { x: myObstacle.ax, y: myObstacle.ay },
                         { x: myObstacle.bx, y: myObstacle.by },
-                        { x: myObstacle.cx, y: myObstacle.cy },
+                        { x: myObstacle.cx, y: myObstacle.cy }
                     ];
                     for (let i = 0; i < 3; i++) {
                         if (
@@ -941,42 +934,42 @@ export abstract class LegoChassis extends EncoderChassisDiffDrive implements ILa
         y: -20,
         rx: 0,
         ry: 0,
-        bumped: false,
+        bumped: false
     };
     backMiddle: PointRobotWorldBumped = {
         x: -30,
         y: 0,
         rx: 0,
         ry: 0,
-        bumped: false,
+        bumped: false
     };
     backRight: PointRobotWorldBumped = {
         x: -30,
         y: 20,
         rx: 0,
         ry: 0,
-        bumped: false,
+        bumped: false
     };
     frontLeft: PointRobotWorldBumped = {
         x: 25,
         y: -22.5,
         rx: 0,
         ry: 0,
-        bumped: false,
+        bumped: false
     };
     frontMiddle: PointRobotWorldBumped = {
         x: 25,
         y: 0,
         rx: 0,
         ry: 0,
-        bumped: false,
+        bumped: false
     };
     frontRight: PointRobotWorldBumped = {
         x: 25,
         y: 22.5,
         rx: 0,
         ry: 0,
-        bumped: false,
+        bumped: false
     };
 
     override reset(): void {
@@ -989,21 +982,21 @@ export abstract class LegoChassis extends EncoderChassisDiffDrive implements ILa
         y: -2,
         w: 4,
         h: 4,
-        color: '#000000',
+        color: '#000000'
     };
     wheelLeft: Geometry = {
         x: -8,
         y: -24,
         w: 16,
         h: 8,
-        color: '#000000',
+        color: '#000000'
     };
     wheelRight: Geometry = {
         x: -8,
         y: 16,
         w: 16,
         h: 8,
-        color: '#000000',
+        color: '#000000'
     };
     axisDiff = 2;
 
@@ -1063,7 +1056,7 @@ export class EV3Chassis extends LegoChassis {
         w: 50,
         h: 40,
         radius: 2.5,
-        color: '#FCCC00',
+        color: '#FCCC00'
     };
     topView: string =
         '<svg id="brick' +
@@ -1148,7 +1141,7 @@ export class EV3Chassis extends LegoChassis {
             '<image width="178" height="128" alt="eyes closed" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALIAAACACAQAAAAFMftFAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QA/4ePzL8AAAAJcEhZcwAAFeAAABXgAY1ULDgAAATbSURBVHja7ZxJksMgDEUhlftfmV7EiW3MIEDDh+ZvutoDoBcZgwR2bmtra2tra2tra2srlrdugJKCpbX/A3Kwtfdlbb+CwngRY1ofsjni9buLJ2IDi9f2ZAAvdm5tyCCIV+4uUoj3EI5VEH0xQNWCihEbW7ki5DtiAAsBmsCsK2IQ60CawSZAxEANYREk4nXHyUCIwRozKONYW14ozRkHBIsYo0E8o9owdLeo3qa180UXgBFbQuYM30AjtoIsEx8DRWzRsBrg9haZJkkp0vXkEuAxSMCIdRuXRgyNh0d6JoKFHzWlY+o/BqxlLlx8V1vyJv97xPJGgwYfdSVrOHDQRlOSxoNPdvUkBwB+HqYn2RmfHWKgpS3reRol9KRu80qQW2J7qnavApkypzSbdyJAHu8/W0bjBiN3S8g8/WcPNOo9TLNVG8itmZF8K/unO+k7RSLeCJkRSv9Zu6rHDr6fWurGTrU+3KXrOWaUKiMSq8xIS73p+7gm7XTME0DmerT97QhH+6mYu+vSWnA4Go+LPdhi0013nbrpJ+5Hm6v1wr6s4cl8IU9f+I+vXHbJQ+aNKiPMUJslDZk/cO+jv7ylikjnxcdpAsw+U7pkg/ZyQPg9z8st5JWEvF6OLzSEk75HvMaCw3UQ55SPswRpBDJ+LJuerXcYvnBlLoTlpT0Z0495JzXlQKxKd4GlkDnanomhpRO8c3KQRx5r/nVH9W6gFXNTnWieHB7/aUWLJexQGML1NSx1tD+tSlWthjhFVb4+eo75IXN5T+k9zlu37zhTb8XlXj7Iox+kyWWGvQvNk4Ca/MDZs06KNzvnOCDbxhL4N6zV5X+JA2LpvZC50dbKC9mhfgxAQ/6oO+3PjyN9kO281x/GSYTv24adJ+jqHUiji7vBlBef9XzSF/z5IlTI1n09VSR/nvXzOPw/QX+J/rg/W0IfZImQOfW8bBfRu2ChCHpWT+b25fHSCu8QHMiefE7Ol0dDnhl/loQs/eriz8mNK+nP49+uolQ5Uq4vXse5Fo7vCYlK7PVkqUfW30r22Xr0X709ZQ3n+Kw3c3Gvr+Nv669kWcj4mKWXLQTnkEYXI4b0vbiCOOKjZPnkjlb6nmdjjohwYxetaklTKe/l00hTSpiRr3uazZK928B6DW8VfaVP6S7Tbb/0lE6oXCH1YuGLNKgoD7m0TzMdDCn9YEgrlEE+xRAq51q2eXFjpk2CpvioSB5N/2ITvT131mmpSLnJyBm2G1fPMpW0pkRcnvHxb6bpnZuN3musEuSQOdYDvz4iKWtawM6VIHOvab9ibkM2sQ/Hpt/NSp8dXco69imGEYtM9YxdyEamroOrUk3heQCQHtnolGnto+c29XwzxTJSMqjn8Ko8ctaeubW+MAERf7oLSmRVYmtX63ataeUbpsbonzezbmNW3xdf/YNKkM2fQ6+Ei4TEf3MgBm3luxKvnAkxrG7jZH/743AQTz7ju0yrYRFTBdvSH+TpEQPr6C4ixFifA5m8szggJxFjAKYLuL2vRRBD67URy+vz4kNGPH2P/IGMjJgq6Fa/o6w0dGNn1ae72IhFdeYcMAFPHKo/9YJGvIjuo4stEWHjnTofcmqFjTngiNeADK8NWUHIj9oSwzfntieraENWEC7kBaJvX+FCXkgbsoL+APENFhEdy5OyAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDE2LTAzLTEzVDE0OjI0OjIzKzAxOjAwwvAUiQAAACV0RVh0ZGF0ZTptb2RpZnkAMjAxNi0wMy0xM1QxNDoyNDoyMyswMTowMLOtrDUAAAAASUVORK5CYII=" />',
         FLOWERS:
             '<image width="178" height="128" alt="flowers" xlink:href="data:image/png;base64,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" />',
-        TACHO: '<image width="178" height="128" alt="tacho" xlink:href="data:image/png;base64,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" />',
+        TACHO: '<image width="178" height="128" alt="tacho" xlink:href="data:image/png;base64,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" />'
     };
 
     constructor(id: number, configuration: {}, maxRotation: number, pose: Pose) {
@@ -1186,7 +1179,7 @@ export class NXTChassis extends LegoChassis {
         w: 50,
         h: 40,
         radius: 2.5,
-        color: 'LIGHTGREY',
+        color: 'LIGHTGREY'
     };
     topView: string =
         '<svg id="brick' +
@@ -1241,6 +1234,7 @@ export class NXTChassis extends LegoChassis {
         }
     }
 }
+
 export class RCJChassis extends ChassisDiffDrive implements ILabel {
     axisDiff: number;
     geom: Geometry = {
@@ -1249,49 +1243,49 @@ export class RCJChassis extends ChassisDiffDrive implements ILabel {
         w: 46,
         h: 36,
         radius: 1.5,
-        color: '#D03750',
+        color: '#D03750'
     };
     backLeft: PointRobotWorldBumped = {
         x: this.geom.x,
         y: this.geom.y,
         rx: 0,
         ry: 0,
-        bumped: false,
+        bumped: false
     };
     backMiddle: PointRobotWorldBumped = {
         x: this.geom.x,
         y: 0,
         rx: 0,
         ry: 0,
-        bumped: false,
+        bumped: false
     };
     backRight: PointRobotWorldBumped = {
         x: this.geom.x,
         y: this.geom.y * -1,
         rx: 0,
         ry: 0,
-        bumped: false,
+        bumped: false
     };
     frontLeft: PointRobotWorldBumped = {
         x: this.geom.w + this.geom.x,
         y: this.geom.y,
         rx: 0,
         ry: 0,
-        bumped: false,
+        bumped: false
     };
     frontMiddle: PointRobotWorldBumped = {
         x: this.geom.w + this.geom.x,
         y: 0,
         rx: 0,
         ry: 0,
-        bumped: false,
+        bumped: false
     };
     frontRight: PointRobotWorldBumped = {
         x: this.geom.w + this.geom.x,
         y: this.geom.y * -1,
         rx: 0,
         ry: 0,
-        bumped: false,
+        bumped: false
     };
     GRABBER_LINE_WIDTH = 4;
     grabber: Geometry = {
@@ -1300,7 +1294,7 @@ export class RCJChassis extends ChassisDiffDrive implements ILabel {
         w: -31,
         h: 32,
         radius: 0,
-        color: '#666666',
+        color: '#666666'
     };
     grabberAngle: number = 0;
     grabberWidth: number = this.grabber.w;
@@ -1353,21 +1347,21 @@ export class RCJChassis extends ChassisDiffDrive implements ILabel {
         y: -2,
         w: 2,
         h: 4,
-        color: '#000000',
+        color: '#000000'
     };
     wheelLeft: Geometry = {
         x: 0,
         y: 0,
         w: 0,
         h: 6,
-        color: '#000000',
+        color: '#000000'
     };
     wheelRight: Geometry = {
         x: 0,
         y: 0,
         w: 0,
         h: 6,
-        color: '#000000',
+        color: '#000000'
     };
 
     constructor(id: number, configuration: {}, maxRotation: number, pose: Pose) {
@@ -1474,6 +1468,7 @@ export class RCJChassis extends ChassisDiffDrive implements ILabel {
         $('#display' + this.id).html('');
     }
 }
+
 export class Txt4Chassis extends EncoderChassisDiffDrive implements ILabel {
     geom: Geometry = {
         x: -28,
@@ -1481,7 +1476,7 @@ export class Txt4Chassis extends EncoderChassisDiffDrive implements ILabel {
         w: 46,
         h: 26,
         radius: 1.5,
-        color: '#d11921',
+        color: '#d11921'
     };
     topView: string =
         '<svg id="brick' +
@@ -1774,42 +1769,42 @@ export class Txt4Chassis extends EncoderChassisDiffDrive implements ILabel {
         y: -20,
         rx: 0,
         ry: 0,
-        bumped: false,
+        bumped: false
     };
     backMiddle: PointRobotWorldBumped = {
         x: -30,
         y: 0,
         rx: 0,
         ry: 0,
-        bumped: false,
+        bumped: false
     };
     backRight: PointRobotWorldBumped = {
         x: -30,
         y: 20,
         rx: 0,
         ry: 0,
-        bumped: false,
+        bumped: false
     };
     frontLeft: PointRobotWorldBumped = {
         x: 25,
         y: -22.5,
         rx: 0,
         ry: 0,
-        bumped: false,
+        bumped: false
     };
     frontMiddle: PointRobotWorldBumped = {
         x: 25,
         y: 0,
         rx: 0,
         ry: 0,
-        bumped: false,
+        bumped: false
     };
     frontRight: PointRobotWorldBumped = {
         x: 25,
         y: 22.5,
         rx: 0,
         ry: 0,
-        bumped: false,
+        bumped: false
     };
 
     wheelBack: Geometry = {
@@ -1817,21 +1812,21 @@ export class Txt4Chassis extends EncoderChassisDiffDrive implements ILabel {
         y: -1,
         w: 2,
         h: 2,
-        color: '#000000',
+        color: '#000000'
     };
     wheelLeft: Geometry = {
         x: -8,
         y: -24,
         w: 16,
         h: 8,
-        color: '#000000',
+        color: '#000000'
     };
     wheelRight: Geometry = {
         x: -8,
         y: 16,
         w: 16,
         h: 8,
-        color: '#000000',
+        color: '#000000'
     };
     axisDiff = 0;
     geomDisplay: Geometry = {
@@ -1840,7 +1835,7 @@ export class Txt4Chassis extends EncoderChassisDiffDrive implements ILabel {
         w: 26, //46,
         h: 26, //26
         radius: 1.5,
-        color: 'DimGrey',
+        color: 'DimGrey'
     };
 
     override reset(): void {
@@ -1941,7 +1936,7 @@ export class EdisonChassis extends ChassisDiffDrive {
         w: 24,
         h: 22.5,
         radius: 0,
-        color: '#f2f2f2',
+        color: '#f2f2f2'
     };
     axisDiff: number;
     backLeft: PointRobotWorldBumped = {
@@ -1949,42 +1944,42 @@ export class EdisonChassis extends ChassisDiffDrive {
         y: -11.25,
         rx: 0,
         ry: 0,
-        bumped: false,
+        bumped: false
     };
     backMiddle: PointRobotWorldBumped = {
         x: -5.5,
         y: 0,
         rx: 0,
         ry: 0,
-        bumped: false,
+        bumped: false
     };
     backRight: PointRobotWorldBumped = {
         x: -5.5,
         y: 11.25,
         rx: 0,
         ry: 0,
-        bumped: false,
+        bumped: false
     };
     frontLeft: PointRobotWorldBumped = {
         x: 18.5,
         y: -11.25,
         rx: 0,
         ry: 0,
-        bumped: false,
+        bumped: false
     };
     frontMiddle: PointRobotWorldBumped = {
         x: 18.5,
         y: 0,
         rx: 0,
         ry: 0,
-        bumped: false,
+        bumped: false
     };
     frontRight: PointRobotWorldBumped = {
         x: 18.5,
         y: 11.25,
         rx: 0,
         ry: 0,
-        bumped: false,
+        bumped: false
     };
     img = new Image();
     topView: string =
@@ -2096,21 +2091,21 @@ export class EdisonChassis extends ChassisDiffDrive {
         y: 0,
         w: 0,
         h: 0,
-        color: '#000000',
+        color: '#000000'
     };
     wheelLeft: Geometry = {
         x: 0,
         y: 0,
         w: 0,
         h: 0,
-        color: '#000000',
+        color: '#000000'
     };
     wheelRight: Geometry = {
         x: 0,
         y: 0,
         w: 0,
         h: 0,
-        color: '#000000',
+        color: '#000000'
     };
 
     constructor(id: number, configuration: {}, maxRotation: number, pose: Pose) {
@@ -2144,7 +2139,7 @@ export class ThymioChassis extends ChassisDiffDrive {
         w: 25,
         h: 34,
         radius: 0,
-        color: '#f2f2f2',
+        color: '#f2f2f2'
     };
     axisDiff: number;
     backLeft: PointRobotWorldBumped = {
@@ -2152,42 +2147,42 @@ export class ThymioChassis extends ChassisDiffDrive {
         y: -17,
         rx: 0,
         ry: 0,
-        bumped: false,
+        bumped: false
     };
     backMiddle: PointRobotWorldBumped = {
         x: -9,
         y: 0,
         rx: 0,
         ry: 0,
-        bumped: false,
+        bumped: false
     };
     backRight: PointRobotWorldBumped = {
         x: -9,
         y: 17,
         rx: 0,
         ry: 0,
-        bumped: false,
+        bumped: false
     };
     frontLeft: PointRobotWorldBumped = {
         x: 25,
         y: -18,
         rx: 0,
         ry: 0,
-        bumped: false,
+        bumped: false
     };
     frontMiddle: PointRobotWorldBumped = {
         x: 26,
         y: 0,
         rx: 0,
         ry: 0,
-        bumped: false,
+        bumped: false
     };
     frontRight: PointRobotWorldBumped = {
         x: 25,
         y: 18,
         rx: 0,
         ry: 0,
-        bumped: false,
+        bumped: false
     };
     topView: string =
         '<svg width="114.00105mm" height="108.29441mm" viewBox="0 0 114.00105 108.29441" version="1.1" id="brick' +
@@ -2386,21 +2381,21 @@ export class ThymioChassis extends ChassisDiffDrive {
         y: 0,
         w: 0,
         h: 0,
-        color: '#000000',
+        color: '#000000'
     };
     wheelLeft: Geometry = {
         x: 0,
         y: 0,
         w: 0,
         h: 0,
-        color: '#000000',
+        color: '#000000'
     };
     wheelRight: Geometry = {
         x: 0,
         y: 0,
         w: 0,
         h: 0,
-        color: '#000000',
+        color: '#000000'
     };
 
     constructor(id: number, configuration: {}, maxRotation: number, pose: Pose) {
@@ -2476,7 +2471,7 @@ export class MbotChassis extends ChassisDiffDrive {
         w: 36,
         h: 28,
         radius: 0,
-        color: '#0f9cF4',
+        color: '#0f9cF4'
     };
     topView: string;
     backLeft: PointRobotWorldBumped = {
@@ -2484,42 +2479,42 @@ export class MbotChassis extends ChassisDiffDrive {
         y: -14,
         rx: 0,
         ry: 0,
-        bumped: false,
+        bumped: false
     };
     backMiddle: PointRobotWorldBumped = {
         x: -10,
         y: 0,
         rx: 0,
         ry: 0,
-        bumped: false,
+        bumped: false
     };
     backRight: PointRobotWorldBumped = {
         x: -10,
         y: 14,
         rx: 0,
         ry: 0,
-        bumped: false,
+        bumped: false
     };
     frontLeft: PointRobotWorldBumped = {
         x: 29,
         y: -14,
         rx: 0,
         ry: 0,
-        bumped: false,
+        bumped: false
     };
     frontMiddle: PointRobotWorldBumped = {
         x: 29,
         y: 0,
         rx: 0,
         ry: 0,
-        bumped: false,
+        bumped: false
     };
     frontRight: PointRobotWorldBumped = {
         x: 29,
         y: 14,
         rx: 0,
         ry: 0,
-        bumped: false,
+        bumped: false
     };
     private display: MbotDisplay;
 
@@ -2534,21 +2529,21 @@ export class MbotChassis extends ChassisDiffDrive {
         y: 0,
         w: 0,
         h: 0,
-        color: '#000000',
+        color: '#000000'
     };
     wheelLeft: Geometry = {
         x: 0,
         y: 0,
         w: 0,
         h: 4,
-        color: '#000000',
+        color: '#000000'
     };
     wheelRight: Geometry = {
         x: 0,
         y: 0,
         w: 0,
         h: 4,
-        color: '#000000',
+        color: '#000000'
     };
     axisDiff = 0;
 
@@ -2660,7 +2655,7 @@ export class StatusLed implements IUpdateAction, IDrawable, IReset {
                 this.timer = 0;
             }
         }
-        $('#led' + myRobot.id).attr('fill', "url('#" + this.color + myRobot.id + "')");
+        $('#led' + myRobot.id).attr('fill', 'url(\'#' + this.color + myRobot.id + '\')');
     }
 }
 
@@ -2690,7 +2685,7 @@ export class TTS implements IUpdateAction {
             this.language = language;
         }
         let sayText = myRobot.interpreter.getRobotBehaviour().getActionState('sayText', true);
-        let callBackOnFinished = function () {
+        let callBackOnFinished = function() {
             myRobot.interpreter.getRobotBehaviour().setBlocking(false);
         };
         if (sayText && window.speechSynthesis) {
@@ -2736,15 +2731,15 @@ export class TTS implements IUpdateAction {
             if (utterThis.voice === null) {
                 console.log(
                     'Language "' +
-                        lang +
-                        '" could not be found. Try a different browser or for chromium add the command line flag "--enable-speech-dispatcher".'
+                    lang +
+                    '" could not be found. Try a different browser or for chromium add the command line flag "--enable-speech-dispatcher".'
                 );
             }
         }
         utterThis.pitch = pitch;
         utterThis.rate = speed;
         utterThis.volume = this.volume;
-        utterThis.onend = function (e) {
+        utterThis.onend = function(e) {
             callBackOnFinished();
         };
         //does not work for volume = 0 thus workaround with if statement
@@ -2756,20 +2751,20 @@ export class TTS implements IUpdateAction {
     }
 }
 
-export class WebAudio implements IUpdateAction {
+export class WebAudio implements WebAudioBase, IUpdateAction {
     context: AudioContext;
     gainNode: GainNode;
     tone = {
         duration: 0,
         timer: 0,
         file: {
-            0: function (webAudio: WebAudio, osci: OscillatorNode) {
+            0: function(webAudio: WebAudio, osci: OscillatorNode) {
                 let ct = webAudio.context.currentTime;
                 osci.frequency.setValueAtTime(600, ct);
                 osci.start(ct);
                 osci.stop(ct + 200 / 1000);
             },
-            1: function (webAudio: WebAudio, osci: OscillatorNode) {
+            1: function(webAudio: WebAudio, osci: OscillatorNode) {
                 let ct = webAudio.context.currentTime;
                 osci.frequency.setValueAtTime(600, ct);
                 osci.start(ct);
@@ -2777,7 +2772,7 @@ export class WebAudio implements IUpdateAction {
                 webAudio.gainNode.gain.setValueAtTime(webAudio.volume, ct + 300 / 1000);
                 osci.stop(ct + 500 / 1000);
             },
-            2: function (webAudio: WebAudio, osci: OscillatorNode) {
+            2: function(webAudio: WebAudio, osci: OscillatorNode) {
                 let frequency = 300;
                 let ct = webAudio.context.currentTime;
                 osci.start(ct);
@@ -2788,7 +2783,7 @@ export class WebAudio implements IUpdateAction {
                 }
                 osci.stop(ct + 1100 / 1000);
             },
-            3: function (webAudio: WebAudio, osci: OscillatorNode) {
+            3: function(webAudio: WebAudio, osci: OscillatorNode) {
                 let frequency = 700;
                 let ct = webAudio.context.currentTime;
                 osci.start(ct);
@@ -2799,13 +2794,13 @@ export class WebAudio implements IUpdateAction {
                 }
                 osci.stop(ct + 1100 / 1000);
             },
-            4: function (webAudio: WebAudio, osci: OscillatorNode) {
+            4: function(webAudio: WebAudio, osci: OscillatorNode) {
                 let ct = webAudio.context.currentTime;
                 osci.frequency.setValueAtTime(200, ct);
                 osci.start(ct);
                 osci.stop(ct + 200 / 1000);
-            },
-        },
+            }
+        }
     };
     volume: number = 0.5;
 
@@ -2825,7 +2820,7 @@ export class WebAudio implements IUpdateAction {
         this.volume = (myRobot as any).volume || this.volume;
         let tone: any = myRobot.interpreter.getRobotBehaviour().getActionState('tone', true);
         if (tone && this.context) {
-            let callBackOnFinished = function () {
+            let callBackOnFinished = function() {
                 myRobot.interpreter.getRobotBehaviour().setBlocking(false);
             };
             this.playTone(callBackOnFinished, tone);
@@ -2840,7 +2835,7 @@ export class WebAudio implements IUpdateAction {
         //applies gain to Sound
         oscillator.connect(this.gainNode).connect(this.context.destination);
         let myAudio = this;
-        oscillator.onended = function (e) {
+        oscillator.onended = function(e) {
             oscillator.disconnect(myAudio.gainNode);
             myAudio.gainNode.disconnect(myAudio.context.destination);
             callBackOnFinished();
@@ -2946,7 +2941,7 @@ export abstract class MatrixDisplay implements IUpdateAction, IDrawable, IReset 
         ':': [1, 2, 4],
         ';': [2, 5, 7, 9],
         '"': [3, 1, 2, 11, 12],
-        "'": [1, 1, 2],
+        '\'': [1, 1, 2],
         '@': [5, 2, 3, 4, 6, 10, 11, 13, 15, 16, 19, 22, 23, 24],
         '#': [5, 2, 4, 6, 7, 8, 9, 10, 12, 14, 16, 17, 18, 19, 20, 22, 24],
         '%': [5, 1, 2, 5, 6, 9, 13, 17, 20, 21, 24, 25],
@@ -2969,7 +2964,7 @@ export abstract class MatrixDisplay implements IUpdateAction, IDrawable, IReset 
         '6': [5, 4, 8, 10, 12, 13, 15, 16, 18, 20, 24],
         '7': [5, 1, 5, 6, 9, 11, 13, 16, 17, 21],
         '8': [5, 2, 4, 6, 8, 10, 11, 13, 15, 16, 18, 20, 22, 24],
-        '9': [5, 2, 6, 8, 10, 11, 13, 14, 16, 18, 22],
+        '9': [5, 2, 6, 8, 10, 11, 13, 14, 16, 18, 22]
     };
     lightLevel: number = 100;
 
@@ -3035,7 +3030,7 @@ export abstract class MatrixDisplay implements IUpdateAction, IDrawable, IReset 
             if (display.text) {
                 let that = this;
                 let textArray = this.generateText(display.text);
-                let myText = function (textArray, that) {
+                let myText = function(textArray, that) {
                     let shallow = textArray.slice(0, that.leds.length);
                     that.leds = JSON.parse(JSON.stringify(shallow));
                     if (textArray.length > that.leds.length) {
@@ -3050,7 +3045,7 @@ export abstract class MatrixDisplay implements IUpdateAction, IDrawable, IReset 
             if (display.character) {
                 let that = this;
                 let textArray = this.generateCharacter(display.character);
-                let myCharacter = function (textArray, that) {
+                let myCharacter = function(textArray, that) {
                     if (textArray && textArray.length >= 5) {
                         that.leds = textArray.slice(0, that.leds.length);
                         textArray = textArray.slice(that.leds.length);
@@ -3062,9 +3057,9 @@ export abstract class MatrixDisplay implements IUpdateAction, IDrawable, IReset 
                 myCharacter(textArray, that);
             }
             if (display.picture) {
-                const transpose = function (matrix: number[][]): number[][] {
-                    return matrix[0].map(function (col, i) {
-                        return matrix.map(function (row) {
+                const transpose = function(matrix: number[][]): number[][] {
+                    return matrix[0].map(function(col, i) {
+                        return matrix.map(function(row) {
                             return row[i];
                         });
                     });
@@ -3081,7 +3076,7 @@ export abstract class MatrixDisplay implements IUpdateAction, IDrawable, IReset 
                     }
 
                     let that = this;
-                    let myAnimation = function (animation, index, that) {
+                    let myAnimation = function(animation, index, that) {
                         if (animation && animation.length > index) {
                             that.leds = animation[index];
                             that.timeout = setTimeout(myAnimation, 150, animation, index + 1, that);
@@ -3179,7 +3174,7 @@ export class MbedDisplay extends MatrixDisplay implements ISensor {
         [0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0]
     ];
     brightness: number = 255;
     color: string[] = ['255,255,255', '255,226,99', '255,227,0', '255,219,0', '255,201,0', '255,184,0', '255,143,0', '255, 113, 0', '255, 76, 2', '255, 0, 0'];
@@ -3236,7 +3231,7 @@ export class MbotDisplay extends MatrixDisplay {
         [0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0]
     ];
     override color: string[] = [
         '161, 223, 250',
@@ -3248,7 +3243,7 @@ export class MbotDisplay extends MatrixDisplay {
         '161, 223, 250',
         '161, 223, 250',
         '161, 223, 250',
-        '161, 223, 250',
+        '161, 223, 250'
     ];
     private canvas = document.createElement('canvas');
     private ctx: CanvasRenderingContext2D;
@@ -3372,11 +3367,11 @@ export class Txt4RGBLed extends RGBLed {
         if (this.color !== this.resetColor) {
             $('#stopOn' + this.id).css({
                 'stop-color': 'rgb(' + this.color[0] + ',' + this.color[1] + ',' + this.color[2] + ')',
-                'stop-opacity': 1,
+                'stop-opacity': 1
             });
             $('#stopOff' + this.id).css({
                 'stop-color': 'rgb(' + this.color[0] + ',' + this.color[1] + ',' + this.color[2] + ')',
-                'stop-opacity': 0.5,
+                'stop-opacity': 0.5
             });
         } else {
             $('#stopOn' + this.id).css({ 'stop-color': '#666666', 'stop-opacity': 1 });
@@ -3413,7 +3408,7 @@ export class CalliopeV3RGBLeds implements IUpdateAction, IDrawable {
                     }
                 } else {
                     let that = this;
-                    Object.keys(led).forEach(function (key, index) {
+                    Object.keys(led).forEach(function(key, index) {
                         if (led[key]['mode'] && led[key]['mode'] === 'off') {
                             that.rgbLeds[key].color = that.rgbLeds[key].resetColor;
                         } else if (that.rgbLeds[key] && led[key].color) {
@@ -3486,11 +3481,11 @@ export class ThymioRGBLeds implements IUpdateAction, IDrawable, IReset {
         if (this.colorL) {
             $('#stopOnL' + this.myRobotId).css({
                 'stop-color': 'rgb(' + this.colorL[0] + ',' + this.colorL[1] + ',' + this.colorL[2] + ')',
-                'stop-opacity': 1,
+                'stop-opacity': 1
             });
             $('#stopOffL' + this.myRobotId).css({
                 'stop-color': 'rgb(' + this.colorL[0] + ',' + this.colorL[1] + ',' + this.colorL[2] + ')',
-                'stop-opacity': 0,
+                'stop-opacity': 0
             });
         } else {
             $('#stopOnL' + this.myRobotId).css({ 'stop-color': this.chassisColor, 'stop-opacity': 0 });
@@ -3499,11 +3494,11 @@ export class ThymioRGBLeds implements IUpdateAction, IDrawable, IReset {
         if (this.colorR) {
             $('#stopOnR' + this.myRobotId).css({
                 'stop-color': 'rgb(' + this.colorR[0] + ',' + this.colorR[1] + ',' + this.colorR[2] + ')',
-                'stop-opacity': 1,
+                'stop-opacity': 1
             });
             $('#stopOffR' + this.myRobotId).css({
                 'stop-color': 'rgb(' + this.colorR[0] + ',' + this.colorR[1] + ',' + this.colorR[2] + ')',
-                'stop-opacity': 0,
+                'stop-opacity': 0
             });
         } else {
             $('#stopOnR' + this.myRobotId).css({ 'stop-color': this.chassisColor, 'stop-opacity': 0 });
@@ -3647,43 +3642,43 @@ export class ThymioProxHLeds implements IUpdateAction, IDrawable, IReset {
         {
             x: 24 * Math.cos(-Math.PI / 4),
             y: 24 * Math.sin(-Math.PI / 4),
-            theta: -Math.PI / 4,
+            theta: -Math.PI / 4
         },
         {
             x: 26 * Math.cos(-Math.PI / 8),
             y: 26 * Math.sin(-Math.PI / 8),
-            theta: -Math.PI / 8,
+            theta: -Math.PI / 8
         },
         {
             x: 26,
             y: -1,
-            theta: 0,
+            theta: 0
         },
         {
             x: 26,
             y: 1,
-            theta: 0,
+            theta: 0
         },
         {
             x: 26 * Math.cos(Math.PI / 8),
             y: 26 * Math.sin(Math.PI / 8),
-            theta: Math.PI / 8,
+            theta: Math.PI / 8
         },
         {
             x: 24 * Math.cos(Math.PI / 4),
             y: 24 * Math.sin(Math.PI / 4),
-            theta: Math.PI / 4,
+            theta: Math.PI / 4
         },
         {
             x: -9,
             y: -13,
-            theta: Math.PI,
+            theta: Math.PI
         },
         {
             x: -9,
             y: 13,
-            theta: Math.PI,
-        },
+            theta: Math.PI
+        }
     ];
     values: number[] = [0, 0, 0, 0, 0, 0, 0, 0];
     r: number = 1;
@@ -3735,13 +3730,13 @@ export class ThymioTemperatureLeds implements IUpdateAction, IDrawable, IReset {
         {
             x: 10,
             y: -17,
-            theta: -Math.PI / 2,
+            theta: -Math.PI / 2
         },
         {
             x: 12,
             y: -17,
-            theta: -Math.PI / 2,
-        },
+            theta: -Math.PI / 2
+        }
     ];
     values: number[] = [0, 0];
     r: number = 1;
@@ -3796,8 +3791,8 @@ export class ThymioSoundLed implements IUpdateAction, IDrawable, IReset {
         {
             x: 12,
             y: 17,
-            theta: Math.PI / 2,
-        },
+            theta: Math.PI / 2
+        }
     ];
     value: number = 0;
     r: number = 1;
@@ -4017,12 +4012,12 @@ export class Motors implements IUpdateAction, IDrawable, IReset {
     updateAction(myRobot: RobotBase, dt: number, interpreterRunning: boolean): void {
         var motors = myRobot.interpreter.getRobotBehaviour().getActionState('motors', true);
         if (motors) {
-            let rotate = function (speed, that) {
+            let rotate = function(speed, that) {
                 that.theta -= ((Math.PI / 2) * speed) / 1000;
                 that.theta = that.theta % (Math.PI * 2);
                 that.timeout = setTimeout(rotate, 150, speed, that);
             };
-            let setMotor = function (speed, motor) {
+            let setMotor = function(speed, motor) {
                 motor.power = speed;
                 clearTimeout(motor.timeout);
                 speed = speed > 100 ? 100 : speed;

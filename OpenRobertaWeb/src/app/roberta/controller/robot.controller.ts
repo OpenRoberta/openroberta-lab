@@ -484,7 +484,7 @@ function switchRobot(robot: string, extensions: object, opt_continue?: boolean, 
                     $('#show-message').on('hidden.bs.modal', function () {
                         $('#show-message>.modal-dialog').addClass('modal-sm');
                     });
-                    MSG.displayPopupMessage(GUISTATE_C.getLanguage(), deprecatedData, 'OK', false);
+                    MSG.displayPopupMessage(GUISTATE_C.getLanguage(), deprecatedData, 'OK', 'false');
                 }
             } else {
                 // @ts-ignore

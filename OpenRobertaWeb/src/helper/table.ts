@@ -4,12 +4,11 @@ import * as Blockly from 'blockly';
 import * as UTIL from 'util.roberta';
 
 export namespace CommonTable {
-    export const options = {
+    export const options: object = {
         buttonsAlign: 'right',
-        formatLoadingMessage: function () {
+        formatLoadingMessage: function (): string {
             return '<div class="pace"></div>';
         },
-        // @ts-ignore
         height: UTIL.calcDataTableHeight,
         icons: {
             paginationSwitchDown: 'typcn-document-text',
@@ -23,7 +22,7 @@ export namespace CommonTable {
 }
 
 export namespace CardView {
-    export const options = {
+    export const options: object = {
         cardView: 'true',
         pageList: [12, 24, 48, 96],
         pageSize: 12,
@@ -37,7 +36,7 @@ export namespace CardView {
         return '<div class="typcn typcn-' + GUISTATE_C.findGroup(robot) + '"></div>';
     }
 
-    export function robotImage(robot: string, row): string {
+    export function robotImage(robot: string, row: string): string {
         return '<div class="text-center robotImage"><img src="/css/img/system_preview/' + robot + '.jpg" class="w-50" alt="' + row + '"/></div>';
     }
 
@@ -45,20 +44,20 @@ export namespace CardView {
         return '<div class="cardViewName">' + value + '</div>';
     }
 
-    export function description(description: string) {
+    export function description(description: string): string {
         return '<div class="cardViewDescription">' + description + '</div>';
     }
 
-    export function programDescription(xml: string) {
+    export function programDescription(xml: string): string {
         let myDescription = getAttributeFromXml(xml, 'description');
         return description(myDescription);
     }
 
-    export function programTags(xml): string {
-        let myTags = getAttributeFromXml(xml, 'tags');
+    export function programTags(xml: string): string {
+        let myTags: string = getAttributeFromXml(xml, 'tags');
         return tags(myTags);
     }
-    export function tags(tags): string {
+    export function tags(tags: string): string {
         if (!tags) {
             tags = '&nbsp;';
         }
@@ -71,11 +70,11 @@ export namespace CardView {
         return text ? text : '&nbsp;';
     }
 
-    export function titleTypcn(value: any, typicon: string) {
+    export function titleTypcn(value: any, typicon: string): string {
         return '<div><div class="cardViewLabel tutorialIcon typcn typcn-' + typicon + '"></div><span>' + value + '</span></div>';
     }
 
-    export function titleLabel(text: string, label: string, type: string) {
+    export function titleLabel(text: string, label: string, type: string): string {
         let myLabel: string = Blockly.Msg[label] || label;
         return (
             '<div class="' +

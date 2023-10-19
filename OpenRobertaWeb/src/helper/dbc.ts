@@ -1,12 +1,11 @@
-import * as exports from 'exports';
 import * as LOG from 'log';
 
 /**
  * assertEq: assert that two objects are === w.r.t. to type and content,
  * otherwise LOG and throw an exception
  */
-function assertEq(expected, given) {
-    function internalCheck(expected, given) {
+export function assertEq(expected: any, given: any): void {
+    function internalCheck(expected, given): string {
         if (typeof expected === typeof given) {
             if (expected === given) {
                 return null;
@@ -17,7 +16,7 @@ function assertEq(expected, given) {
             return 'Violation. Expected type: ' + typeof expected + ', given: ' + typeof given;
         }
     }
-    var msg = internalCheck(expected, given);
+    let msg: string = internalCheck(expected, given);
     if (msg !== null) {
         LOG.info(msg);
         throw msg;
@@ -28,10 +27,9 @@ function assertEq(expected, given) {
  * assertTrue: assert that a condition holds, otherwise LOG and throw an
  * exception
  */
-function assertTrue(boolToTest, msg) {
+export function assertTrue(boolToTest: boolean, msg: string): void {
     if (!boolToTest) {
         LOG.info(msg);
         throw msg;
     }
 }
-export { assertEq, assertTrue };

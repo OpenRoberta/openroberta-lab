@@ -1,15 +1,23 @@
 import * as MSG from 'message';
 import * as LOG from 'log';
 import * as $ from 'jquery';
+
+// @ts-ignore
 import * as Blockly from 'blockly';
 import 'jquery-validate';
 import 'bootstrap';
 import * as U from 'interpreter.util';
 import * as GUISTATE_C from 'guiState.controller';
+import { WebAudioBase } from '../app/roberta/ts/baseInterfaces';
 
-const ANIMATION_DURATION = 750;
+const ANIMATION_DURATION: number = 750;
 
-export function getLinesFromRectangle(myObj) {
+export function getLinesFromRectangle(myObj: any): {
+    x1: number;
+    x2: number;
+    y1: number;
+    y2: number;
+}[] {
     return [
         {
             x1: myObj.x,
@@ -41,8 +49,8 @@ export function getLinesFromRectangle(myObj) {
 /**
  * @return the (unique) start block from the program. Must exist.
  */
-function getTheStartBlock() {
-    var startBlock = null;
+export function getTheStartBlock(): any {
+    let startBlock: any = null;
     for (const block of Blockly.Workspace.getByContainer('blocklyDiv').getTopBlocks()) {
         if (!block.isDeletable()) {
             return block;
@@ -54,7 +62,7 @@ function getTheStartBlock() {
 /**
  * @return all block from the program.
  */
-function getAllBlocks() {
+export function getAllBlocks(): any[] {
     return Blockly.Workspace.getByContainer('blocklyDiv').getAllBlocks();
 }
 
@@ -66,26 +74,26 @@ function getAllBlocks() {
  * @param {string}
  *            newName New configuration name.
  */
-function renameNeuron(oldName, newName) {
-    var blocks = getAllBlocks();
-    for (var x = 0; x < blocks.length; x++) {
-        var block = blocks[x];
+export function renameNeuron(oldName: string, newName: string): void {
+    let blocks: any[] = getAllBlocks();
+    for (let x: number = 0; x < blocks.length; x++) {
+        let block: any = blocks[x];
         if (!block.dependNeuron) {
             continue;
         }
-        var dependNeuron;
+        let dependNeuron: any;
         if (typeof block.dependNeuron === 'function') {
             dependNeuron = block.dependNeuron();
         } else {
             dependNeuron = block.dependNeuron;
         }
-        var dropDown = dependNeuron.dropDown;
+        let dropDown = dependNeuron.dropDown;
         if (!Array.isArray(dropDown)) {
             dropDown = [dropDown];
         }
-        for (var d = 0; d < dropDown.length; d++) {
-            var index = -1;
-            for (var i = 0; i < dropDown[d].menuGenerator_.length; i++) {
+        for (let d: number = 0; d < dropDown.length; d++) {
+            let index: number = -1;
+            for (let i: number = 0; i < dropDown[d].menuGenerator_.length; i++) {
                 if (dropDown[d].menuGenerator_[i][1] === oldName) {
                     index = i;
                     break;
@@ -112,36 +120,42 @@ function renameNeuron(oldName, newName) {
     }
 }
 
-export const activationDisplayName = { linear: 'Linear', relu: 'ReLU', tanh: 'Tanh', sigmoid: 'Sigmoid', bool: 'Bool(0,1)' };
+export const activationDisplayName: { linear: string; relu: string; tanh: string; sigmoid: string; bool: string } = {
+    linear: 'Linear',
+    relu: 'ReLU',
+    tanh: 'Tanh',
+    sigmoid: 'Sigmoid',
+    bool: 'Bool(0,1)',
+};
 
-export const csvToArray = (data, delimiter = ';', omitFirstRow = false) =>
+export const csvToArray: Function = (data: string, delimiter: string = ';', omitFirstRow: boolean = false) =>
     data
         .slice(omitFirstRow ? data.indexOf('\n') + 1 : 0)
         .split('\n')
-        .filter((val) => val.length !== 0)
-        .map((val) => val.split(delimiter));
+        .filter((val: string): boolean => val.length !== 0)
+        .map((val: string) => val.split(delimiter));
 
-export const arrayToCsv = (data, delimiter = ';') => data.map((v) => v.join(delimiter)).join('\n');
+export const arrayToCsv = (data: [], delimiter: string = ';') => data.map((v: []) => v.join(delimiter)).join('\n');
 
-var ratioWorkspace = 1;
-var simRobotWindowPositions = [];
+let ratioWorkspace: number = 1;
+let simRobotWindowPositions: number[] = [];
 /**
  * Decode base64 string to array of bytes
  *
  * @param b64string
  *            A base64 encoded string
  */
-function base64decode(b64string) {
-    var byteCharacters = atob(b64string);
-    var byteNumbers = new Array(byteCharacters.length);
-    for (var i = 0; i < byteCharacters.length; i++) {
+export function base64decode(b64string: string): Uint8Array {
+    let byteCharacters: string = atob(b64string);
+    let byteNumbers: number[] = new Array(byteCharacters.length);
+    for (let i: number = 0; i < byteCharacters.length; i++) {
         byteNumbers[i] = byteCharacters.charCodeAt(i);
     }
     return new Uint8Array(byteNumbers);
 }
 
-function clone(obj) {
-    var copy;
+export function clone(obj?: null | object): any {
+    let copy: [] | object;
 
     // Handle the 3 simple types, and null or undefined
     if (null == obj || 'object' != typeof obj) return obj;
@@ -149,6 +163,7 @@ function clone(obj) {
     // Handle Date
     if (obj instanceof Date) {
         copy = new Date();
+        // @ts-ignore
         copy.setTime(obj.getTime());
         return copy;
     }
@@ -156,7 +171,7 @@ function clone(obj) {
     // Handle Array
     if (obj instanceof Array) {
         copy = [];
-        for (var i = 0, len = obj.length; i < len; i++) {
+        for (let i: number = 0, len: number = obj.length; i < len; i++) {
             copy[i] = clone(obj[i]);
         }
         return copy;
@@ -165,7 +180,7 @@ function clone(obj) {
     // Handle Object
     if (obj instanceof Object) {
         copy = {};
-        for (var attr in obj) {
+        for (let attr in obj) {
             if (obj.hasOwnProperty(attr)) copy[attr] = clone(obj[attr]);
         }
         return copy;
@@ -174,20 +189,19 @@ function clone(obj) {
     throw new Error("Unable to copy obj! Its type isn't supported.");
 }
 
-function isEmpty(obj) {
+export function isEmpty(obj: object): boolean {
     return Object.keys(obj).length === 0 && obj.constructor === Object;
 }
-
-export function isMobile() {
+export function isMobile(): boolean {
     return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 }
 
-function getPropertyFromObject(obj, prop, arrayIndex) {
+export function getPropertyFromObject(obj: object | undefined, prop: string, arrayIndex?: number) {
     //property not found
     if (typeof obj === 'undefined') return false;
 
     //index of next property split
-    var _index = prop.indexOf('.');
+    let _index: number = prop.indexOf('.');
 
     //property split found; recursive call
     if (_index > -1) {
@@ -202,12 +216,12 @@ function getPropertyFromObject(obj, prop, arrayIndex) {
     return obj[prop];
 }
 
-function setObjectProperty(obj, prop, value, arrayIndex) {
+export function setObjectProperty(obj: object | undefined, prop: string, value: any, arrayIndex?: number) {
     //property not found
     if (typeof obj === 'undefined') return false;
 
     //index of next property split
-    var _index = prop.indexOf('.');
+    let _index: number = prop.indexOf('.');
 
     //property split found; recursive call
     if (_index > -1) {
@@ -228,10 +242,10 @@ function setObjectProperty(obj, prop, value, arrayIndex) {
  * @param {date}
  *            date from server to be formatted
  */
-function formatDate(dateLong) {
+export function formatDate(dateLong: string): string {
     if (dateLong) {
-        var date = new Date(dateLong);
-        var datestring =
+        let date: Date = new Date(dateLong);
+        let datestring: string =
             ('0' + date.getDate()).slice(-2) +
             '.' +
             ('0' + (date.getMonth() + 1)).slice(-2) +
@@ -253,18 +267,18 @@ function formatDate(dateLong) {
  * @param {d}
  *            date in the form 'dd.mm.yyyy, hh:mm:ss'
  */
-function parseDate(d) {
+export function parseDate(d: string): number {
     if (d) {
-        var dayPart = d.split(', ')[0];
-        var timePart = d.split(', ')[1];
-        var day = dayPart.split('.')[0];
-        var month = dayPart.split('.')[1] - 1;
-        var year = dayPart.split('.')[2];
-        var hour = timePart.split(':')[0];
-        var minute = timePart.split(':')[1];
-        var second = timePart.split(':')[2];
-        var mseconds = timePart.split('.')[1];
-        var date = new Date(year, month, day, hour, minute, second, mseconds);
+        let dayPart: string = d.split(', ')[0];
+        let timePart: string = d.split(', ')[1];
+        let day: number = Number(dayPart.split('.')[0]);
+        let month: number = Number(dayPart.split('.')[1]) - 1;
+        let year: number = Number(dayPart.split('.')[2]);
+        let hour: number = Number(timePart.split(':')[0]);
+        let minute: number = Number(timePart.split(':')[1]);
+        let second: number = Number(timePart.split(':')[2]);
+        let mseconds: number = Number(timePart.split('.')[1]);
+        let date: Date = new Date(year, month, day, hour, minute, second, mseconds);
         return date.getTime();
     }
     return 0;
@@ -276,10 +290,10 @@ function parseDate(d) {
  * @param {result}
  *            Result-object from server call
  */
-function formatResultLog(result) {
-    var str = '{';
-    var comma = false;
-    for (var key in result) {
+export function formatResultLog(result: object): string {
+    let str: string = '{';
+    let comma: boolean = false;
+    for (let key in result) {
         if (comma) {
             str += ',';
         } else {
@@ -302,14 +316,14 @@ function formatResultLog(result) {
 /**
  * Calculate height of data table
  */
-function calcDataTableHeight() {
+export function calcDataTableHeight(): number {
     return Math.round($(window).height() - 100);
 }
 
-function checkVisibility() {
-    var stateKey,
-        eventKey,
-        keys = {
+export function checkVisibility(): Function {
+    let stateKey: string,
+        eventKey: string,
+        keys: object = {
             hidden: 'visibilitychange',
             webkitHidden: 'webkitvisibilitychange',
             mozHidden: 'mozvisibilitychange',
@@ -329,19 +343,19 @@ function checkVisibility() {
     };
 }
 
-function setFocusOnElement($elem) {
-    setTimeout(function () {
+export function setFocusOnElement($elem: JQuery<HTMLElement>): void {
+    setTimeout(function (): void {
         if ($elem.is(':visible') == true) {
             $elem.focus();
         }
     }, 800);
 }
 
-function showSingleModal(customize, onSubmit, onHidden, validator) {
+export function showSingleModal(customize: Function, onSubmit: Function, onHidden: Function, validator: JQueryValidation.ValidationOptions): void {
     customize();
     $('#single-modal-form').onWrap(
         'submit',
-        function (e) {
+        function (e): void {
             e.preventDefault();
             onSubmit();
         },
@@ -363,10 +377,10 @@ function showSingleModal(customize, onSubmit, onHidden, validator) {
     $('#single-modal').modal('show');
 }
 
-function showSingleListModal(customize, onSubmit, onHidden, validator) {
+export function showSingleListModal(customize: Function, onSubmit: Function, onHidden: Function, validator?: JQueryValidation.ValidationOptions): void {
     $('#single-modal-list-form').onWrap(
         'submit',
-        function (e) {
+        function (e): void {
             e.preventDefault();
             onSubmit();
         },
@@ -374,7 +388,7 @@ function showSingleListModal(customize, onSubmit, onHidden, validator) {
     );
     $('#single-modal-list').onWrap(
         'hidden.bs.modal',
-        function () {
+        function (): void {
             $('#single-modal-list-form').unbind('submit');
             onHidden();
         },
@@ -388,7 +402,7 @@ function showSingleListModal(customize, onSubmit, onHidden, validator) {
  * Helper to show the information on top of the share modal.
  *
  */
-function showMsgOnTop(msg) {
+export function showMsgOnTop(msg: string): void {
     $('#show-message').find('button').removeAttr('data-bs-dismiss');
     $('#show-message')
         .find('button')
@@ -411,7 +425,7 @@ function showMsgOnTop(msg) {
  * @param {result}
  *            Result-object from server call
  */
-function response(result) {
+export function response(result): void {
     LOG.info('result from server: ' + formatResultLog(result));
     if (result.rc != 'ok') {
         MSG.displayMessage(result.message, 'POPUP', '');
@@ -428,7 +442,7 @@ function response(result) {
  * @return {Number} rounded number
  *
  */
-function round(value, decimals) {
+export function round(value: number, decimals: number): number {
     return parseFloat(value.toFixed(decimals));
 }
 
@@ -439,8 +453,8 @@ function round(value, decimals) {
  *            {Number} -
  * @return {Number} - 1 if it is positive number o/w return -1
  */
-function sgn(x) {
-    return (x > 0) - (x < 0);
+export function sgn(x: number): number {
+    return Number(x > 0) - Number(x < 0);
 }
 
 /**
@@ -449,27 +463,28 @@ function sgn(x) {
  * @param path
  *            {String} - path
  */
-function getBasename(path) {
-    var base = String(path).substring(path.lastIndexOf('/') + 1);
+export function getBasename(path: string): string {
+    let base: string = String(path).substring(path.lastIndexOf('/') + 1);
     if (base.lastIndexOf('.') != -1) {
         base = base.substring(0, base.lastIndexOf('.'));
     }
     return base;
 }
 
-function destroyClickedElement(event) {
+function destroyClickedElement(event: any): void {
     document.body.removeChild(event.target);
 }
 
-function download(fileName, content) {
+export function download(fileName: string, content: string): void {
     if ('Blob' in window && navigator.userAgent.toLowerCase().match(/iPad|iPhone|Android/i) == null) {
-        var contentAsBlob = new Blob([content], {
+        let contentAsBlob: Blob = new Blob([content], {
             type: 'application/octet-stream',
         });
         if ('msSaveOrOpenBlob' in navigator) {
+            //@ts-ignore
             navigator.msSaveOrOpenBlob(contentAsBlob, fileName);
         } else {
-            var downloadLink = document.createElement('a');
+            let downloadLink: HTMLAnchorElement = document.createElement('a');
             downloadLink.download = fileName;
             downloadLink.innerHTML = 'Download File';
             downloadLink.href = window.URL.createObjectURL(contentAsBlob);
@@ -481,7 +496,7 @@ function download(fileName, content) {
             }, 0);
         }
     } else {
-        var downloadLink = document.createElement('a');
+        let downloadLink: HTMLAnchorElement = document.createElement('a');
         downloadLink.setAttribute('href', 'data:text/' + fileName.substring(fileName.indexOf('.') + 1) + ';charset=utf-8,' + encodeURIComponent(content));
         downloadLink.setAttribute('download', fileName);
         downloadLink.style.display = 'none';
@@ -493,17 +508,17 @@ function download(fileName, content) {
     }
 }
 
-function getHashFrom(string) {
-    var hash = 0;
-    for (var i = 0; i < string.length; i++) {
+export function getHashFrom(string: string): number {
+    let hash: number = 0;
+    for (let i: number = 0; i < string.length; i++) {
         hash = (hash << 5) - hash + string.charCodeAt(i++);
     }
     return hash < 0 ? hash * -1 + 0xffffffff : hash;
 }
 
-function countBlocks(xmlString) {
-    var counter = 0;
-    var pos = 0;
+export function countBlocks(xmlString: string): number {
+    let counter: number = 0;
+    let pos: number = 0;
 
     while (true) {
         pos = xmlString.indexOf('<block', pos);
@@ -517,7 +532,7 @@ function countBlocks(xmlString) {
     return counter - 1;
 }
 
-function isLocalStorageAvailable() {
+export function isLocalStorageAvailable(): boolean {
     try {
         localStorage.setItem('test', 'test');
         localStorage.removeItem('test');
@@ -527,21 +542,21 @@ function isLocalStorageAvailable() {
     }
 }
 
-function alertTab(tabIdentifier) {
+export function alertTab(tabIdentifier: string): void {
     clearTabAlert(tabIdentifier);
     $('#' + tabIdentifier).width(); // trigger a reflow to sync animations
     $('#' + tabIdentifier).prepend('<span class="typcn typcn-warning-outline"></span>'); // add alert typicon
     $('#' + tabIdentifier).addClass('blinking');
 }
 
-function clearTabAlert(tabIdentifier) {
+export function clearTabAlert(tabIdentifier: string): void {
     $('#' + tabIdentifier)
         .children()
         .remove('.typcn'); // remove alert typicon
     $('#' + tabIdentifier).removeClass('blinking');
 }
 
-var __entityMap = {
+let __entityMap: object = {
     '&': '&amp;',
     '<': '&lt;',
     '>': '&gt;',
@@ -549,14 +564,14 @@ var __entityMap = {
     "'": '&#39;',
     '/': '&#x2F;',
 };
-
+//@ts-ignore
 String.prototype.escapeHTML = function () {
-    return String(this).replace(/[&<>"'\/]/g, function (s) {
+    return String(this).replace(/[&<>"'\/]/g, function (s: string) {
         return __entityMap[s];
     });
 };
 
-$.fn.draggable = function (opt) {
+$.fn.draggable = function (opt: { handle: string; cursor: string; draggableClass: string; activeHandleClass: string; constraint: string; axis: string }): void {
     opt = $.extend(
         {
             handle: '',
@@ -567,14 +582,14 @@ $.fn.draggable = function (opt) {
         opt
     );
 
-    var $selected = null;
-    var $elements = opt.handle === '' ? this : this.find(opt.handle);
+    let $selected = null;
+    let $elements = opt.handle === '' ? this : this.find(opt.handle);
 
     $elements
         .css('cursor', opt.cursor)
-        .on('mousedown touchstart', function (e) {
-            var pageX = e.pageX || e.originalEvent.touches[0].pageX;
-            var pageY = e.pageY || e.originalEvent.touches[0].pageY;
+        .on('mousedown touchstart', function (e): void {
+            let pageX: number = e.pageX || e.originalEvent.touches[0].pageX;
+            let pageY: number = e.pageY || e.originalEvent.touches[0].pageY;
             if (opt.handle === '') {
                 $selected = $(this);
                 $selected.addClass(opt.draggableClass);
@@ -582,23 +597,23 @@ $.fn.draggable = function (opt) {
                 $selected = $(this).parent();
                 $selected.addClass(opt.draggableClass).find(opt.handle).addClass(opt.activeHandleClass);
             }
-            var drg_h = $selected.outerHeight(),
-                drg_w = $selected.outerWidth(),
-                pos_y = $selected.offset().top + drg_h - pageY,
-                pos_x = $selected.offset().left + drg_w - pageX;
+            let drg_h: number = $selected.outerHeight(),
+                drg_w: number = $selected.outerWidth(),
+                pos_y: number = $selected.offset().top + drg_h - pageY,
+                pos_x: number = $selected.offset().left + drg_w - pageX;
             $(document)
-                .on('mousemove touchmove', function (e) {
-                    var pageX = e.pageX || e.originalEvent.touches[0].pageX;
-                    var pageY = e.pageY || e.originalEvent.touches[0].pageY;
-                    var newXPosition = pageX + pos_x - drg_w;
-                    var newYPosition = pageY + pos_y - drg_h;
+                .on('mousemove touchmove', function (e: JQuery.TouchEventBase): void {
+                    let pageX: number = e.pageX || e.originalEvent.touches[0].pageX;
+                    let pageY: number = e.pageY || e.originalEvent.touches[0].pageY;
+                    let newXPosition: number = pageX + pos_x - drg_w;
+                    let newYPosition: number = pageY + pos_y - drg_h;
                     if (opt.constraint == 'window') {
                         if (newXPosition >= $(window).width() - 19) {
                             newXPosition = $(window).width() - 20;
                         } else if (newXPosition <= 19 - $selected.width()) {
                             newXPosition = 18 - $selected.width();
                         }
-                        var headerSize = 92;
+                        let headerSize: number = 92;
                         if (newYPosition >= $(window).height() - 19) {
                             newYPosition = $(window).height() - 20;
                         } else if (newYPosition <= 19 - $selected.height() + headerSize) {
@@ -607,9 +622,9 @@ $.fn.draggable = function (opt) {
                     }
                     // special case movable slider between workspace and right divs
                     if (opt.axis == 'x') {
-                        var left = pageX + pos_x - drg_w;
-                        var left = Math.min(left, $('#main-section').width() - 24);
-                        var left = Math.max(left, 42);
+                        let left: number = pageX + pos_x - drg_w;
+                        left = Math.min(left, $('#main-section').width() - 24);
+                        left = Math.max(left, 42);
                         $selected.offset({
                             top: 0,
                             left: left,
@@ -634,7 +649,7 @@ $.fn.draggable = function (opt) {
                         right: 'auto',
                     });
                 })
-                .on('mouseup touchend', function () {
+                .on('mouseup touchend', function (): void {
                     $(document).off('mousemove touchmove'); // Unbind events from document
                     if ($selected !== null) {
                         $selected.removeClass(opt.draggableClass);
@@ -642,7 +657,7 @@ $.fn.draggable = function (opt) {
                     }
                 });
         })
-        .on('mouseup touchend', function () {
+        .on('mouseup touchend', function (): void {
             if ($selected) {
                 if (opt.handle === '') {
                     $selected.removeClass(opt.draggableClass);
@@ -669,7 +684,7 @@ $.fn.removeClass = function () {
     return result;
 };
 
-$.fn.toggleSimPopup = function (position) {
+$.fn.toggleSimPopup = function (position: Coordinates): void {
     if ($(this).is(':hidden')) {
         $(this).css({
             top: position.top + $('#header').height() + 12,
@@ -688,30 +703,30 @@ $.fn.toggleSimPopup = function (position) {
     });
 };
 
-$.fn.closeRightView = function (opt_callBack) {
+$.fn.closeRightView = function (opt_callBack: Function): void {
     if ($('.fromRight.rightActive').hasClass('shifting')) {
         return;
     }
     $('.fromRight.rightActive').addClass('shifting');
     $('.blocklyToolboxDiv').css('display', 'inherit');
-    var that = this; //$('#blocklyDiv')
+    let that = this; //$('#blocklyDiv')
     $('.fromRight.rightActive').animate(
         {
             width: 0,
         },
         {
             duration: ANIMATION_DURATION,
-            start: function () {
+            start: function (): void {
                 $('.modal').modal('hide');
                 $('.rightMenuButton.rightActive').removeClass('rightActive');
             },
-            step: function (now) {
+            step: function (now: number): void {
                 $(window).trigger('resize');
                 that.width($('#main-section').width() - Math.ceil(now));
                 /*$('.rightMenuButton').css('right', now);*/
                 ratioWorkspace = $('#blocklyDiv').outerWidth() / $('#main-section').outerWidth();
             },
-            done: function () {
+            done: function (): void {
                 that.width($('#main-section').outerWidth());
                 /* $('.rightMenuButton').css('right', 0);*/
                 ratioWorkspace = 1;
@@ -725,20 +740,20 @@ $.fn.closeRightView = function (opt_callBack) {
                 }
                 $('.fromRight').trigger('closed');
             },
-            always: function () {
+            always: function (): void {
                 $('.fromRight.shifting').removeClass('shifting');
             },
         }
     );
 };
 
-$.fn.openRightView = function ($view, initialViewWidth, opt_callBack) {
+$.fn.openRightView = function ($view: JQuery<HTMLElement>, initialViewWidth: number, opt_callBack?: Function): void {
     if ($('.fromRight.rightActive').hasClass('shifting')) {
         return;
     }
-    let $blockly = $('#blocklyDiv');
-    var width;
-    var smallScreen;
+    let $blockly: JQuery<HTMLElement> = $('#blocklyDiv');
+    let width: number;
+    let smallScreen: boolean;
     if ($(window).width() < 768) {
         smallScreen = true;
         width = $blockly.outerWidth() - 52;
@@ -774,13 +789,13 @@ $.fn.openRightView = function ($view, initialViewWidth, opt_callBack) {
         },
         {
             duration: ANIMATION_DURATION,
-            step: function (now, tween) {
+            step: function (now: number, tween: JQuery.Tween<HTMLElement>): void {
                 $blockly.outerWidth($('#main-section').width() - now);
                 /*$('.rightMenuButton').css('right', Math.floor(now));*/
                 ratioWorkspace = $('#blocklyDiv').outerWidth() / $('#main-section').width();
                 $(window).trigger('resize');
             },
-            done: function () {
+            done: function (): void {
                 $('#sliderDiv').show();
                 $blockly.outerWidth($('#main-section').width() - $('.fromRight.rightActive').width());
                 /*  $('.rightMenuButton').css('right', $('.fromRight.rightActive').width());*/
@@ -796,22 +811,22 @@ $.fn.openRightView = function ($view, initialViewWidth, opt_callBack) {
                     opt_callBack();
                 }
             },
-            always: function () {
+            always: function (): void {
                 $view.removeClass('shifting');
             },
         }
     );
 };
 
-$(window).on('resize', function () {
-    var mainWidth = $('#main-section').width();
-    var parentWidth = mainWidth;
-    var height = $('#main-section').height(); //Math.max($('#blocklyDiv').outerHeight(), $('#brickly').outerHeight());
+$(window).on('resize', function (): void {
+    let mainWidth: number = $('#main-section').width();
+    let parentWidth: number = mainWidth;
+    let height: number = $('#main-section').height(); //Math.max($('#blocklyDiv').outerHeight(), $('#brickly').outerHeight());
 
-    var rightWidth = (1 - ratioWorkspace) * parentWidth;
-    var leftWidth = ratioWorkspace * parentWidth;
+    let rightWidth: number = (1 - ratioWorkspace) * parentWidth;
+    let leftWidth: number = ratioWorkspace * parentWidth;
 
-    if (!$('.fromRight.rightActive.shifting').length > 0) {
+    if (!$('.fromRight.rightActive.shifting').length > false) {
         if ($('.fromRight.rightActive').length > 0) {
             $('.fromRight.rightActive').width(rightWidth);
             /*$('.rightMenuButton').css('right', rightWidth);*/
@@ -841,27 +856,27 @@ $(window).on('resize', function () {
             $('#configuration .blocklyToolboxDiv').removeClass('small');
         }
     }
-    for (const robotWindowElement of $('.simWindow:visible')) {
+    $('.simWindow:visible').each(function (index: number, robotWindowElement: HTMLElement) {
         if (robotWindowElement.offsetLeft >= $(window).width() - 20) {
             $('#' + robotWindowElement.id).css({
-                left: '' + $(window).width() - 20,
+                left: '' + ($(window).width() - 20),
             });
         }
         if (robotWindowElement.offsetTop >= $(window).height() - 20) {
             $('#' + robotWindowElement.id).css({
-                top: '' + $(window).height() - 20,
+                top: '' + ($(window).height() - 20),
             });
         }
-    }
+    });
 
     // here comes a fix for a strange browser behavior while zoom is not 100%. It is just in case (e.g. chrome 125% works fine, 110% not).
     // Seems that either the returned sizes from the browser sometimes include margins/borders and sometimes not or that the assigned sizes behave
     // different (with and without margins/borders).
-    var diff = mainWidth - $('#blocklyDiv').outerWidth() - rightWidth;
+    let diff: number = mainWidth - $('#blocklyDiv').outerWidth() - rightWidth;
     if (diff != 0) {
         $('#blocklyDiv').outerWidth(leftWidth + diff);
     }
-    var workspace = Blockly.getMainWorkspace();
+    let workspace: any = Blockly.getMainWorkspace();
     if (workspace) {
         Blockly.svgResize(workspace);
     }
@@ -875,13 +890,13 @@ $(window).on('resize', function () {
  * @param {workspacee}
  *            workspace
  */
-function clearAnnotations(workspace) {
-    if (workspace && workspace instanceof Blockly.Workspace) {
-        var allBlocks = workspace.getAllBlocks();
-        for (var i = 0; i < allBlocks.length; i++) {
-            var icons = allBlocks[i].getIcons();
-            for (var k = 0; k < icons.length; k++) {
-                var block = icons[k].block_;
+export function clearAnnotations(workspace?: any): void {
+    if (workspace) {
+        let allBlocks: any[] = workspace.getAllBlocks();
+        for (let i: number = 0; i < allBlocks.length; i++) {
+            let icons = allBlocks[i].getIcons();
+            for (let k: number = 0; k < icons.length; k++) {
+                let block: any = icons[k].block_;
                 if (block.error) {
                     block.error.dispose();
                     block.render();
@@ -901,13 +916,13 @@ function clearAnnotations(workspace) {
  * @param {object}
  *            confAnnos - {block id, {type of annotation, message key}}
  */
-function annotateBlocks(workspace, annotations) {
-    for (var annoId in annotations) {
-        var block = workspace.getBlockById(annoId);
+export function annotateBlocks(workspace: any, annotations: any[]): void {
+    for (let annoId in annotations) {
+        let block: any = workspace.getBlockById(annoId);
         if (block) {
-            var anno = annotations[annoId];
-            for (var annoType in anno) {
-                var annoMsg = Blockly.Msg[anno[annoType]] || anno[annoType] || 'unknown error';
+            let anno = annotations[annoId];
+            for (let annoType in anno) {
+                let annoMsg: string = Blockly.Msg[anno[annoType]] || anno[annoType] || 'unknown error';
                 switch (annoType) {
                     case 'ERROR':
                         block.setErrorText(annoMsg);
@@ -925,17 +940,17 @@ function annotateBlocks(workspace, annotations) {
     }
 }
 
-function removeLinks($elem) {
+export function removeLinks($elem: JQuery<HTMLElement>): void {
     $elem
         .filter(function () {
             return $(this).attr('href') && ($(this).attr('href').indexOf('http') === 0 || $(this).attr('href').indexOf('javascript:linkTo') === 0);
         })
-        .each(function () {
+        .each(function (): void {
             $(this).removeAttr('href');
         });
 }
 
-export function checkInCircle(px, py, cx, cy, r) {
+export function checkInCircle(px: number, py: number, cx: number, cy: number, r: number): boolean {
     return (px - cx) * (px - cx) + (py - cy) * (py - cy) <= r * r;
 }
 
@@ -945,9 +960,9 @@ export function checkInCircle(px, py, cx, cy, r) {
  * @param duration
  *            {Number} - duration (optional) how long the simRobotWindow should take to show
  */
-function openSimRobotWindow() {
-    for (const robotWindowElement of $('.simWindow-openedButHidden')) {
-        var position = $(window).width() * simRobotWindowPositions[robotWindowElement.id];
+export function openSimRobotWindow(): void {
+    $('.simWindow-openedButHidden').each(function (index, robotWindowElement) {
+        let position: number = $(window).width() * simRobotWindowPositions[robotWindowElement.id];
 
         $('#' + robotWindowElement.id).animate(
             {
@@ -956,7 +971,7 @@ function openSimRobotWindow() {
             },
             ANIMATION_DURATION
         );
-    }
+    });
     $('.simWindow').removeClass('simWindow-openedButHidden');
 }
 
@@ -966,17 +981,17 @@ function openSimRobotWindow() {
  * @param duration
  *            {Number} - duration (optional) how long the simRobotWindow should take to hide
  */
-function closeSimRobotWindow() {
-    var SimWindows = $('.simWindow:visible');
-    for (const robotWindowElement of SimWindows) {
-        var relativePosition;
+export function closeSimRobotWindow(): void {
+    let SimWindows: JQuery<HTMLElement> = $('.simWindow:visible');
+    SimWindows.each(function (index, robotWindowElement) {
+        let relativePosition: number;
         if ($(window).width() !== 0) {
             relativePosition = Math.abs((robotWindowElement.offsetLeft / $(window).width()) % 1);
         } else {
             relativePosition = 0;
         }
         simRobotWindowPositions[robotWindowElement.id] = relativePosition;
-    }
+    });
     SimWindows.addClass('simWindow-openedButHidden').animate(
         {
             opacity: 'hide',
@@ -986,10 +1001,10 @@ function closeSimRobotWindow() {
     );
 }
 
-export function isIE() {
-    var ua = window.navigator.userAgent;
-    var ie = ua.indexOf('MSIE ');
-    var ie11 = ua.indexOf('Trident/');
+export function isIE(): boolean {
+    let ua: string = window.navigator.userAgent;
+    let ie: number = ua.indexOf('MSIE ');
+    let ie11: number = ua.indexOf('Trident/');
 
     if (ie > -1 || ie11 > -1) {
         return true;
@@ -997,19 +1012,19 @@ export function isIE() {
     return false;
 }
 
-export function isEdge() {
-    var ua = window.navigator.userAgent;
-    var edge = ua.indexOf('Edge');
+export function isEdge(): boolean {
+    let ua: string = window.navigator.userAgent;
+    let edge: number = ua.indexOf('Edge');
     return edge > -1;
 }
 
-export function isChromium() {
-    var ua = window.navigator.userAgent;
-    var chrome = ua.indexOf('Chrome');
+export function isChromium(): boolean {
+    let ua: string = window.navigator.userAgent;
+    let chrome: number = ua.indexOf('Chrome');
     return chrome > -1;
 }
 
-function isIOS() {
+function isIOS(): boolean {
     return navigator.userAgent.toLowerCase().match(/iPad|iPhone/i) !== null;
 }
 
@@ -1021,7 +1036,7 @@ export function isChromeOS() {
     return navigator.userAgent.indexOf('CrOS') != -1;
 }
 
-export function isWebUsbSupported() {
+export function isWebUsbSupported(): boolean {
     //webUSB is currently only supported by chromium browsers like google chrome, Edge, Microsoft Edge, etc.
     //webUSB is currently not supported on any IOS device
     return isChromium() && !isIOS();
@@ -1032,7 +1047,7 @@ export function isWebBleSupported() {
     return isChromium() && !isIOS();
 }
 
-export function initMicrophone(robot) {
+export function initMicrophone(robot): void {
     // TODO if (navigator.mediaDevices === undefined) {
     //navigator.mediaDevices = {};
     //}
@@ -1040,22 +1055,21 @@ export function initMicrophone(robot) {
 
     try {
         // ask for an audio input
-        const mediaDevices = navigator.mediaDevices;
+        const mediaDevices: MediaDevices = navigator.mediaDevices;
         mediaDevices
             .getUserMedia({
                 audio: {
-                    mandatory: {
-                        googEchoCancellation: 'false',
-                        googAutoGainControl: 'false',
-                        googNoiseSuppression: 'false',
-                        googHighpassFilter: 'false',
-                    },
-                    optional: [],
+                    echoCancellation: false,
+                    autoGainControl: false,
+                    noiseSuppression: false,
+                    //@ts-ignore
+                    highpassFilter: false,
                 },
             })
             .then(
-                function (stream) {
-                    var mediaStreamSource = robot.webAudio.context.createMediaStreamSource(stream);
+                function (stream: MediaStream): void {
+                    let mediaStreamSource: MediaStreamAudioSourceNode = robot.webAudio.context.createMediaStreamSource(stream);
+                    //@ts-ignore
                     robot.sound = Volume.createAudioMeter(robot.webAudio.context);
                     mediaStreamSource.connect(robot.sound);
                 },
@@ -1067,15 +1081,31 @@ export function initMicrophone(robot) {
         console.log('Sorry, but there is no microphone available on your system');
     }
 }
-var thisWebAudio;
-export function getWebAudio() {
+let thisWebAudio: WebAudioBase;
+export function getWebAudio(): WebAudioBase {
     if (!thisWebAudio) {
-        thisWebAudio = {};
-        var AudioContext = window.AudioContext || window['webkitAudioContext'] || false;
+        thisWebAudio = new (class implements WebAudioBase {
+            context: AudioContext;
+            gainNode: GainNode;
+            tone: {
+                duration: number;
+                timer: number;
+                file: {
+                    0: (webAudio: WebAudioBase, osci: OscillatorNode) => void;
+                    1: (webAudio: WebAudioBase, osci: OscillatorNode) => void;
+                    2: (webAudio: WebAudioBase, osci: OscillatorNode) => void;
+                    3: (webAudio: WebAudioBase, osci: OscillatorNode) => void;
+                    4: (webAudio: WebAudioBase, osci: OscillatorNode) => void;
+                };
+            };
+            volume: number;
+        })();
+        let AudioContext: AudioContext = window.AudioContext || window['webkitAudioContext'] || false;
         if (AudioContext) {
-            thisWebAudio.context = new AudioContext();
+            thisWebAudio.context = AudioContext;
         } else {
             thisWebAudio.context = null;
+            //@ts-ignore
             thisWebAudio.oscillator = null;
             console.log(
                 'Sorry, but the Web Audio API is not supported by your browser. Please, consider upgrading to the latest version or downloading Google Chrome or Mozilla Firefox'
@@ -1085,21 +1115,23 @@ export function getWebAudio() {
     return thisWebAudio;
 }
 
-export function extendMouseEvent(e, scale, $layer) {
-    let X = e.clientX || e.originalEvent.touches[0].pageX;
-    let Y = e.clientY || e.originalEvent.touches[0].pageY;
-    let top = $layer.offset().top;
-    let left = $layer.offset().left;
+export function extendMouseEvent(e: JQuery.TouchEventBase, scale: number, $layer: JQuery<HTMLElement>): void {
+    let X: number = e.clientX || e.originalEvent.touches[0].pageX;
+    let Y: number = e.clientY || e.originalEvent.touches[0].pageY;
+    let top: number = $layer.offset().top;
+    let left: number = $layer.offset().left;
+    // @ts-ignore
     e.startX = (X - left) / scale;
+    // @ts-ignore
     e.startY = (Y - top) / scale;
 }
 
-function toFixedPrecision(value, precision) {
-    var power = Math.pow(10, precision || 0);
-    return String(Math.round(value * power) / power);
+export function toFixedPrecision(value: number | string, precision: number): string {
+    let power: number = Math.pow(10, precision || 0);
+    return String(Math.round(Number(value) * power) / power);
 }
 
-export function addVariableValue($elem, name, value) {
+export function addVariableValue($elem: JQuery<HTMLElement>, name: string, value?: number | string | boolean | object): void {
     if (value === undefined) {
         return;
     }
@@ -1117,7 +1149,8 @@ export function addVariableValue($elem, name, value) {
             if (value === null) {
                 $elem.append('<div><label>' + name + ' :  </label><span> null </span></div>');
             } else {
-                for (var i = 0; i < value.length; i++) {
+                //@ts-ignore
+                for (let i: number = 0; i < value.length; i++) {
                     addVariableValue($elem, name + ' [' + String(i) + ']', value[i]);
                 }
             }
@@ -1130,11 +1163,11 @@ export function addVariableValue($elem, name, value) {
     }
 }
 
-export function RGBAToHexA(rgba) {
-    let r = (+rgba[0]).toString(16),
-        g = (+rgba[1]).toString(16),
-        b = (+rgba[2]).toString(16),
-        a = (+rgba[3]).toString(16);
+export function RGBAToHexA(rgba: number[]): string {
+    let r: string = (+rgba[0]).toString(16),
+        g: string = (+rgba[1]).toString(16),
+        b: string = (+rgba[2]).toString(16),
+        a: string = (+rgba[3]).toString(16);
 
     if (r.length == 1) r = '0' + r;
     if (g.length == 1) g = '0' + g;
@@ -1144,18 +1177,18 @@ export function RGBAToHexA(rgba) {
     return '#' + r + g + b + a;
 }
 
-export function cleanUri() {
-    let location = new URL(document.location);
-    let clean_uri = location.protocol + '//' + location.host;
+export function cleanUri(): void {
+    let location: URL = new URL(document.location.toString());
+    let clean_uri: string = location.protocol + '//' + location.host;
     window.history.replaceState({}, document.title, clean_uri);
 }
 
 //TODO: Robot group names exists in plugin properties
-export function getRobotGroupsPrettyPrint(opt_robotGroup) {
-    var robots = GUISTATE_C.getRobots();
-    var groups = {};
+export function getRobotGroupsPrettyPrint(opt_robotGroup?): string | object {
+    let robots = GUISTATE_C.getRobots();
+    let groups: object = {};
 
-    var coerceName = function (name, group) {
+    let coerceName = function (name: string, group: string): string {
         if (group === 'arduino') return 'Nepo4Arduino';
         if (group === 'ev3') return 'Ev3';
         return GUISTATE_C.getMenuRobotRealName(name);
@@ -1163,48 +1196,13 @@ export function getRobotGroupsPrettyPrint(opt_robotGroup) {
     if (opt_robotGroup) {
         return coerceName(opt_robotGroup, opt_robotGroup);
     }
-    for (var propt in robots) {
-        var group = robots[propt].group;
-        var name = robots[propt].name;
+    for (let propt in robots) {
+        //@ts-ignore
+        let group: string = robots[propt].group;
+        let name: string = robots[propt].name;
         if (group && !groups[group]) {
             groups[group] = coerceName(name, group);
         }
     }
     return groups;
 }
-
-export {
-    getTheStartBlock,
-    getAllBlocks,
-    renameNeuron,
-    base64decode,
-    clone,
-    isEmpty,
-    getPropertyFromObject,
-    setObjectProperty,
-    formatDate,
-    parseDate,
-    formatResultLog,
-    calcDataTableHeight,
-    checkVisibility,
-    setFocusOnElement,
-    showSingleModal,
-    showSingleListModal,
-    showMsgOnTop,
-    response,
-    round,
-    sgn,
-    getBasename,
-    download,
-    getHashFrom,
-    countBlocks,
-    isLocalStorageAvailable,
-    alertTab,
-    clearTabAlert,
-    clearAnnotations,
-    annotateBlocks,
-    removeLinks,
-    openSimRobotWindow,
-    closeSimRobotWindow,
-    toFixedPrecision,
-};

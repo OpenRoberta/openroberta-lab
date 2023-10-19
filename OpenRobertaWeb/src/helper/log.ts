@@ -2,23 +2,24 @@ import * as $ from 'jquery';
 import 'bootstrap-table';
 
 // switches for logging:
-var logToLog = true; // log to HTML-list with id #log
-var logToComm = true; // log to server along with the next ajax call
-var logToConsole = true; // log ERROR to console for DEBUGGING
+let logToLog: boolean = true; // log to HTML-list with id #log
+let logToComm: boolean = true; // log to server along with the next ajax call
+let logToConsole: boolean = true; // log ERROR to console for DEBUGGING
 
-var markerINFO = '[[INFO]] ';
-var markerERROR = '[[ERR ]] ';
+let markerINFO: string = '[[INFO]] ';
+let markerERROR: string = '[[ERR ]] ';
 
 /**
  * log text to a HTML-list with id #log or prepare it to be sent to the
  * server or do both or do nothing, depending on switches. A marker is
  * prepended to the message
  */
-function text(obj, marker) {
+export function text(obj: string | JSON, marker?: string): void {
     if (marker === undefined) {
         marker = markerINFO;
     }
     /* jshint expr : true */
+    console.log();
     logToLog && logLog(obj, marker);
     logToComm && logComm(obj, marker);
     logToConsole && marker === markerERROR && logConsole(obj, marker);
@@ -27,21 +28,21 @@ function text(obj, marker) {
 /**
  * log info text
  */
-function info(obj) {
+export function info(obj: string | JSON): void {
     text(obj, markerINFO);
 }
 
 /**
  * log error text
  */
-function error(obj) {
+export function error(obj: string | JSON): void {
     text(obj, markerERROR);
 }
 
 /**
  * set switch for logging to a HTML-list to either true or false
  */
-function enableHtml(bool) {
+export function enableHtml(bool: boolean): void {
     logToLog = bool;
 }
 
@@ -49,17 +50,17 @@ function enableHtml(bool) {
  * set switch for logging to server along with the next ajax call to either
  * true or false
  */
-function enableComm(bool) {
+export function enableComm(bool: boolean): void {
     logToComm = bool;
 }
 
 // IMPLEMENTATION OF logging to server along with the next ajax call
-var logQueue = [];
+let logQueue: string[] = [];
 
 /**
  * log to a queue
  */
-function logComm(obj, marker) {
+function logComm(obj: JSON | string, marker: string): void {
     if (typeof obj === 'object') {
         obj = JSON.stringify(obj);
     }
@@ -69,7 +70,7 @@ function logComm(obj, marker) {
 /**
  * to be used by COMM only: retrieve the number of entries in the log queue
  */
-function length() {
+export function length(): number {
     return logQueue.length;
 }
 
@@ -77,37 +78,37 @@ function length() {
  * to be used by COMM only: retrieve logging data, because an ajax request
  * has to be prepared
  */
-function reportToComm() {
-    var _logQueue = logQueue;
+export function reportToComm(): string[] {
+    let _logQueue: string[] = logQueue;
     logQueue = [];
     return _logQueue;
 }
 
-var logToggle = 'log0'; // for alternating css-classes
+let logToggle: string = 'log0'; // for alternating css-classes
 
 /**
  * IMPLEMENTATION OF logging to a HTML-list with id #logTable. expect: HTML-list
  * with id #log expect: css-classes 'log0' and 'log1' and 'lERR'
  */
-function logLog(obj, marker) {
+function logLog(obj: any, marker: any): void {
     if (typeof obj === 'object') {
         obj = JSON.stringify(obj);
     }
-    var data = $('#logTable').bootstrapTable('getData');
+    let data = $('#logTable').bootstrapTable('getData');
     $('#logTable').bootstrapTable('insertRow', {
         index: 0,
         row: {
             0: data.length + 1,
             1: marker,
-            2: obj,
-        },
+            2: obj
+        }
     });
 }
 
 /**
  * IMPLEMENTATION OF logging to the console
  */
-function logConsole(obj, marker) {
+function logConsole(obj: string | JSON, marker: string): void {
     if (typeof obj === 'object') {
         obj = JSON.stringify(obj);
     }
@@ -117,12 +118,11 @@ function logConsole(obj, marker) {
 /**
  * toggle the visibility of the HTML-list with id #log
  */
-function toggleVisibility() {
-    var $log = $('#log');
+export function toggleVisibility(): void {
+    let $log: JQuery<HTMLElement> = $('#log');
     if ($log.is(':visible')) {
         $log.hide();
     } else {
         $log.show();
     }
 }
-export { text, info, error, enableHtml, enableComm, length, reportToComm, toggleVisibility };

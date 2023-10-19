@@ -8,27 +8,27 @@ import * as GUISTATE from 'guiState.model';
 
 let blocklyWorkspace;
 
-function init(workspace) {
+export function init(workspace) {
     blocklyWorkspace = GUISTATE_C.getBlocklyWorkspace();
     initEvents();
 }
 
 function initEvents() {
-    Blockly.bindEvent_(blocklyWorkspace.robControls.runOnBrick, 'mousedown', null, function (e) {
+    Blockly.bindEvent_(blocklyWorkspace.robControls.runOnBrick, 'mousedown', null, function(e) {
         if ($('#runOnBrick').hasClass('disabled')) {
             let notificationElement = $('#releaseInfo');
             let notificationElementTitle = notificationElement.children('#releaseInfoTitle');
             let notificationElementDescription = notificationElement.children('#releaseInfoContent');
             notificationElementDescription.html(Blockly.Msg.POPUP_RUN_NOTIFICATION);
             notificationElementTitle.html(Blockly.Msg.POPUP_ATTENTION);
-            let a = notificationElement.on('notificationFadeInComplete', function () {
+            let a = notificationElement.on('notificationFadeInComplete', function() {
                 clearTimeout(a.data('hideInteval'));
-                let id = setTimeout(function () {
+                let id = setTimeout(function() {
                     notificationElement.fadeOut(500);
                 }, 10000);
                 a.data('hideInteval', id);
             });
-            notificationElement.fadeIn(500, function () {
+            notificationElement.fadeIn(500, function() {
                 $(this).trigger('notificationFadeInComplete');
             });
 
@@ -38,12 +38,12 @@ function initEvents() {
         runOnBrick();
         return false;
     });
-    Blockly.bindEvent_(blocklyWorkspace.robControls.stopBrick, 'mousedown', null, function (e) {
+    Blockly.bindEvent_(blocklyWorkspace.robControls.stopBrick, 'mousedown', null, function(e) {
         LOG.info('stopBrick from blockly button');
         stopProgram();
         return false;
     });
-    Blockly.bindEvent_(blocklyWorkspace.robControls.stopProgram, 'mousedown', null, function (e) {
+    Blockly.bindEvent_(blocklyWorkspace.robControls.stopProgram, 'mousedown', null, function(e) {
         LOG.info('stopProgram from blockly button');
         stopProgram();
         return false;
@@ -53,7 +53,7 @@ function initEvents() {
 /**
  * Start the program on brick from the source code editor
  */
-function runNative(sourceCode) {
+export function runNative(sourceCode) {
     let ping = GUISTATE_C.doPing();
     GUISTATE_C.setConnectionState('busy');
     GUISTATE_C.setPing(false);
@@ -65,7 +65,7 @@ function runNative(sourceCode) {
 /**
  * Start the program on the brick
  */
-function runOnBrick(opt_program?) {
+export function runOnBrick(opt_program?) {
     let ping = GUISTATE.server.ping;
     GUISTATE_C.setConnectionState('busy');
     GUISTATE_C.setPing(false);
@@ -89,5 +89,3 @@ function runOnBrick(opt_program?) {
 async function stopProgram() {
     CONNECTION_C.getConnectionInstance().stopProgram();
 }
-
-export { init, runNative, runOnBrick };
