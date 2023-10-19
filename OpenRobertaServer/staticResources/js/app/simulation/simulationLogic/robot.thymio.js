@@ -1,3 +1,78 @@
-var __extends=this&&this.__extends||function(){var e=function(t,o){return e=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(e,t){e.__proto__=t}||function(e,t){for(var o in t)Object.prototype.hasOwnProperty.call(t,o)&&(e[o]=t[o])},e(t,o)};return function(t,o){if("function"!=typeof o&&null!==o)throw new TypeError("Class extends value "+String(o)+" is not a constructor or null");function n(){this.constructor=t}e(t,o),t.prototype=null===o?Object.create(o):(n.prototype=o.prototype,new n)}}();define(["require","exports","robot.actuators","robot.sensors","jquery","robot.base.mobile"],(function(e,t,o,n,s,i){Object.defineProperty(t,"__esModule",{value:!0});var r=function(e){function t(t,n,s,i,r){var u=e.call(this,t,n,s,i,r)||this;return u.imgList=["simpleBackgroundSmall","drawBackground","rescueBackground","mathBackground"],u.webAudio=new o.WebAudio,u}return __extends(t,e),t.prototype.configure=function(e){e.TRACKWIDTH=9,e.WHEELDIAMETER=4.3,this.chassis=new o.ThymioChassis(this.id,e,1.5,this.pose),this.lineSensor=new n.ThymioLineSensors({x:24,y:0}),this.infraredSensors=new n.ThymioInfraredSensors,this.tapSensor=new n.TapSensor,this.soundSensor=new n.VolumeMeterSensor(this);this.buttons=new n.EV3Keys([{name:"forward",value:!1},{name:"backward",value:!1},{name:"left",value:!1},{name:"right",value:!1},{name:"center",value:!1}],this.id);var t=this;for(var i in this.buttons.keys){var r=s("#"+this.buttons.keys[i].name+t.id);r.on("mousedown touchstart",(function(){t.buttons.keys[this.id.replace(/\d+$/,"")].value=!0})),r.on("mouseup touchend",(function(){t.buttons.keys[this.id.replace(/\d+$/,"")].value=!1}))}this.topLed=new o.ThymioRGBLeds({x:2,y:7.5},this.id,this.chassis.geom.color),this.circleLeds=new o.ThymioCircleLeds(this.id),this.buttonLeds=new o.ThymioButtonLeds(this.id),this.proxHLeds=new o.ThymioProxHLeds(this.id),this.temperatureLeds=new o.ThymioTemperatureLeds(this.id),this.soundLed=new o.ThymioSoundLed(this.id)},t}(i.RobotBaseMobile);t.default=r}));
-//# sourceMappingURL=robot.thymio.js.map
-//# sourceMappingURL=robot.thymio.js.map
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+define(["require", "exports", "robot.actuators", "robot.sensors", "jquery", "robot.base.mobile"], function (require, exports, robot_actuators_1, robot_sensors_1, $, robot_base_mobile_1) {
+    Object.defineProperty(exports, "__esModule", { value: true });
+    var RobotThymio = /** @class */ (function (_super) {
+        __extends(RobotThymio, _super);
+        function RobotThymio(id, configuration, interpreter, savedName, myListener) {
+            var _this = _super.call(this, id, configuration, interpreter, savedName, myListener) || this;
+            _this.imgList = ['simpleBackgroundSmall', 'drawBackground', 'rescueBackground', 'mathBackground'];
+            _this.webAudio = new robot_actuators_1.WebAudio();
+            return _this;
+        }
+        RobotThymio.prototype.configure = function (configuration) {
+            // due to no information from the configuration, track width and wheel diameter are fix:
+            configuration['TRACKWIDTH'] = 9;
+            configuration['WHEELDIAMETER'] = 4.3;
+            this.chassis = new robot_actuators_1.ThymioChassis(this.id, configuration, 1.5, this.pose);
+            this.lineSensor = new robot_sensors_1.ThymioLineSensors({ x: 24, y: 0 });
+            this.infraredSensors = new robot_sensors_1.ThymioInfraredSensors();
+            this.tapSensor = new robot_sensors_1.TapSensor();
+            this.soundSensor = new robot_sensors_1.VolumeMeterSensor(this);
+            var myButtons = [
+                {
+                    name: 'forward',
+                    value: false,
+                },
+                {
+                    name: 'backward',
+                    value: false,
+                },
+                {
+                    name: 'left',
+                    value: false,
+                },
+                {
+                    name: 'right',
+                    value: false,
+                },
+                {
+                    name: 'center',
+                    value: false,
+                },
+            ];
+            this.buttons = new robot_sensors_1.EV3Keys(myButtons, this.id);
+            var thymio = this;
+            for (var property in this['buttons']['keys']) {
+                var $property = $('#' + this['buttons']['keys'][property].name + thymio.id);
+                $property.on('mousedown touchstart', function () {
+                    thymio['buttons']['keys'][this.id.replace(/\d+$/, '')]['value'] = true;
+                });
+                $property.on('mouseup touchend', function () {
+                    thymio['buttons']['keys'][this.id.replace(/\d+$/, '')]['value'] = false;
+                });
+            }
+            this.topLed = new robot_actuators_1.ThymioRGBLeds({ x: 2, y: 7.5 }, this.id, this.chassis.geom.color);
+            this.circleLeds = new robot_actuators_1.ThymioCircleLeds(this.id);
+            this.buttonLeds = new robot_actuators_1.ThymioButtonLeds(this.id);
+            this.proxHLeds = new robot_actuators_1.ThymioProxHLeds(this.id);
+            this.temperatureLeds = new robot_actuators_1.ThymioTemperatureLeds(this.id);
+            this.soundLed = new robot_actuators_1.ThymioSoundLed(this.id);
+        };
+        return RobotThymio;
+    }(robot_base_mobile_1.RobotBaseMobile));
+    exports.default = RobotThymio;
+});

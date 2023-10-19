@@ -1,3 +1,6947 @@
-define(["require","exports"],(function(t,e){Object.defineProperty(e,"__esModule",{value:!0}),e.mobsya=void 0,function(t){!function(t){!function(t){t[t.Thymio2=0]="Thymio2",t[t.Thymio2Wireless=1]="Thymio2Wireless",t[t.SimulatedThymio2=2]="SimulatedThymio2",t[t.DummyNode=3]="DummyNode",t[t.UnknownType=4]="UnknownType"}(t.NodeType||(t.NodeType={}))}(t.fb||(t.fb={}))}(e.mobsya||(e.mobsya={})),function(t){!function(t){!function(t){t[t.Rename=1]="Rename",t[t.ForceResetAndStop=2]="ForceResetAndStop",t[t.FirwmareUpgrade=4]="FirwmareUpgrade"}(t.NodeCapability||(t.NodeCapability={}))}(t.fb||(t.fb={}))}(e.mobsya||(e.mobsya={})),function(t){!function(t){!function(t){t[t.unknown=0]="unknown",t[t.connected=1]="connected",t[t.available=2]="available",t[t.busy=3]="busy",t[t.ready=4]="ready",t[t.disconnected=5]="disconnected"}(t.NodeStatus||(t.NodeStatus={}))}(t.fb||(t.fb={}))}(e.mobsya||(e.mobsya={})),function(t){!function(t){!function(t){t[t.no_error=0]="no_error",t[t.unknown_error=1]="unknown_error",t[t.unknown_node=2]="unknown_node",t[t.node_busy=3]="node_busy",t[t.unsupported_variable_type=4]="unsupported_variable_type",t[t.thymio2_pairing_write_dongle_failed=5]="thymio2_pairing_write_dongle_failed",t[t.thymio2_pairing_write_robot_failed=6]="thymio2_pairing_write_robot_failed"}(t.ErrorType||(t.ErrorType={}))}(t.fb||(t.fb={}))}(e.mobsya||(e.mobsya={})),function(t){!function(t){!function(t){t[t.StopMonitoring=0]="StopMonitoring",t[t.Variables=1]="Variables",t[t.Events=2]="Events",t[t.VMExecutionState=4]="VMExecutionState",t[t.SharedEventsDescription=8]="SharedEventsDescription",t[t.SharedVariables=16]="SharedVariables",t[t.Scratchpads=32]="Scratchpads"}(t.WatchableInfo||(t.WatchableInfo={}))}(t.fb||(t.fb={}))}(e.mobsya||(e.mobsya={})),function(t){!function(t){!function(t){t[t.Aseba=1]="Aseba",t[t.Aesl=2]="Aesl"}(t.ProgrammingLanguage||(t.ProgrammingLanguage={}))}(t.fb||(t.fb={}))}(e.mobsya||(e.mobsya={})),function(t){!function(t){!function(t){t[t.NoOption=1]="NoOption",t[t.LoadOnTarget=2]="LoadOnTarget",t[t.FetchBytecode=4]="FetchBytecode"}(t.CompilationOptions||(t.CompilationOptions={}))}(t.fb||(t.fb={}))}(e.mobsya||(e.mobsya={})),function(t){!function(t){!function(t){t[t.Stop=0]="Stop",t[t.Run=1]="Run",t[t.Step=2]="Step",t[t.StepToNextLine=3]="StepToNextLine",t[t.Pause=4]="Pause",t[t.Reset=5]="Reset",t[t.Reboot=6]="Reboot",t[t.Suspend=7]="Suspend",t[t.WriteProgramToDeviceMemory=8]="WriteProgramToDeviceMemory"}(t.VMExecutionStateCommand||(t.VMExecutionStateCommand={}))}(t.fb||(t.fb={}))}(e.mobsya||(e.mobsya={})),function(t){!function(t){!function(t){t[t.Stopped=0]="Stopped",t[t.Running=1]="Running",t[t.Paused=2]="Paused"}(t.VMExecutionState||(t.VMExecutionState={}))}(t.fb||(t.fb={}))}(e.mobsya||(e.mobsya={})),function(t){!function(t){!function(t){t[t.NoError=0]="NoError",t[t.Killed=1]="Killed",t[t.OutOfBoundAccess=2]="OutOfBoundAccess",t[t.DivisionByZero=3]="DivisionByZero",t[t.GenericError=4]="GenericError"}(t.VMExecutionError||(t.VMExecutionError={}))}(t.fb||(t.fb={}))}(e.mobsya||(e.mobsya={})),function(t){!function(t){!function(t){t[t.NONE=0]="NONE",t[t.ConnectionHandshake=1]="ConnectionHandshake",t[t.DeviceManagerShutdownRequest=2]="DeviceManagerShutdownRequest",t[t.RequestListOfNodes=3]="RequestListOfNodes",t[t.RequestNodeAsebaVMDescription=4]="RequestNodeAsebaVMDescription",t[t.LockNode=5]="LockNode",t[t.UnlockNode=6]="UnlockNode",t[t.RenameNode=7]="RenameNode",t[t.CompileAndLoadCodeOnVM=8]="CompileAndLoadCodeOnVM",t[t.NodesChanged=9]="NodesChanged",t[t.NodeAsebaVMDescription=10]="NodeAsebaVMDescription",t[t.RequestCompleted=11]="RequestCompleted",t[t.Error=12]="Error",t[t.CompilationResultFailure=13]="CompilationResultFailure",t[t.CompilationResultSuccess=14]="CompilationResultSuccess",t[t.WatchNode=15]="WatchNode",t[t.VariablesChanged=16]="VariablesChanged",t[t.SetVariables=17]="SetVariables",t[t.EventsDescriptionsChanged=18]="EventsDescriptionsChanged",t[t.RegisterEvents=19]="RegisterEvents",t[t.SendEvents=20]="SendEvents",t[t.EventsEmitted=21]="EventsEmitted",t[t.SetBreakpoints=22]="SetBreakpoints",t[t.SetBreakpointsResponse=23]="SetBreakpointsResponse",t[t.SetVMExecutionState=24]="SetVMExecutionState",t[t.VMExecutionStateChanged=25]="VMExecutionStateChanged",t[t.ScratchpadUpdate=26]="ScratchpadUpdate",t[t.FirmwareUpgradeRequest=27]="FirmwareUpgradeRequest",t[t.FirmwareUpgradeStatus=28]="FirmwareUpgradeStatus",t[t.Ping=29]="Ping",t[t.EnableThymio2PairingMode=30]="EnableThymio2PairingMode",t[t.Thymio2WirelessDonglesChanged=31]="Thymio2WirelessDonglesChanged",t[t.Thymio2WirelessDonglePairingRequest=32]="Thymio2WirelessDonglePairingRequest",t[t.Thymio2WirelessDonglePairingResponse=33]="Thymio2WirelessDonglePairingResponse",t[t.CompileAndSave=34]="CompileAndSave",t[t.SaveBytecode=35]="SaveBytecode"}(t.AnyMessage||(t.AnyMessage={}))}(t.fb||(t.fb={}))}(e.mobsya||(e.mobsya={})),function(t){!function(t){var e=function(){function t(){this.bb=null,this.bb_pos=0}return t.prototype.__init=function(t,e){return this.bb_pos=t,this.bb=e,this},t.getRootAsNodeId=function(e,n){return(n||new t).__init(e.readInt32(e.position())+e.position(),e)},t.prototype.id=function(t){var e=this.bb.__offset(this.bb_pos,4);return e?this.bb.readUint8(this.bb.__vector(this.bb_pos+e)+t):0},t.prototype.idLength=function(){var t=this.bb.__offset(this.bb_pos,4);return t?this.bb.__vector_len(this.bb_pos+t):0},t.prototype.idArray=function(){var t=this.bb.__offset(this.bb_pos,4);return t?new Uint8Array(this.bb.bytes().buffer,this.bb.bytes().byteOffset+this.bb.__vector(this.bb_pos+t),this.bb.__vector_len(this.bb_pos+t)):null},t.startNodeId=function(t){t.startObject(1)},t.addId=function(t,e){t.addFieldOffset(0,e,0)},t.createIdVector=function(t,e){t.startVector(1,e.length,1);for(var n=e.length-1;n>=0;n--)t.addInt8(e[n]);return t.endVector()},t.startIdVector=function(t,e){t.startVector(1,e,1)},t.endNodeId=function(t){return t.endObject()},t.createNodeId=function(e,n){return t.startNodeId(e),t.addId(e,n),t.endNodeId(e)},t}();t.NodeId=e}(t.fb||(t.fb={}))}(e.mobsya||(e.mobsya={})),function(t){!function(e){var n=function(){function e(){this.bb=null,this.bb_pos=0}return e.prototype.__init=function(t,e){return this.bb_pos=t,this.bb=e,this},e.getRootAsConnectionHandshake=function(t,n){return(n||new e).__init(t.readInt32(t.position())+t.position(),t)},e.prototype.minProtocolVersion=function(){var t=this.bb.__offset(this.bb_pos,4);return t?this.bb.readUint32(this.bb_pos+t):1},e.prototype.mutate_minProtocolVersion=function(t){var e=this.bb.__offset(this.bb_pos,4);return 0!==e&&(this.bb.writeUint32(this.bb_pos+e,t),!0)},e.prototype.protocolVersion=function(){var t=this.bb.__offset(this.bb_pos,6);return t?this.bb.readUint32(this.bb_pos+t):1},e.prototype.mutate_protocolVersion=function(t){var e=this.bb.__offset(this.bb_pos,6);return 0!==e&&(this.bb.writeUint32(this.bb_pos+e,t),!0)},e.prototype.maxMessageSize=function(){var t=this.bb.__offset(this.bb_pos,8);return t?this.bb.readUint32(this.bb_pos+t):102400},e.prototype.mutate_maxMessageSize=function(t){var e=this.bb.__offset(this.bb_pos,8);return 0!==e&&(this.bb.writeUint32(this.bb_pos+e,t),!0)},e.prototype.token=function(t){var e=this.bb.__offset(this.bb_pos,10);return e?this.bb.readUint8(this.bb.__vector(this.bb_pos+e)+t):0},e.prototype.tokenLength=function(){var t=this.bb.__offset(this.bb_pos,10);return t?this.bb.__vector_len(this.bb_pos+t):0},e.prototype.tokenArray=function(){var t=this.bb.__offset(this.bb_pos,10);return t?new Uint8Array(this.bb.bytes().buffer,this.bb.bytes().byteOffset+this.bb.__vector(this.bb_pos+t),this.bb.__vector_len(this.bb_pos+t)):null},e.prototype.localhostPeer=function(){var t=this.bb.__offset(this.bb_pos,12);return!!t&&!!this.bb.readInt8(this.bb_pos+t)},e.prototype.mutate_localhostPeer=function(t){var e=this.bb.__offset(this.bb_pos,12);return 0!==e&&(this.bb.writeInt8(this.bb_pos+e,+t),!0)},e.prototype.wsPort=function(){var t=this.bb.__offset(this.bb_pos,14);return t?this.bb.readUint16(this.bb_pos+t):0},e.prototype.mutate_ws_port=function(t){var e=this.bb.__offset(this.bb_pos,14);return 0!==e&&(this.bb.writeUint16(this.bb_pos+e,t),!0)},e.prototype.uuid=function(e){var n=this.bb.__offset(this.bb_pos,16);return n?(e||new t.fb.NodeId).__init(this.bb.__indirect(this.bb_pos+n),this.bb):null},e.prototype.password=function(t){var e=this.bb.__offset(this.bb_pos,18);return e?this.bb.__string(this.bb_pos+e,t):null},e.startConnectionHandshake=function(t){t.startObject(8)},e.addMinProtocolVersion=function(t,e){t.addFieldInt32(0,e,1)},e.addProtocolVersion=function(t,e){t.addFieldInt32(1,e,1)},e.addMaxMessageSize=function(t,e){t.addFieldInt32(2,e,102400)},e.addToken=function(t,e){t.addFieldOffset(3,e,0)},e.createTokenVector=function(t,e){t.startVector(1,e.length,1);for(var n=e.length-1;n>=0;n--)t.addInt8(e[n]);return t.endVector()},e.startTokenVector=function(t,e){t.startVector(1,e,1)},e.addLocalhostPeer=function(t,e){t.addFieldInt8(4,+e,0)},e.addWsPort=function(t,e){t.addFieldInt16(5,e,0)},e.addUuid=function(t,e){t.addFieldOffset(6,e,0)},e.addPassword=function(t,e){t.addFieldOffset(7,e,0)},e.endConnectionHandshake=function(t){return t.endObject()},e.createConnectionHandshake=function(t,n,i,o,s,b,r,a,d){return e.startConnectionHandshake(t),e.addMinProtocolVersion(t,n),e.addProtocolVersion(t,i),e.addMaxMessageSize(t,o),e.addToken(t,s),e.addLocalhostPeer(t,b),e.addWsPort(t,r),e.addUuid(t,a),e.addPassword(t,d),e.endConnectionHandshake(t)},e}();e.ConnectionHandshake=n}(t.fb||(t.fb={}))}(e.mobsya||(e.mobsya={})),function(t){!function(t){var e=function(){function t(){this.bb=null,this.bb_pos=0}return t.prototype.__init=function(t,e){return this.bb_pos=t,this.bb=e,this},t.getRootAsPing=function(e,n){return(n||new t).__init(e.readInt32(e.position())+e.position(),e)},t.startPing=function(t){t.startObject(0)},t.endPing=function(t){return t.endObject()},t.createPing=function(e){return t.startPing(e),t.endPing(e)},t}();t.Ping=e}(t.fb||(t.fb={}))}(e.mobsya||(e.mobsya={})),function(t){!function(t){var e=function(){function t(){this.bb=null,this.bb_pos=0}return t.prototype.__init=function(t,e){return this.bb_pos=t,this.bb=e,this},t.getRootAsDeviceManagerShutdownRequest=function(e,n){return(n||new t).__init(e.readInt32(e.position())+e.position(),e)},t.prototype.requestId=function(){var t=this.bb.__offset(this.bb_pos,4);return t?this.bb.readUint32(this.bb_pos+t):0},t.prototype.mutate_request_id=function(t){var e=this.bb.__offset(this.bb_pos,4);return 0!==e&&(this.bb.writeUint32(this.bb_pos+e,t),!0)},t.startDeviceManagerShutdownRequest=function(t){t.startObject(1)},t.addRequestId=function(t,e){t.addFieldInt32(0,e,0)},t.endDeviceManagerShutdownRequest=function(t){return t.endObject()},t.createDeviceManagerShutdownRequest=function(e,n){return t.startDeviceManagerShutdownRequest(e),t.addRequestId(e,n),t.endDeviceManagerShutdownRequest(e)},t}();t.DeviceManagerShutdownRequest=e}(t.fb||(t.fb={}))}(e.mobsya||(e.mobsya={})),function(t){!function(e){var n=function(){function e(){this.bb=null,this.bb_pos=0}return e.prototype.__init=function(t,e){return this.bb_pos=t,this.bb=e,this},e.getRootAsNode=function(t,n){return(n||new e).__init(t.readInt32(t.position())+t.position(),t)},e.prototype.nodeId=function(e){var n=this.bb.__offset(this.bb_pos,4);return n?(e||new t.fb.NodeId).__init(this.bb.__indirect(this.bb_pos+n),this.bb):null},e.prototype.groupId=function(e){var n=this.bb.__offset(this.bb_pos,6);return n?(e||new t.fb.NodeId).__init(this.bb.__indirect(this.bb_pos+n),this.bb):null},e.prototype.status=function(){var e=this.bb.__offset(this.bb_pos,8);return e?this.bb.readInt32(this.bb_pos+e):t.fb.NodeStatus.unknown},e.prototype.mutate_status=function(t){var e=this.bb.__offset(this.bb_pos,8);return 0!==e&&(this.bb.writeInt32(this.bb_pos+e,t),!0)},e.prototype.type=function(){var e=this.bb.__offset(this.bb_pos,10);return e?this.bb.readInt32(this.bb_pos+e):t.fb.NodeType.Thymio2},e.prototype.mutate_type=function(t){var e=this.bb.__offset(this.bb_pos,10);return 0!==e&&(this.bb.writeInt32(this.bb_pos+e,t),!0)},e.prototype.name=function(t){var e=this.bb.__offset(this.bb_pos,12);return e?this.bb.__string(this.bb_pos+e,t):null},e.prototype.capabilities=function(){var t=this.bb.__offset(this.bb_pos,14);return t?this.bb.readUint64(this.bb_pos+t):this.bb.createLong(0,0)},e.prototype.mutate_capabilities=function(t){var e=this.bb.__offset(this.bb_pos,14);return 0!==e&&(this.bb.writeUint64(this.bb_pos+e,t),!0)},e.prototype.fwVersion=function(t){var e=this.bb.__offset(this.bb_pos,16);return e?this.bb.__string(this.bb_pos+e,t):null},e.prototype.latestFwVersion=function(t){var e=this.bb.__offset(this.bb_pos,18);return e?this.bb.__string(this.bb_pos+e,t):null},e.startNode=function(t){t.startObject(8)},e.addNodeId=function(t,e){t.addFieldOffset(0,e,0)},e.addGroupId=function(t,e){t.addFieldOffset(1,e,0)},e.addStatus=function(e,n){e.addFieldInt32(2,n,t.fb.NodeStatus.unknown)},e.addType=function(e,n){e.addFieldInt32(3,n,t.fb.NodeType.Thymio2)},e.addName=function(t,e){t.addFieldOffset(4,e,0)},e.addCapabilities=function(t,e){t.addFieldInt64(5,e,t.createLong(0,0))},e.addFwVersion=function(t,e){t.addFieldOffset(6,e,0)},e.addLatestFwVersion=function(t,e){t.addFieldOffset(7,e,0)},e.endNode=function(t){return t.endObject()},e.createNode=function(t,n,i,o,s,b,r,a,d){return e.startNode(t),e.addNodeId(t,n),e.addGroupId(t,i),e.addStatus(t,o),e.addType(t,s),e.addName(t,b),e.addCapabilities(t,r),e.addFwVersion(t,a),e.addLatestFwVersion(t,d),e.endNode(t)},e}();e.Node=n}(t.fb||(t.fb={}))}(e.mobsya||(e.mobsya={})),function(t){!function(t){var e=function(){function t(){this.bb=null,this.bb_pos=0}return t.prototype.__init=function(t,e){return this.bb_pos=t,this.bb=e,this},t.getRootAsNamedValue=function(e,n){return(n||new t).__init(e.readInt32(e.position())+e.position(),e)},t.prototype.name=function(t){var e=this.bb.__offset(this.bb_pos,4);return e?this.bb.__string(this.bb_pos+e,t):null},t.prototype.value=function(t){var e=this.bb.__offset(this.bb_pos,6);return e?this.bb.readUint8(this.bb.__vector(this.bb_pos+e)+t):0},t.prototype.valueLength=function(){var t=this.bb.__offset(this.bb_pos,6);return t?this.bb.__vector_len(this.bb_pos+t):0},t.prototype.valueArray=function(){var t=this.bb.__offset(this.bb_pos,6);return t?new Uint8Array(this.bb.bytes().buffer,this.bb.bytes().byteOffset+this.bb.__vector(this.bb_pos+t),this.bb.__vector_len(this.bb_pos+t)):null},t.startNamedValue=function(t){t.startObject(2)},t.addName=function(t,e){t.addFieldOffset(0,e,0)},t.addValue=function(t,e){t.addFieldOffset(1,e,0)},t.createValueVector=function(t,e){t.startVector(1,e.length,1);for(var n=e.length-1;n>=0;n--)t.addInt8(e[n]);return t.endVector()},t.startValueVector=function(t,e){t.startVector(1,e,1)},t.endNamedValue=function(t){var e=t.endObject();return t.requiredField(e,4),e},t.createNamedValue=function(e,n,i){return t.startNamedValue(e),t.addName(e,n),t.addValue(e,i),t.endNamedValue(e)},t}();t.NamedValue=e}(t.fb||(t.fb={}))}(e.mobsya||(e.mobsya={})),function(t){!function(t){var e=function(){function t(){this.bb=null,this.bb_pos=0}return t.prototype.__init=function(t,e){return this.bb_pos=t,this.bb=e,this},t.getRootAsNodeVariable=function(e,n){return(n||new t).__init(e.readInt32(e.position())+e.position(),e)},t.prototype.name=function(t){var e=this.bb.__offset(this.bb_pos,4);return e?this.bb.__string(this.bb_pos+e,t):null},t.prototype.value=function(t){var e=this.bb.__offset(this.bb_pos,6);return e?this.bb.readUint8(this.bb.__vector(this.bb_pos+e)+t):0},t.prototype.valueLength=function(){var t=this.bb.__offset(this.bb_pos,6);return t?this.bb.__vector_len(this.bb_pos+t):0},t.prototype.valueArray=function(){var t=this.bb.__offset(this.bb_pos,6);return t?new Uint8Array(this.bb.bytes().buffer,this.bb.bytes().byteOffset+this.bb.__vector(this.bb_pos+t),this.bb.__vector_len(this.bb_pos+t)):null},t.startNodeVariable=function(t){t.startObject(2)},t.addName=function(t,e){t.addFieldOffset(0,e,0)},t.addValue=function(t,e){t.addFieldOffset(1,e,0)},t.createValueVector=function(t,e){t.startVector(1,e.length,1);for(var n=e.length-1;n>=0;n--)t.addInt8(e[n]);return t.endVector()},t.startValueVector=function(t,e){t.startVector(1,e,1)},t.endNodeVariable=function(t){var e=t.endObject();return t.requiredField(e,4),e},t.createNodeVariable=function(e,n,i){return t.startNodeVariable(e),t.addName(e,n),t.addValue(e,i),t.endNodeVariable(e)},t}();t.NodeVariable=e}(t.fb||(t.fb={}))}(e.mobsya||(e.mobsya={})),function(t){!function(e){var n=function(){function e(){this.bb=null,this.bb_pos=0}return e.prototype.__init=function(t,e){return this.bb_pos=t,this.bb=e,this},e.getRootAsVariablesChanged=function(t,n){return(n||new e).__init(t.readInt32(t.position())+t.position(),t)},e.prototype.nodeId=function(e){var n=this.bb.__offset(this.bb_pos,4);return n?(e||new t.fb.NodeId).__init(this.bb.__indirect(this.bb_pos+n),this.bb):null},e.prototype.vars=function(e,n){var i=this.bb.__offset(this.bb_pos,6);return i?(n||new t.fb.NodeVariable).__init(this.bb.__indirect(this.bb.__vector(this.bb_pos+i)+4*e),this.bb):null},e.prototype.varsLength=function(){var t=this.bb.__offset(this.bb_pos,6);return t?this.bb.__vector_len(this.bb_pos+t):0},e.prototype.timestamp=function(){var t=this.bb.__offset(this.bb_pos,8);return t?this.bb.readUint64(this.bb_pos+t):this.bb.createLong(0,0)},e.prototype.mutate_timestamp=function(t){var e=this.bb.__offset(this.bb_pos,8);return 0!==e&&(this.bb.writeUint64(this.bb_pos+e,t),!0)},e.startVariablesChanged=function(t){t.startObject(3)},e.addNodeId=function(t,e){t.addFieldOffset(0,e,0)},e.addVars=function(t,e){t.addFieldOffset(1,e,0)},e.createVarsVector=function(t,e){t.startVector(4,e.length,4);for(var n=e.length-1;n>=0;n--)t.addOffset(e[n]);return t.endVector()},e.startVarsVector=function(t,e){t.startVector(4,e,4)},e.addTimestamp=function(t,e){t.addFieldInt64(2,e,t.createLong(0,0))},e.endVariablesChanged=function(t){return t.endObject()},e.createVariablesChanged=function(t,n,i,o){return e.startVariablesChanged(t),e.addNodeId(t,n),e.addVars(t,i),e.addTimestamp(t,o),e.endVariablesChanged(t)},e}();e.VariablesChanged=n}(t.fb||(t.fb={}))}(e.mobsya||(e.mobsya={})),function(t){!function(e){var n=function(){function e(){this.bb=null,this.bb_pos=0}return e.prototype.__init=function(t,e){return this.bb_pos=t,this.bb=e,this},e.getRootAsSendEvents=function(t,n){return(n||new e).__init(t.readInt32(t.position())+t.position(),t)},e.prototype.requestId=function(){var t=this.bb.__offset(this.bb_pos,4);return t?this.bb.readUint32(this.bb_pos+t):0},e.prototype.mutate_request_id=function(t){var e=this.bb.__offset(this.bb_pos,4);return 0!==e&&(this.bb.writeUint32(this.bb_pos+e,t),!0)},e.prototype.nodeId=function(e){var n=this.bb.__offset(this.bb_pos,6);return n?(e||new t.fb.NodeId).__init(this.bb.__indirect(this.bb_pos+n),this.bb):null},e.prototype.events=function(e,n){var i=this.bb.__offset(this.bb_pos,8);return i?(n||new t.fb.NamedValue).__init(this.bb.__indirect(this.bb.__vector(this.bb_pos+i)+4*e),this.bb):null},e.prototype.eventsLength=function(){var t=this.bb.__offset(this.bb_pos,8);return t?this.bb.__vector_len(this.bb_pos+t):0},e.startSendEvents=function(t){t.startObject(3)},e.addRequestId=function(t,e){t.addFieldInt32(0,e,0)},e.addNodeId=function(t,e){t.addFieldOffset(1,e,0)},e.addEvents=function(t,e){t.addFieldOffset(2,e,0)},e.createEventsVector=function(t,e){t.startVector(4,e.length,4);for(var n=e.length-1;n>=0;n--)t.addOffset(e[n]);return t.endVector()},e.startEventsVector=function(t,e){t.startVector(4,e,4)},e.endSendEvents=function(t){return t.endObject()},e.createSendEvents=function(t,n,i,o){return e.startSendEvents(t),e.addRequestId(t,n),e.addNodeId(t,i),e.addEvents(t,o),e.endSendEvents(t)},e}();e.SendEvents=n}(t.fb||(t.fb={}))}(e.mobsya||(e.mobsya={})),function(t){!function(e){var n=function(){function e(){this.bb=null,this.bb_pos=0}return e.prototype.__init=function(t,e){return this.bb_pos=t,this.bb=e,this},e.getRootAsEventsEmitted=function(t,n){return(n||new e).__init(t.readInt32(t.position())+t.position(),t)},e.prototype.nodeId=function(e){var n=this.bb.__offset(this.bb_pos,4);return n?(e||new t.fb.NodeId).__init(this.bb.__indirect(this.bb_pos+n),this.bb):null},e.prototype.events=function(e,n){var i=this.bb.__offset(this.bb_pos,6);return i?(n||new t.fb.NamedValue).__init(this.bb.__indirect(this.bb.__vector(this.bb_pos+i)+4*e),this.bb):null},e.prototype.eventsLength=function(){var t=this.bb.__offset(this.bb_pos,6);return t?this.bb.__vector_len(this.bb_pos+t):0},e.prototype.timestamp=function(){var t=this.bb.__offset(this.bb_pos,8);return t?this.bb.readUint64(this.bb_pos+t):this.bb.createLong(0,0)},e.prototype.mutate_timestamp=function(t){var e=this.bb.__offset(this.bb_pos,8);return 0!==e&&(this.bb.writeUint64(this.bb_pos+e,t),!0)},e.startEventsEmitted=function(t){t.startObject(3)},e.addNodeId=function(t,e){t.addFieldOffset(0,e,0)},e.addEvents=function(t,e){t.addFieldOffset(1,e,0)},e.createEventsVector=function(t,e){t.startVector(4,e.length,4);for(var n=e.length-1;n>=0;n--)t.addOffset(e[n]);return t.endVector()},e.startEventsVector=function(t,e){t.startVector(4,e,4)},e.addTimestamp=function(t,e){t.addFieldInt64(2,e,t.createLong(0,0))},e.endEventsEmitted=function(t){return t.endObject()},e.createEventsEmitted=function(t,n,i,o){return e.startEventsEmitted(t),e.addNodeId(t,n),e.addEvents(t,i),e.addTimestamp(t,o),e.endEventsEmitted(t)},e}();e.EventsEmitted=n}(t.fb||(t.fb={}))}(e.mobsya||(e.mobsya={})),function(t){!function(e){var n=function(){function e(){this.bb=null,this.bb_pos=0}return e.prototype.__init=function(t,e){return this.bb_pos=t,this.bb=e,this},e.getRootAsNodesChanged=function(t,n){return(n||new e).__init(t.readInt32(t.position())+t.position(),t)},e.prototype.nodes=function(e,n){var i=this.bb.__offset(this.bb_pos,4);return i?(n||new t.fb.Node).__init(this.bb.__indirect(this.bb.__vector(this.bb_pos+i)+4*e),this.bb):null},e.prototype.nodesLength=function(){var t=this.bb.__offset(this.bb_pos,4);return t?this.bb.__vector_len(this.bb_pos+t):0},e.startNodesChanged=function(t){t.startObject(1)},e.addNodes=function(t,e){t.addFieldOffset(0,e,0)},e.createNodesVector=function(t,e){t.startVector(4,e.length,4);for(var n=e.length-1;n>=0;n--)t.addOffset(e[n]);return t.endVector()},e.startNodesVector=function(t,e){t.startVector(4,e,4)},e.endNodesChanged=function(t){return t.endObject()},e.createNodesChanged=function(t,n){return e.startNodesChanged(t),e.addNodes(t,n),e.endNodesChanged(t)},e}();e.NodesChanged=n}(t.fb||(t.fb={}))}(e.mobsya||(e.mobsya={})),function(t){!function(t){var e=function(){function t(){this.bb=null,this.bb_pos=0}return t.prototype.__init=function(t,e){return this.bb_pos=t,this.bb=e,this},t.getRootAsRequestListOfNodes=function(e,n){return(n||new t).__init(e.readInt32(e.position())+e.position(),e)},t.startRequestListOfNodes=function(t){t.startObject(0)},t.endRequestListOfNodes=function(t){return t.endObject()},t.createRequestListOfNodes=function(e){return t.startRequestListOfNodes(e),t.endRequestListOfNodes(e)},t}();t.RequestListOfNodes=e}(t.fb||(t.fb={}))}(e.mobsya||(e.mobsya={})),function(t){!function(e){var n=function(){function e(){this.bb=null,this.bb_pos=0}return e.prototype.__init=function(t,e){return this.bb_pos=t,this.bb=e,this},e.getRootAsRequestNodeAsebaVMDescription=function(t,n){return(n||new e).__init(t.readInt32(t.position())+t.position(),t)},e.prototype.requestId=function(){var t=this.bb.__offset(this.bb_pos,4);return t?this.bb.readUint32(this.bb_pos+t):0},e.prototype.mutate_request_id=function(t){var e=this.bb.__offset(this.bb_pos,4);return 0!==e&&(this.bb.writeUint32(this.bb_pos+e,t),!0)},e.prototype.nodeId=function(e){var n=this.bb.__offset(this.bb_pos,6);return n?(e||new t.fb.NodeId).__init(this.bb.__indirect(this.bb_pos+n),this.bb):null},e.startRequestNodeAsebaVMDescription=function(t){t.startObject(2)},e.addRequestId=function(t,e){t.addFieldInt32(0,e,0)},e.addNodeId=function(t,e){t.addFieldOffset(1,e,0)},e.endRequestNodeAsebaVMDescription=function(t){return t.endObject()},e.createRequestNodeAsebaVMDescription=function(t,n,i){return e.startRequestNodeAsebaVMDescription(t),e.addRequestId(t,n),e.addNodeId(t,i),e.endRequestNodeAsebaVMDescription(t)},e}();e.RequestNodeAsebaVMDescription=n}(t.fb||(t.fb={}))}(e.mobsya||(e.mobsya={})),function(t){!function(e){var n=function(){function e(){this.bb=null,this.bb_pos=0}return e.prototype.__init=function(t,e){return this.bb_pos=t,this.bb=e,this},e.getRootAsNodeAsebaVMDescription=function(t,n){return(n||new e).__init(t.readInt32(t.position())+t.position(),t)},e.prototype.requestId=function(){var t=this.bb.__offset(this.bb_pos,4);return t?this.bb.readUint32(this.bb_pos+t):0},e.prototype.mutate_request_id=function(t){var e=this.bb.__offset(this.bb_pos,4);return 0!==e&&(this.bb.writeUint32(this.bb_pos+e,t),!0)},e.prototype.nodeId=function(e){var n=this.bb.__offset(this.bb_pos,6);return n?(e||new t.fb.NodeId).__init(this.bb.__indirect(this.bb_pos+n),this.bb):null},e.prototype.bytecodeSize=function(){var t=this.bb.__offset(this.bb_pos,8);return t?this.bb.readUint32(this.bb_pos+t):0},e.prototype.mutate_bytecode_size=function(t){var e=this.bb.__offset(this.bb_pos,8);return 0!==e&&(this.bb.writeUint32(this.bb_pos+e,t),!0)},e.prototype.dataSize=function(){var t=this.bb.__offset(this.bb_pos,10);return t?this.bb.readUint32(this.bb_pos+t):0},e.prototype.mutate_data_size=function(t){var e=this.bb.__offset(this.bb_pos,10);return 0!==e&&(this.bb.writeUint32(this.bb_pos+e,t),!0)},e.prototype.stackSize=function(){var t=this.bb.__offset(this.bb_pos,12);return t?this.bb.readUint32(this.bb_pos+t):0},e.prototype.mutate_stack_size=function(t){var e=this.bb.__offset(this.bb_pos,12);return 0!==e&&(this.bb.writeUint32(this.bb_pos+e,t),!0)},e.prototype.variables=function(e,n){var i=this.bb.__offset(this.bb_pos,14);return i?(n||new t.fb.AsebaNamedVariable).__init(this.bb.__indirect(this.bb.__vector(this.bb_pos+i)+4*e),this.bb):null},e.prototype.variablesLength=function(){var t=this.bb.__offset(this.bb_pos,14);return t?this.bb.__vector_len(this.bb_pos+t):0},e.prototype.events=function(e,n){var i=this.bb.__offset(this.bb_pos,16);return i?(n||new t.fb.AsebaEvent).__init(this.bb.__indirect(this.bb.__vector(this.bb_pos+i)+4*e),this.bb):null},e.prototype.eventsLength=function(){var t=this.bb.__offset(this.bb_pos,16);return t?this.bb.__vector_len(this.bb_pos+t):0},e.prototype.functions=function(e,n){var i=this.bb.__offset(this.bb_pos,18);return i?(n||new t.fb.AsebaNativeFunction).__init(this.bb.__indirect(this.bb.__vector(this.bb_pos+i)+4*e),this.bb):null},e.prototype.functionsLength=function(){var t=this.bb.__offset(this.bb_pos,18);return t?this.bb.__vector_len(this.bb_pos+t):0},e.startNodeAsebaVMDescription=function(t){t.startObject(8)},e.addRequestId=function(t,e){t.addFieldInt32(0,e,0)},e.addNodeId=function(t,e){t.addFieldOffset(1,e,0)},e.addBytecodeSize=function(t,e){t.addFieldInt32(2,e,0)},e.addDataSize=function(t,e){t.addFieldInt32(3,e,0)},e.addStackSize=function(t,e){t.addFieldInt32(4,e,0)},e.addVariables=function(t,e){t.addFieldOffset(5,e,0)},e.createVariablesVector=function(t,e){t.startVector(4,e.length,4);for(var n=e.length-1;n>=0;n--)t.addOffset(e[n]);return t.endVector()},e.startVariablesVector=function(t,e){t.startVector(4,e,4)},e.addEvents=function(t,e){t.addFieldOffset(6,e,0)},e.createEventsVector=function(t,e){t.startVector(4,e.length,4);for(var n=e.length-1;n>=0;n--)t.addOffset(e[n]);return t.endVector()},e.startEventsVector=function(t,e){t.startVector(4,e,4)},e.addFunctions=function(t,e){t.addFieldOffset(7,e,0)},e.createFunctionsVector=function(t,e){t.startVector(4,e.length,4);for(var n=e.length-1;n>=0;n--)t.addOffset(e[n]);return t.endVector()},e.startFunctionsVector=function(t,e){t.startVector(4,e,4)},e.endNodeAsebaVMDescription=function(t){return t.endObject()},e.createNodeAsebaVMDescription=function(t,n,i,o,s,b,r,a,d){return e.startNodeAsebaVMDescription(t),e.addRequestId(t,n),e.addNodeId(t,i),e.addBytecodeSize(t,o),e.addDataSize(t,s),e.addStackSize(t,b),e.addVariables(t,r),e.addEvents(t,a),e.addFunctions(t,d),e.endNodeAsebaVMDescription(t)},e}();e.NodeAsebaVMDescription=n}(t.fb||(t.fb={}))}(e.mobsya||(e.mobsya={})),function(t){!function(t){var e=function(){function t(){this.bb=null,this.bb_pos=0}return t.prototype.__init=function(t,e){return this.bb_pos=t,this.bb=e,this},t.getRootAsAsebaNamedVariable=function(e,n){return(n||new t).__init(e.readInt32(e.position())+e.position(),e)},t.prototype.index=function(){var t=this.bb.__offset(this.bb_pos,4);return t?this.bb.readUint16(this.bb_pos+t):0},t.prototype.mutate_index=function(t){var e=this.bb.__offset(this.bb_pos,4);return 0!==e&&(this.bb.writeUint16(this.bb_pos+e,t),!0)},t.prototype.name=function(t){var e=this.bb.__offset(this.bb_pos,6);return e?this.bb.__string(this.bb_pos+e,t):null},t.prototype.size=function(){var t=this.bb.__offset(this.bb_pos,8);return t?this.bb.readUint32(this.bb_pos+t):0},t.prototype.mutate_size=function(t){var e=this.bb.__offset(this.bb_pos,8);return 0!==e&&(this.bb.writeUint32(this.bb_pos+e,t),!0)},t.startAsebaNamedVariable=function(t){t.startObject(3)},t.addIndex=function(t,e){t.addFieldInt16(0,e,0)},t.addName=function(t,e){t.addFieldOffset(1,e,0)},t.addSize=function(t,e){t.addFieldInt32(2,e,0)},t.endAsebaNamedVariable=function(t){return t.endObject()},t.createAsebaNamedVariable=function(e,n,i,o){return t.startAsebaNamedVariable(e),t.addIndex(e,n),t.addName(e,i),t.addSize(e,o),t.endAsebaNamedVariable(e)},t}();t.AsebaNamedVariable=e}(t.fb||(t.fb={}))}(e.mobsya||(e.mobsya={})),function(t){!function(t){var e=function(){function t(){this.bb=null,this.bb_pos=0}return t.prototype.__init=function(t,e){return this.bb_pos=t,this.bb=e,this},t.getRootAsAsebaEvent=function(e,n){return(n||new t).__init(e.readInt32(e.position())+e.position(),e)},t.prototype.index=function(){var t=this.bb.__offset(this.bb_pos,4);return t?this.bb.readUint16(this.bb_pos+t):0},t.prototype.mutate_index=function(t){var e=this.bb.__offset(this.bb_pos,4);return 0!==e&&(this.bb.writeUint16(this.bb_pos+e,t),!0)},t.prototype.name=function(t){var e=this.bb.__offset(this.bb_pos,6);return e?this.bb.__string(this.bb_pos+e,t):null},t.prototype.description=function(t){var e=this.bb.__offset(this.bb_pos,8);return e?this.bb.__string(this.bb_pos+e,t):null},t.startAsebaEvent=function(t){t.startObject(3)},t.addIndex=function(t,e){t.addFieldInt16(0,e,0)},t.addName=function(t,e){t.addFieldOffset(1,e,0)},t.addDescription=function(t,e){t.addFieldOffset(2,e,0)},t.endAsebaEvent=function(t){return t.endObject()},t.createAsebaEvent=function(e,n,i,o){return t.startAsebaEvent(e),t.addIndex(e,n),t.addName(e,i),t.addDescription(e,o),t.endAsebaEvent(e)},t}();t.AsebaEvent=e}(t.fb||(t.fb={}))}(e.mobsya||(e.mobsya={})),function(t){!function(e){var n=function(){function e(){this.bb=null,this.bb_pos=0}return e.prototype.__init=function(t,e){return this.bb_pos=t,this.bb=e,this},e.getRootAsAsebaNativeFunction=function(t,n){return(n||new e).__init(t.readInt32(t.position())+t.position(),t)},e.prototype.index=function(){var t=this.bb.__offset(this.bb_pos,4);return t?this.bb.readUint16(this.bb_pos+t):0},e.prototype.mutate_index=function(t){var e=this.bb.__offset(this.bb_pos,4);return 0!==e&&(this.bb.writeUint16(this.bb_pos+e,t),!0)},e.prototype.name=function(t){var e=this.bb.__offset(this.bb_pos,6);return e?this.bb.__string(this.bb_pos+e,t):null},e.prototype.description=function(t){var e=this.bb.__offset(this.bb_pos,8);return e?this.bb.__string(this.bb_pos+e,t):null},e.prototype.parameters=function(e,n){var i=this.bb.__offset(this.bb_pos,10);return i?(n||new t.fb.AsebaNativeFunctionParameter).__init(this.bb.__indirect(this.bb.__vector(this.bb_pos+i)+4*e),this.bb):null},e.prototype.parametersLength=function(){var t=this.bb.__offset(this.bb_pos,10);return t?this.bb.__vector_len(this.bb_pos+t):0},e.startAsebaNativeFunction=function(t){t.startObject(4)},e.addIndex=function(t,e){t.addFieldInt16(0,e,0)},e.addName=function(t,e){t.addFieldOffset(1,e,0)},e.addDescription=function(t,e){t.addFieldOffset(2,e,0)},e.addParameters=function(t,e){t.addFieldOffset(3,e,0)},e.createParametersVector=function(t,e){t.startVector(4,e.length,4);for(var n=e.length-1;n>=0;n--)t.addOffset(e[n]);return t.endVector()},e.startParametersVector=function(t,e){t.startVector(4,e,4)},e.endAsebaNativeFunction=function(t){return t.endObject()},e.createAsebaNativeFunction=function(t,n,i,o,s){return e.startAsebaNativeFunction(t),e.addIndex(t,n),e.addName(t,i),e.addDescription(t,o),e.addParameters(t,s),e.endAsebaNativeFunction(t)},e}();e.AsebaNativeFunction=n}(t.fb||(t.fb={}))}(e.mobsya||(e.mobsya={})),function(t){!function(t){var e=function(){function t(){this.bb=null,this.bb_pos=0}return t.prototype.__init=function(t,e){return this.bb_pos=t,this.bb=e,this},t.getRootAsAsebaNativeFunctionParameter=function(e,n){return(n||new t).__init(e.readInt32(e.position())+e.position(),e)},t.prototype.name=function(t){var e=this.bb.__offset(this.bb_pos,4);return e?this.bb.__string(this.bb_pos+e,t):null},t.prototype.size=function(){var t=this.bb.__offset(this.bb_pos,6);return t?this.bb.readUint32(this.bb_pos+t):0},t.prototype.mutate_size=function(t){var e=this.bb.__offset(this.bb_pos,6);return 0!==e&&(this.bb.writeUint32(this.bb_pos+e,t),!0)},t.startAsebaNativeFunctionParameter=function(t){t.startObject(2)},t.addName=function(t,e){t.addFieldOffset(0,e,0)},t.addSize=function(t,e){t.addFieldInt32(1,e,0)},t.endAsebaNativeFunctionParameter=function(t){return t.endObject()},t.createAsebaNativeFunctionParameter=function(e,n,i){return t.startAsebaNativeFunctionParameter(e),t.addName(e,n),t.addSize(e,i),t.endAsebaNativeFunctionParameter(e)},t}();t.AsebaNativeFunctionParameter=e}(t.fb||(t.fb={}))}(e.mobsya||(e.mobsya={})),function(t){!function(e){var n=function(){function e(){this.bb=null,this.bb_pos=0}return e.prototype.__init=function(t,e){return this.bb_pos=t,this.bb=e,this},e.getRootAsSetVariables=function(t,n){return(n||new e).__init(t.readInt32(t.position())+t.position(),t)},e.prototype.requestId=function(){var t=this.bb.__offset(this.bb_pos,4);return t?this.bb.readUint32(this.bb_pos+t):0},e.prototype.mutate_request_id=function(t){var e=this.bb.__offset(this.bb_pos,4);return 0!==e&&(this.bb.writeUint32(this.bb_pos+e,t),!0)},e.prototype.nodeOrGroupId=function(e){var n=this.bb.__offset(this.bb_pos,6);return n?(e||new t.fb.NodeId).__init(this.bb.__indirect(this.bb_pos+n),this.bb):null},e.prototype.vars=function(e,n){var i=this.bb.__offset(this.bb_pos,8);return i?(n||new t.fb.NodeVariable).__init(this.bb.__indirect(this.bb.__vector(this.bb_pos+i)+4*e),this.bb):null},e.prototype.varsLength=function(){var t=this.bb.__offset(this.bb_pos,8);return t?this.bb.__vector_len(this.bb_pos+t):0},e.startSetVariables=function(t){t.startObject(3)},e.addRequestId=function(t,e){t.addFieldInt32(0,e,0)},e.addNodeOrGroupId=function(t,e){t.addFieldOffset(1,e,0)},e.addVars=function(t,e){t.addFieldOffset(2,e,0)},e.createVarsVector=function(t,e){t.startVector(4,e.length,4);for(var n=e.length-1;n>=0;n--)t.addOffset(e[n]);return t.endVector()},e.startVarsVector=function(t,e){t.startVector(4,e,4)},e.endSetVariables=function(t){return t.endObject()},e.createSetVariables=function(t,n,i,o){return e.startSetVariables(t),e.addRequestId(t,n),e.addNodeOrGroupId(t,i),e.addVars(t,o),e.endSetVariables(t)},e}();e.SetVariables=n}(t.fb||(t.fb={}))}(e.mobsya||(e.mobsya={})),function(t){!function(e){var n=function(){function e(){this.bb=null,this.bb_pos=0}return e.prototype.__init=function(t,e){return this.bb_pos=t,this.bb=e,this},e.getRootAsRenameNode=function(t,n){return(n||new e).__init(t.readInt32(t.position())+t.position(),t)},e.prototype.requestId=function(){var t=this.bb.__offset(this.bb_pos,4);return t?this.bb.readUint32(this.bb_pos+t):0},e.prototype.mutate_request_id=function(t){var e=this.bb.__offset(this.bb_pos,4);return 0!==e&&(this.bb.writeUint32(this.bb_pos+e,t),!0)},e.prototype.nodeId=function(e){var n=this.bb.__offset(this.bb_pos,6);return n?(e||new t.fb.NodeId).__init(this.bb.__indirect(this.bb_pos+n),this.bb):null},e.prototype.newName=function(t){var e=this.bb.__offset(this.bb_pos,8);return e?this.bb.__string(this.bb_pos+e,t):null},e.startRenameNode=function(t){t.startObject(3)},e.addRequestId=function(t,e){t.addFieldInt32(0,e,0)},e.addNodeId=function(t,e){t.addFieldOffset(1,e,0)},e.addNewName=function(t,e){t.addFieldOffset(2,e,0)},e.endRenameNode=function(t){return t.endObject()},e.createRenameNode=function(t,n,i,o){return e.startRenameNode(t),e.addRequestId(t,n),e.addNodeId(t,i),e.addNewName(t,o),e.endRenameNode(t)},e}();e.RenameNode=n}(t.fb||(t.fb={}))}(e.mobsya||(e.mobsya={})),function(t){!function(e){var n=function(){function e(){this.bb=null,this.bb_pos=0}return e.prototype.__init=function(t,e){return this.bb_pos=t,this.bb=e,this},e.getRootAsLockNode=function(t,n){return(n||new e).__init(t.readInt32(t.position())+t.position(),t)},e.prototype.requestId=function(){var t=this.bb.__offset(this.bb_pos,4);return t?this.bb.readUint32(this.bb_pos+t):0},e.prototype.mutate_request_id=function(t){var e=this.bb.__offset(this.bb_pos,4);return 0!==e&&(this.bb.writeUint32(this.bb_pos+e,t),!0)},e.prototype.nodeId=function(e){var n=this.bb.__offset(this.bb_pos,6);return n?(e||new t.fb.NodeId).__init(this.bb.__indirect(this.bb_pos+n),this.bb):null},e.startLockNode=function(t){t.startObject(2)},e.addRequestId=function(t,e){t.addFieldInt32(0,e,0)},e.addNodeId=function(t,e){t.addFieldOffset(1,e,0)},e.endLockNode=function(t){return t.endObject()},e.createLockNode=function(t,n,i){return e.startLockNode(t),e.addRequestId(t,n),e.addNodeId(t,i),e.endLockNode(t)},e}();e.LockNode=n}(t.fb||(t.fb={}))}(e.mobsya||(e.mobsya={})),function(t){!function(e){var n=function(){function e(){this.bb=null,this.bb_pos=0}return e.prototype.__init=function(t,e){return this.bb_pos=t,this.bb=e,this},e.getRootAsUnlockNode=function(t,n){return(n||new e).__init(t.readInt32(t.position())+t.position(),t)},e.prototype.requestId=function(){var t=this.bb.__offset(this.bb_pos,4);return t?this.bb.readUint32(this.bb_pos+t):0},e.prototype.mutate_request_id=function(t){var e=this.bb.__offset(this.bb_pos,4);return 0!==e&&(this.bb.writeUint32(this.bb_pos+e,t),!0)},e.prototype.nodeId=function(e){var n=this.bb.__offset(this.bb_pos,6);return n?(e||new t.fb.NodeId).__init(this.bb.__indirect(this.bb_pos+n),this.bb):null},e.startUnlockNode=function(t){t.startObject(2)},e.addRequestId=function(t,e){t.addFieldInt32(0,e,0)},e.addNodeId=function(t,e){t.addFieldOffset(1,e,0)},e.endUnlockNode=function(t){return t.endObject()},e.createUnlockNode=function(t,n,i){return e.startUnlockNode(t),e.addRequestId(t,n),e.addNodeId(t,i),e.endUnlockNode(t)},e}();e.UnlockNode=n}(t.fb||(t.fb={}))}(e.mobsya||(e.mobsya={})),function(t){!function(e){var n=function(){function e(){this.bb=null,this.bb_pos=0}return e.prototype.__init=function(t,e){return this.bb_pos=t,this.bb=e,this},e.getRootAsCompileAndLoadCodeOnVM=function(t,n){return(n||new e).__init(t.readInt32(t.position())+t.position(),t)},e.prototype.requestId=function(){var t=this.bb.__offset(this.bb_pos,4);return t?this.bb.readUint32(this.bb_pos+t):0},e.prototype.mutate_request_id=function(t){var e=this.bb.__offset(this.bb_pos,4);return 0!==e&&(this.bb.writeUint32(this.bb_pos+e,t),!0)},e.prototype.nodeId=function(e){var n=this.bb.__offset(this.bb_pos,6);return n?(e||new t.fb.NodeId).__init(this.bb.__indirect(this.bb_pos+n),this.bb):null},e.prototype.language=function(){var e=this.bb.__offset(this.bb_pos,8);return e?this.bb.readInt32(this.bb_pos+e):t.fb.ProgrammingLanguage.Aseba},e.prototype.mutate_language=function(t){var e=this.bb.__offset(this.bb_pos,8);return 0!==e&&(this.bb.writeInt32(this.bb_pos+e,t),!0)},e.prototype.program=function(t){var e=this.bb.__offset(this.bb_pos,10);return e?this.bb.__string(this.bb_pos+e,t):null},e.prototype.options=function(){var t=this.bb.__offset(this.bb_pos,12);return t?this.bb.readUint32(this.bb_pos+t):0},e.prototype.mutate_options=function(t){var e=this.bb.__offset(this.bb_pos,12);return 0!==e&&(this.bb.writeUint32(this.bb_pos+e,t),!0)},e.startCompileAndLoadCodeOnVM=function(t){t.startObject(5)},e.addRequestId=function(t,e){t.addFieldInt32(0,e,0)},e.addNodeId=function(t,e){t.addFieldOffset(1,e,0)},e.addLanguage=function(e,n){e.addFieldInt32(2,n,t.fb.ProgrammingLanguage.Aseba)},e.addProgram=function(t,e){t.addFieldOffset(3,e,0)},e.addOptions=function(t,e){t.addFieldInt32(4,e,0)},e.endCompileAndLoadCodeOnVM=function(t){var e=t.endObject();return t.requiredField(e,10),e},e.createCompileAndLoadCodeOnVM=function(t,n,i,o,s,b){return e.startCompileAndLoadCodeOnVM(t),e.addRequestId(t,n),e.addNodeId(t,i),e.addLanguage(t,o),e.addProgram(t,s),e.addOptions(t,b),e.endCompileAndLoadCodeOnVM(t)},e}();e.CompileAndLoadCodeOnVM=n}(t.fb||(t.fb={}))}(e.mobsya||(e.mobsya={})),function(t){!function(t){var e=function(){function t(){this.bb=null,this.bb_pos=0}return t.prototype.__init=function(t,e){return this.bb_pos=t,this.bb=e,this},t.getRootAsCompilationResultFailure=function(e,n){return(n||new t).__init(e.readInt32(e.position())+e.position(),e)},t.prototype.requestId=function(){var t=this.bb.__offset(this.bb_pos,4);return t?this.bb.readUint32(this.bb_pos+t):0},t.prototype.mutate_request_id=function(t){var e=this.bb.__offset(this.bb_pos,4);return 0!==e&&(this.bb.writeUint32(this.bb_pos+e,t),!0)},t.prototype.message=function(t){var e=this.bb.__offset(this.bb_pos,6);return e?this.bb.__string(this.bb_pos+e,t):null},t.prototype.character=function(){var t=this.bb.__offset(this.bb_pos,8);return t?this.bb.readUint32(this.bb_pos+t):0},t.prototype.mutate_character=function(t){var e=this.bb.__offset(this.bb_pos,8);return 0!==e&&(this.bb.writeUint32(this.bb_pos+e,t),!0)},t.prototype.line=function(){var t=this.bb.__offset(this.bb_pos,10);return t?this.bb.readUint32(this.bb_pos+t):0},t.prototype.mutate_line=function(t){var e=this.bb.__offset(this.bb_pos,10);return 0!==e&&(this.bb.writeUint32(this.bb_pos+e,t),!0)},t.prototype.column=function(){var t=this.bb.__offset(this.bb_pos,12);return t?this.bb.readUint32(this.bb_pos+t):0},t.prototype.mutate_column=function(t){var e=this.bb.__offset(this.bb_pos,12);return 0!==e&&(this.bb.writeUint32(this.bb_pos+e,t),!0)},t.startCompilationResultFailure=function(t){t.startObject(5)},t.addRequestId=function(t,e){t.addFieldInt32(0,e,0)},t.addMessage=function(t,e){t.addFieldOffset(1,e,0)},t.addCharacter=function(t,e){t.addFieldInt32(2,e,0)},t.addLine=function(t,e){t.addFieldInt32(3,e,0)},t.addColumn=function(t,e){t.addFieldInt32(4,e,0)},t.endCompilationResultFailure=function(t){var e=t.endObject();return t.requiredField(e,6),e},t.createCompilationResultFailure=function(e,n,i,o,s,b){return t.startCompilationResultFailure(e),t.addRequestId(e,n),t.addMessage(e,i),t.addCharacter(e,o),t.addLine(e,s),t.addColumn(e,b),t.endCompilationResultFailure(e)},t}();t.CompilationResultFailure=e}(t.fb||(t.fb={}))}(e.mobsya||(e.mobsya={})),function(t){!function(e){var n=function(){function e(){this.bb=null,this.bb_pos=0}return e.prototype.__init=function(t,e){return this.bb_pos=t,this.bb=e,this},e.getRootAsCompileAndSave=function(t,n){return(n||new e).__init(t.readInt32(t.position())+t.position(),t)},e.prototype.requestId=function(){var t=this.bb.__offset(this.bb_pos,4);return t?this.bb.readUint32(this.bb_pos+t):0},e.prototype.mutate_request_id=function(t){var e=this.bb.__offset(this.bb_pos,4);return 0!==e&&(this.bb.writeUint32(this.bb_pos+e,t),!0)},e.prototype.nodeId=function(e){var n=this.bb.__offset(this.bb_pos,6);return n?(e||new t.fb.NodeId).__init(this.bb.__indirect(this.bb_pos+n),this.bb):null},e.prototype.language=function(){var e=this.bb.__offset(this.bb_pos,8);return e?this.bb.readInt32(this.bb_pos+e):t.fb.ProgrammingLanguage.Aseba},e.prototype.mutate_language=function(t){var e=this.bb.__offset(this.bb_pos,8);return 0!==e&&(this.bb.writeInt32(this.bb_pos+e,t),!0)},e.prototype.program=function(t){var e=this.bb.__offset(this.bb_pos,10);return e?this.bb.__string(this.bb_pos+e,t):null},e.prototype.options=function(){var t=this.bb.__offset(this.bb_pos,12);return t?this.bb.readUint32(this.bb_pos+t):0},e.prototype.mutate_options=function(t){var e=this.bb.__offset(this.bb_pos,12);return 0!==e&&(this.bb.writeUint32(this.bb_pos+e,t),!0)},e.startCompileAndSave=function(t){t.startObject(5)},e.addRequestId=function(t,e){t.addFieldInt32(0,e,0)},e.addNodeId=function(t,e){t.addFieldOffset(1,e,0)},e.addLanguage=function(e,n){e.addFieldInt32(2,n,t.fb.ProgrammingLanguage.Aseba)},e.addProgram=function(t,e){t.addFieldOffset(3,e,0)},e.addOptions=function(t,e){t.addFieldInt32(4,e,0)},e.endCompileAndSave=function(t){var e=t.endObject();return t.requiredField(e,10),e},e.createCompileAndSave=function(t,n,i,o,s,b){return e.startCompileAndSave(t),e.addRequestId(t,n),e.addNodeId(t,i),e.addLanguage(t,o),e.addProgram(t,s),e.addOptions(t,b),e.endCompileAndSave(t)},e}();e.CompileAndSave=n}(t.fb||(t.fb={}))}(e.mobsya||(e.mobsya={})),function(t){!function(e){var n=function(){function e(){this.bb=null,this.bb_pos=0}return e.prototype.__init=function(t,e){return this.bb_pos=t,this.bb=e,this},e.getRootAsSaveBytecode=function(t,n){return(n||new e).__init(t.readInt32(t.position())+t.position(),t)},e.prototype.requestId=function(){var t=this.bb.__offset(this.bb_pos,4);return t?this.bb.readUint32(this.bb_pos+t):0},e.prototype.mutate_request_id=function(t){var e=this.bb.__offset(this.bb_pos,4);return 0!==e&&(this.bb.writeUint32(this.bb_pos+e,t),!0)},e.prototype.nodeId=function(e){var n=this.bb.__offset(this.bb_pos,6);return n?(e||new t.fb.NodeId).__init(this.bb.__indirect(this.bb_pos+n),this.bb):null},e.prototype.program=function(t){var e=this.bb.__offset(this.bb_pos,8);return e?this.bb.__string(this.bb_pos+e,t):null},e.startSaveBytecode=function(t){t.startObject(3)},e.addRequestId=function(t,e){t.addFieldInt32(0,e,0)},e.addNodeId=function(t,e){t.addFieldOffset(1,e,0)},e.addProgram=function(t,e){t.addFieldOffset(2,e,0)},e.endSaveBytecode=function(t){return t.endObject()},e.createSaveBytecode=function(t,n,i,o){return e.startSaveBytecode(t),e.addRequestId(t,n),e.addNodeId(t,i),e.addProgram(t,o),e.endSaveBytecode(t)},e}();e.SaveBytecode=n}(t.fb||(t.fb={}))}(e.mobsya||(e.mobsya={})),function(t){!function(t){var e=function(){function t(){this.bb=null,this.bb_pos=0}return t.prototype.__init=function(t,e){return this.bb_pos=t,this.bb=e,this},t.getRootAsCompilationResultSuccess=function(e,n){return(n||new t).__init(e.readInt32(e.position())+e.position(),e)},t.prototype.requestId=function(){var t=this.bb.__offset(this.bb_pos,4);return t?this.bb.readUint32(this.bb_pos+t):0},t.prototype.mutate_request_id=function(t){var e=this.bb.__offset(this.bb_pos,4);return 0!==e&&(this.bb.writeUint32(this.bb_pos+e,t),!0)},t.prototype.bytecodeSize=function(){var t=this.bb.__offset(this.bb_pos,6);return t?this.bb.readUint32(this.bb_pos+t):0},t.prototype.mutate_bytecode_size=function(t){var e=this.bb.__offset(this.bb_pos,6);return 0!==e&&(this.bb.writeUint32(this.bb_pos+e,t),!0)},t.prototype.totalBytecodeSize=function(){var t=this.bb.__offset(this.bb_pos,8);return t?this.bb.readUint32(this.bb_pos+t):0},t.prototype.mutate_total_bytecode_size=function(t){var e=this.bb.__offset(this.bb_pos,8);return 0!==e&&(this.bb.writeUint32(this.bb_pos+e,t),!0)},t.prototype.variablesSize=function(){var t=this.bb.__offset(this.bb_pos,10);return t?this.bb.readUint32(this.bb_pos+t):0},t.prototype.mutate_variables_size=function(t){var e=this.bb.__offset(this.bb_pos,10);return 0!==e&&(this.bb.writeUint32(this.bb_pos+e,t),!0)},t.prototype.totalVariablesSize=function(){var t=this.bb.__offset(this.bb_pos,12);return t?this.bb.readUint32(this.bb_pos+t):0},t.prototype.mutate_total_variables_size=function(t){var e=this.bb.__offset(this.bb_pos,12);return 0!==e&&(this.bb.writeUint32(this.bb_pos+e,t),!0)},t.startCompilationResultSuccess=function(t){t.startObject(5)},t.addRequestId=function(t,e){t.addFieldInt32(0,e,0)},t.addBytecodeSize=function(t,e){t.addFieldInt32(1,e,0)},t.addTotalBytecodeSize=function(t,e){t.addFieldInt32(2,e,0)},t.addVariablesSize=function(t,e){t.addFieldInt32(3,e,0)},t.addTotalVariablesSize=function(t,e){t.addFieldInt32(4,e,0)},t.endCompilationResultSuccess=function(t){return t.endObject()},t.createCompilationResultSuccess=function(e,n,i,o,s,b){return t.startCompilationResultSuccess(e),t.addRequestId(e,n),t.addBytecodeSize(e,i),t.addTotalBytecodeSize(e,o),t.addVariablesSize(e,s),t.addTotalVariablesSize(e,b),t.endCompilationResultSuccess(e)},t}();t.CompilationResultSuccess=e}(t.fb||(t.fb={}))}(e.mobsya||(e.mobsya={})),function(t){!function(e){var n=function(){function e(){this.bb=null,this.bb_pos=0}return e.prototype.__init=function(t,e){return this.bb_pos=t,this.bb=e,this},e.getRootAsSetVMExecutionState=function(t,n){return(n||new e).__init(t.readInt32(t.position())+t.position(),t)},e.prototype.requestId=function(){var t=this.bb.__offset(this.bb_pos,4);return t?this.bb.readUint32(this.bb_pos+t):0},e.prototype.mutate_request_id=function(t){var e=this.bb.__offset(this.bb_pos,4);return 0!==e&&(this.bb.writeUint32(this.bb_pos+e,t),!0)},e.prototype.nodeId=function(e){var n=this.bb.__offset(this.bb_pos,6);return n?(e||new t.fb.NodeId).__init(this.bb.__indirect(this.bb_pos+n),this.bb):null},e.prototype.command=function(){var e=this.bb.__offset(this.bb_pos,8);return e?this.bb.readInt16(this.bb_pos+e):t.fb.VMExecutionStateCommand.Stop},e.prototype.mutate_command=function(t){var e=this.bb.__offset(this.bb_pos,8);return 0!==e&&(this.bb.writeInt16(this.bb_pos+e,t),!0)},e.startSetVMExecutionState=function(t){t.startObject(3)},e.addRequestId=function(t,e){t.addFieldInt32(0,e,0)},e.addNodeId=function(t,e){t.addFieldOffset(1,e,0)},e.addCommand=function(e,n){e.addFieldInt16(2,n,t.fb.VMExecutionStateCommand.Stop)},e.endSetVMExecutionState=function(t){return t.endObject()},e.createSetVMExecutionState=function(t,n,i,o){return e.startSetVMExecutionState(t),e.addRequestId(t,n),e.addNodeId(t,i),e.addCommand(t,o),e.endSetVMExecutionState(t)},e}();e.SetVMExecutionState=n}(t.fb||(t.fb={}))}(e.mobsya||(e.mobsya={})),function(t){!function(e){var n=function(){function e(){this.bb=null,this.bb_pos=0}return e.prototype.__init=function(t,e){return this.bb_pos=t,this.bb=e,this},e.getRootAsVMExecutionStateChanged=function(t,n){return(n||new e).__init(t.readInt32(t.position())+t.position(),t)},e.prototype.nodeId=function(e){var n=this.bb.__offset(this.bb_pos,4);return n?(e||new t.fb.NodeId).__init(this.bb.__indirect(this.bb_pos+n),this.bb):null},e.prototype.state=function(){var e=this.bb.__offset(this.bb_pos,6);return e?this.bb.readInt16(this.bb_pos+e):t.fb.VMExecutionState.Stopped},e.prototype.mutate_state=function(t){var e=this.bb.__offset(this.bb_pos,6);return 0!==e&&(this.bb.writeInt16(this.bb_pos+e,t),!0)},e.prototype.line=function(){var t=this.bb.__offset(this.bb_pos,8);return t?this.bb.readUint32(this.bb_pos+t):0},e.prototype.mutate_line=function(t){var e=this.bb.__offset(this.bb_pos,8);return 0!==e&&(this.bb.writeUint32(this.bb_pos+e,t),!0)},e.prototype.error=function(){var e=this.bb.__offset(this.bb_pos,10);return e?this.bb.readInt16(this.bb_pos+e):t.fb.VMExecutionError.NoError},e.prototype.mutate_error=function(t){var e=this.bb.__offset(this.bb_pos,10);return 0!==e&&(this.bb.writeInt16(this.bb_pos+e,t),!0)},e.prototype.errorMsg=function(t){var e=this.bb.__offset(this.bb_pos,12);return e?this.bb.__string(this.bb_pos+e,t):null},e.startVMExecutionStateChanged=function(t){t.startObject(5)},e.addNodeId=function(t,e){t.addFieldOffset(0,e,0)},e.addState=function(e,n){e.addFieldInt16(1,n,t.fb.VMExecutionState.Stopped)},e.addLine=function(t,e){t.addFieldInt32(2,e,0)},e.addError=function(e,n){e.addFieldInt16(3,n,t.fb.VMExecutionError.NoError)},e.addErrorMsg=function(t,e){t.addFieldOffset(4,e,0)},e.endVMExecutionStateChanged=function(t){return t.endObject()},e.createVMExecutionStateChanged=function(t,n,i,o,s,b){return e.startVMExecutionStateChanged(t),e.addNodeId(t,n),e.addState(t,i),e.addLine(t,o),e.addError(t,s),e.addErrorMsg(t,b),e.endVMExecutionStateChanged(t)},e}();e.VMExecutionStateChanged=n}(t.fb||(t.fb={}))}(e.mobsya||(e.mobsya={})),function(t){!function(t){var e=function(){function t(){this.bb=null,this.bb_pos=0}return t.prototype.__init=function(t,e){return this.bb_pos=t,this.bb=e,this},t.getRootAsBreakpoint=function(e,n){return(n||new t).__init(e.readInt32(e.position())+e.position(),e)},t.prototype.line=function(){var t=this.bb.__offset(this.bb_pos,4);return t?this.bb.readUint32(this.bb_pos+t):0},t.prototype.mutate_line=function(t){var e=this.bb.__offset(this.bb_pos,4);return 0!==e&&(this.bb.writeUint32(this.bb_pos+e,t),!0)},t.startBreakpoint=function(t){t.startObject(1)},t.addLine=function(t,e){t.addFieldInt32(0,e,0)},t.endBreakpoint=function(t){return t.endObject()},t.createBreakpoint=function(e,n){return t.startBreakpoint(e),t.addLine(e,n),t.endBreakpoint(e)},t}();t.Breakpoint=e}(t.fb||(t.fb={}))}(e.mobsya||(e.mobsya={})),function(t){!function(e){var n=function(){function e(){this.bb=null,this.bb_pos=0}return e.prototype.__init=function(t,e){return this.bb_pos=t,this.bb=e,this},e.getRootAsSetBreakpoints=function(t,n){return(n||new e).__init(t.readInt32(t.position())+t.position(),t)},e.prototype.requestId=function(){var t=this.bb.__offset(this.bb_pos,4);return t?this.bb.readUint32(this.bb_pos+t):0},e.prototype.mutate_request_id=function(t){var e=this.bb.__offset(this.bb_pos,4);return 0!==e&&(this.bb.writeUint32(this.bb_pos+e,t),!0)},e.prototype.nodeId=function(e){var n=this.bb.__offset(this.bb_pos,6);return n?(e||new t.fb.NodeId).__init(this.bb.__indirect(this.bb_pos+n),this.bb):null},e.prototype.breakpoints=function(e,n){var i=this.bb.__offset(this.bb_pos,8);return i?(n||new t.fb.Breakpoint).__init(this.bb.__indirect(this.bb.__vector(this.bb_pos+i)+4*e),this.bb):null},e.prototype.breakpointsLength=function(){var t=this.bb.__offset(this.bb_pos,8);return t?this.bb.__vector_len(this.bb_pos+t):0},e.startSetBreakpoints=function(t){t.startObject(3)},e.addRequestId=function(t,e){t.addFieldInt32(0,e,0)},e.addNodeId=function(t,e){t.addFieldOffset(1,e,0)},e.addBreakpoints=function(t,e){t.addFieldOffset(2,e,0)},e.createBreakpointsVector=function(t,e){t.startVector(4,e.length,4);for(var n=e.length-1;n>=0;n--)t.addOffset(e[n]);return t.endVector()},e.startBreakpointsVector=function(t,e){t.startVector(4,e,4)},e.endSetBreakpoints=function(t){return t.endObject()},e.createSetBreakpoints=function(t,n,i,o){return e.startSetBreakpoints(t),e.addRequestId(t,n),e.addNodeId(t,i),e.addBreakpoints(t,o),e.endSetBreakpoints(t)},e}();e.SetBreakpoints=n}(t.fb||(t.fb={}))}(e.mobsya||(e.mobsya={})),function(t){!function(e){var n=function(){function e(){this.bb=null,this.bb_pos=0}return e.prototype.__init=function(t,e){return this.bb_pos=t,this.bb=e,this},e.getRootAsSetBreakpointsResponse=function(t,n){return(n||new e).__init(t.readInt32(t.position())+t.position(),t)},e.prototype.requestId=function(){var t=this.bb.__offset(this.bb_pos,4);return t?this.bb.readUint32(this.bb_pos+t):0},e.prototype.mutate_request_id=function(t){var e=this.bb.__offset(this.bb_pos,4);return 0!==e&&(this.bb.writeUint32(this.bb_pos+e,t),!0)},e.prototype.error=function(){var e=this.bb.__offset(this.bb_pos,6);return e?this.bb.readInt32(this.bb_pos+e):t.fb.ErrorType.no_error},e.prototype.mutate_error=function(t){var e=this.bb.__offset(this.bb_pos,6);return 0!==e&&(this.bb.writeInt32(this.bb_pos+e,t),!0)},e.prototype.breakpoints=function(e,n){var i=this.bb.__offset(this.bb_pos,8);return i?(n||new t.fb.Breakpoint).__init(this.bb.__indirect(this.bb.__vector(this.bb_pos+i)+4*e),this.bb):null},e.prototype.breakpointsLength=function(){var t=this.bb.__offset(this.bb_pos,8);return t?this.bb.__vector_len(this.bb_pos+t):0},e.startSetBreakpointsResponse=function(t){t.startObject(3)},e.addRequestId=function(t,e){t.addFieldInt32(0,e,0)},e.addError=function(e,n){e.addFieldInt32(1,n,t.fb.ErrorType.no_error)},e.addBreakpoints=function(t,e){t.addFieldOffset(2,e,0)},e.createBreakpointsVector=function(t,e){t.startVector(4,e.length,4);for(var n=e.length-1;n>=0;n--)t.addOffset(e[n]);return t.endVector()},e.startBreakpointsVector=function(t,e){t.startVector(4,e,4)},e.endSetBreakpointsResponse=function(t){return t.endObject()},e.createSetBreakpointsResponse=function(t,n,i,o){return e.startSetBreakpointsResponse(t),e.addRequestId(t,n),e.addError(t,i),e.addBreakpoints(t,o),e.endSetBreakpointsResponse(t)},e}();e.SetBreakpointsResponse=n}(t.fb||(t.fb={}))}(e.mobsya||(e.mobsya={})),function(t){!function(e){var n=function(){function e(){this.bb=null,this.bb_pos=0}return e.prototype.__init=function(t,e){return this.bb_pos=t,this.bb=e,this},e.getRootAsWatchNode=function(t,n){return(n||new e).__init(t.readInt32(t.position())+t.position(),t)},e.prototype.requestId=function(){var t=this.bb.__offset(this.bb_pos,4);return t?this.bb.readUint32(this.bb_pos+t):0},e.prototype.mutate_request_id=function(t){var e=this.bb.__offset(this.bb_pos,4);return 0!==e&&(this.bb.writeUint32(this.bb_pos+e,t),!0)},e.prototype.nodeOrGroupId=function(e){var n=this.bb.__offset(this.bb_pos,6);return n?(e||new t.fb.NodeId).__init(this.bb.__indirect(this.bb_pos+n),this.bb):null},e.prototype.infoType=function(){var t=this.bb.__offset(this.bb_pos,8);return t?this.bb.readUint32(this.bb_pos+t):0},e.prototype.mutate_info_type=function(t){var e=this.bb.__offset(this.bb_pos,8);return 0!==e&&(this.bb.writeUint32(this.bb_pos+e,t),!0)},e.startWatchNode=function(t){t.startObject(3)},e.addRequestId=function(t,e){t.addFieldInt32(0,e,0)},e.addNodeOrGroupId=function(t,e){t.addFieldOffset(1,e,0)},e.addInfoType=function(t,e){t.addFieldInt32(2,e,0)},e.endWatchNode=function(t){return t.endObject()},e.createWatchNode=function(t,n,i,o){return e.startWatchNode(t),e.addRequestId(t,n),e.addNodeOrGroupId(t,i),e.addInfoType(t,o),e.endWatchNode(t)},e}();e.WatchNode=n}(t.fb||(t.fb={}))}(e.mobsya||(e.mobsya={})),function(t){!function(e){var n=function(){function e(){this.bb=null,this.bb_pos=0}return e.prototype.__init=function(t,e){return this.bb_pos=t,this.bb=e,this},e.getRootAsError=function(t,n){return(n||new e).__init(t.readInt32(t.position())+t.position(),t)},e.prototype.requestId=function(){var t=this.bb.__offset(this.bb_pos,4);return t?this.bb.readUint32(this.bb_pos+t):0},e.prototype.mutate_request_id=function(t){var e=this.bb.__offset(this.bb_pos,4);return 0!==e&&(this.bb.writeUint32(this.bb_pos+e,t),!0)},e.prototype.error=function(){var e=this.bb.__offset(this.bb_pos,6);return e?this.bb.readInt32(this.bb_pos+e):t.fb.ErrorType.no_error},e.prototype.mutate_error=function(t){var e=this.bb.__offset(this.bb_pos,6);return 0!==e&&(this.bb.writeInt32(this.bb_pos+e,t),!0)},e.startError=function(t){t.startObject(2)},e.addRequestId=function(t,e){t.addFieldInt32(0,e,0)},e.addError=function(e,n){e.addFieldInt32(1,n,t.fb.ErrorType.no_error)},e.endError=function(t){return t.endObject()},e.createError=function(t,n,i){return e.startError(t),e.addRequestId(t,n),e.addError(t,i),e.endError(t)},e}();e.Error=n}(t.fb||(t.fb={}))}(e.mobsya||(e.mobsya={})),function(t){!function(t){var e=function(){function t(){this.bb=null,this.bb_pos=0}return t.prototype.__init=function(t,e){return this.bb_pos=t,this.bb=e,this},t.getRootAsRequestCompleted=function(e,n){return(n||new t).__init(e.readInt32(e.position())+e.position(),e)},t.prototype.requestId=function(){var t=this.bb.__offset(this.bb_pos,4);return t?this.bb.readUint32(this.bb_pos+t):0},t.prototype.mutate_request_id=function(t){var e=this.bb.__offset(this.bb_pos,4);return 0!==e&&(this.bb.writeUint32(this.bb_pos+e,t),!0)},t.startRequestCompleted=function(t){t.startObject(1)},t.addRequestId=function(t,e){t.addFieldInt32(0,e,0)},t.endRequestCompleted=function(t){return t.endObject()},t.createRequestCompleted=function(e,n){return t.startRequestCompleted(e),t.addRequestId(e,n),t.endRequestCompleted(e)},t}();t.RequestCompleted=e}(t.fb||(t.fb={}))}(e.mobsya||(e.mobsya={})),function(t){!function(t){var e=function(){function t(){this.bb=null,this.bb_pos=0}return t.prototype.__init=function(t,e){return this.bb_pos=t,this.bb=e,this},t.getRootAsEventDescription=function(e,n){return(n||new t).__init(e.readInt32(e.position())+e.position(),e)},t.prototype.name=function(t){var e=this.bb.__offset(this.bb_pos,4);return e?this.bb.__string(this.bb_pos+e,t):null},t.prototype.fixedSized=function(){var t=this.bb.__offset(this.bb_pos,6);return t?this.bb.readUint32(this.bb_pos+t):0},t.prototype.mutate_fixed_sized=function(t){var e=this.bb.__offset(this.bb_pos,6);return 0!==e&&(this.bb.writeUint32(this.bb_pos+e,t),!0)},t.prototype.index=function(){var t=this.bb.__offset(this.bb_pos,8);return t?this.bb.readUint32(this.bb_pos+t):0},t.prototype.mutate_index=function(t){var e=this.bb.__offset(this.bb_pos,8);return 0!==e&&(this.bb.writeUint32(this.bb_pos+e,t),!0)},t.startEventDescription=function(t){t.startObject(3)},t.addName=function(t,e){t.addFieldOffset(0,e,0)},t.addFixedSized=function(t,e){t.addFieldInt32(1,e,0)},t.addIndex=function(t,e){t.addFieldInt32(2,e,0)},t.endEventDescription=function(t){return t.endObject()},t.createEventDescription=function(e,n,i,o){return t.startEventDescription(e),t.addName(e,n),t.addFixedSized(e,i),t.addIndex(e,o),t.endEventDescription(e)},t}();t.EventDescription=e}(t.fb||(t.fb={}))}(e.mobsya||(e.mobsya={})),function(t){!function(e){var n=function(){function e(){this.bb=null,this.bb_pos=0}return e.prototype.__init=function(t,e){return this.bb_pos=t,this.bb=e,this},e.getRootAsRegisterEvents=function(t,n){return(n||new e).__init(t.readInt32(t.position())+t.position(),t)},e.prototype.requestId=function(){var t=this.bb.__offset(this.bb_pos,4);return t?this.bb.readUint32(this.bb_pos+t):0},e.prototype.mutate_request_id=function(t){var e=this.bb.__offset(this.bb_pos,4);return 0!==e&&(this.bb.writeUint32(this.bb_pos+e,t),!0)},e.prototype.nodeOrGroupId=function(e){var n=this.bb.__offset(this.bb_pos,6);return n?(e||new t.fb.NodeId).__init(this.bb.__indirect(this.bb_pos+n),this.bb):null},e.prototype.events=function(e,n){var i=this.bb.__offset(this.bb_pos,8);return i?(n||new t.fb.EventDescription).__init(this.bb.__indirect(this.bb.__vector(this.bb_pos+i)+4*e),this.bb):null},e.prototype.eventsLength=function(){var t=this.bb.__offset(this.bb_pos,8);return t?this.bb.__vector_len(this.bb_pos+t):0},e.startRegisterEvents=function(t){t.startObject(3)},e.addRequestId=function(t,e){t.addFieldInt32(0,e,0)},e.addNodeOrGroupId=function(t,e){t.addFieldOffset(1,e,0)},e.addEvents=function(t,e){t.addFieldOffset(2,e,0)},e.createEventsVector=function(t,e){t.startVector(4,e.length,4);for(var n=e.length-1;n>=0;n--)t.addOffset(e[n]);return t.endVector()},e.startEventsVector=function(t,e){t.startVector(4,e,4)},e.endRegisterEvents=function(t){return t.endObject()},e.createRegisterEvents=function(t,n,i,o){return e.startRegisterEvents(t),e.addRequestId(t,n),e.addNodeOrGroupId(t,i),e.addEvents(t,o),e.endRegisterEvents(t)},e}();e.RegisterEvents=n}(t.fb||(t.fb={}))}(e.mobsya||(e.mobsya={})),function(t){!function(e){var n=function(){function e(){this.bb=null,this.bb_pos=0}return e.prototype.__init=function(t,e){return this.bb_pos=t,this.bb=e,this},e.getRootAsEventsDescriptionsChanged=function(t,n){return(n||new e).__init(t.readInt32(t.position())+t.position(),t)},e.prototype.nodeOrGroupId=function(e){var n=this.bb.__offset(this.bb_pos,4);return n?(e||new t.fb.NodeId).__init(this.bb.__indirect(this.bb_pos+n),this.bb):null},e.prototype.events=function(e,n){var i=this.bb.__offset(this.bb_pos,6);return i?(n||new t.fb.EventDescription).__init(this.bb.__indirect(this.bb.__vector(this.bb_pos+i)+4*e),this.bb):null},e.prototype.eventsLength=function(){var t=this.bb.__offset(this.bb_pos,6);return t?this.bb.__vector_len(this.bb_pos+t):0},e.startEventsDescriptionsChanged=function(t){t.startObject(2)},e.addNodeOrGroupId=function(t,e){t.addFieldOffset(0,e,0)},e.addEvents=function(t,e){t.addFieldOffset(1,e,0)},e.createEventsVector=function(t,e){t.startVector(4,e.length,4);for(var n=e.length-1;n>=0;n--)t.addOffset(e[n]);return t.endVector()},e.startEventsVector=function(t,e){t.startVector(4,e,4)},e.endEventsDescriptionsChanged=function(t){return t.endObject()},e.createEventsDescriptionsChanged=function(t,n,i){return e.startEventsDescriptionsChanged(t),e.addNodeOrGroupId(t,n),e.addEvents(t,i),e.endEventsDescriptionsChanged(t)},e}();e.EventsDescriptionsChanged=n}(t.fb||(t.fb={}))}(e.mobsya||(e.mobsya={})),function(t){!function(e){var n=function(){function e(){this.bb=null,this.bb_pos=0}return e.prototype.__init=function(t,e){return this.bb_pos=t,this.bb=e,this},e.getRootAsScratchpadUpdate=function(t,n){return(n||new e).__init(t.readInt32(t.position())+t.position(),t)},e.prototype.requestId=function(){var t=this.bb.__offset(this.bb_pos,4);return t?this.bb.readUint32(this.bb_pos+t):0},e.prototype.mutate_request_id=function(t){var e=this.bb.__offset(this.bb_pos,4);return 0!==e&&(this.bb.writeUint32(this.bb_pos+e,t),!0)},e.prototype.scratchpadId=function(e){var n=this.bb.__offset(this.bb_pos,6);return n?(e||new t.fb.NodeId).__init(this.bb.__indirect(this.bb_pos+n),this.bb):null},e.prototype.groupId=function(e){var n=this.bb.__offset(this.bb_pos,8);return n?(e||new t.fb.NodeId).__init(this.bb.__indirect(this.bb_pos+n),this.bb):null},e.prototype.nodeId=function(e){var n=this.bb.__offset(this.bb_pos,10);return n?(e||new t.fb.NodeId).__init(this.bb.__indirect(this.bb_pos+n),this.bb):null},e.prototype.language=function(){var e=this.bb.__offset(this.bb_pos,12);return e?this.bb.readInt32(this.bb_pos+e):t.fb.ProgrammingLanguage.Aseba},e.prototype.mutate_language=function(t){var e=this.bb.__offset(this.bb_pos,12);return 0!==e&&(this.bb.writeInt32(this.bb_pos+e,t),!0)},e.prototype.text=function(t){var e=this.bb.__offset(this.bb_pos,14);return e?this.bb.__string(this.bb_pos+e,t):null},e.prototype.name=function(t){var e=this.bb.__offset(this.bb_pos,16);return e?this.bb.__string(this.bb_pos+e,t):null},e.prototype.deleted=function(){var t=this.bb.__offset(this.bb_pos,18);return!!t&&!!this.bb.readInt8(this.bb_pos+t)},e.prototype.mutate_deleted=function(t){var e=this.bb.__offset(this.bb_pos,18);return 0!==e&&(this.bb.writeInt8(this.bb_pos+e,+t),!0)},e.startScratchpadUpdate=function(t){t.startObject(8)},e.addRequestId=function(t,e){t.addFieldInt32(0,e,0)},e.addScratchpadId=function(t,e){t.addFieldOffset(1,e,0)},e.addGroupId=function(t,e){t.addFieldOffset(2,e,0)},e.addNodeId=function(t,e){t.addFieldOffset(3,e,0)},e.addLanguage=function(e,n){e.addFieldInt32(4,n,t.fb.ProgrammingLanguage.Aseba)},e.addText=function(t,e){t.addFieldOffset(5,e,0)},e.addName=function(t,e){t.addFieldOffset(6,e,0)},e.addDeleted=function(t,e){t.addFieldInt8(7,+e,0)},e.endScratchpadUpdate=function(t){var e=t.endObject();return t.requiredField(e,6),t.requiredField(e,14),e},e.createScratchpadUpdate=function(t,n,i,o,s,b,r,a,d){return e.startScratchpadUpdate(t),e.addRequestId(t,n),e.addScratchpadId(t,i),e.addGroupId(t,o),e.addNodeId(t,s),e.addLanguage(t,b),e.addText(t,r),e.addName(t,a),e.addDeleted(t,d),e.endScratchpadUpdate(t)},e}();e.ScratchpadUpdate=n}(t.fb||(t.fb={}))}(e.mobsya||(e.mobsya={})),function(t){!function(e){var n=function(){function e(){this.bb=null,this.bb_pos=0}return e.prototype.__init=function(t,e){return this.bb_pos=t,this.bb=e,this},e.getRootAsFirmwareUpgradeRequest=function(t,n){return(n||new e).__init(t.readInt32(t.position())+t.position(),t)},e.prototype.requestId=function(){var t=this.bb.__offset(this.bb_pos,4);return t?this.bb.readUint32(this.bb_pos+t):0},e.prototype.mutate_request_id=function(t){var e=this.bb.__offset(this.bb_pos,4);return 0!==e&&(this.bb.writeUint32(this.bb_pos+e,t),!0)},e.prototype.nodeId=function(e){var n=this.bb.__offset(this.bb_pos,6);return n?(e||new t.fb.NodeId).__init(this.bb.__indirect(this.bb_pos+n),this.bb):null},e.startFirmwareUpgradeRequest=function(t){t.startObject(2)},e.addRequestId=function(t,e){t.addFieldInt32(0,e,0)},e.addNodeId=function(t,e){t.addFieldOffset(1,e,0)},e.endFirmwareUpgradeRequest=function(t){return t.endObject()},e.createFirmwareUpgradeRequest=function(t,n,i){return e.startFirmwareUpgradeRequest(t),e.addRequestId(t,n),e.addNodeId(t,i),e.endFirmwareUpgradeRequest(t)},e}();e.FirmwareUpgradeRequest=n}(t.fb||(t.fb={}))}(e.mobsya||(e.mobsya={})),function(t){!function(e){var n=function(){function e(){this.bb=null,this.bb_pos=0}return e.prototype.__init=function(t,e){return this.bb_pos=t,this.bb=e,this},e.getRootAsFirmwareUpgradeStatus=function(t,n){return(n||new e).__init(t.readInt32(t.position())+t.position(),t)},e.prototype.requestId=function(){var t=this.bb.__offset(this.bb_pos,4);return t?this.bb.readUint32(this.bb_pos+t):0},e.prototype.mutate_request_id=function(t){var e=this.bb.__offset(this.bb_pos,4);return 0!==e&&(this.bb.writeUint32(this.bb_pos+e,t),!0)},e.prototype.nodeId=function(e){var n=this.bb.__offset(this.bb_pos,6);return n?(e||new t.fb.NodeId).__init(this.bb.__indirect(this.bb_pos+n),this.bb):null},e.prototype.progress=function(){var t=this.bb.__offset(this.bb_pos,8);return t?this.bb.readFloat64(this.bb_pos+t):0},e.prototype.mutate_progress=function(t){var e=this.bb.__offset(this.bb_pos,8);return 0!==e&&(this.bb.writeFloat64(this.bb_pos+e,t),!0)},e.startFirmwareUpgradeStatus=function(t){t.startObject(3)},e.addRequestId=function(t,e){t.addFieldInt32(0,e,0)},e.addNodeId=function(t,e){t.addFieldOffset(1,e,0)},e.addProgress=function(t,e){t.addFieldFloat64(2,e,0)},e.endFirmwareUpgradeStatus=function(t){return t.endObject()},e.createFirmwareUpgradeStatus=function(t,n,i,o){return e.startFirmwareUpgradeStatus(t),e.addRequestId(t,n),e.addNodeId(t,i),e.addProgress(t,o),e.endFirmwareUpgradeStatus(t)},e}();e.FirmwareUpgradeStatus=n}(t.fb||(t.fb={}))}(e.mobsya||(e.mobsya={})),function(t){!function(e){var n=function(){function e(){this.bb=null,this.bb_pos=0}return e.prototype.__init=function(t,e){return this.bb_pos=t,this.bb=e,this},e.getRootAsThymio2WirelessDongle=function(t,n){return(n||new e).__init(t.readInt32(t.position())+t.position(),t)},e.prototype.dongleId=function(e){var n=this.bb.__offset(this.bb_pos,4);return n?(e||new t.fb.NodeId).__init(this.bb.__indirect(this.bb_pos+n),this.bb):null},e.prototype.dongleNode=function(){var t=this.bb.__offset(this.bb_pos,6);return t?this.bb.readUint16(this.bb_pos+t):0},e.prototype.mutate_dongle_node=function(t){var e=this.bb.__offset(this.bb_pos,6);return 0!==e&&(this.bb.writeUint16(this.bb_pos+e,t),!0)},e.prototype.networkId=function(){var t=this.bb.__offset(this.bb_pos,8);return t?this.bb.readUint16(this.bb_pos+t):0},e.prototype.mutate_network_id=function(t){var e=this.bb.__offset(this.bb_pos,8);return 0!==e&&(this.bb.writeUint16(this.bb_pos+e,t),!0)},e.prototype.channelId=function(){var t=this.bb.__offset(this.bb_pos,10);return t?this.bb.readUint8(this.bb_pos+t):0},e.prototype.mutate_channel_id=function(t){var e=this.bb.__offset(this.bb_pos,10);return 0!==e&&(this.bb.writeUint8(this.bb_pos+e,t),!0)},e.startThymio2WirelessDongle=function(t){t.startObject(4)},e.addDongleId=function(t,e){t.addFieldOffset(0,e,0)},e.addDongleNode=function(t,e){t.addFieldInt16(1,e,0)},e.addNetworkId=function(t,e){t.addFieldInt16(2,e,0)},e.addChannelId=function(t,e){t.addFieldInt8(3,e,0)},e.endThymio2WirelessDongle=function(t){return t.endObject()},e.createThymio2WirelessDongle=function(t,n,i,o,s){return e.startThymio2WirelessDongle(t),e.addDongleId(t,n),e.addDongleNode(t,i),e.addNetworkId(t,o),e.addChannelId(t,s),e.endThymio2WirelessDongle(t)},e}();e.Thymio2WirelessDongle=n}(t.fb||(t.fb={}))}(e.mobsya||(e.mobsya={})),function(t){!function(t){var e=function(){function t(){this.bb=null,this.bb_pos=0}return t.prototype.__init=function(t,e){return this.bb_pos=t,this.bb=e,this},t.getRootAsEnableThymio2PairingMode=function(e,n){return(n||new t).__init(e.readInt32(e.position())+e.position(),e)},t.prototype.enable=function(){var t=this.bb.__offset(this.bb_pos,4);return!t||!!this.bb.readInt8(this.bb_pos+t)},t.prototype.mutate_enable=function(t){var e=this.bb.__offset(this.bb_pos,4);return 0!==e&&(this.bb.writeInt8(this.bb_pos+e,+t),!0)},t.startEnableThymio2PairingMode=function(t){t.startObject(1)},t.addEnable=function(t,e){t.addFieldInt8(0,+e,1)},t.endEnableThymio2PairingMode=function(t){return t.endObject()},t.createEnableThymio2PairingMode=function(e,n){return t.startEnableThymio2PairingMode(e),t.addEnable(e,n),t.endEnableThymio2PairingMode(e)},t}();t.EnableThymio2PairingMode=e}(t.fb||(t.fb={}))}(e.mobsya||(e.mobsya={})),function(t){!function(e){var n=function(){function e(){this.bb=null,this.bb_pos=0}return e.prototype.__init=function(t,e){return this.bb_pos=t,this.bb=e,this},e.getRootAsThymio2WirelessDonglesChanged=function(t,n){return(n||new e).__init(t.readInt32(t.position())+t.position(),t)},e.prototype.dongles=function(e,n){var i=this.bb.__offset(this.bb_pos,4);return i?(n||new t.fb.Thymio2WirelessDongle).__init(this.bb.__indirect(this.bb.__vector(this.bb_pos+i)+4*e),this.bb):null},e.prototype.donglesLength=function(){var t=this.bb.__offset(this.bb_pos,4);return t?this.bb.__vector_len(this.bb_pos+t):0},e.startThymio2WirelessDonglesChanged=function(t){t.startObject(1)},e.addDongles=function(t,e){t.addFieldOffset(0,e,0)},e.createDonglesVector=function(t,e){t.startVector(4,e.length,4);for(var n=e.length-1;n>=0;n--)t.addOffset(e[n]);return t.endVector()},e.startDonglesVector=function(t,e){t.startVector(4,e,4)},e.endThymio2WirelessDonglesChanged=function(t){return t.endObject()},e.createThymio2WirelessDonglesChanged=function(t,n){return e.startThymio2WirelessDonglesChanged(t),e.addDongles(t,n),e.endThymio2WirelessDonglesChanged(t)},e}();e.Thymio2WirelessDonglesChanged=n}(t.fb||(t.fb={}))}(e.mobsya||(e.mobsya={})),function(t){!function(e){var n=function(){function e(){this.bb=null,this.bb_pos=0}return e.prototype.__init=function(t,e){return this.bb_pos=t,this.bb=e,this},e.getRootAsThymio2WirelessDonglePairingRequest=function(t,n){return(n||new e).__init(t.readInt32(t.position())+t.position(),t)},e.prototype.requestId=function(){var t=this.bb.__offset(this.bb_pos,4);return t?this.bb.readUint32(this.bb_pos+t):0},e.prototype.mutate_request_id=function(t){var e=this.bb.__offset(this.bb_pos,4);return 0!==e&&(this.bb.writeUint32(this.bb_pos+e,t),!0)},e.prototype.dongleId=function(e){var n=this.bb.__offset(this.bb_pos,6);return n?(e||new t.fb.NodeId).__init(this.bb.__indirect(this.bb_pos+n),this.bb):null},e.prototype.nodeId=function(e){var n=this.bb.__offset(this.bb_pos,8);return n?(e||new t.fb.NodeId).__init(this.bb.__indirect(this.bb_pos+n),this.bb):null},e.prototype.networkId=function(){var t=this.bb.__offset(this.bb_pos,10);return t?this.bb.readUint16(this.bb_pos+t):0},e.prototype.mutate_network_id=function(t){var e=this.bb.__offset(this.bb_pos,10);return 0!==e&&(this.bb.writeUint16(this.bb_pos+e,t),!0)},e.prototype.channelId=function(){var t=this.bb.__offset(this.bb_pos,12);return t?this.bb.readUint8(this.bb_pos+t):0},e.prototype.mutate_channel_id=function(t){var e=this.bb.__offset(this.bb_pos,12);return 0!==e&&(this.bb.writeUint8(this.bb_pos+e,t),!0)},e.startThymio2WirelessDonglePairingRequest=function(t){t.startObject(5)},e.addRequestId=function(t,e){t.addFieldInt32(0,e,0)},e.addDongleId=function(t,e){t.addFieldOffset(1,e,0)},e.addNodeId=function(t,e){t.addFieldOffset(2,e,0)},e.addNetworkId=function(t,e){t.addFieldInt16(3,e,0)},e.addChannelId=function(t,e){t.addFieldInt8(4,e,0)},e.endThymio2WirelessDonglePairingRequest=function(t){return t.endObject()},e.createThymio2WirelessDonglePairingRequest=function(t,n,i,o,s,b){return e.startThymio2WirelessDonglePairingRequest(t),e.addRequestId(t,n),e.addDongleId(t,i),e.addNodeId(t,o),e.addNetworkId(t,s),e.addChannelId(t,b),e.endThymio2WirelessDonglePairingRequest(t)},e}();e.Thymio2WirelessDonglePairingRequest=n}(t.fb||(t.fb={}))}(e.mobsya||(e.mobsya={})),function(t){!function(t){var e=function(){function t(){this.bb=null,this.bb_pos=0}return t.prototype.__init=function(t,e){return this.bb_pos=t,this.bb=e,this},t.getRootAsThymio2WirelessDonglePairingResponse=function(e,n){return(n||new t).__init(e.readInt32(e.position())+e.position(),e)},t.prototype.requestId=function(){var t=this.bb.__offset(this.bb_pos,4);return t?this.bb.readUint32(this.bb_pos+t):0},t.prototype.mutate_request_id=function(t){var e=this.bb.__offset(this.bb_pos,4);return 0!==e&&(this.bb.writeUint32(this.bb_pos+e,t),!0)},t.prototype.networkId=function(){var t=this.bb.__offset(this.bb_pos,6);return t?this.bb.readUint16(this.bb_pos+t):0},t.prototype.mutate_network_id=function(t){var e=this.bb.__offset(this.bb_pos,6);return 0!==e&&(this.bb.writeUint16(this.bb_pos+e,t),!0)},t.prototype.channelId=function(){var t=this.bb.__offset(this.bb_pos,8);return t?this.bb.readUint8(this.bb_pos+t):0},t.prototype.mutate_channel_id=function(t){var e=this.bb.__offset(this.bb_pos,8);return 0!==e&&(this.bb.writeUint8(this.bb_pos+e,t),!0)},t.startThymio2WirelessDonglePairingResponse=function(t){t.startObject(3)},t.addRequestId=function(t,e){t.addFieldInt32(0,e,0)},t.addNetworkId=function(t,e){t.addFieldInt16(1,e,0)},t.addChannelId=function(t,e){t.addFieldInt8(2,e,0)},t.endThymio2WirelessDonglePairingResponse=function(t){return t.endObject()},t.createThymio2WirelessDonglePairingResponse=function(e,n,i,o){return t.startThymio2WirelessDonglePairingResponse(e),t.addRequestId(e,n),t.addNetworkId(e,i),t.addChannelId(e,o),t.endThymio2WirelessDonglePairingResponse(e)},t}();t.Thymio2WirelessDonglePairingResponse=e}(t.fb||(t.fb={}))}(e.mobsya||(e.mobsya={})),function(t){!function(e){var n=function(){function e(){this.bb=null,this.bb_pos=0}return e.prototype.__init=function(t,e){return this.bb_pos=t,this.bb=e,this},e.getRootAsMessage=function(t,n){return(n||new e).__init(t.readInt32(t.position())+t.position(),t)},e.prototype.messageType=function(){var e=this.bb.__offset(this.bb_pos,4);return e?this.bb.readUint8(this.bb_pos+e):t.fb.AnyMessage.NONE},e.prototype.mutate_message_type=function(t){var e=this.bb.__offset(this.bb_pos,4);return 0!==e&&(this.bb.writeUint8(this.bb_pos+e,t),!0)},e.prototype.message=function(t){var e=this.bb.__offset(this.bb_pos,6);return e?this.bb.__union(t,this.bb_pos+e):null},e.startMessage=function(t){t.startObject(2)},e.addMessageType=function(e,n){e.addFieldInt8(0,n,t.fb.AnyMessage.NONE)},e.addMessage=function(t,e){t.addFieldOffset(1,e,0)},e.endMessage=function(t){return t.endObject()},e.finishMessageBuffer=function(t,e){t.finish(e)},e.createMessage=function(t,n,i){return e.startMessage(t),e.addMessageType(t,n),e.addMessage(t,i),e.endMessage(t)},e}();e.Message=n}(t.fb||(t.fb={}))}(e.mobsya||(e.mobsya={}))}));
-//# sourceMappingURL=thymio_generated.js.map
-//# sourceMappingURL=thymio_generated.js.map
+// automatically generated by the FlatBuffers compiler, do not modify
+define(["require", "exports"], function (require, exports) {
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.mobsya = void 0;
+    /**
+     * The Type of a node
+     * A node can designate either a robot, a simulator, each with various capabilities.
+     *
+     * @enum
+     */
+    var mobsya;
+    (function (mobsya) {
+        var fb;
+        (function (fb) {
+            var NodeType;
+            (function (NodeType) {
+                NodeType[NodeType["Thymio2"] = 0] = "Thymio2";
+                NodeType[NodeType["Thymio2Wireless"] = 1] = "Thymio2Wireless";
+                NodeType[NodeType["SimulatedThymio2"] = 2] = "SimulatedThymio2";
+                NodeType[NodeType["DummyNode"] = 3] = "DummyNode";
+                NodeType[NodeType["UnknownType"] = 4] = "UnknownType";
+            })(NodeType = fb.NodeType || (fb.NodeType = {}));
+        })(fb = mobsya.fb || (mobsya.fb = {}));
+    })(mobsya = exports.mobsya || (exports.mobsya = {}));
+    ;
+    /**
+     * Capabilities of a node
+     * What a client can do with a node may depends on permissions, firmware version, type of node/device, etc
+     *
+     * @enum
+     */
+    (function (mobsya) {
+        var fb;
+        (function (fb) {
+            var NodeCapability;
+            (function (NodeCapability) {
+                NodeCapability[NodeCapability["Rename"] = 1] = "Rename";
+                NodeCapability[NodeCapability["ForceResetAndStop"] = 2] = "ForceResetAndStop";
+                NodeCapability[NodeCapability["FirwmareUpgrade"] = 4] = "FirwmareUpgrade";
+            })(NodeCapability = fb.NodeCapability || (fb.NodeCapability = {}));
+        })(fb = mobsya.fb || (mobsya.fb = {}));
+    })(mobsya = exports.mobsya || (exports.mobsya = {}));
+    ;
+    /**
+     * The status of a node represents whether the node is connected and available.
+     *
+     * @enum
+     */
+    (function (mobsya) {
+        var fb;
+        (function (fb) {
+            var NodeStatus;
+            (function (NodeStatus) {
+                /**
+                 * The status is unknown, this denotes a programmation error or a bug
+                 */
+                NodeStatus[NodeStatus["unknown"] = 0] = "unknown";
+                /**
+                 * The node is just connected. However, sending code or requesting a VM desciption is unspecified in this state
+                 */
+                NodeStatus[NodeStatus["connected"] = 1] = "connected";
+                /**
+                 * The node is available. It needs to be sent a LockNode message before any action that would mutate it state, such as sending code can take place
+                 */
+                NodeStatus[NodeStatus["available"] = 2] = "available";
+                /**
+                 * The node is busy - this will be sent to all clients, except the one who locked the node
+                 */
+                NodeStatus[NodeStatus["busy"] = 3] = "busy";
+                /**
+                 * The node is ready - this will be sent the client that optained a lock on the node
+                 */
+                NodeStatus[NodeStatus["ready"] = 4] = "ready";
+                /**
+                 * The node is disconnected. Any reference to it will be destroyed on the server side, and sending further messages to it will fail
+                 */
+                NodeStatus[NodeStatus["disconnected"] = 5] = "disconnected";
+            })(NodeStatus = fb.NodeStatus || (fb.NodeStatus = {}));
+        })(fb = mobsya.fb || (mobsya.fb = {}));
+    })(mobsya = exports.mobsya || (exports.mobsya = {}));
+    ;
+    /**
+     * @enum
+     */
+    (function (mobsya) {
+        var fb;
+        (function (fb) {
+            var ErrorType;
+            (function (ErrorType) {
+                ErrorType[ErrorType["no_error"] = 0] = "no_error";
+                /**
+                 * Genric error
+                 */
+                ErrorType[ErrorType["unknown_error"] = 1] = "unknown_error";
+                /**
+                 * The node ddoes not exist or was disconnected
+                 */
+                ErrorType[ErrorType["unknown_node"] = 2] = "unknown_node";
+                /**
+                 * The node is busy (locked by another client)
+                 */
+                ErrorType[ErrorType["node_busy"] = 3] = "node_busy";
+                /**
+                 *Unsuported variable type - For SetVariables and Events
+                 */
+                ErrorType[ErrorType["unsupported_variable_type"] = 4] = "unsupported_variable_type";
+                ErrorType[ErrorType["thymio2_pairing_write_dongle_failed"] = 5] = "thymio2_pairing_write_dongle_failed";
+                ErrorType[ErrorType["thymio2_pairing_write_robot_failed"] = 6] = "thymio2_pairing_write_robot_failed";
+            })(ErrorType = fb.ErrorType || (fb.ErrorType = {}));
+        })(fb = mobsya.fb || (mobsya.fb = {}));
+    })(mobsya = exports.mobsya || (exports.mobsya = {}));
+    ;
+    /**
+     * @enum
+     */
+    (function (mobsya) {
+        var fb;
+        (function (fb) {
+            var WatchableInfo;
+            (function (WatchableInfo) {
+                WatchableInfo[WatchableInfo["StopMonitoring"] = 0] = "StopMonitoring";
+                WatchableInfo[WatchableInfo["Variables"] = 1] = "Variables";
+                WatchableInfo[WatchableInfo["Events"] = 2] = "Events";
+                WatchableInfo[WatchableInfo["VMExecutionState"] = 4] = "VMExecutionState";
+                WatchableInfo[WatchableInfo["SharedEventsDescription"] = 8] = "SharedEventsDescription";
+                WatchableInfo[WatchableInfo["SharedVariables"] = 16] = "SharedVariables";
+                WatchableInfo[WatchableInfo["Scratchpads"] = 32] = "Scratchpads";
+            })(WatchableInfo = fb.WatchableInfo || (fb.WatchableInfo = {}));
+        })(fb = mobsya.fb || (mobsya.fb = {}));
+    })(mobsya = exports.mobsya || (exports.mobsya = {}));
+    ;
+    /**
+     * @enum
+     */
+    (function (mobsya) {
+        var fb;
+        (function (fb) {
+            var ProgrammingLanguage;
+            (function (ProgrammingLanguage) {
+                ProgrammingLanguage[ProgrammingLanguage["Aseba"] = 1] = "Aseba";
+                ProgrammingLanguage[ProgrammingLanguage["Aesl"] = 2] = "Aesl";
+            })(ProgrammingLanguage = fb.ProgrammingLanguage || (fb.ProgrammingLanguage = {}));
+        })(fb = mobsya.fb || (mobsya.fb = {}));
+    })(mobsya = exports.mobsya || (exports.mobsya = {}));
+    ;
+    /**
+     * @enum
+     */
+    (function (mobsya) {
+        var fb;
+        (function (fb) {
+            var CompilationOptions;
+            (function (CompilationOptions) {
+                CompilationOptions[CompilationOptions["NoOption"] = 1] = "NoOption";
+                CompilationOptions[CompilationOptions["LoadOnTarget"] = 2] = "LoadOnTarget";
+                CompilationOptions[CompilationOptions["FetchBytecode"] = 4] = "FetchBytecode";
+            })(CompilationOptions = fb.CompilationOptions || (fb.CompilationOptions = {}));
+        })(fb = mobsya.fb || (mobsya.fb = {}));
+    })(mobsya = exports.mobsya || (exports.mobsya = {}));
+    ;
+    /**
+     * @enum
+     */
+    (function (mobsya) {
+        var fb;
+        (function (fb) {
+            var VMExecutionStateCommand;
+            (function (VMExecutionStateCommand) {
+                VMExecutionStateCommand[VMExecutionStateCommand["Stop"] = 0] = "Stop";
+                VMExecutionStateCommand[VMExecutionStateCommand["Run"] = 1] = "Run";
+                VMExecutionStateCommand[VMExecutionStateCommand["Step"] = 2] = "Step";
+                VMExecutionStateCommand[VMExecutionStateCommand["StepToNextLine"] = 3] = "StepToNextLine";
+                VMExecutionStateCommand[VMExecutionStateCommand["Pause"] = 4] = "Pause";
+                VMExecutionStateCommand[VMExecutionStateCommand["Reset"] = 5] = "Reset";
+                VMExecutionStateCommand[VMExecutionStateCommand["Reboot"] = 6] = "Reboot";
+                VMExecutionStateCommand[VMExecutionStateCommand["Suspend"] = 7] = "Suspend";
+                VMExecutionStateCommand[VMExecutionStateCommand["WriteProgramToDeviceMemory"] = 8] = "WriteProgramToDeviceMemory";
+            })(VMExecutionStateCommand = fb.VMExecutionStateCommand || (fb.VMExecutionStateCommand = {}));
+        })(fb = mobsya.fb || (mobsya.fb = {}));
+    })(mobsya = exports.mobsya || (exports.mobsya = {}));
+    ;
+    /**
+     * @enum
+     */
+    (function (mobsya) {
+        var fb;
+        (function (fb) {
+            var VMExecutionState;
+            (function (VMExecutionState) {
+                VMExecutionState[VMExecutionState["Stopped"] = 0] = "Stopped";
+                VMExecutionState[VMExecutionState["Running"] = 1] = "Running";
+                VMExecutionState[VMExecutionState["Paused"] = 2] = "Paused";
+            })(VMExecutionState = fb.VMExecutionState || (fb.VMExecutionState = {}));
+        })(fb = mobsya.fb || (mobsya.fb = {}));
+    })(mobsya = exports.mobsya || (exports.mobsya = {}));
+    ;
+    /**
+     * @enum
+     */
+    (function (mobsya) {
+        var fb;
+        (function (fb) {
+            var VMExecutionError;
+            (function (VMExecutionError) {
+                VMExecutionError[VMExecutionError["NoError"] = 0] = "NoError";
+                VMExecutionError[VMExecutionError["Killed"] = 1] = "Killed";
+                VMExecutionError[VMExecutionError["OutOfBoundAccess"] = 2] = "OutOfBoundAccess";
+                VMExecutionError[VMExecutionError["DivisionByZero"] = 3] = "DivisionByZero";
+                VMExecutionError[VMExecutionError["GenericError"] = 4] = "GenericError";
+            })(VMExecutionError = fb.VMExecutionError || (fb.VMExecutionError = {}));
+        })(fb = mobsya.fb || (mobsya.fb = {}));
+    })(mobsya = exports.mobsya || (exports.mobsya = {}));
+    ;
+    /**
+     * @enum
+     */
+    (function (mobsya) {
+        var fb;
+        (function (fb) {
+            var AnyMessage;
+            (function (AnyMessage) {
+                AnyMessage[AnyMessage["NONE"] = 0] = "NONE";
+                AnyMessage[AnyMessage["ConnectionHandshake"] = 1] = "ConnectionHandshake";
+                AnyMessage[AnyMessage["DeviceManagerShutdownRequest"] = 2] = "DeviceManagerShutdownRequest";
+                AnyMessage[AnyMessage["RequestListOfNodes"] = 3] = "RequestListOfNodes";
+                AnyMessage[AnyMessage["RequestNodeAsebaVMDescription"] = 4] = "RequestNodeAsebaVMDescription";
+                AnyMessage[AnyMessage["LockNode"] = 5] = "LockNode";
+                AnyMessage[AnyMessage["UnlockNode"] = 6] = "UnlockNode";
+                AnyMessage[AnyMessage["RenameNode"] = 7] = "RenameNode";
+                AnyMessage[AnyMessage["CompileAndLoadCodeOnVM"] = 8] = "CompileAndLoadCodeOnVM";
+                AnyMessage[AnyMessage["NodesChanged"] = 9] = "NodesChanged";
+                AnyMessage[AnyMessage["NodeAsebaVMDescription"] = 10] = "NodeAsebaVMDescription";
+                AnyMessage[AnyMessage["RequestCompleted"] = 11] = "RequestCompleted";
+                AnyMessage[AnyMessage["Error"] = 12] = "Error";
+                AnyMessage[AnyMessage["CompilationResultFailure"] = 13] = "CompilationResultFailure";
+                AnyMessage[AnyMessage["CompilationResultSuccess"] = 14] = "CompilationResultSuccess";
+                AnyMessage[AnyMessage["WatchNode"] = 15] = "WatchNode";
+                AnyMessage[AnyMessage["VariablesChanged"] = 16] = "VariablesChanged";
+                AnyMessage[AnyMessage["SetVariables"] = 17] = "SetVariables";
+                AnyMessage[AnyMessage["EventsDescriptionsChanged"] = 18] = "EventsDescriptionsChanged";
+                AnyMessage[AnyMessage["RegisterEvents"] = 19] = "RegisterEvents";
+                AnyMessage[AnyMessage["SendEvents"] = 20] = "SendEvents";
+                AnyMessage[AnyMessage["EventsEmitted"] = 21] = "EventsEmitted";
+                AnyMessage[AnyMessage["SetBreakpoints"] = 22] = "SetBreakpoints";
+                AnyMessage[AnyMessage["SetBreakpointsResponse"] = 23] = "SetBreakpointsResponse";
+                AnyMessage[AnyMessage["SetVMExecutionState"] = 24] = "SetVMExecutionState";
+                AnyMessage[AnyMessage["VMExecutionStateChanged"] = 25] = "VMExecutionStateChanged";
+                AnyMessage[AnyMessage["ScratchpadUpdate"] = 26] = "ScratchpadUpdate";
+                AnyMessage[AnyMessage["FirmwareUpgradeRequest"] = 27] = "FirmwareUpgradeRequest";
+                AnyMessage[AnyMessage["FirmwareUpgradeStatus"] = 28] = "FirmwareUpgradeStatus";
+                AnyMessage[AnyMessage["Ping"] = 29] = "Ping";
+                AnyMessage[AnyMessage["EnableThymio2PairingMode"] = 30] = "EnableThymio2PairingMode";
+                AnyMessage[AnyMessage["Thymio2WirelessDonglesChanged"] = 31] = "Thymio2WirelessDonglesChanged";
+                AnyMessage[AnyMessage["Thymio2WirelessDonglePairingRequest"] = 32] = "Thymio2WirelessDonglePairingRequest";
+                AnyMessage[AnyMessage["Thymio2WirelessDonglePairingResponse"] = 33] = "Thymio2WirelessDonglePairingResponse";
+                AnyMessage[AnyMessage["CompileAndSave"] = 34] = "CompileAndSave";
+                AnyMessage[AnyMessage["SaveBytecode"] = 35] = "SaveBytecode";
+            })(AnyMessage = fb.AnyMessage || (fb.AnyMessage = {}));
+        })(fb = mobsya.fb || (mobsya.fb = {}));
+    })(mobsya = exports.mobsya || (exports.mobsya = {}));
+    ;
+    /**
+     *A node id
+     *
+     * @constructor
+     */
+    (function (mobsya) {
+        var fb;
+        (function (fb) {
+            var NodeId = /** @class */ (function () {
+                function NodeId() {
+                    this.bb = null;
+                    this.bb_pos = 0;
+                }
+                /**
+                 * @param number i
+                 * @param flatbuffers.ByteBuffer bb
+                 * @returns NodeId
+                 */
+                NodeId.prototype.__init = function (i, bb) {
+                    this.bb_pos = i;
+                    this.bb = bb;
+                    return this;
+                };
+                ;
+                /**
+                 * @param flatbuffers.ByteBuffer bb
+                 * @param NodeId= obj
+                 * @returns NodeId
+                 */
+                NodeId.getRootAsNodeId = function (bb, obj) {
+                    return (obj || new NodeId).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+                };
+                ;
+                /**
+                 * @param number index
+                 * @returns number
+                 */
+                NodeId.prototype.id = function (index) {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    return offset ? this.bb.readUint8(this.bb.__vector(this.bb_pos + offset) + index) : 0;
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                NodeId.prototype.idLength = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    return offset ? this.bb.__vector_len(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * @returns Uint8Array
+                 */
+                NodeId.prototype.idArray = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    return offset ? new Uint8Array(this.bb.bytes().buffer, this.bb.bytes().byteOffset + this.bb.__vector(this.bb_pos + offset), this.bb.__vector_len(this.bb_pos + offset)) : null;
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 */
+                NodeId.startNodeId = function (builder) {
+                    builder.startObject(1);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset idOffset
+                 */
+                NodeId.addId = function (builder, idOffset) {
+                    builder.addFieldOffset(0, idOffset, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param Array.<number> data
+                 * @returns flatbuffers.Offset
+                 */
+                NodeId.createIdVector = function (builder, data) {
+                    builder.startVector(1, data.length, 1);
+                    for (var i = data.length - 1; i >= 0; i--) {
+                        builder.addInt8(data[i]);
+                    }
+                    return builder.endVector();
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number numElems
+                 */
+                NodeId.startIdVector = function (builder, numElems) {
+                    builder.startVector(1, numElems, 1);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @returns flatbuffers.Offset
+                 */
+                NodeId.endNodeId = function (builder) {
+                    var offset = builder.endObject();
+                    return offset;
+                };
+                ;
+                NodeId.createNodeId = function (builder, idOffset) {
+                    NodeId.startNodeId(builder);
+                    NodeId.addId(builder, idOffset);
+                    return NodeId.endNodeId(builder);
+                };
+                return NodeId;
+            }());
+            fb.NodeId = NodeId;
+        })(fb = mobsya.fb || (mobsya.fb = {}));
+    })(mobsya = exports.mobsya || (exports.mobsya = {}));
+    /**
+     * @constructor
+     */
+    (function (mobsya) {
+        var fb;
+        (function (fb) {
+            var ConnectionHandshake = /** @class */ (function () {
+                function ConnectionHandshake() {
+                    this.bb = null;
+                    this.bb_pos = 0;
+                }
+                /**
+                 * @param number i
+                 * @param flatbuffers.ByteBuffer bb
+                 * @returns ConnectionHandshake
+                 */
+                ConnectionHandshake.prototype.__init = function (i, bb) {
+                    this.bb_pos = i;
+                    this.bb = bb;
+                    return this;
+                };
+                ;
+                /**
+                 * @param flatbuffers.ByteBuffer bb
+                 * @param ConnectionHandshake= obj
+                 * @returns ConnectionHandshake
+                 */
+                ConnectionHandshake.getRootAsConnectionHandshake = function (bb, obj) {
+                    return (obj || new ConnectionHandshake).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                ConnectionHandshake.prototype.minProtocolVersion = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    return offset ? this.bb.readUint32(this.bb_pos + offset) : 1;
+                };
+                ;
+                /**
+                 * @param number value
+                 * @returns boolean
+                 */
+                ConnectionHandshake.prototype.mutate_minProtocolVersion = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeUint32(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                ConnectionHandshake.prototype.protocolVersion = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 6);
+                    return offset ? this.bb.readUint32(this.bb_pos + offset) : 1;
+                };
+                ;
+                /**
+                 * @param number value
+                 * @returns boolean
+                 */
+                ConnectionHandshake.prototype.mutate_protocolVersion = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 6);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeUint32(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                ConnectionHandshake.prototype.maxMessageSize = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 8);
+                    return offset ? this.bb.readUint32(this.bb_pos + offset) : 102400;
+                };
+                ;
+                /**
+                 * @param number value
+                 * @returns boolean
+                 */
+                ConnectionHandshake.prototype.mutate_maxMessageSize = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 8);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeUint32(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                /**
+                 * @param number index
+                 * @returns number
+                 */
+                ConnectionHandshake.prototype.token = function (index) {
+                    var offset = this.bb.__offset(this.bb_pos, 10);
+                    return offset ? this.bb.readUint8(this.bb.__vector(this.bb_pos + offset) + index) : 0;
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                ConnectionHandshake.prototype.tokenLength = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 10);
+                    return offset ? this.bb.__vector_len(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * @returns Uint8Array
+                 */
+                ConnectionHandshake.prototype.tokenArray = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 10);
+                    return offset ? new Uint8Array(this.bb.bytes().buffer, this.bb.bytes().byteOffset + this.bb.__vector(this.bb_pos + offset), this.bb.__vector_len(this.bb_pos + offset)) : null;
+                };
+                ;
+                /**
+                 * @returns boolean
+                 */
+                ConnectionHandshake.prototype.localhostPeer = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 12);
+                    return offset ? !!this.bb.readInt8(this.bb_pos + offset) : false;
+                };
+                ;
+                /**
+                 * @param boolean value
+                 * @returns boolean
+                 */
+                ConnectionHandshake.prototype.mutate_localhostPeer = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 12);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeInt8(this.bb_pos + offset, +value);
+                    return true;
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                ConnectionHandshake.prototype.wsPort = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 14);
+                    return offset ? this.bb.readUint16(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * @param number value
+                 * @returns boolean
+                 */
+                ConnectionHandshake.prototype.mutate_ws_port = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 14);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeUint16(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                /**
+                 * @param mobsya.fb.NodeId= obj
+                 * @returns mobsya.fb.NodeId|null
+                 */
+                ConnectionHandshake.prototype.uuid = function (obj) {
+                    var offset = this.bb.__offset(this.bb_pos, 16);
+                    return offset ? (obj || new mobsya.fb.NodeId).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
+                };
+                ;
+                ConnectionHandshake.prototype.password = function (optionalEncoding) {
+                    var offset = this.bb.__offset(this.bb_pos, 18);
+                    return offset ? this.bb.__string(this.bb_pos + offset, optionalEncoding) : null;
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 */
+                ConnectionHandshake.startConnectionHandshake = function (builder) {
+                    builder.startObject(8);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number minProtocolVersion
+                 */
+                ConnectionHandshake.addMinProtocolVersion = function (builder, minProtocolVersion) {
+                    builder.addFieldInt32(0, minProtocolVersion, 1);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number protocolVersion
+                 */
+                ConnectionHandshake.addProtocolVersion = function (builder, protocolVersion) {
+                    builder.addFieldInt32(1, protocolVersion, 1);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number maxMessageSize
+                 */
+                ConnectionHandshake.addMaxMessageSize = function (builder, maxMessageSize) {
+                    builder.addFieldInt32(2, maxMessageSize, 102400);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset tokenOffset
+                 */
+                ConnectionHandshake.addToken = function (builder, tokenOffset) {
+                    builder.addFieldOffset(3, tokenOffset, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param Array.<number> data
+                 * @returns flatbuffers.Offset
+                 */
+                ConnectionHandshake.createTokenVector = function (builder, data) {
+                    builder.startVector(1, data.length, 1);
+                    for (var i = data.length - 1; i >= 0; i--) {
+                        builder.addInt8(data[i]);
+                    }
+                    return builder.endVector();
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number numElems
+                 */
+                ConnectionHandshake.startTokenVector = function (builder, numElems) {
+                    builder.startVector(1, numElems, 1);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param boolean localhostPeer
+                 */
+                ConnectionHandshake.addLocalhostPeer = function (builder, localhostPeer) {
+                    builder.addFieldInt8(4, +localhostPeer, +false);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number wsPort
+                 */
+                ConnectionHandshake.addWsPort = function (builder, wsPort) {
+                    builder.addFieldInt16(5, wsPort, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset uuidOffset
+                 */
+                ConnectionHandshake.addUuid = function (builder, uuidOffset) {
+                    builder.addFieldOffset(6, uuidOffset, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset passwordOffset
+                 */
+                ConnectionHandshake.addPassword = function (builder, passwordOffset) {
+                    builder.addFieldOffset(7, passwordOffset, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @returns flatbuffers.Offset
+                 */
+                ConnectionHandshake.endConnectionHandshake = function (builder) {
+                    var offset = builder.endObject();
+                    return offset;
+                };
+                ;
+                ConnectionHandshake.createConnectionHandshake = function (builder, minProtocolVersion, protocolVersion, maxMessageSize, tokenOffset, localhostPeer, wsPort, uuidOffset, passwordOffset) {
+                    ConnectionHandshake.startConnectionHandshake(builder);
+                    ConnectionHandshake.addMinProtocolVersion(builder, minProtocolVersion);
+                    ConnectionHandshake.addProtocolVersion(builder, protocolVersion);
+                    ConnectionHandshake.addMaxMessageSize(builder, maxMessageSize);
+                    ConnectionHandshake.addToken(builder, tokenOffset);
+                    ConnectionHandshake.addLocalhostPeer(builder, localhostPeer);
+                    ConnectionHandshake.addWsPort(builder, wsPort);
+                    ConnectionHandshake.addUuid(builder, uuidOffset);
+                    ConnectionHandshake.addPassword(builder, passwordOffset);
+                    return ConnectionHandshake.endConnectionHandshake(builder);
+                };
+                return ConnectionHandshake;
+            }());
+            fb.ConnectionHandshake = ConnectionHandshake;
+        })(fb = mobsya.fb || (mobsya.fb = {}));
+    })(mobsya = exports.mobsya || (exports.mobsya = {}));
+    /**
+     * @constructor
+     */
+    (function (mobsya) {
+        var fb;
+        (function (fb) {
+            var Ping = /** @class */ (function () {
+                function Ping() {
+                    this.bb = null;
+                    this.bb_pos = 0;
+                }
+                /**
+                 * @param number i
+                 * @param flatbuffers.ByteBuffer bb
+                 * @returns Ping
+                 */
+                Ping.prototype.__init = function (i, bb) {
+                    this.bb_pos = i;
+                    this.bb = bb;
+                    return this;
+                };
+                ;
+                /**
+                 * @param flatbuffers.ByteBuffer bb
+                 * @param Ping= obj
+                 * @returns Ping
+                 */
+                Ping.getRootAsPing = function (bb, obj) {
+                    return (obj || new Ping).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 */
+                Ping.startPing = function (builder) {
+                    builder.startObject(0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @returns flatbuffers.Offset
+                 */
+                Ping.endPing = function (builder) {
+                    var offset = builder.endObject();
+                    return offset;
+                };
+                ;
+                Ping.createPing = function (builder) {
+                    Ping.startPing(builder);
+                    return Ping.endPing(builder);
+                };
+                return Ping;
+            }());
+            fb.Ping = Ping;
+        })(fb = mobsya.fb || (mobsya.fb = {}));
+    })(mobsya = exports.mobsya || (exports.mobsya = {}));
+    /**
+     * @constructor
+     */
+    (function (mobsya) {
+        var fb;
+        (function (fb) {
+            var DeviceManagerShutdownRequest = /** @class */ (function () {
+                function DeviceManagerShutdownRequest() {
+                    this.bb = null;
+                    this.bb_pos = 0;
+                }
+                /**
+                 * @param number i
+                 * @param flatbuffers.ByteBuffer bb
+                 * @returns DeviceManagerShutdownRequest
+                 */
+                DeviceManagerShutdownRequest.prototype.__init = function (i, bb) {
+                    this.bb_pos = i;
+                    this.bb = bb;
+                    return this;
+                };
+                ;
+                /**
+                 * @param flatbuffers.ByteBuffer bb
+                 * @param DeviceManagerShutdownRequest= obj
+                 * @returns DeviceManagerShutdownRequest
+                 */
+                DeviceManagerShutdownRequest.getRootAsDeviceManagerShutdownRequest = function (bb, obj) {
+                    return (obj || new DeviceManagerShutdownRequest).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                DeviceManagerShutdownRequest.prototype.requestId = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * @param number value
+                 * @returns boolean
+                 */
+                DeviceManagerShutdownRequest.prototype.mutate_request_id = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeUint32(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 */
+                DeviceManagerShutdownRequest.startDeviceManagerShutdownRequest = function (builder) {
+                    builder.startObject(1);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number requestId
+                 */
+                DeviceManagerShutdownRequest.addRequestId = function (builder, requestId) {
+                    builder.addFieldInt32(0, requestId, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @returns flatbuffers.Offset
+                 */
+                DeviceManagerShutdownRequest.endDeviceManagerShutdownRequest = function (builder) {
+                    var offset = builder.endObject();
+                    return offset;
+                };
+                ;
+                DeviceManagerShutdownRequest.createDeviceManagerShutdownRequest = function (builder, requestId) {
+                    DeviceManagerShutdownRequest.startDeviceManagerShutdownRequest(builder);
+                    DeviceManagerShutdownRequest.addRequestId(builder, requestId);
+                    return DeviceManagerShutdownRequest.endDeviceManagerShutdownRequest(builder);
+                };
+                return DeviceManagerShutdownRequest;
+            }());
+            fb.DeviceManagerShutdownRequest = DeviceManagerShutdownRequest;
+        })(fb = mobsya.fb || (mobsya.fb = {}));
+    })(mobsya = exports.mobsya || (exports.mobsya = {}));
+    /**
+     * Represent a node
+     *
+     * @constructor
+     */
+    (function (mobsya) {
+        var fb;
+        (function (fb) {
+            var Node = /** @class */ (function () {
+                function Node() {
+                    this.bb = null;
+                    this.bb_pos = 0;
+                }
+                /**
+                 * @param number i
+                 * @param flatbuffers.ByteBuffer bb
+                 * @returns Node
+                 */
+                Node.prototype.__init = function (i, bb) {
+                    this.bb_pos = i;
+                    this.bb = bb;
+                    return this;
+                };
+                ;
+                /**
+                 * @param flatbuffers.ByteBuffer bb
+                 * @param Node= obj
+                 * @returns Node
+                 */
+                Node.getRootAsNode = function (bb, obj) {
+                    return (obj || new Node).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+                };
+                ;
+                /**
+                 * @param mobsya.fb.NodeId= obj
+                 * @returns mobsya.fb.NodeId|null
+                 */
+                Node.prototype.nodeId = function (obj) {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    return offset ? (obj || new mobsya.fb.NodeId).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
+                };
+                ;
+                /**
+                 * @param mobsya.fb.NodeId= obj
+                 * @returns mobsya.fb.NodeId|null
+                 */
+                Node.prototype.groupId = function (obj) {
+                    var offset = this.bb.__offset(this.bb_pos, 6);
+                    return offset ? (obj || new mobsya.fb.NodeId).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
+                };
+                ;
+                /**
+                 * @returns mobsya.fb.NodeStatus
+                 */
+                Node.prototype.status = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 8);
+                    return offset ? /**  */ (this.bb.readInt32(this.bb_pos + offset)) : mobsya.fb.NodeStatus.unknown;
+                };
+                ;
+                /**
+                 * @param mobsya.fb.NodeStatus value
+                 * @returns boolean
+                 */
+                Node.prototype.mutate_status = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 8);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeInt32(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                /**
+                 * @returns mobsya.fb.NodeType
+                 */
+                Node.prototype.type = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 10);
+                    return offset ? /**  */ (this.bb.readInt32(this.bb_pos + offset)) : mobsya.fb.NodeType.Thymio2;
+                };
+                ;
+                /**
+                 * @param mobsya.fb.NodeType value
+                 * @returns boolean
+                 */
+                Node.prototype.mutate_type = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 10);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeInt32(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                Node.prototype.name = function (optionalEncoding) {
+                    var offset = this.bb.__offset(this.bb_pos, 12);
+                    return offset ? this.bb.__string(this.bb_pos + offset, optionalEncoding) : null;
+                };
+                ;
+                /**
+                 * @returns flatbuffers.Long
+                 */
+                Node.prototype.capabilities = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 14);
+                    return offset ? this.bb.readUint64(this.bb_pos + offset) : this.bb.createLong(0, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Long value
+                 * @returns boolean
+                 */
+                Node.prototype.mutate_capabilities = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 14);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeUint64(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                Node.prototype.fwVersion = function (optionalEncoding) {
+                    var offset = this.bb.__offset(this.bb_pos, 16);
+                    return offset ? this.bb.__string(this.bb_pos + offset, optionalEncoding) : null;
+                };
+                ;
+                Node.prototype.latestFwVersion = function (optionalEncoding) {
+                    var offset = this.bb.__offset(this.bb_pos, 18);
+                    return offset ? this.bb.__string(this.bb_pos + offset, optionalEncoding) : null;
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 */
+                Node.startNode = function (builder) {
+                    builder.startObject(8);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset nodeIdOffset
+                 */
+                Node.addNodeId = function (builder, nodeIdOffset) {
+                    builder.addFieldOffset(0, nodeIdOffset, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset groupIdOffset
+                 */
+                Node.addGroupId = function (builder, groupIdOffset) {
+                    builder.addFieldOffset(1, groupIdOffset, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param mobsya.fb.NodeStatus status
+                 */
+                Node.addStatus = function (builder, status) {
+                    builder.addFieldInt32(2, status, mobsya.fb.NodeStatus.unknown);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param mobsya.fb.NodeType type
+                 */
+                Node.addType = function (builder, type) {
+                    builder.addFieldInt32(3, type, mobsya.fb.NodeType.Thymio2);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset nameOffset
+                 */
+                Node.addName = function (builder, nameOffset) {
+                    builder.addFieldOffset(4, nameOffset, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Long capabilities
+                 */
+                Node.addCapabilities = function (builder, capabilities) {
+                    builder.addFieldInt64(5, capabilities, builder.createLong(0, 0));
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset fwVersionOffset
+                 */
+                Node.addFwVersion = function (builder, fwVersionOffset) {
+                    builder.addFieldOffset(6, fwVersionOffset, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset latestFwVersionOffset
+                 */
+                Node.addLatestFwVersion = function (builder, latestFwVersionOffset) {
+                    builder.addFieldOffset(7, latestFwVersionOffset, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @returns flatbuffers.Offset
+                 */
+                Node.endNode = function (builder) {
+                    var offset = builder.endObject();
+                    return offset;
+                };
+                ;
+                Node.createNode = function (builder, nodeIdOffset, groupIdOffset, status, type, nameOffset, capabilities, fwVersionOffset, latestFwVersionOffset) {
+                    Node.startNode(builder);
+                    Node.addNodeId(builder, nodeIdOffset);
+                    Node.addGroupId(builder, groupIdOffset);
+                    Node.addStatus(builder, status);
+                    Node.addType(builder, type);
+                    Node.addName(builder, nameOffset);
+                    Node.addCapabilities(builder, capabilities);
+                    Node.addFwVersion(builder, fwVersionOffset);
+                    Node.addLatestFwVersion(builder, latestFwVersionOffset);
+                    return Node.endNode(builder);
+                };
+                return Node;
+            }());
+            fb.Node = Node;
+        })(fb = mobsya.fb || (mobsya.fb = {}));
+    })(mobsya = exports.mobsya || (exports.mobsya = {}));
+    /**
+     * @constructor
+     */
+    (function (mobsya) {
+        var fb;
+        (function (fb) {
+            var NamedValue = /** @class */ (function () {
+                function NamedValue() {
+                    this.bb = null;
+                    this.bb_pos = 0;
+                }
+                /**
+                 * @param number i
+                 * @param flatbuffers.ByteBuffer bb
+                 * @returns NamedValue
+                 */
+                NamedValue.prototype.__init = function (i, bb) {
+                    this.bb_pos = i;
+                    this.bb = bb;
+                    return this;
+                };
+                ;
+                /**
+                 * @param flatbuffers.ByteBuffer bb
+                 * @param NamedValue= obj
+                 * @returns NamedValue
+                 */
+                NamedValue.getRootAsNamedValue = function (bb, obj) {
+                    return (obj || new NamedValue).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+                };
+                ;
+                NamedValue.prototype.name = function (optionalEncoding) {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    return offset ? this.bb.__string(this.bb_pos + offset, optionalEncoding) : null;
+                };
+                ;
+                /**
+                 * @param number index
+                 * @returns number
+                 */
+                NamedValue.prototype.value = function (index) {
+                    var offset = this.bb.__offset(this.bb_pos, 6);
+                    return offset ? this.bb.readUint8(this.bb.__vector(this.bb_pos + offset) + index) : 0;
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                NamedValue.prototype.valueLength = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 6);
+                    return offset ? this.bb.__vector_len(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * @returns Uint8Array
+                 */
+                NamedValue.prototype.valueArray = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 6);
+                    return offset ? new Uint8Array(this.bb.bytes().buffer, this.bb.bytes().byteOffset + this.bb.__vector(this.bb_pos + offset), this.bb.__vector_len(this.bb_pos + offset)) : null;
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 */
+                NamedValue.startNamedValue = function (builder) {
+                    builder.startObject(2);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset nameOffset
+                 */
+                NamedValue.addName = function (builder, nameOffset) {
+                    builder.addFieldOffset(0, nameOffset, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset valueOffset
+                 */
+                NamedValue.addValue = function (builder, valueOffset) {
+                    builder.addFieldOffset(1, valueOffset, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param Array.<number> data
+                 * @returns flatbuffers.Offset
+                 */
+                NamedValue.createValueVector = function (builder, data) {
+                    builder.startVector(1, data.length, 1);
+                    for (var i = data.length - 1; i >= 0; i--) {
+                        builder.addInt8(data[i]);
+                    }
+                    return builder.endVector();
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number numElems
+                 */
+                NamedValue.startValueVector = function (builder, numElems) {
+                    builder.startVector(1, numElems, 1);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @returns flatbuffers.Offset
+                 */
+                NamedValue.endNamedValue = function (builder) {
+                    var offset = builder.endObject();
+                    builder.requiredField(offset, 4); // name
+                    return offset;
+                };
+                ;
+                NamedValue.createNamedValue = function (builder, nameOffset, valueOffset) {
+                    NamedValue.startNamedValue(builder);
+                    NamedValue.addName(builder, nameOffset);
+                    NamedValue.addValue(builder, valueOffset);
+                    return NamedValue.endNamedValue(builder);
+                };
+                return NamedValue;
+            }());
+            fb.NamedValue = NamedValue;
+        })(fb = mobsya.fb || (mobsya.fb = {}));
+    })(mobsya = exports.mobsya || (exports.mobsya = {}));
+    /**
+     * @constructor
+     */
+    (function (mobsya) {
+        var fb;
+        (function (fb) {
+            var NodeVariable = /** @class */ (function () {
+                function NodeVariable() {
+                    this.bb = null;
+                    this.bb_pos = 0;
+                }
+                /**
+                 * @param number i
+                 * @param flatbuffers.ByteBuffer bb
+                 * @returns NodeVariable
+                 */
+                NodeVariable.prototype.__init = function (i, bb) {
+                    this.bb_pos = i;
+                    this.bb = bb;
+                    return this;
+                };
+                ;
+                /**
+                 * @param flatbuffers.ByteBuffer bb
+                 * @param NodeVariable= obj
+                 * @returns NodeVariable
+                 */
+                NodeVariable.getRootAsNodeVariable = function (bb, obj) {
+                    return (obj || new NodeVariable).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+                };
+                ;
+                NodeVariable.prototype.name = function (optionalEncoding) {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    return offset ? this.bb.__string(this.bb_pos + offset, optionalEncoding) : null;
+                };
+                ;
+                /**
+                 * @param number index
+                 * @returns number
+                 */
+                NodeVariable.prototype.value = function (index) {
+                    var offset = this.bb.__offset(this.bb_pos, 6);
+                    return offset ? this.bb.readUint8(this.bb.__vector(this.bb_pos + offset) + index) : 0;
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                NodeVariable.prototype.valueLength = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 6);
+                    return offset ? this.bb.__vector_len(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * @returns Uint8Array
+                 */
+                NodeVariable.prototype.valueArray = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 6);
+                    return offset ? new Uint8Array(this.bb.bytes().buffer, this.bb.bytes().byteOffset + this.bb.__vector(this.bb_pos + offset), this.bb.__vector_len(this.bb_pos + offset)) : null;
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 */
+                NodeVariable.startNodeVariable = function (builder) {
+                    builder.startObject(2);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset nameOffset
+                 */
+                NodeVariable.addName = function (builder, nameOffset) {
+                    builder.addFieldOffset(0, nameOffset, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset valueOffset
+                 */
+                NodeVariable.addValue = function (builder, valueOffset) {
+                    builder.addFieldOffset(1, valueOffset, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param Array.<number> data
+                 * @returns flatbuffers.Offset
+                 */
+                NodeVariable.createValueVector = function (builder, data) {
+                    builder.startVector(1, data.length, 1);
+                    for (var i = data.length - 1; i >= 0; i--) {
+                        builder.addInt8(data[i]);
+                    }
+                    return builder.endVector();
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number numElems
+                 */
+                NodeVariable.startValueVector = function (builder, numElems) {
+                    builder.startVector(1, numElems, 1);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @returns flatbuffers.Offset
+                 */
+                NodeVariable.endNodeVariable = function (builder) {
+                    var offset = builder.endObject();
+                    builder.requiredField(offset, 4); // name
+                    return offset;
+                };
+                ;
+                NodeVariable.createNodeVariable = function (builder, nameOffset, valueOffset) {
+                    NodeVariable.startNodeVariable(builder);
+                    NodeVariable.addName(builder, nameOffset);
+                    NodeVariable.addValue(builder, valueOffset);
+                    return NodeVariable.endNodeVariable(builder);
+                };
+                return NodeVariable;
+            }());
+            fb.NodeVariable = NodeVariable;
+        })(fb = mobsya.fb || (mobsya.fb = {}));
+    })(mobsya = exports.mobsya || (exports.mobsya = {}));
+    /**
+     * @constructor
+     */
+    (function (mobsya) {
+        var fb;
+        (function (fb) {
+            var VariablesChanged = /** @class */ (function () {
+                function VariablesChanged() {
+                    this.bb = null;
+                    this.bb_pos = 0;
+                }
+                /**
+                 * @param number i
+                 * @param flatbuffers.ByteBuffer bb
+                 * @returns VariablesChanged
+                 */
+                VariablesChanged.prototype.__init = function (i, bb) {
+                    this.bb_pos = i;
+                    this.bb = bb;
+                    return this;
+                };
+                ;
+                /**
+                 * @param flatbuffers.ByteBuffer bb
+                 * @param VariablesChanged= obj
+                 * @returns VariablesChanged
+                 */
+                VariablesChanged.getRootAsVariablesChanged = function (bb, obj) {
+                    return (obj || new VariablesChanged).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+                };
+                ;
+                /**
+                 * @param mobsya.fb.NodeId= obj
+                 * @returns mobsya.fb.NodeId|null
+                 */
+                VariablesChanged.prototype.nodeId = function (obj) {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    return offset ? (obj || new mobsya.fb.NodeId).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
+                };
+                ;
+                /**
+                 * @param number index
+                 * @param mobsya.fb.NodeVariable= obj
+                 * @returns mobsya.fb.NodeVariable
+                 */
+                VariablesChanged.prototype.vars = function (index, obj) {
+                    var offset = this.bb.__offset(this.bb_pos, 6);
+                    return offset ? (obj || new mobsya.fb.NodeVariable).__init(this.bb.__indirect(this.bb.__vector(this.bb_pos + offset) + index * 4), this.bb) : null;
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                VariablesChanged.prototype.varsLength = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 6);
+                    return offset ? this.bb.__vector_len(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * unix timestamp ( miliseconds) of when the variables were modified - or 0 if unspecified
+                 *
+                 * @returns flatbuffers.Long
+                 */
+                VariablesChanged.prototype.timestamp = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 8);
+                    return offset ? this.bb.readUint64(this.bb_pos + offset) : this.bb.createLong(0, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Long value
+                 * @returns boolean
+                 */
+                VariablesChanged.prototype.mutate_timestamp = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 8);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeUint64(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 */
+                VariablesChanged.startVariablesChanged = function (builder) {
+                    builder.startObject(3);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset nodeIdOffset
+                 */
+                VariablesChanged.addNodeId = function (builder, nodeIdOffset) {
+                    builder.addFieldOffset(0, nodeIdOffset, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset varsOffset
+                 */
+                VariablesChanged.addVars = function (builder, varsOffset) {
+                    builder.addFieldOffset(1, varsOffset, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param Array.<flatbuffers.Offset> data
+                 * @returns flatbuffers.Offset
+                 */
+                VariablesChanged.createVarsVector = function (builder, data) {
+                    builder.startVector(4, data.length, 4);
+                    for (var i = data.length - 1; i >= 0; i--) {
+                        builder.addOffset(data[i]);
+                    }
+                    return builder.endVector();
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number numElems
+                 */
+                VariablesChanged.startVarsVector = function (builder, numElems) {
+                    builder.startVector(4, numElems, 4);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Long timestamp
+                 */
+                VariablesChanged.addTimestamp = function (builder, timestamp) {
+                    builder.addFieldInt64(2, timestamp, builder.createLong(0, 0));
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @returns flatbuffers.Offset
+                 */
+                VariablesChanged.endVariablesChanged = function (builder) {
+                    var offset = builder.endObject();
+                    return offset;
+                };
+                ;
+                VariablesChanged.createVariablesChanged = function (builder, nodeIdOffset, varsOffset, timestamp) {
+                    VariablesChanged.startVariablesChanged(builder);
+                    VariablesChanged.addNodeId(builder, nodeIdOffset);
+                    VariablesChanged.addVars(builder, varsOffset);
+                    VariablesChanged.addTimestamp(builder, timestamp);
+                    return VariablesChanged.endVariablesChanged(builder);
+                };
+                return VariablesChanged;
+            }());
+            fb.VariablesChanged = VariablesChanged;
+        })(fb = mobsya.fb || (mobsya.fb = {}));
+    })(mobsya = exports.mobsya || (exports.mobsya = {}));
+    /**
+     * @constructor
+     */
+    (function (mobsya) {
+        var fb;
+        (function (fb) {
+            var SendEvents = /** @class */ (function () {
+                function SendEvents() {
+                    this.bb = null;
+                    this.bb_pos = 0;
+                }
+                /**
+                 * @param number i
+                 * @param flatbuffers.ByteBuffer bb
+                 * @returns SendEvents
+                 */
+                SendEvents.prototype.__init = function (i, bb) {
+                    this.bb_pos = i;
+                    this.bb = bb;
+                    return this;
+                };
+                ;
+                /**
+                 * @param flatbuffers.ByteBuffer bb
+                 * @param SendEvents= obj
+                 * @returns SendEvents
+                 */
+                SendEvents.getRootAsSendEvents = function (bb, obj) {
+                    return (obj || new SendEvents).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                SendEvents.prototype.requestId = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * @param number value
+                 * @returns boolean
+                 */
+                SendEvents.prototype.mutate_request_id = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeUint32(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                /**
+                 * @param mobsya.fb.NodeId= obj
+                 * @returns mobsya.fb.NodeId|null
+                 */
+                SendEvents.prototype.nodeId = function (obj) {
+                    var offset = this.bb.__offset(this.bb_pos, 6);
+                    return offset ? (obj || new mobsya.fb.NodeId).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
+                };
+                ;
+                /**
+                 * @param number index
+                 * @param mobsya.fb.NamedValue= obj
+                 * @returns mobsya.fb.NamedValue
+                 */
+                SendEvents.prototype.events = function (index, obj) {
+                    var offset = this.bb.__offset(this.bb_pos, 8);
+                    return offset ? (obj || new mobsya.fb.NamedValue).__init(this.bb.__indirect(this.bb.__vector(this.bb_pos + offset) + index * 4), this.bb) : null;
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                SendEvents.prototype.eventsLength = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 8);
+                    return offset ? this.bb.__vector_len(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 */
+                SendEvents.startSendEvents = function (builder) {
+                    builder.startObject(3);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number requestId
+                 */
+                SendEvents.addRequestId = function (builder, requestId) {
+                    builder.addFieldInt32(0, requestId, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset nodeIdOffset
+                 */
+                SendEvents.addNodeId = function (builder, nodeIdOffset) {
+                    builder.addFieldOffset(1, nodeIdOffset, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset eventsOffset
+                 */
+                SendEvents.addEvents = function (builder, eventsOffset) {
+                    builder.addFieldOffset(2, eventsOffset, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param Array.<flatbuffers.Offset> data
+                 * @returns flatbuffers.Offset
+                 */
+                SendEvents.createEventsVector = function (builder, data) {
+                    builder.startVector(4, data.length, 4);
+                    for (var i = data.length - 1; i >= 0; i--) {
+                        builder.addOffset(data[i]);
+                    }
+                    return builder.endVector();
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number numElems
+                 */
+                SendEvents.startEventsVector = function (builder, numElems) {
+                    builder.startVector(4, numElems, 4);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @returns flatbuffers.Offset
+                 */
+                SendEvents.endSendEvents = function (builder) {
+                    var offset = builder.endObject();
+                    return offset;
+                };
+                ;
+                SendEvents.createSendEvents = function (builder, requestId, nodeIdOffset, eventsOffset) {
+                    SendEvents.startSendEvents(builder);
+                    SendEvents.addRequestId(builder, requestId);
+                    SendEvents.addNodeId(builder, nodeIdOffset);
+                    SendEvents.addEvents(builder, eventsOffset);
+                    return SendEvents.endSendEvents(builder);
+                };
+                return SendEvents;
+            }());
+            fb.SendEvents = SendEvents;
+        })(fb = mobsya.fb || (mobsya.fb = {}));
+    })(mobsya = exports.mobsya || (exports.mobsya = {}));
+    /**
+     * @constructor
+     */
+    (function (mobsya) {
+        var fb;
+        (function (fb) {
+            var EventsEmitted = /** @class */ (function () {
+                function EventsEmitted() {
+                    this.bb = null;
+                    this.bb_pos = 0;
+                }
+                /**
+                 * @param number i
+                 * @param flatbuffers.ByteBuffer bb
+                 * @returns EventsEmitted
+                 */
+                EventsEmitted.prototype.__init = function (i, bb) {
+                    this.bb_pos = i;
+                    this.bb = bb;
+                    return this;
+                };
+                ;
+                /**
+                 * @param flatbuffers.ByteBuffer bb
+                 * @param EventsEmitted= obj
+                 * @returns EventsEmitted
+                 */
+                EventsEmitted.getRootAsEventsEmitted = function (bb, obj) {
+                    return (obj || new EventsEmitted).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+                };
+                ;
+                /**
+                 * @param mobsya.fb.NodeId= obj
+                 * @returns mobsya.fb.NodeId|null
+                 */
+                EventsEmitted.prototype.nodeId = function (obj) {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    return offset ? (obj || new mobsya.fb.NodeId).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
+                };
+                ;
+                /**
+                 * @param number index
+                 * @param mobsya.fb.NamedValue= obj
+                 * @returns mobsya.fb.NamedValue
+                 */
+                EventsEmitted.prototype.events = function (index, obj) {
+                    var offset = this.bb.__offset(this.bb_pos, 6);
+                    return offset ? (obj || new mobsya.fb.NamedValue).__init(this.bb.__indirect(this.bb.__vector(this.bb_pos + offset) + index * 4), this.bb) : null;
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                EventsEmitted.prototype.eventsLength = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 6);
+                    return offset ? this.bb.__vector_len(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * unix timestamp ( miliseconds) of when the events were emitted - or 0 if unspecified
+                 *
+                 * @returns flatbuffers.Long
+                 */
+                EventsEmitted.prototype.timestamp = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 8);
+                    return offset ? this.bb.readUint64(this.bb_pos + offset) : this.bb.createLong(0, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Long value
+                 * @returns boolean
+                 */
+                EventsEmitted.prototype.mutate_timestamp = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 8);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeUint64(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 */
+                EventsEmitted.startEventsEmitted = function (builder) {
+                    builder.startObject(3);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset nodeIdOffset
+                 */
+                EventsEmitted.addNodeId = function (builder, nodeIdOffset) {
+                    builder.addFieldOffset(0, nodeIdOffset, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset eventsOffset
+                 */
+                EventsEmitted.addEvents = function (builder, eventsOffset) {
+                    builder.addFieldOffset(1, eventsOffset, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param Array.<flatbuffers.Offset> data
+                 * @returns flatbuffers.Offset
+                 */
+                EventsEmitted.createEventsVector = function (builder, data) {
+                    builder.startVector(4, data.length, 4);
+                    for (var i = data.length - 1; i >= 0; i--) {
+                        builder.addOffset(data[i]);
+                    }
+                    return builder.endVector();
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number numElems
+                 */
+                EventsEmitted.startEventsVector = function (builder, numElems) {
+                    builder.startVector(4, numElems, 4);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Long timestamp
+                 */
+                EventsEmitted.addTimestamp = function (builder, timestamp) {
+                    builder.addFieldInt64(2, timestamp, builder.createLong(0, 0));
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @returns flatbuffers.Offset
+                 */
+                EventsEmitted.endEventsEmitted = function (builder) {
+                    var offset = builder.endObject();
+                    return offset;
+                };
+                ;
+                EventsEmitted.createEventsEmitted = function (builder, nodeIdOffset, eventsOffset, timestamp) {
+                    EventsEmitted.startEventsEmitted(builder);
+                    EventsEmitted.addNodeId(builder, nodeIdOffset);
+                    EventsEmitted.addEvents(builder, eventsOffset);
+                    EventsEmitted.addTimestamp(builder, timestamp);
+                    return EventsEmitted.endEventsEmitted(builder);
+                };
+                return EventsEmitted;
+            }());
+            fb.EventsEmitted = EventsEmitted;
+        })(fb = mobsya.fb || (mobsya.fb = {}));
+    })(mobsya = exports.mobsya || (exports.mobsya = {}));
+    /**
+     * Message sent by the server when a node changes status.
+     * This messages is automatically sent when the application first connects and each time one or more node change status
+     *
+     * @constructor
+     */
+    (function (mobsya) {
+        var fb;
+        (function (fb) {
+            var NodesChanged = /** @class */ (function () {
+                function NodesChanged() {
+                    this.bb = null;
+                    this.bb_pos = 0;
+                }
+                /**
+                 * @param number i
+                 * @param flatbuffers.ByteBuffer bb
+                 * @returns NodesChanged
+                 */
+                NodesChanged.prototype.__init = function (i, bb) {
+                    this.bb_pos = i;
+                    this.bb = bb;
+                    return this;
+                };
+                ;
+                /**
+                 * @param flatbuffers.ByteBuffer bb
+                 * @param NodesChanged= obj
+                 * @returns NodesChanged
+                 */
+                NodesChanged.getRootAsNodesChanged = function (bb, obj) {
+                    return (obj || new NodesChanged).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+                };
+                ;
+                /**
+                 * Nodes whose status changed. it's up to the client to maintain a list of all nodes.
+                 *
+                 * @param number index
+                 * @param mobsya.fb.Node= obj
+                 * @returns mobsya.fb.Node
+                 */
+                NodesChanged.prototype.nodes = function (index, obj) {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    return offset ? (obj || new mobsya.fb.Node).__init(this.bb.__indirect(this.bb.__vector(this.bb_pos + offset) + index * 4), this.bb) : null;
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                NodesChanged.prototype.nodesLength = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    return offset ? this.bb.__vector_len(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 */
+                NodesChanged.startNodesChanged = function (builder) {
+                    builder.startObject(1);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset nodesOffset
+                 */
+                NodesChanged.addNodes = function (builder, nodesOffset) {
+                    builder.addFieldOffset(0, nodesOffset, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param Array.<flatbuffers.Offset> data
+                 * @returns flatbuffers.Offset
+                 */
+                NodesChanged.createNodesVector = function (builder, data) {
+                    builder.startVector(4, data.length, 4);
+                    for (var i = data.length - 1; i >= 0; i--) {
+                        builder.addOffset(data[i]);
+                    }
+                    return builder.endVector();
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number numElems
+                 */
+                NodesChanged.startNodesVector = function (builder, numElems) {
+                    builder.startVector(4, numElems, 4);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @returns flatbuffers.Offset
+                 */
+                NodesChanged.endNodesChanged = function (builder) {
+                    var offset = builder.endObject();
+                    return offset;
+                };
+                ;
+                NodesChanged.createNodesChanged = function (builder, nodesOffset) {
+                    NodesChanged.startNodesChanged(builder);
+                    NodesChanged.addNodes(builder, nodesOffset);
+                    return NodesChanged.endNodesChanged(builder);
+                };
+                return NodesChanged;
+            }());
+            fb.NodesChanged = NodesChanged;
+        })(fb = mobsya.fb || (mobsya.fb = {}));
+    })(mobsya = exports.mobsya || (exports.mobsya = {}));
+    /**
+     * Ask the server to send a list of all nodes
+     * The server will send back a NodesChanged message containing infos on all nodes
+     *
+     * @constructor
+     */
+    (function (mobsya) {
+        var fb;
+        (function (fb) {
+            var RequestListOfNodes = /** @class */ (function () {
+                function RequestListOfNodes() {
+                    this.bb = null;
+                    this.bb_pos = 0;
+                }
+                /**
+                 * @param number i
+                 * @param flatbuffers.ByteBuffer bb
+                 * @returns RequestListOfNodes
+                 */
+                RequestListOfNodes.prototype.__init = function (i, bb) {
+                    this.bb_pos = i;
+                    this.bb = bb;
+                    return this;
+                };
+                ;
+                /**
+                 * @param flatbuffers.ByteBuffer bb
+                 * @param RequestListOfNodes= obj
+                 * @returns RequestListOfNodes
+                 */
+                RequestListOfNodes.getRootAsRequestListOfNodes = function (bb, obj) {
+                    return (obj || new RequestListOfNodes).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 */
+                RequestListOfNodes.startRequestListOfNodes = function (builder) {
+                    builder.startObject(0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @returns flatbuffers.Offset
+                 */
+                RequestListOfNodes.endRequestListOfNodes = function (builder) {
+                    var offset = builder.endObject();
+                    return offset;
+                };
+                ;
+                RequestListOfNodes.createRequestListOfNodes = function (builder) {
+                    RequestListOfNodes.startRequestListOfNodes(builder);
+                    return RequestListOfNodes.endRequestListOfNodes(builder);
+                };
+                return RequestListOfNodes;
+            }());
+            fb.RequestListOfNodes = RequestListOfNodes;
+        })(fb = mobsya.fb || (mobsya.fb = {}));
+    })(mobsya = exports.mobsya || (exports.mobsya = {}));
+    /**
+     * Request the server to send a NodeAsebaVMDescription for the node corresponding to node_id
+     *
+     * @constructor
+     */
+    (function (mobsya) {
+        var fb;
+        (function (fb) {
+            var RequestNodeAsebaVMDescription = /** @class */ (function () {
+                function RequestNodeAsebaVMDescription() {
+                    this.bb = null;
+                    this.bb_pos = 0;
+                }
+                /**
+                 * @param number i
+                 * @param flatbuffers.ByteBuffer bb
+                 * @returns RequestNodeAsebaVMDescription
+                 */
+                RequestNodeAsebaVMDescription.prototype.__init = function (i, bb) {
+                    this.bb_pos = i;
+                    this.bb = bb;
+                    return this;
+                };
+                ;
+                /**
+                 * @param flatbuffers.ByteBuffer bb
+                 * @param RequestNodeAsebaVMDescription= obj
+                 * @returns RequestNodeAsebaVMDescription
+                 */
+                RequestNodeAsebaVMDescription.getRootAsRequestNodeAsebaVMDescription = function (bb, obj) {
+                    return (obj || new RequestNodeAsebaVMDescription).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                RequestNodeAsebaVMDescription.prototype.requestId = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * @param number value
+                 * @returns boolean
+                 */
+                RequestNodeAsebaVMDescription.prototype.mutate_request_id = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeUint32(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                /**
+                 * @param mobsya.fb.NodeId= obj
+                 * @returns mobsya.fb.NodeId|null
+                 */
+                RequestNodeAsebaVMDescription.prototype.nodeId = function (obj) {
+                    var offset = this.bb.__offset(this.bb_pos, 6);
+                    return offset ? (obj || new mobsya.fb.NodeId).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 */
+                RequestNodeAsebaVMDescription.startRequestNodeAsebaVMDescription = function (builder) {
+                    builder.startObject(2);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number requestId
+                 */
+                RequestNodeAsebaVMDescription.addRequestId = function (builder, requestId) {
+                    builder.addFieldInt32(0, requestId, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset nodeIdOffset
+                 */
+                RequestNodeAsebaVMDescription.addNodeId = function (builder, nodeIdOffset) {
+                    builder.addFieldOffset(1, nodeIdOffset, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @returns flatbuffers.Offset
+                 */
+                RequestNodeAsebaVMDescription.endRequestNodeAsebaVMDescription = function (builder) {
+                    var offset = builder.endObject();
+                    return offset;
+                };
+                ;
+                RequestNodeAsebaVMDescription.createRequestNodeAsebaVMDescription = function (builder, requestId, nodeIdOffset) {
+                    RequestNodeAsebaVMDescription.startRequestNodeAsebaVMDescription(builder);
+                    RequestNodeAsebaVMDescription.addRequestId(builder, requestId);
+                    RequestNodeAsebaVMDescription.addNodeId(builder, nodeIdOffset);
+                    return RequestNodeAsebaVMDescription.endRequestNodeAsebaVMDescription(builder);
+                };
+                return RequestNodeAsebaVMDescription;
+            }());
+            fb.RequestNodeAsebaVMDescription = RequestNodeAsebaVMDescription;
+        })(fb = mobsya.fb || (mobsya.fb = {}));
+    })(mobsya = exports.mobsya || (exports.mobsya = {}));
+    /**
+     * The description of an Aseba VM, sent in response to a RequestNodeAsebaVMDescription
+     *
+     * @constructor
+     */
+    (function (mobsya) {
+        var fb;
+        (function (fb) {
+            var NodeAsebaVMDescription = /** @class */ (function () {
+                function NodeAsebaVMDescription() {
+                    this.bb = null;
+                    this.bb_pos = 0;
+                }
+                /**
+                 * @param number i
+                 * @param flatbuffers.ByteBuffer bb
+                 * @returns NodeAsebaVMDescription
+                 */
+                NodeAsebaVMDescription.prototype.__init = function (i, bb) {
+                    this.bb_pos = i;
+                    this.bb = bb;
+                    return this;
+                };
+                ;
+                /**
+                 * @param flatbuffers.ByteBuffer bb
+                 * @param NodeAsebaVMDescription= obj
+                 * @returns NodeAsebaVMDescription
+                 */
+                NodeAsebaVMDescription.getRootAsNodeAsebaVMDescription = function (bb, obj) {
+                    return (obj || new NodeAsebaVMDescription).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                NodeAsebaVMDescription.prototype.requestId = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * @param number value
+                 * @returns boolean
+                 */
+                NodeAsebaVMDescription.prototype.mutate_request_id = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeUint32(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                /**
+                 * @param mobsya.fb.NodeId= obj
+                 * @returns mobsya.fb.NodeId|null
+                 */
+                NodeAsebaVMDescription.prototype.nodeId = function (obj) {
+                    var offset = this.bb.__offset(this.bb_pos, 6);
+                    return offset ? (obj || new mobsya.fb.NodeId).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                NodeAsebaVMDescription.prototype.bytecodeSize = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 8);
+                    return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * @param number value
+                 * @returns boolean
+                 */
+                NodeAsebaVMDescription.prototype.mutate_bytecode_size = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 8);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeUint32(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                NodeAsebaVMDescription.prototype.dataSize = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 10);
+                    return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * @param number value
+                 * @returns boolean
+                 */
+                NodeAsebaVMDescription.prototype.mutate_data_size = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 10);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeUint32(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                NodeAsebaVMDescription.prototype.stackSize = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 12);
+                    return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * @param number value
+                 * @returns boolean
+                 */
+                NodeAsebaVMDescription.prototype.mutate_stack_size = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 12);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeUint32(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                /**
+                 * @param number index
+                 * @param mobsya.fb.AsebaNamedVariable= obj
+                 * @returns mobsya.fb.AsebaNamedVariable
+                 */
+                NodeAsebaVMDescription.prototype.variables = function (index, obj) {
+                    var offset = this.bb.__offset(this.bb_pos, 14);
+                    return offset ? (obj || new mobsya.fb.AsebaNamedVariable).__init(this.bb.__indirect(this.bb.__vector(this.bb_pos + offset) + index * 4), this.bb) : null;
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                NodeAsebaVMDescription.prototype.variablesLength = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 14);
+                    return offset ? this.bb.__vector_len(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * @param number index
+                 * @param mobsya.fb.AsebaEvent= obj
+                 * @returns mobsya.fb.AsebaEvent
+                 */
+                NodeAsebaVMDescription.prototype.events = function (index, obj) {
+                    var offset = this.bb.__offset(this.bb_pos, 16);
+                    return offset ? (obj || new mobsya.fb.AsebaEvent).__init(this.bb.__indirect(this.bb.__vector(this.bb_pos + offset) + index * 4), this.bb) : null;
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                NodeAsebaVMDescription.prototype.eventsLength = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 16);
+                    return offset ? this.bb.__vector_len(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * @param number index
+                 * @param mobsya.fb.AsebaNativeFunction= obj
+                 * @returns mobsya.fb.AsebaNativeFunction
+                 */
+                NodeAsebaVMDescription.prototype.functions = function (index, obj) {
+                    var offset = this.bb.__offset(this.bb_pos, 18);
+                    return offset ? (obj || new mobsya.fb.AsebaNativeFunction).__init(this.bb.__indirect(this.bb.__vector(this.bb_pos + offset) + index * 4), this.bb) : null;
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                NodeAsebaVMDescription.prototype.functionsLength = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 18);
+                    return offset ? this.bb.__vector_len(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 */
+                NodeAsebaVMDescription.startNodeAsebaVMDescription = function (builder) {
+                    builder.startObject(8);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number requestId
+                 */
+                NodeAsebaVMDescription.addRequestId = function (builder, requestId) {
+                    builder.addFieldInt32(0, requestId, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset nodeIdOffset
+                 */
+                NodeAsebaVMDescription.addNodeId = function (builder, nodeIdOffset) {
+                    builder.addFieldOffset(1, nodeIdOffset, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number bytecodeSize
+                 */
+                NodeAsebaVMDescription.addBytecodeSize = function (builder, bytecodeSize) {
+                    builder.addFieldInt32(2, bytecodeSize, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number dataSize
+                 */
+                NodeAsebaVMDescription.addDataSize = function (builder, dataSize) {
+                    builder.addFieldInt32(3, dataSize, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number stackSize
+                 */
+                NodeAsebaVMDescription.addStackSize = function (builder, stackSize) {
+                    builder.addFieldInt32(4, stackSize, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset variablesOffset
+                 */
+                NodeAsebaVMDescription.addVariables = function (builder, variablesOffset) {
+                    builder.addFieldOffset(5, variablesOffset, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param Array.<flatbuffers.Offset> data
+                 * @returns flatbuffers.Offset
+                 */
+                NodeAsebaVMDescription.createVariablesVector = function (builder, data) {
+                    builder.startVector(4, data.length, 4);
+                    for (var i = data.length - 1; i >= 0; i--) {
+                        builder.addOffset(data[i]);
+                    }
+                    return builder.endVector();
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number numElems
+                 */
+                NodeAsebaVMDescription.startVariablesVector = function (builder, numElems) {
+                    builder.startVector(4, numElems, 4);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset eventsOffset
+                 */
+                NodeAsebaVMDescription.addEvents = function (builder, eventsOffset) {
+                    builder.addFieldOffset(6, eventsOffset, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param Array.<flatbuffers.Offset> data
+                 * @returns flatbuffers.Offset
+                 */
+                NodeAsebaVMDescription.createEventsVector = function (builder, data) {
+                    builder.startVector(4, data.length, 4);
+                    for (var i = data.length - 1; i >= 0; i--) {
+                        builder.addOffset(data[i]);
+                    }
+                    return builder.endVector();
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number numElems
+                 */
+                NodeAsebaVMDescription.startEventsVector = function (builder, numElems) {
+                    builder.startVector(4, numElems, 4);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset functionsOffset
+                 */
+                NodeAsebaVMDescription.addFunctions = function (builder, functionsOffset) {
+                    builder.addFieldOffset(7, functionsOffset, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param Array.<flatbuffers.Offset> data
+                 * @returns flatbuffers.Offset
+                 */
+                NodeAsebaVMDescription.createFunctionsVector = function (builder, data) {
+                    builder.startVector(4, data.length, 4);
+                    for (var i = data.length - 1; i >= 0; i--) {
+                        builder.addOffset(data[i]);
+                    }
+                    return builder.endVector();
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number numElems
+                 */
+                NodeAsebaVMDescription.startFunctionsVector = function (builder, numElems) {
+                    builder.startVector(4, numElems, 4);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @returns flatbuffers.Offset
+                 */
+                NodeAsebaVMDescription.endNodeAsebaVMDescription = function (builder) {
+                    var offset = builder.endObject();
+                    return offset;
+                };
+                ;
+                NodeAsebaVMDescription.createNodeAsebaVMDescription = function (builder, requestId, nodeIdOffset, bytecodeSize, dataSize, stackSize, variablesOffset, eventsOffset, functionsOffset) {
+                    NodeAsebaVMDescription.startNodeAsebaVMDescription(builder);
+                    NodeAsebaVMDescription.addRequestId(builder, requestId);
+                    NodeAsebaVMDescription.addNodeId(builder, nodeIdOffset);
+                    NodeAsebaVMDescription.addBytecodeSize(builder, bytecodeSize);
+                    NodeAsebaVMDescription.addDataSize(builder, dataSize);
+                    NodeAsebaVMDescription.addStackSize(builder, stackSize);
+                    NodeAsebaVMDescription.addVariables(builder, variablesOffset);
+                    NodeAsebaVMDescription.addEvents(builder, eventsOffset);
+                    NodeAsebaVMDescription.addFunctions(builder, functionsOffset);
+                    return NodeAsebaVMDescription.endNodeAsebaVMDescription(builder);
+                };
+                return NodeAsebaVMDescription;
+            }());
+            fb.NodeAsebaVMDescription = NodeAsebaVMDescription;
+        })(fb = mobsya.fb || (mobsya.fb = {}));
+    })(mobsya = exports.mobsya || (exports.mobsya = {}));
+    /**
+     * @constructor
+     */
+    (function (mobsya) {
+        var fb;
+        (function (fb) {
+            var AsebaNamedVariable = /** @class */ (function () {
+                function AsebaNamedVariable() {
+                    this.bb = null;
+                    this.bb_pos = 0;
+                }
+                /**
+                 * @param number i
+                 * @param flatbuffers.ByteBuffer bb
+                 * @returns AsebaNamedVariable
+                 */
+                AsebaNamedVariable.prototype.__init = function (i, bb) {
+                    this.bb_pos = i;
+                    this.bb = bb;
+                    return this;
+                };
+                ;
+                /**
+                 * @param flatbuffers.ByteBuffer bb
+                 * @param AsebaNamedVariable= obj
+                 * @returns AsebaNamedVariable
+                 */
+                AsebaNamedVariable.getRootAsAsebaNamedVariable = function (bb, obj) {
+                    return (obj || new AsebaNamedVariable).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                AsebaNamedVariable.prototype.index = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    return offset ? this.bb.readUint16(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * @param number value
+                 * @returns boolean
+                 */
+                AsebaNamedVariable.prototype.mutate_index = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeUint16(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                AsebaNamedVariable.prototype.name = function (optionalEncoding) {
+                    var offset = this.bb.__offset(this.bb_pos, 6);
+                    return offset ? this.bb.__string(this.bb_pos + offset, optionalEncoding) : null;
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                AsebaNamedVariable.prototype.size = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 8);
+                    return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * @param number value
+                 * @returns boolean
+                 */
+                AsebaNamedVariable.prototype.mutate_size = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 8);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeUint32(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 */
+                AsebaNamedVariable.startAsebaNamedVariable = function (builder) {
+                    builder.startObject(3);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number index
+                 */
+                AsebaNamedVariable.addIndex = function (builder, index) {
+                    builder.addFieldInt16(0, index, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset nameOffset
+                 */
+                AsebaNamedVariable.addName = function (builder, nameOffset) {
+                    builder.addFieldOffset(1, nameOffset, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number size
+                 */
+                AsebaNamedVariable.addSize = function (builder, size) {
+                    builder.addFieldInt32(2, size, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @returns flatbuffers.Offset
+                 */
+                AsebaNamedVariable.endAsebaNamedVariable = function (builder) {
+                    var offset = builder.endObject();
+                    return offset;
+                };
+                ;
+                AsebaNamedVariable.createAsebaNamedVariable = function (builder, index, nameOffset, size) {
+                    AsebaNamedVariable.startAsebaNamedVariable(builder);
+                    AsebaNamedVariable.addIndex(builder, index);
+                    AsebaNamedVariable.addName(builder, nameOffset);
+                    AsebaNamedVariable.addSize(builder, size);
+                    return AsebaNamedVariable.endAsebaNamedVariable(builder);
+                };
+                return AsebaNamedVariable;
+            }());
+            fb.AsebaNamedVariable = AsebaNamedVariable;
+        })(fb = mobsya.fb || (mobsya.fb = {}));
+    })(mobsya = exports.mobsya || (exports.mobsya = {}));
+    /**
+     * @constructor
+     */
+    (function (mobsya) {
+        var fb;
+        (function (fb) {
+            var AsebaEvent = /** @class */ (function () {
+                function AsebaEvent() {
+                    this.bb = null;
+                    this.bb_pos = 0;
+                }
+                /**
+                 * @param number i
+                 * @param flatbuffers.ByteBuffer bb
+                 * @returns AsebaEvent
+                 */
+                AsebaEvent.prototype.__init = function (i, bb) {
+                    this.bb_pos = i;
+                    this.bb = bb;
+                    return this;
+                };
+                ;
+                /**
+                 * @param flatbuffers.ByteBuffer bb
+                 * @param AsebaEvent= obj
+                 * @returns AsebaEvent
+                 */
+                AsebaEvent.getRootAsAsebaEvent = function (bb, obj) {
+                    return (obj || new AsebaEvent).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                AsebaEvent.prototype.index = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    return offset ? this.bb.readUint16(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * @param number value
+                 * @returns boolean
+                 */
+                AsebaEvent.prototype.mutate_index = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeUint16(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                AsebaEvent.prototype.name = function (optionalEncoding) {
+                    var offset = this.bb.__offset(this.bb_pos, 6);
+                    return offset ? this.bb.__string(this.bb_pos + offset, optionalEncoding) : null;
+                };
+                ;
+                AsebaEvent.prototype.description = function (optionalEncoding) {
+                    var offset = this.bb.__offset(this.bb_pos, 8);
+                    return offset ? this.bb.__string(this.bb_pos + offset, optionalEncoding) : null;
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 */
+                AsebaEvent.startAsebaEvent = function (builder) {
+                    builder.startObject(3);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number index
+                 */
+                AsebaEvent.addIndex = function (builder, index) {
+                    builder.addFieldInt16(0, index, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset nameOffset
+                 */
+                AsebaEvent.addName = function (builder, nameOffset) {
+                    builder.addFieldOffset(1, nameOffset, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset descriptionOffset
+                 */
+                AsebaEvent.addDescription = function (builder, descriptionOffset) {
+                    builder.addFieldOffset(2, descriptionOffset, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @returns flatbuffers.Offset
+                 */
+                AsebaEvent.endAsebaEvent = function (builder) {
+                    var offset = builder.endObject();
+                    return offset;
+                };
+                ;
+                AsebaEvent.createAsebaEvent = function (builder, index, nameOffset, descriptionOffset) {
+                    AsebaEvent.startAsebaEvent(builder);
+                    AsebaEvent.addIndex(builder, index);
+                    AsebaEvent.addName(builder, nameOffset);
+                    AsebaEvent.addDescription(builder, descriptionOffset);
+                    return AsebaEvent.endAsebaEvent(builder);
+                };
+                return AsebaEvent;
+            }());
+            fb.AsebaEvent = AsebaEvent;
+        })(fb = mobsya.fb || (mobsya.fb = {}));
+    })(mobsya = exports.mobsya || (exports.mobsya = {}));
+    /**
+     * @constructor
+     */
+    (function (mobsya) {
+        var fb;
+        (function (fb) {
+            var AsebaNativeFunction = /** @class */ (function () {
+                function AsebaNativeFunction() {
+                    this.bb = null;
+                    this.bb_pos = 0;
+                }
+                /**
+                 * @param number i
+                 * @param flatbuffers.ByteBuffer bb
+                 * @returns AsebaNativeFunction
+                 */
+                AsebaNativeFunction.prototype.__init = function (i, bb) {
+                    this.bb_pos = i;
+                    this.bb = bb;
+                    return this;
+                };
+                ;
+                /**
+                 * @param flatbuffers.ByteBuffer bb
+                 * @param AsebaNativeFunction= obj
+                 * @returns AsebaNativeFunction
+                 */
+                AsebaNativeFunction.getRootAsAsebaNativeFunction = function (bb, obj) {
+                    return (obj || new AsebaNativeFunction).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                AsebaNativeFunction.prototype.index = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    return offset ? this.bb.readUint16(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * @param number value
+                 * @returns boolean
+                 */
+                AsebaNativeFunction.prototype.mutate_index = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeUint16(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                AsebaNativeFunction.prototype.name = function (optionalEncoding) {
+                    var offset = this.bb.__offset(this.bb_pos, 6);
+                    return offset ? this.bb.__string(this.bb_pos + offset, optionalEncoding) : null;
+                };
+                ;
+                AsebaNativeFunction.prototype.description = function (optionalEncoding) {
+                    var offset = this.bb.__offset(this.bb_pos, 8);
+                    return offset ? this.bb.__string(this.bb_pos + offset, optionalEncoding) : null;
+                };
+                ;
+                /**
+                 * @param number index
+                 * @param mobsya.fb.AsebaNativeFunctionParameter= obj
+                 * @returns mobsya.fb.AsebaNativeFunctionParameter
+                 */
+                AsebaNativeFunction.prototype.parameters = function (index, obj) {
+                    var offset = this.bb.__offset(this.bb_pos, 10);
+                    return offset ? (obj || new mobsya.fb.AsebaNativeFunctionParameter).__init(this.bb.__indirect(this.bb.__vector(this.bb_pos + offset) + index * 4), this.bb) : null;
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                AsebaNativeFunction.prototype.parametersLength = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 10);
+                    return offset ? this.bb.__vector_len(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 */
+                AsebaNativeFunction.startAsebaNativeFunction = function (builder) {
+                    builder.startObject(4);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number index
+                 */
+                AsebaNativeFunction.addIndex = function (builder, index) {
+                    builder.addFieldInt16(0, index, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset nameOffset
+                 */
+                AsebaNativeFunction.addName = function (builder, nameOffset) {
+                    builder.addFieldOffset(1, nameOffset, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset descriptionOffset
+                 */
+                AsebaNativeFunction.addDescription = function (builder, descriptionOffset) {
+                    builder.addFieldOffset(2, descriptionOffset, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset parametersOffset
+                 */
+                AsebaNativeFunction.addParameters = function (builder, parametersOffset) {
+                    builder.addFieldOffset(3, parametersOffset, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param Array.<flatbuffers.Offset> data
+                 * @returns flatbuffers.Offset
+                 */
+                AsebaNativeFunction.createParametersVector = function (builder, data) {
+                    builder.startVector(4, data.length, 4);
+                    for (var i = data.length - 1; i >= 0; i--) {
+                        builder.addOffset(data[i]);
+                    }
+                    return builder.endVector();
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number numElems
+                 */
+                AsebaNativeFunction.startParametersVector = function (builder, numElems) {
+                    builder.startVector(4, numElems, 4);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @returns flatbuffers.Offset
+                 */
+                AsebaNativeFunction.endAsebaNativeFunction = function (builder) {
+                    var offset = builder.endObject();
+                    return offset;
+                };
+                ;
+                AsebaNativeFunction.createAsebaNativeFunction = function (builder, index, nameOffset, descriptionOffset, parametersOffset) {
+                    AsebaNativeFunction.startAsebaNativeFunction(builder);
+                    AsebaNativeFunction.addIndex(builder, index);
+                    AsebaNativeFunction.addName(builder, nameOffset);
+                    AsebaNativeFunction.addDescription(builder, descriptionOffset);
+                    AsebaNativeFunction.addParameters(builder, parametersOffset);
+                    return AsebaNativeFunction.endAsebaNativeFunction(builder);
+                };
+                return AsebaNativeFunction;
+            }());
+            fb.AsebaNativeFunction = AsebaNativeFunction;
+        })(fb = mobsya.fb || (mobsya.fb = {}));
+    })(mobsya = exports.mobsya || (exports.mobsya = {}));
+    /**
+     * @constructor
+     */
+    (function (mobsya) {
+        var fb;
+        (function (fb) {
+            var AsebaNativeFunctionParameter = /** @class */ (function () {
+                function AsebaNativeFunctionParameter() {
+                    this.bb = null;
+                    this.bb_pos = 0;
+                }
+                /**
+                 * @param number i
+                 * @param flatbuffers.ByteBuffer bb
+                 * @returns AsebaNativeFunctionParameter
+                 */
+                AsebaNativeFunctionParameter.prototype.__init = function (i, bb) {
+                    this.bb_pos = i;
+                    this.bb = bb;
+                    return this;
+                };
+                ;
+                /**
+                 * @param flatbuffers.ByteBuffer bb
+                 * @param AsebaNativeFunctionParameter= obj
+                 * @returns AsebaNativeFunctionParameter
+                 */
+                AsebaNativeFunctionParameter.getRootAsAsebaNativeFunctionParameter = function (bb, obj) {
+                    return (obj || new AsebaNativeFunctionParameter).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+                };
+                ;
+                AsebaNativeFunctionParameter.prototype.name = function (optionalEncoding) {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    return offset ? this.bb.__string(this.bb_pos + offset, optionalEncoding) : null;
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                AsebaNativeFunctionParameter.prototype.size = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 6);
+                    return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * @param number value
+                 * @returns boolean
+                 */
+                AsebaNativeFunctionParameter.prototype.mutate_size = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 6);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeUint32(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 */
+                AsebaNativeFunctionParameter.startAsebaNativeFunctionParameter = function (builder) {
+                    builder.startObject(2);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset nameOffset
+                 */
+                AsebaNativeFunctionParameter.addName = function (builder, nameOffset) {
+                    builder.addFieldOffset(0, nameOffset, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number size
+                 */
+                AsebaNativeFunctionParameter.addSize = function (builder, size) {
+                    builder.addFieldInt32(1, size, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @returns flatbuffers.Offset
+                 */
+                AsebaNativeFunctionParameter.endAsebaNativeFunctionParameter = function (builder) {
+                    var offset = builder.endObject();
+                    return offset;
+                };
+                ;
+                AsebaNativeFunctionParameter.createAsebaNativeFunctionParameter = function (builder, nameOffset, size) {
+                    AsebaNativeFunctionParameter.startAsebaNativeFunctionParameter(builder);
+                    AsebaNativeFunctionParameter.addName(builder, nameOffset);
+                    AsebaNativeFunctionParameter.addSize(builder, size);
+                    return AsebaNativeFunctionParameter.endAsebaNativeFunctionParameter(builder);
+                };
+                return AsebaNativeFunctionParameter;
+            }());
+            fb.AsebaNativeFunctionParameter = AsebaNativeFunctionParameter;
+        })(fb = mobsya.fb || (mobsya.fb = {}));
+    })(mobsya = exports.mobsya || (exports.mobsya = {}));
+    /**
+     * Modify the value of specified variables
+     *
+     * @constructor
+     */
+    (function (mobsya) {
+        var fb;
+        (function (fb) {
+            var SetVariables = /** @class */ (function () {
+                function SetVariables() {
+                    this.bb = null;
+                    this.bb_pos = 0;
+                }
+                /**
+                 * @param number i
+                 * @param flatbuffers.ByteBuffer bb
+                 * @returns SetVariables
+                 */
+                SetVariables.prototype.__init = function (i, bb) {
+                    this.bb_pos = i;
+                    this.bb = bb;
+                    return this;
+                };
+                ;
+                /**
+                 * @param flatbuffers.ByteBuffer bb
+                 * @param SetVariables= obj
+                 * @returns SetVariables
+                 */
+                SetVariables.getRootAsSetVariables = function (bb, obj) {
+                    return (obj || new SetVariables).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                SetVariables.prototype.requestId = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * @param number value
+                 * @returns boolean
+                 */
+                SetVariables.prototype.mutate_request_id = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeUint32(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                /**
+                 * @param mobsya.fb.NodeId= obj
+                 * @returns mobsya.fb.NodeId|null
+                 */
+                SetVariables.prototype.nodeOrGroupId = function (obj) {
+                    var offset = this.bb.__offset(this.bb_pos, 6);
+                    return offset ? (obj || new mobsya.fb.NodeId).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
+                };
+                ;
+                /**
+                 * @param number index
+                 * @param mobsya.fb.NodeVariable= obj
+                 * @returns mobsya.fb.NodeVariable
+                 */
+                SetVariables.prototype.vars = function (index, obj) {
+                    var offset = this.bb.__offset(this.bb_pos, 8);
+                    return offset ? (obj || new mobsya.fb.NodeVariable).__init(this.bb.__indirect(this.bb.__vector(this.bb_pos + offset) + index * 4), this.bb) : null;
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                SetVariables.prototype.varsLength = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 8);
+                    return offset ? this.bb.__vector_len(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 */
+                SetVariables.startSetVariables = function (builder) {
+                    builder.startObject(3);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number requestId
+                 */
+                SetVariables.addRequestId = function (builder, requestId) {
+                    builder.addFieldInt32(0, requestId, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset nodeOrGroupIdOffset
+                 */
+                SetVariables.addNodeOrGroupId = function (builder, nodeOrGroupIdOffset) {
+                    builder.addFieldOffset(1, nodeOrGroupIdOffset, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset varsOffset
+                 */
+                SetVariables.addVars = function (builder, varsOffset) {
+                    builder.addFieldOffset(2, varsOffset, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param Array.<flatbuffers.Offset> data
+                 * @returns flatbuffers.Offset
+                 */
+                SetVariables.createVarsVector = function (builder, data) {
+                    builder.startVector(4, data.length, 4);
+                    for (var i = data.length - 1; i >= 0; i--) {
+                        builder.addOffset(data[i]);
+                    }
+                    return builder.endVector();
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number numElems
+                 */
+                SetVariables.startVarsVector = function (builder, numElems) {
+                    builder.startVector(4, numElems, 4);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @returns flatbuffers.Offset
+                 */
+                SetVariables.endSetVariables = function (builder) {
+                    var offset = builder.endObject();
+                    return offset;
+                };
+                ;
+                SetVariables.createSetVariables = function (builder, requestId, nodeOrGroupIdOffset, varsOffset) {
+                    SetVariables.startSetVariables(builder);
+                    SetVariables.addRequestId(builder, requestId);
+                    SetVariables.addNodeOrGroupId(builder, nodeOrGroupIdOffset);
+                    SetVariables.addVars(builder, varsOffset);
+                    return SetVariables.endSetVariables(builder);
+                };
+                return SetVariables;
+            }());
+            fb.SetVariables = SetVariables;
+        })(fb = mobsya.fb || (mobsya.fb = {}));
+    })(mobsya = exports.mobsya || (exports.mobsya = {}));
+    /**
+     * Set a new name for this nùode
+     *
+     * @constructor
+     */
+    (function (mobsya) {
+        var fb;
+        (function (fb) {
+            var RenameNode = /** @class */ (function () {
+                function RenameNode() {
+                    this.bb = null;
+                    this.bb_pos = 0;
+                }
+                /**
+                 * @param number i
+                 * @param flatbuffers.ByteBuffer bb
+                 * @returns RenameNode
+                 */
+                RenameNode.prototype.__init = function (i, bb) {
+                    this.bb_pos = i;
+                    this.bb = bb;
+                    return this;
+                };
+                ;
+                /**
+                 * @param flatbuffers.ByteBuffer bb
+                 * @param RenameNode= obj
+                 * @returns RenameNode
+                 */
+                RenameNode.getRootAsRenameNode = function (bb, obj) {
+                    return (obj || new RenameNode).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                RenameNode.prototype.requestId = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * @param number value
+                 * @returns boolean
+                 */
+                RenameNode.prototype.mutate_request_id = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeUint32(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                /**
+                 * @param mobsya.fb.NodeId= obj
+                 * @returns mobsya.fb.NodeId|null
+                 */
+                RenameNode.prototype.nodeId = function (obj) {
+                    var offset = this.bb.__offset(this.bb_pos, 6);
+                    return offset ? (obj || new mobsya.fb.NodeId).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
+                };
+                ;
+                RenameNode.prototype.newName = function (optionalEncoding) {
+                    var offset = this.bb.__offset(this.bb_pos, 8);
+                    return offset ? this.bb.__string(this.bb_pos + offset, optionalEncoding) : null;
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 */
+                RenameNode.startRenameNode = function (builder) {
+                    builder.startObject(3);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number requestId
+                 */
+                RenameNode.addRequestId = function (builder, requestId) {
+                    builder.addFieldInt32(0, requestId, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset nodeIdOffset
+                 */
+                RenameNode.addNodeId = function (builder, nodeIdOffset) {
+                    builder.addFieldOffset(1, nodeIdOffset, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset newNameOffset
+                 */
+                RenameNode.addNewName = function (builder, newNameOffset) {
+                    builder.addFieldOffset(2, newNameOffset, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @returns flatbuffers.Offset
+                 */
+                RenameNode.endRenameNode = function (builder) {
+                    var offset = builder.endObject();
+                    return offset;
+                };
+                ;
+                RenameNode.createRenameNode = function (builder, requestId, nodeIdOffset, newNameOffset) {
+                    RenameNode.startRenameNode(builder);
+                    RenameNode.addRequestId(builder, requestId);
+                    RenameNode.addNodeId(builder, nodeIdOffset);
+                    RenameNode.addNewName(builder, newNameOffset);
+                    return RenameNode.endRenameNode(builder);
+                };
+                return RenameNode;
+            }());
+            fb.RenameNode = RenameNode;
+        })(fb = mobsya.fb || (mobsya.fb = {}));
+    })(mobsya = exports.mobsya || (exports.mobsya = {}));
+    /**
+     * Ask the server to give this client sole ownership of the node.
+     * This needs to be done once before sending mutating instructions to the node
+     * The lock remain until the client disconnect, the device disconnect or a UnlockNode message is sent
+     * Once locked, the node appears busy to all clients.
+     *
+     * @constructor
+     */
+    (function (mobsya) {
+        var fb;
+        (function (fb) {
+            var LockNode = /** @class */ (function () {
+                function LockNode() {
+                    this.bb = null;
+                    this.bb_pos = 0;
+                }
+                /**
+                 * @param number i
+                 * @param flatbuffers.ByteBuffer bb
+                 * @returns LockNode
+                 */
+                LockNode.prototype.__init = function (i, bb) {
+                    this.bb_pos = i;
+                    this.bb = bb;
+                    return this;
+                };
+                ;
+                /**
+                 * @param flatbuffers.ByteBuffer bb
+                 * @param LockNode= obj
+                 * @returns LockNode
+                 */
+                LockNode.getRootAsLockNode = function (bb, obj) {
+                    return (obj || new LockNode).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                LockNode.prototype.requestId = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * @param number value
+                 * @returns boolean
+                 */
+                LockNode.prototype.mutate_request_id = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeUint32(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                /**
+                 * @param mobsya.fb.NodeId= obj
+                 * @returns mobsya.fb.NodeId|null
+                 */
+                LockNode.prototype.nodeId = function (obj) {
+                    var offset = this.bb.__offset(this.bb_pos, 6);
+                    return offset ? (obj || new mobsya.fb.NodeId).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 */
+                LockNode.startLockNode = function (builder) {
+                    builder.startObject(2);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number requestId
+                 */
+                LockNode.addRequestId = function (builder, requestId) {
+                    builder.addFieldInt32(0, requestId, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset nodeIdOffset
+                 */
+                LockNode.addNodeId = function (builder, nodeIdOffset) {
+                    builder.addFieldOffset(1, nodeIdOffset, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @returns flatbuffers.Offset
+                 */
+                LockNode.endLockNode = function (builder) {
+                    var offset = builder.endObject();
+                    return offset;
+                };
+                ;
+                LockNode.createLockNode = function (builder, requestId, nodeIdOffset) {
+                    LockNode.startLockNode(builder);
+                    LockNode.addRequestId(builder, requestId);
+                    LockNode.addNodeId(builder, nodeIdOffset);
+                    return LockNode.endLockNode(builder);
+                };
+                return LockNode;
+            }());
+            fb.LockNode = LockNode;
+        })(fb = mobsya.fb || (mobsya.fb = {}));
+    })(mobsya = exports.mobsya || (exports.mobsya = {}));
+    /**
+     * Unlock a device so that other client can use it.
+     * Once unlocked, the node appears ready to all clients.
+     *
+     * @constructor
+     */
+    (function (mobsya) {
+        var fb;
+        (function (fb) {
+            var UnlockNode = /** @class */ (function () {
+                function UnlockNode() {
+                    this.bb = null;
+                    this.bb_pos = 0;
+                }
+                /**
+                 * @param number i
+                 * @param flatbuffers.ByteBuffer bb
+                 * @returns UnlockNode
+                 */
+                UnlockNode.prototype.__init = function (i, bb) {
+                    this.bb_pos = i;
+                    this.bb = bb;
+                    return this;
+                };
+                ;
+                /**
+                 * @param flatbuffers.ByteBuffer bb
+                 * @param UnlockNode= obj
+                 * @returns UnlockNode
+                 */
+                UnlockNode.getRootAsUnlockNode = function (bb, obj) {
+                    return (obj || new UnlockNode).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                UnlockNode.prototype.requestId = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * @param number value
+                 * @returns boolean
+                 */
+                UnlockNode.prototype.mutate_request_id = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeUint32(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                /**
+                 * @param mobsya.fb.NodeId= obj
+                 * @returns mobsya.fb.NodeId|null
+                 */
+                UnlockNode.prototype.nodeId = function (obj) {
+                    var offset = this.bb.__offset(this.bb_pos, 6);
+                    return offset ? (obj || new mobsya.fb.NodeId).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 */
+                UnlockNode.startUnlockNode = function (builder) {
+                    builder.startObject(2);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number requestId
+                 */
+                UnlockNode.addRequestId = function (builder, requestId) {
+                    builder.addFieldInt32(0, requestId, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset nodeIdOffset
+                 */
+                UnlockNode.addNodeId = function (builder, nodeIdOffset) {
+                    builder.addFieldOffset(1, nodeIdOffset, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @returns flatbuffers.Offset
+                 */
+                UnlockNode.endUnlockNode = function (builder) {
+                    var offset = builder.endObject();
+                    return offset;
+                };
+                ;
+                UnlockNode.createUnlockNode = function (builder, requestId, nodeIdOffset) {
+                    UnlockNode.startUnlockNode(builder);
+                    UnlockNode.addRequestId(builder, requestId);
+                    UnlockNode.addNodeId(builder, nodeIdOffset);
+                    return UnlockNode.endUnlockNode(builder);
+                };
+                return UnlockNode;
+            }());
+            fb.UnlockNode = UnlockNode;
+        })(fb = mobsya.fb || (mobsya.fb = {}));
+    })(mobsya = exports.mobsya || (exports.mobsya = {}));
+    /**
+     * @constructor
+     */
+    (function (mobsya) {
+        var fb;
+        (function (fb) {
+            var CompileAndLoadCodeOnVM = /** @class */ (function () {
+                function CompileAndLoadCodeOnVM() {
+                    this.bb = null;
+                    this.bb_pos = 0;
+                }
+                /**
+                 * @param number i
+                 * @param flatbuffers.ByteBuffer bb
+                 * @returns CompileAndLoadCodeOnVM
+                 */
+                CompileAndLoadCodeOnVM.prototype.__init = function (i, bb) {
+                    this.bb_pos = i;
+                    this.bb = bb;
+                    return this;
+                };
+                ;
+                /**
+                 * @param flatbuffers.ByteBuffer bb
+                 * @param CompileAndLoadCodeOnVM= obj
+                 * @returns CompileAndLoadCodeOnVM
+                 */
+                CompileAndLoadCodeOnVM.getRootAsCompileAndLoadCodeOnVM = function (bb, obj) {
+                    return (obj || new CompileAndLoadCodeOnVM).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                CompileAndLoadCodeOnVM.prototype.requestId = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * @param number value
+                 * @returns boolean
+                 */
+                CompileAndLoadCodeOnVM.prototype.mutate_request_id = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeUint32(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                /**
+                 * @param mobsya.fb.NodeId= obj
+                 * @returns mobsya.fb.NodeId|null
+                 */
+                CompileAndLoadCodeOnVM.prototype.nodeId = function (obj) {
+                    var offset = this.bb.__offset(this.bb_pos, 6);
+                    return offset ? (obj || new mobsya.fb.NodeId).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
+                };
+                ;
+                /**
+                 * @returns mobsya.fb.ProgrammingLanguage
+                 */
+                CompileAndLoadCodeOnVM.prototype.language = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 8);
+                    return offset ? /**  */ (this.bb.readInt32(this.bb_pos + offset)) : mobsya.fb.ProgrammingLanguage.Aseba;
+                };
+                ;
+                /**
+                 * @param mobsya.fb.ProgrammingLanguage value
+                 * @returns boolean
+                 */
+                CompileAndLoadCodeOnVM.prototype.mutate_language = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 8);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeInt32(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                CompileAndLoadCodeOnVM.prototype.program = function (optionalEncoding) {
+                    var offset = this.bb.__offset(this.bb_pos, 10);
+                    return offset ? this.bb.__string(this.bb_pos + offset, optionalEncoding) : null;
+                };
+                ;
+                /**
+                 * @returns mobsya.fb.CompilationOptions
+                 */
+                CompileAndLoadCodeOnVM.prototype.options = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 12);
+                    return offset ? /**  */ (this.bb.readUint32(this.bb_pos + offset)) : /** } */ (0);
+                };
+                ;
+                /**
+                 * @param mobsya.fb.CompilationOptions value
+                 * @returns boolean
+                 */
+                CompileAndLoadCodeOnVM.prototype.mutate_options = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 12);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeUint32(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 */
+                CompileAndLoadCodeOnVM.startCompileAndLoadCodeOnVM = function (builder) {
+                    builder.startObject(5);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number requestId
+                 */
+                CompileAndLoadCodeOnVM.addRequestId = function (builder, requestId) {
+                    builder.addFieldInt32(0, requestId, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset nodeIdOffset
+                 */
+                CompileAndLoadCodeOnVM.addNodeId = function (builder, nodeIdOffset) {
+                    builder.addFieldOffset(1, nodeIdOffset, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param mobsya.fb.ProgrammingLanguage language
+                 */
+                CompileAndLoadCodeOnVM.addLanguage = function (builder, language) {
+                    builder.addFieldInt32(2, language, mobsya.fb.ProgrammingLanguage.Aseba);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset programOffset
+                 */
+                CompileAndLoadCodeOnVM.addProgram = function (builder, programOffset) {
+                    builder.addFieldOffset(3, programOffset, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param mobsya.fb.CompilationOptions options
+                 */
+                CompileAndLoadCodeOnVM.addOptions = function (builder, options) {
+                    builder.addFieldInt32(4, options, /** } */ (0));
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @returns flatbuffers.Offset
+                 */
+                CompileAndLoadCodeOnVM.endCompileAndLoadCodeOnVM = function (builder) {
+                    var offset = builder.endObject();
+                    builder.requiredField(offset, 10); // program
+                    return offset;
+                };
+                ;
+                CompileAndLoadCodeOnVM.createCompileAndLoadCodeOnVM = function (builder, requestId, nodeIdOffset, language, programOffset, options) {
+                    CompileAndLoadCodeOnVM.startCompileAndLoadCodeOnVM(builder);
+                    CompileAndLoadCodeOnVM.addRequestId(builder, requestId);
+                    CompileAndLoadCodeOnVM.addNodeId(builder, nodeIdOffset);
+                    CompileAndLoadCodeOnVM.addLanguage(builder, language);
+                    CompileAndLoadCodeOnVM.addProgram(builder, programOffset);
+                    CompileAndLoadCodeOnVM.addOptions(builder, options);
+                    return CompileAndLoadCodeOnVM.endCompileAndLoadCodeOnVM(builder);
+                };
+                return CompileAndLoadCodeOnVM;
+            }());
+            fb.CompileAndLoadCodeOnVM = CompileAndLoadCodeOnVM;
+        })(fb = mobsya.fb || (mobsya.fb = {}));
+    })(mobsya = exports.mobsya || (exports.mobsya = {}));
+    /**
+     * @constructor
+     */
+    (function (mobsya) {
+        var fb;
+        (function (fb) {
+            var CompilationResultFailure = /** @class */ (function () {
+                function CompilationResultFailure() {
+                    this.bb = null;
+                    this.bb_pos = 0;
+                }
+                /**
+                 * @param number i
+                 * @param flatbuffers.ByteBuffer bb
+                 * @returns CompilationResultFailure
+                 */
+                CompilationResultFailure.prototype.__init = function (i, bb) {
+                    this.bb_pos = i;
+                    this.bb = bb;
+                    return this;
+                };
+                ;
+                /**
+                 * @param flatbuffers.ByteBuffer bb
+                 * @param CompilationResultFailure= obj
+                 * @returns CompilationResultFailure
+                 */
+                CompilationResultFailure.getRootAsCompilationResultFailure = function (bb, obj) {
+                    return (obj || new CompilationResultFailure).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                CompilationResultFailure.prototype.requestId = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * @param number value
+                 * @returns boolean
+                 */
+                CompilationResultFailure.prototype.mutate_request_id = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeUint32(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                CompilationResultFailure.prototype.message = function (optionalEncoding) {
+                    var offset = this.bb.__offset(this.bb_pos, 6);
+                    return offset ? this.bb.__string(this.bb_pos + offset, optionalEncoding) : null;
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                CompilationResultFailure.prototype.character = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 8);
+                    return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * @param number value
+                 * @returns boolean
+                 */
+                CompilationResultFailure.prototype.mutate_character = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 8);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeUint32(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                CompilationResultFailure.prototype.line = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 10);
+                    return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * @param number value
+                 * @returns boolean
+                 */
+                CompilationResultFailure.prototype.mutate_line = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 10);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeUint32(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                CompilationResultFailure.prototype.column = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 12);
+                    return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * @param number value
+                 * @returns boolean
+                 */
+                CompilationResultFailure.prototype.mutate_column = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 12);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeUint32(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 */
+                CompilationResultFailure.startCompilationResultFailure = function (builder) {
+                    builder.startObject(5);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number requestId
+                 */
+                CompilationResultFailure.addRequestId = function (builder, requestId) {
+                    builder.addFieldInt32(0, requestId, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset messageOffset
+                 */
+                CompilationResultFailure.addMessage = function (builder, messageOffset) {
+                    builder.addFieldOffset(1, messageOffset, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number character
+                 */
+                CompilationResultFailure.addCharacter = function (builder, character) {
+                    builder.addFieldInt32(2, character, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number line
+                 */
+                CompilationResultFailure.addLine = function (builder, line) {
+                    builder.addFieldInt32(3, line, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number column
+                 */
+                CompilationResultFailure.addColumn = function (builder, column) {
+                    builder.addFieldInt32(4, column, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @returns flatbuffers.Offset
+                 */
+                CompilationResultFailure.endCompilationResultFailure = function (builder) {
+                    var offset = builder.endObject();
+                    builder.requiredField(offset, 6); // message
+                    return offset;
+                };
+                ;
+                CompilationResultFailure.createCompilationResultFailure = function (builder, requestId, messageOffset, character, line, column) {
+                    CompilationResultFailure.startCompilationResultFailure(builder);
+                    CompilationResultFailure.addRequestId(builder, requestId);
+                    CompilationResultFailure.addMessage(builder, messageOffset);
+                    CompilationResultFailure.addCharacter(builder, character);
+                    CompilationResultFailure.addLine(builder, line);
+                    CompilationResultFailure.addColumn(builder, column);
+                    return CompilationResultFailure.endCompilationResultFailure(builder);
+                };
+                return CompilationResultFailure;
+            }());
+            fb.CompilationResultFailure = CompilationResultFailure;
+        })(fb = mobsya.fb || (mobsya.fb = {}));
+    })(mobsya = exports.mobsya || (exports.mobsya = {}));
+    /**
+     * @constructor
+     */
+    (function (mobsya) {
+        var fb;
+        (function (fb) {
+            var CompileAndSave = /** @class */ (function () {
+                function CompileAndSave() {
+                    this.bb = null;
+                    this.bb_pos = 0;
+                }
+                /**
+                 * @param number i
+                 * @param flatbuffers.ByteBuffer bb
+                 * @returns CompileAndSave
+                 */
+                CompileAndSave.prototype.__init = function (i, bb) {
+                    this.bb_pos = i;
+                    this.bb = bb;
+                    return this;
+                };
+                ;
+                /**
+                 * @param flatbuffers.ByteBuffer bb
+                 * @param CompileAndSave= obj
+                 * @returns CompileAndSave
+                 */
+                CompileAndSave.getRootAsCompileAndSave = function (bb, obj) {
+                    return (obj || new CompileAndSave).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                CompileAndSave.prototype.requestId = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * @param number value
+                 * @returns boolean
+                 */
+                CompileAndSave.prototype.mutate_request_id = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeUint32(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                /**
+                 * @param mobsya.fb.NodeId= obj
+                 * @returns mobsya.fb.NodeId|null
+                 */
+                CompileAndSave.prototype.nodeId = function (obj) {
+                    var offset = this.bb.__offset(this.bb_pos, 6);
+                    return offset ? (obj || new mobsya.fb.NodeId).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
+                };
+                ;
+                /**
+                 * @returns mobsya.fb.ProgrammingLanguage
+                 */
+                CompileAndSave.prototype.language = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 8);
+                    return offset ? /**  */ (this.bb.readInt32(this.bb_pos + offset)) : mobsya.fb.ProgrammingLanguage.Aseba;
+                };
+                ;
+                /**
+                 * @param mobsya.fb.ProgrammingLanguage value
+                 * @returns boolean
+                 */
+                CompileAndSave.prototype.mutate_language = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 8);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeInt32(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                CompileAndSave.prototype.program = function (optionalEncoding) {
+                    var offset = this.bb.__offset(this.bb_pos, 10);
+                    return offset ? this.bb.__string(this.bb_pos + offset, optionalEncoding) : null;
+                };
+                ;
+                /**
+                 * @returns mobsya.fb.CompilationOptions
+                 */
+                CompileAndSave.prototype.options = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 12);
+                    return offset ? /**  */ (this.bb.readUint32(this.bb_pos + offset)) : /** } */ (0);
+                };
+                ;
+                /**
+                 * @param mobsya.fb.CompilationOptions value
+                 * @returns boolean
+                 */
+                CompileAndSave.prototype.mutate_options = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 12);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeUint32(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 */
+                CompileAndSave.startCompileAndSave = function (builder) {
+                    builder.startObject(5);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number requestId
+                 */
+                CompileAndSave.addRequestId = function (builder, requestId) {
+                    builder.addFieldInt32(0, requestId, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset nodeIdOffset
+                 */
+                CompileAndSave.addNodeId = function (builder, nodeIdOffset) {
+                    builder.addFieldOffset(1, nodeIdOffset, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param mobsya.fb.ProgrammingLanguage language
+                 */
+                CompileAndSave.addLanguage = function (builder, language) {
+                    builder.addFieldInt32(2, language, mobsya.fb.ProgrammingLanguage.Aseba);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset programOffset
+                 */
+                CompileAndSave.addProgram = function (builder, programOffset) {
+                    builder.addFieldOffset(3, programOffset, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param mobsya.fb.CompilationOptions options
+                 */
+                CompileAndSave.addOptions = function (builder, options) {
+                    builder.addFieldInt32(4, options, /** } */ (0));
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @returns flatbuffers.Offset
+                 */
+                CompileAndSave.endCompileAndSave = function (builder) {
+                    var offset = builder.endObject();
+                    builder.requiredField(offset, 10); // program
+                    return offset;
+                };
+                ;
+                CompileAndSave.createCompileAndSave = function (builder, requestId, nodeIdOffset, language, programOffset, options) {
+                    CompileAndSave.startCompileAndSave(builder);
+                    CompileAndSave.addRequestId(builder, requestId);
+                    CompileAndSave.addNodeId(builder, nodeIdOffset);
+                    CompileAndSave.addLanguage(builder, language);
+                    CompileAndSave.addProgram(builder, programOffset);
+                    CompileAndSave.addOptions(builder, options);
+                    return CompileAndSave.endCompileAndSave(builder);
+                };
+                return CompileAndSave;
+            }());
+            fb.CompileAndSave = CompileAndSave;
+        })(fb = mobsya.fb || (mobsya.fb = {}));
+    })(mobsya = exports.mobsya || (exports.mobsya = {}));
+    /**
+     * @constructor
+     */
+    (function (mobsya) {
+        var fb;
+        (function (fb) {
+            var SaveBytecode = /** @class */ (function () {
+                function SaveBytecode() {
+                    this.bb = null;
+                    this.bb_pos = 0;
+                }
+                /**
+                 * @param number i
+                 * @param flatbuffers.ByteBuffer bb
+                 * @returns SaveBytecode
+                 */
+                SaveBytecode.prototype.__init = function (i, bb) {
+                    this.bb_pos = i;
+                    this.bb = bb;
+                    return this;
+                };
+                ;
+                /**
+                 * @param flatbuffers.ByteBuffer bb
+                 * @param SaveBytecode= obj
+                 * @returns SaveBytecode
+                 */
+                SaveBytecode.getRootAsSaveBytecode = function (bb, obj) {
+                    return (obj || new SaveBytecode).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                SaveBytecode.prototype.requestId = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * @param number value
+                 * @returns boolean
+                 */
+                SaveBytecode.prototype.mutate_request_id = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeUint32(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                /**
+                 * @param mobsya.fb.NodeId= obj
+                 * @returns mobsya.fb.NodeId|null
+                 */
+                SaveBytecode.prototype.nodeId = function (obj) {
+                    var offset = this.bb.__offset(this.bb_pos, 6);
+                    return offset ? (obj || new mobsya.fb.NodeId).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
+                };
+                ;
+                SaveBytecode.prototype.program = function (optionalEncoding) {
+                    var offset = this.bb.__offset(this.bb_pos, 8);
+                    return offset ? this.bb.__string(this.bb_pos + offset, optionalEncoding) : null;
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 */
+                SaveBytecode.startSaveBytecode = function (builder) {
+                    builder.startObject(3);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number requestId
+                 */
+                SaveBytecode.addRequestId = function (builder, requestId) {
+                    builder.addFieldInt32(0, requestId, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset nodeIdOffset
+                 */
+                SaveBytecode.addNodeId = function (builder, nodeIdOffset) {
+                    builder.addFieldOffset(1, nodeIdOffset, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset programOffset
+                 */
+                SaveBytecode.addProgram = function (builder, programOffset) {
+                    builder.addFieldOffset(2, programOffset, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @returns flatbuffers.Offset
+                 */
+                SaveBytecode.endSaveBytecode = function (builder) {
+                    var offset = builder.endObject();
+                    return offset;
+                };
+                ;
+                SaveBytecode.createSaveBytecode = function (builder, requestId, nodeIdOffset, programOffset) {
+                    SaveBytecode.startSaveBytecode(builder);
+                    SaveBytecode.addRequestId(builder, requestId);
+                    SaveBytecode.addNodeId(builder, nodeIdOffset);
+                    SaveBytecode.addProgram(builder, programOffset);
+                    return SaveBytecode.endSaveBytecode(builder);
+                };
+                return SaveBytecode;
+            }());
+            fb.SaveBytecode = SaveBytecode;
+        })(fb = mobsya.fb || (mobsya.fb = {}));
+    })(mobsya = exports.mobsya || (exports.mobsya = {}));
+    /**
+     * @constructor
+     */
+    (function (mobsya) {
+        var fb;
+        (function (fb) {
+            var CompilationResultSuccess = /** @class */ (function () {
+                function CompilationResultSuccess() {
+                    this.bb = null;
+                    this.bb_pos = 0;
+                }
+                /**
+                 * @param number i
+                 * @param flatbuffers.ByteBuffer bb
+                 * @returns CompilationResultSuccess
+                 */
+                CompilationResultSuccess.prototype.__init = function (i, bb) {
+                    this.bb_pos = i;
+                    this.bb = bb;
+                    return this;
+                };
+                ;
+                /**
+                 * @param flatbuffers.ByteBuffer bb
+                 * @param CompilationResultSuccess= obj
+                 * @returns CompilationResultSuccess
+                 */
+                CompilationResultSuccess.getRootAsCompilationResultSuccess = function (bb, obj) {
+                    return (obj || new CompilationResultSuccess).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                CompilationResultSuccess.prototype.requestId = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * @param number value
+                 * @returns boolean
+                 */
+                CompilationResultSuccess.prototype.mutate_request_id = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeUint32(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                CompilationResultSuccess.prototype.bytecodeSize = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 6);
+                    return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * @param number value
+                 * @returns boolean
+                 */
+                CompilationResultSuccess.prototype.mutate_bytecode_size = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 6);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeUint32(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                CompilationResultSuccess.prototype.totalBytecodeSize = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 8);
+                    return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * @param number value
+                 * @returns boolean
+                 */
+                CompilationResultSuccess.prototype.mutate_total_bytecode_size = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 8);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeUint32(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                CompilationResultSuccess.prototype.variablesSize = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 10);
+                    return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * @param number value
+                 * @returns boolean
+                 */
+                CompilationResultSuccess.prototype.mutate_variables_size = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 10);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeUint32(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                CompilationResultSuccess.prototype.totalVariablesSize = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 12);
+                    return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * @param number value
+                 * @returns boolean
+                 */
+                CompilationResultSuccess.prototype.mutate_total_variables_size = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 12);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeUint32(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 */
+                CompilationResultSuccess.startCompilationResultSuccess = function (builder) {
+                    builder.startObject(5);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number requestId
+                 */
+                CompilationResultSuccess.addRequestId = function (builder, requestId) {
+                    builder.addFieldInt32(0, requestId, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number bytecodeSize
+                 */
+                CompilationResultSuccess.addBytecodeSize = function (builder, bytecodeSize) {
+                    builder.addFieldInt32(1, bytecodeSize, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number totalBytecodeSize
+                 */
+                CompilationResultSuccess.addTotalBytecodeSize = function (builder, totalBytecodeSize) {
+                    builder.addFieldInt32(2, totalBytecodeSize, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number variablesSize
+                 */
+                CompilationResultSuccess.addVariablesSize = function (builder, variablesSize) {
+                    builder.addFieldInt32(3, variablesSize, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number totalVariablesSize
+                 */
+                CompilationResultSuccess.addTotalVariablesSize = function (builder, totalVariablesSize) {
+                    builder.addFieldInt32(4, totalVariablesSize, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @returns flatbuffers.Offset
+                 */
+                CompilationResultSuccess.endCompilationResultSuccess = function (builder) {
+                    var offset = builder.endObject();
+                    return offset;
+                };
+                ;
+                CompilationResultSuccess.createCompilationResultSuccess = function (builder, requestId, bytecodeSize, totalBytecodeSize, variablesSize, totalVariablesSize) {
+                    CompilationResultSuccess.startCompilationResultSuccess(builder);
+                    CompilationResultSuccess.addRequestId(builder, requestId);
+                    CompilationResultSuccess.addBytecodeSize(builder, bytecodeSize);
+                    CompilationResultSuccess.addTotalBytecodeSize(builder, totalBytecodeSize);
+                    CompilationResultSuccess.addVariablesSize(builder, variablesSize);
+                    CompilationResultSuccess.addTotalVariablesSize(builder, totalVariablesSize);
+                    return CompilationResultSuccess.endCompilationResultSuccess(builder);
+                };
+                return CompilationResultSuccess;
+            }());
+            fb.CompilationResultSuccess = CompilationResultSuccess;
+        })(fb = mobsya.fb || (mobsya.fb = {}));
+    })(mobsya = exports.mobsya || (exports.mobsya = {}));
+    /**
+     * @constructor
+     */
+    (function (mobsya) {
+        var fb;
+        (function (fb) {
+            var SetVMExecutionState = /** @class */ (function () {
+                function SetVMExecutionState() {
+                    this.bb = null;
+                    this.bb_pos = 0;
+                }
+                /**
+                 * @param number i
+                 * @param flatbuffers.ByteBuffer bb
+                 * @returns SetVMExecutionState
+                 */
+                SetVMExecutionState.prototype.__init = function (i, bb) {
+                    this.bb_pos = i;
+                    this.bb = bb;
+                    return this;
+                };
+                ;
+                /**
+                 * @param flatbuffers.ByteBuffer bb
+                 * @param SetVMExecutionState= obj
+                 * @returns SetVMExecutionState
+                 */
+                SetVMExecutionState.getRootAsSetVMExecutionState = function (bb, obj) {
+                    return (obj || new SetVMExecutionState).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                SetVMExecutionState.prototype.requestId = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * @param number value
+                 * @returns boolean
+                 */
+                SetVMExecutionState.prototype.mutate_request_id = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeUint32(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                /**
+                 * @param mobsya.fb.NodeId= obj
+                 * @returns mobsya.fb.NodeId|null
+                 */
+                SetVMExecutionState.prototype.nodeId = function (obj) {
+                    var offset = this.bb.__offset(this.bb_pos, 6);
+                    return offset ? (obj || new mobsya.fb.NodeId).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
+                };
+                ;
+                /**
+                 * @returns mobsya.fb.VMExecutionStateCommand
+                 */
+                SetVMExecutionState.prototype.command = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 8);
+                    return offset ? /**  */ (this.bb.readInt16(this.bb_pos + offset)) : mobsya.fb.VMExecutionStateCommand.Stop;
+                };
+                ;
+                /**
+                 * @param mobsya.fb.VMExecutionStateCommand value
+                 * @returns boolean
+                 */
+                SetVMExecutionState.prototype.mutate_command = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 8);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeInt16(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 */
+                SetVMExecutionState.startSetVMExecutionState = function (builder) {
+                    builder.startObject(3);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number requestId
+                 */
+                SetVMExecutionState.addRequestId = function (builder, requestId) {
+                    builder.addFieldInt32(0, requestId, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset nodeIdOffset
+                 */
+                SetVMExecutionState.addNodeId = function (builder, nodeIdOffset) {
+                    builder.addFieldOffset(1, nodeIdOffset, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param mobsya.fb.VMExecutionStateCommand command
+                 */
+                SetVMExecutionState.addCommand = function (builder, command) {
+                    builder.addFieldInt16(2, command, mobsya.fb.VMExecutionStateCommand.Stop);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @returns flatbuffers.Offset
+                 */
+                SetVMExecutionState.endSetVMExecutionState = function (builder) {
+                    var offset = builder.endObject();
+                    return offset;
+                };
+                ;
+                SetVMExecutionState.createSetVMExecutionState = function (builder, requestId, nodeIdOffset, command) {
+                    SetVMExecutionState.startSetVMExecutionState(builder);
+                    SetVMExecutionState.addRequestId(builder, requestId);
+                    SetVMExecutionState.addNodeId(builder, nodeIdOffset);
+                    SetVMExecutionState.addCommand(builder, command);
+                    return SetVMExecutionState.endSetVMExecutionState(builder);
+                };
+                return SetVMExecutionState;
+            }());
+            fb.SetVMExecutionState = SetVMExecutionState;
+        })(fb = mobsya.fb || (mobsya.fb = {}));
+    })(mobsya = exports.mobsya || (exports.mobsya = {}));
+    /**
+     * @constructor
+     */
+    (function (mobsya) {
+        var fb;
+        (function (fb) {
+            var VMExecutionStateChanged = /** @class */ (function () {
+                function VMExecutionStateChanged() {
+                    this.bb = null;
+                    this.bb_pos = 0;
+                }
+                /**
+                 * @param number i
+                 * @param flatbuffers.ByteBuffer bb
+                 * @returns VMExecutionStateChanged
+                 */
+                VMExecutionStateChanged.prototype.__init = function (i, bb) {
+                    this.bb_pos = i;
+                    this.bb = bb;
+                    return this;
+                };
+                ;
+                /**
+                 * @param flatbuffers.ByteBuffer bb
+                 * @param VMExecutionStateChanged= obj
+                 * @returns VMExecutionStateChanged
+                 */
+                VMExecutionStateChanged.getRootAsVMExecutionStateChanged = function (bb, obj) {
+                    return (obj || new VMExecutionStateChanged).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+                };
+                ;
+                /**
+                 * @param mobsya.fb.NodeId= obj
+                 * @returns mobsya.fb.NodeId|null
+                 */
+                VMExecutionStateChanged.prototype.nodeId = function (obj) {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    return offset ? (obj || new mobsya.fb.NodeId).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
+                };
+                ;
+                /**
+                 * @returns mobsya.fb.VMExecutionState
+                 */
+                VMExecutionStateChanged.prototype.state = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 6);
+                    return offset ? /**  */ (this.bb.readInt16(this.bb_pos + offset)) : mobsya.fb.VMExecutionState.Stopped;
+                };
+                ;
+                /**
+                 * @param mobsya.fb.VMExecutionState value
+                 * @returns boolean
+                 */
+                VMExecutionStateChanged.prototype.mutate_state = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 6);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeInt16(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                VMExecutionStateChanged.prototype.line = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 8);
+                    return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * @param number value
+                 * @returns boolean
+                 */
+                VMExecutionStateChanged.prototype.mutate_line = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 8);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeUint32(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                /**
+                 * @returns mobsya.fb.VMExecutionError
+                 */
+                VMExecutionStateChanged.prototype.error = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 10);
+                    return offset ? /**  */ (this.bb.readInt16(this.bb_pos + offset)) : mobsya.fb.VMExecutionError.NoError;
+                };
+                ;
+                /**
+                 * @param mobsya.fb.VMExecutionError value
+                 * @returns boolean
+                 */
+                VMExecutionStateChanged.prototype.mutate_error = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 10);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeInt16(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                VMExecutionStateChanged.prototype.errorMsg = function (optionalEncoding) {
+                    var offset = this.bb.__offset(this.bb_pos, 12);
+                    return offset ? this.bb.__string(this.bb_pos + offset, optionalEncoding) : null;
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 */
+                VMExecutionStateChanged.startVMExecutionStateChanged = function (builder) {
+                    builder.startObject(5);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset nodeIdOffset
+                 */
+                VMExecutionStateChanged.addNodeId = function (builder, nodeIdOffset) {
+                    builder.addFieldOffset(0, nodeIdOffset, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param mobsya.fb.VMExecutionState state
+                 */
+                VMExecutionStateChanged.addState = function (builder, state) {
+                    builder.addFieldInt16(1, state, mobsya.fb.VMExecutionState.Stopped);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number line
+                 */
+                VMExecutionStateChanged.addLine = function (builder, line) {
+                    builder.addFieldInt32(2, line, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param mobsya.fb.VMExecutionError error
+                 */
+                VMExecutionStateChanged.addError = function (builder, error) {
+                    builder.addFieldInt16(3, error, mobsya.fb.VMExecutionError.NoError);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset errorMsgOffset
+                 */
+                VMExecutionStateChanged.addErrorMsg = function (builder, errorMsgOffset) {
+                    builder.addFieldOffset(4, errorMsgOffset, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @returns flatbuffers.Offset
+                 */
+                VMExecutionStateChanged.endVMExecutionStateChanged = function (builder) {
+                    var offset = builder.endObject();
+                    return offset;
+                };
+                ;
+                VMExecutionStateChanged.createVMExecutionStateChanged = function (builder, nodeIdOffset, state, line, error, errorMsgOffset) {
+                    VMExecutionStateChanged.startVMExecutionStateChanged(builder);
+                    VMExecutionStateChanged.addNodeId(builder, nodeIdOffset);
+                    VMExecutionStateChanged.addState(builder, state);
+                    VMExecutionStateChanged.addLine(builder, line);
+                    VMExecutionStateChanged.addError(builder, error);
+                    VMExecutionStateChanged.addErrorMsg(builder, errorMsgOffset);
+                    return VMExecutionStateChanged.endVMExecutionStateChanged(builder);
+                };
+                return VMExecutionStateChanged;
+            }());
+            fb.VMExecutionStateChanged = VMExecutionStateChanged;
+        })(fb = mobsya.fb || (mobsya.fb = {}));
+    })(mobsya = exports.mobsya || (exports.mobsya = {}));
+    /**
+     * @constructor
+     */
+    (function (mobsya) {
+        var fb;
+        (function (fb) {
+            var Breakpoint = /** @class */ (function () {
+                function Breakpoint() {
+                    this.bb = null;
+                    this.bb_pos = 0;
+                }
+                /**
+                 * @param number i
+                 * @param flatbuffers.ByteBuffer bb
+                 * @returns Breakpoint
+                 */
+                Breakpoint.prototype.__init = function (i, bb) {
+                    this.bb_pos = i;
+                    this.bb = bb;
+                    return this;
+                };
+                ;
+                /**
+                 * @param flatbuffers.ByteBuffer bb
+                 * @param Breakpoint= obj
+                 * @returns Breakpoint
+                 */
+                Breakpoint.getRootAsBreakpoint = function (bb, obj) {
+                    return (obj || new Breakpoint).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                Breakpoint.prototype.line = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * @param number value
+                 * @returns boolean
+                 */
+                Breakpoint.prototype.mutate_line = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeUint32(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 */
+                Breakpoint.startBreakpoint = function (builder) {
+                    builder.startObject(1);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number line
+                 */
+                Breakpoint.addLine = function (builder, line) {
+                    builder.addFieldInt32(0, line, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @returns flatbuffers.Offset
+                 */
+                Breakpoint.endBreakpoint = function (builder) {
+                    var offset = builder.endObject();
+                    return offset;
+                };
+                ;
+                Breakpoint.createBreakpoint = function (builder, line) {
+                    Breakpoint.startBreakpoint(builder);
+                    Breakpoint.addLine(builder, line);
+                    return Breakpoint.endBreakpoint(builder);
+                };
+                return Breakpoint;
+            }());
+            fb.Breakpoint = Breakpoint;
+        })(fb = mobsya.fb || (mobsya.fb = {}));
+    })(mobsya = exports.mobsya || (exports.mobsya = {}));
+    /**
+     * @constructor
+     */
+    (function (mobsya) {
+        var fb;
+        (function (fb) {
+            var SetBreakpoints = /** @class */ (function () {
+                function SetBreakpoints() {
+                    this.bb = null;
+                    this.bb_pos = 0;
+                }
+                /**
+                 * @param number i
+                 * @param flatbuffers.ByteBuffer bb
+                 * @returns SetBreakpoints
+                 */
+                SetBreakpoints.prototype.__init = function (i, bb) {
+                    this.bb_pos = i;
+                    this.bb = bb;
+                    return this;
+                };
+                ;
+                /**
+                 * @param flatbuffers.ByteBuffer bb
+                 * @param SetBreakpoints= obj
+                 * @returns SetBreakpoints
+                 */
+                SetBreakpoints.getRootAsSetBreakpoints = function (bb, obj) {
+                    return (obj || new SetBreakpoints).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                SetBreakpoints.prototype.requestId = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * @param number value
+                 * @returns boolean
+                 */
+                SetBreakpoints.prototype.mutate_request_id = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeUint32(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                /**
+                 * @param mobsya.fb.NodeId= obj
+                 * @returns mobsya.fb.NodeId|null
+                 */
+                SetBreakpoints.prototype.nodeId = function (obj) {
+                    var offset = this.bb.__offset(this.bb_pos, 6);
+                    return offset ? (obj || new mobsya.fb.NodeId).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
+                };
+                ;
+                /**
+                 * @param number index
+                 * @param mobsya.fb.Breakpoint= obj
+                 * @returns mobsya.fb.Breakpoint
+                 */
+                SetBreakpoints.prototype.breakpoints = function (index, obj) {
+                    var offset = this.bb.__offset(this.bb_pos, 8);
+                    return offset ? (obj || new mobsya.fb.Breakpoint).__init(this.bb.__indirect(this.bb.__vector(this.bb_pos + offset) + index * 4), this.bb) : null;
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                SetBreakpoints.prototype.breakpointsLength = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 8);
+                    return offset ? this.bb.__vector_len(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 */
+                SetBreakpoints.startSetBreakpoints = function (builder) {
+                    builder.startObject(3);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number requestId
+                 */
+                SetBreakpoints.addRequestId = function (builder, requestId) {
+                    builder.addFieldInt32(0, requestId, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset nodeIdOffset
+                 */
+                SetBreakpoints.addNodeId = function (builder, nodeIdOffset) {
+                    builder.addFieldOffset(1, nodeIdOffset, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset breakpointsOffset
+                 */
+                SetBreakpoints.addBreakpoints = function (builder, breakpointsOffset) {
+                    builder.addFieldOffset(2, breakpointsOffset, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param Array.<flatbuffers.Offset> data
+                 * @returns flatbuffers.Offset
+                 */
+                SetBreakpoints.createBreakpointsVector = function (builder, data) {
+                    builder.startVector(4, data.length, 4);
+                    for (var i = data.length - 1; i >= 0; i--) {
+                        builder.addOffset(data[i]);
+                    }
+                    return builder.endVector();
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number numElems
+                 */
+                SetBreakpoints.startBreakpointsVector = function (builder, numElems) {
+                    builder.startVector(4, numElems, 4);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @returns flatbuffers.Offset
+                 */
+                SetBreakpoints.endSetBreakpoints = function (builder) {
+                    var offset = builder.endObject();
+                    return offset;
+                };
+                ;
+                SetBreakpoints.createSetBreakpoints = function (builder, requestId, nodeIdOffset, breakpointsOffset) {
+                    SetBreakpoints.startSetBreakpoints(builder);
+                    SetBreakpoints.addRequestId(builder, requestId);
+                    SetBreakpoints.addNodeId(builder, nodeIdOffset);
+                    SetBreakpoints.addBreakpoints(builder, breakpointsOffset);
+                    return SetBreakpoints.endSetBreakpoints(builder);
+                };
+                return SetBreakpoints;
+            }());
+            fb.SetBreakpoints = SetBreakpoints;
+        })(fb = mobsya.fb || (mobsya.fb = {}));
+    })(mobsya = exports.mobsya || (exports.mobsya = {}));
+    /**
+     * @constructor
+     */
+    (function (mobsya) {
+        var fb;
+        (function (fb) {
+            var SetBreakpointsResponse = /** @class */ (function () {
+                function SetBreakpointsResponse() {
+                    this.bb = null;
+                    this.bb_pos = 0;
+                }
+                /**
+                 * @param number i
+                 * @param flatbuffers.ByteBuffer bb
+                 * @returns SetBreakpointsResponse
+                 */
+                SetBreakpointsResponse.prototype.__init = function (i, bb) {
+                    this.bb_pos = i;
+                    this.bb = bb;
+                    return this;
+                };
+                ;
+                /**
+                 * @param flatbuffers.ByteBuffer bb
+                 * @param SetBreakpointsResponse= obj
+                 * @returns SetBreakpointsResponse
+                 */
+                SetBreakpointsResponse.getRootAsSetBreakpointsResponse = function (bb, obj) {
+                    return (obj || new SetBreakpointsResponse).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                SetBreakpointsResponse.prototype.requestId = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * @param number value
+                 * @returns boolean
+                 */
+                SetBreakpointsResponse.prototype.mutate_request_id = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeUint32(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                /**
+                 * @returns mobsya.fb.ErrorType
+                 */
+                SetBreakpointsResponse.prototype.error = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 6);
+                    return offset ? /**  */ (this.bb.readInt32(this.bb_pos + offset)) : mobsya.fb.ErrorType.no_error;
+                };
+                ;
+                /**
+                 * @param mobsya.fb.ErrorType value
+                 * @returns boolean
+                 */
+                SetBreakpointsResponse.prototype.mutate_error = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 6);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeInt32(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                /**
+                 * @param number index
+                 * @param mobsya.fb.Breakpoint= obj
+                 * @returns mobsya.fb.Breakpoint
+                 */
+                SetBreakpointsResponse.prototype.breakpoints = function (index, obj) {
+                    var offset = this.bb.__offset(this.bb_pos, 8);
+                    return offset ? (obj || new mobsya.fb.Breakpoint).__init(this.bb.__indirect(this.bb.__vector(this.bb_pos + offset) + index * 4), this.bb) : null;
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                SetBreakpointsResponse.prototype.breakpointsLength = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 8);
+                    return offset ? this.bb.__vector_len(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 */
+                SetBreakpointsResponse.startSetBreakpointsResponse = function (builder) {
+                    builder.startObject(3);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number requestId
+                 */
+                SetBreakpointsResponse.addRequestId = function (builder, requestId) {
+                    builder.addFieldInt32(0, requestId, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param mobsya.fb.ErrorType error
+                 */
+                SetBreakpointsResponse.addError = function (builder, error) {
+                    builder.addFieldInt32(1, error, mobsya.fb.ErrorType.no_error);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset breakpointsOffset
+                 */
+                SetBreakpointsResponse.addBreakpoints = function (builder, breakpointsOffset) {
+                    builder.addFieldOffset(2, breakpointsOffset, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param Array.<flatbuffers.Offset> data
+                 * @returns flatbuffers.Offset
+                 */
+                SetBreakpointsResponse.createBreakpointsVector = function (builder, data) {
+                    builder.startVector(4, data.length, 4);
+                    for (var i = data.length - 1; i >= 0; i--) {
+                        builder.addOffset(data[i]);
+                    }
+                    return builder.endVector();
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number numElems
+                 */
+                SetBreakpointsResponse.startBreakpointsVector = function (builder, numElems) {
+                    builder.startVector(4, numElems, 4);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @returns flatbuffers.Offset
+                 */
+                SetBreakpointsResponse.endSetBreakpointsResponse = function (builder) {
+                    var offset = builder.endObject();
+                    return offset;
+                };
+                ;
+                SetBreakpointsResponse.createSetBreakpointsResponse = function (builder, requestId, error, breakpointsOffset) {
+                    SetBreakpointsResponse.startSetBreakpointsResponse(builder);
+                    SetBreakpointsResponse.addRequestId(builder, requestId);
+                    SetBreakpointsResponse.addError(builder, error);
+                    SetBreakpointsResponse.addBreakpoints(builder, breakpointsOffset);
+                    return SetBreakpointsResponse.endSetBreakpointsResponse(builder);
+                };
+                return SetBreakpointsResponse;
+            }());
+            fb.SetBreakpointsResponse = SetBreakpointsResponse;
+        })(fb = mobsya.fb || (mobsya.fb = {}));
+    })(mobsya = exports.mobsya || (exports.mobsya = {}));
+    /**
+     * @constructor
+     */
+    (function (mobsya) {
+        var fb;
+        (function (fb) {
+            var WatchNode = /** @class */ (function () {
+                function WatchNode() {
+                    this.bb = null;
+                    this.bb_pos = 0;
+                }
+                /**
+                 * @param number i
+                 * @param flatbuffers.ByteBuffer bb
+                 * @returns WatchNode
+                 */
+                WatchNode.prototype.__init = function (i, bb) {
+                    this.bb_pos = i;
+                    this.bb = bb;
+                    return this;
+                };
+                ;
+                /**
+                 * @param flatbuffers.ByteBuffer bb
+                 * @param WatchNode= obj
+                 * @returns WatchNode
+                 */
+                WatchNode.getRootAsWatchNode = function (bb, obj) {
+                    return (obj || new WatchNode).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                WatchNode.prototype.requestId = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * @param number value
+                 * @returns boolean
+                 */
+                WatchNode.prototype.mutate_request_id = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeUint32(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                /**
+                 * @param mobsya.fb.NodeId= obj
+                 * @returns mobsya.fb.NodeId|null
+                 */
+                WatchNode.prototype.nodeOrGroupId = function (obj) {
+                    var offset = this.bb.__offset(this.bb_pos, 6);
+                    return offset ? (obj || new mobsya.fb.NodeId).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                WatchNode.prototype.infoType = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 8);
+                    return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * @param number value
+                 * @returns boolean
+                 */
+                WatchNode.prototype.mutate_info_type = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 8);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeUint32(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 */
+                WatchNode.startWatchNode = function (builder) {
+                    builder.startObject(3);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number requestId
+                 */
+                WatchNode.addRequestId = function (builder, requestId) {
+                    builder.addFieldInt32(0, requestId, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset nodeOrGroupIdOffset
+                 */
+                WatchNode.addNodeOrGroupId = function (builder, nodeOrGroupIdOffset) {
+                    builder.addFieldOffset(1, nodeOrGroupIdOffset, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number infoType
+                 */
+                WatchNode.addInfoType = function (builder, infoType) {
+                    builder.addFieldInt32(2, infoType, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @returns flatbuffers.Offset
+                 */
+                WatchNode.endWatchNode = function (builder) {
+                    var offset = builder.endObject();
+                    return offset;
+                };
+                ;
+                WatchNode.createWatchNode = function (builder, requestId, nodeOrGroupIdOffset, infoType) {
+                    WatchNode.startWatchNode(builder);
+                    WatchNode.addRequestId(builder, requestId);
+                    WatchNode.addNodeOrGroupId(builder, nodeOrGroupIdOffset);
+                    WatchNode.addInfoType(builder, infoType);
+                    return WatchNode.endWatchNode(builder);
+                };
+                return WatchNode;
+            }());
+            fb.WatchNode = WatchNode;
+        })(fb = mobsya.fb || (mobsya.fb = {}));
+    })(mobsya = exports.mobsya || (exports.mobsya = {}));
+    /**
+     * @constructor
+     */
+    (function (mobsya) {
+        var fb;
+        (function (fb) {
+            var Error = /** @class */ (function () {
+                function Error() {
+                    this.bb = null;
+                    this.bb_pos = 0;
+                }
+                /**
+                 * @param number i
+                 * @param flatbuffers.ByteBuffer bb
+                 * @returns Error
+                 */
+                Error.prototype.__init = function (i, bb) {
+                    this.bb_pos = i;
+                    this.bb = bb;
+                    return this;
+                };
+                ;
+                /**
+                 * @param flatbuffers.ByteBuffer bb
+                 * @param Error= obj
+                 * @returns Error
+                 */
+                Error.getRootAsError = function (bb, obj) {
+                    return (obj || new Error).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                Error.prototype.requestId = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * @param number value
+                 * @returns boolean
+                 */
+                Error.prototype.mutate_request_id = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeUint32(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                /**
+                 * @returns mobsya.fb.ErrorType
+                 */
+                Error.prototype.error = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 6);
+                    return offset ? /**  */ (this.bb.readInt32(this.bb_pos + offset)) : mobsya.fb.ErrorType.no_error;
+                };
+                ;
+                /**
+                 * @param mobsya.fb.ErrorType value
+                 * @returns boolean
+                 */
+                Error.prototype.mutate_error = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 6);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeInt32(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 */
+                Error.startError = function (builder) {
+                    builder.startObject(2);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number requestId
+                 */
+                Error.addRequestId = function (builder, requestId) {
+                    builder.addFieldInt32(0, requestId, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param mobsya.fb.ErrorType error
+                 */
+                Error.addError = function (builder, error) {
+                    builder.addFieldInt32(1, error, mobsya.fb.ErrorType.no_error);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @returns flatbuffers.Offset
+                 */
+                Error.endError = function (builder) {
+                    var offset = builder.endObject();
+                    return offset;
+                };
+                ;
+                Error.createError = function (builder, requestId, error) {
+                    Error.startError(builder);
+                    Error.addRequestId(builder, requestId);
+                    Error.addError(builder, error);
+                    return Error.endError(builder);
+                };
+                return Error;
+            }());
+            fb.Error = Error;
+        })(fb = mobsya.fb || (mobsya.fb = {}));
+    })(mobsya = exports.mobsya || (exports.mobsya = {}));
+    /**
+     * @constructor
+     */
+    (function (mobsya) {
+        var fb;
+        (function (fb) {
+            var RequestCompleted = /** @class */ (function () {
+                function RequestCompleted() {
+                    this.bb = null;
+                    this.bb_pos = 0;
+                }
+                /**
+                 * @param number i
+                 * @param flatbuffers.ByteBuffer bb
+                 * @returns RequestCompleted
+                 */
+                RequestCompleted.prototype.__init = function (i, bb) {
+                    this.bb_pos = i;
+                    this.bb = bb;
+                    return this;
+                };
+                ;
+                /**
+                 * @param flatbuffers.ByteBuffer bb
+                 * @param RequestCompleted= obj
+                 * @returns RequestCompleted
+                 */
+                RequestCompleted.getRootAsRequestCompleted = function (bb, obj) {
+                    return (obj || new RequestCompleted).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                RequestCompleted.prototype.requestId = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * @param number value
+                 * @returns boolean
+                 */
+                RequestCompleted.prototype.mutate_request_id = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeUint32(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 */
+                RequestCompleted.startRequestCompleted = function (builder) {
+                    builder.startObject(1);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number requestId
+                 */
+                RequestCompleted.addRequestId = function (builder, requestId) {
+                    builder.addFieldInt32(0, requestId, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @returns flatbuffers.Offset
+                 */
+                RequestCompleted.endRequestCompleted = function (builder) {
+                    var offset = builder.endObject();
+                    return offset;
+                };
+                ;
+                RequestCompleted.createRequestCompleted = function (builder, requestId) {
+                    RequestCompleted.startRequestCompleted(builder);
+                    RequestCompleted.addRequestId(builder, requestId);
+                    return RequestCompleted.endRequestCompleted(builder);
+                };
+                return RequestCompleted;
+            }());
+            fb.RequestCompleted = RequestCompleted;
+        })(fb = mobsya.fb || (mobsya.fb = {}));
+    })(mobsya = exports.mobsya || (exports.mobsya = {}));
+    /**
+     * @constructor
+     */
+    (function (mobsya) {
+        var fb;
+        (function (fb) {
+            var EventDescription = /** @class */ (function () {
+                function EventDescription() {
+                    this.bb = null;
+                    this.bb_pos = 0;
+                }
+                /**
+                 * @param number i
+                 * @param flatbuffers.ByteBuffer bb
+                 * @returns EventDescription
+                 */
+                EventDescription.prototype.__init = function (i, bb) {
+                    this.bb_pos = i;
+                    this.bb = bb;
+                    return this;
+                };
+                ;
+                /**
+                 * @param flatbuffers.ByteBuffer bb
+                 * @param EventDescription= obj
+                 * @returns EventDescription
+                 */
+                EventDescription.getRootAsEventDescription = function (bb, obj) {
+                    return (obj || new EventDescription).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+                };
+                ;
+                EventDescription.prototype.name = function (optionalEncoding) {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    return offset ? this.bb.__string(this.bb_pos + offset, optionalEncoding) : null;
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                EventDescription.prototype.fixedSized = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 6);
+                    return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * @param number value
+                 * @returns boolean
+                 */
+                EventDescription.prototype.mutate_fixed_sized = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 6);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeUint32(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                EventDescription.prototype.index = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 8);
+                    return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * @param number value
+                 * @returns boolean
+                 */
+                EventDescription.prototype.mutate_index = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 8);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeUint32(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 */
+                EventDescription.startEventDescription = function (builder) {
+                    builder.startObject(3);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset nameOffset
+                 */
+                EventDescription.addName = function (builder, nameOffset) {
+                    builder.addFieldOffset(0, nameOffset, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number fixedSized
+                 */
+                EventDescription.addFixedSized = function (builder, fixedSized) {
+                    builder.addFieldInt32(1, fixedSized, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number index
+                 */
+                EventDescription.addIndex = function (builder, index) {
+                    builder.addFieldInt32(2, index, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @returns flatbuffers.Offset
+                 */
+                EventDescription.endEventDescription = function (builder) {
+                    var offset = builder.endObject();
+                    return offset;
+                };
+                ;
+                EventDescription.createEventDescription = function (builder, nameOffset, fixedSized, index) {
+                    EventDescription.startEventDescription(builder);
+                    EventDescription.addName(builder, nameOffset);
+                    EventDescription.addFixedSized(builder, fixedSized);
+                    EventDescription.addIndex(builder, index);
+                    return EventDescription.endEventDescription(builder);
+                };
+                return EventDescription;
+            }());
+            fb.EventDescription = EventDescription;
+        })(fb = mobsya.fb || (mobsya.fb = {}));
+    })(mobsya = exports.mobsya || (exports.mobsya = {}));
+    /**
+     * @constructor
+     */
+    (function (mobsya) {
+        var fb;
+        (function (fb) {
+            var RegisterEvents = /** @class */ (function () {
+                function RegisterEvents() {
+                    this.bb = null;
+                    this.bb_pos = 0;
+                }
+                /**
+                 * @param number i
+                 * @param flatbuffers.ByteBuffer bb
+                 * @returns RegisterEvents
+                 */
+                RegisterEvents.prototype.__init = function (i, bb) {
+                    this.bb_pos = i;
+                    this.bb = bb;
+                    return this;
+                };
+                ;
+                /**
+                 * @param flatbuffers.ByteBuffer bb
+                 * @param RegisterEvents= obj
+                 * @returns RegisterEvents
+                 */
+                RegisterEvents.getRootAsRegisterEvents = function (bb, obj) {
+                    return (obj || new RegisterEvents).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                RegisterEvents.prototype.requestId = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * @param number value
+                 * @returns boolean
+                 */
+                RegisterEvents.prototype.mutate_request_id = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeUint32(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                /**
+                 * @param mobsya.fb.NodeId= obj
+                 * @returns mobsya.fb.NodeId|null
+                 */
+                RegisterEvents.prototype.nodeOrGroupId = function (obj) {
+                    var offset = this.bb.__offset(this.bb_pos, 6);
+                    return offset ? (obj || new mobsya.fb.NodeId).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
+                };
+                ;
+                /**
+                 * @param number index
+                 * @param mobsya.fb.EventDescription= obj
+                 * @returns mobsya.fb.EventDescription
+                 */
+                RegisterEvents.prototype.events = function (index, obj) {
+                    var offset = this.bb.__offset(this.bb_pos, 8);
+                    return offset ? (obj || new mobsya.fb.EventDescription).__init(this.bb.__indirect(this.bb.__vector(this.bb_pos + offset) + index * 4), this.bb) : null;
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                RegisterEvents.prototype.eventsLength = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 8);
+                    return offset ? this.bb.__vector_len(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 */
+                RegisterEvents.startRegisterEvents = function (builder) {
+                    builder.startObject(3);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number requestId
+                 */
+                RegisterEvents.addRequestId = function (builder, requestId) {
+                    builder.addFieldInt32(0, requestId, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset nodeOrGroupIdOffset
+                 */
+                RegisterEvents.addNodeOrGroupId = function (builder, nodeOrGroupIdOffset) {
+                    builder.addFieldOffset(1, nodeOrGroupIdOffset, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset eventsOffset
+                 */
+                RegisterEvents.addEvents = function (builder, eventsOffset) {
+                    builder.addFieldOffset(2, eventsOffset, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param Array.<flatbuffers.Offset> data
+                 * @returns flatbuffers.Offset
+                 */
+                RegisterEvents.createEventsVector = function (builder, data) {
+                    builder.startVector(4, data.length, 4);
+                    for (var i = data.length - 1; i >= 0; i--) {
+                        builder.addOffset(data[i]);
+                    }
+                    return builder.endVector();
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number numElems
+                 */
+                RegisterEvents.startEventsVector = function (builder, numElems) {
+                    builder.startVector(4, numElems, 4);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @returns flatbuffers.Offset
+                 */
+                RegisterEvents.endRegisterEvents = function (builder) {
+                    var offset = builder.endObject();
+                    return offset;
+                };
+                ;
+                RegisterEvents.createRegisterEvents = function (builder, requestId, nodeOrGroupIdOffset, eventsOffset) {
+                    RegisterEvents.startRegisterEvents(builder);
+                    RegisterEvents.addRequestId(builder, requestId);
+                    RegisterEvents.addNodeOrGroupId(builder, nodeOrGroupIdOffset);
+                    RegisterEvents.addEvents(builder, eventsOffset);
+                    return RegisterEvents.endRegisterEvents(builder);
+                };
+                return RegisterEvents;
+            }());
+            fb.RegisterEvents = RegisterEvents;
+        })(fb = mobsya.fb || (mobsya.fb = {}));
+    })(mobsya = exports.mobsya || (exports.mobsya = {}));
+    /**
+     * @constructor
+     */
+    (function (mobsya) {
+        var fb;
+        (function (fb) {
+            var EventsDescriptionsChanged = /** @class */ (function () {
+                function EventsDescriptionsChanged() {
+                    this.bb = null;
+                    this.bb_pos = 0;
+                }
+                /**
+                 * @param number i
+                 * @param flatbuffers.ByteBuffer bb
+                 * @returns EventsDescriptionsChanged
+                 */
+                EventsDescriptionsChanged.prototype.__init = function (i, bb) {
+                    this.bb_pos = i;
+                    this.bb = bb;
+                    return this;
+                };
+                ;
+                /**
+                 * @param flatbuffers.ByteBuffer bb
+                 * @param EventsDescriptionsChanged= obj
+                 * @returns EventsDescriptionsChanged
+                 */
+                EventsDescriptionsChanged.getRootAsEventsDescriptionsChanged = function (bb, obj) {
+                    return (obj || new EventsDescriptionsChanged).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+                };
+                ;
+                /**
+                 * @param mobsya.fb.NodeId= obj
+                 * @returns mobsya.fb.NodeId|null
+                 */
+                EventsDescriptionsChanged.prototype.nodeOrGroupId = function (obj) {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    return offset ? (obj || new mobsya.fb.NodeId).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
+                };
+                ;
+                /**
+                 * @param number index
+                 * @param mobsya.fb.EventDescription= obj
+                 * @returns mobsya.fb.EventDescription
+                 */
+                EventsDescriptionsChanged.prototype.events = function (index, obj) {
+                    var offset = this.bb.__offset(this.bb_pos, 6);
+                    return offset ? (obj || new mobsya.fb.EventDescription).__init(this.bb.__indirect(this.bb.__vector(this.bb_pos + offset) + index * 4), this.bb) : null;
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                EventsDescriptionsChanged.prototype.eventsLength = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 6);
+                    return offset ? this.bb.__vector_len(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 */
+                EventsDescriptionsChanged.startEventsDescriptionsChanged = function (builder) {
+                    builder.startObject(2);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset nodeOrGroupIdOffset
+                 */
+                EventsDescriptionsChanged.addNodeOrGroupId = function (builder, nodeOrGroupIdOffset) {
+                    builder.addFieldOffset(0, nodeOrGroupIdOffset, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset eventsOffset
+                 */
+                EventsDescriptionsChanged.addEvents = function (builder, eventsOffset) {
+                    builder.addFieldOffset(1, eventsOffset, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param Array.<flatbuffers.Offset> data
+                 * @returns flatbuffers.Offset
+                 */
+                EventsDescriptionsChanged.createEventsVector = function (builder, data) {
+                    builder.startVector(4, data.length, 4);
+                    for (var i = data.length - 1; i >= 0; i--) {
+                        builder.addOffset(data[i]);
+                    }
+                    return builder.endVector();
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number numElems
+                 */
+                EventsDescriptionsChanged.startEventsVector = function (builder, numElems) {
+                    builder.startVector(4, numElems, 4);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @returns flatbuffers.Offset
+                 */
+                EventsDescriptionsChanged.endEventsDescriptionsChanged = function (builder) {
+                    var offset = builder.endObject();
+                    return offset;
+                };
+                ;
+                EventsDescriptionsChanged.createEventsDescriptionsChanged = function (builder, nodeOrGroupIdOffset, eventsOffset) {
+                    EventsDescriptionsChanged.startEventsDescriptionsChanged(builder);
+                    EventsDescriptionsChanged.addNodeOrGroupId(builder, nodeOrGroupIdOffset);
+                    EventsDescriptionsChanged.addEvents(builder, eventsOffset);
+                    return EventsDescriptionsChanged.endEventsDescriptionsChanged(builder);
+                };
+                return EventsDescriptionsChanged;
+            }());
+            fb.EventsDescriptionsChanged = EventsDescriptionsChanged;
+        })(fb = mobsya.fb || (mobsya.fb = {}));
+    })(mobsya = exports.mobsya || (exports.mobsya = {}));
+    /**
+     * @constructor
+     */
+    (function (mobsya) {
+        var fb;
+        (function (fb) {
+            var ScratchpadUpdate = /** @class */ (function () {
+                function ScratchpadUpdate() {
+                    this.bb = null;
+                    this.bb_pos = 0;
+                }
+                /**
+                 * @param number i
+                 * @param flatbuffers.ByteBuffer bb
+                 * @returns ScratchpadUpdate
+                 */
+                ScratchpadUpdate.prototype.__init = function (i, bb) {
+                    this.bb_pos = i;
+                    this.bb = bb;
+                    return this;
+                };
+                ;
+                /**
+                 * @param flatbuffers.ByteBuffer bb
+                 * @param ScratchpadUpdate= obj
+                 * @returns ScratchpadUpdate
+                 */
+                ScratchpadUpdate.getRootAsScratchpadUpdate = function (bb, obj) {
+                    return (obj || new ScratchpadUpdate).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                ScratchpadUpdate.prototype.requestId = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * @param number value
+                 * @returns boolean
+                 */
+                ScratchpadUpdate.prototype.mutate_request_id = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeUint32(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                /**
+                 * @param mobsya.fb.NodeId= obj
+                 * @returns mobsya.fb.NodeId|null
+                 */
+                ScratchpadUpdate.prototype.scratchpadId = function (obj) {
+                    var offset = this.bb.__offset(this.bb_pos, 6);
+                    return offset ? (obj || new mobsya.fb.NodeId).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
+                };
+                ;
+                /**
+                 * @param mobsya.fb.NodeId= obj
+                 * @returns mobsya.fb.NodeId|null
+                 */
+                ScratchpadUpdate.prototype.groupId = function (obj) {
+                    var offset = this.bb.__offset(this.bb_pos, 8);
+                    return offset ? (obj || new mobsya.fb.NodeId).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
+                };
+                ;
+                /**
+                 * @param mobsya.fb.NodeId= obj
+                 * @returns mobsya.fb.NodeId|null
+                 */
+                ScratchpadUpdate.prototype.nodeId = function (obj) {
+                    var offset = this.bb.__offset(this.bb_pos, 10);
+                    return offset ? (obj || new mobsya.fb.NodeId).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
+                };
+                ;
+                /**
+                 * @returns mobsya.fb.ProgrammingLanguage
+                 */
+                ScratchpadUpdate.prototype.language = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 12);
+                    return offset ? /**  */ (this.bb.readInt32(this.bb_pos + offset)) : mobsya.fb.ProgrammingLanguage.Aseba;
+                };
+                ;
+                /**
+                 * @param mobsya.fb.ProgrammingLanguage value
+                 * @returns boolean
+                 */
+                ScratchpadUpdate.prototype.mutate_language = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 12);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeInt32(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                ScratchpadUpdate.prototype.text = function (optionalEncoding) {
+                    var offset = this.bb.__offset(this.bb_pos, 14);
+                    return offset ? this.bb.__string(this.bb_pos + offset, optionalEncoding) : null;
+                };
+                ;
+                ScratchpadUpdate.prototype.name = function (optionalEncoding) {
+                    var offset = this.bb.__offset(this.bb_pos, 16);
+                    return offset ? this.bb.__string(this.bb_pos + offset, optionalEncoding) : null;
+                };
+                ;
+                /**
+                 * @returns boolean
+                 */
+                ScratchpadUpdate.prototype.deleted = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 18);
+                    return offset ? !!this.bb.readInt8(this.bb_pos + offset) : false;
+                };
+                ;
+                /**
+                 * @param boolean value
+                 * @returns boolean
+                 */
+                ScratchpadUpdate.prototype.mutate_deleted = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 18);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeInt8(this.bb_pos + offset, +value);
+                    return true;
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 */
+                ScratchpadUpdate.startScratchpadUpdate = function (builder) {
+                    builder.startObject(8);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number requestId
+                 */
+                ScratchpadUpdate.addRequestId = function (builder, requestId) {
+                    builder.addFieldInt32(0, requestId, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset scratchpadIdOffset
+                 */
+                ScratchpadUpdate.addScratchpadId = function (builder, scratchpadIdOffset) {
+                    builder.addFieldOffset(1, scratchpadIdOffset, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset groupIdOffset
+                 */
+                ScratchpadUpdate.addGroupId = function (builder, groupIdOffset) {
+                    builder.addFieldOffset(2, groupIdOffset, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset nodeIdOffset
+                 */
+                ScratchpadUpdate.addNodeId = function (builder, nodeIdOffset) {
+                    builder.addFieldOffset(3, nodeIdOffset, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param mobsya.fb.ProgrammingLanguage language
+                 */
+                ScratchpadUpdate.addLanguage = function (builder, language) {
+                    builder.addFieldInt32(4, language, mobsya.fb.ProgrammingLanguage.Aseba);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset textOffset
+                 */
+                ScratchpadUpdate.addText = function (builder, textOffset) {
+                    builder.addFieldOffset(5, textOffset, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset nameOffset
+                 */
+                ScratchpadUpdate.addName = function (builder, nameOffset) {
+                    builder.addFieldOffset(6, nameOffset, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param boolean deleted
+                 */
+                ScratchpadUpdate.addDeleted = function (builder, deleted) {
+                    builder.addFieldInt8(7, +deleted, +false);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @returns flatbuffers.Offset
+                 */
+                ScratchpadUpdate.endScratchpadUpdate = function (builder) {
+                    var offset = builder.endObject();
+                    builder.requiredField(offset, 6); // scratchpad_id
+                    builder.requiredField(offset, 14); // text
+                    return offset;
+                };
+                ;
+                ScratchpadUpdate.createScratchpadUpdate = function (builder, requestId, scratchpadIdOffset, groupIdOffset, nodeIdOffset, language, textOffset, nameOffset, deleted) {
+                    ScratchpadUpdate.startScratchpadUpdate(builder);
+                    ScratchpadUpdate.addRequestId(builder, requestId);
+                    ScratchpadUpdate.addScratchpadId(builder, scratchpadIdOffset);
+                    ScratchpadUpdate.addGroupId(builder, groupIdOffset);
+                    ScratchpadUpdate.addNodeId(builder, nodeIdOffset);
+                    ScratchpadUpdate.addLanguage(builder, language);
+                    ScratchpadUpdate.addText(builder, textOffset);
+                    ScratchpadUpdate.addName(builder, nameOffset);
+                    ScratchpadUpdate.addDeleted(builder, deleted);
+                    return ScratchpadUpdate.endScratchpadUpdate(builder);
+                };
+                return ScratchpadUpdate;
+            }());
+            fb.ScratchpadUpdate = ScratchpadUpdate;
+        })(fb = mobsya.fb || (mobsya.fb = {}));
+    })(mobsya = exports.mobsya || (exports.mobsya = {}));
+    /**
+     * @constructor
+     */
+    (function (mobsya) {
+        var fb;
+        (function (fb) {
+            var FirmwareUpgradeRequest = /** @class */ (function () {
+                function FirmwareUpgradeRequest() {
+                    this.bb = null;
+                    this.bb_pos = 0;
+                }
+                /**
+                 * @param number i
+                 * @param flatbuffers.ByteBuffer bb
+                 * @returns FirmwareUpgradeRequest
+                 */
+                FirmwareUpgradeRequest.prototype.__init = function (i, bb) {
+                    this.bb_pos = i;
+                    this.bb = bb;
+                    return this;
+                };
+                ;
+                /**
+                 * @param flatbuffers.ByteBuffer bb
+                 * @param FirmwareUpgradeRequest= obj
+                 * @returns FirmwareUpgradeRequest
+                 */
+                FirmwareUpgradeRequest.getRootAsFirmwareUpgradeRequest = function (bb, obj) {
+                    return (obj || new FirmwareUpgradeRequest).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                FirmwareUpgradeRequest.prototype.requestId = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * @param number value
+                 * @returns boolean
+                 */
+                FirmwareUpgradeRequest.prototype.mutate_request_id = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeUint32(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                /**
+                 * @param mobsya.fb.NodeId= obj
+                 * @returns mobsya.fb.NodeId|null
+                 */
+                FirmwareUpgradeRequest.prototype.nodeId = function (obj) {
+                    var offset = this.bb.__offset(this.bb_pos, 6);
+                    return offset ? (obj || new mobsya.fb.NodeId).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 */
+                FirmwareUpgradeRequest.startFirmwareUpgradeRequest = function (builder) {
+                    builder.startObject(2);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number requestId
+                 */
+                FirmwareUpgradeRequest.addRequestId = function (builder, requestId) {
+                    builder.addFieldInt32(0, requestId, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset nodeIdOffset
+                 */
+                FirmwareUpgradeRequest.addNodeId = function (builder, nodeIdOffset) {
+                    builder.addFieldOffset(1, nodeIdOffset, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @returns flatbuffers.Offset
+                 */
+                FirmwareUpgradeRequest.endFirmwareUpgradeRequest = function (builder) {
+                    var offset = builder.endObject();
+                    return offset;
+                };
+                ;
+                FirmwareUpgradeRequest.createFirmwareUpgradeRequest = function (builder, requestId, nodeIdOffset) {
+                    FirmwareUpgradeRequest.startFirmwareUpgradeRequest(builder);
+                    FirmwareUpgradeRequest.addRequestId(builder, requestId);
+                    FirmwareUpgradeRequest.addNodeId(builder, nodeIdOffset);
+                    return FirmwareUpgradeRequest.endFirmwareUpgradeRequest(builder);
+                };
+                return FirmwareUpgradeRequest;
+            }());
+            fb.FirmwareUpgradeRequest = FirmwareUpgradeRequest;
+        })(fb = mobsya.fb || (mobsya.fb = {}));
+    })(mobsya = exports.mobsya || (exports.mobsya = {}));
+    /**
+     * @constructor
+     */
+    (function (mobsya) {
+        var fb;
+        (function (fb) {
+            var FirmwareUpgradeStatus = /** @class */ (function () {
+                function FirmwareUpgradeStatus() {
+                    this.bb = null;
+                    this.bb_pos = 0;
+                }
+                /**
+                 * @param number i
+                 * @param flatbuffers.ByteBuffer bb
+                 * @returns FirmwareUpgradeStatus
+                 */
+                FirmwareUpgradeStatus.prototype.__init = function (i, bb) {
+                    this.bb_pos = i;
+                    this.bb = bb;
+                    return this;
+                };
+                ;
+                /**
+                 * @param flatbuffers.ByteBuffer bb
+                 * @param FirmwareUpgradeStatus= obj
+                 * @returns FirmwareUpgradeStatus
+                 */
+                FirmwareUpgradeStatus.getRootAsFirmwareUpgradeStatus = function (bb, obj) {
+                    return (obj || new FirmwareUpgradeStatus).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                FirmwareUpgradeStatus.prototype.requestId = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * @param number value
+                 * @returns boolean
+                 */
+                FirmwareUpgradeStatus.prototype.mutate_request_id = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeUint32(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                /**
+                 * @param mobsya.fb.NodeId= obj
+                 * @returns mobsya.fb.NodeId|null
+                 */
+                FirmwareUpgradeStatus.prototype.nodeId = function (obj) {
+                    var offset = this.bb.__offset(this.bb_pos, 6);
+                    return offset ? (obj || new mobsya.fb.NodeId).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                FirmwareUpgradeStatus.prototype.progress = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 8);
+                    return offset ? this.bb.readFloat64(this.bb_pos + offset) : 0.0;
+                };
+                ;
+                /**
+                 * @param number value
+                 * @returns boolean
+                 */
+                FirmwareUpgradeStatus.prototype.mutate_progress = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 8);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeFloat64(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 */
+                FirmwareUpgradeStatus.startFirmwareUpgradeStatus = function (builder) {
+                    builder.startObject(3);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number requestId
+                 */
+                FirmwareUpgradeStatus.addRequestId = function (builder, requestId) {
+                    builder.addFieldInt32(0, requestId, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset nodeIdOffset
+                 */
+                FirmwareUpgradeStatus.addNodeId = function (builder, nodeIdOffset) {
+                    builder.addFieldOffset(1, nodeIdOffset, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number progress
+                 */
+                FirmwareUpgradeStatus.addProgress = function (builder, progress) {
+                    builder.addFieldFloat64(2, progress, 0.0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @returns flatbuffers.Offset
+                 */
+                FirmwareUpgradeStatus.endFirmwareUpgradeStatus = function (builder) {
+                    var offset = builder.endObject();
+                    return offset;
+                };
+                ;
+                FirmwareUpgradeStatus.createFirmwareUpgradeStatus = function (builder, requestId, nodeIdOffset, progress) {
+                    FirmwareUpgradeStatus.startFirmwareUpgradeStatus(builder);
+                    FirmwareUpgradeStatus.addRequestId(builder, requestId);
+                    FirmwareUpgradeStatus.addNodeId(builder, nodeIdOffset);
+                    FirmwareUpgradeStatus.addProgress(builder, progress);
+                    return FirmwareUpgradeStatus.endFirmwareUpgradeStatus(builder);
+                };
+                return FirmwareUpgradeStatus;
+            }());
+            fb.FirmwareUpgradeStatus = FirmwareUpgradeStatus;
+        })(fb = mobsya.fb || (mobsya.fb = {}));
+    })(mobsya = exports.mobsya || (exports.mobsya = {}));
+    /**
+     * @constructor
+     */
+    (function (mobsya) {
+        var fb;
+        (function (fb) {
+            var Thymio2WirelessDongle = /** @class */ (function () {
+                function Thymio2WirelessDongle() {
+                    this.bb = null;
+                    this.bb_pos = 0;
+                }
+                /**
+                 * @param number i
+                 * @param flatbuffers.ByteBuffer bb
+                 * @returns Thymio2WirelessDongle
+                 */
+                Thymio2WirelessDongle.prototype.__init = function (i, bb) {
+                    this.bb_pos = i;
+                    this.bb = bb;
+                    return this;
+                };
+                ;
+                /**
+                 * @param flatbuffers.ByteBuffer bb
+                 * @param Thymio2WirelessDongle= obj
+                 * @returns Thymio2WirelessDongle
+                 */
+                Thymio2WirelessDongle.getRootAsThymio2WirelessDongle = function (bb, obj) {
+                    return (obj || new Thymio2WirelessDongle).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+                };
+                ;
+                /**
+                 * @param mobsya.fb.NodeId= obj
+                 * @returns mobsya.fb.NodeId|null
+                 */
+                Thymio2WirelessDongle.prototype.dongleId = function (obj) {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    return offset ? (obj || new mobsya.fb.NodeId).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                Thymio2WirelessDongle.prototype.dongleNode = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 6);
+                    return offset ? this.bb.readUint16(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * @param number value
+                 * @returns boolean
+                 */
+                Thymio2WirelessDongle.prototype.mutate_dongle_node = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 6);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeUint16(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                Thymio2WirelessDongle.prototype.networkId = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 8);
+                    return offset ? this.bb.readUint16(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * @param number value
+                 * @returns boolean
+                 */
+                Thymio2WirelessDongle.prototype.mutate_network_id = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 8);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeUint16(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                Thymio2WirelessDongle.prototype.channelId = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 10);
+                    return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * @param number value
+                 * @returns boolean
+                 */
+                Thymio2WirelessDongle.prototype.mutate_channel_id = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 10);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeUint8(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 */
+                Thymio2WirelessDongle.startThymio2WirelessDongle = function (builder) {
+                    builder.startObject(4);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset dongleIdOffset
+                 */
+                Thymio2WirelessDongle.addDongleId = function (builder, dongleIdOffset) {
+                    builder.addFieldOffset(0, dongleIdOffset, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number dongleNode
+                 */
+                Thymio2WirelessDongle.addDongleNode = function (builder, dongleNode) {
+                    builder.addFieldInt16(1, dongleNode, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number networkId
+                 */
+                Thymio2WirelessDongle.addNetworkId = function (builder, networkId) {
+                    builder.addFieldInt16(2, networkId, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number channelId
+                 */
+                Thymio2WirelessDongle.addChannelId = function (builder, channelId) {
+                    builder.addFieldInt8(3, channelId, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @returns flatbuffers.Offset
+                 */
+                Thymio2WirelessDongle.endThymio2WirelessDongle = function (builder) {
+                    var offset = builder.endObject();
+                    return offset;
+                };
+                ;
+                Thymio2WirelessDongle.createThymio2WirelessDongle = function (builder, dongleIdOffset, dongleNode, networkId, channelId) {
+                    Thymio2WirelessDongle.startThymio2WirelessDongle(builder);
+                    Thymio2WirelessDongle.addDongleId(builder, dongleIdOffset);
+                    Thymio2WirelessDongle.addDongleNode(builder, dongleNode);
+                    Thymio2WirelessDongle.addNetworkId(builder, networkId);
+                    Thymio2WirelessDongle.addChannelId(builder, channelId);
+                    return Thymio2WirelessDongle.endThymio2WirelessDongle(builder);
+                };
+                return Thymio2WirelessDongle;
+            }());
+            fb.Thymio2WirelessDongle = Thymio2WirelessDongle;
+        })(fb = mobsya.fb || (mobsya.fb = {}));
+    })(mobsya = exports.mobsya || (exports.mobsya = {}));
+    /**
+     * @constructor
+     */
+    (function (mobsya) {
+        var fb;
+        (function (fb) {
+            var EnableThymio2PairingMode = /** @class */ (function () {
+                function EnableThymio2PairingMode() {
+                    this.bb = null;
+                    this.bb_pos = 0;
+                }
+                /**
+                 * @param number i
+                 * @param flatbuffers.ByteBuffer bb
+                 * @returns EnableThymio2PairingMode
+                 */
+                EnableThymio2PairingMode.prototype.__init = function (i, bb) {
+                    this.bb_pos = i;
+                    this.bb = bb;
+                    return this;
+                };
+                ;
+                /**
+                 * @param flatbuffers.ByteBuffer bb
+                 * @param EnableThymio2PairingMode= obj
+                 * @returns EnableThymio2PairingMode
+                 */
+                EnableThymio2PairingMode.getRootAsEnableThymio2PairingMode = function (bb, obj) {
+                    return (obj || new EnableThymio2PairingMode).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+                };
+                ;
+                /**
+                 * @returns boolean
+                 */
+                EnableThymio2PairingMode.prototype.enable = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    return offset ? !!this.bb.readInt8(this.bb_pos + offset) : true;
+                };
+                ;
+                /**
+                 * @param boolean value
+                 * @returns boolean
+                 */
+                EnableThymio2PairingMode.prototype.mutate_enable = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeInt8(this.bb_pos + offset, +value);
+                    return true;
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 */
+                EnableThymio2PairingMode.startEnableThymio2PairingMode = function (builder) {
+                    builder.startObject(1);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param boolean enable
+                 */
+                EnableThymio2PairingMode.addEnable = function (builder, enable) {
+                    builder.addFieldInt8(0, +enable, +true);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @returns flatbuffers.Offset
+                 */
+                EnableThymio2PairingMode.endEnableThymio2PairingMode = function (builder) {
+                    var offset = builder.endObject();
+                    return offset;
+                };
+                ;
+                EnableThymio2PairingMode.createEnableThymio2PairingMode = function (builder, enable) {
+                    EnableThymio2PairingMode.startEnableThymio2PairingMode(builder);
+                    EnableThymio2PairingMode.addEnable(builder, enable);
+                    return EnableThymio2PairingMode.endEnableThymio2PairingMode(builder);
+                };
+                return EnableThymio2PairingMode;
+            }());
+            fb.EnableThymio2PairingMode = EnableThymio2PairingMode;
+        })(fb = mobsya.fb || (mobsya.fb = {}));
+    })(mobsya = exports.mobsya || (exports.mobsya = {}));
+    /**
+     * @constructor
+     */
+    (function (mobsya) {
+        var fb;
+        (function (fb) {
+            var Thymio2WirelessDonglesChanged = /** @class */ (function () {
+                function Thymio2WirelessDonglesChanged() {
+                    this.bb = null;
+                    this.bb_pos = 0;
+                }
+                /**
+                 * @param number i
+                 * @param flatbuffers.ByteBuffer bb
+                 * @returns Thymio2WirelessDonglesChanged
+                 */
+                Thymio2WirelessDonglesChanged.prototype.__init = function (i, bb) {
+                    this.bb_pos = i;
+                    this.bb = bb;
+                    return this;
+                };
+                ;
+                /**
+                 * @param flatbuffers.ByteBuffer bb
+                 * @param Thymio2WirelessDonglesChanged= obj
+                 * @returns Thymio2WirelessDonglesChanged
+                 */
+                Thymio2WirelessDonglesChanged.getRootAsThymio2WirelessDonglesChanged = function (bb, obj) {
+                    return (obj || new Thymio2WirelessDonglesChanged).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+                };
+                ;
+                /**
+                 * @param number index
+                 * @param mobsya.fb.Thymio2WirelessDongle= obj
+                 * @returns mobsya.fb.Thymio2WirelessDongle
+                 */
+                Thymio2WirelessDonglesChanged.prototype.dongles = function (index, obj) {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    return offset ? (obj || new mobsya.fb.Thymio2WirelessDongle).__init(this.bb.__indirect(this.bb.__vector(this.bb_pos + offset) + index * 4), this.bb) : null;
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                Thymio2WirelessDonglesChanged.prototype.donglesLength = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    return offset ? this.bb.__vector_len(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 */
+                Thymio2WirelessDonglesChanged.startThymio2WirelessDonglesChanged = function (builder) {
+                    builder.startObject(1);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset donglesOffset
+                 */
+                Thymio2WirelessDonglesChanged.addDongles = function (builder, donglesOffset) {
+                    builder.addFieldOffset(0, donglesOffset, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param Array.<flatbuffers.Offset> data
+                 * @returns flatbuffers.Offset
+                 */
+                Thymio2WirelessDonglesChanged.createDonglesVector = function (builder, data) {
+                    builder.startVector(4, data.length, 4);
+                    for (var i = data.length - 1; i >= 0; i--) {
+                        builder.addOffset(data[i]);
+                    }
+                    return builder.endVector();
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number numElems
+                 */
+                Thymio2WirelessDonglesChanged.startDonglesVector = function (builder, numElems) {
+                    builder.startVector(4, numElems, 4);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @returns flatbuffers.Offset
+                 */
+                Thymio2WirelessDonglesChanged.endThymio2WirelessDonglesChanged = function (builder) {
+                    var offset = builder.endObject();
+                    return offset;
+                };
+                ;
+                Thymio2WirelessDonglesChanged.createThymio2WirelessDonglesChanged = function (builder, donglesOffset) {
+                    Thymio2WirelessDonglesChanged.startThymio2WirelessDonglesChanged(builder);
+                    Thymio2WirelessDonglesChanged.addDongles(builder, donglesOffset);
+                    return Thymio2WirelessDonglesChanged.endThymio2WirelessDonglesChanged(builder);
+                };
+                return Thymio2WirelessDonglesChanged;
+            }());
+            fb.Thymio2WirelessDonglesChanged = Thymio2WirelessDonglesChanged;
+        })(fb = mobsya.fb || (mobsya.fb = {}));
+    })(mobsya = exports.mobsya || (exports.mobsya = {}));
+    /**
+     * @constructor
+     */
+    (function (mobsya) {
+        var fb;
+        (function (fb) {
+            var Thymio2WirelessDonglePairingRequest = /** @class */ (function () {
+                function Thymio2WirelessDonglePairingRequest() {
+                    this.bb = null;
+                    this.bb_pos = 0;
+                }
+                /**
+                 * @param number i
+                 * @param flatbuffers.ByteBuffer bb
+                 * @returns Thymio2WirelessDonglePairingRequest
+                 */
+                Thymio2WirelessDonglePairingRequest.prototype.__init = function (i, bb) {
+                    this.bb_pos = i;
+                    this.bb = bb;
+                    return this;
+                };
+                ;
+                /**
+                 * @param flatbuffers.ByteBuffer bb
+                 * @param Thymio2WirelessDonglePairingRequest= obj
+                 * @returns Thymio2WirelessDonglePairingRequest
+                 */
+                Thymio2WirelessDonglePairingRequest.getRootAsThymio2WirelessDonglePairingRequest = function (bb, obj) {
+                    return (obj || new Thymio2WirelessDonglePairingRequest).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                Thymio2WirelessDonglePairingRequest.prototype.requestId = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * @param number value
+                 * @returns boolean
+                 */
+                Thymio2WirelessDonglePairingRequest.prototype.mutate_request_id = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeUint32(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                /**
+                 * @param mobsya.fb.NodeId= obj
+                 * @returns mobsya.fb.NodeId|null
+                 */
+                Thymio2WirelessDonglePairingRequest.prototype.dongleId = function (obj) {
+                    var offset = this.bb.__offset(this.bb_pos, 6);
+                    return offset ? (obj || new mobsya.fb.NodeId).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
+                };
+                ;
+                /**
+                 * @param mobsya.fb.NodeId= obj
+                 * @returns mobsya.fb.NodeId|null
+                 */
+                Thymio2WirelessDonglePairingRequest.prototype.nodeId = function (obj) {
+                    var offset = this.bb.__offset(this.bb_pos, 8);
+                    return offset ? (obj || new mobsya.fb.NodeId).__init(this.bb.__indirect(this.bb_pos + offset), this.bb) : null;
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                Thymio2WirelessDonglePairingRequest.prototype.networkId = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 10);
+                    return offset ? this.bb.readUint16(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * @param number value
+                 * @returns boolean
+                 */
+                Thymio2WirelessDonglePairingRequest.prototype.mutate_network_id = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 10);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeUint16(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                Thymio2WirelessDonglePairingRequest.prototype.channelId = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 12);
+                    return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * @param number value
+                 * @returns boolean
+                 */
+                Thymio2WirelessDonglePairingRequest.prototype.mutate_channel_id = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 12);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeUint8(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 */
+                Thymio2WirelessDonglePairingRequest.startThymio2WirelessDonglePairingRequest = function (builder) {
+                    builder.startObject(5);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number requestId
+                 */
+                Thymio2WirelessDonglePairingRequest.addRequestId = function (builder, requestId) {
+                    builder.addFieldInt32(0, requestId, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset dongleIdOffset
+                 */
+                Thymio2WirelessDonglePairingRequest.addDongleId = function (builder, dongleIdOffset) {
+                    builder.addFieldOffset(1, dongleIdOffset, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset nodeIdOffset
+                 */
+                Thymio2WirelessDonglePairingRequest.addNodeId = function (builder, nodeIdOffset) {
+                    builder.addFieldOffset(2, nodeIdOffset, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number networkId
+                 */
+                Thymio2WirelessDonglePairingRequest.addNetworkId = function (builder, networkId) {
+                    builder.addFieldInt16(3, networkId, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number channelId
+                 */
+                Thymio2WirelessDonglePairingRequest.addChannelId = function (builder, channelId) {
+                    builder.addFieldInt8(4, channelId, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @returns flatbuffers.Offset
+                 */
+                Thymio2WirelessDonglePairingRequest.endThymio2WirelessDonglePairingRequest = function (builder) {
+                    var offset = builder.endObject();
+                    return offset;
+                };
+                ;
+                Thymio2WirelessDonglePairingRequest.createThymio2WirelessDonglePairingRequest = function (builder, requestId, dongleIdOffset, nodeIdOffset, networkId, channelId) {
+                    Thymio2WirelessDonglePairingRequest.startThymio2WirelessDonglePairingRequest(builder);
+                    Thymio2WirelessDonglePairingRequest.addRequestId(builder, requestId);
+                    Thymio2WirelessDonglePairingRequest.addDongleId(builder, dongleIdOffset);
+                    Thymio2WirelessDonglePairingRequest.addNodeId(builder, nodeIdOffset);
+                    Thymio2WirelessDonglePairingRequest.addNetworkId(builder, networkId);
+                    Thymio2WirelessDonglePairingRequest.addChannelId(builder, channelId);
+                    return Thymio2WirelessDonglePairingRequest.endThymio2WirelessDonglePairingRequest(builder);
+                };
+                return Thymio2WirelessDonglePairingRequest;
+            }());
+            fb.Thymio2WirelessDonglePairingRequest = Thymio2WirelessDonglePairingRequest;
+        })(fb = mobsya.fb || (mobsya.fb = {}));
+    })(mobsya = exports.mobsya || (exports.mobsya = {}));
+    /**
+     * @constructor
+     */
+    (function (mobsya) {
+        var fb;
+        (function (fb) {
+            var Thymio2WirelessDonglePairingResponse = /** @class */ (function () {
+                function Thymio2WirelessDonglePairingResponse() {
+                    this.bb = null;
+                    this.bb_pos = 0;
+                }
+                /**
+                 * @param number i
+                 * @param flatbuffers.ByteBuffer bb
+                 * @returns Thymio2WirelessDonglePairingResponse
+                 */
+                Thymio2WirelessDonglePairingResponse.prototype.__init = function (i, bb) {
+                    this.bb_pos = i;
+                    this.bb = bb;
+                    return this;
+                };
+                ;
+                /**
+                 * @param flatbuffers.ByteBuffer bb
+                 * @param Thymio2WirelessDonglePairingResponse= obj
+                 * @returns Thymio2WirelessDonglePairingResponse
+                 */
+                Thymio2WirelessDonglePairingResponse.getRootAsThymio2WirelessDonglePairingResponse = function (bb, obj) {
+                    return (obj || new Thymio2WirelessDonglePairingResponse).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                Thymio2WirelessDonglePairingResponse.prototype.requestId = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    return offset ? this.bb.readUint32(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * @param number value
+                 * @returns boolean
+                 */
+                Thymio2WirelessDonglePairingResponse.prototype.mutate_request_id = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeUint32(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                Thymio2WirelessDonglePairingResponse.prototype.networkId = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 6);
+                    return offset ? this.bb.readUint16(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * @param number value
+                 * @returns boolean
+                 */
+                Thymio2WirelessDonglePairingResponse.prototype.mutate_network_id = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 6);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeUint16(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                /**
+                 * @returns number
+                 */
+                Thymio2WirelessDonglePairingResponse.prototype.channelId = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 8);
+                    return offset ? this.bb.readUint8(this.bb_pos + offset) : 0;
+                };
+                ;
+                /**
+                 * @param number value
+                 * @returns boolean
+                 */
+                Thymio2WirelessDonglePairingResponse.prototype.mutate_channel_id = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 8);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeUint8(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 */
+                Thymio2WirelessDonglePairingResponse.startThymio2WirelessDonglePairingResponse = function (builder) {
+                    builder.startObject(3);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number requestId
+                 */
+                Thymio2WirelessDonglePairingResponse.addRequestId = function (builder, requestId) {
+                    builder.addFieldInt32(0, requestId, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number networkId
+                 */
+                Thymio2WirelessDonglePairingResponse.addNetworkId = function (builder, networkId) {
+                    builder.addFieldInt16(1, networkId, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param number channelId
+                 */
+                Thymio2WirelessDonglePairingResponse.addChannelId = function (builder, channelId) {
+                    builder.addFieldInt8(2, channelId, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @returns flatbuffers.Offset
+                 */
+                Thymio2WirelessDonglePairingResponse.endThymio2WirelessDonglePairingResponse = function (builder) {
+                    var offset = builder.endObject();
+                    return offset;
+                };
+                ;
+                Thymio2WirelessDonglePairingResponse.createThymio2WirelessDonglePairingResponse = function (builder, requestId, networkId, channelId) {
+                    Thymio2WirelessDonglePairingResponse.startThymio2WirelessDonglePairingResponse(builder);
+                    Thymio2WirelessDonglePairingResponse.addRequestId(builder, requestId);
+                    Thymio2WirelessDonglePairingResponse.addNetworkId(builder, networkId);
+                    Thymio2WirelessDonglePairingResponse.addChannelId(builder, channelId);
+                    return Thymio2WirelessDonglePairingResponse.endThymio2WirelessDonglePairingResponse(builder);
+                };
+                return Thymio2WirelessDonglePairingResponse;
+            }());
+            fb.Thymio2WirelessDonglePairingResponse = Thymio2WirelessDonglePairingResponse;
+        })(fb = mobsya.fb || (mobsya.fb = {}));
+    })(mobsya = exports.mobsya || (exports.mobsya = {}));
+    /**
+     * @constructor
+     */
+    (function (mobsya) {
+        var fb;
+        (function (fb) {
+            var Message = /** @class */ (function () {
+                function Message() {
+                    this.bb = null;
+                    this.bb_pos = 0;
+                }
+                /**
+                 * @param number i
+                 * @param flatbuffers.ByteBuffer bb
+                 * @returns Message
+                 */
+                Message.prototype.__init = function (i, bb) {
+                    this.bb_pos = i;
+                    this.bb = bb;
+                    return this;
+                };
+                ;
+                /**
+                 * @param flatbuffers.ByteBuffer bb
+                 * @param Message= obj
+                 * @returns Message
+                 */
+                Message.getRootAsMessage = function (bb, obj) {
+                    return (obj || new Message).__init(bb.readInt32(bb.position()) + bb.position(), bb);
+                };
+                ;
+                /**
+                 * @returns mobsya.fb.AnyMessage
+                 */
+                Message.prototype.messageType = function () {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    return offset ? /**  */ (this.bb.readUint8(this.bb_pos + offset)) : mobsya.fb.AnyMessage.NONE;
+                };
+                ;
+                /**
+                 * @param mobsya.fb.AnyMessage value
+                 * @returns boolean
+                 */
+                Message.prototype.mutate_message_type = function (value) {
+                    var offset = this.bb.__offset(this.bb_pos, 4);
+                    if (offset === 0) {
+                        return false;
+                    }
+                    this.bb.writeUint8(this.bb_pos + offset, value);
+                    return true;
+                };
+                ;
+                /**
+                 * @param flatbuffers.Table obj
+                 * @returns ?flatbuffers.Table
+                 */
+                Message.prototype.message = function (obj) {
+                    var offset = this.bb.__offset(this.bb_pos, 6);
+                    return offset ? this.bb.__union(obj, this.bb_pos + offset) : null;
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 */
+                Message.startMessage = function (builder) {
+                    builder.startObject(2);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param mobsya.fb.AnyMessage messageType
+                 */
+                Message.addMessageType = function (builder, messageType) {
+                    builder.addFieldInt8(0, messageType, mobsya.fb.AnyMessage.NONE);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset messageOffset
+                 */
+                Message.addMessage = function (builder, messageOffset) {
+                    builder.addFieldOffset(1, messageOffset, 0);
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @returns flatbuffers.Offset
+                 */
+                Message.endMessage = function (builder) {
+                    var offset = builder.endObject();
+                    return offset;
+                };
+                ;
+                /**
+                 * @param flatbuffers.Builder builder
+                 * @param flatbuffers.Offset offset
+                 */
+                Message.finishMessageBuffer = function (builder, offset) {
+                    builder.finish(offset);
+                };
+                ;
+                Message.createMessage = function (builder, messageType, messageOffset) {
+                    Message.startMessage(builder);
+                    Message.addMessageType(builder, messageType);
+                    Message.addMessage(builder, messageOffset);
+                    return Message.endMessage(builder);
+                };
+                return Message;
+            }());
+            fb.Message = Message;
+        })(fb = mobsya.fb || (mobsya.fb = {}));
+    })(mobsya = exports.mobsya || (exports.mobsya = {}));
+});

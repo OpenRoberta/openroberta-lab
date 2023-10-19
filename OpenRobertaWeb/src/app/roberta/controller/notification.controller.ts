@@ -65,14 +65,14 @@ export function reloadNotifications() {
 
 /*----------- NOTIFICATION MODAL -----------*/
 
-export function showNotificationModal() {
-    notificationModel.getNotifications(function (result) {
+export function showNotificationModal(): void {
+    notificationModel.getNotifications(function(result): void {
         setFileDownloadContent(result.notifications);
         $('#modal-notifications').modal('show');
     });
 }
 
-function showAlertInNotificationModal(context, content, time?) {
+function showAlertInNotificationModal(context, content, time?): void {
     time = time || 6 * 1000;
     const $alert = $('#notification-modal-alert');
     $alert
@@ -85,11 +85,11 @@ function showAlertInNotificationModal(context, content, time?) {
         .slideUp();
 }
 
-function initNotificationModal() {
-    $notificationForm.onWrap('submit', (e) => {
+function initNotificationModal(): void {
+    $notificationForm.onWrap('submit', (e): void => {
         e.preventDefault();
-        readFileInputField((fileContent) => {
-            notificationModel.postNotifications(fileContent, function (restResponse) {
+        readFileInputField((fileContent): void => {
+            notificationModel.postNotifications(fileContent, function(restResponse) {
                 if (restResponse.rc === 'ok' && restResponse.message === 'ORA_NOTIFICATION_SUCCESS') {
                     $notificationForm.trigger('reset');
                     showAlertInNotificationModal('success', 'The notifications were transmitted successfully');
@@ -106,14 +106,14 @@ function initNotificationModal() {
     });
 }
 
-function readFileInputField(readyFn) {
+function readFileInputField(readyFn: Function): void {
     let uploadedFiles = $notificationFileUpload.prop('files');
     if (uploadedFiles.length > 0) {
         readFile(uploadedFiles[0], readyFn);
     }
 }
 
-function readFile(file, readyFn) {
+function readFile(file, readyFn: Function): void {
     const fileReader = new FileReader();
     fileReader.onload = () => readyFn(fileReader.result);
     fileReader.readAsText(file);
@@ -409,12 +409,12 @@ class ElementMarkerState extends NotificationState {
         super(elementMarker.time || defaultElementMarkerTime);
         this._content = parseLocalized(elementMarker.content);
         this.$element = $(parseSelector(elementMarker));
-        this.$badge = $("<span class='badge badge-primary' style='display:none;'>" + this._content + '</span>');
+        this.$badge = $('<span class=\'badge badge-primary\' style=\'display:none;\'>' + this._content + '</span>');
     }
 
     protected hideAction() {
         if (this.$element.length) {
-            this.$badge.fadeOut(fadingDuration).queue(function () {
+            this.$badge.fadeOut(fadingDuration).queue(function() {
                 $(this).remove();
             });
         }
@@ -437,9 +437,9 @@ class StartScreenNotificationState extends NotificationState {
         this.content = parseLocalized(startScreen.content);
         this.$element = $(
             '<h4 style="display: none">' +
-                '<button aria-hidden="true" class="btn-close btn-close-white float-end" onclick="$(this).parent().slideUp(400)" type="button"></button>\n' +
-                this.content +
-                '</h4>'
+            '<button aria-hidden="true" class="btn-close btn-close-white float-end" onclick="$(this).parent().slideUp(400)" type="button"></button>\n' +
+            this.content +
+            '</h4>'
         );
     }
 
@@ -448,7 +448,7 @@ class StartScreenNotificationState extends NotificationState {
     }
 
     protected hideAction() {
-        this.$element.slideUp(fadingDuration).queue(function () {
+        this.$element.slideUp(fadingDuration).queue(function() {
             $(this).remove();
         });
     }

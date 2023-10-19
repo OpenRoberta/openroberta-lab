@@ -1,3 +1,29 @@
-var __extends=this&&this.__extends||function(){var t=function(o,e){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,o){t.__proto__=o}||function(t,o){for(var e in o)Object.prototype.hasOwnProperty.call(o,e)&&(t[e]=o[e])},t(o,e)};return function(o,e){if("function"!=typeof e&&null!==e)throw new TypeError("Class extends value "+String(e)+" is not a constructor or null");function n(){this.constructor=o}t(o,e),o.prototype=null===e?Object.create(e):(n.prototype=e.prototype,new n)}}();define(["require","exports","robot.base"],(function(t,o,e){Object.defineProperty(o,"__esModule",{value:!0}),o.RobotBaseStationary=void 0;var n=function(t){function o(o,e,n,r,i){var a=t.call(this,o,e,n,r,i)||this;return a.mobile=!1,a}return __extends(o,t),o}(e.RobotBase);o.RobotBaseStationary=n}));
-//# sourceMappingURL=robot.base.stationary.js.map
-//# sourceMappingURL=robot.base.stationary.js.map
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+define(["require", "exports", "robot.base"], function (require, exports, robot_base_1) {
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.RobotBaseStationary = void 0;
+    var RobotBaseStationary = /** @class */ (function (_super) {
+        __extends(RobotBaseStationary, _super);
+        function RobotBaseStationary(id, configuration, interpreter, name, mySelectionListener) {
+            var _this = _super.call(this, id, configuration, interpreter, name, mySelectionListener) || this;
+            _this.mobile = false;
+            return _this;
+        }
+        return RobotBaseStationary;
+    }(robot_base_1.RobotBase));
+    exports.RobotBaseStationary = RobotBaseStationary;
+});

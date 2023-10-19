@@ -2,21 +2,23 @@ import * as UTIL from 'util.roberta';
 import * as GUISTATE_C from 'guiState.controller';
 import * as $ from 'jquery';
 import 'bootstrap-table';
+//@ts-ignore
+import * as Blockly from 'blockly';
 
 /**
  * Initialize table of programs
  */
-export function init() {
+export function init(): void {
     initLogList();
     initLogListEvents();
 }
 
-export function switchLanguage() {
+export function switchLanguage(): void {
     $('#logTable').bootstrapTable('destroy');
     init();
 }
 
-function initLogList() {
+function initLogList(): void {
     $('#logTable').bootstrapTable({
         locale: GUISTATE_C.getLanguage(),
         pageList: '[ 10, 25, All ]',
@@ -66,16 +68,17 @@ function initLogList() {
         .find('button[name="paginationSwitch"]')
         .attr('title', '')
         .attr('rel', 'tooltip')
+        //@ts-ignore
         .attr('data-bs-original-title', $('#logTable').bootstrapTable.locales[GUISTATE_C.getLanguage()].formatPaginationSwitch())
         .tooltip({ trigger: 'hover' });
 }
 
-function initLogListEvents() {
+function initLogListEvents(): void {
     $('#tabLogList').onWrap('show.bs.tab', function () {
         GUISTATE_C.setView('tabLogList');
     });
 
-    $(window).resize(function () {
+    $(window).resize(function (): void {
         $('#logTable').bootstrapTable('resetView', {
             height: UTIL.calcDataTableHeight(),
         });
@@ -85,7 +88,7 @@ function initLogListEvents() {
         .find('button[name="refresh"]')
         .onWrap(
             'click',
-            function () {
+            function (): boolean {
                 $('#logTable').bootstrapTable('removeAll');
                 return false;
             },
@@ -94,15 +97,16 @@ function initLogListEvents() {
 
     $('#backLogList').onWrap(
         'click',
-        function () {
-            $('#' + GUISTATE_C.getPrevView()).tabWrapShow();
+        function (): boolean {
+            //$('#' + GUISTATE_C.getPrevView()).tabWrapShow();
+            $('#' + GUISTATE_C.getPrevView().tabWrapShow());
             return false;
         },
         'back to previous view'
     );
 }
 
-function rowStyle(row, index) {
+function rowStyle(row, index): object {
     if (row[1] === '[[ERR ]] ') {
         return {
             classes: 'danger',

@@ -10,14 +10,13 @@ import * as COMM from 'comm';
 /**
  * Refresh program list
  */
-function loadProgList(successFn) {
+export function loadProgList(successFn: Function): void {
     COMM.json('/program/listing/names', {}, successFn, 'load program list');
 }
 
 /**
  * Refresh example list
  */
-function loadExampleList(successFn) {
+export function loadExampleList(successFn: Function): void {
     COMM.json('/program/examples/names', {}, successFn, 'load example list');
 }
-export { loadProgList, loadExampleList };

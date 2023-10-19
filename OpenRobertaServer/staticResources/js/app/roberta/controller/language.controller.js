@@ -1,3 +1,163 @@
-define(["require","exports","log","jquery","guiState.controller","blockly","bootstrap"],(function(a,n,e,i,t,g){function l(a){a&&"object"==typeof a&&a.length||(a=i(document.body)),a.find("[lkey]").each((function(a){var n,e,t=i(this).attr("lkey");if(t.toString().indexOf("+")>-1?e=(n=t.split("+").map((function(a){return a.trim().replace("Blockly.Msg.","")}))).map((function(a){return g.Msg[a]})).join(""):(n=t.replace("Blockly.Msg.",""),e=g.Msg[n]),null==e)return console.error("UNDEFINED    key : value = "+n+" : "+e),!0;"tooltip"===i(this).attr("rel")?i(this).attr("data-bs-original-title",e):(i(this).html(e),i(this).attr("value",e))})),i("#start input.form-control.search-input").attr("placeholder",g.Msg.START_FORMATSEARCH)}function r(a,n){return n=i.extend(n||{},{dataType:"script",cache:!0,url:a}),jQuery.ajax(n)}Object.defineProperty(n,"__esModule",{value:!0}),n.translate=n.init=void 0,n.init=function(){var a,n=new i.Deferred;return"de"===(a=navigator.language.indexOf("de")>-1?"de":navigator.language.indexOf("fi")>-1?"fi":navigator.language.indexOf("da")>-1?"da":navigator.language.indexOf("es")>-1?"es":navigator.language.indexOf("fr")>-1?"fr":navigator.language.indexOf("it")>-1?"it":navigator.language.indexOf("ca")>-1?"ca":navigator.language.indexOf("pt")>-1?"pt":navigator.language.indexOf("pl")>-1?"pl":navigator.language.indexOf("ru")>-1?"ru":navigator.language.indexOf("be")>-1?"be":navigator.language.indexOf("cs")>-1?"cs":navigator.language.indexOf("tr")>-1?"tr":navigator.language.indexOf("nl")>-1?"nl":navigator.language.indexOf("sv")>-1?"sv":navigator.language.indexOf("zh-hans")>-1?"zh-hans":navigator.language.indexOf("zh-hant")>-1?"zh-hant":navigator.language.indexOf("ro")>-1?"ro":navigator.language.indexOf("eu")>-1?"eu":navigator.language.indexOf("uk")>-1?"uk":"en")?(i(".EN").css("display","none"),i(".DE").css("display","inline"),i("li>a.DE").css("display","block")):(i(".DE").css("display","none"),i(".EN").css("display","inline"),i("li>a.EN").css("display","block")),i("#language li a[lang="+a+"]").parent().addClass("disabled"),r("blockly/msg/js/"+a+".js").done((function(e){l(),n.resolve(a)})),i("#language").onWrap("click","li a",(function(){e.info("language clicked"),function(a){if(t.getLanguage!=a){var n="blockly/msg/js/"+a.toLowerCase()+".js";r(n).done((function(n){t.setLanguage(a),l()})),e.info("language switched to "+a)}}(i(this).attr("lang"))})),n.promise(a)},n.translate=l}));
-//# sourceMappingURL=language.controller.js.map
-//# sourceMappingURL=language.controller.js.map
+define(["require", "exports", "log", "jquery", "guiState.controller", "blockly", "bootstrap"], function (require, exports, LOG, $, GUISTATE_C, Blockly) {
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.translate = exports.init = void 0;
+    /**
+     * Initialize language switching
+     */
+    function init() {
+        var ready = $.Deferred();
+        var language;
+        if (navigator.language.indexOf('de') > -1) {
+            language = 'de';
+        }
+        else if (navigator.language.indexOf('fi') > -1) {
+            language = 'fi';
+        }
+        else if (navigator.language.indexOf('da') > -1) {
+            language = 'da';
+        }
+        else if (navigator.language.indexOf('es') > -1) {
+            language = 'es';
+        }
+        else if (navigator.language.indexOf('fr') > -1) {
+            language = 'fr';
+        }
+        else if (navigator.language.indexOf('it') > -1) {
+            language = 'it';
+        }
+        else if (navigator.language.indexOf('ca') > -1) {
+            language = 'ca';
+        }
+        else if (navigator.language.indexOf('pt') > -1) {
+            language = 'pt';
+        }
+        else if (navigator.language.indexOf('pl') > -1) {
+            language = 'pl';
+        }
+        else if (navigator.language.indexOf('ru') > -1) {
+            language = 'ru';
+        }
+        else if (navigator.language.indexOf('be') > -1) {
+            language = 'be';
+        }
+        else if (navigator.language.indexOf('cs') > -1) {
+            language = 'cs';
+        }
+        else if (navigator.language.indexOf('tr') > -1) {
+            language = 'tr';
+        }
+        else if (navigator.language.indexOf('nl') > -1) {
+            language = 'nl';
+        }
+        else if (navigator.language.indexOf('sv') > -1) {
+            language = 'sv';
+        }
+        else if (navigator.language.indexOf('zh-hans') > -1) {
+            language = 'zh-hans';
+        }
+        else if (navigator.language.indexOf('zh-hant') > -1) {
+            language = 'zh-hant';
+        }
+        else if (navigator.language.indexOf('ro') > -1) {
+            language = 'ro';
+        }
+        else if (navigator.language.indexOf('eu') > -1) {
+            language = 'eu';
+        }
+        else if (navigator.language.indexOf('uk') > -1) {
+            language = 'uk';
+        }
+        else {
+            language = 'en';
+        }
+        if (language === 'de') {
+            $('.EN').css('display', 'none');
+            $('.DE').css('display', 'inline');
+            $('li>a.DE').css('display', 'block');
+        }
+        else {
+            $('.DE').css('display', 'none');
+            $('.EN').css('display', 'inline');
+            $('li>a.EN').css('display', 'block');
+        }
+        $('#language li a[lang=' + language + ']')
+            .parent()
+            .addClass('disabled');
+        var url = 'blockly/msg/js/' + language + '.js';
+        getCachedScript(url).done(function (data) {
+            translate();
+            ready.resolve(language);
+        });
+        initEvents();
+        return ready.promise(language);
+    }
+    exports.init = init;
+    function initEvents() {
+        $('#language').onWrap('click', 'li a', function () {
+            LOG.info('language clicked');
+            var language = $(this).attr('lang');
+            switchLanguage(language);
+        }),
+            'switch language clicked';
+    }
+    function switchLanguage(language) {
+        if (GUISTATE_C.getLanguage == language) {
+            return;
+        }
+        var url = 'blockly/msg/js/' + language.toLowerCase() + '.js';
+        getCachedScript(url).done(function (data) {
+            GUISTATE_C.setLanguage(language);
+            translate();
+        });
+        LOG.info('language switched to ' + language);
+    }
+    /**
+     * Translate the web page
+     */
+    function translate($domElement) {
+        if (!$domElement || typeof $domElement !== 'object' || !$domElement.length) {
+            $domElement = $(document.body);
+        }
+        $domElement.find('[lkey]').each(function (index) {
+            var lkey = $(this).attr('lkey');
+            var key, value;
+            if (lkey.toString().indexOf('+') > -1) {
+                key = lkey.split('+').map(function (k) { return k.trim().replace('Blockly.Msg.', ''); }); //.forEach((k) => k.replace('Blockly.Msg.', ''));
+                value = key.map(function (k) { return Blockly.Msg[k]; }).join('');
+            }
+            else {
+                key = lkey.replace('Blockly.Msg.', '');
+                value = Blockly.Msg[key];
+            }
+            if (value == undefined) {
+                console.error('UNDEFINED    key : value = ' + key + ' : ' + value);
+                return true;
+            }
+            if ($(this).attr('rel') === 'tooltip') {
+                $(this).attr('data-bs-original-title', value);
+            }
+            else {
+                $(this).html(value);
+                $(this).attr('value', value);
+            }
+        });
+        $('#start input.form-control.search-input').attr('placeholder', Blockly.Msg.START_FORMATSEARCH);
+    }
+    exports.translate = translate;
+    /**
+     * $.getScript() will append a timestamped query parameter to the url to
+     * prevent caching. The cache control should be handled using http-headers.
+     * see https://api.jquery.com/jquery.getscript/#caching-requests
+     */
+    function getCachedScript(url, options) {
+        // Allow user to set any option except for dataType, cache, and url
+        options = $.extend(options || {}, {
+            dataType: 'script',
+            cache: true,
+            url: url,
+        });
+        // Use $.ajax() since it is more flexible than $.getScript
+        // Return the jqXHR object so we can chain callbacks
+        return jQuery.ajax(options);
+    }
+});

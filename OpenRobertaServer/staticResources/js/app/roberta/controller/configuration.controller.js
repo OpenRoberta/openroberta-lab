@@ -1,3 +1,423 @@
-define(["require","exports","log","util.roberta","message","guiState.controller","blockly","configuration.model","confVisualization","jquery","jquery-validate"],(function(o,e,n,i,t,a,r,s,l,u){var g,f,c;Object.defineProperty(e,"__esModule",{value:!0}),e.configurationToBricklyWorkspace=e.resetView=e.changeRobotSvg=e.reloadView=e.reloadConf=e.getBricklyWorkspace=e.showConfiguration=e.newConfiguration=e.showSaveAsModal=e.initConfigurationEnvironment=e.loadFromListing=e.saveAsToServer=e.saveToServer=e.initConfigurationForms=e.init=void 0;var d=!0,m=!1;function v(){g=u("#single-modal-form")}function C(){if(u(".modal").modal("hide"),a.isConfigurationStandard()||a.isConfigurationAnonymous())n.error("saveToServer may only be called with an explicit config name");else{var o=c?c.getXml():r.Xml.workspaceToDom(f),e=r.Xml.domToText(o);s.saveConfigurationToServer(a.getConfigurationName(),e,(function(o){"ok"===o.rc&&(a.setConfigurationSaved(!0),n.info("save brick configuration "+a.getConfigurationName())),t.displayInformation(o,"MESSAGE_EDIT_SAVE_CONFIGURATION",o.message,a.getConfigurationName())}))}}function b(){if(g.validate(),g.valid()){u(".modal").modal("hide");var o=u("#singleModalInput").val().toString().trim();if(a.getConfigurationStandardName()===o)return void n.error("saveAsToServer may NOT use the config standard name");var e=c?c.getXml():r.Xml.workspaceToDom(f),i=r.Xml.domToText(e);s.saveAsConfigurationToServer(o,i,(function(e){if("ok"===e.rc)e.name=o,a.setConfiguration(e),a.setProgramSaved(!1),n.info("save brick configuration "+a.getConfigurationName()),t.displayInformation(e,"MESSAGE_EDIT_SAVE_CONFIGURATION_AS",e.message,a.getConfigurationName());else if("ORA_CONFIGURATION_SAVE_AS_ERROR_CONFIGURATION_EXISTS"==e.cause){var l=r.Msg.POPUP_BACKGROUND_REPLACE_CONFIGURATION||"A configuration with the same name already exists! <br> Would you like to replace it?";u("#show-message-confirm").onWrap("shown.bs.modal",(function(){u("#confirm").off(),u("#confirm").onWrap("click",(function(e){e.preventDefault(),s.saveConfigurationToServer(o,i,(function(e){"ok"==e.rc?(e.name=o,a.setConfiguration(e),a.setProgramSaved(!1),n.info("saved configuration"+a.getConfigurationName()+" as"+o+" and overwrote old content"),t.displayInformation(e,"MESSAGE_EDIT_SAVE_CONFIGURATION_AS",e.message,a.getConfigurationName(),null)):(n.info("failed to overwrite "+o),t.displayMessage(e.message,"POPUP",""))}))}),"confirm modal"),u("#confirmCancel").off(),u("#confirmCancel").onWrap("click",(function(o){o.preventDefault(),u(".modal").modal("hide")}),"cancel modal")})),t.displayPopupMessage("ORA_CONFIGURATION_SAVE_AS_ERROR_CONFIGURATION_EXISTS",l,r.Msg.POPUP_REPLACE,r.Msg.POPUP_CANCEL)}}))}}function p(){if(A(a.getConfigurationConf()),w()){var o=void 0,e=void 0;u(window).width()<768?(o=u(window).width()/50,e=25):(o=u(window).width()/5,e=50);for(var n=f.getTopBlocks(!0),i=0;i<n.length;i++){var t=r.getSvgXY_(n[i].svgGroup_,f),s=n[i].getRelativeToSurfaceXY();n[i].moveBy(s.x-t.x+o,s.y-t.y+e)}m=!0}else m=!1,f.setVisible(!1);var l=c?c.getXml():r.Xml.workspaceToDom(f),g=r.Xml.domToText(l);a.setConfigurationXML(g)}function S(o){if(o||!1||a.isConfigurationSaved()){var e={name:a.getRobotGroup().toUpperCase()+"basis",lastChanged:"",rc:null,message:null,cause:null,confXML:null,parameters:null,cmd:null,initToken:null};a.setConfiguration(e),p()}else u("#show-message-confirm").oneWrap("shown.bs.modal",(function(){u("#confirm").off(),u("#confirm").onWrap("click",(function(o){o.preventDefault(),S(!0)})),u("#confirmCancel").off(),u("#confirmCancel").onWrap("click",(function(o){o.preventDefault(),u(".modal").modal("hide")}))})),a.isUserLoggedIn()?t.displayMessage("POPUP_BEFOREUNLOAD_LOGGEDIN","POPUP","",!0):t.displayMessage("POPUP_BEFOREUNLOAD","POPUP","",!0)}function T(o){"ok"==o.rc&&(A(o.confXML),a.setConfiguration(o),n.info("show configuration "+a.getConfigurationName()))}function w(){return"tabConfiguration"==a.getView()}function A(o){d=!1,f.clear(),r.svgResize(f);var e,n=r.Xml.textToDom(o,f);c&&(c.dispose(),c=null),l.CircuitVisualization.isRobotVisualized(a.getRobotGroup(),a.getRobot())?c=l.CircuitVisualization.domToWorkspace(n,f):r.Xml.domToWorkspace(n,f),f.setVersion(n.getAttribute("xmlversion"));var i=null==a.getConfigurationName()?"":a.getConfigurationName();e=o==a.getConfigurationConf()?a.getRobotGroup().toUpperCase()+"basis":i,a.setConfigurationName(e),a.setConfigurationSaved(!0),u("#tabConfigurationName").html(e),setTimeout((function(){d=!0}),500),m=w(),a.isConfigurationUsed()?f.setVisible(!0):f.setVisible(!1)}e.init=function(){var o;o=a.getConfigurationToolbox(),(f=r.inject(document.getElementById("bricklyDiv"),{path:"/blockly/",toolbox:o,trashcan:!0,scrollbars:!0,media:"../blockly/media/",zoom:{controls:!0,wheel:!1,startScale:1,maxScale:4,minScale:.25,scaleSpeed:1.1},checkInTask:["-Brick","robConf"],variableDeclaration:!0,robControls:!0,theme:a.getTheme()})).setDevice({group:a.getRobotGroup(),robot:a.getRobot()}),f.robControls.runOnBrick.setAttribute("style","display : none"),a.setBricklyWorkspace(f),f.robControls.disable("saveProgram"),u("#tabConfiguration").onWrap("show.bs.tab",(function(){a.setView("tabConfiguration")})),u("#tabConfiguration").onWrap("shown.bs.tab",(function(){f.markFocused(),a.isConfigurationUsed()?f.setVisible(!0):f.setVisible(!1),u(window).resize(),i.clearAnnotations(f),void 0!==a.confAnnos&&(i.annotateBlocks(f,a.confAnnos),delete a.confAnnos),c&&c.refresh()}),"tabConfiguration clicked"),u("#tabConfiguration").onWrap("hidden.bs.tab",(function(){var o=c?c.getXml():r.Xml.workspaceToDom(f),e=r.Xml.domToText(o);a.setConfigurationXML(e),f.setVisible(!1)})),r.bindEvent_(f.robControls.saveProgram,"mousedown",null,(function(){n.info("saveConfiguration from brickly button"),C()})),f.addChangeListener((function(o){d&&o.type!=r.Events.UI&&a.isConfigurationSaved()&&(a.isConfigurationStandard()&&a.setConfigurationName(""),a.setConfigurationSaved(!1),a.setProgramSaved(!1)),o.type===r.Events.DELETE&&0===f.getAllBlocks().length&&S(!0)})),v(),p()},e.initConfigurationForms=v,e.saveToServer=C,e.saveAsToServer=b,e.loadFromListing=function(o){n.info("loadFromList "+o[0]),s.loadConfigurationFromListing(o[0],o[1],(function(e){"ok"===e.rc&&(e.name=o[0],u("#tabConfiguration").oneWrap("shown.bs.tab",(function(){T(e)})),u("#tabConfiguration").tabWrapShow()),t.displayInformation(e,"",e.message,"")}))},e.initConfigurationEnvironment=p,e.showSaveAsModal=function(){var o=new RegExp("^(?!\\b"+a.getConfigurationStandardName()+"\\b)([a-zA-Z_öäüÖÄÜß$€][a-zA-Z0-9_öäüÖÄÜß$€]*)$");u.validator.addMethod("regex",(function(o,e,n){return(o=o.trim()).match(n)}),"No special Characters allowed here. Use only upper and lowercase letters (A through Z; a through z) and numbers."),i.showSingleModal((function(){u("#singleModalInput").attr("type","text"),u("#single-modal h5").text(r.Msg.MENU_SAVE_AS),u("#single-modal label").text(r.Msg.POPUP_NAME)}),b,(function(){}),{rules:{singleModalInput:{required:!0,regex:o}},errorClass:"form-invalid",errorPlacement:function(o,e){o.insertAfter(e)},messages:{singleModalInput:{required:jQuery.validator.format(r.Msg.VALIDATION_FIELD_REQUIRED),regex:jQuery.validator.format(r.Msg.MESSAGE_INVALID_CONF_NAME)}}})},e.newConfiguration=S,e.showConfiguration=T,e.getBricklyWorkspace=function(){return f},e.reloadConf=function(o){var e;if(e=o?o.confXML:a.getConfigurationXML(),m)A(e);else{A(e);var n=void 0,i=void 0;u(window).width()<768?(n=u(window).width()/50,i=25):(n=u(window).width()/5,i=50);for(var t=f.getTopBlocks(!0),s=0;s<t.length;s++){var l=r.getSvgXY_(t[s].svgGroup_,f),g=t[s].getRelativeToSurfaceXY();t[s].moveBy(g.x-l.x+n,g.y-l.y+i)}}},e.reloadView=function(){var o=c?c.getXml():r.Xml.workspaceToDom(f);A(r.Xml.domToText(o));var e=a.getConfigurationToolbox();f.updateToolbox(e)},e.changeRobotSvg=function(){l.CircuitVisualization.isRobotVisualized(a.getRobotGroup()+"_"+a.getRobot(),null)&&(f.setDevice({group:a.getRobotGroup(),robot:a.getRobot()}),c.resetRobot())},e.resetView=function(){f.setDevice({group:a.getRobotGroup(),robot:a.getRobot()}),p();var o=a.getConfigurationToolbox();f.updateToolbox(o)},e.configurationToBricklyWorkspace=A}));
-//# sourceMappingURL=configuration.controller.js.map
-//# sourceMappingURL=configuration.controller.js.map
+define(["require", "exports", "log", "util.roberta", "message", "guiState.controller", "blockly", "configuration.model", "confVisualization", "jquery", "jquery-validate"], function (require, exports, LOG, UTIL, MSG, GUISTATE_C, Blockly, CONFIGURATION, CV, $) {
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.configurationToBricklyWorkspace = exports.resetView = exports.changeRobotSvg = exports.reloadView = exports.reloadConf = exports.getBricklyWorkspace = exports.showConfiguration = exports.newConfiguration = exports.showSaveAsModal = exports.initConfigurationEnvironment = exports.loadFromListing = exports.saveAsToServer = exports.saveToServer = exports.initConfigurationForms = exports.init = void 0;
+    var $formSingleModal;
+    var bricklyWorkspace;
+    var confVis;
+    var listenToBricklyEvents = true;
+    var seen = false;
+    function init() {
+        initView();
+        initEvents();
+        initConfigurationForms();
+        initConfigurationEnvironment();
+    }
+    exports.init = init;
+    /**
+     * Inject Brickly with initial toolbox
+     *
+     *            toolbox
+     */
+    function initView() {
+        var toolbox = GUISTATE_C.getConfigurationToolbox();
+        bricklyWorkspace = Blockly.inject(document.getElementById('bricklyDiv'), {
+            path: '/blockly/',
+            toolbox: toolbox,
+            trashcan: true,
+            scrollbars: true,
+            media: '../blockly/media/',
+            zoom: {
+                controls: true,
+                wheel: false,
+                startScale: 1.0,
+                maxScale: 4,
+                minScale: 0.25,
+                scaleSpeed: 1.1
+            },
+            checkInTask: ['-Brick', 'robConf'],
+            variableDeclaration: true,
+            robControls: true,
+            theme: GUISTATE_C.getTheme()
+        });
+        bricklyWorkspace.setDevice({
+            group: GUISTATE_C.getRobotGroup(),
+            robot: GUISTATE_C.getRobot()
+        });
+        // Configurations can't be executed
+        bricklyWorkspace.robControls.runOnBrick.setAttribute('style', 'display : none');
+        GUISTATE_C.setBricklyWorkspace(bricklyWorkspace);
+        bricklyWorkspace.robControls.disable('saveProgram');
+    }
+    function initEvents() {
+        $('#tabConfiguration').onWrap('show.bs.tab', function () {
+            GUISTATE_C.setView('tabConfiguration');
+        });
+        $('#tabConfiguration').onWrap('shown.bs.tab', function () {
+            bricklyWorkspace.markFocused();
+            if (GUISTATE_C.isConfigurationUsed()) {
+                bricklyWorkspace.setVisible(true);
+            }
+            else {
+                bricklyWorkspace.setVisible(false);
+            }
+            $(window).resize();
+            UTIL.clearAnnotations(bricklyWorkspace);
+            // @ts-ignore
+            if (GUISTATE_C.confAnnos) {
+                // @ts-ignore
+                UTIL.annotateBlocks(bricklyWorkspace, GUISTATE_C.confAnnos);
+                // @ts-ignore
+                delete GUISTATE_C.confAnnos;
+            }
+            confVis && confVis.refresh();
+        }, 'tabConfiguration clicked');
+        $('#tabConfiguration').onWrap('hidden.bs.tab', function () {
+            var dom = confVis ? confVis.getXml() : Blockly.Xml.workspaceToDom(bricklyWorkspace);
+            var xml = Blockly.Xml.domToText(dom);
+            GUISTATE_C.setConfigurationXML(xml);
+            bricklyWorkspace.setVisible(false);
+        });
+        Blockly.bindEvent_(bricklyWorkspace.robControls.saveProgram, 'mousedown', null, function () {
+            LOG.info('saveConfiguration from brickly button');
+            saveToServer();
+        });
+        bricklyWorkspace.addChangeListener(function (event) {
+            if (listenToBricklyEvents && event.type != Blockly.Events.UI && GUISTATE_C.isConfigurationSaved()) {
+                if (GUISTATE_C.isConfigurationStandard()) {
+                    GUISTATE_C.setConfigurationName('');
+                }
+                GUISTATE_C.setConfigurationSaved(false);
+                GUISTATE_C.setProgramSaved(false);
+            }
+            if (event.type === Blockly.Events.DELETE) {
+                if (bricklyWorkspace.getAllBlocks().length === 0) {
+                    newConfiguration(true);
+                }
+            }
+        });
+    }
+    function initConfigurationForms() {
+        $formSingleModal = $('#single-modal-form');
+    }
+    exports.initConfigurationForms = initConfigurationForms;
+    /**
+     * Save configuration to server
+     */
+    function saveToServer() {
+        $('.modal').modal('hide'); // close all opened popups
+        if (GUISTATE_C.isConfigurationStandard() || GUISTATE_C.isConfigurationAnonymous()) {
+            LOG.error('saveToServer may only be called with an explicit config name');
+            return;
+        }
+        var dom = confVis ? confVis.getXml() : Blockly.Xml.workspaceToDom(bricklyWorkspace);
+        var xmlText = Blockly.Xml.domToText(dom);
+        CONFIGURATION.saveConfigurationToServer(GUISTATE_C.getConfigurationName(), xmlText, function (result) {
+            if (result.rc === 'ok') {
+                GUISTATE_C.setConfigurationSaved(true);
+                LOG.info('save brick configuration ' + GUISTATE_C.getConfigurationName());
+            }
+            MSG.displayInformation(result, 'MESSAGE_EDIT_SAVE_CONFIGURATION', result.message, GUISTATE_C.getConfigurationName());
+        });
+    }
+    exports.saveToServer = saveToServer;
+    /**
+     * Save configuration with new name to server
+     */
+    function saveAsToServer() {
+        $formSingleModal.validate();
+        if ($formSingleModal.valid()) {
+            $('.modal').modal('hide'); // close all opened popups
+            var confName_1 = $('#singleModalInput').val().toString().trim();
+            if (GUISTATE_C.getConfigurationStandardName() === confName_1) {
+                LOG.error('saveAsToServer may NOT use the config standard name');
+                return;
+            }
+            var dom = confVis ? confVis.getXml() : Blockly.Xml.workspaceToDom(bricklyWorkspace);
+            var xmlText_1 = Blockly.Xml.domToText(dom);
+            CONFIGURATION.saveAsConfigurationToServer(confName_1, xmlText_1, function (result) {
+                if (result.rc === 'ok') {
+                    result.name = confName_1;
+                    GUISTATE_C.setConfiguration(result);
+                    GUISTATE_C.setProgramSaved(false);
+                    LOG.info('save brick configuration ' + GUISTATE_C.getConfigurationName());
+                    MSG.displayInformation(result, 'MESSAGE_EDIT_SAVE_CONFIGURATION_AS', result.message, GUISTATE_C.getConfigurationName());
+                }
+                else if (result.cause == 'ORA_CONFIGURATION_SAVE_AS_ERROR_CONFIGURATION_EXISTS') {
+                    //Replace popup window
+                    var modalMessage = Blockly.Msg.POPUP_BACKGROUND_REPLACE_CONFIGURATION ||
+                        'A configuration with the same name already exists! <br> Would you like to replace it?';
+                    $('#show-message-confirm').onWrap('shown.bs.modal', function () {
+                        $('#confirm').off();
+                        $('#confirm').onWrap('click', function (e) {
+                            e.preventDefault();
+                            CONFIGURATION.saveConfigurationToServer(confName_1, xmlText_1, function (result) {
+                                if (result.rc == 'ok') {
+                                    result.name = confName_1;
+                                    GUISTATE_C.setConfiguration(result);
+                                    GUISTATE_C.setProgramSaved(false);
+                                    LOG.info('saved configuration' + GUISTATE_C.getConfigurationName() + ' as' + confName_1 + ' and overwrote old content');
+                                    MSG.displayInformation(result, 'MESSAGE_EDIT_SAVE_CONFIGURATION_AS', result.message, GUISTATE_C.getConfigurationName(), null);
+                                }
+                                else {
+                                    LOG.info('failed to overwrite ' + confName_1);
+                                    MSG.displayMessage(result.message, 'POPUP', '');
+                                }
+                            });
+                        }, 'confirm modal');
+                        $('#confirmCancel').off();
+                        $('#confirmCancel').onWrap('click', function (e) {
+                            e.preventDefault();
+                            $('.modal').modal('hide');
+                        }, 'cancel modal');
+                    });
+                    MSG.displayPopupMessage('ORA_CONFIGURATION_SAVE_AS_ERROR_CONFIGURATION_EXISTS', modalMessage, Blockly.Msg.POPUP_REPLACE, Blockly.Msg.POPUP_CANCEL);
+                }
+            });
+        }
+    }
+    exports.saveAsToServer = saveAsToServer;
+    /**
+     * Load the configuration that was selected in configurations list
+     */
+    function loadFromListing(conf) {
+        LOG.info('loadFromList ' + conf[0]);
+        CONFIGURATION.loadConfigurationFromListing(conf[0], conf[1], function (result) {
+            if (result.rc === 'ok') {
+                result.name = conf[0];
+                $('#tabConfiguration').oneWrap('shown.bs.tab', function () {
+                    showConfiguration(result);
+                });
+                // @ts-ignore
+                $('#tabConfiguration').tabWrapShow();
+            }
+            MSG.displayInformation(result, '', result.message, '');
+        });
+    }
+    exports.loadFromListing = loadFromListing;
+    function initConfigurationEnvironment() {
+        var conf = GUISTATE_C.getConfigurationConf();
+        configurationToBricklyWorkspace(conf);
+        if (isVisible()) {
+            var x = void 0, y = void 0;
+            if ($(window).width() < 768) {
+                x = $(window).width() / 50;
+                y = 25;
+            }
+            else {
+                x = $(window).width() / 5;
+                y = 50;
+            }
+            var blocks = bricklyWorkspace.getTopBlocks(true);
+            for (var i = 0; i < blocks.length; i++) {
+                var coord = Blockly.getSvgXY_(blocks[i].svgGroup_, bricklyWorkspace);
+                var coordBlock = blocks[i].getRelativeToSurfaceXY();
+                blocks[i].moveBy(coordBlock.x - coord.x + x, coordBlock.y - coord.y + y);
+            }
+            seen = true;
+        }
+        else {
+            seen = false;
+            bricklyWorkspace.setVisible(false);
+        }
+        var dom = confVis ? confVis.getXml() : Blockly.Xml.workspaceToDom(bricklyWorkspace);
+        var xml = Blockly.Xml.domToText(dom);
+        GUISTATE_C.setConfigurationXML(xml);
+    }
+    exports.initConfigurationEnvironment = initConfigurationEnvironment;
+    function showSaveAsModal() {
+        var regexString = new RegExp('^(?!\\b' + GUISTATE_C.getConfigurationStandardName() + '\\b)([a-zA-Z_öäüÖÄÜß$€][a-zA-Z0-9_öäüÖÄÜß$€]*)$');
+        $.validator.addMethod('regex', function (value, _element, regexp) {
+            value = value.trim();
+            return value.match(regexp);
+        }, 'No special Characters allowed here. Use only upper and lowercase letters (A through Z; a through z) and numbers.');
+        UTIL.showSingleModal(function () {
+            $('#singleModalInput').attr('type', 'text');
+            $('#single-modal h5').text(Blockly.Msg['MENU_SAVE_AS']);
+            $('#single-modal label').text(Blockly.Msg['POPUP_NAME']);
+        }, saveAsToServer, function () { }, {
+            rules: {
+                singleModalInput: {
+                    required: true,
+                    regex: regexString
+                }
+            },
+            errorClass: 'form-invalid',
+            errorPlacement: function (label, element) {
+                label.insertAfter(element);
+            },
+            messages: {
+                singleModalInput: {
+                    required: jQuery.validator.format(Blockly.Msg['VALIDATION_FIELD_REQUIRED']),
+                    regex: jQuery.validator.format(Blockly.Msg['MESSAGE_INVALID_CONF_NAME'])
+                }
+            }
+        });
+    }
+    exports.showSaveAsModal = showSaveAsModal;
+    /**
+     * New configuration
+     */
+    function newConfiguration(opt_further) {
+        var further = opt_further || false;
+        if (further || GUISTATE_C.isConfigurationSaved()) {
+            var result = {
+                name: GUISTATE_C.getRobotGroup().toUpperCase() + 'basis',
+                lastChanged: '',
+                rc: null,
+                message: null,
+                cause: null,
+                confXML: null,
+                parameters: null,
+                cmd: null,
+                initToken: null
+            };
+            GUISTATE_C.setConfiguration(result);
+            initConfigurationEnvironment();
+        }
+        else {
+            $('#show-message-confirm').oneWrap('shown.bs.modal', function () {
+                $('#confirm').off();
+                $('#confirm').onWrap('click', function (e) {
+                    e.preventDefault();
+                    newConfiguration(true);
+                });
+                $('#confirmCancel').off();
+                $('#confirmCancel').onWrap('click', function (e) {
+                    e.preventDefault();
+                    $('.modal').modal('hide');
+                });
+            });
+            if (GUISTATE_C.isUserLoggedIn()) {
+                MSG.displayMessage('POPUP_BEFOREUNLOAD_LOGGEDIN', 'POPUP', '', true);
+            }
+            else {
+                MSG.displayMessage('POPUP_BEFOREUNLOAD', 'POPUP', '', true);
+            }
+        }
+    }
+    exports.newConfiguration = newConfiguration;
+    /**
+     * Show configuration
+     *
+     *            load configuration
+     *            data of server call
+     * @param result
+     */
+    function showConfiguration(result) {
+        if (result.rc == 'ok') {
+            configurationToBricklyWorkspace(result.confXML);
+            GUISTATE_C.setConfiguration(result);
+            LOG.info('show configuration ' + GUISTATE_C.getConfigurationName());
+        }
+    }
+    exports.showConfiguration = showConfiguration;
+    function getBricklyWorkspace() {
+        return bricklyWorkspace;
+    }
+    exports.getBricklyWorkspace = getBricklyWorkspace;
+    function reloadConf(opt_result) {
+        var conf;
+        if (opt_result) {
+            conf = opt_result.confXML;
+        }
+        else {
+            conf = GUISTATE_C.getConfigurationXML();
+        }
+        if (!seen) {
+            configurationToBricklyWorkspace(conf);
+            var x = void 0, y = void 0;
+            if ($(window).width() < 768) {
+                x = $(window).width() / 50;
+                y = 25;
+            }
+            else {
+                x = $(window).width() / 5;
+                y = 50;
+            }
+            var blocks = bricklyWorkspace.getTopBlocks(true);
+            for (var i = 0; i < blocks.length; i++) {
+                var coord = Blockly.getSvgXY_(blocks[i].svgGroup_, bricklyWorkspace);
+                var coordBlock = blocks[i].getRelativeToSurfaceXY();
+                blocks[i].moveBy(coordBlock.x - coord.x + x, coordBlock.y - coord.y + y);
+            }
+        }
+        else {
+            configurationToBricklyWorkspace(conf);
+        }
+    }
+    exports.reloadConf = reloadConf;
+    function reloadView() {
+        var dom = confVis ? confVis.getXml() : Blockly.Xml.workspaceToDom(bricklyWorkspace);
+        var xml = Blockly.Xml.domToText(dom);
+        configurationToBricklyWorkspace(xml);
+        var toolbox = GUISTATE_C.getConfigurationToolbox();
+        bricklyWorkspace.updateToolbox(toolbox);
+    }
+    exports.reloadView = reloadView;
+    function changeRobotSvg() {
+        if (CV.CircuitVisualization.isRobotVisualized(GUISTATE_C.getRobotGroup() + '_' + GUISTATE_C.getRobot(), null)) {
+            bricklyWorkspace.setDevice({
+                group: GUISTATE_C.getRobotGroup(),
+                robot: GUISTATE_C.getRobot()
+            });
+            confVis.resetRobot();
+        }
+    }
+    exports.changeRobotSvg = changeRobotSvg;
+    function resetView() {
+        bricklyWorkspace.setDevice({
+            group: GUISTATE_C.getRobotGroup(),
+            robot: GUISTATE_C.getRobot()
+        });
+        initConfigurationEnvironment();
+        var toolbox = GUISTATE_C.getConfigurationToolbox();
+        bricklyWorkspace.updateToolbox(toolbox);
+    }
+    exports.resetView = resetView;
+    function isVisible() {
+        return GUISTATE_C.getView() == 'tabConfiguration';
+    }
+    function resetConfVisIfAvailable() {
+        if (confVis) {
+            confVis.dispose();
+            confVis = null;
+        }
+    }
+    function configurationToBricklyWorkspace(xml) {
+        // removing changelistener in blockly doesn't work, so no other way
+        listenToBricklyEvents = false;
+        bricklyWorkspace.clear();
+        Blockly.svgResize(bricklyWorkspace);
+        var dom = Blockly.Xml.textToDom(xml, bricklyWorkspace);
+        resetConfVisIfAvailable();
+        if (CV.CircuitVisualization.isRobotVisualized(GUISTATE_C.getRobotGroup(), GUISTATE_C.getRobot())) {
+            confVis = CV.CircuitVisualization.domToWorkspace(dom, bricklyWorkspace);
+        }
+        else {
+            Blockly.Xml.domToWorkspace(dom, bricklyWorkspace);
+        }
+        bricklyWorkspace.setVersion(dom.getAttribute('xmlversion'));
+        var name;
+        var configName = GUISTATE_C.getConfigurationName() == undefined ? '' : GUISTATE_C.getConfigurationName();
+        if (xml == GUISTATE_C.getConfigurationConf()) {
+            name = GUISTATE_C.getRobotGroup().toUpperCase() + 'basis';
+        }
+        else {
+            name = configName;
+        }
+        GUISTATE_C.setConfigurationName(name);
+        GUISTATE_C.setConfigurationSaved(true);
+        $('#tabConfigurationName').html(name);
+        setTimeout(function () {
+            listenToBricklyEvents = true;
+        }, 500);
+        seen = isVisible();
+        if (GUISTATE_C.isConfigurationUsed()) {
+            bricklyWorkspace.setVisible(true);
+        }
+        else {
+            bricklyWorkspace.setVisible(false);
+        }
+    }
+    exports.configurationToBricklyWorkspace = configurationToBricklyWorkspace;
+});

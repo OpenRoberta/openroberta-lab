@@ -1,3 +1,517 @@
-var __assign=this&&this.__assign||function(){return __assign=Object.assign||function(e){for(var t,r=1,a=arguments.length;r<a;r++)for(var i in t=arguments[r])Object.prototype.hasOwnProperty.call(t,i)&&(e[i]=t[i]);return e},__assign.apply(this,arguments)};define(["require","exports","log","util.roberta","message","guiState.controller","galleryList.controller","program.model","userGroup.model","blockly","jquery","table","bootstrap-table"],(function(e,t,r,a,i,n,o,l,s,h,c,p){function d(e){for(var t=c("#relationsTable").bootstrapTable("getData"),o=0;o<t.length;o++)if(isNaN(e)||o==parseInt(e)){var s=JSON.parse(JSON.stringify(t[o].sharedWith)),h=!1;if(updateRowIndex=-1,right="NONE",!c("#checkRead"+o).is(":checked")||"User"===s.type&&n.isUserMemberOfUserGroup()&&s.label===n.getUserUserGroupOwner()||(right="READ"),c("#checkWrite"+o).is(":checked")&&(right="WRITE"),null===s.label){var p=(h=c('#relationsTable tr[data-index="'+o+'"] .shareLabelInput')).val();if(!p)continue;if("User"===s.type){if(p===t[o].owner){if(!isNaN(e))return void a.showMsgOnTop("ORA_USER_TO_SHARE_SAME_AS_LOGIN_USER");continue}updateRowIndex=t.map((function(e){return null!==e.sharedWith?e.sharedWith.label:""})).indexOf(p),updateRowIndex>=0&&(s=JSON.parse(JSON.stringify(t[updateRowIndex].sharedWith)))}s.label=p}right!==s.right&&(s.right=right,function(e,t,n,o){l.shareProgram(e.name,t,(function(l){"ok"===l.rc?(n&&(n.val(""),"UserGroup"===t.type&&n.find('option[value="'+t.label+'"]').remove(),o<0?c("#relationsTable").bootstrapTable("insertRow",{index:2,row:{name:e.name,owner:e.owner,sharedWith:t,read:t.right,write:t.right}}):c("#relationsTable").bootstrapTable("updateRow",{index:o,row:{name:e.name,owner:e.owner,sharedWith:t,read:t.right,write:t.right}})),i.displayMessage(l.message,"TOAST",t.label),r.info("share program "+e.name+" with '"+t.label+"'("+t.type+") having right '"+t.right+"'"),c("#progList").find('button[name="refresh"]').clickWrap()):a.showMsgOnTop(l.message)}))}(t[o],s,h,updateRowIndex))}isNaN(e)&&c("#show-relations").modal("hide")}Object.defineProperty(t,"__esModule",{value:!0}),t.init=void 0,t.init=function(){!function(){c("#relationsTable").bootstrapTable({height:400,theadClasses:"table-dark",iconsPrefix:"typcn",icons:{paginationSwitchDown:"typcn-document-text",paginationSwitchUp:"typcn-book",refresh:"typcn-refresh"},columns:[{title:"Name",field:"name",visible:!1},{title:"Owner",field:"owner",visible:!1},{title:"<span lkey='Blockly.Msg.DATATABLE_SHARED_WITH'>"+(h.Msg.DATATABLE_SHARED_WITH||"Geteilt mit")+"</span>",field:"sharedWith",events:u,formatter:w},{title:"<span class='typcn typcn-eye'></span>",field:"read",events:b,width:"20px",halign:"center",valign:"middle",formatter:f},{title:"<span class='typcn typcn-pencil'></span>",field:"write",events:g,width:"20px",halign:"center",valign:"middle",formatter:y}]});var e={columns:[{sortable:!0,title:"",formatter:p.CardView.robot},{title:"",sortable:!0,formatter:p.CardView.name},{title:"",sortable:!0,formatter:p.CardView.programDescription},{title:"",sortable:!0,formatter:function(e){return p.CardView.titleLabel(e,"GALLERY_BY","cardViewInfo")}},{sortable:!0,title:"",formatter:function(e){return p.CardView.titleLabel(a.formatDate(e),"GALLERY_DATE","cardViewInfo")}},{title:"",formatter:function(e){return p.CardView.titleTypcn(e,"eye-outline")},sortable:!0},{title:"",formatter:function(e){return p.CardView.titleTypcn(e,"heart-full-outline")},sortable:!0},{title:"",sortable:!0,formatter:function(e,t){return p.CardView.programTags(t[2])}},{title:"",events:o.eventsLike,formatter:o.formatLike}],pagination:!1,rowAttributes:o.rowAttributes,height:410,search:!1},t=__assign(__assign({},p.CardView.options),e);c("#galleryPreview").bootstrapTable(t)}(),c("#show-relations").onWrap("updateAndShow",(function(e,t){return function(e){var t=e[0],r=null;c.isEmptyObject(e[2])||(r=e[2]),c("#show-relations h5").text(h.Msg.BUTTON_DO_SHARE+" »"+t+"«").end(),c("#show-relations").find(".modal-header>h5").text(h.Msg.BUTTON_DO_SHARE+" »"+t+"«").end(),c("#relationsTable").bootstrapTable("removeAll"),r&&c.each(r.sharedWith,(function(t,r){"User"===r.type&&"Gallery"===r.label||c("#relationsTable").bootstrapTable("insertRow",{index:-1,row:{name:e[0],owner:e[1],sharedWith:r,read:r.right,write:r.right}})})),c("#relationsTable").bootstrapTable("insertRow",{index:0,row:{name:e[0],owner:e[1],sharedWith:{label:null,type:"UserGroup",right:"NONE"},read:"READ",write:""}}),c("#relationsTable").bootstrapTable("insertRow",{index:0,row:{name:e[0],owner:e[1],sharedWith:{label:null,type:"User",right:"NONE"},read:"READ",write:""}}),c("#show-relations").oneWrap("shown.bs.modal",(function(e){c("#relationsTable").bootstrapTable("resetView"),c("#relationsTable").find("input :first").focus()})),c("#show-relations").modal("show")}(t),!1}),"show relations"),c("#share-with-gallery").onWrap("updateAndShow",(function(e,t){return function(e){var t=e[0],r=e[3];c("#share-with-gallery h5").html(""),c("#galleryPreview").html(""),c("#textShareGallery").html(""),c("#share-with-gallery").data("progName",t),c("#share-with-gallery").data("user",r),l.loadProgramFromListing(t,"Gallery",r,(function(r){"ok"===r.rc?i.displayInformation({rc:"error"},"GALLERY_SHARED_ALREADY","GALLERY_SHARED_ALREADY",t):(c("#textShareGallery").html(h.Msg.PROGLIST_SHARE_WITH_GALLERY),c("#share-with-gallery").data("action","add"),l.loadProgramEntity(t,n.getUserAccountName(),n.getUserAccountName(),(function(t){if("ok"===t.rc){var r=e[0];c("#share-with-gallery h5").text(h.Msg.BUTTON_DO_UPLOAD_GALLERY.replace("$",r)),c("#galleryPreview").bootstrapTable("load",new Array(t.program)),c(".infoTags").tagsinput(),c("#galleryPreview .bootstrap-tagsinput").addClass("galleryTags"),c("#galleryPreview").find(".galleryTags>input").attr("readonly","true"),c("#galleryPreview").find("span[data-role=remove]").addClass("hidden"),c("#share-with-gallery").modal("show")}})))}))}(t),!1}),"share with gallery"),c("#shareProgram").onWrap("click",(function(e){d()}),"ok click for share program"),c("#shareWithGallery").onWrap("click",(function(e){var t,a=c("#share-with-gallery .modal-body").find(">:first-child");a?a.show():c("#textShareGallery").show(),c("#share-with-gallery").data("action"),t=c("#share-with-gallery").data("progName"),l.shareProgramWithGallery(t,(function(e){"ok"===e.rc&&(r.info("share program "+t+" with Gallery"),c("#progList").find('button[name="refresh"]').clickWrap()),i.displayInformation(e,e.message,e.message,t)})),c("#share-with-gallery").modal("hide")}),"ok click for share with gallery"),c("#cancelShareWithGallery").onWrap("click",(function(e){var t=c("#share-with-gallery .modal-body").find(">:first-child");t?t.show():c("#textShareGallery").show(),c("#share-with-gallery").modal("hide")}),"ok click for cancel share with gallery")};var u={"click .addShare":function(e,t,r,a){d(a)}},b={"click #checkRead0":function(e){c(this).is(":checked")||c("#checkWrite0").prop("checked",!0)}},g={"click #checkWrite0":function(){c(this).is(":checked")||c("#checkRead0").prop("checked",!0)}},f=function(e,t,r){return null===t.sharedWith.label&&"UserGroup"===t.sharedWith.type||"User"===t.sharedWith.type&&n.isUserMemberOfUserGroup()&&n.getUserUserGroupOwner()===t.sharedWith.label?'<input type="checkbox" id="checkRead'+r+'" checked disabled>':"READ"===e?'<input type="checkbox" id="checkRead'+r+'" checked>':'<input type="checkbox" id="checkRead'+r+'">'},y=function(e,t,r){return"UserGroup"===t.sharedWith.type?'<input type="checkbox" id="checkWrite'+r+'" disabled>':"WRITE"===e?'<input type="checkbox" id="checkWrite'+r+'" checked>':'<input type="checkbox" id="checkWrite'+r+'">'},w=function(e,t,r){if(null===e||"object"!=typeof e)return error.log('unknown share format "'+typeof e+'"'),"";if(null===e.label){if("User"===e.type){var a=c('<div class="input-group"><label class="input-group-btn" for="shareWithUserInput"><button type="button" style="height:48px" class="btn disabled editor"><i class="typcn typcn-user"></i></button></label><span class="input-group-btn"><button class="addShare btn" type="button" style="height: 48px"><i class="typcn typcn-plus"></i></button></span><input class="shareLabelInput form-control" type="text" name="user.account" placeholder="'+h.Msg.SHARE_WITH_USER+'"/></div>');return c("<div></div>").append(a).html()}return"UserGroup"===e.type?(n.isUserMemberOfUserGroup()||s.loadUserGroupList((function(a){if("ok"==a.rc&&a.userGroups&&a.userGroups.length>0){var i=c("#relationsTable").bootstrapTable("getData").filter((function(e){return e.sharedWith&&"UserGroup"===e.sharedWith.type})).map((function(e){return e.sharedWith.label})),n=c('#relationsTable tr[data-index="'+r+'"] script').parent(),o=c('<td><div class="input-group"><label class="input-group-btn" for="shareWithUserGroupInput"><button type="button" style="height:48px" class="btn disabled editor"><i class="typcn typcn-group"></i></button></label><span class="input-group-btn"><button class="addShare btn" type="button" style="height: 48px"><i class="typcn typcn-plus"></i></button></span><select class="shareLabelInput form-control" name="userGroup.name"><option value="">'+h.Msg.SHARE_WITH_USERGROUP+"</option>"+a.userGroups.filter((function(e){return-1===i.indexOf(e.name)})).reduce((function(e,t){return e+'<option value="'+t.name+'">'+t.name+"</option>"}),"")+"</select></div></td>");c("#relationsTable").find('tr[data-index="'+r+'"]').show(),n.replaceWith(o[0]),Object.keys(u).forEach((function(a){if(u.hasOwnProperty(a)){var i=a.split(" ",2);n.find(i[1]).on(i[0],(function(i){u[a](i,e,t,r)}))}}))}})),"<script>$('#relationsTable').find('tr[data-index=\""+r+"\"]').hide();<\/script>"):(error.log("unknown share type"),"")}var i="warning-outline";return"User"===e.type?i="user":"UserGroup"===e.type&&(i="group"),'<span class="typcn typcn-'+i+'"></span> <span class="value">'+e.label+"</span>"}}));
-//# sourceMappingURL=progShare.controller.js.map
-//# sourceMappingURL=progShare.controller.js.map
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
+define(["require", "exports", "log", "log", "util.roberta", "message", "guiState.controller", "galleryList.controller", "program.model", "userGroup.model", "blockly", "jquery", "table", "bootstrap-table"], function (require, exports, LOG, log_1, UTIL, MSG, GUISTATE_C, galleryList_controller_1, PROGRAM, USERGROUP, Blockly, $, table_1) {
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.init = void 0;
+    function init() {
+        initView();
+        initEvents();
+    }
+    exports.init = init;
+    function initView() {
+        $('#relationsTable').bootstrapTable({
+            height: 400,
+            theadClasses: 'table-dark',
+            iconsPrefix: 'typcn',
+            icons: {
+                paginationSwitchDown: 'typcn-document-text',
+                paginationSwitchUp: 'typcn-book',
+                refresh: 'typcn-refresh'
+            },
+            columns: [
+                {
+                    title: 'Name',
+                    field: 'name',
+                    visible: false
+                },
+                {
+                    title: 'Owner',
+                    field: 'owner',
+                    visible: false
+                },
+                {
+                    title: '<span lkey=\'Blockly.Msg.DATATABLE_SHARED_WITH\'>' + (Blockly.Msg.DATATABLE_SHARED_WITH || 'Geteilt mit') + '</span>',
+                    field: 'sharedWith',
+                    events: eventAddShare,
+                    formatter: formatSharedWith
+                },
+                {
+                    title: '<span class=\'typcn typcn-eye\'></span>',
+                    field: 'read',
+                    events: eventCheckRead,
+                    width: '20px',
+                    halign: 'center',
+                    valign: 'middle',
+                    formatter: formatRead
+                },
+                {
+                    title: '<span class=\'typcn typcn-pencil\'></span>',
+                    field: 'write',
+                    events: eventCheckWrite,
+                    width: '20px',
+                    halign: 'center',
+                    valign: 'middle',
+                    formatter: formatWrite
+                }
+            ]
+        });
+        var myOptions = {
+            columns: [
+                {
+                    sortable: true,
+                    title: '',
+                    formatter: table_1.CardView.robot
+                },
+                {
+                    title: '',
+                    sortable: true,
+                    formatter: table_1.CardView.name
+                },
+                {
+                    title: '',
+                    sortable: true,
+                    formatter: table_1.CardView.programDescription
+                },
+                {
+                    title: '',
+                    sortable: true,
+                    formatter: function (goal) {
+                        return table_1.CardView.titleLabel(goal, 'GALLERY_BY', 'cardViewInfo');
+                    }
+                },
+                {
+                    sortable: true,
+                    title: '',
+                    formatter: function (date) {
+                        return table_1.CardView.titleLabel(UTIL.formatDate(date), 'GALLERY_DATE', 'cardViewInfo');
+                    }
+                },
+                {
+                    title: '',
+                    formatter: function (num) {
+                        return table_1.CardView.titleTypcn(num, 'eye-outline');
+                    },
+                    sortable: true
+                },
+                {
+                    title: '',
+                    formatter: function (num) {
+                        return table_1.CardView.titleTypcn(num, 'heart-full-outline');
+                    },
+                    sortable: true
+                },
+                {
+                    title: '',
+                    sortable: true,
+                    formatter: function (value, row) {
+                        return table_1.CardView.programTags(row[2]);
+                    }
+                },
+                {
+                    title: '',
+                    events: galleryList_controller_1.eventsLike,
+                    formatter: galleryList_controller_1.formatLike
+                }
+            ],
+            pagination: false,
+            rowAttributes: galleryList_controller_1.rowAttributes,
+            height: 410,
+            search: false
+        };
+        var options = __assign(__assign({}, table_1.CardView.options), myOptions);
+        $('#galleryPreview').bootstrapTable(options);
+    }
+    function initEvents() {
+        // triggered from the progList
+        $('#show-relations').onWrap('updateAndShow', function (e, data) {
+            showShareWithUser(data);
+            return false;
+        }, 'show relations');
+        // triggered from the progList
+        $('#share-with-gallery').onWrap('updateAndShow', function (e, row) {
+            showShareWithGallery(row);
+            return false;
+        }, 'share with gallery');
+        // click on the ok button from modal
+        $('#shareProgram').onWrap('click', function (e) {
+            updateSharedWithUsers();
+        }, 'ok click for share program');
+        // click on the ok button from modal
+        $('#shareWithGallery').onWrap('click', function (e) {
+            var table = $('#share-with-gallery .modal-body').find('>:first-child');
+            if (table) {
+                table.show();
+            }
+            else {
+                $('#textShareGallery').show();
+            }
+            updateShareWithGallery($('#share-with-gallery').data('action'));
+        }, 'ok click for share with gallery');
+        $('#cancelShareWithGallery').onWrap('click', function (e) {
+            var table = $('#share-with-gallery .modal-body').find('>:first-child');
+            if (table) {
+                table.show();
+            }
+            else {
+                $('#textShareGallery').show();
+            }
+            $('#share-with-gallery').modal('hide');
+        }, 'ok click for cancel share with gallery');
+    }
+    function showShareWithUser(data) {
+        var progName = data[0];
+        var shared = null;
+        if (!$.isEmptyObject(data[2])) {
+            shared = data[2];
+        }
+        $('#show-relations h5')
+            .text(Blockly.Msg.BUTTON_DO_SHARE + ' »' + progName + '«')
+            .end();
+        $('#show-relations')
+            .find('.modal-header>h5')
+            .text(Blockly.Msg.BUTTON_DO_SHARE + ' »' + progName + '«')
+            .end();
+        $('#relationsTable').bootstrapTable('removeAll');
+        if (shared) {
+            $.each(shared.sharedWith, function (i, shareObj) {
+                if (shareObj.type !== 'User' || shareObj.label !== 'Gallery') {
+                    $('#relationsTable').bootstrapTable('insertRow', {
+                        index: -1,
+                        row: {
+                            name: data[0],
+                            owner: data[1],
+                            sharedWith: shareObj,
+                            read: shareObj.right,
+                            write: shareObj.right
+                        }
+                    });
+                }
+            });
+        }
+        // add input row for new user group to share with
+        $('#relationsTable').bootstrapTable('insertRow', {
+            index: 0,
+            row: {
+                name: data[0],
+                owner: data[1],
+                sharedWith: {
+                    label: null,
+                    type: 'UserGroup',
+                    right: 'NONE'
+                },
+                read: 'READ',
+                write: ''
+            }
+        });
+        // add input row for new user to share with
+        $('#relationsTable').bootstrapTable('insertRow', {
+            index: 0,
+            row: {
+                name: data[0],
+                owner: data[1],
+                sharedWith: {
+                    label: null,
+                    type: 'User',
+                    right: 'NONE'
+                },
+                read: 'READ',
+                write: ''
+            }
+        });
+        $('#show-relations').oneWrap('shown.bs.modal', function (e) {
+            $('#relationsTable').bootstrapTable('resetView');
+            $('#relationsTable').find('input :first').focus();
+        });
+        $('#show-relations').modal('show');
+    }
+    function showShareWithGallery(row) {
+        var progName = row[0];
+        var authorName = row[3];
+        $('#share-with-gallery h5').html('');
+        $('#galleryPreview').html('');
+        $('#textShareGallery').html('');
+        $('#share-with-gallery').data('progName', progName);
+        $('#share-with-gallery').data('user', authorName);
+        // check if this program has already shared with the gallery
+        PROGRAM.loadProgramFromListing(progName, 'Gallery', authorName, function (result) {
+            if (result.rc === 'ok') {
+                // already shared!
+                //TODO create usefull text at least for german and english.
+                MSG.displayInformation({ rc: 'error' }, 'GALLERY_SHARED_ALREADY', 'GALLERY_SHARED_ALREADY', progName);
+            }
+            else {
+                $('#textShareGallery').html(Blockly.Msg.PROGLIST_SHARE_WITH_GALLERY);
+                $('#share-with-gallery').data('action', 'add');
+                PROGRAM.loadProgramEntity(progName, GUISTATE_C.getUserAccountName(), GUISTATE_C.getUserAccountName(), function (result) {
+                    if (result.rc === 'ok') {
+                        var progName_1 = row[0];
+                        $('#share-with-gallery h5').text(Blockly.Msg.BUTTON_DO_UPLOAD_GALLERY.replace('$', progName_1));
+                        $('#galleryPreview').bootstrapTable('load', new Array(result.program));
+                        //@ts-ignore
+                        $('.infoTags').tagsinput();
+                        $('#galleryPreview .bootstrap-tagsinput').addClass('galleryTags');
+                        $('#galleryPreview').find('.galleryTags>input').attr('readonly', 'true');
+                        $('#galleryPreview').find('span[data-role=remove]').addClass('hidden');
+                        $('#share-with-gallery').modal('show');
+                    }
+                });
+            }
+        });
+    }
+    /**
+     * Update rights for all users with which this program is shared, no
+     * selected right will remove sharing
+     */
+    function updateSharedWithUsers(rowIndex) {
+        var data = $('#relationsTable').bootstrapTable('getData');
+        for (var i = 0; i < data.length; i++) {
+            if (!isNaN(rowIndex) && i != parseInt(rowIndex)) {
+                continue;
+            }
+            var sharedWith = JSON.parse(JSON.stringify(data[i].sharedWith)), $shareLabelInput = false;
+            (rowIndex = -1), (rowIndex.right = 'NONE');
+            if ($('#checkRead' + i).is(':checked') &&
+                (sharedWith.type !== 'User' || !GUISTATE_C.isUserMemberOfUserGroup() || sharedWith.label !== GUISTATE_C.getUserUserGroupOwner())) {
+                rowIndex.right = 'READ';
+            }
+            if ($('#checkWrite' + i).is(':checked')) {
+                rowIndex.right = 'WRITE';
+            }
+            if (sharedWith.label === null) {
+                var $shareLabelInput_1 = $('#relationsTable tr[data-index="' + i + '"] .shareLabelInput'), shareLabel = $shareLabelInput_1.val();
+                if (!shareLabel) {
+                    continue;
+                }
+                if (sharedWith.type === 'User') {
+                    // new user and owner are the same?
+                    if (shareLabel === data[i].owner) {
+                        if (!isNaN(rowIndex)) {
+                            UTIL.showMsgOnTop('ORA_USER_TO_SHARE_SAME_AS_LOGIN_USER');
+                            return;
+                        }
+                        continue;
+                    }
+                    rowIndex = data
+                        .map(function (row) {
+                        return row.sharedWith !== null ? row.sharedWith.label : '';
+                    })
+                        .indexOf(shareLabel);
+                    if (rowIndex >= 0) {
+                        sharedWith = JSON.parse(JSON.stringify(data[rowIndex].sharedWith));
+                    }
+                }
+                sharedWith.label = shareLabel;
+            }
+            if (rowIndex.right !== sharedWith.right) {
+                sharedWith.right = rowIndex.right;
+                (function (row, shareObj, $shareLabelInput, updateRowIndex) {
+                    PROGRAM.shareProgram(row.name, shareObj, function (result) {
+                        if (result.rc === 'ok') {
+                            if ($shareLabelInput) {
+                                $shareLabelInput.val('');
+                                if (shareObj.type === 'UserGroup') {
+                                    $shareLabelInput.find('option[value="' + shareObj.label + '"]').remove();
+                                }
+                                if (updateRowIndex < 0) {
+                                    $('#relationsTable').bootstrapTable('insertRow', {
+                                        index: 2,
+                                        row: {
+                                            name: row.name,
+                                            owner: row.owner,
+                                            sharedWith: shareObj,
+                                            read: shareObj.right,
+                                            write: shareObj.right
+                                        }
+                                    });
+                                }
+                                else {
+                                    $('#relationsTable').bootstrapTable('updateRow', {
+                                        index: updateRowIndex,
+                                        row: {
+                                            name: row.name,
+                                            owner: row.owner,
+                                            sharedWith: shareObj,
+                                            read: shareObj.right,
+                                            write: shareObj.right
+                                        }
+                                    });
+                                }
+                            }
+                            MSG.displayMessage(result.message, 'TOAST', shareObj.label);
+                            LOG.info('share program ' + row.name + ' with \'' + shareObj.label + '\'(' + shareObj.type + ') having right \'' + shareObj.right + '\'');
+                            $('#progList').find('button[name="refresh"]').clickWrap();
+                        }
+                        else {
+                            UTIL.showMsgOnTop(result.message);
+                        }
+                    });
+                    // @ts-ignore
+                })(data[i], sharedWith, $shareLabelInput, updateRowIndex);
+            }
+        }
+        if (isNaN(rowIndex)) {
+            $('#show-relations').modal('hide');
+        }
+    }
+    /**
+     * Update rights for sharing with the gallery
+     *
+     */
+    function updateShareWithGallery(action) {
+        var progName = $('#share-with-gallery').data('progName');
+        PROGRAM.shareProgramWithGallery(progName, function (result) {
+            if (result.rc === 'ok') {
+                LOG.info('share program ' + progName + ' with Gallery');
+                $('#progList').find('button[name="refresh"]').clickWrap();
+            }
+            MSG.displayInformation(result, result.message, result.message, progName);
+        });
+        $('#share-with-gallery').modal('hide');
+    }
+    var rowStyle = function (row, index) {
+        return {
+            classes: 'typcn typcn-' + row[2] // the robot typicon as background image
+        };
+    };
+    var eventAddShare = {
+        'click .addShare': function (e, value, row, index) {
+            updateSharedWithUsers(index);
+        }
+    };
+    var eventCheckRead = {
+        'click #checkRead0': function (e) {
+            if (!$(this).is(':checked')) {
+                $('#checkWrite0').prop('checked', true);
+            }
+        }
+    };
+    var eventCheckWrite = {
+        'click #checkWrite0': function () {
+            if (!$(this).is(':checked')) {
+                $('#checkRead0').prop('checked', true);
+            }
+        }
+    };
+    var formatRead = function (value, row, index) {
+        if ((row.sharedWith.label === null && row.sharedWith.type === 'UserGroup') ||
+            (row.sharedWith.type === 'User' && GUISTATE_C.isUserMemberOfUserGroup() && GUISTATE_C.getUserUserGroupOwner() === row.sharedWith.label)) {
+            return '<input type="checkbox" id="checkRead' + index + '" checked disabled>';
+        }
+        if (value === 'READ') {
+            return '<input type="checkbox" id="checkRead' + index + '" checked>';
+        }
+        return '<input type="checkbox" id="checkRead' + index + '">';
+    };
+    var formatWrite = function (value, row, index) {
+        if (row.sharedWith.type === 'UserGroup') {
+            return '<input type="checkbox" id="checkWrite' + index + '" disabled>';
+        }
+        if (value === 'WRITE') {
+            return '<input type="checkbox" id="checkWrite' + index + '" checked>';
+        }
+        return '<input type="checkbox" id="checkWrite' + index + '">';
+    };
+    var formatSharedWith = function (value, row, index) {
+        if (value === null || typeof value !== 'object') {
+            //@ts-ignore
+            log_1.error.log('unknown share format "' + typeof value + '"');
+            return '';
+        }
+        if (value.label === null) {
+            var typeLabel = '';
+            if (value.type === 'User') {
+                var $html = $('<div class="input-group">' +
+                    '<label class="input-group-btn" for="shareWithUserInput">' +
+                    '<button type="button" style="height:48px" class="btn disabled editor">' +
+                    '<i class="typcn typcn-user"></i>' +
+                    '</button>' +
+                    '</label>' +
+                    '<span class="input-group-btn">' +
+                    '<button class="addShare btn" type="button" style="height: 48px">' +
+                    '<i class="typcn typcn-plus"></i>' +
+                    '</button>' +
+                    '</span>' +
+                    '<input class="shareLabelInput form-control" type="text" name="user.account" placeholder="' +
+                    Blockly.Msg.SHARE_WITH_USER +
+                    '"/>' +
+                    '</div>');
+                return $('<div></div>').append($html).html();
+            }
+            if (value.type === 'UserGroup') {
+                if (!GUISTATE_C.isUserMemberOfUserGroup()) {
+                    USERGROUP.loadUserGroupList(function (data) {
+                        if (data.rc == 'ok' && data.userGroups && data.userGroups.length > 0) {
+                            var existingUserGroupNames = $('#relationsTable')
+                                .bootstrapTable('getData')
+                                .filter(function (dataEntry) {
+                                return dataEntry.sharedWith && dataEntry.sharedWith.type === 'UserGroup';
+                            })
+                                .map(function (dataEntry) {
+                                return dataEntry.sharedWith.label;
+                            });
+                            var $td = $('#relationsTable tr[data-index="' + index + '"] script').parent();
+                            var $html = $('<td><div class="input-group">' +
+                                '<label class="input-group-btn" for="shareWithUserGroupInput">' +
+                                '<button type="button" style="height:48px" class="btn disabled editor">' +
+                                '<i class="typcn typcn-group"></i>' +
+                                '</button>' +
+                                '</label>' +
+                                '<span class="input-group-btn">' +
+                                '<button class="addShare btn" type="button" style="height: 48px">' +
+                                '<i class="typcn typcn-plus"></i>' +
+                                '</button>' +
+                                '</span>' +
+                                '<select class="shareLabelInput form-control" name="userGroup.name">' +
+                                '<option value="">' +
+                                Blockly.Msg.SHARE_WITH_USERGROUP +
+                                '</option>' +
+                                data.userGroups
+                                    .filter(function (userGroup) {
+                                    return existingUserGroupNames.indexOf(userGroup.name) === -1;
+                                })
+                                    .reduce(function (carry, userGroup) {
+                                    return carry + '<option value="' + userGroup.name + '">' + userGroup.name + '</option>';
+                                }, '') +
+                                '</select>' +
+                                '</div></td>');
+                            $('#relationsTable')
+                                .find('tr[data-index="' + index + '"]')
+                                .show();
+                            $td.replaceWith($html[0]);
+                            Object.keys(eventAddShare).forEach(function (eventKey) {
+                                if (!eventAddShare.hasOwnProperty(eventKey)) {
+                                    return;
+                                }
+                                var eventInformation = eventKey.split(' ', 2);
+                                $td.find(eventInformation[1]).on(eventInformation[0], function (e) {
+                                    eventAddShare[eventKey](e, value, row, index);
+                                });
+                            });
+                        }
+                    });
+                }
+                return '<script>$(\'#relationsTable\').find(\'tr[data-index="' + index + '"]\').hide();</script>';
+            }
+            //@ts-ignore
+            log_1.error.log('unknown share type');
+            return '';
+        }
+        var typeIconClass = 'warning-outline';
+        if (value.type === 'User') {
+            typeIconClass = 'user';
+        }
+        else if (value.type === 'UserGroup') {
+            typeIconClass = 'group';
+        }
+        return '<span class="typcn typcn-' + typeIconClass + '"></span> <span class="value">' + value.label + '</span>';
+    };
+});

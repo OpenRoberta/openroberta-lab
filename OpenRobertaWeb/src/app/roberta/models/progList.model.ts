@@ -10,19 +10,19 @@ import * as COMM from 'comm';
 /**
  * Refresh program list
  */
-function loadProgList(successFn) {
+export function loadProgList(successFn: Function): void {
     COMM.json('/program/listing/names', {}, successFn, 'load program list');
 }
 
 /**
  *
  */
-function loadProgListFromUserGroupMembers(userGroupName, successFn) {
+export function loadProgListFromUserGroupMembers(userGroupName: string, successFn: Function): void {
     COMM.json(
         '/program/userGroupMembers/names',
         {
             cmd: 'getInfosOfProgramsOfUserGroupMembers',
-            groupName: userGroupName,
+            groupName: userGroupName
         },
         successFn,
         'load program list of the members of the user group "' + userGroupName + '" from the server.'
@@ -32,15 +32,14 @@ function loadProgListFromUserGroupMembers(userGroupName, successFn) {
 /**
  * Refresh example list
  */
-function loadExampleList(successFn) {
+export function loadExampleList(successFn: Function): void {
     COMM.json('/program/examples/names', {}, successFn, 'load example list');
 }
 
 /**
  * Refresh example list
  */
-function loadGalleryList(successFn, filters) {
-    var data = !!filters ? filters : {};
+export function loadGalleryList(successFn: Function, filters: any): void {
+    let data = !!filters ? filters : {};
     COMM.json('/program/gallery', data, successFn, 'load gallery list');
 }
-export { loadProgList, loadProgListFromUserGroupMembers, loadExampleList, loadGalleryList };

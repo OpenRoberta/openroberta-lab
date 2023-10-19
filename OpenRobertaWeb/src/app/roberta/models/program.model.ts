@@ -18,7 +18,7 @@ import * as COMM from 'comm';
  *            {String} - that represents the program
  *
  */
-function saveAsProgramToServer(programName, ownerAccount, xmlProgramText, configName, xmlConfigText, timestamp, successFn) {
+export function saveAsProgramToServer(programName: string, ownerAccount, xmlProgramText, configName: string, xmlConfigText, timestamp: number, successFn: Function): void {
     COMM.json(
         '/program/save',
         {
@@ -28,10 +28,10 @@ function saveAsProgramToServer(programName, ownerAccount, xmlProgramText, config
             progXML: xmlProgramText,
             configName: configName,
             confXML: xmlConfigText,
-            timestamp: timestamp,
+            timestamp: timestamp
         },
         successFn,
-        "save program to server with new name '" + programName + "'"
+        'save program to server with new name \'' + programName + '\''
     );
 }
 
@@ -49,7 +49,7 @@ function saveAsProgramToServer(programName, ownerAccount, xmlProgramText, config
  *
  *
  */
-function saveProgramToServer(programName, ownerAccount, xmlProgramText, configName, xmlConfigText, timestamp, successFn) {
+export function saveProgramToServer(programName: string, ownerAccount, xmlProgramText, configName: string, xmlConfigText, timestamp: number, successFn): void {
     COMM.json(
         '/program/save',
         {
@@ -59,10 +59,10 @@ function saveProgramToServer(programName, ownerAccount, xmlProgramText, configNa
             progXML: xmlProgramText,
             configName: configName,
             confXML: xmlConfigText,
-            timestamp: timestamp,
+            timestamp: timestamp
         },
         successFn,
-        "save program '" + programName + "' to server"
+        'save program \'' + programName + '\' to server'
     );
 }
 
@@ -74,15 +74,15 @@ function saveProgramToServer(programName, ownerAccount, xmlProgramText, configNa
  * @param xmlText
  *            {String} - that represents the program
  */
-function loadProgramFromXML(programName, xmlText, successFn) {
+export function loadProgramFromXML(programName: string, xmlText: string, successFn: Function): void {
     COMM.json(
         '/program/import',
         {
             programName: programName,
-            progXML: xmlText,
+            progXML: xmlText
         },
         successFn,
-        "open program '" + programName + "' from XML"
+        'open program \'' + programName + '\' from XML'
     );
 }
 
@@ -90,7 +90,7 @@ function loadProgramFromXML(programName, xmlText, successFn) {
  * Downloads the programs by the current User
  * if no user is logged in this does nothing
  */
-function exportAllProgramsXml() {
+export function exportAllProgramsXml(): void {
     COMM.download('/program/exportAllPrograms');
 }
 
@@ -105,28 +105,28 @@ function exportAllProgramsXml() {
  *            {String} - administration rights of the user
  *
  */
-function shareProgram(programName, shareObj, successFn) {
+export function shareProgram(programName: string, shareObj, successFn: Function): void {
     COMM.json(
         '/program/share',
         {
             cmd: 'shareP',
             programName: programName,
-            shareData: shareObj,
+            shareData: shareObj
         },
         successFn,
-        "share program '" + programName + "' with '" + shareObj.label + "'(" + shareObj.type + ") having right '" + shareObj.right + "'"
+        'share program \'' + programName + '\' with \'' + shareObj.label + '\'(' + shareObj.type + ') having right \'' + shareObj.right + '\''
     );
 }
 
-function shareProgramWithGallery(programName, successFn) {
+export function shareProgramWithGallery(programName: string, successFn: Function): void {
     COMM.json(
         '/program/share/create',
         {
             cmd: 'shareWithGallery',
-            programName: programName,
+            programName: programName
         },
         successFn,
-        "share program '" + programName + "' with Gallery"
+        'share program \'' + programName + '\' with Gallery'
     );
 }
 
@@ -138,19 +138,19 @@ function shareProgramWithGallery(programName, successFn) {
  * @param owner
  *            {String} - owner of the program
  */
-function deleteShare(programName, owner, author, successFn) {
+export function deleteShare(programName: string, owner: string, author, successFn: Function): void {
     COMM.json(
         '/program/share/delete',
         {
             cmd: 'shareDelete',
             programName: programName,
             owner: owner,
-            author: author,
+            author: author
         },
-        function (result) {
+        function(result): void {
             successFn(result, programName);
         },
-        "delete share program '" + programName + "' owner: " + owner
+        'delete share program \'' + programName + '\' owner: ' + owner
     );
 }
 
@@ -161,17 +161,17 @@ function deleteShare(programName, owner, author, successFn) {
  *            {String} - name of the program
  *
  */
-function deleteProgramFromListing(programName, author, successFn) {
+export function deleteProgramFromListing(programName: string, author, successFn: Function): void {
     COMM.json(
         '/program/delete',
         {
             programName: programName,
-            author: author,
+            author: author
         },
-        function (result) {
+        function(result): void {
             successFn(result, programName);
         },
-        "delete program '" + programName + "'"
+        'delete program \'' + programName + '\''
     );
 }
 
@@ -184,16 +184,16 @@ function deleteProgramFromListing(programName, author, successFn) {
  *            {String} - name of the owner of the program
  *
  */
-function loadProgramFromListing(programName, ownerName, author, successFn) {
+export function loadProgramFromListing(programName: string, ownerName: string, author, successFn: Function): void {
     COMM.json(
         '/program/listing',
         {
             programName: programName,
             owner: ownerName,
-            author: author,
+            author: author
         },
         successFn,
-        "load program '" + programName + "' owned by '" + ownerName + "'"
+        'load program \'' + programName + '\' owned by \'' + ownerName + '\''
     );
 }
 
@@ -206,23 +206,23 @@ function loadProgramFromListing(programName, ownerName, author, successFn) {
  *            {String} - name of the owner of the program
  *
  */
-function loadProgramEntity(programName, author, ownerName, successFn) {
+export function loadProgramEntity(programName: string, author, ownerName: string, successFn: Function): void {
     COMM.json(
         '/program/entity',
         {
             programName: programName,
             owner: ownerName,
-            author: author,
+            author: author
         },
         successFn,
-        "load programEntity '" + programName + "' owned by '" + ownerName + "'"
+        'load programEntity \'' + programName + '\' owned by \'' + ownerName + '\''
     );
 }
 
 /**
  * Refresh program list
  */
-function refreshList(successFn) {
+export function refreshList(successFn: Function): void {
     COMM.json('/program/listing/names', {}, successFn, 'refresh program list');
 }
 
@@ -242,7 +242,7 @@ function refreshList(successFn) {
  * @param password
  *            {String} - WLAN password for WiFi enabled robots
  */
-function showSourceProgram(programName, configName, xmlTextProgram, xmlTextConfig, SSID, password, language, successFn) {
+export function showSourceProgram(programName: string, configName: string, xmlTextProgram: string, xmlTextConfig: string, SSID: string, password: string, language, successFn: Function): void {
     COMM.json(
         '/projectWorkflow/source',
         {
@@ -252,10 +252,10 @@ function showSourceProgram(programName, configName, xmlTextProgram, xmlTextConfi
             confXML: xmlTextConfig,
             SSID: SSID,
             password: password,
-            language: language,
+            language: language
         },
         successFn,
-        "show source code of program '" + programName + "'"
+        'show source code of program \'' + programName + '\''
     );
 }
 
@@ -275,7 +275,7 @@ function showSourceProgram(programName, configName, xmlTextProgram, xmlTextConfi
  * @param password
  *            {String} - WLAN password for WiFi enabled robots
  */
-function runOnBrick(programName, configName, xmlTextProgram, xmlTextConfig, SSID, password, language, successFn) {
+export function runOnBrick(programName: string, configName: string, xmlTextProgram: string, xmlTextConfig: string, SSID: string, password: string, language, successFn: Function): void {
     COMM.json(
         '/projectWorkflow/run',
         {
@@ -285,17 +285,17 @@ function runOnBrick(programName, configName, xmlTextProgram, xmlTextConfig, SSID
             confXML: xmlTextConfig,
             SSID: SSID,
             password: password,
-            language: language,
+            language: language
         },
         successFn,
-        "run program '" + programName + "' with configuration '" + configName + "'"
+        'run program \'' + programName + '\' with configuration \'' + configName + '\''
     );
 }
 
 /**
  * Stop program
  */
-export function stopProgram(successFn) {
+export function stopProgram(successFn: Function): void {
     COMM.json('/projectWorkflow/stop', {}, successFn, 'stop program ');
 }
 
@@ -311,7 +311,7 @@ export function stopProgram(successFn) {
  * @param xmlTextConfig
  *            {String} - XML representation of the robot configuration
  */
-function runInSim(programName, configName, xmlTextProgram, xmlTextConfig, language, successFn) {
+export function runInSim(programName: string, configName: string, xmlTextProgram: string, xmlTextConfig: string, language, successFn: Function): void {
     COMM.json(
         '/projectWorkflow/sourceSimulation',
         {
@@ -319,10 +319,10 @@ function runInSim(programName, configName, xmlTextProgram, xmlTextConfig, langua
             configurationName: configName,
             progXML: xmlTextProgram,
             confXML: xmlTextConfig,
-            language: language,
+            language: language
         },
         successFn,
-        "run program '" + programName + "' with configuration '" + configName + "'"
+        'run program \'' + programName + '\' with configuration \'' + configName + '\''
     );
 }
 
@@ -335,16 +335,16 @@ function runInSim(programName, configName, xmlTextProgram, xmlTextConfig, langua
  *            {String} - source code of the program
  */
 
-function runNative(programName, programText, language, successFn) {
+export function runNative(programName: string, programText: string, language, successFn: Function): void {
     COMM.json(
         '/projectWorkflow/runNative',
         {
             programName: programName,
             progXML: programText,
-            language: language,
+            language: language
         },
         successFn,
-        "run program '" + programName + "'"
+        'run program \'' + programName + '\''
     );
 }
 
@@ -357,16 +357,16 @@ function runNative(programName, programText, language, successFn) {
  *            {String} - source code of the program
  *
  */
-function compileN(programName, programText, language, successFn) {
+export function compileN(programName: string, programText: string, language, successFn: Function): void {
     COMM.json(
         '/projectWorkflow/compileNative',
         {
             programName: programName,
             progXML: programText,
-            language: language,
+            language: language
         },
         successFn,
-        "compile program '" + programName + "'"
+        'compile program \'' + programName + '\''
     );
 }
 
@@ -379,17 +379,17 @@ function compileN(programName, programText, language, successFn) {
  *            {String} - source code of the program
  *
  */
-function compileP(programName, programText, language, successFn) {
+export function compileP(programName: string, programText: string, language, successFn: Function): void {
     COMM.json(
         '/projectWorkflow/compileProgram',
         {
             cmd: 'compileP',
             programName: programName,
             progXML: programText,
-            language: language,
+            language: language
         },
         successFn,
-        "compile program '" + programName + "'"
+        'compile program \'' + programName + '\''
     );
 }
 
@@ -405,7 +405,7 @@ function compileP(programName, programText, language, successFn) {
  * @param xmlTextConfig
  *            {String} - XML representation of the robot configuration
  */
-function checkProgramCompatibility(programName, configName, xmlTextProgram, xmlTextConfig, successFn) {
+export function checkProgramCompatibility(programName: string, configName: string, xmlTextProgram: string, xmlTextConfig: string, successFn: Function): void {
     COMM.json(
         '/program',
         {
@@ -413,10 +413,10 @@ function checkProgramCompatibility(programName, configName, xmlTextProgram, xmlT
             programName: programName,
             configuration: configName,
             progXML: xmlTextProgram,
-            confXML: xmlTextConfig,
+            confXML: xmlTextConfig
         },
         successFn,
-        "check program '" + programName + "' with configuration '" + configName + "'"
+        'check program \'' + programName + '\' with configuration \'' + configName + '\''
     );
 }
 
@@ -427,47 +427,24 @@ function checkProgramCompatibility(programName, configName, xmlTextProgram, xmlT
  *            {String} - name of the program from the gallery
  *
  */
-function likeProgram(like, programName, author, robotName, successFn) {
+export function likeProgram(like, programName: string, author, robotName: string, successFn: Function): void {
     COMM.json(
         '/program/like',
         {
             programName: programName,
             robotName: robotName,
             author: author,
-            like: like,
+            like: like
         },
         successFn,
-        "like program '" + programName + "': '" + like + "'"
+        'like program \'' + programName + '\': \'' + like + '\''
     );
 }
 
-function resetProgram(successFn) {
+export function resetProgram(successFn: Function): void {
     COMM.json('/projectWorkflow/reset', {}, successFn, 'reset');
 }
 
 export function externAPIRequest(urlAPI, data, successFn, errorFn) {
     COMM.externPost(urlAPI, data, successFn, errorFn);
 }
-
-export {
-    saveAsProgramToServer,
-    saveProgramToServer,
-    loadProgramFromXML,
-    exportAllProgramsXml,
-    shareProgram,
-    shareProgramWithGallery,
-    deleteShare,
-    deleteProgramFromListing,
-    loadProgramFromListing,
-    loadProgramEntity,
-    refreshList,
-    showSourceProgram,
-    runOnBrick,
-    runInSim,
-    runNative,
-    compileN,
-    compileP,
-    checkProgramCompatibility,
-    likeProgram,
-    resetProgram,
-};

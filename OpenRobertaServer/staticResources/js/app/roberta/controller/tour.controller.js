@@ -1,3 +1,386 @@
-define(["require","exports","blockly","jquery","jquery-scrollto","enjoyHint"],(function(t,e,o,n){var i;Object.defineProperty(e,"__esModule",{value:!0}),e.getInstance=e.start=void 0,e.start=function(t){if(!t||"welcome"!==t&&"overview"!==t)return e(),void LOG.error("Tour not available: "+t);function e(){n("#enjoyHintAnchor").remove(),n("#enjoyHintStart").remove(),o.mainWorkspace.clear(),i={},n(".rightMenuButton.rightActive")&&n(".rightMenuButton.rightActive").clickWrap(),n("#tabStart").tabWrapShow()}i=new EnjoyHint({onStart:function(){var t,e,o;n(window).width()<768?(t=Math.min(n(window).width()/3,n(window).height()/2),e=100,o=2*n(window).height()/5):n(window).width()<n(window).height()?(t=Math.min(n(window).width()/3,n(window).height()/2),e=n(window).width()/2,o=(n(window).height()-t)/2):(t=Math.min(n(window).width()/3,n(window).height()/2),e=n(window).width()/2,o=(n(window).height()-t)/3),n("<div>",{id:"enjoyHintAnchor"}).css({width:t,height:t,top:o,left:e,position:"absolute"}).appendTo("body"),n("<div>",{id:"enjoyHintStart"}).css({width:0,height:0,top:30,right:31,position:"absolute"}).appendTo("body")},onSkip:function(){e()},onEnd:function(){e()}});var l,r,k=[{}];switch(t){case"welcome":for(var a=0,p=s.length;a<p;++a)k[a]=jQuery.extend(!0,{},s[a]);break;case"overview":for(a=0,p=c.length;a<p;++a)k[a]=jQuery.extend(!0,{},c[a])}for(a=0;a<k.length;a++){if(k[a].description){l=k[a].description.split("."),r=window;for(var u=0;u<l.length&&null!==r;u++)r=r[l[u]];k[a].description=r||k[a].description}if(k[a].nextButton&&k[a].nextButton.text){l=k[a].nextButton.text.split("."),r=window;for(u=0;u<l.length&&null!==r;u++)r=r[l[u]];k[a].nextButton.text=r||k[a].nextButton.text}if(k[a].skipButton&&k[a].skipButton.text){l=k[a].skipButton.text.split("."),r=window;for(u=0;u<l.length&&null!==r;u++)r=r[l[u]];k[a].skipButton.text=r||k[a].skipButton.text}}i.set(k),i.run(),LOG.info("Tour "+t+" started")},e.getInstance=function(){return i};n("#blocklyDiv").width(),n("#blocklyDiv").height();var s=[{event_type:"next",selector:"#enjoyHintStart",description:"Blockly.Msg.TOUR1_DESCRIPTION01",nextButton:{text:"Blockly.Msg.TOUR1_DESCRIPTION00"},showSkip:!1},{event:"click touchend",selector:".blocklyTreeRow:eq(1)",description:"Blockly.Msg.TOUR1_DESCRIPTION10",showSkip:!1},{event:"mousedown touchstart",selector:".blocklyFlyout>g>g>g",description:"Blockly.Msg.TOUR1_DESCRIPTION12",showSkip:!1},{event_type:"next",selector:".blocklyBlockCanvas",description:"Blockly.Msg.TOUR1_DESCRIPTION12",bottom:-100,showSkip:!1,nextButton:{text:"Blockly.Msg.TOUR1_DESCRIPTION00"}},{event_type:"custom",event:"startSim",selector:"#simButton",description:"Blockly.Msg.TOUR1_DESCRIPTION13",showSkip:!1,onBeforeStart:function(){o.getMainWorkspace().getTopBlocks()[0].getNextBlock()||i.setCurrentStepBack()}},{event:"mousedown touchstart",timeout:1e3,selector:"#simControl",description:"Blockly.Msg.TOUR1_DESCRIPTION13a",showSkip:!1},{event_type:"next",selector:"#enjoyHintAnchor",description:"Blockly.Msg.TOUR1_DESCRIPTION15",shape:"circle",nextButton:{text:"Blockly.Msg.TOUR1_DESCRIPTION00"},showSkip:!1},{event:"mousedown touchstart",selector:"#simButton",description:"Blockly.Msg.TOUR1_DESCRIPTION16",showSkip:!1},{event:"mousedown touchstart",selector:"#simButton",timeout:1e3,showSkip:!1,onBeforeStart:function(){setTimeout((function(){n(".enjoyhint_close_btn").trigger("click")}),1e3)}}],c=[{event_type:"next",selector:"#enjoyHintStart",description:"Blockly.Msg.TOUR1_DESCRIPTION01",nextButton:{text:"Blockly.Msg.TOUR1_DESCRIPTION00"},showSkip:!1},{event_type:"next",selector:"#head-navigation",description:"Blockly.Msg.TOUR1_DESCRIPTION02",nextButton:{text:"Blockly.Msg.TOUR1_DESCRIPTION00"},showSkip:!1},{event_type:"next",selector:"#mainNavigationBar",description:"Blockly.Msg.TOUR1_DESCRIPTION03",nextButton:{text:"Blockly.Msg.TOUR1_DESCRIPTION00"},showSkip:!1},{event:"click",selector:"a#tabConfiguration",description:"Blockly.Msg.TOUR1_DESCRIPTION04",nextButton:{text:"Blockly.Msg.TOUR1_DESCRIPTION00"},showSkip:!1},{event_type:"next",selector:"#bricklyDiv .blocklyBlockCanvas>.blocklyDraggable>.blocklyDraggable",description:"Blockly.Msg.TOUR1_DESCRIPTION05",shape:"circle",radius:200,nextButton:{text:"Blockly.Msg.TOUR1_DESCRIPTION00"},showSkip:!1,onBeforeStart:function(){n("#tabConfiguration").clickWrap()}},{event:"click",selector:"a#tabProgram",description:"Blockly.Msg.TOUR1_DESCRIPTION06",nextButton:{text:"Blockly.Msg.TOUR1_DESCRIPTION00"},showSkip:!1},{event_type:"next",selector:".blocklyTreeRoot",description:"Blockly.Msg.TOUR1_DESCRIPTION07",nextButton:{text:"Blockly.Msg.TOUR1_DESCRIPTION00"},showSkip:!1,onBeforeStart:function(){n("#tabProgram").tabWrapShow()}},{event_type:"next",selector:".nav.nav-tabs.levelTabs",description:"Blockly.Msg.TOUR1_DESCRIPTION07a",nextButton:{text:"Blockly.Msg.TOUR1_DESCRIPTION00"},onBeforeStart:function(){o.hideChaff(!1)},showSkip:!1},{event_type:"next",selector:"#blocklyDiv>svg>g>g:eq(1)",description:"Blockly.Msg.TOUR1_DESCRIPTION08",bottom:-100,nextButton:{text:"Blockly.Msg.TOUR1_DESCRIPTION00"},showSkip:!1,onBeforeStart:function(){n("#beginner").clickWrap()}},{event_type:"next",selector:".blocklyButtons:eq(1)",description:"Blockly.Msg.TOUR1_DESCRIPTION09",right:-50,nextButton:{text:"Blockly.Msg.TOUR1_DESCRIPTION00"},showSkip:!1},{event:"click touchend",selector:".blocklyTreeRow:eq(1)",description:"Blockly.Msg.TOUR1_DESCRIPTION10",showSkip:!1},{event:"mousedown touchstart",selector:".blocklyFlyout>g>g>g",description:"Blockly.Msg.TOUR1_DESCRIPTION12",showSkip:!1},{event_type:"next",selector:".blocklyBlockCanvas",description:"Blockly.Msg.TOUR1_DESCRIPTION12",bottom:-100,showSkip:!1,nextButton:{text:"Blockly.Msg.TOUR1_DESCRIPTION00"}},{event_type:"custom",event:"startSim",selector:"#simButton",description:"Blockly.Msg.TOUR1_DESCRIPTION13",showSkip:!1,onBeforeStart:function(){o.getMainWorkspace().getTopBlocks()[0].getNextBlock()||i.setCurrentStepBack()}},{event:"mousedown touchstart",timeout:1e3,selector:"#simControl",description:"Blockly.Msg.TOUR1_DESCRIPTION13a",showSkip:!1},{event_type:"next",selector:"#enjoyHintAnchor",description:"Blockly.Msg.TOUR1_DESCRIPTION15",shape:"circle",nextButton:{text:"Blockly.Msg.TOUR1_DESCRIPTION00"},showSkip:!1},{event:"mousedown touchstart",selector:"#simButton",description:"Blockly.Msg.TOUR1_DESCRIPTION16",showSkip:!1},{event:"mousedown touchstart",selector:"#simButton",timeout:1e3,showSkip:!1,onBeforeStart:function(){setTimeout((function(){n(".enjoyhint_close_btn").trigger("click")}),1e3)}}]}));
-//# sourceMappingURL=tour.controller.js.map
-//# sourceMappingURL=tour.controller.js.map
+define(["require", "exports", "blockly", "jquery", "jquery-scrollto", "enjoyHint"], function (require, exports, Blockly, $) {
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.getInstance = exports.start = void 0;
+    var enjoyhint_instance;
+    var touchEvent;
+    function is_touch_device() {
+        try {
+            document.createEvent('TouchEvent');
+            return 'click touchend';
+        }
+        catch (e) {
+            return 'click';
+        }
+    }
+    function start(tour) {
+        if (!tour || (tour !== 'welcome' && tour !== 'overview')) {
+            end();
+            //@ts-ignore
+            LOG.error('Tour not available: ' + tour);
+            return;
+        }
+        function end() {
+            $('#enjoyHintAnchor').remove();
+            $('#enjoyHintStart').remove();
+            Blockly.mainWorkspace.clear();
+            enjoyhint_instance = {};
+            if ($('.rightMenuButton.rightActive')) {
+                $('.rightMenuButton.rightActive').clickWrap();
+            }
+            //@ts-ignore
+            $('#tabStart').tabWrapShow();
+        }
+        //@ts-ignore
+        enjoyhint_instance = new EnjoyHint({
+            onStart: function () {
+                var size, x, y;
+                if ($(window).width() < 768) {
+                    size = Math.min($(window).width() / 3, $(window).height() / 2);
+                    x = 100;
+                    y = ($(window).height() * 2) / 5;
+                }
+                else if ($(window).width() < $(window).height()) {
+                    size = Math.min($(window).width() / 3, $(window).height() / 2);
+                    x = $(window).width() / 2;
+                    y = ($(window).height() - size) / 2;
+                }
+                else {
+                    size = Math.min($(window).width() / 3, $(window).height() / 2);
+                    x = $(window).width() / 2;
+                    y = ($(window).height() - size) / 3;
+                }
+                $('<div>', {
+                    id: 'enjoyHintAnchor'
+                })
+                    .css({ width: size, height: size, top: y, left: x, position: 'absolute' })
+                    .appendTo('body');
+                $('<div>', {
+                    id: 'enjoyHintStart'
+                })
+                    .css({ width: 0, height: 0, top: 30, right: 31, position: 'absolute' })
+                    .appendTo('body');
+            },
+            onSkip: function () {
+                end();
+            },
+            onEnd: function () {
+                end();
+            }
+        });
+        var enjoyhint_script_steps = [{}];
+        switch (tour) {
+            case 'welcome':
+                for (var i = 0, len = welcome.length; i < len; ++i) {
+                    enjoyhint_script_steps[i] = jQuery.extend(true, {}, welcome[i]);
+                }
+                break;
+            case 'overview':
+                for (var i = 0, len = overview.length; i < len; ++i) {
+                    enjoyhint_script_steps[i] = jQuery.extend(true, {}, overview[i]);
+                }
+                break;
+            default:
+                break;
+        }
+        // translation
+        var key, keyParts, translation;
+        for (var i = 0; i < enjoyhint_script_steps.length; i++) {
+            if (enjoyhint_script_steps[i].description) {
+                key = enjoyhint_script_steps[i].description;
+                keyParts = key.split('.');
+                translation = window;
+                for (var j = 0; j < keyParts.length && translation !== null; j++) {
+                    translation = translation[keyParts[j]];
+                }
+                enjoyhint_script_steps[i].description = translation || enjoyhint_script_steps[i].description;
+            }
+            if (enjoyhint_script_steps[i].nextButton && enjoyhint_script_steps[i].nextButton.text) {
+                key = enjoyhint_script_steps[i].nextButton.text;
+                keyParts = key.split('.');
+                translation = window;
+                for (var j = 0; j < keyParts.length && translation !== null; j++) {
+                    translation = translation[keyParts[j]];
+                }
+                enjoyhint_script_steps[i].nextButton.text = translation || enjoyhint_script_steps[i].nextButton.text;
+            }
+            if (enjoyhint_script_steps[i].skipButton && enjoyhint_script_steps[i].skipButton.text) {
+                key = enjoyhint_script_steps[i].skipButton.text;
+                keyParts = key.split('.');
+                translation = window;
+                for (var j = 0; j < keyParts.length && translation !== null; j++) {
+                    translation = translation[keyParts[j]];
+                }
+                enjoyhint_script_steps[i].skipButton.text = translation || enjoyhint_script_steps[i].skipButton.text;
+            }
+        }
+        enjoyhint_instance.set(enjoyhint_script_steps);
+        enjoyhint_instance.run();
+        //@ts-ignore
+        LOG.info('Tour ' + tour + ' started');
+    }
+    exports.start = start;
+    function getInstance() {
+        return enjoyhint_instance;
+    }
+    exports.getInstance = getInstance;
+    var offsetLeft = $('#blocklyDiv').width() * -0.15;
+    var offsetTop = $('#blocklyDiv').height() * -0.1;
+    var welcome = [
+        {
+            event_type: 'next',
+            selector: '#enjoyHintStart',
+            description: 'Blockly.Msg.TOUR1_DESCRIPTION01',
+            nextButton: {
+                text: 'Blockly.Msg.TOUR1_DESCRIPTION00'
+            },
+            showSkip: false
+        },
+        {
+            event: 'click touchend',
+            selector: '.blocklyTreeRow:eq(1)',
+            description: 'Blockly.Msg.TOUR1_DESCRIPTION10',
+            showSkip: false
+        },
+        {
+            event: 'mousedown touchstart',
+            selector: '.blocklyFlyout>g>g>g',
+            description: 'Blockly.Msg.TOUR1_DESCRIPTION12',
+            showSkip: false
+        },
+        {
+            event_type: 'next',
+            selector: '.blocklyBlockCanvas',
+            description: 'Blockly.Msg.TOUR1_DESCRIPTION12',
+            bottom: -100,
+            showSkip: false,
+            nextButton: {
+                text: 'Blockly.Msg.TOUR1_DESCRIPTION00'
+            }
+        },
+        {
+            event_type: 'custom',
+            event: 'startSim',
+            selector: '#simButton',
+            description: 'Blockly.Msg.TOUR1_DESCRIPTION13',
+            showSkip: false,
+            onBeforeStart: function () {
+                var blocks = Blockly.getMainWorkspace().getTopBlocks();
+                if (!blocks[0].getNextBlock()) {
+                    enjoyhint_instance.setCurrentStepBack();
+                }
+            }
+        },
+        {
+            event: 'mousedown touchstart',
+            timeout: 1000,
+            selector: '#simControl',
+            description: 'Blockly.Msg.TOUR1_DESCRIPTION13a',
+            showSkip: false
+        },
+        {
+            event_type: 'next',
+            selector: '#enjoyHintAnchor',
+            description: 'Blockly.Msg.TOUR1_DESCRIPTION15',
+            shape: 'circle',
+            nextButton: {
+                text: 'Blockly.Msg.TOUR1_DESCRIPTION00'
+            },
+            showSkip: false
+        },
+        {
+            event: 'mousedown touchstart',
+            selector: '#simButton',
+            description: 'Blockly.Msg.TOUR1_DESCRIPTION16',
+            showSkip: false
+        },
+        {
+            event: 'mousedown touchstart',
+            selector: '#simButton',
+            timeout: 1000,
+            showSkip: false,
+            onBeforeStart: function () {
+                setTimeout(function () {
+                    $('.enjoyhint_close_btn').trigger('click');
+                }, 1000);
+            }
+        }
+    ];
+    var overview = [
+        {
+            event_type: 'next',
+            selector: '#enjoyHintStart',
+            description: 'Blockly.Msg.TOUR1_DESCRIPTION01',
+            nextButton: {
+                text: 'Blockly.Msg.TOUR1_DESCRIPTION00'
+            },
+            showSkip: false
+        },
+        {
+            event_type: 'next',
+            selector: '#head-navigation',
+            description: 'Blockly.Msg.TOUR1_DESCRIPTION02',
+            nextButton: {
+                text: 'Blockly.Msg.TOUR1_DESCRIPTION00'
+            },
+            showSkip: false
+        },
+        {
+            event_type: 'next',
+            selector: '#mainNavigationBar',
+            description: 'Blockly.Msg.TOUR1_DESCRIPTION03',
+            nextButton: {
+                text: 'Blockly.Msg.TOUR1_DESCRIPTION00'
+            },
+            showSkip: false
+        },
+        {
+            event: 'click',
+            selector: 'a#tabConfiguration',
+            description: 'Blockly.Msg.TOUR1_DESCRIPTION04',
+            nextButton: {
+                text: 'Blockly.Msg.TOUR1_DESCRIPTION00'
+            },
+            showSkip: false
+        },
+        {
+            event_type: 'next',
+            selector: '#bricklyDiv .blocklyBlockCanvas>.blocklyDraggable>.blocklyDraggable',
+            description: 'Blockly.Msg.TOUR1_DESCRIPTION05',
+            shape: 'circle',
+            radius: 200,
+            nextButton: {
+                text: 'Blockly.Msg.TOUR1_DESCRIPTION00'
+            },
+            showSkip: false,
+            onBeforeStart: function () {
+                $('#tabConfiguration').clickWrap();
+            }
+        },
+        {
+            event: 'click',
+            selector: 'a#tabProgram',
+            description: 'Blockly.Msg.TOUR1_DESCRIPTION06',
+            nextButton: {
+                text: 'Blockly.Msg.TOUR1_DESCRIPTION00'
+            },
+            showSkip: false
+        },
+        {
+            event_type: 'next',
+            selector: '.blocklyTreeRoot',
+            description: 'Blockly.Msg.TOUR1_DESCRIPTION07',
+            nextButton: {
+                text: 'Blockly.Msg.TOUR1_DESCRIPTION00'
+            },
+            showSkip: false,
+            onBeforeStart: function () {
+                //@ts-ignore
+                $('#tabProgram').tabWrapShow();
+            }
+        },
+        {
+            event_type: 'next',
+            selector: '.nav.nav-tabs.levelTabs',
+            description: 'Blockly.Msg.TOUR1_DESCRIPTION07a',
+            nextButton: {
+                text: 'Blockly.Msg.TOUR1_DESCRIPTION00'
+            },
+            onBeforeStart: function () {
+                Blockly.hideChaff(false);
+            },
+            showSkip: false
+        },
+        {
+            event_type: 'next',
+            selector: '#blocklyDiv>svg>g>g:eq(1)',
+            description: 'Blockly.Msg.TOUR1_DESCRIPTION08',
+            bottom: -100,
+            nextButton: {
+                text: 'Blockly.Msg.TOUR1_DESCRIPTION00'
+            },
+            showSkip: false,
+            onBeforeStart: function () {
+                $('#beginner').clickWrap();
+            }
+        },
+        {
+            event_type: 'next',
+            selector: '.blocklyButtons:eq(1)',
+            description: 'Blockly.Msg.TOUR1_DESCRIPTION09',
+            right: -50,
+            nextButton: {
+                text: 'Blockly.Msg.TOUR1_DESCRIPTION00'
+            },
+            showSkip: false
+        },
+        {
+            event: 'click touchend',
+            selector: '.blocklyTreeRow:eq(1)',
+            description: 'Blockly.Msg.TOUR1_DESCRIPTION10',
+            showSkip: false
+        },
+        {
+            event: 'mousedown touchstart',
+            selector: '.blocklyFlyout>g>g>g',
+            description: 'Blockly.Msg.TOUR1_DESCRIPTION12',
+            showSkip: false
+        },
+        {
+            event_type: 'next',
+            selector: '.blocklyBlockCanvas',
+            description: 'Blockly.Msg.TOUR1_DESCRIPTION12',
+            bottom: -100,
+            showSkip: false,
+            nextButton: {
+                text: 'Blockly.Msg.TOUR1_DESCRIPTION00'
+            }
+        },
+        {
+            event_type: 'custom',
+            event: 'startSim',
+            selector: '#simButton',
+            description: 'Blockly.Msg.TOUR1_DESCRIPTION13',
+            showSkip: false,
+            onBeforeStart: function () {
+                var blocks = Blockly.getMainWorkspace().getTopBlocks();
+                if (!blocks[0].getNextBlock()) {
+                    enjoyhint_instance.setCurrentStepBack();
+                }
+            }
+        },
+        {
+            event: 'mousedown touchstart',
+            timeout: 1000,
+            selector: '#simControl',
+            description: 'Blockly.Msg.TOUR1_DESCRIPTION13a',
+            showSkip: false
+        },
+        {
+            event_type: 'next',
+            selector: '#enjoyHintAnchor',
+            description: 'Blockly.Msg.TOUR1_DESCRIPTION15',
+            shape: 'circle',
+            nextButton: {
+                text: 'Blockly.Msg.TOUR1_DESCRIPTION00'
+            },
+            showSkip: false
+        },
+        {
+            event: 'mousedown touchstart',
+            selector: '#simButton',
+            description: 'Blockly.Msg.TOUR1_DESCRIPTION16',
+            showSkip: false
+        },
+        {
+            event: 'mousedown touchstart',
+            selector: '#simButton',
+            timeout: 1000,
+            showSkip: false,
+            onBeforeStart: function () {
+                setTimeout(function () {
+                    $('.enjoyhint_close_btn').trigger('click');
+                }, 1000);
+            }
+        }
+    ];
+});

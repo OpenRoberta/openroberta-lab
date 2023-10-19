@@ -1,3 +1,132 @@
-define(["require","exports"],(function(r,o){Object.defineProperty(o,"__esModule",{value:!0}),o.display=o.maze=void 0,o.maze=function(r,o){var e=r*o-1;if(!(e<0)){for(var a=[],t=0;t<r+1;t++)a[t]=[];var l=[];for(t=0;t<o+1;t++)l[t]=[];var s=[Math.floor(Math.random()*r),Math.floor(Math.random()*o)],f=[s],h=[];for(t=0;t<r+2;t++){h[t]=[];for(var n=0;n<o+1;n++)h[t].push(t>0&&t<r+1&&n>0&&(t!=s[0]+1||n!=s[1]+1))}for(;0<e;){var i=[[s[0]+1,s[1]],[s[0],s[1]+1],[s[0]-1,s[1]],[s[0],s[1]-1]],c=[];for(t=0;t<4;t++)h[i[t][0]+1][i[t][1]+1]&&c.push(i[t]);if(c.length){e-=1;var y=c[Math.floor(Math.random()*c.length)];h[y[0]+1][y[1]+1]=!1,y[0]==s[0]?a[y[0]][(y[1]+s[1]-1)/2]=!0:l[(y[0]+s[0]-1)/2][y[1]]=!0,f.push(s=y)}else s=f.pop()}return{x:r,y:o,horiz:a,verti:l}}alert("illegal maze dimensions")},o.display=function(r){for(var o=[],e=0;e<2*r.x+1;e++){var a=[];if(0==e%2)for(var t=0;t<4*r.y+1;t++)0==t%4?a[t]="+":e>0&&r.verti[e/2-1][Math.floor(t/4)]?a[t]=" ":a[t]="-";else for(t=0;t<4*r.y+1;t++)0==t%4?t>0&&r.horiz[(e-1)/2][t/4-1]?a[t]=" ":a[t]="|":a[t]=" ";0==e&&(a[1]=a[2]=a[3]=" "),2*r.x-1==e&&(a[4*r.y]=" "),o.push(a.join("")+"\r\n")}var l=o.join("");return console.log(r),console.log(l),function(r){var o=1/(r.x+.2),e=1/(r.y+.2),a=.1*e,t={robotPoses:[],obstacles:[],colorAreas:[],ruler:{}};t.robotPoses.push({x:e/2+a,y:a,theta:Math.PI/2,xOld:0,yOld:0,transX:0,transY:0,thetaOld:0,thetaDiff:0}),t.colorAreas.push({x:0+a,y:0,h:o/2+a,w:e,form:"rectangle",type:"colorArea",theta:0,color:"green"}),t.colorAreas.push({x:(r.y-1)*e+e/2+a,y:(r.x-1)*o+a,h:o,w:e/2+a,form:"rectangle",type:"colorArea",theta:0,color:"green"}),t.ruler={x:0,y:0,xOld:0,yOld:0,w:0,h:0,wOld:0,hOld:0,type:"ruler",img:null,color:null};for(var l=0;l<r.x;l++)for(var s=0;s<r.y-1;s++)if(!r.horiz[l][s]){for(var f=(s+1)*e+a/2,h=l*o+a,n=o,i=l+1;i<r.x&&!r.horiz[i][s];i++)n+=o,r.horiz[i][s]=!0;t.obstacles.push({x:f,y:h,h:n,w:a,form:"rectangle",type:"obstacle",theta:0,color:"#33B8CA"})}for(l=0;l<r.x-1;l++)for(s=0;s<r.y;s++)if(!r.verti[l][s]){f=s*e+a,h=(l+1)*o+a/2,n=.1*o;var c=e;for(i=s+1;i<r.y&&!r.verti[l][i];i++)c+=e,r.verti[l][i]=!0;t.obstacles.push({x:f,y:h,h:n,w:c,form:"rectangle",type:"obstacle",theta:0,color:"#33B8CA"})}console.log(JSON.stringify(t))}(r),l}}));
-//# sourceMappingURL=maze.js.map
-//# sourceMappingURL=maze.js.map
+define(["require", "exports"], function (require, exports) {
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.display = exports.maze = void 0;
+    function maze(x, y) {
+        var n = x * y - 1;
+        if (n < 0) {
+            alert("illegal maze dimensions");
+            return;
+        }
+        var horiz = [];
+        for (var j = 0; j < x + 1; j++)
+            horiz[j] = [];
+        var verti = [];
+        for (var j = 0; j < y + 1; j++)
+            verti[j] = [];
+        // console.log(display({ x: x, y: y, horiz: horiz, verti: verti }));
+        var here = [Math.floor(Math.random() * x), Math.floor(Math.random() * y)];
+        var path = [here];
+        var unvisited = [];
+        for (var j = 0; j < x + 2; j++) {
+            unvisited[j] = [];
+            for (var k = 0; k < y + 1; k++)
+                unvisited[j].push(j > 0 && j < x + 1 && k > 0 && (j != here[0] + 1 || k != here[1] + 1));
+        }
+        while (0 < n) {
+            var potential = [[here[0] + 1, here[1]], [here[0], here[1] + 1],
+                [here[0] - 1, here[1]], [here[0], here[1] - 1]];
+            var neighbors = [];
+            for (var j = 0; j < 4; j++)
+                if (unvisited[potential[j][0] + 1][potential[j][1] + 1])
+                    neighbors.push(potential[j]);
+            if (neighbors.length) {
+                n = n - 1;
+                var next = neighbors[Math.floor(Math.random() * neighbors.length)];
+                unvisited[next[0] + 1][next[1] + 1] = false;
+                if (next[0] == here[0])
+                    horiz[next[0]][(next[1] + here[1] - 1) / 2] = true;
+                else
+                    verti[(next[0] + here[0] - 1) / 2][next[1]] = true;
+                path.push(here = next);
+            }
+            else
+                here = path.pop();
+        }
+        return ({ x: x, y: y, horiz: horiz, verti: verti });
+    }
+    exports.maze = maze;
+    function display(m) {
+        var text = [];
+        for (var j = 0; j < m.x * 2 + 1; j++) {
+            var line = [];
+            if (0 == j % 2)
+                for (var k = 0; k < m.y * 4 + 1; k++)
+                    if (0 == k % 4)
+                        line[k] = '+';
+                    else if (j > 0 && m.verti[j / 2 - 1][Math.floor(k / 4)])
+                        line[k] = ' ';
+                    else
+                        line[k] = '-';
+            else
+                for (var k = 0; k < m.y * 4 + 1; k++)
+                    if (0 == k % 4)
+                        if (k > 0 && m.horiz[(j - 1) / 2][k / 4 - 1])
+                            line[k] = ' ';
+                        else
+                            line[k] = '|';
+                    else
+                        line[k] = ' ';
+            if (0 == j)
+                line[1] = line[2] = line[3] = ' ';
+            if (m.x * 2 - 1 == j)
+                line[4 * m.y] = ' ';
+            text.push(line.join('') + '\r\n');
+        }
+        var maze = text.join('');
+        console.log(m);
+        console.log(maze);
+        download(m);
+        return maze;
+    }
+    exports.display = display;
+    function download(m) {
+        var l = 1 / (m.x + 0.2);
+        var b = 1 / (m.y + 0.2);
+        var w = 0.1 * b;
+        var result = { "robotPoses": [], "obstacles": [], "colorAreas": [], "ruler": {} };
+        result.robotPoses.push({ "x": b / 2 + w, "y": w, "theta": Math.PI / 2, "xOld": 0, "yOld": 0, "transX": 0, "transY": 0, "thetaOld": 0, "thetaDiff": 0 });
+        result.colorAreas.push({ "x": 0 + w, "y": 0, "h": l / 2 + w, "w": b, "form": "rectangle", "type": "colorArea", "theta": 0, "color": "green" });
+        result.colorAreas.push({ "x": (m.y - 1) * b + b / 2 + w, "y": (m.x - 1) * l + w, "h": l, "w": b / 2 + w, "form": "rectangle", "type": "colorArea", "theta": 0, "color": "green" });
+        result.ruler = { "x": 0, "y": 0, "xOld": 0, "yOld": 0, "w": 0, "h": 0, "wOld": 0, "hOld": 0, "type": "ruler", "img": null, "color": null };
+        for (var i = 0; i < m.x; i++) {
+            for (var j = 0; j < m.y - 1; j++) {
+                if (!m.horiz[i][j]) {
+                    var x = (j + 1) * b + w / 2;
+                    var y = (i) * l + w;
+                    var h = l;
+                    for (var k = i + 1; k < m.x; k++) {
+                        if (!m.horiz[k][j]) {
+                            h += l;
+                            m.horiz[k][j] = true;
+                        }
+                        else {
+                            break;
+                        }
+                    }
+                    result.obstacles.push({ "x": x, "y": y, "h": h, "w": w, "form": "rectangle", "type": "obstacle", "theta": 0, "color": "#33B8CA" });
+                }
+            }
+        }
+        for (var i = 0; i < m.x - 1; i++) {
+            for (var j = 0; j < m.y; j++) {
+                if (!m.verti[i][j]) {
+                    var x = (j) * b + w;
+                    var y = (i + 1) * l + w / 2;
+                    var h = 0.1 * l;
+                    var wx = b;
+                    for (var k = j + 1; k < m.y; k++) {
+                        if (!m.verti[i][k]) {
+                            wx += b;
+                            m.verti[i][k] = true;
+                        }
+                        else {
+                            break;
+                        }
+                    }
+                    result.obstacles.push({ "x": x, "y": y, "h": h, "w": wx, "form": "rectangle", "type": "obstacle", "theta": 0, "color": "#33B8CA" });
+                }
+            }
+        }
+        console.log(JSON.stringify(result));
+    }
+});

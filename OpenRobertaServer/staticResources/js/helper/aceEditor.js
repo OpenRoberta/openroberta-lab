@@ -1,3 +1,148 @@
-define(["require","exports"],(function(e,n){var t,i,s;Object.defineProperty(n,"__esModule",{value:!0}),n.setCodeLanguage=n.setViewCode=n.setEditorCode=n.getEditorCode=n.setWasEditedByUser=n.getCurrentLanguage=n.wasEditedByUser=n.init=void 0;var o=!1,a=0,r=!1;function c(e){e.session.setUseWrapMode(!0),e.setShowPrintMargin(!1)}function u(e){e.setHighlightActiveLine(!1),0==e.getSelectedText().length&&e.setHighlightActiveLine(!0)}function g(e){var n=0;return e.session.getAllFolds().forEach((function(e){var t=e.start.row,i=e.end.row;n+=i-t})),e.session.getLength()-n}function d(e){for(var n in e.session.getMarkers(!1))e.session.removeMarker(Number(n));for(var t=0;t<g(e);t++)t%2==1?(e.session.addGutterDecoration(t,"ace_lineBackgroundGrey"),e.session.highlightLines(t,t,"ace_lineBackgroundGrey",!1)):e.session.highlightLines(t,t,"ace_lineBackgroundWhite",!1)}n.init=function(){r||(r=!0,ace.require("ace/ext/language_tools"),c(t=ace.edit("codeContent")),t.setOptions({readOnly:!0,highlightActiveLine:!1,highlightGutterLine:!1}),c(i=ace.edit("aceEditor")),i.setOptions({enableBasicAutocompletion:!0,enableSnippets:!1,enableLiveAutocompletion:!1}),i.session.on("change",(function(){a!==i.session.getLength()&&(a=i.session.getLength(),u(i)),o=!0})),i.session.on("changeFold",(function(){u(i)})),i.selection.on("changeSelection",(function(){u(i)})),t.session.on("changeFold",(function(){d(t)})),$(window).resize((function(){t.resize(),i.resize()})))},n.wasEditedByUser=function(){return o},n.getCurrentLanguage=function(){return s},n.setWasEditedByUser=function(e){o=e},n.getEditorCode=function(){return i.getValue()},n.setEditorCode=function(e){i.setValue(e,0),i.clearSelection(),i.focus(),u(i)},n.setViewCode=function(e){t.setValue(e,0),t.clearSelection(),t.moveCursorTo(0,0),d(t)},n.setCodeLanguage=function(e){var n;switch(e){case"py":default:n="python";break;case"java":n="java";break;case"ino":case"nxc":case"cpp":n="c_cpp";break;case"json":n="json"}i.session.setMode("ace/mode/"+n),t.session.setMode("ace/mode/"+n),a=i.session.getLength(),s=n}}));
-//# sourceMappingURL=aceEditor.js.map
-//# sourceMappingURL=aceEditor.js.map
+/*
+ important note:
+    AceAjax types are incomplete some typing errors have to be suppressed with it-ignore
+*/
+define(["require", "exports"], function (require, exports) {
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.setCodeLanguage = exports.setViewCode = exports.setEditorCode = exports.getEditorCode = exports.setWasEditedByUser = exports.getCurrentLanguage = exports.wasEditedByUser = exports.init = void 0;
+    var codeView;
+    var editor;
+    var currentLanguage;
+    var wasEdited = false;
+    var previousLineCount = 0;
+    var initialized = false;
+    function init() {
+        if (initialized)
+            return;
+        initialized = true;
+        ace.require('ace/ext/language_tools');
+        codeView = ace.edit('codeContent');
+        applyDefaultSettings(codeView);
+        codeView.setOptions({
+            readOnly: true,
+            highlightActiveLine: false,
+            highlightGutterLine: false,
+        });
+        editor = ace.edit('aceEditor');
+        applyDefaultSettings(editor);
+        editor.setOptions({
+            enableBasicAutocompletion: true,
+            enableSnippets: false,
+            enableLiveAutocompletion: false,
+        });
+        editor.session.on('change', function () {
+            if (previousLineCount !== editor.session.getLength()) {
+                previousLineCount = editor.session.getLength();
+                resetActiveLine(editor);
+            }
+            wasEdited = true;
+        });
+        editor.session.on('changeFold', function () {
+            resetActiveLine(editor);
+        });
+        editor.selection.on('changeSelection', function () {
+            resetActiveLine(editor);
+        });
+        codeView.session.on('changeFold', function () {
+            highlightEverySecondLine(codeView);
+        });
+        $(window).resize(function () {
+            codeView.resize();
+            editor.resize();
+        });
+    }
+    exports.init = init;
+    function wasEditedByUser() {
+        return wasEdited;
+    }
+    exports.wasEditedByUser = wasEditedByUser;
+    function getCurrentLanguage() {
+        return currentLanguage;
+    }
+    exports.getCurrentLanguage = getCurrentLanguage;
+    function setWasEditedByUser(edited) {
+        wasEdited = edited;
+    }
+    exports.setWasEditedByUser = setWasEditedByUser;
+    function getEditorCode() {
+        return editor.getValue();
+    }
+    exports.getEditorCode = getEditorCode;
+    function setEditorCode(sourceCode) {
+        editor.setValue(sourceCode, 0);
+        editor.clearSelection();
+        editor.focus();
+        resetActiveLine(editor);
+    }
+    exports.setEditorCode = setEditorCode;
+    function setViewCode(sourceCode) {
+        codeView.setValue(sourceCode, 0);
+        codeView.clearSelection();
+        codeView.moveCursorTo(0, 0);
+        highlightEverySecondLine(codeView);
+    }
+    exports.setViewCode = setViewCode;
+    function setCodeLanguage(languageFileExtension) {
+        var langToSet;
+        switch (languageFileExtension) {
+            case 'py':
+                langToSet = 'python';
+                break;
+            case 'java':
+                langToSet = 'java';
+                break;
+            case 'ino':
+            case 'nxc':
+            case 'cpp':
+                langToSet = 'c_cpp';
+                break;
+            case 'json':
+                langToSet = 'json';
+                break;
+            default:
+                langToSet = 'python';
+        }
+        editor.session.setMode('ace/mode/' + langToSet);
+        codeView.session.setMode('ace/mode/' + langToSet);
+        previousLineCount = editor.session.getLength();
+        currentLanguage = langToSet;
+    }
+    exports.setCodeLanguage = setCodeLanguage;
+    function applyDefaultSettings(ed) {
+        ed.session.setUseWrapMode(true);
+        ed.setShowPrintMargin(false);
+    }
+    function resetActiveLine(ed) {
+        ed.setHighlightActiveLine(false);
+        // @ts-ignore
+        if (ed.getSelectedText().length == 0) {
+            ed.setHighlightActiveLine(true);
+        }
+    }
+    function getNumberOfVisibleRows(ed) {
+        var hiddenRows = 0;
+        //TODO add fold type once AceAjax typings are complete
+        //@ts-ignore
+        ed.session.getAllFolds().forEach(function (fold) {
+            var startRow = fold.start.row;
+            var endRow = fold.end.row;
+            hiddenRows += endRow - startRow;
+        });
+        return ed.session.getLength() - hiddenRows;
+    }
+    // Function to style every second line
+    function highlightEverySecondLine(ed) {
+        for (var id in ed.session.getMarkers(false)) {
+            ed.session.removeMarker(Number(id));
+        }
+        for (var i = 0; i < getNumberOfVisibleRows(ed); i++) {
+            if (i % 2 === 1) {
+                ed.session.addGutterDecoration(i, 'ace_lineBackgroundGrey');
+                ed.session.highlightLines(i, i, 'ace_lineBackgroundGrey', false);
+            }
+            else {
+                ed.session.highlightLines(i, i, 'ace_lineBackgroundWhite', false);
+            }
+        }
+    }
+});

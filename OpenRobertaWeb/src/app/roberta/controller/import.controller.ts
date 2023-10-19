@@ -6,20 +6,21 @@ import * as PROGRAM_C from 'program.controller';
 import * as NN_C from 'nn.controller';
 import * as CONFIGURATION_C from 'configuration.controller';
 import * as PROGRAM from 'program.model';
+//@ts-ignore
 import * as Blockly from 'blockly';
 import * as $ from 'jquery';
 import 'jquery-validate';
 
-function init(callback, opt_callback) {
+export function init(callback, opt_callback?): void {
     $('#fileSelector').val(null);
     $('#fileSelector').off();
     $('#fileSelector').onWrap(
         'change',
-        function (event) {
-            var file = event.target.files[0];
-            var reader = new FileReader();
-            reader.onload = function (event) {
-                var name = UTIL.getBasename(file.name);
+        function(event: any): boolean {
+            let file = event.target.files[0];
+            let reader: FileReader = new FileReader();
+            reader.onload = function(event: ProgressEvent<FileReader>): void {
+                let name: string = UTIL.getBasename(file.name);
                 if (callback && typeof callback === 'function') {
                     callback(name, event.target.result, opt_callback);
                 }
@@ -31,7 +32,7 @@ function init(callback, opt_callback) {
     );
 }
 
-function importXml() {
+export function importXml(): void {
     init(loadProgramFromXML);
     $('#fileSelector').attr('accept', '.xml');
     $('#fileSelector').clickWrap(); // opening dialog
@@ -40,23 +41,23 @@ function importXml() {
     }
 }
 
-export function importXmlFromStart(startCallback) {
+export function importXmlFromStart(startCallback: any): void {
     init(loadProgramFromXMLStart, startCallback);
     $('#fileSelector').attr('accept', '.xml');
     $('#fileSelector').clickWrap(); // opening dialog
 }
-function importSourceCode(callback) {
+export function importSourceCode(callback): void {
     init(callback);
     $('#fileSelector').attr('accept', '.' + GUISTATE_C.getSourceCodeFileExtension());
     $('#fileSelector').clickWrap(); // opening dialog
 }
 
-function loadProgramFromXMLStart(name, xml, opt_callback) {
-    var start = xml.indexOf('robottype="');
+function loadProgramFromXMLStart(name, xml, opt_callback): void {
+    let start = xml.indexOf('robottype="');
     start += 11;
-    var end = xml.indexOf('"', start);
-    var robot = xml.substring(start, end);
-    var robotType;
+    let end = xml.indexOf('"', start);
+    let robot = xml.substring(start, end);
+    let robotType;
     //TODO: This is only a fix for calliope and missing information in XML. Should be removed asap.
     if (robot.indexOf('calliope') >= 0) {
         robotType = 'calliope2017NoBlue';
@@ -73,7 +74,7 @@ function loadProgramFromXMLStart(name, xml, opt_callback) {
     }
 }
 
-function loadProgramFromXML(name, xml) {
+export function loadProgramFromXML(name: string, xml): void {
     if (xml.search('<export') === -1) {
         xml =
             '<export xmlns="http://de.fhg.iais.roberta.blockly"><program>' +
@@ -82,15 +83,16 @@ function loadProgramFromXML(name, xml) {
             GUISTATE_C.getConfigurationXML() +
             '</config></export>';
     }
-    PROGRAM.loadProgramFromXML(name, xml, function (result) {
+    PROGRAM.loadProgramFromXML(name, xml, function(result: any): void {
         if (result.rc == 'ok') {
             NN_C.programWasReplaced(); // remember, that NN save must NOT be executed after import
             // save the old program and configuration that it can be restored
-            var dom = Blockly.Xml.workspaceToDom(GUISTATE_C.getBlocklyWorkspace());
-            var xmlProgOld = Blockly.Xml.domToText(dom);
+            let dom = Blockly.Xml.workspaceToDom(GUISTATE_C.getBlocklyWorkspace());
+            let xmlProgOld = Blockly.Xml.domToText(dom);
             GUISTATE_C.setProgramXML(xmlProgOld);
+            //@ts-ignore
             dom = Blockly.Xml.workspaceToDom(GUISTATE_C.getBricklyWorkspace());
-            var xmlConfOld = Blockly.Xml.domToText(dom);
+            let xmlConfOld = Blockly.Xml.domToText(dom);
             GUISTATE_C.setConfigurationXML(xmlConfOld);
 
             // on server side we only test case insensitive block names, displaying xml can still fail:
@@ -98,7 +100,7 @@ function loadProgramFromXML(name, xml) {
             result.name = 'NEPOprog';
             result.programShared = false;
             result.programTimestamp = '';
-            var nameConfOld = GUISTATE_C.getConfigurationName();
+            let nameConfOld = GUISTATE_C.getConfigurationName();
             try {
                 CONFIGURATION_C.configurationToBricklyWorkspace(result.confXML);
                 GUISTATE_C.setConfigurationXML(result.confXML);
@@ -132,15 +134,15 @@ function loadProgramFromXML(name, xml) {
  * Open a file select dialog to load source code from local disk and send it
  * to the cross compiler
  */
-function importSourceCodeToCompile() {
+export function importSourceCodeToCompile(): void {
     init(compileFromSource);
     $('#fileSelector').attr('accept', '.' + GUISTATE_C.getSourceCodeFileExtension());
     $('#fileSelector').clickWrap(); // opening dialog
 }
 
-function compileFromSource(name, source) {
-    PROGRAM.compileN(name, source, GUISTATE_C.getLanguage(), function (result) {
-        var alertMsg = result.rc;
+function compileFromSource(name: string, source): void {
+    PROGRAM.compileN(name, source, GUISTATE_C.getLanguage(), function(result: any): void {
+        let alertMsg = result.rc;
         if (result.parameters !== undefined) {
             alertMsg += '\nMessage is:\n' + result.parameters.MESSAGE;
         }
@@ -153,15 +155,14 @@ function compileFromSource(name, source) {
  * to the cross compiler
  */
 
-function importNepoCodeToCompile() {
+export function importNepoCodeToCompile(): void {
     init(compileFromNepoCode);
     $('#fileSelector').attr('accept', '.xml');
     $('#fileSelector').clickWrap(); // opening dialog
 }
-export { init, importXml, importSourceCode, loadProgramFromXML, importSourceCodeToCompile, importNepoCodeToCompile };
 
-function compileFromNepoCode(name, source) {
-    PROGRAM.compileP(name, source, GUISTATE_C.getLanguage(), function (result) {
+function compileFromNepoCode(name: string, source): void {
+    PROGRAM.compileP(name, source, GUISTATE_C.getLanguage(), function(result: any): void {
         alert(result.rc);
     });
 }

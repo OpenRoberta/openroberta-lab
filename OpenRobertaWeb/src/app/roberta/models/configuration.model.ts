@@ -16,13 +16,13 @@ import * as COMM from 'comm';
  * @param xmlText
  *            {String} - XML representation of the robot configuration
  */
-function saveAsConfigurationToServer(configName, xmlText, successFn) {
+export function saveAsConfigurationToServer(configName: string, xmlText: string, successFn: Function): void {
     COMM.json(
         '/conf/saveC',
         {
             cmd: 'saveAsC',
             name: configName,
-            configuration: xmlText,
+            configuration: xmlText
         },
         successFn,
         'save configuration to server with new name ' + configName
@@ -38,13 +38,13 @@ function saveAsConfigurationToServer(configName, xmlText, successFn) {
  * @param xmlText
  *            {String} - XML representation of the robot configuration
  */
-function saveConfigurationToServer(configName, xmlText, successFn) {
+export function saveConfigurationToServer(configName: string, xmlText: string, successFn: Function): void {
     COMM.json(
         '/conf/saveC',
         {
             cmd: 'saveC',
             name: configName,
-            configuration: xmlText,
+            configuration: xmlText
         },
         successFn,
         'save configuration ' + configName + ' to server'
@@ -58,14 +58,14 @@ function saveConfigurationToServer(configName, xmlText, successFn) {
  *            {String } - name of the robot configuration
  *
  */
-function deleteConfigurationFromListing(configName, successFn) {
+export function deleteConfigurationFromListing(configName: string, successFn: Function): void {
     COMM.json(
         '/conf/deleteC',
         {
             cmd: 'deleteC',
-            name: configName,
+            name: configName
         },
-        function (result) {
+        function(result): void {
             successFn(result, configName);
         },
         'delete configuration ' + configName
@@ -81,13 +81,13 @@ function deleteConfigurationFromListing(configName, successFn) {
  * @param owner
  *            {String} - configuration owner
  */
-function loadConfigurationFromListing(configName, owner, successFn) {
+export function loadConfigurationFromListing(configName: string, owner: string, successFn: Function): void {
     COMM.json(
         '/conf/loadC',
         {
             cmd: 'loadC',
             name: configName,
-            owner: owner,
+            owner: owner
         },
         successFn,
         'load configuration ' + configName
@@ -98,15 +98,13 @@ function loadConfigurationFromListing(configName, owner, successFn) {
  * Refresh configuration list
  *
  */
-function refreshList(successFn) {
+export function refreshList(successFn: Function): void {
     COMM.json(
         '/conf/loadCN',
         {
-            cmd: 'loadCN',
+            cmd: 'loadCN'
         },
         successFn,
         'refresh configuration list'
     );
 }
-
-export { saveAsConfigurationToServer, saveConfigurationToServer, deleteConfigurationFromListing, loadConfigurationFromListing, refreshList };

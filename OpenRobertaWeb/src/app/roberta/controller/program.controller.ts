@@ -7,45 +7,46 @@ import * as NN_C from 'nn.controller';
 import * as PROGRAM from 'program.model';
 import * as USER from 'user.model';
 import * as CONFIGURATION_C from 'configuration.controller';
+//@ts-ignore
 import * as Blockly from 'blockly';
 import * as $ from 'jquery';
 import 'jquery-validate';
 import * as ACE_EDITOR from 'aceEditor';
 
-var $formSingleModal;
+let $formSingleModal;
 
-var blocklyWorkspace;
-var listenToBlocklyEvents = true;
-var seen = true;
+let blocklyWorkspace;
+let listenToBlocklyEvents: boolean = true;
+let seen: boolean = true;
 
-let _SSID = '';
-let _password = '';
+let _SSID: string = '';
+let _password: string = '';
 
-export function setSSID(SSID) {
+export function setSSID(SSID: string): void {
     _SSID = SSID;
 }
-export function getSSID() {
+export function getSSID(): string {
     return _SSID;
 }
-export function setPassword(password) {
+export function setPassword(password: any): void {
     _password = password;
 }
-export function getPassword() {
+export function getPassword(): string {
     return _password;
 }
 
 /**
  * Inject Blockly with initial toolbox
  */
-function init() {
+export function init(): void {
     initView();
     initProgramEnvironment();
     initEvents();
     initProgramForms();
 }
 
-function initView() {
-    var toolbox = GUISTATE_C.getProgramToolbox();
+function initView(): void {
+    let toolbox = GUISTATE_C.getProgramToolbox();
     blocklyWorkspace = Blockly.inject(document.getElementById('blocklyDiv'), {
         path: '/blockly/',
         toolbox: toolbox,
@@ -58,33 +59,33 @@ function initView() {
             startScale: 1.0,
             maxScale: 4,
             minScale: 0.25,
-            scaleSpeed: 1.1,
+            scaleSpeed: 1.1
         },
         variableDeclaration: true,
         robControls: true,
-        theme: GUISTATE_C.getTheme(),
+        theme: GUISTATE_C.getTheme()
     });
     $(window).resize();
     blocklyWorkspace.setDevice({
         group: GUISTATE_C.getRobotGroup(),
-        robot: GUISTATE_C.getRobot(),
+        robot: GUISTATE_C.getRobot()
     });
     GUISTATE_C.setBlocklyWorkspace(blocklyWorkspace);
     blocklyWorkspace.robControls.disable('saveProgram');
     blocklyWorkspace.robControls.refreshTooltips(GUISTATE_C.getRobotRealName());
     GUISTATE_C.checkSim();
-    $('#program').find('.blocklyToolboxDiv:first').wrap("<div id='toolboxDiv' style='position: absolute;'></div>");
+    $('#program').find('.blocklyToolboxDiv:first').wrap('<div id=\'toolboxDiv\' style=\'position: absolute;\'></div>');
     $('#toolboxDiv').prepend(
         '<ul class="nav nav-tabs levelTabs"><li class="nav-item"><a class="nav-link typcn typcn-media-stop-outline active beginner" href="#beginner" data-bs-toggle="tab">1</a></li><li class="nav-item"><a href="#expert" class="nav-link typcn typcn-star-outline expert" data-bs-toggle="tab">2</a></li></ul>'
     );
 }
 
-function initEvents() {
+function initEvents(): void {
     $('#sliderDiv').draggable({
         axis: 'x',
-        cursor: 'col-resize',
+        cursor: 'col-resize'
     });
-    $('#tabProgram').onWrap('click', function (e) {
+    $('#tabProgram').onWrap('click', function(e): boolean {
         e.preventDefault();
         if (
             GUISTATE_C.getView() === 'tabConfiguration' &&
@@ -92,9 +93,9 @@ function initEvents() {
             !GUISTATE_C.isConfigurationSaved() &&
             !GUISTATE_C.isConfigurationAnonymous()
         ) {
-            $('#show-message-confirm').oneWrap('shown.bs.modal', function (e) {
+            $('#show-message-confirm').oneWrap('shown.bs.modal', function(e): void {
                 $('#confirm').off();
-                $('#confirm').on('click', function (e) {
+                $('#confirm').on('click', function(e): void {
                     e.preventDefault();
                     // TODO, check if we want to give the user the opportunity to convert the named configuration into an anonymous one
                     GUISTATE_C.setConfigurationName('');
@@ -103,7 +104,7 @@ function initEvents() {
                     $('#tabProgram').tabWrapShow();
                 });
                 $('#confirmCancel').off();
-                $('#confirmCancel').on('click', function (e) {
+                $('#confirmCancel').on('click', function(e): void {
                     e.preventDefault();
                     $('.modal').modal('hide');
                 });
@@ -114,11 +115,11 @@ function initEvents() {
             $('#tabProgram').tabWrapShow();
         }
     });
-    $('#tabProgram').onWrap('show.bs.tab', function (e) {
+    $('#tabProgram').onWrap('show.bs.tab', function(e): void {
         GUISTATE_C.setView('tabProgram');
     });
 
-    $('#tabProgram').onWrap('shown.bs.tab', function (e) {
+    $('#tabProgram').onWrap('shown.bs.tab', function(e): void {
         blocklyWorkspace.markFocused();
         blocklyWorkspace.setVisible(true);
         if (!seen) {
@@ -127,15 +128,15 @@ function initEvents() {
         }
         $(window).resize();
     });
-    $('#tabProgram').onWrap('hide.bs.tab', function (e) {
+    $('#tabProgram').onWrap('hide.bs.tab', function(e): void {
         seen = false;
     });
-    $('#tabProgram').onWrap('hidden.bs.tab', function (e) {
+    $('#tabProgram').onWrap('hidden.bs.tab', function(e): void {
         blocklyWorkspace.setVisible(false);
     });
 
-    $('.expert, .beginner').onWrap('click', function (e) {
-        var target =
+    $('.expert, .beginner').onWrap('click', function(e): void {
+        let target: string =
             ($(e.target).attr('href') && $(e.target).attr('href').substring(1)) ||
             ($(e.target.parentElement).attr('href') && $(e.target.parentElement).attr('href').substring(1)); // activated tab
         $('.levelTabs a[href="' + target + '"]').tabWrapShow();
@@ -146,7 +147,7 @@ function initEvents() {
     });
 
     bindControl();
-    blocklyWorkspace.addChangeListener(function (event) {
+    blocklyWorkspace.addChangeListener(function(event: Event): boolean {
         if (listenToBlocklyEvents && event.type != Blockly.Events.UI && GUISTATE_C.isProgramSaved()) {
             GUISTATE_C.setProgramSaved(false);
         }
@@ -157,10 +158,11 @@ function initEvents() {
         }
         $('.selectedHelp').removeClass('selectedHelp');
         if (Blockly.selected && $('#blocklyDiv').hasClass('rightActive')) {
-            var block = Blockly.selected.type;
+            let block = Blockly.selected.type;
             $('#' + block).addClass('selectedHelp');
+            //@ts-ignore
             $('#helpContent').scrollTo('#' + block, 1000, {
-                offset: -10,
+                offset: -10
             });
         }
         return false;
@@ -170,13 +172,13 @@ function initEvents() {
 /**
  * Save program to server
  */
-function saveToServer() {
+export function saveToServer(): void {
     $('.modal').modal('hide'); // close all opened popups
-    var xmlProgram = Blockly.Xml.workspaceToDom(blocklyWorkspace);
-    var xmlProgramText = Blockly.Xml.domToText(xmlProgram);
-    var isNamedConfig = !GUISTATE_C.isConfigurationStandard() && !GUISTATE_C.isConfigurationAnonymous();
-    var configName = isNamedConfig ? GUISTATE_C.getConfigurationName() : undefined;
-    var xmlConfigText = GUISTATE_C.isConfigurationAnonymous() ? GUISTATE_C.getConfigurationXML() : undefined;
+    let xmlProgram = Blockly.Xml.workspaceToDom(blocklyWorkspace);
+    let xmlProgramText = Blockly.Xml.domToText(xmlProgram);
+    let isNamedConfig: boolean = !GUISTATE_C.isConfigurationStandard() && !GUISTATE_C.isConfigurationAnonymous();
+    let configName = isNamedConfig ? GUISTATE_C.getConfigurationName() : undefined;
+    let xmlConfigText = GUISTATE_C.isConfigurationAnonymous() ? GUISTATE_C.getConfigurationXML() : undefined;
 
     PROGRAM.saveProgramToServer(
         GUISTATE_C.getProgramName(),
@@ -185,7 +187,7 @@ function saveToServer() {
         configName,
         xmlConfigText,
         GUISTATE_C.getProgramTimestamp(),
-        function (result) {
+        function(result: any): void {
             if (result.rc === 'ok') {
                 GUISTATE_C.setProgramTimestamp(result.lastChanged);
                 GUISTATE_C.setProgramSaved(true);
@@ -200,17 +202,18 @@ function saveToServer() {
 /**
  * Save program with new name to server
  */
-function saveAsProgramToServer() {
+function saveAsProgramToServer(): void {
     $formSingleModal.validate();
     if ($formSingleModal.valid()) {
         $('.modal').modal('hide'); // close all opened popups
-        var progName = $('#singleModalInput').val().trim();
-        var xmlProgram = Blockly.Xml.workspaceToDom(blocklyWorkspace);
-        var xmlProgramText = Blockly.Xml.domToText(xmlProgram);
-        var isNamedConfig = !GUISTATE_C.isConfigurationStandard() && !GUISTATE_C.isConfigurationAnonymous();
-        var configName = isNamedConfig ? GUISTATE_C.getConfigurationName() : undefined;
-        var xmlConfigText = GUISTATE_C.isConfigurationAnonymous() ? GUISTATE_C.getConfigurationXML() : undefined;
-        var userAccountName = GUISTATE_C.getUserAccountName();
+        //@ts-ignore
+        let progName = $('#singleModalInput').val().trim();
+        let xmlProgram = Blockly.Xml.workspaceToDom(blocklyWorkspace);
+        let xmlProgramText = Blockly.Xml.domToText(xmlProgram);
+        let isNamedConfig: boolean = !GUISTATE_C.isConfigurationStandard() && !GUISTATE_C.isConfigurationAnonymous();
+        let configName = isNamedConfig ? GUISTATE_C.getConfigurationName() : undefined;
+        let xmlConfigText = GUISTATE_C.isConfigurationAnonymous() ? GUISTATE_C.getConfigurationXML() : undefined;
+        let userAccountName = GUISTATE_C.getUserAccountName();
 
         LOG.info('saveAs program ' + GUISTATE_C.getProgramName());
         PROGRAM.saveAsProgramToServer(
@@ -220,7 +223,7 @@ function saveAsProgramToServer() {
             configName,
             xmlConfigText,
             GUISTATE_C.getProgramTimestamp(),
-            function (result) {
+            function(result: any): void {
                 if (result.rc === 'ok') {
                     LOG.info('saved program ' + GUISTATE_C.getProgramName() + ' as ' + progName);
                     result.name = progName;
@@ -231,14 +234,14 @@ function saveAsProgramToServer() {
                     if (result.cause === 'ORA_PROGRAM_SAVE_AS_ERROR_PROGRAM_EXISTS') {
                         //show replace option
                         //get last changed of program to overwrite
-                        var lastChanged = result.lastChanged;
-                        var modalMessage =
+                        let lastChanged = result.lastChanged;
+                        let modalMessage =
                             Blockly.Msg.POPUP_BACKGROUND_REPLACE || 'A program with the same name already exists! <br> Would you like to replace it?';
-                        $('#show-message-confirm').oneWrap('shown.bs.modal', function (e) {
+                        $('#show-message-confirm').oneWrap('shown.bs.modal', function(e): void {
                             $('#confirm').off();
                             $('#confirm').onWrap(
                                 'click',
-                                function (e) {
+                                function(e): void {
                                     e.preventDefault();
                                     PROGRAM.saveProgramToServer(
                                         progName,
@@ -247,7 +250,7 @@ function saveAsProgramToServer() {
                                         configName,
                                         xmlConfigText,
                                         lastChanged,
-                                        function (result) {
+                                        function(result: any): void {
                                             if (result.rc === 'ok') {
                                                 LOG.info('saved program ' + GUISTATE_C.getProgramName() + ' as ' + progName + ' and overwrote old content');
                                                 result.name = progName;
@@ -265,7 +268,7 @@ function saveAsProgramToServer() {
                             $('#confirmCancel').off();
                             $('#confirmCancel').onWrap(
                                 'click',
-                                function (e) {
+                                function(e) {
                                     e.preventDefault();
                                     $('.modal').modal('hide');
                                 },
@@ -283,19 +286,19 @@ function saveAsProgramToServer() {
 /**
  * Load the program that was selected in gallery list
  */
-function loadFromGallery(program) {
-    var programName = program[1];
-    var user = program[3];
-    var robotGroup = program[0];
-    var robotType;
+export function loadFromGallery(program: any[]): void {
+    let programName = program[1];
+    let user = program[3];
+    let robotGroup = program[0];
+    let robotType;
     if (robotGroup === GUISTATE_C.getRobotGroup()) {
         robotType = GUISTATE_C.getRobot();
     } else {
         robotType = GUISTATE_C.findRobot(robotGroup);
     }
-    var owner = 'Gallery';
-    function loadProgramFromGallery() {
-        PROGRAM.loadProgramFromListing(programName, owner, user, function (result) {
+    let owner: string = 'Gallery';
+    function loadProgramFromGallery(): void {
+        PROGRAM.loadProgramFromListing(programName, owner, user, function(result: any): void {
             if (result.rc === 'ok') {
                 result.programShared = 'READ';
                 result.name = programName;
@@ -315,7 +318,7 @@ function loadFromGallery(program) {
                     GUISTATE_C.setConfigurationName(result.configName);
                     GUISTATE_C.setConfigurationXML(result.confXML);
                 }
-                $('#tabProgram').oneWrap('shown.bs.tab', function (e) {
+                $('#tabProgram').oneWrap('shown.bs.tab', function(e): void {
                     CONFIGURATION_C.reloadConf();
                     reloadProgram();
                 });
@@ -325,24 +328,26 @@ function loadFromGallery(program) {
         });
     }
     //TODO !!!!
+    //@ts-ignore
     ROBOT_C.switchRobot(robotType, {}, false, loadProgramFromGallery);
 }
 
-function initProgramForms() {
+export function initProgramForms(): void {
     $formSingleModal = $('#single-modal-form');
     $('#buttonCancelFirmwareUpdateAndRun').onWrap(
         'click',
-        function () {
+        function(): void {
+            //@ts-ignore
             start();
         },
         'cancel firmware update and run'
     );
 }
 
-function showSaveAsModal() {
+export function showSaveAsModal(): void {
     $.validator.addMethod(
         'regex',
-        function (value, element, regexp) {
+        function(value, element: HTMLElement, regexp) {
             value = value.trim();
             return value.match(regexp);
         },
@@ -350,36 +355,36 @@ function showSaveAsModal() {
     );
 
     UTIL.showSingleModal(
-        function () {
+        function(): void {
             $('#singleModalInput').attr('type', 'text');
             $('#single-modal h5').text(Blockly.Msg['MENU_SAVE_AS']);
             $('#single-modal label').text(Blockly.Msg['POPUP_NAME']);
         },
         saveAsProgramToServer,
-        function () {},
+        function(): void {},
         {
             rules: {
                 singleModalInput: {
                     required: true,
-                    regex: /^[a-zA-Z_öäüÖÄÜß$€][a-zA-Z0-9_öäüÖÄÜß$€]{0,254}$/,
-                },
+                    regex: /^[a-zA-Z_öäüÖÄÜß$€][a-zA-Z0-9_öäüÖÄÜß$€]{0,254}$/
+                }
             },
             errorClass: 'form-invalid',
-            errorPlacement: function (label, element) {
+            errorPlacement: function(label, element): void {
                 label.insertAfter(element);
             },
             messages: {
                 singleModalInput: {
                     required: Blockly.Msg['VALIDATION_FIELD_REQUIRED'],
-                    regex: Blockly.Msg['MESSAGE_INVALID_NAME'],
-                },
-            },
+                    regex: Blockly.Msg['MESSAGE_INVALID_NAME']
+                }
+            }
         }
     );
 }
 
-function initProgramEnvironment() {
-    var x, y;
+export function initProgramEnvironment(): void {
+    let x, y;
     if ($(window).width() < 768) {
         x = $(window).width() / 50;
         y = 25;
@@ -387,11 +392,11 @@ function initProgramEnvironment() {
         x = $(window).width() / 5;
         y = 50;
     }
-    var program = GUISTATE_C.getProgramProg();
+    let program = GUISTATE_C.getProgramProg();
     programToBlocklyWorkspace(program);
-    var blocks = blocklyWorkspace.getTopBlocks(true);
+    let blocks = blocklyWorkspace.getTopBlocks(true);
     if (blocks[0]) {
-        var coord = blocks[0].getRelativeToSurfaceXY();
+        let coord = blocks[0].getRelativeToSurfaceXY();
         blocks[0].moveBy(x - coord.x, y - coord.y);
     }
 }
@@ -399,10 +404,10 @@ function initProgramEnvironment() {
 /**
  * New program
  */
-function newProgram(opt_further) {
-    var further = opt_further || false;
-    function loadNewProgram() {
-        var result = {};
+export function newProgram(opt_further?): void {
+    let further = opt_further || false;
+    function loadNewProgram(): void {
+        let result: any = {};
         result.rc = 'ok';
         result.name = 'NEPOprog';
         result.programShared = false;
@@ -419,15 +424,15 @@ function newProgram(opt_further) {
     }
 }
 
-function confirmLoadProgram() {
-    $('#show-message-confirm').oneWrap('shown.bs.modal', function (e) {
+function confirmLoadProgram(): void {
+    $('#show-message-confirm').oneWrap('shown.bs.modal', function(e): void {
         $('#confirm').off();
-        $('#confirm').on('click', function (e) {
+        $('#confirm').on('click', function(e): void {
             e.preventDefault();
             newProgram(true);
         });
         $('#confirmCancel').off();
-        $('#confirmCancel').on('click', function (e) {
+        $('#confirmCancel').on('click', function(e): void {
             e.preventDefault();
             $('.modal').modal('hide');
         });
@@ -439,23 +444,24 @@ function confirmLoadProgram() {
     }
 }
 
-function linkProgram() {
-    var dom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
-    var xml = Blockly.Xml.domToText(dom);
+export function linkProgram(): void {
+    let dom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
+    let xml = Blockly.Xml.domToText(dom);
     //TODO this should be removed after the next release
     xml = '<export xmlns="http://de.fhg.iais.roberta.blockly"><program>' + xml + '</program><config>' + GUISTATE_C.getConfigurationXML() + '</config></export>';
-    var location = new URL(document.location);
-    var clean_uri = location.protocol + '//' + location.host;
-    var link = clean_uri + '?loadSystem=';
+
+    let location: URL = new URL(document.location.toString());
+    let clean_uri: string = location.protocol + '//' + location.host;
+    let link: string = clean_uri + '?loadSystem=';
     link += GUISTATE_C.getRobot();
     link += '&loadProgram=' + xml;
     link = encodeURI(link);
-    var $temp = $('<input>');
+    let $temp = $('<input>');
     $('body').append($temp);
     $temp.val(link).select();
     document.execCommand('copy');
     $temp.remove();
-    var displayLink = '</br><textarea readonly style="width:100%;" type="text">' + link + '</textarea>';
+    let displayLink: string = '</br><textarea readonly style="width:100%;" type="text">' + link + '</textarea>';
     LOG.info('ProgramLinkShare');
     MSG.displayMessage('POPUP_GET_LINK', 'POPUP', displayLink);
 }
@@ -463,9 +469,9 @@ function linkProgram() {
 /**
  * Create a file from the blocks and download it.
  */
-function exportXml() {
-    var dom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
-    var xml =
+export function exportXml(): void {
+    let dom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
+    let xml: string =
         '<export xmlns="http://de.fhg.iais.roberta.blockly"><program>' +
         Blockly.Xml.domToText(dom) +
         '</program><config>' +
@@ -479,8 +485,8 @@ function exportXml() {
 /**
  * Download all programs by the current User
  */
-function exportAllXml() {
-    USER.userLoggedInCheck(function (result) {
+export function exportAllXml(): void {
+    USER.userLoggedInCheck(function(result: any): void {
         if (result.rc === 'ok') {
             PROGRAM.exportAllProgramsXml();
         } else {
@@ -489,12 +495,12 @@ function exportAllXml() {
     });
 }
 
-function getBlocklyWorkspace() {
+export function getBlocklyWorkspace(): any {
     return blocklyWorkspace;
 }
 
-function bindControl() {
-    Blockly.bindEvent_(blocklyWorkspace.robControls.saveProgram, 'mousedown', null, function (e) {
+function bindControl(): void {
+    Blockly.bindEvent_(blocklyWorkspace.robControls.saveProgram, 'mousedown', null, function(e): boolean {
         LOG.info('saveProgram from blockly button');
         saveToServer();
         return false;
@@ -502,11 +508,12 @@ function bindControl() {
     blocklyWorkspace.robControls.disable('saveProgram');
 }
 
-function reloadProgram(opt_result, opt_fromShowSource) {
-    var program;
+export function reloadProgram(opt_result?, opt_fromShowSource?): void {
+    let program;
     if (opt_result) {
         program = opt_result.progXML;
         if (!$.isEmptyObject(opt_result.confAnnos)) {
+            //@ts-ignore
             GUISTATE_C.confAnnos = opt_result.confAnnos;
             UTIL.alertTab('tabConfiguration');
         }
@@ -516,12 +523,12 @@ function reloadProgram(opt_result, opt_fromShowSource) {
     programToBlocklyWorkspace(program, opt_fromShowSource);
 }
 
-function reloadView() {
+export function reloadView(): void {
     if (isVisible()) {
-        var dom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
-        var xml = Blockly.Xml.domToText(dom);
+        let dom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
+        let xml = Blockly.Xml.domToText(dom);
         programToBlocklyWorkspace(xml);
-        var toolbox = GUISTATE_C.getProgramToolbox();
+        let toolbox = GUISTATE_C.getProgramToolbox();
         blocklyWorkspace.updateToolbox(toolbox);
         seen = true;
     } else {
@@ -529,19 +536,19 @@ function reloadView() {
     }
 }
 
-function resetView() {
+export function resetView(): void {
     blocklyWorkspace.setDevice({
         group: GUISTATE_C.getRobotGroup(),
-        robot: GUISTATE_C.getRobot(),
+        robot: GUISTATE_C.getRobot()
     });
     initProgramEnvironment();
-    var toolbox = GUISTATE_C.getProgramToolbox();
+    let toolbox = GUISTATE_C.getProgramToolbox();
     blocklyWorkspace.updateToolbox(toolbox);
 }
 
-function loadToolbox(level) {
+export function loadToolbox(level): void {
     GUISTATE_C.setProgramToolboxLevel(level);
-    var xml = GUISTATE_C.getToolbox(level);
+    let xml: any = GUISTATE_C.getToolbox(level);
     if (xml) {
         blocklyWorkspace.updateToolbox(xml);
     }
@@ -552,23 +559,23 @@ function loadToolbox(level) {
     }
 }
 
-function loadExternalToolbox(toolbox) {
+export function loadExternalToolbox(toolbox: any): void {
     if (toolbox) {
         blocklyWorkspace.updateToolbox(toolbox);
     }
 }
 
-function isVisible() {
+function isVisible(): boolean {
     return GUISTATE_C.getView() == 'tabProgram';
 }
 
-function programToBlocklyWorkspace(xml, opt_fromShowSource) {
+export function programToBlocklyWorkspace(xml, opt_fromShowSource?): void {
     if (!xml) {
         return;
     }
     listenToBlocklyEvents = false;
     blocklyWorkspace.clear();
-    var dom = Blockly.Xml.textToDom(xml, blocklyWorkspace);
+    let dom = Blockly.Xml.textToDom(xml, blocklyWorkspace);
     Blockly.Xml.domToWorkspace(dom, blocklyWorkspace);
     blocklyWorkspace.setVersion(dom.getAttribute('xmlversion'));
     $('#infoContent').html(blocklyWorkspace.description);
@@ -577,44 +584,27 @@ function programToBlocklyWorkspace(xml, opt_fromShowSource) {
     } else {
         $('#infoButton').removeClass('notEmpty');
     }
-    var tmpTags = blocklyWorkspace.tags;
+    let tmpTags = blocklyWorkspace.tags;
+    //@ts-ignore
     $('#infoTags').tagsinput('removeAll');
     $('.bootstrap-tagsinput input').attr('placeholder', 'Tags');
+    //@ts-ignore
     $('#infoTags').tagsinput('add', tmpTags);
-    var xmlConfiguration = GUISTATE_C.getConfigurationXML();
-    var dom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
-    var xmlProgram = Blockly.Xml.domToText(dom);
+    let xmlConfiguration = GUISTATE_C.getConfigurationXML();
+    dom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
+    let xmlProgram = Blockly.Xml.domToText(dom);
 
-    var isNamedConfig = !GUISTATE_C.isConfigurationStandard() && !GUISTATE_C.isConfigurationAnonymous();
-    var configName = isNamedConfig ? GUISTATE_C.getConfigurationName() : undefined;
-    var xmlConfigText = GUISTATE_C.isConfigurationAnonymous() ? GUISTATE_C.getConfigurationXML() : undefined;
+    let isNamedConfig: boolean = !GUISTATE_C.isConfigurationStandard() && !GUISTATE_C.isConfigurationAnonymous();
+    let configName = isNamedConfig ? GUISTATE_C.getConfigurationName() : undefined;
+    let xmlConfigText = GUISTATE_C.isConfigurationAnonymous() ? GUISTATE_C.getConfigurationXML() : undefined;
     GUISTATE_C.setProgramSaved(true);
-    var language = GUISTATE_C.getLanguage();
+    let language = GUISTATE_C.getLanguage();
     if ($('#codeDiv').hasClass('rightActive') && opt_fromShowSource) {
-        PROGRAM.showSourceProgram(GUISTATE_C.getProgramName(), configName, xmlProgram, xmlConfigText, language, getSSID(), getPassword(), function (result) {
+        PROGRAM.showSourceProgram(GUISTATE_C.getProgramName(), configName, xmlProgram, xmlConfigText, language, getSSID(), getPassword(), function(result: any): void {
             ACE_EDITOR.setViewCode(result.sourceCode);
         });
     }
-    setTimeout(function () {
+    setTimeout(function(): void {
         listenToBlocklyEvents = true;
     }, 500);
 }
-export {
-    init,
-    saveToServer,
-    loadFromGallery,
-    initProgramForms,
-    showSaveAsModal,
-    initProgramEnvironment,
-    newProgram,
-    linkProgram,
-    exportXml,
-    exportAllXml,
-    getBlocklyWorkspace,
-    reloadProgram,
-    reloadView,
-    resetView,
-    loadToolbox,
-    loadExternalToolbox,
-    programToBlocklyWorkspace,
-};

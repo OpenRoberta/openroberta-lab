@@ -13,12 +13,7 @@ import { BaseResponse, ConfResponse } from '../ts/restEntities';
 let $formSingleModal: JQuery<HTMLElement>;
 
 let bricklyWorkspace: any;
-let confVis: {
-    dispose: any;
-    refresh: any;
-    resetRobot: any;
-    getXml: any;
-};
+let confVis: any;
 let listenToBricklyEvents: boolean = true;
 let seen: boolean = false;
 
@@ -83,7 +78,7 @@ function initEvents(): void {
             UTIL.clearAnnotations(bricklyWorkspace);
 
             // @ts-ignore
-            if (GUISTATE_C.confAnnos !== undefined) {
+            if (GUISTATE_C.confAnnos) {
                 // @ts-ignore
                 UTIL.annotateBlocks(bricklyWorkspace, GUISTATE_C.confAnnos);
                 // @ts-ignore

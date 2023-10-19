@@ -1,3 +1,44 @@
-define(["require","exports"],(function(t,e){Object.defineProperty(e,"__esModule",{value:!0}),e.Port=void 0;var o=function(){function t(t,e,o,n){this.position_=o,this.element_=window.Blockly.createSvgElement("rect",{class:"port",width:5,height:5,fill:"red",stroke:"black","stroke-width":1,transform:"translate(".concat(o.x,", ").concat(o.y,")"),r:3},t),this.connectedTo=n,e&&(this.element_.tooltip=e,window.Blockly.Tooltip.bindMouseEvents(t))}return t.prototype.moveTo=function(t){this.position_=t,this.element_.setAttribute("transform","translate(".concat(t.x,", ").concat(t.y,")"))},Object.defineProperty(t.prototype,"element",{get:function(){return this.element_},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"position",{get:function(){return this.position_},enumerable:!1,configurable:!0}),t}();e.Port=o}));
-//# sourceMappingURL=port.js.map
-//# sourceMappingURL=port.js.map
+define(["require", "exports"], function (require, exports) {
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.Port = void 0;
+    var Port = /** @class */ (function () {
+        function Port(parent, name, position, connectedTo) {
+            this.position_ = position;
+            this.element_ = window.Blockly.createSvgElement('rect', {
+                class: 'port',
+                width: 5,
+                height: 5,
+                fill: 'red',
+                stroke: 'black',
+                'stroke-width': 1,
+                transform: "translate(".concat(position.x, ", ").concat(position.y, ")"),
+                r: 3,
+            }, parent);
+            this.connectedTo = connectedTo;
+            if (name) {
+                this.element_.tooltip = name;
+                window.Blockly.Tooltip.bindMouseEvents(parent);
+            }
+        }
+        Port.prototype.moveTo = function (position) {
+            this.position_ = position;
+            this.element_.setAttribute('transform', "translate(".concat(position.x, ", ").concat(position.y, ")"));
+        };
+        Object.defineProperty(Port.prototype, "element", {
+            get: function () {
+                return this.element_;
+            },
+            enumerable: false,
+            configurable: true
+        });
+        Object.defineProperty(Port.prototype, "position", {
+            get: function () {
+                return this.position_;
+            },
+            enumerable: false,
+            configurable: true
+        });
+        return Port;
+    }());
+    exports.Port = Port;
+});

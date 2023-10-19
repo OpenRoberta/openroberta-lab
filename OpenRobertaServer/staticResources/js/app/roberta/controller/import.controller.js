@@ -1,3 +1,157 @@
-define(["require","exports","message","log","util.roberta","guiState.controller","program.controller","nn.controller","configuration.controller","program.model","blockly","jquery","jquery-validate"],(function(e,o,r,t,a,i,n,l,c,m,p,g){function f(e,o){g("#fileSelector").val(null),g("#fileSelector").off(),g("#fileSelector").onWrap("change",(function(r){var t=r.target.files[0],i=new FileReader;return i.onload=function(r){var i=a.getBasename(t.name);e&&"function"==typeof e&&e(i,r.target.result,o)},i.readAsText(t),!1}),"import clicked")}function s(e,o,t){var n=o.indexOf('robottype="');n+=11;var l,c=o.indexOf('"',n),m=o.substring(n,c);m.indexOf("calliope")>=0&&(l="calliope2017NoBlue");for(var g=0,f=Object.entries(i.getRobots());g<f.length;g++){var s=f[g],d=(s[0],s[1]);d.name===m&&(l=d.group)}l?t&&"function"==typeof t&&t(l,{},u,[e,o]):r.displayInformation({rx:"error"},"",p.Msg.PROGRAM_IMPORT_ERROR_MISSING_ROBOT_TYPE,a.getRobotGroupsPrettyPrint(m))}function u(e,o){-1===o.search("<export")&&(o='<export xmlns="http://de.fhg.iais.roberta.blockly"><program>'+o+"</program><config>"+i.getConfigurationXML()+"</config></export>"),m.loadProgramFromXML(e,o,(function(o){if("ok"==o.rc){l.programWasReplaced();var a=p.Xml.workspaceToDom(i.getBlocklyWorkspace()),m=p.Xml.domToText(a);i.setProgramXML(m),a=p.Xml.workspaceToDom(i.getBricklyWorkspace());var g=p.Xml.domToText(a);i.setConfigurationXML(g),o.programSaved=!1,o.name="NEPOprog",o.programShared=!1,o.programTimestamp="";var f=i.getConfigurationName();try{c.configurationToBricklyWorkspace(o.confXML),i.setConfigurationXML(o.confXML),n.programToBlocklyWorkspace(o.progXML),i.setProgram(o),i.setProgramXML(o.progXML),i.setConfigurationName(""),t.info("show program "+i.getProgramName())}catch(a){t.error(a.message),i.setProgramXML(m),i.setConfigurationXML(g),i.setConfigurationName(f),c.reloadConf(),n.reloadProgram(),o.rc="error",r.displayInformation(o,"",p.Msg.ORA_PROGRAM_IMPORT_ERROR,e)}}else"ORA_PROGRAM_IMPORT_ERROR_WRONG_ROBOT_TYPE"===o.message?r.displayInformation(o,"",o.message,o.robotTypes):r.displayInformation(o,"",o.message,e)}))}function d(e,o){m.compileN(e,o,i.getLanguage(),(function(e){var o=e.rc;void 0!==e.parameters&&(o+="\nMessage is:\n"+e.parameters.MESSAGE),alert(o)}))}function M(e,o){m.compileP(e,o,i.getLanguage(),(function(e){alert(e.rc)}))}Object.defineProperty(o,"__esModule",{value:!0}),o.importNepoCodeToCompile=o.importSourceCodeToCompile=o.loadProgramFromXML=o.importSourceCode=o.importXml=o.init=o.importXmlFromStart=void 0,o.init=f,o.importXml=function(){f(u),g("#fileSelector").attr("accept",".xml"),g("#fileSelector").clickWrap(),g(".rightMenuButton.rightActive").length>0&&g(".rightMenuButton.rightActive").clickWrap()},o.importXmlFromStart=function(e){f(s,e),g("#fileSelector").attr("accept",".xml"),g("#fileSelector").clickWrap()},o.importSourceCode=function(e){f(e),g("#fileSelector").attr("accept","."+i.getSourceCodeFileExtension()),g("#fileSelector").clickWrap()},o.loadProgramFromXML=u,o.importSourceCodeToCompile=function(){f(d),g("#fileSelector").attr("accept","."+i.getSourceCodeFileExtension()),g("#fileSelector").clickWrap()},o.importNepoCodeToCompile=function(){f(M),g("#fileSelector").attr("accept",".xml"),g("#fileSelector").clickWrap()}}));
-//# sourceMappingURL=import.controller.js.map
-//# sourceMappingURL=import.controller.js.map
+define(["require", "exports", "message", "log", "util.roberta", "guiState.controller", "program.controller", "nn.controller", "configuration.controller", "program.model", "blockly", "jquery", "jquery-validate"], function (require, exports, MSG, LOG, UTIL, GUISTATE_C, PROGRAM_C, NN_C, CONFIGURATION_C, PROGRAM, Blockly, $) {
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.importNepoCodeToCompile = exports.importSourceCodeToCompile = exports.loadProgramFromXML = exports.importSourceCode = exports.importXmlFromStart = exports.importXml = exports.init = void 0;
+    function init(callback, opt_callback) {
+        $('#fileSelector').val(null);
+        $('#fileSelector').off();
+        $('#fileSelector').onWrap('change', function (event) {
+            var file = event.target.files[0];
+            var reader = new FileReader();
+            reader.onload = function (event) {
+                var name = UTIL.getBasename(file.name);
+                if (callback && typeof callback === 'function') {
+                    callback(name, event.target.result, opt_callback);
+                }
+            };
+            reader.readAsText(file);
+            return false;
+        }, 'import clicked');
+    }
+    exports.init = init;
+    function importXml() {
+        init(loadProgramFromXML);
+        $('#fileSelector').attr('accept', '.xml');
+        $('#fileSelector').clickWrap(); // opening dialog
+        if ($('.rightMenuButton.rightActive').length > 0) {
+            $('.rightMenuButton.rightActive').clickWrap();
+        }
+    }
+    exports.importXml = importXml;
+    function importXmlFromStart(startCallback) {
+        init(loadProgramFromXMLStart, startCallback);
+        $('#fileSelector').attr('accept', '.xml');
+        $('#fileSelector').clickWrap(); // opening dialog
+    }
+    exports.importXmlFromStart = importXmlFromStart;
+    function importSourceCode(callback) {
+        init(callback);
+        $('#fileSelector').attr('accept', '.' + GUISTATE_C.getSourceCodeFileExtension());
+        $('#fileSelector').clickWrap(); // opening dialog
+    }
+    exports.importSourceCode = importSourceCode;
+    function loadProgramFromXMLStart(name, xml, opt_callback) {
+        var start = xml.indexOf('robottype="');
+        start += 11;
+        var end = xml.indexOf('"', start);
+        var robot = xml.substring(start, end);
+        var robotType;
+        //TODO: This is only a fix for calliope and missing information in XML. Should be removed asap.
+        if (robot.indexOf('calliope') >= 0) {
+            robotType = 'calliope2017NoBlue';
+        }
+        for (var _i = 0, _a = Object.entries(GUISTATE_C.getRobots()); _i < _a.length; _i++) {
+            var _b = _a[_i], key = _b[0], value = _b[1];
+            if (value['name'] === robot) {
+                robotType = value['group'];
+            }
+        }
+        if (robotType) {
+            opt_callback && typeof opt_callback === 'function' && opt_callback(robotType, {}, loadProgramFromXML, [name, xml]);
+        }
+        else {
+            MSG.displayInformation({ rx: 'error' }, '', Blockly.Msg.PROGRAM_IMPORT_ERROR_MISSING_ROBOT_TYPE, UTIL.getRobotGroupsPrettyPrint(robot));
+        }
+    }
+    function loadProgramFromXML(name, xml) {
+        if (xml.search('<export') === -1) {
+            xml =
+                '<export xmlns="http://de.fhg.iais.roberta.blockly"><program>' +
+                    xml +
+                    '</program><config>' +
+                    GUISTATE_C.getConfigurationXML() +
+                    '</config></export>';
+        }
+        PROGRAM.loadProgramFromXML(name, xml, function (result) {
+            if (result.rc == 'ok') {
+                NN_C.programWasReplaced(); // remember, that NN save must NOT be executed after import
+                // save the old program and configuration that it can be restored
+                var dom = Blockly.Xml.workspaceToDom(GUISTATE_C.getBlocklyWorkspace());
+                var xmlProgOld = Blockly.Xml.domToText(dom);
+                GUISTATE_C.setProgramXML(xmlProgOld);
+                //@ts-ignore
+                dom = Blockly.Xml.workspaceToDom(GUISTATE_C.getBricklyWorkspace());
+                var xmlConfOld = Blockly.Xml.domToText(dom);
+                GUISTATE_C.setConfigurationXML(xmlConfOld);
+                // on server side we only test case insensitive block names, displaying xml can still fail:
+                result.programSaved = false;
+                result.name = 'NEPOprog';
+                result.programShared = false;
+                result.programTimestamp = '';
+                var nameConfOld = GUISTATE_C.getConfigurationName();
+                try {
+                    CONFIGURATION_C.configurationToBricklyWorkspace(result.confXML);
+                    GUISTATE_C.setConfigurationXML(result.confXML);
+                    PROGRAM_C.programToBlocklyWorkspace(result.progXML);
+                    GUISTATE_C.setProgram(result);
+                    GUISTATE_C.setProgramXML(result.progXML);
+                    GUISTATE_C.setConfigurationName('');
+                    LOG.info('show program ' + GUISTATE_C.getProgramName());
+                }
+                catch (e) {
+                    // restore old Program
+                    LOG.error(e.message);
+                    GUISTATE_C.setProgramXML(xmlProgOld);
+                    GUISTATE_C.setConfigurationXML(xmlConfOld);
+                    GUISTATE_C.setConfigurationName(nameConfOld);
+                    CONFIGURATION_C.reloadConf();
+                    PROGRAM_C.reloadProgram();
+                    result.rc = 'error';
+                    MSG.displayInformation(result, '', Blockly.Msg.ORA_PROGRAM_IMPORT_ERROR, name);
+                }
+            }
+            else {
+                if (result.message === 'ORA_PROGRAM_IMPORT_ERROR_WRONG_ROBOT_TYPE') {
+                    MSG.displayInformation(result, '', result.message, result.robotTypes);
+                }
+                else {
+                    MSG.displayInformation(result, '', result.message, name);
+                }
+            }
+        });
+    }
+    exports.loadProgramFromXML = loadProgramFromXML;
+    /**
+     * Open a file select dialog to load source code from local disk and send it
+     * to the cross compiler
+     */
+    function importSourceCodeToCompile() {
+        init(compileFromSource);
+        $('#fileSelector').attr('accept', '.' + GUISTATE_C.getSourceCodeFileExtension());
+        $('#fileSelector').clickWrap(); // opening dialog
+    }
+    exports.importSourceCodeToCompile = importSourceCodeToCompile;
+    function compileFromSource(name, source) {
+        PROGRAM.compileN(name, source, GUISTATE_C.getLanguage(), function (result) {
+            var alertMsg = result.rc;
+            if (result.parameters !== undefined) {
+                alertMsg += '\nMessage is:\n' + result.parameters.MESSAGE;
+            }
+            alert(alertMsg);
+        });
+    }
+    /**
+     * Open a file select dialog to load source code from local disk and send it
+     * to the cross compiler
+     */
+    function importNepoCodeToCompile() {
+        init(compileFromNepoCode);
+        $('#fileSelector').attr('accept', '.xml');
+        $('#fileSelector').clickWrap(); // opening dialog
+    }
+    exports.importNepoCodeToCompile = importNepoCodeToCompile;
+    function compileFromNepoCode(name, source) {
+        PROGRAM.compileP(name, source, GUISTATE_C.getLanguage(), function (result) {
+            alert(result.rc);
+        });
+    }
+});

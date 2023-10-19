@@ -54,6 +54,7 @@ export function appToJsInterface(jsonData: string): void {
                 $('#show-available-connections').trigger('connect', data);
                 theRobotBehaviour.update(data);
                 GUISTATE_C.setConnectionState('wait');
+                //@ts-ignore
                 let bricklyWorkspace: any = GUISTATE_C.getBricklyWorkspace();
                 let blocks: any[] = bricklyWorkspace.getAllBlocks();
                 for (let i: number = 0; i < blocks.length; i++) {
@@ -72,6 +73,7 @@ export function appToJsInterface(jsonData: string): void {
                 if (interpreter != undefined) {
                     interpreter.terminate();
                 }
+                //@ts-ignore
                 let bricklyWorkspace: any = GUISTATE_C.getBricklyWorkspace();
                 let blocks: any[] = bricklyWorkspace.getAllBlocks();
                 for (let i: number = 0; i < blocks.length; i++) {
@@ -162,7 +164,7 @@ export function jsToDisplay(action: any): void {
     if (action.show !== undefined) {
         $('#showDisplayText').append('<div>' + action.show + '</div>');
         if (!$('#showDisplayText').is(':visible')) {
-            $('#showDisplay').oneWrap('hidden.bs.modal', function (): void {
+            $('#showDisplay').oneWrap('hidden.bs.modal', function(): void {
                 $('#showDisplayText').empty();
             });
             $('#showDisplay').modal('show');

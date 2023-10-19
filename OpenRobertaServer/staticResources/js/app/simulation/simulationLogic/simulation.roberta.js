@@ -1,3 +1,1356 @@
-var __awaiter=this&&this.__awaiter||function(e,t,n,r){return new(n||(n=Promise))((function(o,i){function s(e){try{c(r.next(e))}catch(e){i(e)}}function a(e){try{c(r.throw(e))}catch(e){i(e)}}function c(e){var t;e.done?o(e.value):(t=e.value,t instanceof n?t:new n((function(e){e(t)}))).then(s,a)}c((r=r.apply(e,t||[])).next())}))},__generator=this&&this.__generator||function(e,t){var n,r,o,i,s={label:0,sent:function(){if(1&o[0])throw o[1];return o[1]},trys:[],ops:[]};return i={next:a(0),throw:a(1),return:a(2)},"function"==typeof Symbol&&(i[Symbol.iterator]=function(){return this}),i;function a(a){return function(c){return function(a){if(n)throw new TypeError("Generator is already executing.");for(;i&&(i=0,a[0]&&(s=0)),s;)try{if(n=1,r&&(o=2&a[0]?r.return:a[0]?r.throw||((o=r.return)&&o.call(r),0):r.next)&&!(o=o.call(r,a[1])).done)return o;switch(r=0,o&&(a=[2&a[0],o.value]),a[0]){case 0:case 1:o=a;break;case 4:return s.label++,{value:a[1],done:!1};case 5:s.label++,r=a[1],a=[0];continue;case 7:a=s.ops.pop(),s.trys.pop();continue;default:if(!(o=s.trys,(o=o.length>0&&o[o.length-1])||6!==a[0]&&2!==a[0])){s=0;continue}if(3===a[0]&&(!o||a[1]>o[0]&&a[1]<o[3])){s.label=a[1];break}if(6===a[0]&&s.label<o[1]){s.label=o[1],o=a;break}if(o&&s.label<o[2]){s.label=o[2],s.ops.push(a);break}o[2]&&s.ops.pop(),s.trys.pop();continue}a=t.call(e,s)}catch(e){a=[6,e],r=0}finally{n=o=0}if(5&a[0])throw a[1];return{value:a[0]?a[1]:void 0,done:!0}}([a,c])}}};define(["require","exports","interpreter.constants","util.roberta","interpreter.interpreter","interpreter.robotSimBehaviour","message","jquery","huebee","blockly","nn.controller","simulation.scene","robot.base","simulation.objects","simulation.math"],(function(e,t,n,r,o,i,s,a,c,l,u,h,p,f,d){Object.defineProperty(t,"__esModule",{value:!0}),t.SimulationRoberta=void 0;var g=function(){function e(){this.canceled=!0,this._breakpoints=[],this._debugMode=!1,this._dt=0,this._interpreterRunning=!1,this._interpreters=[],this._renderTime=5,this._renderUntil=[],this._scale=1,this._time=(new Date).getTime(),this._importPoses=[],this.dist=0,this.globalID=0,this.numRobots=0,this.observers=[],this.TILE_SIZE=90,this.EV_WALL_SIZE=10,this._configType="std"}return Object.defineProperty(e,"Instance",{get:function(){return this._instance||(this._instance=new e,this._instance._selectionListener=new p.SelectionListener,this._instance.scene=new h.SimulationScene(this._instance),this._instance.initEvents()),this._instance},enumerable:!1,configurable:!0}),Object.defineProperty(e.prototype,"debugMode",{get:function(){return this._debugMode},set:function(e){this._debugMode=e},enumerable:!1,configurable:!0}),Object.defineProperty(e.prototype,"lastMousePosition",{get:function(){return this._lastMousePosition},set:function(e){this._lastMousePosition=e},enumerable:!1,configurable:!0}),Object.defineProperty(e.prototype,"oldMousePosition",{get:function(){return this._oldMousePosition},set:function(e){this._oldMousePosition=e},enumerable:!1,configurable:!0}),Object.defineProperty(e.prototype,"selectionListener",{get:function(){return this._selectionListener},enumerable:!1,configurable:!0}),Object.defineProperty(e.prototype,"renderUntil",{get:function(){return this._renderUntil},enumerable:!1,configurable:!0}),Object.defineProperty(e.prototype,"breakpoints",{get:function(){return this._breakpoints},set:function(e){this._breakpoints=e},enumerable:!1,configurable:!0}),Object.defineProperty(e.prototype,"interpreters",{get:function(){return this._interpreters},set:function(e){this._interpreters=e,this.numRobots=this._interpreters.length},enumerable:!1,configurable:!0}),Object.defineProperty(e.prototype,"time",{get:function(){return this._time},set:function(e){this._time=e},enumerable:!1,configurable:!0}),Object.defineProperty(e.prototype,"importPoses",{get:function(){return this._importPoses},set:function(e){this._importPoses=e},enumerable:!1,configurable:!0}),Object.defineProperty(e.prototype,"renderTime",{get:function(){return this._renderTime},set:function(e){this._renderTime=e},enumerable:!1,configurable:!0}),Object.defineProperty(e.prototype,"dt",{get:function(){return this._dt},set:function(e){this._dt=e},enumerable:!1,configurable:!0}),Object.defineProperty(e.prototype,"scale",{get:function(){return this._scale},set:function(e){this._scale=e},enumerable:!1,configurable:!0}),e.prototype.isInterpreterRunning=function(){return this._interpreterRunning},Object.defineProperty(e.prototype,"interpreterRunning",{set:function(e){this._interpreterRunning=e},enumerable:!1,configurable:!0}),Object.defineProperty(e.prototype,"configType",{get:function(){return this._configType},set:function(e){this._configType=e},enumerable:!1,configurable:!0}),e.prototype.addMarker=function(e){this.scene.addMarker(e)},e.prototype.addColorArea=function(e){this.scene.addColorArea(e),this.enableChangeObjectButtons()},e.prototype.addObstacle=function(e){this.scene.addObstacle(e),this.enableChangeObjectButtons()},e.prototype.allInterpretersTerminated=function(){for(var e=0;e<this.interpreters.length;e++)if(!this.interpreters[e].isTerminated())return!1;return!0},e.prototype.callbackOnTermination=function(){this.allInterpretersTerminated()&&("function"==typeof this.callbackOnEnd&&this.callbackOnEnd(),console.log("END of Sim")),this.scene.robots.forEach((function(e){e.interpreter.isTerminated()&&e.mobile&&e.reset(),e.interpreter.updateNNView&&u.saveNN2Blockly(e.interpreter.neuralNetwork)}))},e.prototype.deleteAllColorArea=function(){this.scene.colorAreaList=[]},e.prototype.deleteAllObstacle=function(){this.scene.obstacleList=[]},e.prototype.deleteAllMarker=function(){this.scene.markerList=[]},e.prototype.deleteSelectedObject=function(){this.scene.deleteSelectedObject()},e.prototype.disableChangeObjectButtons=function(){a(".simChangeObject").removeClass("disabled").addClass("disabled")},e.prototype.enableChangeObjectButtons=function(){a(".simChangeObject").removeClass("disabled")},e.prototype.endDebugging=function(){null!==this.interpreters&&this.interpreters.forEach((function(e){e.setDebugMode(!1),e.breakpoints=[]})),l.getMainWorkspace().getAllBlocks().forEach((function(e){a(e.svgPath_).stop(!0,!0).removeAttr("style")})),this.breakpoints=[],this.debugMode=!1,this.updateBreakpointEvent()},e.prototype.exportConfigData=function(){return this.getConfigData()},e.prototype.getConfigData=function(){var e=this.scene.uCanvas.height,t=this.scene.uCanvas.width,n={};function r(n){if(n instanceof f.RectangleSimulationObject){if(n instanceof f.MarkerSimulationObject){var r=n.markerId;return{x:n.x/t,y:n.y/e,w:n.w/t,h:n.h/e,theta:n.theta,color:n.color,form:f.SimObjectShape.Rectangle,type:n.type,markerId:r}}return{x:n.x/t,y:n.y/e,w:n.w/t,h:n.h/e,theta:n.theta,color:n.color,form:f.SimObjectShape.Rectangle,type:n.type}}return n instanceof f.TriangleSimulationObject?{ax:n.ax/t,ay:n.ay/e,bx:n.bx/t,by:n.by/e,cx:n.cx/t,cy:n.cy/e,color:n.color,form:f.SimObjectShape.Triangle,type:n.type}:n instanceof f.CircleSimulationObject?{x:n.x/t,y:n.y/e,r:n.r/e/t,color:n.color,form:f.SimObjectShape.Circle,type:n.type}:void 0}var o=this.scene.getRobotPoses();return n.robotPoses=o.map((function(n){return[{x:n[0].x/t,y:n[0].y/e,theta:n[0].theta},{x:n[1].x/t,y:n[1].y/e,theta:n[1].theta}]})),n.obstacles=this.scene.obstacleList.map((function(e){return r(e)})),n.colorAreas=this.scene.colorAreaList.map((function(e){return r(e)})),n.marker=this.scene.markerList.map((function(e){return r(e)})),n},e.prototype.getNumRobots=function(){return this.interpreters.length},e.prototype.handleMouse=function(t){switch("mouseup"!==t.type&&"touchend"!==t.type&&t.stopPropagation(),t.preventDefault(),a("#robotLayer").data().hovered?a("#robotLayer").data("hovered",!1):a("#robotLayer").css("cursor","auto"),t&&"mouseout"!==t.type&&"touchcancel"!==t.type&&"touchend"!==t.type&&!t.startX&&(r.extendMouseEvent(t,this.scale,a("#robotLayer")),this.lastMousePosition={x:t.startX,y:t.startY}),t.type){case"mousedown":case"touchstart":this.oldMousePosition=this.lastMousePosition,this.selectionListener.fire(null);break;case"mousemove":case"touchmove":if(!this.oldMousePosition)return;t&&!t.startX&&r.extendMouseEvent(t,e.Instance.scale,a("#robotLayer"));var n=t,o=(n.startX-this.oldMousePosition.x)*this.scale,i=(n.startY-this.oldMousePosition.y)*this.scale,s=a("#canvasDiv").position();s.top+=i,s.left+=o,a("#canvasDiv").css({top:s.top}),a("#canvasDiv").css({left:s.left});break;default:this.oldMousePosition=null}},e.prototype.handleMouseWheel=function(e){var t=this.scale,n=0;if(void 0!==e.originalEvent.wheelDelta)n=e.originalEvent.wheelDelta;else if(e.originalEvent.touches){if(!e.originalEvent.touches[0]||!e.originalEvent.touches[1])return void(this.dist=0);var r=e.originalEvent.touches[0].pageX-e.originalEvent.touches[1].pageX,o=e.originalEvent.touches[0].pageY-e.originalEvent.touches[1].pageY,i=r*r+o*o;if(0==this.dist)return void(this.dist=i);n=i-this.dist,this.dist=i}else n=-e.originalEvent.deltaY;var s=!1;if(n>0?(this.scale*=1.025,this.scale>15&&(this.scale=15),s=!0):n<0&&(this.scale*=.925,this.scale<.25&&(this.scale=.25),s=!0),s){var c=this.scale-t,l=a("#canvasDiv").position(),u=this.scene.uCanvas.width*c,h=this.scene.uCanvas.height*c;l.top=l.top-h/2,l.left=l.left-u/2,a("#canvasDiv").css({top:l.top}),a("#canvasDiv").css({left:l.left}),this.scene.resetAllCanvas(!1)}return!1},e.prototype.importConfigData=function(){a("#backgroundFileSelector").val(null),a("#backgroundFileSelector").attr("accept",".json"),a("#backgroundFileSelector").off();var e=this;a("#backgroundFileSelector").onWrap("change",(function(t){var n=t.target.files[0],r=new FileReader;return r.onload=function(t){try{var n=JSON.parse(t.target.result);e.setNewConfig(n)}catch(e){console.error(e)}},r.readAsText(n),!1})),a("#backgroundFileSelector").clickWrap()},e.prototype.importImage=function(){var e=a("#backgroundFileSelector");e.val(null),e.attr("accept",".png, .jpg, .jpeg, .svg"),e.clickWrap();var t=this;e.on("change",(function(e){var n=e.target.files[0],o=new FileReader;return o.onload=function(){var e=new Image;e.onload=function(){var n=document.createElement("canvas");n.width=e.width,n.height=e.height,n.getContext("2d").drawImage(e,0,0);var o=n.toDataURL("image/png"),i=new Image(n.width,n.height);i.src=o,i.onload=function(){t.scene.customBackgroundLoaded?t.scene.imgBackgroundList[t.scene.imgBackgroundList.length-1]=i:t.scene.imgBackgroundList.push(i),t.setBackground(t.scene.imgBackgroundList.length-1)},r.isLocalStorageAvailable()&&(a("#show-message-confirm").oneWrap("shown.bs.modal",(function(){a("#confirm").off(),a("#confirm").on("click",(function(e){e.preventDefault(),localStorage.setItem("customBackground",JSON.stringify({image:o.replace(/^data:image\/(png|jpg);base64,/,""),timestamp:(new Date).getTime()}))})),a("#confirmCancel").off(),a("#confirmCancel").on("click",(function(e){e.preventDefault()}))})),s.displayPopupMessage("Blockly.Msg.POPUP_BACKGROUND_STORAGE",l.Msg.POPUP_BACKGROUND_STORAGE,l.Msg.YES,l.Msg.NO))},"string"==typeof o.result&&(e.src=o.result)},o.readAsDataURL(n),!1}))},e.prototype.init=function(e,t,n,r){var s=this;this.robotType=r||this.robotType,this.storedPrograms=e,this.resetRenderUntil(e.length);var a=[];this.interpreters=e.map((function(e){var t=JSON.parse(e.javaScriptProgram);return a.push(e.configuration),new o.Interpreter(t,new i.RobotSimBehaviour,s.callbackOnTermination.bind(s),s.breakpoints,e.programName,e.updateNNView)})),this.updateDebugMode(this.debugMode);var c=e.map((function(e){return e.programName}));this.scene.init(this.robotType,t,this.interpreters,a,c,this.importPoses,n)},e.prototype.initColorPicker=function(e){var t=this;e&&e.length>0?this.colorpicker=new c("#colorpicker",{shades:1,hues:8,customColors:e,setText:!1}):this.colorpicker=new c("#colorpicker",{shades:1,hues:8,setText:!1}),this.colorpicker.on("change",(function(e){t.scene.changeColorWithColorPicker(e)}));var n=c.prototype.close;c.prototype.close=function(){a(".huebee__container").off("mouseup touchend",(function(e){e.stopPropagation(),t.resetColorpickerCursor()})),n.call(this)};var r=c.prototype.open;c.prototype.open=function(){r.call(this),a(".huebee__container").on("mouseup touchend",(function(e){t.resetColorpickerCursor()})),a(".huebee").draggable({})}},e.prototype.initEvents=function(){var e=this,t=this;a(window).on("focus",(function(){return t.start(),!1})),a(window).on("blur",(function(){return t.stop(),!1})),a("#simDiv").on("wheel mousewheel touchmove",(function(t){e.handleMouseWheel(t)})),a("#canvasDiv").on("mousedown touchstart mousemove touchmove mouseup touchend mouseout touchcancel",(function(t){e.handleMouse(t)})),a("#robotLayer").on("click touchstart",(function(e){a("#robotLayer").attr("tabindex",0),a("#robotLayer").trigger("focus"),e.preventDefault()})),a("#blocklyDiv").on("click touchstart",(function(e){a("#blocklyDiv").trigger("focus"),e.preventDefault()}))},e.prototype.interpreterAddEvent=function(e){this.updateBreakpointEvent(),this.interpreters&&this.interpreters.forEach((function(t){return t.addEvent(e)}))},e.prototype.removeBreakPoint=function(e){for(var t=0;t<this._breakpoints.length;t++)this._breakpoints[t]===e.id&&this._breakpoints.splice(t,1);if(!this._breakpoints&&this._breakpoints.length>0&&null!==this.interpreters)for(t=0;t<this.interpreters.length;t++)this.interpreters[t].removeEvent(n.DEBUG_BREAKPOINT)},e.prototype.render=function(){var e=this;if(this.canceled)return cancelAnimationFrame(this.globalID),this.renderTime=5,void(this.globalID=0);this.globalID=requestAnimationFrame(this.render.bind(this));var t=(new Date).getTime(),n=t-this.time,r=Math.min(15,Math.abs(n-this.renderTime)/this.getNumRobots());this.dt=n/1e3,this.stepCounter+=1,this.isInterpreterRunning()&&this.interpreters.forEach((function(n,o){if(n.isTerminated())e.allInterpretersTerminated()&&(e.interpreterRunning=!1);else if(e.renderUntil[o]<=t){var i=n.run(t+r),s=(new Date).getTime();e.renderUntil[o]=s+i}}),this),this.updateBreakpointEvent();var o=(new Date).getTime();this.scene.update(this.dt,this.isInterpreterRunning()),this.renderTime=(new Date).getTime()-o,this.time=t},e.prototype.resetColorpickerCursor=function(){this.colorpicker.color=null,this.colorpicker.setTexts(),this.colorpicker.setBackgrounds(),this.colorpicker.cursor.classList.add("is-hidden")},e.prototype.resetPose=function(){this.scene.resetPoseAndDrawings()},e.prototype.resetRenderUntil=function(e){this._renderUntil=[];for(var t=0;t<e;t++)this._renderUntil[t]=0},e.prototype.run=function(e,t){this.callbackOnEnd=t;var n=this;this.init(e,!1,(function(){setTimeout((function(){n.interpreterRunning=!0}),250)}))},e.prototype.setBackground=function(e){this.scale=1,this.scene.stepBackground(e)},e.prototype.setNewConfig=function(e){return __awaiter(this,void 0,void 0,(function(){var t,n,r,o,i,s,c,l,u=this;return __generator(this,(function(h){switch(h.label){case 0:return e.hasOwnProperty("tileSet")?[4,this.prepareRescueLine(e).then(function(e){this.configType="rcj",setTimeout((function(){a(window).trigger("resize","loaded")}),100)}.bind(this),(function(e){alert(e.message)}))]:[3,2];case 1:return h.sent(),[3,3];case 2:t=e,n=this.scene.uCanvas.height,r=this.scene.uCanvas.width,o=this,i=function(e){var t={};switch(t.id=o.scene.uniqueObjectId,"MARKER"===e.type?(t.shape="MARKER",t.markerId=e.markerId):t.shape=e.form.toUpperCase(),t.color=e.color,t.newObjecttype=e.type,e.form.toLowerCase()){case"rectangle":t.p={x:e.x*r,y:e.y*n},t.params=[e.w*r,e.h*n];break;case"triangle":t.p={x:0,y:0},t.params=[e.ax*r,e.ay*n,e.bx*r,e.by*n,e.cx*r,e.cy*n];break;case"circle":t.p={x:e.x*r,y:e.y*n},t.params=[e.r*n*r]}return t},this.importPoses=[],t.robotPoses.forEach((function(e){if(Array.isArray(e)){(o={}).x=e[0].x*r,o.y=e[0].y*n,o.theta=e[0].theta;var t={};t.x=e[1].x*r,t.y=e[1].y*n,t.theta=e[1].theta,u.importPoses.push([o,t])}else{var o;(o={}).x=e.x*r,o.y=e.y*n,o.theta=e.theta,u.importPoses.push([o,o])}})),this.scene.setRobotPoses(this.importPoses),s=[],t.obstacles.forEach((function(e){s.push(i(e))})),this.scene.addImportObstacle(s),c=[],t.colorAreas.forEach((function(e){c.push(i(e))})),this.scene.addImportColorAreaList(c),l=[],t.marker&&t.marker.forEach((function(e){l.push(i(e))})),this.scene.addImportMarkerList(l),h.label=3;case 3:return[2]}}))}))},e.prototype.setPause=function(e){this.interpreterRunning=!e},e.prototype.start=function(){this.time=(new Date).getTime(),this.canceled=!1,0===this.globalID&&this.render()},e.prototype.stop=function(){this.interpreters.forEach((function(e){e.updateNNView&&u.saveNN2Blockly(e.neuralNetwork)})),this.canceled=!0},e.prototype.stopProgram=function(){this.interpreters.forEach((function(e){e.removeHighlights(),e.terminate(),e.updateNNView&&u.saveNN2Blockly(e.neuralNetwork)})),this.interpreterRunning=!1},e.prototype.toggleColorPicker=function(){a(".huebee").length?this.colorpicker.close():this.colorpicker.open()},e.prototype.toggleTrail=function(){this.scene.toggleTrail()},e.prototype.updateBreakpointEvent=function(){if(this.debugMode){var e=this;l.getMainWorkspace().getAllBlocks().forEach((function(t){if(!a(t.svgGroup_).hasClass("blocklyDisabled")){e.observers.hasOwnProperty(t.id)&&e.observers[t.id].disconnect();var n=new MutationObserver((function(n){n.forEach((function(n){a(t.svgGroup_).hasClass("blocklyDisabled")||a(t.svgGroup_).hasClass("blocklyDragging")?(e.removeBreakPoint(t),a(t.svgGroup_).removeClass("blocklySelected"),a(t.svgPath_).removeClass("breakpoint").removeClass("selectedBreakpoint")):a(t.svgGroup_).hasClass("blocklySelected")&&(a(t.svgPath_).hasClass("breakpoint")?(e.removeBreakPoint(t),a(t.svgPath_).removeClass("breakpoint")):a(t.svgPath_).hasClass("selectedBreakpoint")?(e.removeBreakPoint(t),a(t.svgPath_).removeClass("selectedBreakpoint").stop(!0,!0).animate({"fill-opacity":"1"},0)):(e._breakpoints.push(t.id),a(t.svgPath_).addClass("breakpoint")),a(t.svgGroup_).removeClass("blocklySelected"))}))}));e.observers[t.id]=n,n.observe(t.svgGroup_,{attributes:!0})}}),e)}},e.prototype.updateDebugMode=function(e){if(this.debugMode=e,null!==this.interpreters)for(var t=0;t<this.interpreters.length;t++)this.interpreters[t].setDebugMode(e);this.updateBreakpointEvent()},e.prototype.prepareRescueLine=function(e){return __awaiter(this,void 0,void 0,(function(){var t;return __generator(this,(function(n){return t=this,[2,new Promise((function(n,r){var o={rc:"ok",message:""},i=e.length*t.TILE_SIZE,s=e.width*t.TILE_SIZE,c=document.createElement("canvas");c.id="tmp",c.width=s,c.height=i,a("body").append(c);var l,u=function(e){return new Promise((function(t,n){var r=new Image;r.onload=function(){t(r)},r.onerror=function(){n("Image couldn't be loaded: "+e.tileType.image)},r.src="/css/img/simulationRescue/tiles/"+e.tileType.image}))},h=[];for(l in e.tiles)h.push(e.tiles[l]);var p,g,m=e.tiles[e.startTile.x+","+e.startTile.y+","+e.startTile.z],b={},y=[],v=function(n){var r=e.victims,o=[],i=Math.min(n[0],n[2])*t.TILE_SIZE-t.TILE_SIZE/2,s=Math.min(n[1],n[3])*t.TILE_SIZE-t.TILE_SIZE/2,a=(Math.max(n[0],n[2])-Math.min(n[0],n[2])+1)*t.TILE_SIZE+t.TILE_SIZE,c=(Math.max(n[1],n[3])-Math.min(n[1],n[3])+1)*t.TILE_SIZE+t.TILE_SIZE,l=function(e){for(var n={x:i+Math.random()*a,y:s+Math.random()*c},r=0;r<o.length;)d.getDistance(n,o[r].p)<200?(n={x:i+Math.random()*a,y:s+Math.random()*c},r=0):r++;var l={id:t.scene.uniqueObjectId,p:n,params:[7,1],theta:0,color:e,shape:f.SimObjectShape.Circle,type:f.SimObjectType.Obstacle};o.push(l)};if(r.live&&r.live>0)for(var u=0;u<r.live;++u)l("#33B8CA");if(r.dead&&r.dead>0)for(u=0;u<r.dead;++u)l("#000000");return o},E=[],I=function(){t.scene.obstacleList.filter((function(e){return e.movable})).forEach((function(e){e.selected=!0,e.removeObserver(t.scene.rcjScoringTool),t.scene.deleteSelectedObject()}));var e=v(E);t.scene.addSomeObstacles(e),t.scene.obstacleList.forEach((function(e){e.addObserver&&"function"==typeof e.addObserver&&e.addObserver(t.scene.rcjScoringTool)}))};(g=h,Promise.all(g.map(u))).then((function(l){var u=c.getContext("2d");u.fillStyle="white",u.fillRect(0,0,c.width,c.height);var d=[],g=[],_=[],S=[],k=[];if(h.forEach((function(n,r){if(n.tileType.image.startsWith("ev")){switch(n.tileType.image.replace(".png","")){case"ev1":E.push(n.x),E.push(n.y);break;case"ev2":var i=n.rot.toString();switch(i){case"0":d.push({x:n.x,y:n.y});break;case"90":g.push({x:n.x,y:n.y});break;case"180":_.push({x:n.x,y:n.y});break;case"270":S.push({x:n.x,y:n.y});break;default:o.rc="error",o.message="Unknown evacuation zone rotation"}break;case"ev3":switch(i=n.rot.toString()){case"0":d.push({x:n.x,y:n.y}),g.push({x:n.x,y:n.y});break;case"90":g.push({x:n.x,y:n.y}),_.push({x:n.x,y:n.y});break;case"180":S.push({x:n.x,y:n.y}),_.push({x:n.x,y:n.y});break;case"270":d.push({x:n.x,y:n.y}),S.push({x:n.x,y:n.y});break;default:o.rc="error",o.message="Unknown evacuation zone rotation"}break;default:o.rc="error",o.message="Unknown evacuation zone type"}var s=n.x,a=n.y,c=s+","+(a-1)+",0",h=s+1+","+a+",0",m=s+","+(a+1)+",0",b=s-1+","+a+",0";e.tiles[c]&&e.tiles[c].tileType.image.startsWith("tile-0")?p={x:s,y:a,dir:"top"}:e.tiles[h]&&e.tiles[h].tileType.image.startsWith("tile-0")?p={x:s,y:a,dir:"right"}:e.tiles[m]&&e.tiles[m].tileType.image.startsWith("tile-0")?p={x:s,y:a,dir:"bottom"}:e.tiles[b]&&e.tiles[b].tileType.image.startsWith("tile-0")&&(p={x:s,y:a,dir:"left"})}else if(u.save(),u.translate(n.x*t.TILE_SIZE+t.TILE_SIZE/2,n.y*t.TILE_SIZE+t.TILE_SIZE/2),u.rotate(n.rot*Math.PI/180),u.drawImage(l[r],0,0,l[r].width,l[r].height,-t.TILE_SIZE/2,-t.TILE_SIZE/2,t.TILE_SIZE,t.TILE_SIZE),u.restore(),n.index.length>0&&y.push(n),n.items&&n.items.obstacles&&n.items.obstacles>0){var v={};v.id=t.scene.uniqueObjectId,v.shape=f.SimObjectShape.Rectangle,v.color="#ff0000",v.newObjecttype=f.SimObjectType.Obstacle,v.p={x:n.x*t.TILE_SIZE+t.TILE_SIZE/4+10,y:n.y*t.TILE_SIZE+t.TILE_SIZE/4+10},v.params=[.5*t.TILE_SIZE,.5*t.TILE_SIZE],k.push(v)}})),d.length>=2&&g.length>=2&&_.length>=2&&S.length>=2){d.sort((function(e,t){return e.x-t.x})),g.sort((function(e,t){return e.y-t.y})),_.sort((function(e,t){return e.x-t.x})),S.sort((function(e,t){return e.y-t.y}));var T={id:t.scene.uniqueObjectId,p:{x:d[0].x*t.TILE_SIZE+10,y:d[0].y*t.TILE_SIZE+t.EV_WALL_SIZE},params:[t.TILE_SIZE*(d[d.length-1].x-d[0].x+1),t.EV_WALL_SIZE],theta:0,color:"#ffffff",shape:f.SimObjectShape.Rectangle,type:f.SimObjectType.Obstacle},w={id:t.scene.uniqueObjectId,p:{x:g[0].x*t.TILE_SIZE+t.TILE_SIZE,y:g[0].y*t.TILE_SIZE+t.EV_WALL_SIZE},params:[t.EV_WALL_SIZE,t.TILE_SIZE*(g[g.length-1].y-g[0].y+1)],theta:0,color:"#ffffff",shape:f.SimObjectShape.Rectangle,type:f.SimObjectType.Obstacle},L={id:t.scene.uniqueObjectId,p:{x:_[0].x*t.TILE_SIZE+10,y:_[0].y*t.TILE_SIZE+t.TILE_SIZE},params:[t.TILE_SIZE*(_[_.length-1].x-_[0].x+1),t.EV_WALL_SIZE],theta:0,color:"#ffffff",shape:f.SimObjectShape.Rectangle,type:f.SimObjectType.Obstacle},x={id:t.scene.uniqueObjectId,p:{x:S[0].x*t.TILE_SIZE+10,y:S[0].y*t.TILE_SIZE+t.EV_WALL_SIZE},params:[t.EV_WALL_SIZE,t.TILE_SIZE*(S[S.length-1].y-S[0].y+1)],theta:0,color:"#ffffff",shape:f.SimObjectShape.Rectangle,type:f.SimObjectType.Obstacle};k.push(T,w,L,x);var P=h.filter((function(e){return e.tileType.image.startsWith("ev3")}));!function(e,n){n.save(),n.translate(e.x*t.TILE_SIZE+t.TILE_SIZE/2,e.y*t.TILE_SIZE+t.TILE_SIZE/2);var r=0;switch(e.rot){case 0:break;case 90:r=Math.PI/2;break;case 180:r=Math.PI;break;case 270:r=270*Math.PI/180}n.rotate(r),n.beginPath(),n.moveTo(-t.TILE_SIZE/2,-t.TILE_SIZE/2),n.lineTo(t.TILE_SIZE/2,-t.TILE_SIZE/2),n.lineTo(t.TILE_SIZE/2,t.TILE_SIZE/2),n.closePath(),n.fillStyle="#000000",n.fill(),n.restore()}(P[Math.floor(Math.random()*P.length)],u)}if(m?b=t.getTilePose(m,e.tiles[m.next],{}):(o.rc="error",o.message="Unknown start tile"),p||(o.rc="error",o.message="Unknown evacuation zone entrance tile"),"ok"===o.rc){t.deleteAllColorArea(),t.deleteAllObstacle(),function(e,n){n.save(),n.translate(e.x*t.TILE_SIZE+t.TILE_SIZE/2,e.y*t.TILE_SIZE+t.TILE_SIZE/2);var r=0;switch(e.dir){case"top":break;case"right":r=Math.PI/2;break;case"bottom":r=Math.PI;break;case"left":r=270*Math.PI/180}n.rotate(r),n.fillStyle="#33B8CA",n.fillRect(-t.TILE_SIZE/2,-t.TILE_SIZE/2,t.TILE_SIZE,t.EV_WALL_SIZE),n.restore()}(p,u),function(e){e.strokeStyle="#dddddd",e.lineWidth=1;for(var n=1;n<i;n++)e.moveTo(0,n*t.TILE_SIZE),e.lineTo(s*t.TILE_SIZE,n*t.TILE_SIZE),e.stroke();for(var r=1;r<s;r++)e.moveTo(r*t.TILE_SIZE,0),e.lineTo(r*t.TILE_SIZE,t.TILE_SIZE*i),e.stroke()}(u);var O=function(){var e=new Image;return e.src=c.toDataURL(),e.width=c.width,e.height=c.height,e}();t.scene.imgBackgroundList.push(O),t.setBackground(t.scene.imgBackgroundList.length-1),t.scene.addImportObstacle(k.concat(v(E))),t.scene.addImportRcjLabel(y),t.scene.drawRcjLabel(),t.importPoses=[[b,b]],t.scene.setRobotPoses(t.importPoses),t.scene.setRcjScoringTool(t.scene.robots[0],e,I),a("#simCompetition").show(),n(o)}else r(o);a("#tmp").remove()}),(function(e){a("#tmp").remove(),o.rc="error",o.message=e,r(o)}))}))]}))}))},e.prototype.getTilePose=function(e,t,n){var r={};r.x=e.x*this.TILE_SIZE+this.TILE_SIZE/2+this.EV_WALL_SIZE,r.y=e.y*this.TILE_SIZE+this.TILE_SIZE/2+this.EV_WALL_SIZE;var o=0;return null!=t&&null!=t?e.x-t.x==1?o=Math.PI:e.y-t.y==-1?o=Math.PI/2:e.y-t.y==1&&(o=3*Math.PI/2):null!=n&&null!=n&&(e.x-n.x==-1?o=Math.PI:e.y-n.y==1?o=Math.PI/2:e.y-n.y==-1&&(o=3*Math.PI/2)),r.theta=o,r},e}();t.SimulationRoberta=g,function(){for(var e=["webkit","moz","ms","o"],t=null,n=0;n<e.length&&!window.requestAnimationFrame&&!window.cancelAnimationFrame;n++)t=e[n],window.requestAnimationFrame=window.requestAnimationFrame||window[t+"RequestAnimationFrame"],window.cancelAnimationFrame=window.cancelAnimationFrame||window[t+"CancelAnimationFrame"]||window[t+"CancelRequestAnimationFrame"];if(/iP(ad|hone|od).*OS 6/.test(window.navigator.userAgent)||!window.requestAnimationFrame||!window.cancelAnimationFrame){var r=0;window.requestAnimationFrame=function(e,t){var n=window.performance.now(),o=Math.max(r+16,n);return setTimeout((function(){e(r=o)}),o-n)},window.cancelAnimationFrame=clearTimeout}}(),t.default=g.Instance}));
-//# sourceMappingURL=simulation.roberta.js.map
-//# sourceMappingURL=simulation.roberta.js.map
+/**
+ * @fileOverview Simulate a robot
+ * @author Beate Jost <beate.jost@iais.fraunhofer.de>
+ */
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
+define(["require", "exports", "interpreter.constants", "util.roberta", "interpreter.interpreter", "interpreter.robotSimBehaviour", "message", "jquery", "huebee", "blockly", "nn.controller", "simulation.scene", "robot.base", "simulation.objects", "simulation.math"], function (require, exports, C, UTIL, SIM_I, ROBOT_B, MSG, $, HUEBEE, Blockly, NN_CTRL, simulation_scene_1, robot_base_1, simulation_objects_1, SIMATH) {
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.SimulationRoberta = void 0;
+    var SimulationRoberta = /** @class */ (function () {
+        function SimulationRoberta() {
+            this.canceled = true;
+            this._breakpoints = [];
+            this._debugMode = false;
+            this._dt = 0;
+            this._interpreterRunning = false;
+            this._interpreters = [];
+            this._renderTime = 5; // approx. time in ms only for the first rendering
+            this._renderUntil = [];
+            this._scale = 1;
+            this._time = new Date().getTime();
+            this._importPoses = [];
+            this.dist = 0;
+            this.globalID = 0;
+            this.numRobots = 0;
+            this.observers = [];
+            this.TILE_SIZE = 90;
+            this.EV_WALL_SIZE = 10;
+            this._configType = 'std'; // to distinguish between "rcj" and "std"
+        }
+        Object.defineProperty(SimulationRoberta, "Instance", {
+            get: function () {
+                if (!this._instance) {
+                    this._instance = new SimulationRoberta();
+                    this._instance._selectionListener = new robot_base_1.SelectionListener();
+                    this._instance.scene = new simulation_scene_1.SimulationScene(this._instance);
+                    this._instance.initEvents();
+                }
+                return this._instance;
+            },
+            enumerable: false,
+            configurable: true
+        });
+        Object.defineProperty(SimulationRoberta.prototype, "debugMode", {
+            get: function () {
+                return this._debugMode;
+            },
+            set: function (value) {
+                this._debugMode = value;
+            },
+            enumerable: false,
+            configurable: true
+        });
+        Object.defineProperty(SimulationRoberta.prototype, "lastMousePosition", {
+            get: function () {
+                return this._lastMousePosition;
+            },
+            set: function (value) {
+                this._lastMousePosition = value;
+            },
+            enumerable: false,
+            configurable: true
+        });
+        Object.defineProperty(SimulationRoberta.prototype, "oldMousePosition", {
+            get: function () {
+                return this._oldMousePosition;
+            },
+            set: function (value) {
+                this._oldMousePosition = value;
+            },
+            enumerable: false,
+            configurable: true
+        });
+        Object.defineProperty(SimulationRoberta.prototype, "selectionListener", {
+            get: function () {
+                return this._selectionListener;
+            },
+            enumerable: false,
+            configurable: true
+        });
+        Object.defineProperty(SimulationRoberta.prototype, "renderUntil", {
+            get: function () {
+                return this._renderUntil;
+            },
+            enumerable: false,
+            configurable: true
+        });
+        Object.defineProperty(SimulationRoberta.prototype, "breakpoints", {
+            get: function () {
+                return this._breakpoints;
+            },
+            set: function (value) {
+                this._breakpoints = value;
+            },
+            enumerable: false,
+            configurable: true
+        });
+        Object.defineProperty(SimulationRoberta.prototype, "interpreters", {
+            get: function () {
+                return this._interpreters;
+            },
+            set: function (value) {
+                this._interpreters = value;
+                this.numRobots = this._interpreters.length;
+            },
+            enumerable: false,
+            configurable: true
+        });
+        Object.defineProperty(SimulationRoberta.prototype, "time", {
+            get: function () {
+                return this._time;
+            },
+            set: function (value) {
+                this._time = value;
+            },
+            enumerable: false,
+            configurable: true
+        });
+        Object.defineProperty(SimulationRoberta.prototype, "importPoses", {
+            get: function () {
+                return this._importPoses;
+            },
+            set: function (value) {
+                this._importPoses = value;
+            },
+            enumerable: false,
+            configurable: true
+        });
+        Object.defineProperty(SimulationRoberta.prototype, "renderTime", {
+            get: function () {
+                return this._renderTime;
+            },
+            set: function (value) {
+                this._renderTime = value;
+            },
+            enumerable: false,
+            configurable: true
+        });
+        Object.defineProperty(SimulationRoberta.prototype, "dt", {
+            get: function () {
+                return this._dt;
+            },
+            set: function (value) {
+                this._dt = value;
+            },
+            enumerable: false,
+            configurable: true
+        });
+        Object.defineProperty(SimulationRoberta.prototype, "scale", {
+            get: function () {
+                return this._scale;
+            },
+            set: function (value) {
+                this._scale = value;
+            },
+            enumerable: false,
+            configurable: true
+        });
+        SimulationRoberta.prototype.isInterpreterRunning = function () {
+            return this._interpreterRunning;
+        };
+        Object.defineProperty(SimulationRoberta.prototype, "interpreterRunning", {
+            set: function (value) {
+                this._interpreterRunning = value;
+            },
+            enumerable: false,
+            configurable: true
+        });
+        Object.defineProperty(SimulationRoberta.prototype, "configType", {
+            get: function () {
+                return this._configType;
+            },
+            set: function (value) {
+                this._configType = value;
+            },
+            enumerable: false,
+            configurable: true
+        });
+        SimulationRoberta.prototype.addMarker = function (markerId) {
+            this.scene.addMarker(markerId);
+        };
+        SimulationRoberta.prototype.addColorArea = function (shape) {
+            this.scene.addColorArea(shape);
+            this.enableChangeObjectButtons();
+        };
+        SimulationRoberta.prototype.addObstacle = function (shape) {
+            this.scene.addObstacle(shape);
+            this.enableChangeObjectButtons();
+        };
+        SimulationRoberta.prototype.allInterpretersTerminated = function () {
+            for (var i = 0; i < this.interpreters.length; i++) {
+                if (!this.interpreters[i].isTerminated()) {
+                    return false;
+                }
+            }
+            return true;
+        };
+        SimulationRoberta.prototype.callbackOnTermination = function () {
+            if (this.allInterpretersTerminated()) {
+                typeof this.callbackOnEnd === 'function' && this.callbackOnEnd();
+                console.log('END of Sim');
+            }
+            // only reset mobile robots, because currently all non mobile real "robots" do not reset their actuators when the program is executed
+            this.scene.robots.forEach(function (robot) {
+                robot.interpreter.isTerminated() && robot.mobile && robot.reset();
+                robot.interpreter.updateNNView && NN_CTRL.saveNN2Blockly(robot.interpreter.neuralNetwork);
+            });
+        };
+        SimulationRoberta.prototype.deleteAllColorArea = function () {
+            this.scene.colorAreaList = [];
+        };
+        SimulationRoberta.prototype.deleteAllObstacle = function () {
+            this.scene.obstacleList = [];
+        };
+        SimulationRoberta.prototype.deleteAllMarker = function () {
+            this.scene.markerList = [];
+        };
+        SimulationRoberta.prototype.deleteSelectedObject = function () {
+            this.scene.deleteSelectedObject();
+        };
+        SimulationRoberta.prototype.disableChangeObjectButtons = function () {
+            $('.simChangeObject').removeClass('disabled').addClass('disabled');
+        };
+        SimulationRoberta.prototype.enableChangeObjectButtons = function () {
+            $('.simChangeObject').removeClass('disabled');
+        };
+        SimulationRoberta.prototype.endDebugging = function () {
+            if (this.interpreters !== null) {
+                this.interpreters.forEach(function (interpreter) {
+                    interpreter.setDebugMode(false);
+                    interpreter.breakpoints = [];
+                });
+            }
+            Blockly.getMainWorkspace()
+                .getAllBlocks()
+                .forEach(function (block) {
+                $(block.svgPath_).stop(true, true).removeAttr('style');
+            });
+            this.breakpoints = [];
+            this.debugMode = false;
+            this.updateBreakpointEvent();
+        };
+        /**
+         * @returns {object} the configuration data
+         */
+        SimulationRoberta.prototype.exportConfigData = function () {
+            return this.getConfigData();
+        };
+        /**
+         * Collects all simulation objects and calculates their relative location in the current background.
+         * @returns {object} of all simulation objects
+         */
+        SimulationRoberta.prototype.getConfigData = function () {
+            var height = this.scene.uCanvas.height;
+            var width = this.scene.uCanvas.width;
+            var config = {};
+            function calculateShape(object) {
+                if (object instanceof simulation_objects_1.RectangleSimulationObject) {
+                    if (object instanceof simulation_objects_1.MarkerSimulationObject) {
+                        var myId = object.markerId;
+                        return {
+                            x: object.x / width,
+                            y: object.y / height,
+                            w: object.w / width,
+                            h: object.h / height,
+                            theta: object.theta,
+                            color: object.color,
+                            form: simulation_objects_1.SimObjectShape.Rectangle,
+                            type: object.type,
+                            markerId: myId,
+                        };
+                    }
+                    else {
+                        return {
+                            x: object.x / width,
+                            y: object.y / height,
+                            w: object.w / width,
+                            h: object.h / height,
+                            theta: object.theta,
+                            color: object.color,
+                            form: simulation_objects_1.SimObjectShape.Rectangle,
+                            type: object.type,
+                        };
+                    }
+                }
+                else if (object instanceof simulation_objects_1.TriangleSimulationObject) {
+                    return {
+                        ax: object.ax / width,
+                        ay: object.ay / height,
+                        bx: object.bx / width,
+                        by: object.by / height,
+                        cx: object.cx / width,
+                        cy: object.cy / height,
+                        color: object.color,
+                        form: simulation_objects_1.SimObjectShape.Triangle,
+                        type: object.type,
+                    };
+                }
+                else if (object instanceof simulation_objects_1.CircleSimulationObject) {
+                    return {
+                        x: object.x / width,
+                        y: object.y / height,
+                        r: object.r / height / width,
+                        color: object.color,
+                        form: simulation_objects_1.SimObjectShape.Circle,
+                        type: object.type,
+                    };
+                }
+            }
+            var robotPosesList = this.scene.getRobotPoses();
+            config.robotPoses = robotPosesList.map(function (pose) {
+                return [
+                    {
+                        x: pose[0].x / width,
+                        y: pose[0].y / height,
+                        theta: pose[0].theta,
+                    },
+                    {
+                        x: pose[1].x / width,
+                        y: pose[1].y / height,
+                        theta: pose[1].theta,
+                    },
+                ];
+            });
+            config.obstacles = this.scene.obstacleList.map(function (object) {
+                return calculateShape(object);
+            });
+            config.colorAreas = this.scene.colorAreaList.map(function (object) {
+                return calculateShape(object);
+            });
+            config.marker = this.scene.markerList.map(function (object) {
+                return calculateShape(object);
+            });
+            return config;
+        };
+        SimulationRoberta.prototype.getNumRobots = function () {
+            return this.interpreters.length;
+        };
+        SimulationRoberta.prototype.handleMouse = function (e) {
+            if (e.type !== 'mouseup' && e.type !== 'touchend') {
+                e.stopPropagation();
+            }
+            e.preventDefault();
+            if (!$('#robotLayer').data().hovered) {
+                $('#robotLayer').css('cursor', 'auto');
+            }
+            else {
+                $('#robotLayer').data('hovered', false);
+            }
+            if (e && e.type !== 'mouseout' && e.type !== 'touchcancel' && e.type !== 'touchend' && !e.startX) {
+                UTIL.extendMouseEvent(e, this.scale, $('#robotLayer'));
+                this.lastMousePosition = {
+                    x: e.startX,
+                    y: e.startY,
+                };
+            }
+            switch (e.type) {
+                case 'mousedown':
+                case 'touchstart': {
+                    this.oldMousePosition = this.lastMousePosition;
+                    this.selectionListener.fire(null);
+                    break;
+                }
+                case 'mousemove':
+                case 'touchmove': {
+                    if (!this.oldMousePosition) {
+                        return;
+                    }
+                    if (e && !e.startX) {
+                        UTIL.extendMouseEvent(e, SimulationRoberta.Instance.scale, $('#robotLayer'));
+                    }
+                    var myEvent = e;
+                    var dx = (myEvent.startX - this.oldMousePosition.x) * this.scale;
+                    var dy = (myEvent.startY - this.oldMousePosition.y) * this.scale;
+                    var position = $('#canvasDiv').position();
+                    position.top += dy;
+                    position.left += dx;
+                    $('#canvasDiv').css({ top: position.top });
+                    $('#canvasDiv').css({ left: position.left });
+                    break;
+                }
+                default: {
+                    this.oldMousePosition = null;
+                }
+            }
+        };
+        SimulationRoberta.prototype.handleMouseWheel = function (e) {
+            var scaleOld = this.scale;
+            var delta = 0;
+            if (e.originalEvent.wheelDelta !== undefined) {
+                delta = e.originalEvent.wheelDelta;
+            }
+            else {
+                if (e.originalEvent.touches) {
+                    if (e.originalEvent.touches[0] && e.originalEvent.touches[1]) {
+                        var diffX = e.originalEvent.touches[0].pageX - e.originalEvent.touches[1].pageX;
+                        var diffY = e.originalEvent.touches[0].pageY - e.originalEvent.touches[1].pageY;
+                        var newDist = diffX * diffX + diffY * diffY;
+                        if (this.dist == 0) {
+                            this.dist = newDist;
+                            return;
+                        }
+                        else {
+                            delta = newDist - this.dist;
+                            this.dist = newDist;
+                        }
+                    }
+                    else {
+                        this.dist = 0;
+                        return;
+                    }
+                }
+                else {
+                    delta = -e.originalEvent.deltaY;
+                }
+            }
+            var zoom = false;
+            if (delta > 0) {
+                this.scale *= 1.025;
+                if (this.scale > 5 * 3) {
+                    this.scale = 5 * 3;
+                }
+                zoom = true;
+            }
+            else if (delta < 0) {
+                this.scale *= 0.925;
+                if (this.scale < 0.25) {
+                    this.scale = 0.25;
+                }
+                zoom = true;
+            }
+            if (zoom) {
+                var scaleDif = this.scale - scaleOld;
+                var position = $('#canvasDiv').position();
+                var wDif = this.scene.uCanvas.width * scaleDif;
+                var hDif = this.scene.uCanvas.height * scaleDif;
+                position.top = position.top - hDif / 2;
+                position.left = position.left - wDif / 2;
+                $('#canvasDiv').css({ top: position.top });
+                $('#canvasDiv').css({ left: position.left });
+                this.scene.resetAllCanvas(false);
+            }
+            return false;
+        };
+        SimulationRoberta.prototype.importConfigData = function () {
+            $('#backgroundFileSelector').val(null);
+            $('#backgroundFileSelector').attr('accept', '.json');
+            $('#backgroundFileSelector').off();
+            var sim = this;
+            $('#backgroundFileSelector').onWrap('change', function (event) {
+                var file = event.target['files'][0];
+                var reader = new FileReader();
+                reader.onload = function (event) {
+                    try {
+                        var configData = JSON.parse(event.target.result);
+                        sim.setNewConfig(configData);
+                    }
+                    catch (ex) {
+                        console.error(ex);
+                        //TODO: MSG.displayPopupMessage('Blockly.Msg.POPUP_BACKGROUND_STORAGE', Blockly.Msg.POPUP_CONFIG_UPLOAD_ERROR);
+                    }
+                };
+                reader.readAsText(file);
+                return false;
+            });
+            $('#backgroundFileSelector').clickWrap(); // opening dialog
+        };
+        SimulationRoberta.prototype.importImage = function () {
+            var $backgroundFileSelector = $('#backgroundFileSelector');
+            $backgroundFileSelector.val(null);
+            $backgroundFileSelector.attr('accept', '.png, .jpg, .jpeg, .svg');
+            $backgroundFileSelector.clickWrap(); // opening dialog
+            var sim = this;
+            $backgroundFileSelector.on('change', function (event) {
+                var file = event.target['files'][0];
+                var reader = new FileReader();
+                reader.onload = function () {
+                    var img = new Image();
+                    img.onload = function () {
+                        var canvas = document.createElement('canvas');
+                        canvas.width = img.width;
+                        canvas.height = img.height;
+                        var ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0);
+                        var dataURL = canvas.toDataURL('image/png');
+                        var image = new Image(canvas.width, canvas.height);
+                        image.src = dataURL;
+                        image.onload = function () {
+                            if (sim.scene.customBackgroundLoaded) {
+                                // replace previous image
+                                sim.scene.imgBackgroundList[sim.scene.imgBackgroundList.length - 1] = image;
+                            }
+                            else {
+                                sim.scene.imgBackgroundList.push(image);
+                            }
+                            sim.setBackground(sim.scene.imgBackgroundList.length - 1);
+                        };
+                        if (UTIL.isLocalStorageAvailable()) {
+                            $('#show-message-confirm').oneWrap('shown.bs.modal', function () {
+                                $('#confirm').off();
+                                $('#confirm').on('click', function (e) {
+                                    e.preventDefault();
+                                    localStorage.setItem('customBackground', JSON.stringify({
+                                        image: dataURL.replace(/^data:image\/(png|jpg);base64,/, ''),
+                                        timestamp: new Date().getTime(),
+                                    }));
+                                });
+                                $('#confirmCancel').off();
+                                $('#confirmCancel').on('click', function (e) {
+                                    e.preventDefault();
+                                });
+                            });
+                            MSG.displayPopupMessage('Blockly.Msg.POPUP_BACKGROUND_STORAGE', Blockly.Msg.POPUP_BACKGROUND_STORAGE, Blockly.Msg.YES, Blockly.Msg.NO);
+                        }
+                    };
+                    if (typeof reader.result === 'string') {
+                        img.src = reader.result;
+                    }
+                };
+                reader.readAsDataURL(file);
+                return false;
+            });
+        };
+        SimulationRoberta.prototype.init = function (programs, refresh, callbackOnLoaded, robotType) {
+            var _this = this;
+            this.robotType = robotType || this.robotType;
+            this.storedPrograms = programs;
+            this.resetRenderUntil(programs.length);
+            var configurations = [];
+            this.interpreters = programs.map(function (x) {
+                var src = JSON.parse(x['javaScriptProgram']);
+                configurations.push(x['configuration']);
+                return new SIM_I.Interpreter(src, new ROBOT_B.RobotSimBehaviour(), _this.callbackOnTermination.bind(_this), _this.breakpoints, x['programName'], x['updateNNView']);
+            });
+            this.updateDebugMode(this.debugMode);
+            var programNames = programs.map(function (x) { return x['programName']; });
+            this.scene.init(this.robotType, refresh, this.interpreters, configurations, programNames, this.importPoses, callbackOnLoaded);
+            return;
+        };
+        SimulationRoberta.prototype.initColorPicker = function (robotColors) {
+            var sim = this;
+            if (robotColors && robotColors.length > 0) {
+                this.colorpicker = new HUEBEE('#colorpicker', {
+                    shades: 1,
+                    hues: 8,
+                    customColors: robotColors,
+                    setText: false,
+                });
+            }
+            else {
+                this.colorpicker = new HUEBEE('#colorpicker', {
+                    shades: 1,
+                    hues: 8,
+                    setText: false,
+                });
+            }
+            this.colorpicker.on('change', function (color) {
+                sim.scene.changeColorWithColorPicker(color);
+            });
+            var close = HUEBEE.prototype.close;
+            HUEBEE.prototype.close = function () {
+                $('.huebee__container').off('mouseup touchend', function (e) {
+                    e.stopPropagation();
+                    sim.resetColorpickerCursor();
+                });
+                close.call(this);
+            };
+            var open = HUEBEE.prototype.open;
+            HUEBEE.prototype.open = function () {
+                open.call(this);
+                $('.huebee__container').on('mouseup touchend', function (e) {
+                    sim.resetColorpickerCursor();
+                });
+                $('.huebee').draggable({});
+            };
+        };
+        SimulationRoberta.prototype.initEvents = function () {
+            var _this = this;
+            var that = this;
+            $(window).on('focus', function () {
+                that.start();
+                return false;
+            });
+            $(window).on('blur', function () {
+                that.stop();
+                return false;
+            });
+            $('#simDiv').on('wheel mousewheel touchmove', function (e) {
+                _this.handleMouseWheel(e);
+            });
+            $('#canvasDiv').on('mousedown touchstart mousemove touchmove mouseup touchend mouseout touchcancel', function (e) {
+                // handle any mouse event that is not captured by the object's mouse listener on the specific layers
+                _this.handleMouse(e);
+            });
+            $('#robotLayer').on('click touchstart', function (e) {
+                $('#robotLayer').attr('tabindex', 0);
+                $('#robotLayer').trigger('focus');
+                e.preventDefault();
+            });
+            $('#blocklyDiv').on('click touchstart', function (e) {
+                // $('#blocklyDiv').attr('tabindex', 0);
+                $('#blocklyDiv').trigger('focus');
+                e.preventDefault();
+            });
+        };
+        /** adds an event to the interpreters */
+        SimulationRoberta.prototype.interpreterAddEvent = function (mode) {
+            this.updateBreakpointEvent();
+            if (this.interpreters) {
+                this.interpreters.forEach(function (interpreter) { return interpreter.addEvent(mode); });
+            }
+        };
+        SimulationRoberta.prototype.removeBreakPoint = function (block) {
+            for (var i = 0; i < this._breakpoints.length; i++) {
+                if (this._breakpoints[i] === block.id) {
+                    this._breakpoints.splice(i, 1);
+                }
+            }
+            if (!this._breakpoints && this._breakpoints.length > 0 && this.interpreters !== null) {
+                for (var i = 0; i < this.interpreters.length; i++) {
+                    this.interpreters[i].removeEvent(C.DEBUG_BREAKPOINT);
+                }
+            }
+        };
+        SimulationRoberta.prototype.render = function () {
+            var _this = this;
+            if (this.canceled) {
+                cancelAnimationFrame(this.globalID);
+                this.renderTime = 5;
+                this.globalID = 0;
+                return;
+            }
+            this.globalID = requestAnimationFrame(this.render.bind(this));
+            var now = new Date().getTime();
+            var dtSim = now - this.time;
+            var dtRobot = Math.min(15, Math.abs(dtSim - this.renderTime) / this.getNumRobots());
+            this.dt = dtSim / 1000;
+            this.stepCounter += 1;
+            if (this.isInterpreterRunning()) {
+                this.interpreters.forEach(function (interpreter, index) {
+                    if (!interpreter.isTerminated()) {
+                        if (_this.renderUntil[index] <= now) {
+                            var delayMs = interpreter.run(now + dtRobot);
+                            var nowNext = new Date().getTime();
+                            _this.renderUntil[index] = nowNext + delayMs;
+                        }
+                    }
+                    else if (_this.allInterpretersTerminated()) {
+                        _this.interpreterRunning = false;
+                    }
+                }, this);
+            }
+            this.updateBreakpointEvent();
+            var renderTimeStart = new Date().getTime();
+            this.scene.update(this.dt, this.isInterpreterRunning());
+            this.renderTime = new Date().getTime() - renderTimeStart;
+            this.time = now;
+        };
+        SimulationRoberta.prototype.resetColorpickerCursor = function () {
+            this.colorpicker.color = null;
+            this.colorpicker.setTexts();
+            this.colorpicker.setBackgrounds();
+            this.colorpicker.cursor.classList.add('is-hidden');
+        };
+        SimulationRoberta.prototype.resetPose = function () {
+            this.scene.resetPoseAndDrawings();
+        };
+        SimulationRoberta.prototype.resetRenderUntil = function (num) {
+            this._renderUntil = [];
+            for (var i = 0; i < num; i++) {
+                this._renderUntil[i] = 0;
+            }
+        };
+        SimulationRoberta.prototype.run = function (result, callbackOnEnd) {
+            this.callbackOnEnd = callbackOnEnd;
+            var simulation = this;
+            this.init(result, false, function () {
+                setTimeout(function () {
+                    simulation.interpreterRunning = true;
+                }, 250);
+            });
+        };
+        SimulationRoberta.prototype.setBackground = function (num) {
+            this.scale = 1;
+            this.scene.stepBackground(num);
+        };
+        SimulationRoberta.prototype.setNewConfig = function (configData) {
+            return __awaiter(this, void 0, void 0, function () {
+                var relatives, height_1, width_1, sim_1, calculateShape_1, importObstacles_1, importColorAreas_1, importMarker_1;
+                var _this = this;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            if (!configData.hasOwnProperty('tileSet')) return [3 /*break*/, 2];
+                            return [4 /*yield*/, this.prepareRescueLine(configData).then(function (result) {
+                                    this.configType = 'rcj';
+                                    setTimeout(function () {
+                                        $(window).trigger('resize', 'loaded');
+                                    }, 100);
+                                }.bind(this), function (result) {
+                                    alert(result.message);
+                                    // TODO with msg.keys: MSG.displayInformation(result, '', result.message, null, null);
+                                })];
+                        case 1:
+                            _a.sent();
+                            return [3 /*break*/, 3];
+                        case 2:
+                            relatives = configData;
+                            height_1 = this.scene.uCanvas.height;
+                            width_1 = this.scene.uCanvas.width;
+                            sim_1 = this;
+                            calculateShape_1 = function (object) {
+                                var newObject = {};
+                                newObject.id = sim_1.scene.uniqueObjectId;
+                                if (object.type === 'MARKER') {
+                                    newObject.shape = 'MARKER';
+                                    newObject.markerId = object.markerId;
+                                }
+                                else {
+                                    newObject.shape = object.form.toUpperCase();
+                                }
+                                newObject.color = object.color;
+                                newObject.newObjecttype = object.type;
+                                switch (object.form.toLowerCase()) {
+                                    case 'rectangle':
+                                        newObject.p = { x: object.x * width_1, y: object.y * height_1 };
+                                        newObject.params = [object.w * width_1, object.h * height_1];
+                                        break;
+                                    case 'triangle':
+                                        newObject.p = { x: 0, y: 0 };
+                                        newObject.params = [
+                                            object.ax * width_1,
+                                            object.ay * height_1,
+                                            object.bx * width_1,
+                                            object.by * height_1,
+                                            object.cx * width_1,
+                                            object.cy * height_1,
+                                        ];
+                                        break;
+                                    case 'circle':
+                                        newObject.p = {
+                                            x: object.x * width_1,
+                                            y: object.y * height_1,
+                                        };
+                                        newObject.params = [object.r * height_1 * width_1];
+                                        break;
+                                }
+                                return newObject;
+                            };
+                            this.importPoses = [];
+                            relatives.robotPoses.forEach(function (pose) {
+                                if (Array.isArray(pose)) {
+                                    var myPose = {};
+                                    myPose.x = pose[0].x * width_1;
+                                    myPose.y = pose[0].y * height_1;
+                                    myPose.theta = pose[0].theta;
+                                    var myInitialPose = {};
+                                    myInitialPose.x = pose[1].x * width_1;
+                                    myInitialPose.y = pose[1].y * height_1;
+                                    myInitialPose.theta = pose[1].theta;
+                                    _this.importPoses.push([myPose, myInitialPose]);
+                                }
+                                else {
+                                    var myPose = {};
+                                    myPose.x = pose.x * width_1;
+                                    myPose.y = pose.y * height_1;
+                                    myPose.theta = pose.theta;
+                                    _this.importPoses.push([myPose, myPose]);
+                                }
+                            });
+                            this.scene.setRobotPoses(this.importPoses);
+                            importObstacles_1 = [];
+                            relatives.obstacles.forEach(function (obstacle) {
+                                importObstacles_1.push(calculateShape_1(obstacle));
+                            });
+                            this.scene.addImportObstacle(importObstacles_1);
+                            importColorAreas_1 = [];
+                            relatives.colorAreas.forEach(function (colorArea) {
+                                importColorAreas_1.push(calculateShape_1(colorArea));
+                            });
+                            this.scene.addImportColorAreaList(importColorAreas_1);
+                            importMarker_1 = [];
+                            relatives.marker &&
+                                relatives.marker.forEach(function (marker) {
+                                    importMarker_1.push(calculateShape_1(marker));
+                                });
+                            this.scene.addImportMarkerList(importMarker_1);
+                            _a.label = 3;
+                        case 3: return [2 /*return*/];
+                    }
+                });
+            });
+        };
+        SimulationRoberta.prototype.setPause = function (value) {
+            this.interpreterRunning = !value;
+        };
+        SimulationRoberta.prototype.start = function () {
+            this.time = new Date().getTime();
+            this.canceled = false;
+            if (this.globalID === 0) {
+                this.render();
+            }
+        };
+        SimulationRoberta.prototype.stop = function () {
+            this.interpreters.forEach(function (interpreter) {
+                interpreter.updateNNView && NN_CTRL.saveNN2Blockly(interpreter.neuralNetwork);
+            });
+            this.canceled = true;
+        };
+        SimulationRoberta.prototype.stopProgram = function () {
+            this.interpreters.forEach(function (interpreter) {
+                interpreter.removeHighlights();
+                interpreter.terminate();
+                interpreter.updateNNView && NN_CTRL.saveNN2Blockly(interpreter.neuralNetwork);
+            });
+            this.interpreterRunning = false;
+        };
+        SimulationRoberta.prototype.toggleColorPicker = function () {
+            if ($('.huebee').length) {
+                this.colorpicker.close();
+            }
+            else {
+                this.colorpicker.open();
+            }
+        };
+        SimulationRoberta.prototype.toggleTrail = function () {
+            this.scene.toggleTrail();
+        };
+        /** adds/removes the ability for a block to be a breakpoint to a block */
+        SimulationRoberta.prototype.updateBreakpointEvent = function () {
+            if (this.debugMode) {
+                var sim_2 = this;
+                Blockly.getMainWorkspace()
+                    .getAllBlocks()
+                    .forEach(function (block) {
+                    if (!$(block.svgGroup_).hasClass('blocklyDisabled')) {
+                        if (sim_2.observers.hasOwnProperty(block.id)) {
+                            sim_2.observers[block.id].disconnect();
+                        }
+                        var observer = new MutationObserver(function (mutations) {
+                            mutations.forEach(function (mutation) {
+                                if ($(block.svgGroup_).hasClass('blocklyDisabled') || $(block.svgGroup_).hasClass('blocklyDragging')) {
+                                    sim_2.removeBreakPoint(block);
+                                    $(block.svgGroup_).removeClass('blocklySelected');
+                                    $(block.svgPath_).removeClass('breakpoint').removeClass('selectedBreakpoint');
+                                }
+                                else {
+                                    if ($(block.svgGroup_).hasClass('blocklySelected')) {
+                                        if ($(block.svgPath_).hasClass('breakpoint')) {
+                                            sim_2.removeBreakPoint(block);
+                                            $(block.svgPath_).removeClass('breakpoint');
+                                        }
+                                        else if ($(block.svgPath_).hasClass('selectedBreakpoint')) {
+                                            sim_2.removeBreakPoint(block);
+                                            $(block.svgPath_).removeClass('selectedBreakpoint').stop(true, true).animate({ 'fill-opacity': '1' }, 0);
+                                        }
+                                        else {
+                                            sim_2._breakpoints.push(block.id);
+                                            $(block.svgPath_).addClass('breakpoint');
+                                        }
+                                        $(block.svgGroup_).removeClass('blocklySelected');
+                                    }
+                                }
+                            });
+                        });
+                        sim_2.observers[block.id] = observer;
+                        observer.observe(block.svgGroup_, { attributes: true });
+                    }
+                }, sim_2);
+            }
+        };
+        SimulationRoberta.prototype.updateDebugMode = function (mode) {
+            this.debugMode = mode;
+            if (this.interpreters !== null) {
+                for (var i = 0; i < this.interpreters.length; i++) {
+                    this.interpreters[i].setDebugMode(mode);
+                }
+            }
+            this.updateBreakpointEvent();
+        };
+        SimulationRoberta.prototype.prepareRescueLine = function (configData) {
+            return __awaiter(this, void 0, void 0, function () {
+                var sim;
+                return __generator(this, function (_a) {
+                    sim = this;
+                    return [2 /*return*/, new Promise(function (resolve, reject) {
+                            var result = { rc: 'ok', message: '' };
+                            var height = configData.length * sim.TILE_SIZE; // tile height/length is 25cm, 3 pixel = 1cm
+                            var width = configData.width * sim.TILE_SIZE; // tile width is 25cm, 3 pixel = 1cm
+                            var canvas = document.createElement('canvas');
+                            canvas.id = 'tmp';
+                            canvas.width = width;
+                            canvas.height = height;
+                            $('body').append(canvas);
+                            var preload = function (src) {
+                                return new Promise(function (resolve, reject) {
+                                    var img = new Image();
+                                    img.onload = function () {
+                                        resolve(img);
+                                    };
+                                    img.onerror = function () {
+                                        reject("Image couldn't be loaded: " + src['tileType'].image);
+                                    };
+                                    img.src = '/css/img/simulationRescue/tiles/' + src['tileType'].image;
+                                });
+                            };
+                            var tile;
+                            var imgArray = [];
+                            for (tile in configData.tiles) {
+                                imgArray.push(configData.tiles[tile]);
+                            }
+                            var preloadAll = function (images) {
+                                return Promise.all(images.map(preload));
+                            };
+                            var entrance;
+                            var startTile = configData.tiles[configData.startTile.x + ',' + configData.startTile.y + ',' + configData.startTile.z];
+                            var startPose = {};
+                            var rcjLabel = [];
+                            var drawEntranceEvacuationZone = function (tile, ctx) {
+                                ctx.save();
+                                ctx.translate(tile['x'] * sim.TILE_SIZE + sim.TILE_SIZE / 2, tile['y'] * sim.TILE_SIZE + sim.TILE_SIZE / 2);
+                                var rot = 0;
+                                switch (tile['dir']) {
+                                    case 'top':
+                                        break;
+                                    case 'right':
+                                        rot = Math.PI / 2;
+                                        break;
+                                    case 'bottom':
+                                        rot = Math.PI;
+                                        break;
+                                    case 'left':
+                                        rot = (270 * Math.PI) / 180;
+                                        break;
+                                }
+                                ctx.rotate(rot);
+                                ctx.fillStyle = '#33B8CA';
+                                ctx.fillRect(-sim.TILE_SIZE / 2, -sim.TILE_SIZE / 2, sim.TILE_SIZE, sim.EV_WALL_SIZE);
+                                ctx.restore();
+                            };
+                            var drawEvacuationZone = function (tile, ctx) {
+                                ctx.save();
+                                ctx.translate(tile['x'] * sim.TILE_SIZE + sim.TILE_SIZE / 2, tile['y'] * sim.TILE_SIZE + sim.TILE_SIZE / 2);
+                                var rot = 0;
+                                switch (tile['rot']) {
+                                    case 0:
+                                        break;
+                                    case 90:
+                                        rot = Math.PI / 2;
+                                        break;
+                                    case 180:
+                                        rot = Math.PI;
+                                        break;
+                                    case 270:
+                                        rot = (270 * Math.PI) / 180;
+                                        break;
+                                }
+                                ctx.rotate(rot);
+                                ctx.beginPath();
+                                ctx.moveTo(-sim.TILE_SIZE / 2, -sim.TILE_SIZE / 2);
+                                ctx.lineTo(sim.TILE_SIZE / 2, -sim.TILE_SIZE / 2);
+                                ctx.lineTo(sim.TILE_SIZE / 2, sim.TILE_SIZE / 2);
+                                ctx.closePath();
+                                ctx.fillStyle = '#000000';
+                                ctx.fill();
+                                ctx.restore();
+                            };
+                            var drawTileSeparator = function (ctx) {
+                                ctx.strokeStyle = '#dddddd';
+                                ctx.lineWidth = 1;
+                                for (var i = 1; i < height; i++) {
+                                    ctx.moveTo(0, i * sim.TILE_SIZE);
+                                    ctx.lineTo(width * sim.TILE_SIZE, i * sim.TILE_SIZE);
+                                    ctx.stroke();
+                                }
+                                for (var j = 1; j < width; j++) {
+                                    ctx.moveTo(j * sim.TILE_SIZE, 0);
+                                    ctx.lineTo(j * sim.TILE_SIZE, sim.TILE_SIZE * height);
+                                    ctx.stroke();
+                                }
+                            };
+                            var getRcjVictims = function (evacuationZone) {
+                                var victims = configData.victims;
+                                var rcjVictimsList = [];
+                                var zone = {
+                                    x: Math.min(evacuationZone[0], evacuationZone[2]) * sim.TILE_SIZE - sim.TILE_SIZE / 2,
+                                    y: Math.min(evacuationZone[1], evacuationZone[3]) * sim.TILE_SIZE - sim.TILE_SIZE / 2,
+                                    w: (Math.max(evacuationZone[0], evacuationZone[2]) - Math.min(evacuationZone[0], evacuationZone[2]) + 1) * sim.TILE_SIZE + sim.TILE_SIZE,
+                                    h: (Math.max(evacuationZone[1], evacuationZone[3]) - Math.min(evacuationZone[1], evacuationZone[3]) + 1) * sim.TILE_SIZE + sim.TILE_SIZE,
+                                };
+                                var createVictim = function (color) {
+                                    var p = { x: zone.x + Math.random() * zone.w, y: zone.y + Math.random() * zone.h };
+                                    var i = 0;
+                                    while (i < rcjVictimsList.length) {
+                                        if (SIMATH.getDistance(p, rcjVictimsList[i].p) < 200) {
+                                            p = { x: zone.x + Math.random() * zone.w, y: zone.y + Math.random() * zone.h };
+                                            i = 0;
+                                        }
+                                        else {
+                                            i++;
+                                        }
+                                    }
+                                    var victim = {
+                                        id: sim.scene.uniqueObjectId,
+                                        p: p,
+                                        params: [7, 1],
+                                        theta: 0,
+                                        color: color,
+                                        shape: simulation_objects_1.SimObjectShape.Circle,
+                                        type: simulation_objects_1.SimObjectType.Obstacle,
+                                    };
+                                    rcjVictimsList.push(victim);
+                                };
+                                if (victims['live'] && victims['live'] > 0) {
+                                    for (var i = 0; i < victims['live']; ++i) {
+                                        createVictim('#33B8CA');
+                                    }
+                                }
+                                if (victims['dead'] && victims['dead'] > 0) {
+                                    for (var i = 0; i < victims['dead']; ++i) {
+                                        createVictim('#000000');
+                                    }
+                                }
+                                return rcjVictimsList;
+                            };
+                            var createBackgroundImage = function () {
+                                var image = new Image();
+                                image.src = canvas.toDataURL();
+                                image.width = canvas.width;
+                                image.height = canvas.height;
+                                return image;
+                            };
+                            var evacuationVictimsZone = [];
+                            var resetVictims = function () {
+                                var obstaclesToDelete = sim.scene.obstacleList.filter(function (obstacle) {
+                                    return obstacle.movable;
+                                });
+                                obstaclesToDelete.forEach(function (obstacle) {
+                                    obstacle.selected = true;
+                                    obstacle.removeObserver(sim.scene.rcjScoringTool);
+                                    sim.scene.deleteSelectedObject();
+                                });
+                                var newVictims = getRcjVictims(evacuationVictimsZone);
+                                sim.scene.addSomeObstacles(newVictims);
+                                sim.scene.obstacleList.forEach(function (obstacle) {
+                                    if (obstacle['addObserver'] && typeof obstacle['addObserver'] === 'function') {
+                                        obstacle.addObserver(sim.scene.rcjScoringTool);
+                                    }
+                                });
+                            };
+                            preloadAll(imgArray).then(function (images) {
+                                var ctx = canvas.getContext('2d');
+                                ctx.fillStyle = 'white';
+                                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                                var evacuationTop = [];
+                                var evacuationRight = [];
+                                var evacuationBottom = [];
+                                var evacuationLeft = [];
+                                var importObstacles = [];
+                                imgArray.forEach(function (img, index) {
+                                    if (img['tileType']['image'].startsWith('ev')) {
+                                        var ev = img['tileType']['image'].replace('.png', '');
+                                        switch (ev) {
+                                            case 'ev1':
+                                                evacuationVictimsZone.push(img['x']);
+                                                evacuationVictimsZone.push(img['y']);
+                                                // evacuation zone tile without walls
+                                                break;
+                                            case 'ev2': // one wall
+                                                var rot = img['rot'].toString();
+                                                switch (rot) {
+                                                    case '0':
+                                                        evacuationTop.push({ x: img['x'], y: img['y'] });
+                                                        break;
+                                                    case '90':
+                                                        evacuationRight.push({ x: img['x'], y: img['y'] });
+                                                        break;
+                                                    case '180':
+                                                        evacuationBottom.push({ x: img['x'], y: img['y'] });
+                                                        break;
+                                                    case '270':
+                                                        evacuationLeft.push({ x: img['x'], y: img['y'] });
+                                                        break;
+                                                    default:
+                                                        result.rc = 'error';
+                                                        result.message = 'Unknown evacuation zone rotation';
+                                                }
+                                                break;
+                                            case 'ev3': // two walls (edge)
+                                                rot = img['rot'].toString();
+                                                switch (rot) {
+                                                    case '0':
+                                                        evacuationTop.push({ x: img['x'], y: img['y'] });
+                                                        evacuationRight.push({ x: img['x'], y: img['y'] });
+                                                        break;
+                                                    case '90':
+                                                        evacuationRight.push({ x: img['x'], y: img['y'] });
+                                                        evacuationBottom.push({ x: img['x'], y: img['y'] });
+                                                        break;
+                                                    case '180':
+                                                        evacuationLeft.push({ x: img['x'], y: img['y'] });
+                                                        evacuationBottom.push({ x: img['x'], y: img['y'] });
+                                                        break;
+                                                    case '270':
+                                                        evacuationTop.push({ x: img['x'], y: img['y'] });
+                                                        evacuationLeft.push({ x: img['x'], y: img['y'] });
+                                                        break;
+                                                    default:
+                                                        result.rc = 'error';
+                                                        result.message = 'Unknown evacuation zone rotation';
+                                                }
+                                                break;
+                                            default:
+                                                result.rc = 'error';
+                                                result.message = 'Unknown evacuation zone type';
+                                        }
+                                        // check for entrance (unfortunately not labeled)
+                                        var x = img['x'];
+                                        var y = img['y'];
+                                        var pTop = '' + x + ',' + (y - 1) + ',0';
+                                        var pRight = '' + (x + 1) + ',' + y + ',0';
+                                        var pBottom = '' + x + ',' + (y + 1) + ',0';
+                                        var pLeft = '' + (x - 1) + ',' + y + ',0';
+                                        if (configData['tiles'][pTop] && configData['tiles'][pTop]['tileType'].image.startsWith('tile-0')) {
+                                            entrance = { x: x, y: y, dir: 'top' };
+                                        }
+                                        else if (configData['tiles'][pRight] && configData['tiles'][pRight]['tileType'].image.startsWith('tile-0')) {
+                                            entrance = { x: x, y: y, dir: 'right' };
+                                        }
+                                        else if (configData['tiles'][pBottom] && configData['tiles'][pBottom]['tileType'].image.startsWith('tile-0')) {
+                                            entrance = { x: x, y: y, dir: 'bottom' };
+                                        }
+                                        else if (configData['tiles'][pLeft] && configData['tiles'][pLeft]['tileType'].image.startsWith('tile-0')) {
+                                            entrance = { x: x, y: y, dir: 'left' };
+                                        }
+                                    }
+                                    else {
+                                        ctx.save();
+                                        ctx.translate(img['x'] * sim.TILE_SIZE + sim.TILE_SIZE / 2, img['y'] * sim.TILE_SIZE + sim.TILE_SIZE / 2);
+                                        ctx.rotate((img['rot'] * Math.PI) / 180);
+                                        ctx.drawImage(images[index], 0, 0, images[index]['width'], images[index]['height'], -sim.TILE_SIZE / 2, -sim.TILE_SIZE / 2, sim.TILE_SIZE, sim.TILE_SIZE);
+                                        ctx.restore();
+                                        if (img['index'].length > 0) {
+                                            rcjLabel.push(img);
+                                        }
+                                        if (img['items'] && img['items']['obstacles'] && img['items']['obstacles'] > 0) {
+                                            var obstacle = {};
+                                            obstacle.id = sim.scene.uniqueObjectId;
+                                            obstacle.shape = simulation_objects_1.SimObjectShape.Rectangle;
+                                            obstacle.color = '#ff0000';
+                                            obstacle.newObjecttype = simulation_objects_1.SimObjectType.Obstacle;
+                                            obstacle.p = { x: img['x'] * sim.TILE_SIZE + sim.TILE_SIZE / 4 + 10, y: img['y'] * sim.TILE_SIZE + sim.TILE_SIZE / 4 + 10 };
+                                            obstacle.params = [sim.TILE_SIZE * 0.5, sim.TILE_SIZE * 0.5];
+                                            importObstacles.push(obstacle);
+                                        }
+                                    }
+                                });
+                                if (evacuationTop.length >= 2 && evacuationRight.length >= 2 && evacuationBottom.length >= 2 && evacuationLeft.length >= 2) {
+                                    evacuationTop.sort(function (a, b) {
+                                        return a.x - b.x;
+                                    });
+                                    evacuationRight.sort(function (a, b) {
+                                        return a.y - b.y;
+                                    });
+                                    evacuationBottom.sort(function (a, b) {
+                                        return a.x - b.x;
+                                    });
+                                    evacuationLeft.sort(function (a, b) {
+                                        return a.y - b.y;
+                                    });
+                                    var wallTop = {
+                                        id: sim.scene.uniqueObjectId,
+                                        p: { x: evacuationTop[0]['x'] * sim.TILE_SIZE + 10, y: evacuationTop[0]['y'] * sim.TILE_SIZE + sim.EV_WALL_SIZE },
+                                        params: [sim.TILE_SIZE * (evacuationTop[evacuationTop.length - 1]['x'] - evacuationTop[0]['x'] + 1), sim.EV_WALL_SIZE],
+                                        theta: 0,
+                                        color: '#ffffff',
+                                        shape: simulation_objects_1.SimObjectShape.Rectangle,
+                                        type: simulation_objects_1.SimObjectType.Obstacle,
+                                    };
+                                    var wallRight = {
+                                        id: sim.scene.uniqueObjectId,
+                                        p: { x: evacuationRight[0]['x'] * sim.TILE_SIZE + sim.TILE_SIZE, y: evacuationRight[0]['y'] * sim.TILE_SIZE + sim.EV_WALL_SIZE },
+                                        params: [sim.EV_WALL_SIZE, sim.TILE_SIZE * (evacuationRight[evacuationRight.length - 1]['y'] - evacuationRight[0]['y'] + 1)],
+                                        theta: 0,
+                                        color: '#ffffff',
+                                        shape: simulation_objects_1.SimObjectShape.Rectangle,
+                                        type: simulation_objects_1.SimObjectType.Obstacle,
+                                    };
+                                    var wallBottom = {
+                                        id: sim.scene.uniqueObjectId,
+                                        p: { x: evacuationBottom[0]['x'] * sim.TILE_SIZE + 10, y: evacuationBottom[0]['y'] * sim.TILE_SIZE + sim.TILE_SIZE },
+                                        params: [sim.TILE_SIZE * (evacuationBottom[evacuationBottom.length - 1]['x'] - evacuationBottom[0]['x'] + 1), sim.EV_WALL_SIZE],
+                                        theta: 0,
+                                        color: '#ffffff',
+                                        shape: simulation_objects_1.SimObjectShape.Rectangle,
+                                        type: simulation_objects_1.SimObjectType.Obstacle,
+                                    };
+                                    var wallLeft = {
+                                        id: sim.scene.uniqueObjectId,
+                                        p: { x: evacuationLeft[0]['x'] * sim.TILE_SIZE + 10, y: evacuationLeft[0]['y'] * sim.TILE_SIZE + sim.EV_WALL_SIZE },
+                                        params: [sim.EV_WALL_SIZE, sim.TILE_SIZE * (evacuationLeft[evacuationLeft.length - 1]['y'] - evacuationLeft[0]['y'] + 1)],
+                                        theta: 0,
+                                        color: '#ffffff',
+                                        shape: simulation_objects_1.SimObjectShape.Rectangle,
+                                        type: simulation_objects_1.SimObjectType.Obstacle,
+                                    };
+                                    importObstacles.push(wallTop, wallRight, wallBottom, wallLeft);
+                                    var evacuationEdges = imgArray.filter(function (tile) {
+                                        return tile.tileType.image.startsWith('ev3');
+                                    });
+                                    var evacuationZoneTile = evacuationEdges[Math.floor(Math.random() * evacuationEdges.length)];
+                                    drawEvacuationZone(evacuationZoneTile, ctx);
+                                }
+                                if (startTile) {
+                                    startPose = sim.getTilePose(startTile, configData['tiles'][startTile['next']], {});
+                                }
+                                else {
+                                    result.rc = 'error';
+                                    result.message = 'Unknown start tile';
+                                }
+                                if (!entrance) {
+                                    result.rc = 'error';
+                                    result.message = 'Unknown evacuation zone entrance tile';
+                                }
+                                if (result.rc === 'ok') {
+                                    sim.deleteAllColorArea();
+                                    sim.deleteAllObstacle();
+                                    drawEntranceEvacuationZone(entrance, ctx);
+                                    drawTileSeparator(ctx);
+                                    var image = createBackgroundImage();
+                                    sim.scene.imgBackgroundList.push(image);
+                                    sim.setBackground(sim.scene.imgBackgroundList.length - 1);
+                                    sim.scene.addImportObstacle(importObstacles.concat(getRcjVictims(evacuationVictimsZone)));
+                                    sim.scene.addImportRcjLabel(rcjLabel);
+                                    sim.scene.drawRcjLabel();
+                                    sim.importPoses = [[startPose, startPose]];
+                                    sim.scene.setRobotPoses(sim.importPoses);
+                                    sim.scene.setRcjScoringTool(sim.scene.robots[0], configData, resetVictims);
+                                    $('#simCompetition').show();
+                                    resolve(result);
+                                }
+                                else {
+                                    reject(result);
+                                }
+                                $('#tmp').remove();
+                            }, function (err) {
+                                $('#tmp').remove();
+                                result.rc = 'error';
+                                result.message = err;
+                                reject(result);
+                            });
+                        })];
+                });
+            });
+        };
+        SimulationRoberta.prototype.getTilePose = function (tile, nextTile, prevTile) {
+            var pose = {};
+            pose.x = tile['x'] * this.TILE_SIZE + this.TILE_SIZE / 2 + this.EV_WALL_SIZE;
+            pose.y = tile['y'] * this.TILE_SIZE + this.TILE_SIZE / 2 + this.EV_WALL_SIZE;
+            var rot = 0;
+            if (nextTile != null && nextTile != undefined) {
+                if (tile['x'] - nextTile['x'] === 1) {
+                    rot = Math.PI;
+                }
+                else if (tile['y'] - nextTile['y'] === -1) {
+                    rot = Math.PI / 2;
+                }
+                else if (tile['y'] - nextTile['y'] === 1) {
+                    rot = (Math.PI * 3) / 2;
+                }
+            }
+            else if (prevTile != null && prevTile != undefined) {
+                if (tile['x'] - prevTile['x'] === -1) {
+                    rot = Math.PI;
+                }
+                else if (tile['y'] - prevTile['y'] === 1) {
+                    rot = Math.PI / 2;
+                }
+                else if (tile['y'] - prevTile['y'] === -1) {
+                    rot = (Math.PI * 3) / 2;
+                }
+            }
+            pose.theta = rot;
+            return pose;
+        };
+        return SimulationRoberta;
+    }());
+    exports.SimulationRoberta = SimulationRoberta;
+    // requestAnimationFrame polyfill by Erik Möller.
+    // Fixes from Paul Irish, Tino Zijdel, Andrew Mao, Klemen Slavic, Darius Bacon and Joan Alba Maldonado.
+    // Adapted from https://gist.github.com/paulirish/1579671 which derived from
+    // http://paulirish.com/2011/requestanimationframe-for-smart-animating/
+    // http://my.opera.com/emoller/blog/2011/12/20/requestanimationframe-for-smart-er-animating
+    // Added high resolution timing. This window.performance.now() polyfill can be used: https://gist.github.com/jalbam/cc805ac3cfe14004ecdf323159ecf40e
+    // MIT license
+    // Gist: https://gist.github.com/jalbam/5fe05443270fa6d8136238ec72accbc0
+    (function () {
+        var vendors = ['webkit', 'moz', 'ms', 'o'], vp = null;
+        for (var x = 0; x < vendors.length && !window.requestAnimationFrame && !window.cancelAnimationFrame; x++) {
+            vp = vendors[x];
+            window.requestAnimationFrame = window.requestAnimationFrame || window[vp + 'RequestAnimationFrame'];
+            window.cancelAnimationFrame = window.cancelAnimationFrame || window[vp + 'CancelAnimationFrame'] || window[vp + 'CancelRequestAnimationFrame'];
+        }
+        if (/iP(ad|hone|od).*OS 6/.test(window.navigator.userAgent) || !window.requestAnimationFrame || !window.cancelAnimationFrame) {
+            //iOS6 is buggy.
+            var lastTime = 0;
+            // @ts-ignore
+            window.requestAnimationFrame = function (callback, element) {
+                var now = window.performance.now();
+                var nextTime = Math.max(lastTime + 16, now); //First time will execute it immediately but barely noticeable and performance is gained.
+                return setTimeout(function () {
+                    callback((lastTime = nextTime));
+                }, nextTime - now);
+            };
+            window.cancelAnimationFrame = clearTimeout;
+        }
+    })();
+    exports.default = SimulationRoberta.Instance;
+    function cloadImages(names, arg1, files, arg3, onAllLoaded, arg5, arg6) {
+        throw new Error('Function not implemented.');
+    }
+});

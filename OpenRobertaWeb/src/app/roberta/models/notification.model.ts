@@ -6,11 +6,11 @@
 
 import * as COMM from 'comm';
 
-export const getNotifications = function (successFn) {
+export const getNotifications = function(successFn: Function): void {
     COMM.json(
         '/notifications/getNotifications',
         {},
-        function (result) {
+        function(result): void {
             if (result.rc === 'ok' && result.message === 'ORA_SERVER_SUCCESS') {
                 successFn(result);
             }
@@ -19,11 +19,11 @@ export const getNotifications = function (successFn) {
     );
 };
 
-export const postNotifications = function (notifications, successFn) {
+export const postNotifications = function(notifications: any, successFn: Function): void {
     COMM.json(
         '/notifications/postNotifications',
         {
-            notifications: notifications,
+            notifications: notifications
         },
         successFn,
         'send notifications to server'

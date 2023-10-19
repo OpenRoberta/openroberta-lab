@@ -6,6 +6,7 @@ import * as LEGAL_C from 'legal.controller';
 import * as WEBVIEW_C from 'webview.controller';
 import * as CV from 'confVisualization';
 import * as $ from 'jquery';
+//@ts-ignore
 import * as Blockly from 'blockly';
 import * as NOTIFICATION_C from 'notification.controller';
 import * as CONNECTION_C from 'connection.controller';
@@ -20,25 +21,27 @@ import { switchLanguage as TUTORIALLIST_C_switchLanguage } from 'tutorialList.co
 import { switchLanguage as LOGLIST_C_switchLanguage } from 'logList.controller';
 import { switchLanguage as PROGINFO_C_switchLanguage } from 'progInfo.controller';
 import * as ACE_EDITOR from 'aceEditor';
+import { SetRobotResponse } from '../ts/restEntities';
+import { RobotBase } from 'robot.base';
 
-export var LONG = 300000; // Ping time 5min
-export var SHORT = 3000; // Ping time 3sec
+export let LONG: number = 300000; // Ping time 5min
+export let SHORT: number = 3000; // Ping time 3sec
 
 /**
  * Init robot
  */
-function init(language, opt_data) {
-    var ready = $.Deferred();
-    $.when(GUISTATE.init()).then(function () {
+export function init(language: string, opt_data: boolean) {
+    let ready: JQuery.Deferred<any, any, any> = $.Deferred();
+    $.when(GUISTATE.init()).then(function(): void {
         GUISTATE.gui.webview = opt_data || false;
         if (GUISTATE.gui.webview) {
             $('.logo').css({
-                right: '32px',
+                right: '32px'
             });
         }
 
-        GUISTATE.gui.view = 'start';
-        GUISTATE.gui.prevView = 'start';
+        GUISTATE.gui.view = 'tabProgram';
+        GUISTATE.gui.prevView = 'tabProgram';
         GUISTATE.gui.language = language;
         GUISTATE.gui.startWithoutPopup = false;
 
@@ -56,13 +59,13 @@ function init(language, opt_data) {
         setProgramName('NEPOprog');
 
         if (GUISTATE.server.theme !== 'default') {
-            var themePath = '../theme/' + GUISTATE.server.theme + '.json';
+            let themePath: string = '../theme/' + GUISTATE.server.theme + '.json';
             $.getJSON(themePath)
-                .done(function (data) {
+                .done(function(data): void {
                     // store new theme properties (only colors so far)
                     GUISTATE.server.theme = data;
                 })
-                .fail(function (e, r) {
+                .fail(function(e, r): void {
                     // this should not happen
                     console.error('"' + themePath + '" is not a valid json file! The reason is probably a', r);
                     GUISTATE.server.theme = 'default';
@@ -73,7 +76,7 @@ function init(language, opt_data) {
     return ready.promise();
 }
 
-function setInitialState() {
+export function setInitialState(): void {
     // Toolbox?
     $('.level').removeClass('disabled');
     $('.level.' + GUISTATE.program.toolbox.level).addClass('disabled');
@@ -94,7 +97,7 @@ function setInitialState() {
     updateTutorialMenu();
 }
 
-function setExtensions(extensions) {
+export function setExtensions(extensions): void {
     GUISTATE.robot.extentions = extensions;
 }
 
@@ -102,8 +105,8 @@ export function getExtensions() {
     return GUISTATE.robot.extentions;
 }
 
-function hasExtension(value) {
-    var hasExtension = false;
+export function hasExtension(value): boolean {
+    let hasExtension: boolean = false;
     for (const extension in GUISTATE.robot.extentions) {
         if (extension === value) {
             hasExtension = true;
@@ -116,11 +119,11 @@ function hasExtension(value) {
  * Check if a program is a standard program or not
  *
  */
-function isProgramStandard() {
+export function isProgramStandard(): boolean {
     return GUISTATE.program.name == 'NEPOprog';
 }
 
-function isProgramWritable() {
+export function isProgramWritable(): boolean {
     if (GUISTATE.program.shared == 'WRITE') {
         return true;
     } else if (GUISTATE.program.shared == 'READ') {
@@ -129,23 +132,24 @@ function isProgramWritable() {
     return true;
 }
 
-function isConfigurationStandard() {
+export function isConfigurationStandard(): boolean {
     return GUISTATE.configuration.name == getRobotGroup().toUpperCase() + 'basis';
 }
 
-function getConfigurationStandardName() {
+export function getConfigurationStandardName(): string {
     return getRobotGroup().toUpperCase() + 'basis';
 }
 
-function isConfigurationAnonymous() {
+export function isConfigurationAnonymous(): boolean {
     return GUISTATE.configuration.name == '';
 }
 
-function isKioskMode() {
+export function isKioskMode(): boolean {
+    //@ts-ignore
     return GUISTATE.kiosk && GUISTATE.kiosk === true;
 }
 
-function setState(result) {
+export function setState(result: any): void {
     if (result['serverVersion']) {
         GUISTATE.server.version = result['serverVersion'];
         $('.labReleaseVersion').text(GUISTATE.server.version);
@@ -188,8 +192,8 @@ function setState(result) {
     if (result['robotNepoexitvalue'] != undefined) {
         //TODO: For different robots we have different error messages
         if (result['robotNepoexitvalue'] !== GUISTATE.robot.nepoExitValue) {
-            GUISTATE.nepoExitValue = result['robotNepoexitvalue'];
-            if (GUISTATE.nepoExitValue !== 143 && GUISTATE.robot.nepoExitValue !== 0) {
+            GUISTATE.robot.nepoExitValue = result['robotNepoexitvalue'];
+            if (GUISTATE.robot.nepoExitValue !== 143 && GUISTATE.robot.nepoExitValue !== 0) {
                 MSG.displayMessage('POPUP_PROGRAM_TERMINATED_UNEXPECTED', 'POPUP', '');
             }
         }
@@ -206,30 +210,31 @@ function setState(result) {
     }
 }
 
-function getBlocklyWorkspace() {
+export function getBlocklyWorkspace() {
     return GUISTATE.gui.blocklyWorkspace;
 }
 
-function setBlocklyWorkspace(workspace) {
+export function setBlocklyWorkspace(workspace: any): void {
     GUISTATE.gui.blocklyWorkspace = workspace;
 }
 
-function getBricklyWorkspace() {
+function getBricklyWorkspace(): any {
     return GUISTATE.gui.bricklyWorkspace;
 }
 
-function setBricklyWorkspace(workspace) {
+export function setBricklyWorkspace(workspace: any): void {
     GUISTATE.gui.bricklyWorkspace = workspace;
 }
 
-function setRobot(robot, result, opt_init) {
+export function setRobot(robot: string, result: SetRobotResponse, opt_init?: boolean): void {
     // make sure we use the group instead of the specific robottype if the robot belongs to a group
-    var robotGroup = findGroup(robot);
+    let robotGroup: string = findGroup(robot);
     GUISTATE.gui.program = result.program;
     GUISTATE.gui.configuration = result.configuration;
     GUISTATE.gui.sim = result.sim;
     GUISTATE.gui.multipleSim = result.multipleSim;
     GUISTATE.gui.markerSim = result.markerSim;
+    //@ts-ignore PluginSim is not a property of SetRobotResponse
     GUISTATE.gui.pluginSim = result.pluginSim;
     GUISTATE.gui.nnActivations = result.nnActivations;
     GUISTATE.gui.webotsSim = result.webotsSim;
@@ -271,10 +276,12 @@ function setRobot(robot, result, opt_init) {
         setProgramSaved(true);
         setConfigurationSaved(true);
         if (findGroup(robot) != getRobotGroup()) {
+            //@ts-ignore
             setConfigurationName(robotGroup.toUpperCase() + 'basis');
             setProgramName('NEPOprog');
         }
     } else {
+        //@ts-ignore
         setConfigurationName(robotGroup.toUpperCase() + 'basis');
         setProgramName('NEPOprog');
     }
@@ -282,7 +289,7 @@ function setRobot(robot, result, opt_init) {
     $('#simRobot').removeClass('typcn-' + GUISTATE.gui.robotGroup);
     $('#simRobot').addClass('typcn-' + robotGroup);
 
-    var groupSwitched = false;
+    let groupSwitched: boolean = false;
     if (findGroup(robot) != getRobotGroup()) {
         groupSwitched = true;
     }
@@ -296,7 +303,7 @@ function setRobot(robot, result, opt_init) {
     GUISTATE.gui.robot = robot;
     GUISTATE.gui.robotGroup = robotGroup;
 
-    var value = Blockly.Msg.MENU_START_BRICK;
+    let value = Blockly.Msg.MENU_START_BRICK;
     if (value.indexOf('$') >= 0) {
         value = value.replace('$', getRobotRealName());
     }
@@ -311,7 +318,7 @@ function setRobot(robot, result, opt_init) {
             WEBVIEW_C.jsToAppInterface({
                 target: 'internal',
                 type: 'setRobot',
-                robot: robotGroup,
+                robot: robotGroup
             });
         }
     }
@@ -319,11 +326,11 @@ function setRobot(robot, result, opt_init) {
     if (hasExtension('nn')) {
         $('#nn-activations').empty();
         $('.tabLinkNN').show();
-        $.each(GUISTATE.gui.nnActivations, function (_, item) {
+        $.each(GUISTATE.gui.nnActivations, function(_, item): void {
             $('#nn-activations').append(
                 $('<option>', {
                     value: item,
-                    text: UTIL.activationDisplayName[item],
+                    text: UTIL.activationDisplayName[item]
                 })
             );
         });
@@ -340,14 +347,17 @@ export function resetRobot() {
     GUISTATE.gui.robot = undefined;
 }
 
-function setKioskMode(kiosk) {
+export function setKioskMode(kiosk: boolean): void {
+    //@ts-ignore
     GUISTATE.kiosk = kiosk;
 }
 
-function findGroup(robot) {
-    var robots = getRobots();
-    for (var propt in robots) {
+export function findGroup(robot: string): string {
+    let robots: RobotBase[] = getRobots();
+    for (let propt in robots) {
+        //@ts-ignore
         if (robots[propt].name == robot && robots[propt].group !== '') {
+            //@ts-ignore
             robot = robots[propt].group;
             return robot;
         }
@@ -355,9 +365,9 @@ function findGroup(robot) {
     return robot;
 }
 
-function findRobot(group) {
-    var robots = getRobots();
-    let robot;
+export function findRobot(group) {
+    let robots: any[] = getRobots();
+    let robot: any;
     for (robot in robots) {
         if (robots[robot].group === group) {
             return robots[robot].name;
@@ -367,7 +377,7 @@ function findRobot(group) {
     return null;
 }
 
-function setConnectionState(state) {
+export function setConnectionState(state: string): void {
     switch (state) {
         case 'busy':
             $('#head-navi-icon-robot').removeClass('error');
@@ -396,11 +406,11 @@ function setConnectionState(state) {
     }
 }
 
-function isRunEnabled() {
+export function isRunEnabled() {
     return GUISTATE.gui.runEnabled;
 }
 
-function setRunEnabled(running) {
+export function setRunEnabled(running: boolean): void {
     running ? true : false;
     GUISTATE.gui.runEnabled = running;
     if (running) {
@@ -414,24 +424,24 @@ function setRunEnabled(running) {
     }
 }
 
-function getRobot() {
+export function getRobot() {
     return GUISTATE.gui.robot;
 }
 
-function getRobotGroup() {
+export function getRobotGroup() {
     return GUISTATE.gui.robotGroup;
 }
 
-function setRobotPort(port) {
+export function setRobotPort(port: string): void {
     GUISTATE.robot.robotPort = port;
 }
 
-function getRobotPort() {
+export function getRobotPort(): string {
     return GUISTATE.robot.robotPort;
 }
 
-function getRobotRealName() {
-    for (var robot in getRobots()) {
+export function getRobotRealName() {
+    for (let robot in getRobots()) {
         if (!getRobots().hasOwnProperty(robot)) {
             continue;
         }
@@ -442,8 +452,8 @@ function getRobotRealName() {
     return getRobot();
 }
 
-function getMenuRobotRealName(robotName) {
-    for (var robot in getRobots()) {
+export function getMenuRobotRealName(robotName: string): string {
+    for (let robot in getRobots()) {
         if (!getRobots().hasOwnProperty(robot)) {
             continue;
         }
@@ -454,11 +464,11 @@ function getMenuRobotRealName(robotName) {
     return 'Robot not found';
 }
 
-function isRobotBeta(robotName) {
+export function isRobotBeta(robotName: string): boolean {
     return getRobotsByName()[robotName].announcement == 'beta';
 }
 
-export function isRobotDeprecated(robot) {
+export function isRobotDeprecated(robot): boolean {
     return getRobotsByName()[robot].announcement == 'deprecated';
 }
 
@@ -468,8 +478,8 @@ export function getRobotDeprecatedData(robot) {
     }
 }
 
-function getRobotInfoDE(robotName) {
-    for (var robot in getRobots()) {
+export function getRobotInfoDE(robotName: string) {
+    for (let robot in getRobots()) {
         if (!getRobots().hasOwnProperty(robot)) {
             continue;
         }
@@ -480,8 +490,8 @@ function getRobotInfoDE(robotName) {
     return '#';
 }
 
-function getRobotInfoEN(robotName) {
-    for (var robot in getRobots()) {
+export function getRobotInfoEN(robotName: string) {
+    for (let robot in getRobots()) {
         if (!getRobots().hasOwnProperty(robot)) {
             continue;
         }
@@ -492,44 +502,44 @@ function getRobotInfoEN(robotName) {
     return '#';
 }
 
-function isRobotConnected() {
+export function isRobotConnected(): boolean {
     if (!CONNECTION_C.getConnectionInstance()) return false;
     return CONNECTION_C.getConnectionInstance().isRobotConnected();
 }
 
-function isConfigurationUsed() {
+export function isConfigurationUsed(): boolean {
     return GUISTATE.gui.configurationUsed;
 }
 
-function isRobotDisconnected() {
+export function isRobotDisconnected(): number {
     return (GUISTATE.robot.time = -1);
 }
 
-function getRobotTime() {
+export function getRobotTime(): string {
     return GUISTATE.robot.time;
 }
 
-function getRobotName() {
+export function getRobotName(): string {
     return GUISTATE.robot.name;
 }
 
-function getRobotBattery() {
+export function getRobotBattery(): string {
     return GUISTATE.robot.battery;
 }
 
-function getRobotState() {
+export function getRobotState(): string {
     return GUISTATE.robot.state;
 }
 
-function getRobotVersion() {
+export function getRobotVersion(): string {
     return GUISTATE.robot.version;
 }
 
-function hasRobotDefaultFirmware() {
+export function hasRobotDefaultFirmware(): string {
     return GUISTATE.gui.firmwareDefault;
 }
 
-function setView(view) {
+export function setView(view: string): void {
     if (GUISTATE.gui.view === view) {
         return;
     }
@@ -576,15 +586,15 @@ function setView(view) {
     }
 }
 
-function getView() {
+export function getView(): string {
     return GUISTATE.gui.view;
 }
 
-function getPrevView() {
+export function getPrevView() {
     return GUISTATE.gui.prevView;
 }
 
-function setLanguage(language) {
+export function setLanguage(language: string): void {
     $('#language li a[lang=' + language + ']')
         .parent()
         .addClass('disabled');
@@ -615,7 +625,7 @@ function setLanguage(language) {
         LOGLIST_C_switchLanguage();
         PROGINFO_C_switchLanguage();
         NN_C.reloadViews();
-        var value = Blockly.Msg.MENU_START_BRICK;
+        let value = Blockly.Msg.MENU_START_BRICK;
         if (value.indexOf('$') >= 0) {
             value = value.replace('$', getRobotRealName());
         }
@@ -629,15 +639,15 @@ function setLanguage(language) {
     }
 }
 
-function getLanguage() {
+export function getLanguage() {
     return GUISTATE.gui.language;
 }
 
-function isProgramSaved() {
+export function isProgramSaved() {
     return GUISTATE.program.saved;
 }
 
-function setProgramSaved(save) {
+export function setProgramSaved(save) {
     if (save) {
         $('#menuSaveProg').parent().removeClass('disabled');
         $('#menuSaveProg').parent().addClass('disabled');
@@ -655,11 +665,11 @@ function setProgramSaved(save) {
     GUISTATE.program.saved = save;
 }
 
-function isConfigurationSaved() {
+export function isConfigurationSaved() {
     return GUISTATE.configuration.saved;
 }
 
-function setConfigurationSaved(save) {
+export function setConfigurationSaved(save) {
     if (save) {
         $('#menuSaveConfig').parent().removeClass('disabled');
         $('#menuSaveConfig').parent().addClass('disabled');
@@ -677,51 +687,51 @@ function setConfigurationSaved(save) {
     GUISTATE.configuration.saved = save;
 }
 
-function getProgramShared() {
+export function getProgramShared() {
     return GUISTATE.program.shared;
 }
 
-function setProgramSource(source) {
+export function setProgramSource(source) {
     GUISTATE.program.source = source;
 }
 
-function getProgramSource() {
+export function getProgramSource() {
     return GUISTATE.program.source;
 }
 
-function getSourceCodeFileExtension() {
+export function getSourceCodeFileExtension() {
     return GUISTATE.gui.sourceCodeFileExtension;
 }
 
-function getBinaryFileExtension() {
+export function getBinaryFileExtension() {
     return GUISTATE.gui.binaryFileExtension;
 }
 
-function isUserLoggedIn() {
+export function isUserLoggedIn() {
     return GUISTATE.user.id >= 0;
 }
 
-function getProgramTimestamp() {
+export function getProgramTimestamp() {
     return GUISTATE.program.timestamp;
 }
 
-function setProgramTimestamp(timestamp) {
+export function setProgramTimestamp(timestamp) {
     GUISTATE.program.timestamp = timestamp;
 }
 
-function getProgramName() {
+export function getProgramName() {
     return GUISTATE.program.name;
 }
 
-function setProgramName(name) {
-    var displayName = name;
+export function setProgramName(name): void {
+    let displayName = name;
     if (getProgramShareRelation() && getProgramShareRelation() !== 'NONE' && getProgramOwnerName() !== getUserAccountName()) {
-        var owner = getProgramOwnerName(),
+        let owner = getProgramOwnerName(),
             author = getProgramAuthorName(),
             relation = getProgramShareRelation(),
-            icon = '',
-            content = '',
-            suffix = '';
+            icon: string = '',
+            content: string = '',
+            suffix: string = '';
 
         if (owner === 'Gallery') {
             // user has uploaded this program to the gallery
@@ -748,90 +758,91 @@ function setProgramName(name) {
     GUISTATE.program.name = name;
 }
 
-function getProgramOwnerName() {
+export function getProgramOwnerName() {
     return GUISTATE.program.owner || getUserAccountName();
 }
 
-function setProgramOwnerName(name) {
+export function setProgramOwnerName(name): void {
     GUISTATE.program.owner = name;
 }
 
-function getProgramAuthorName() {
+export function getProgramAuthorName() {
     return GUISTATE.program.author || getUserAccountName();
 }
 
-function setProgramAuthorName(name) {
+export function setProgramAuthorName(name): void {
     GUISTATE.program.author = name;
 }
 
-function getProgramShareRelation() {
+export function getProgramShareRelation() {
     return GUISTATE.program.shared;
 }
 
-function setProgramShareRelation(relation) {
+export function setProgramShareRelation(relation): void {
     GUISTATE.program.shared = relation;
 }
 
-function getConfigurationName() {
+export function getConfigurationName() {
     return GUISTATE.configuration.name;
 }
 
-function setConfigurationName(name) {
+export function setConfigurationName(name): void {
     $('#tabConfigurationName').html(name);
     GUISTATE.configuration.name = name;
 }
 
-function setConfigurationNameDefault() {
+export function setConfigurationNameDefault(): void {
     setConfigurationName(getConfigurationStandardName());
 }
 
-function setProgramToolboxLevel(level) {
+export function setProgramToolboxLevel(level): void {
     $('.level').removeClass('disabled');
     $('.level.' + level).addClass('disabled');
     GUISTATE.program.toolbox.level = level;
 }
 
-function getProgramToolboxLevel() {
+export function getProgramToolboxLevel() {
     return GUISTATE.program.toolbox.level;
 }
 
-function getToolbox(level) {
+export function getToolbox(level) {
     return GUISTATE.gui.program.toolbox[level];
 }
 
-function getConfToolbox() {
+export function getConfToolbox() {
+    //@ts-ignore
     return GUISTATE.conf.toolbox;
 }
 
-function getRobotFWName() {
+export function getRobotFWName() {
     return GUISTATE.robot.fWName;
 }
 
-function setRobotToken(token) {
+export function setRobotToken(token): void {
     GUISTATE.robot.token = token;
 }
 
-function setRobotUrl(url) {
+export function setRobotUrl(url): void {
     GUISTATE.robot.url = url;
 }
 
-function setConfigurationXML(xml) {
+export function setConfigurationXML(xml): void {
     GUISTATE.configuration.xml = xml;
 }
 
-function getConfigurationXML() {
+export function getConfigurationXML() {
     return GUISTATE.configuration.xml;
 }
 
-function setProgramXML(xml) {
+export function setProgramXML(xml): void {
     GUISTATE.program.xml = xml;
 }
 
-function getProgramXML() {
+export function getProgramXML() {
     return GUISTATE.program.xml;
 }
 
-function getRobots() {
+export function getRobots() {
     return GUISTATE.server.robots;
 }
 
@@ -839,7 +850,7 @@ function getRobotsByName() {
     return GUISTATE.server.robotsByName;
 }
 
-function getProgramToolbox() {
+export function getProgramToolbox() {
     if (GUISTATE.gui.program.dynamicToolbox) {
         return GUISTATE.gui.program.dynamicToolbox;
     } else {
@@ -847,67 +858,67 @@ function getProgramToolbox() {
     }
 }
 
-export function setDynamicProgramToolbox(toolbox) {
+export function setDynamicProgramToolbox(toolbox): void {
     GUISTATE.gui.program['dynamicToolbox'] = toolbox;
 }
 
-export function resetDynamicProgramToolbox() {
+export function resetDynamicProgramToolbox(): void {
     delete GUISTATE.gui.program['dynamicToolbox'];
 }
 
-function getConfigurationToolbox() {
+export function getConfigurationToolbox() {
     return GUISTATE.gui.configuration.toolbox;
 }
 
-function getProgramProg() {
+export function getProgramProg() {
     return GUISTATE.gui.program.prog;
 }
 
-function getConfigurationConf() {
+export function getConfigurationConf() {
     return GUISTATE.gui.configuration.conf;
 }
 
-function getStartWithoutPopup() {
+export function getStartWithoutPopup() {
     return GUISTATE.gui.startWithoutPopup;
 }
 
-function setStartWithoutPopup() {
+export function setStartWithoutPopup(): boolean {
     return (GUISTATE.gui.startWithoutPopup = true);
 }
 
-function getServerVersion() {
+export function getServerVersion() {
     return GUISTATE.server.version;
 }
 
-function isPublicServerVersion() {
+export function isPublicServerVersion() {
     return GUISTATE.server.isPublic;
 }
 
-function getUserName() {
+export function getUserName() {
     return GUISTATE.user.name;
 }
 
-function getUserAccountName() {
+export function getUserAccountName() {
     return GUISTATE.user.accountName;
 }
 
-function isUserAccountActivated() {
+export function isUserAccountActivated() {
     return GUISTATE.user.isAccountActivated;
 }
 
-function isUserMemberOfUserGroup() {
+export function isUserMemberOfUserGroup(): boolean {
     return GUISTATE.user.userGroup != '';
 }
 
-function getUserUserGroup() {
+export function getUserUserGroup() {
     return GUISTATE.user.userGroup;
 }
 
-function getUserUserGroupOwner() {
+export function getUserUserGroupOwner() {
     return GUISTATE.user.userGroupOwner;
 }
 
-function setLogin(result) {
+export function setLogin(result: any): void {
     setState(result);
     GUISTATE.user.accountName = result.userAccountName;
     if (result.userName === undefined || result.userName === '') {
@@ -942,7 +953,7 @@ function setLogin(result) {
     }
 }
 
-function setLogout() {
+export function setLogout(): void {
     if (isUserMemberOfUserGroup()) {
         $('#registerUserName, #registerUserEmail').prop('disabled', false);
         $('#userGroupMemberDefaultPasswordHint').addClass('hidden');
@@ -966,6 +977,7 @@ function setLogout() {
     $('#head-navi-icon-user').removeClass('ok');
     $('#head-navi-icon-user').addClass('error');
     if (GUISTATE.gui.view == 'tabProgList') {
+        //@ts-ignore
         $('#tabProgram').tabWrapShow();
     } else if (GUISTATE.gui.view == 'tabConfList') {
         $('#tabConfiguration').clickWrap();
@@ -975,13 +987,13 @@ function setLogout() {
     $('.menuLogin').removeClass('pe-none');
 }
 
-function setProgram(result, opt_owner, opt_author) {
+export function setProgram(result: any, opt_owner?, opt_author?): void {
     if (result) {
         GUISTATE.program.shared = result.programShared;
         GUISTATE.program.timestamp = result.lastChanged;
         setProgramSaved(true);
         setConfigurationSaved(true);
-        var name = result.name;
+        let name = result.name;
 
         setProgramShareRelation(result.programShared);
         if (opt_owner) {
@@ -1007,7 +1019,7 @@ function setProgram(result, opt_owner, opt_author) {
  * Set configuration
  * @param {*} result
  */
-function setConfiguration(result) {
+export function setConfiguration(result: any): void {
     if (result) {
         setConfigurationName(result.name);
         GUISTATE.configuration.timestamp = result.lastChanged;
@@ -1017,7 +1029,7 @@ function setConfiguration(result) {
     }
 }
 
-function checkSim() {
+export function checkSim(): void {
     if (hasSim()) {
         if (hasMarkerSim()) {
             $('#simMarkerObject').parent().css('display', 'inline-block');
@@ -1044,15 +1056,15 @@ function checkSim() {
     }
 }
 
-function hasSim() {
+export function hasSim(): boolean {
     return GUISTATE.gui.sim == true;
 }
 
-function hasMultiSim() {
+export function hasMultiSim(): boolean {
     return GUISTATE.gui.multipleSim == true;
 }
 
-function hasMarkerSim() {
+export function hasMarkerSim(): boolean {
     return GUISTATE.gui.markerSim == true;
 }
 
@@ -1060,70 +1072,70 @@ export function getPluginSim() {
     return GUISTATE.gui.pluginSim || null;
 }
 
-function hasWebotsSim() {
+export function hasWebotsSim(): boolean {
     return GUISTATE.gui.webotsSim == true;
 }
 
-function getWebotsUrl() {
+export function getWebotsUrl() {
     return GUISTATE.gui.webotsUrl;
 }
 
-function getListOfTutorials() {
+export function getListOfTutorials() {
     return GUISTATE.server.tutorial;
 }
 
-function getVendor() {
+export function getVendor() {
     return GUISTATE.gui.vendor;
 }
 
-function getSignature() {
+export function getSignature() {
     return GUISTATE.gui.signature;
 }
 
-function getCommandLine() {
+export function getCommandLine() {
     return GUISTATE.gui.commandLine;
 }
 
-function setPing(ping) {
+export function setPing(ping): void {
     GUISTATE.server.ping = ping;
 }
 
-function doPing() {
+export function doPing() {
     return GUISTATE.server.ping;
 }
 
-function setPingTime(time) {
+export function setPingTime(time): void {
     GUISTATE.server.pingTime = time;
 }
 
-function getPingTime() {
+export function getPingTime() {
     return GUISTATE.server.pingTime;
 }
 
-function getAvailableHelp() {
+export function getAvailableHelp() {
     return GUISTATE.server.help;
 }
 
-function getTheme() {
+export function getTheme() {
     return GUISTATE.server.theme;
 }
 
-function inWebview() {
+export function inWebview() {
     return GUISTATE.gui.webview || false;
 }
 
-function setWebview(webview) {
+export function setWebview(webview): void {
     GUISTATE.gui.webview = webview;
 }
 
-function updateMenuStatus(numOfConnections) {
+export function updateMenuStatus(numOfConnections: any): void {
     CONNECTION_C.getConnectionInstance().updateMenuStatus(numOfConnections);
 }
 
-function updateTutorialMenu() {
+export function updateTutorialMenu(): void {
     $('#head-navigation-tutorial').hide();
-    var tutorialList = getListOfTutorials();
-    for (var tutorial in tutorialList) {
+    let tutorialList = getListOfTutorials();
+    for (let tutorial in tutorialList) {
         if (tutorialList.hasOwnProperty(tutorial) && tutorialList[tutorial].language === getLanguage().toUpperCase()) {
             $('#head-navigation-tutorial').show();
             break;
@@ -1131,127 +1143,6 @@ function updateTutorialMenu() {
     }
 }
 
-function getLegalTextsMap() {
+export function getLegalTextsMap() {
     return GUISTATE.server.legalTexts;
 }
-export {
-    init,
-    setInitialState,
-    isProgramStandard,
-    isProgramWritable,
-    isConfigurationStandard,
-    getConfigurationStandardName,
-    isConfigurationAnonymous,
-    isKioskMode,
-    setState,
-    getBlocklyWorkspace,
-    setBlocklyWorkspace,
-    getBricklyWorkspace,
-    setBricklyWorkspace,
-    setRobot,
-    setKioskMode,
-    findGroup,
-    findRobot,
-    setConnectionState,
-    isRunEnabled,
-    setRunEnabled,
-    getRobot,
-    getRobotGroup,
-    setRobotPort,
-    getRobotPort,
-    getRobotRealName,
-    getMenuRobotRealName,
-    isRobotBeta,
-    getRobotInfoDE,
-    getRobotInfoEN,
-    isRobotConnected,
-    isConfigurationUsed,
-    isRobotDisconnected,
-    getRobotTime,
-    getRobotName,
-    getRobotBattery,
-    getRobotState,
-    getRobotVersion,
-    hasRobotDefaultFirmware,
-    setView,
-    getView,
-    getPrevView,
-    setLanguage,
-    getLanguage,
-    isProgramSaved,
-    setProgramSaved,
-    isConfigurationSaved,
-    setConfigurationSaved,
-    getProgramShared,
-    setProgramSource,
-    getProgramSource,
-    getSourceCodeFileExtension,
-    getBinaryFileExtension,
-    isUserLoggedIn,
-    getProgramTimestamp,
-    setProgramTimestamp,
-    getProgramName,
-    setProgramName,
-    getProgramOwnerName,
-    setProgramOwnerName,
-    getProgramAuthorName,
-    setProgramAuthorName,
-    getProgramShareRelation,
-    setProgramShareRelation,
-    getConfigurationName,
-    setConfigurationName,
-    setConfigurationNameDefault,
-    setProgramToolboxLevel,
-    getProgramToolboxLevel,
-    getToolbox,
-    getConfToolbox,
-    getRobotFWName,
-    setRobotToken,
-    setRobotUrl,
-    setConfigurationXML,
-    getConfigurationXML,
-    setProgramXML,
-    getProgramXML,
-    getRobots,
-    getProgramToolbox,
-    getConfigurationToolbox,
-    getProgramProg,
-    getConfigurationConf,
-    getStartWithoutPopup,
-    setStartWithoutPopup,
-    getServerVersion,
-    isPublicServerVersion,
-    getUserName,
-    getUserAccountName,
-    isUserAccountActivated,
-    isUserMemberOfUserGroup,
-    getUserUserGroup,
-    getUserUserGroupOwner,
-    setLogin,
-    setLogout,
-    setProgram,
-    setConfiguration,
-    checkSim,
-    hasSim,
-    hasMultiSim,
-    hasMarkerSim,
-    hasWebotsSim,
-    getWebotsUrl,
-    getListOfTutorials,
-    getVendor,
-    getSignature,
-    getCommandLine,
-    setPing,
-    doPing,
-    setPingTime,
-    getPingTime,
-    getAvailableHelp,
-    getTheme,
-    inWebview,
-    setWebview,
-    updateMenuStatus,
-    updateTutorialMenu,
-    getLegalTextsMap,
-    setExtensions,
-    hasExtension,
-};

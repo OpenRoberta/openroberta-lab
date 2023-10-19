@@ -1,3 +1,1132 @@
-define(["require","exports","util.roberta","message","guiState.model","progHelp.controller","legal.controller","webview.controller","confVisualization","jquery","blockly","notification.controller","connection.controller","program.controller","configuration.controller","user.controller","nn.controller","progList.controller","confList.controller","galleryList.controller","tutorialList.controller","logList.controller","progInfo.controller","aceEditor"],(function(e,o,r,t,n,a,i,s,u,l,g,c,d,m,b,p,f,v,C,h,P,y,k,S){function N(e){var o=!1;for(var r in n.robot.extentions)r===e&&(o=!0);return o}function R(){return"NEPOprog"==n.program.name}function w(){return"WRITE"==n.program.shared||"READ"!=n.program.shared}function T(){return n.configuration.name==O().toUpperCase()+"basis"}function x(){return O().toUpperCase()+"basis"}function E(){return""==n.configuration.name}function L(e){e.serverVersion&&(n.server.version=e.serverVersion,l(".labReleaseVersion").text(n.server.version)),e.robotVersion&&(n.robot.version=e.robotVersion),null!=e.robotFirmwareName?n.robot.fWName=e.robotFirmwareName:n.robot.fWName="",null!=e.robotWait?n.robot.time=e.robotWait:n.robot.time=-1,null!=e.robotBattery?n.robot.battery=e.robotBattery:n.robot.battery="",null!=e.robotName?n.robot.name=e.robotName:n.robot.name="",null!=e.robotState?n.robot.state=e.robotState:n.robot.state="",null!=e.robotSensorvalues?n.robot.sensorValues=e.robotSensorvalues:n.robot.sensorValues="",null!=e.robotNepoexitvalue&&e.robotNepoexitvalue!==n.robot.nepoExitValue&&(n.nepoExitValue=e.robotNepoexitvalue,143!==n.nepoExitValue&&0!==n.robot.nepoExitValue&&t.displayMessage("POPUP_PROGRAM_TERMINATED_UNEXPECTED","POPUP","")),n.user.accountName?(l("#iconDisplayLogin").removeClass("error"),l("#iconDisplayLogin").addClass("ok")):(l("#iconDisplayLogin").removeClass("ok"),l("#iconDisplayLogin").addClass("error")),null!=d.getConnectionInstance()&&void 0!==d.getConnectionInstance()&&d.getConnectionInstance().setState()}function W(){return n.gui.blocklyWorkspace}function D(){return n.gui.bricklyWorkspace}function M(e){var o=re();for(var r in o)if(o[r].name==e&&""!==o[r].group)return e=o[r].group;return e}function U(e){n.gui.runEnabled=e,e?(n.gui.blocklyWorkspace&&n.gui.blocklyWorkspace.robControls.enable("runOnBrick"),n.gui.blocklyWorkspace&&n.gui.blocklyWorkspace.robControls.enable("stopProgram"),l(".menuRunProg, #runSourceCodeEditor").removeClass("disabled")):(n.gui.blocklyWorkspace&&n.gui.blocklyWorkspace.robControls.disable("runOnBrick"),n.gui.blocklyWorkspace&&n.gui.blocklyWorkspace.robControls.disable("stopProgram"),l(".menuRunProg, #runSourceCodeEditor").addClass("disabled"))}function A(){return n.gui.robot}function O(){return n.gui.robotGroup}function V(){for(var e in re())if(re().hasOwnProperty(e)&&re()[e].name==A())return re()[e].realName;return A()}function B(e){return"deprecated"==te()[e].announcement}function G(){return!!d.getConnectionInstance()&&d.getConnectionInstance().isRobotConnected()}function I(){return n.gui.configurationUsed}function F(){return n.gui.view}function _(){return n.gui.prevView}function H(){return n.gui.language}function X(e){e?(l("#menuSaveProg").parent().removeClass("disabled"),l("#menuSaveProg").parent().addClass("disabled"),W().robControls.disable("saveProgram")):K()&&!R()&&w()?(l("#menuSaveProg").parent().removeClass("disabled"),W().robControls.enable("saveProgram")):(l("#menuSaveProg").parent().removeClass("disabled"),l("#menuSaveProg").parent().addClass("disabled"),W().robControls.disable("saveProgram")),n.program.saved=e}function j(e){e||!K()||T()||E()?(l("#menuSaveConfig").parent().removeClass("disabled"),l("#menuSaveConfig").parent().addClass("disabled"),D().robControls.disable("saveProgram")):(l("#menuSaveConfig").parent().removeClass("disabled"),D().robControls.enable("saveProgram")),n.configuration.saved=e}function z(){return n.gui.sourceCodeFileExtension}function K(){return n.user.id>=0}function $(e){var o=e;if(Z()&&"NONE"!==Z()&&q()!==ne()){var r=q(),t=Q(),a=Z(),i="",s="",u="";"Gallery"===r?(i="th-large-outline","READ"===a&&(s=t)):"Roberta"===r?i="roberta":"WRITE"==a?(i="pencil",u='<span style="color:#33B8CA;">'+r+"</span>"):"READ"==a&&(i="eye",u='<span style="color:#33B8CA;">'+r+"</span>"),o+=' <b><span style="color:#33B8CA;" class="typcn typcn-'+i+' progName">'+s+"</span></b>"+u}l("#tabProgramName").html(o),n.program.name=e}function q(){return n.program.owner||ne()}function J(e){n.program.owner=e}function Q(){return n.program.author||ne()}function Y(e){n.program.author=e}function Z(){return n.program.shared}function ee(e){n.program.shared=e}function oe(e){l("#tabConfigurationName").html(e),n.configuration.name=e}function re(){return n.server.robots}function te(){return n.server.robotsByName}function ne(){return n.user.accountName}function ae(){return""!=n.user.userGroup}function ie(){se()?(le()?l("#simMarkerObject").parent().css("display","inline-block"):l("#simMarkerObject").parent().css("display","none"),l("#menuRunSim").parent().removeClass("disabled"),l("#simButton, #simDebugButton").show()):(l("#menuRunSim").parent().addClass("disabled"),l("#simButton, #simDebugButton").hide()),ge()&&l("#simDebugButton").hide(),ue()?(l("#menuRunMulipleSim").parent().removeClass("unavailable"),l("#menuRunMulipleSim").parent().addClass("available"),l("#menuRunMulipleSim").parent().removeClass("disabled")):(l("#menuRunMulipleSim").parent().addClass("unavailable"),l("#menuRunMulipleSim").parent().removeClass("available"),l("#menuRunMulipleSim").parent().addClass("disabled"))}function se(){return 1==n.gui.sim}function ue(){return 1==n.gui.multipleSim}function le(){return 1==n.gui.markerSim}function ge(){return 1==n.gui.webotsSim}function ce(){return n.server.tutorial}function de(){return n.gui.webview||!1}function me(){l("#head-navigation-tutorial").hide();var e=ce();for(var o in e)if(e.hasOwnProperty(o)&&e[o].language===H().toUpperCase()){l("#head-navigation-tutorial").show();break}}Object.defineProperty(o,"__esModule",{value:!0}),o.hasExtension=o.setExtensions=o.getLegalTextsMap=o.updateTutorialMenu=o.updateMenuStatus=o.setWebview=o.inWebview=o.getTheme=o.getAvailableHelp=o.getPingTime=o.setPingTime=o.doPing=o.setPing=o.getCommandLine=o.getSignature=o.getVendor=o.getListOfTutorials=o.getWebotsUrl=o.hasWebotsSim=o.hasMarkerSim=o.hasMultiSim=o.hasSim=o.checkSim=o.setConfiguration=o.setProgram=o.setLogout=o.setLogin=o.getUserUserGroupOwner=o.getUserUserGroup=o.isUserMemberOfUserGroup=o.isUserAccountActivated=o.getUserAccountName=o.getUserName=o.isPublicServerVersion=o.getServerVersion=o.setStartWithoutPopup=o.getStartWithoutPopup=o.getConfigurationConf=o.getProgramProg=o.getConfigurationToolbox=o.getProgramToolbox=o.getRobots=o.getProgramXML=o.setProgramXML=o.getConfigurationXML=o.setConfigurationXML=o.setRobotUrl=o.setRobotToken=o.getRobotFWName=o.getConfToolbox=o.getToolbox=o.getProgramToolboxLevel=o.setProgramToolboxLevel=o.setConfigurationNameDefault=o.setConfigurationName=o.getConfigurationName=o.setProgramShareRelation=o.getProgramShareRelation=o.setProgramAuthorName=o.getProgramAuthorName=o.setProgramOwnerName=o.getProgramOwnerName=o.setProgramName=o.getProgramName=o.setProgramTimestamp=o.getProgramTimestamp=o.isUserLoggedIn=o.getBinaryFileExtension=o.getSourceCodeFileExtension=o.getProgramSource=o.setProgramSource=o.getProgramShared=o.setConfigurationSaved=o.isConfigurationSaved=o.setProgramSaved=o.isProgramSaved=o.getLanguage=o.setLanguage=o.getPrevView=o.getView=o.setView=o.hasRobotDefaultFirmware=o.getRobotVersion=o.getRobotState=o.getRobotBattery=o.getRobotName=o.getRobotTime=o.isRobotDisconnected=o.isConfigurationUsed=o.isRobotConnected=o.getRobotInfoEN=o.getRobotInfoDE=o.isRobotBeta=o.getMenuRobotRealName=o.getRobotRealName=o.getRobotPort=o.setRobotPort=o.getRobotGroup=o.getRobot=o.setRunEnabled=o.isRunEnabled=o.setConnectionState=o.findRobot=o.findGroup=o.setKioskMode=o.setRobot=o.setBricklyWorkspace=o.getBricklyWorkspace=o.setBlocklyWorkspace=o.getBlocklyWorkspace=o.setState=o.isKioskMode=o.isConfigurationAnonymous=o.getConfigurationStandardName=o.isConfigurationStandard=o.isProgramWritable=o.isProgramStandard=o.setInitialState=o.init=o.getPluginSim=o.resetDynamicProgramToolbox=o.setDynamicProgramToolbox=o.getRobotDeprecatedData=o.isRobotDeprecated=o.resetRobot=o.getExtensions=o.SHORT=o.LONG=void 0,o.LONG=3e5,o.SHORT=3e3,o.init=function(e,o){var r=l.Deferred();return l.when(n.init()).then((function(){if(n.gui.webview=o||!1,n.gui.webview&&l(".logo").css({right:"32px"}),n.gui.view="start",n.gui.prevView="start",n.gui.language=e,n.gui.startWithoutPopup=!1,n.user.id=-1,n.user.accountName="",n.user.name="",n.robot.name="",n.robot.robotPort="",n.program.toolbox.level="beginner",J(null),Y(null),ee(null),$("NEPOprog"),"default"!==n.server.theme){var t="../theme/"+n.server.theme+".json";l.getJSON(t).done((function(e){n.server.theme=e})).fail((function(e,o){console.error('"'+t+'" is not a valid json file! The reason is probably a',o),n.server.theme="default"}))}r.resolve()})),r.promise()},o.setInitialState=function(){l(".level").removeClass("disabled"),l(".level."+n.program.toolbox.level).addClass("disabled"),"tabProgram"===n.gui.view||"start"===n.gui.view?(l("#head-navigation-configuration-edit").css("display","none"),n.gui.blocklyWorkspace.markFocused()):"tabConfiguration"===n.gui.view&&(l("#head-navigation-program-edit").css("display","none"),n.gui.bricklyWorkspace.markFocused()),l("#menu-"+n.gui.robot).parent().addClass("disabled"),me()},o.setExtensions=function(e){n.robot.extentions=e},o.getExtensions=function(){return n.robot.extentions},o.hasExtension=N,o.isProgramStandard=R,o.isProgramWritable=w,o.isConfigurationStandard=T,o.getConfigurationStandardName=x,o.isConfigurationAnonymous=E,o.isKioskMode=function(){return n.kiosk&&!0===n.kiosk},o.setState=L,o.getBlocklyWorkspace=W,o.setBlocklyWorkspace=function(e){n.gui.blocklyWorkspace=e},o.getBricklyWorkspace=D,o.setBricklyWorkspace=function(e){n.gui.bricklyWorkspace=e},o.setRobot=function(e,o,t){var i=M(e);n.gui.program=o.program,n.gui.configuration=o.configuration,n.gui.sim=o.sim,n.gui.multipleSim=o.multipleSim,n.gui.markerSim=o.markerSim,n.gui.pluginSim=o.pluginSim,n.gui.nnActivations=o.nnActivations,n.gui.webotsSim=o.webotsSim,n.gui.webotsUrl=o.webotsUrl,n.gui.vendor=o.vendor,n.gui.signature=o.signature,n.gui.commandLine=o.commandLine,n.gui.configurationUsed=o.configurationUsed,n.gui.sourceCodeFileExtension=o.sourceCodeFileExtension,n.gui.binaryFileExtension=o.binaryFileExtension,n.gui.firmwareDefault=o.firmwareDefault,l("#blocklyDiv, #bricklyDiv").css("background","url(../../../../css/img/"+i+"Background.jpg) repeat"),l("#blocklyDiv, #bricklyDiv").css("background-size","100%"),l("#blocklyDiv, #bricklyDiv").css("background-position","initial"),I()?u.CircuitVisualization.isRobotVisualized(i,e)&&(l("#bricklyDiv").css("background",""),l("#bricklyDiv").css("background-position",""),l("#bricklyDiv").css("background-size","")):(l("#bricklyDiv").css("background","url(../../../../css/img/"+i+"BackgroundConf.svg) no-repeat"),l("#bricklyDiv").css("background-position","center"),l("#bricklyDiv").css("background-size","75% auto")),l(".robotType").removeClass("disabled"),l(".robotType."+e).addClass("disabled"),l("#head-navi-icon-robot").removeClass("typcn-open"),l("#head-navi-icon-robot").removeClass("typcn-"+n.gui.robotGroup),l("#head-navi-icon-robot").addClass("typcn-"+i),l(".simWindow").removeClass("simWindow-openedButHidden"),ie(),J(null),Y(null),ee(null),t?(oe(i.toUpperCase()+"basis"),$("NEPOprog")):(X(!0),j(!0),M(e)!=O()&&(oe(i.toUpperCase()+"basis"),$("NEPOprog"))),l("#simRobot").removeClass("typcn-"+n.gui.robotGroup),l("#simRobot").addClass("typcn-"+i);var c=!1;M(e)!=O()&&(c=!0),void 0===n.gui.firmwareDefault?l("#robotDefaultFirmware").addClass("hidden"):l("#robotDefaultFirmware").removeClass("hidden"),n.gui.robot=e,n.gui.robotGroup=i;var d=g.Msg.MENU_START_BRICK;d.indexOf("$")>=0&&(d=d.replace("$",V())),l("#menuRunProg").html(d),n.gui.blocklyWorkspace&&n.gui.blocklyWorkspace.robControls.refreshTooltips(V()),c&&(a.initView(),de()&&(s.setRobotBehaviour(),s.jsToAppInterface({target:"internal",type:"setRobot",robot:i}))),N("nn")?(l("#nn-activations").empty(),l(".tabLinkNN").show(),l.each(n.gui.nnActivations,(function(e,o){l("#nn-activations").append(l("<option>",{value:o,text:r.activationDisplayName[o]}))}))):l(".tabLinkNN").hide(),r.clearTabAlert("tabConfiguration"),S.setCodeLanguage(z())},o.resetRobot=function(){n.gui.robot=void 0},o.setKioskMode=function(e){n.kiosk=e},o.findGroup=M,o.findRobot=function(e){var o,r=re();for(o in r)if(r[o].group===e)return r[o].name;return null},o.setConnectionState=function e(o){switch(o){case"busy":l("#head-navi-icon-robot").removeClass("error"),l("#head-navi-icon-robot").removeClass("wait"),l("#head-navi-icon-robot").addClass("busy"),U(!1);break;case"error":l("#head-navi-icon-robot").removeClass("busy"),l("#head-navi-icon-robot").removeClass("wait"),l("#head-navi-icon-robot").addClass("error"),U(!1);break;case"wait":G()?(l("#head-navi-icon-robot").removeClass("busy"),l("#head-navi-icon-robot").removeClass("error"),l("#head-navi-icon-robot").addClass("wait"),U(!0)):e("error")}},o.isRunEnabled=function(){return n.gui.runEnabled},o.setRunEnabled=U,o.getRobot=A,o.getRobotGroup=O,o.setRobotPort=function(e){n.robot.robotPort=e},o.getRobotPort=function(){return n.robot.robotPort},o.getRobotRealName=V,o.getMenuRobotRealName=function(e){for(var o in re())if(re().hasOwnProperty(o)&&re()[o].name==e)return re()[o].realName;return"Robot not found"},o.isRobotBeta=function(e){return"beta"==te()[e].announcement},o.isRobotDeprecated=B,o.getRobotDeprecatedData=function(e){if(B(e))return c.getDeprecatedNotifications(e,H())},o.getRobotInfoDE=function(e){for(var o in re())if(re().hasOwnProperty(o)&&re()[o].name==e)return re()[o].infoDE;return"#"},o.getRobotInfoEN=function(e){for(var o in re())if(re().hasOwnProperty(o)&&re()[o].name==e)return re()[o].infoEN;return"#"},o.isRobotConnected=G,o.isConfigurationUsed=I,o.isRobotDisconnected=function(){return n.robot.time=-1},o.getRobotTime=function(){return n.robot.time},o.getRobotName=function(){return n.robot.name},o.getRobotBattery=function(){return n.robot.battery},o.getRobotState=function(){return n.robot.state},o.getRobotVersion=function(){return n.robot.version},o.hasRobotDefaultFirmware=function(){return n.gui.firmwareDefault},o.setView=function(e){n.gui.view!==e&&(l("#head-navi-tooltip-program").attr("data-bs-toggle","dropdown"),l("#head-navi-tooltip-configuration").attr("data-bs-toggle","dropdown"),l("#head-navi-tooltip-robot").attr("data-bs-toggle","dropdown"),l("#head-navigation-program-edit").removeClass("disabled"),l(".robotType").removeClass("disabled"),l("#head-navigation-configuration-edit").removeClass("disabled"),n.gui.prevView=n.gui.view,n.gui.view=e,G()||(U(!1),l("#runSourceCodeEditor").addClass("disabled")),l(".rightMenuButton.rightActive").length>0&&l(".rightMenuButton.rightActive").clickWrap(),"tabConfiguration"===e?(l("#head-navigation-program-edit").css("display","none"),l("#head-navigation-configuration-edit").css("display","inline"),r.clearTabAlert(e)):"tabProgram"===e||"tabNN"===e||"tabNNlearn"===e?(l("#head-navigation-configuration-edit").css("display","none"),l("#head-navigation-program-edit").css("display","inline")):"tabSourceCodeEditor"===e?(l("#head-navigation-configuration-edit").css("display","none"),l("#head-navigation-program-edit").css("display","inline"),l("#head-navigation-program-edit").addClass("disabled"),l(".robotType").addClass("disabled"),l("#head-navi-tooltip-program").attr("data-bs-toggle",""),l("#head-navi-tooltip-configuration").attr("data-bs-toggle","")):(l("#head-navi-tooltip-program").attr("data-bs-toggle",""),l("#head-navi-tooltip-configuration").attr("data-bs-toggle",""),l("#head-navigation-program-edit").addClass("disabled"),l("#head-navigation-configuration-edit").addClass("disabled")))},o.getView=F,o.getPrevView=_,o.setLanguage=function(e){if(l("#language li a[lang="+e+"]").parent().addClass("disabled"),l("#language li a[lang="+n.gui.language+"]").parent().removeClass("disabled"),"de"===e?(l(".EN").css("display","none"),l(".DE").css("display","inline"),l("li>a.DE").css("display","block")):(l(".DE").css("display","none"),l(".EN").css("display","inline"),l("li>a.EN").css("display","block")),n.gui.language=e,a.initView(),i.loadLegalTexts(),p.initValidationMessages(),c.reloadNotifications(),"tabStart"!==F()){m.reloadView(),b.reloadView(),(0,v.switchLanguage)(),(0,C.switchLanguage)(),(0,h.switchLanguage)(),(0,P.switchLanguage)(),(0,y.switchLanguage)(),(0,k.switchLanguage)(),f.reloadViews();var o=g.Msg.MENU_START_BRICK;o.indexOf("$")>=0&&(o=o.replace("$",V())),l("#menuRunProg").text(o),W()&&W().robControls.refreshTooltips(V()),l("#infoContent").attr("data-placeholder",g.Msg.INFO_DOCUMENTATION_HINT||"Document your program here ..."),l(".bootstrap-tagsinput input").attr("placeholder",g.Msg.INFO_TAGS||"Tags"),me()}},o.getLanguage=H,o.isProgramSaved=function(){return n.program.saved},o.setProgramSaved=X,o.isConfigurationSaved=function(){return n.configuration.saved},o.setConfigurationSaved=j,o.getProgramShared=function(){return n.program.shared},o.setProgramSource=function(e){n.program.source=e},o.getProgramSource=function(){return n.program.source},o.getSourceCodeFileExtension=z,o.getBinaryFileExtension=function(){return n.gui.binaryFileExtension},o.isUserLoggedIn=K,o.getProgramTimestamp=function(){return n.program.timestamp},o.setProgramTimestamp=function(e){n.program.timestamp=e},o.getProgramName=function(){return n.program.name},o.setProgramName=$,o.getProgramOwnerName=q,o.setProgramOwnerName=J,o.getProgramAuthorName=Q,o.setProgramAuthorName=Y,o.getProgramShareRelation=Z,o.setProgramShareRelation=ee,o.getConfigurationName=function(){return n.configuration.name},o.setConfigurationName=oe,o.setConfigurationNameDefault=function(){oe(x())},o.setProgramToolboxLevel=function(e){l(".level").removeClass("disabled"),l(".level."+e).addClass("disabled"),n.program.toolbox.level=e},o.getProgramToolboxLevel=function(){return n.program.toolbox.level},o.getToolbox=function(e){return n.gui.program.toolbox[e]},o.getConfToolbox=function(){return n.conf.toolbox},o.getRobotFWName=function(){return n.robot.fWName},o.setRobotToken=function(e){n.robot.token=e},o.setRobotUrl=function(e){n.robot.url=e},o.setConfigurationXML=function(e){n.configuration.xml=e},o.getConfigurationXML=function(){return n.configuration.xml},o.setProgramXML=function(e){n.program.xml=e},o.getProgramXML=function(){return n.program.xml},o.getRobots=re,o.getProgramToolbox=function(){return n.gui.program.dynamicToolbox?n.gui.program.dynamicToolbox:n.gui.program.toolbox[n.program.toolbox.level]},o.setDynamicProgramToolbox=function(e){n.gui.program.dynamicToolbox=e},o.resetDynamicProgramToolbox=function(){delete n.gui.program.dynamicToolbox},o.getConfigurationToolbox=function(){return n.gui.configuration.toolbox},o.getProgramProg=function(){return n.gui.program.prog},o.getConfigurationConf=function(){return n.gui.configuration.conf},o.getStartWithoutPopup=function(){return n.gui.startWithoutPopup},o.setStartWithoutPopup=function(){return n.gui.startWithoutPopup=!0},o.getServerVersion=function(){return n.server.version},o.isPublicServerVersion=function(){return n.server.isPublic},o.getUserName=function(){return n.user.name},o.getUserAccountName=ne,o.isUserAccountActivated=function(){return n.user.isAccountActivated},o.isUserMemberOfUserGroup=ae,o.getUserUserGroup=function(){return n.user.userGroup},o.getUserUserGroupOwner=function(){return n.user.userGroupOwner},o.setLogin=function(e){L(e),n.user.accountName=e.userAccountName,void 0===e.userName||""===e.userName?n.user.name=e.userAccountName:n.user.name=e.userName,n.user.id=e.userId,n.user.isAccountActivated=e.isAccountActivated,n.user.userGroup=e.userGroupName,n.user.userGroupOwner=e.userGroupOwner,l(".navbar-nav > li > ul > .login, .logout").removeClass("disabled"),l(".navbar-nav > li > ul > .login.unavailable").addClass("disabled"),l(".navbar-nav > li > ul > .logout").addClass("disabled"),l("#head-navi-icon-user").removeClass("error"),l("#head-navi-icon-user").addClass("ok"),l(".menuLogin").addClass("pe-none"),l("#menuSaveProg").parent().addClass("disabled"),l("#menuSaveConfig").parent().addClass("disabled"),A()&&(X(!0),j(!0),"tabGalleryList"==n.gui.view&&l("#galleryList").find('button[name="refresh"]').clickWrap()),ae()&&(l("#registerUserName, #registerUserEmail").prop("disabled",!0),l("#userGroupMemberDefaultPasswordHint").removeClass("hidden"))},o.setLogout=function(){ae()&&(l("#registerUserName, #registerUserEmail").prop("disabled",!1),l("#userGroupMemberDefaultPasswordHint").addClass("hidden")),n.user.id=-1,n.user.accountName="",n.user.name="",n.user.userGroup="",n.user.userGroupOwner="","tabUserGroupList"===F()&&l("#"+_()).tabWrapShow(),$("NEPOprog"),J(null),Y(null),ee(null),n.program.shared=!1,l(".navbar-nav > li > ul > .logout, .login").removeClass("disabled"),l(".navbar-nav > li > ul > .login").addClass("disabled"),l("#head-navi-icon-user").removeClass("ok"),l("#head-navi-icon-user").addClass("error"),"tabProgList"==n.gui.view?l("#tabProgram").tabWrapShow():"tabConfList"==n.gui.view?l("#tabConfiguration").clickWrap():"tabGalleryList"==n.gui.view&&l("#galleryList").find('button[name="refresh"]').clickWrap(),l(".menuLogin").removeClass("pe-none")},o.setProgram=function(e,o,r){if(e){n.program.shared=e.programShared,n.program.timestamp=e.lastChanged,X(!0),j(!0);e.name;ee(e.programShared),o?J(o):e.parameters&&e.parameters.OWNER_NAME?J(e.parameters.OWNER_NAME):J(null),r?Y(r):e.parameters&&e.parameters.AUTHOR_NAME?Y(e.parameters.AUTHOR_NAME):J(null),$(e.name)}},o.setConfiguration=function(e){e&&(oe(e.name),n.configuration.timestamp=e.lastChanged,j(!0),X(!1),l("#tabConfigurationName").html(e.name))},o.checkSim=ie,o.hasSim=se,o.hasMultiSim=ue,o.hasMarkerSim=le,o.getPluginSim=function(){return n.gui.pluginSim||null},o.hasWebotsSim=ge,o.getWebotsUrl=function(){return n.gui.webotsUrl},o.getListOfTutorials=ce,o.getVendor=function(){return n.gui.vendor},o.getSignature=function(){return n.gui.signature},o.getCommandLine=function(){return n.gui.commandLine},o.setPing=function(e){n.server.ping=e},o.doPing=function(){return n.server.ping},o.setPingTime=function(e){n.server.pingTime=e},o.getPingTime=function(){return n.server.pingTime},o.getAvailableHelp=function(){return n.server.help},o.getTheme=function(){return n.server.theme},o.inWebview=de,o.setWebview=function(e){n.gui.webview=e},o.updateMenuStatus=function(e){d.getConnectionInstance().updateMenuStatus(e)},o.updateTutorialMenu=me,o.getLegalTextsMap=function(){return n.server.legalTexts}}));
-//# sourceMappingURL=guiState.controller.js.map
-//# sourceMappingURL=guiState.controller.js.map
+define(["require", "exports", "util.roberta", "message", "guiState.model", "progHelp.controller", "legal.controller", "webview.controller", "confVisualization", "jquery", "blockly", "notification.controller", "connection.controller", "program.controller", "configuration.controller", "user.controller", "nn.controller", "progList.controller", "confList.controller", "galleryList.controller", "tutorialList.controller", "logList.controller", "progInfo.controller", "aceEditor"], function (require, exports, UTIL, MSG, GUISTATE, HELP_C, LEGAL_C, WEBVIEW_C, CV, $, Blockly, NOTIFICATION_C, CONNECTION_C, PROGRAM_C, CONFIGURATION_C, USER_C, NN_C, progList_controller_1, confList_controller_1, galleryList_controller_1, tutorialList_controller_1, logList_controller_1, progInfo_controller_1, ACE_EDITOR) {
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.getLegalTextsMap = exports.updateTutorialMenu = exports.updateMenuStatus = exports.setWebview = exports.inWebview = exports.getTheme = exports.getAvailableHelp = exports.getPingTime = exports.setPingTime = exports.doPing = exports.setPing = exports.getCommandLine = exports.getSignature = exports.getVendor = exports.getListOfTutorials = exports.getWebotsUrl = exports.hasWebotsSim = exports.getPluginSim = exports.hasMarkerSim = exports.hasMultiSim = exports.hasSim = exports.checkSim = exports.setConfiguration = exports.setProgram = exports.setLogout = exports.setLogin = exports.getUserUserGroupOwner = exports.getUserUserGroup = exports.isUserMemberOfUserGroup = exports.isUserAccountActivated = exports.getUserAccountName = exports.getUserName = exports.isPublicServerVersion = exports.getServerVersion = exports.setStartWithoutPopup = exports.getStartWithoutPopup = exports.getConfigurationConf = exports.getProgramProg = exports.getConfigurationToolbox = exports.resetDynamicProgramToolbox = exports.setDynamicProgramToolbox = exports.getProgramToolbox = exports.getRobots = exports.getProgramXML = exports.setProgramXML = exports.getConfigurationXML = exports.setConfigurationXML = exports.setRobotUrl = exports.setRobotToken = exports.getRobotFWName = exports.getConfToolbox = exports.getToolbox = exports.getProgramToolboxLevel = exports.setProgramToolboxLevel = exports.setConfigurationNameDefault = exports.setConfigurationName = exports.getConfigurationName = exports.setProgramShareRelation = exports.getProgramShareRelation = exports.setProgramAuthorName = exports.getProgramAuthorName = exports.setProgramOwnerName = exports.getProgramOwnerName = exports.setProgramName = exports.getProgramName = exports.setProgramTimestamp = exports.getProgramTimestamp = exports.isUserLoggedIn = exports.getBinaryFileExtension = exports.getSourceCodeFileExtension = exports.getProgramSource = exports.setProgramSource = exports.getProgramShared = exports.setConfigurationSaved = exports.isConfigurationSaved = exports.setProgramSaved = exports.isProgramSaved = exports.getLanguage = exports.setLanguage = exports.getPrevView = exports.getView = exports.setView = exports.hasRobotDefaultFirmware = exports.getRobotVersion = exports.getRobotState = exports.getRobotBattery = exports.getRobotName = exports.getRobotTime = exports.isRobotDisconnected = exports.isConfigurationUsed = exports.isRobotConnected = exports.getRobotInfoEN = exports.getRobotInfoDE = exports.getRobotDeprecatedData = exports.isRobotDeprecated = exports.isRobotBeta = exports.getMenuRobotRealName = exports.getRobotRealName = exports.getRobotPort = exports.setRobotPort = exports.getRobotGroup = exports.getRobot = exports.setRunEnabled = exports.isRunEnabled = exports.setConnectionState = exports.findRobot = exports.findGroup = exports.setKioskMode = exports.resetRobot = exports.setRobot = exports.setBricklyWorkspace = exports.setBlocklyWorkspace = exports.getBlocklyWorkspace = exports.setState = exports.isKioskMode = exports.isConfigurationAnonymous = exports.getConfigurationStandardName = exports.isConfigurationStandard = exports.isProgramWritable = exports.isProgramStandard = exports.hasExtension = exports.getExtensions = exports.setExtensions = exports.setInitialState = exports.init = exports.SHORT = exports.LONG = void 0;
+    exports.LONG = 300000; // Ping time 5min
+    exports.SHORT = 3000; // Ping time 3sec
+    /**
+     * Init robot
+     */
+    function init(language, opt_data) {
+        var ready = $.Deferred();
+        $.when(GUISTATE.init()).then(function () {
+            GUISTATE.gui.webview = opt_data || false;
+            if (GUISTATE.gui.webview) {
+                $('.logo').css({
+                    right: '32px'
+                });
+            }
+            GUISTATE.gui.view = 'tabProgram';
+            GUISTATE.gui.prevView = 'tabProgram';
+            GUISTATE.gui.language = language;
+            GUISTATE.gui.startWithoutPopup = false;
+            GUISTATE.user.id = -1;
+            GUISTATE.user.accountName = '';
+            GUISTATE.user.name = '';
+            GUISTATE.robot.name = '';
+            GUISTATE.robot.robotPort = '';
+            GUISTATE.program.toolbox.level = 'beginner';
+            setProgramOwnerName(null);
+            setProgramAuthorName(null);
+            setProgramShareRelation(null);
+            setProgramName('NEPOprog');
+            if (GUISTATE.server.theme !== 'default') {
+                var themePath_1 = '../theme/' + GUISTATE.server.theme + '.json';
+                $.getJSON(themePath_1)
+                    .done(function (data) {
+                    // store new theme properties (only colors so far)
+                    GUISTATE.server.theme = data;
+                })
+                    .fail(function (e, r) {
+                    // this should not happen
+                    console.error('"' + themePath_1 + '" is not a valid json file! The reason is probably a', r);
+                    GUISTATE.server.theme = 'default';
+                });
+            }
+            ready.resolve();
+        });
+        return ready.promise();
+    }
+    exports.init = init;
+    function setInitialState() {
+        // Toolbox?
+        $('.level').removeClass('disabled');
+        $('.level.' + GUISTATE.program.toolbox.level).addClass('disabled');
+        // View?
+        if (GUISTATE.gui.view === 'tabProgram' || GUISTATE.gui.view === 'start') {
+            $('#head-navigation-configuration-edit').css('display', 'none');
+            GUISTATE.gui.blocklyWorkspace.markFocused();
+        }
+        else if (GUISTATE.gui.view === 'tabConfiguration') {
+            $('#head-navigation-program-edit').css('display', 'none');
+            GUISTATE.gui.bricklyWorkspace.markFocused();
+        }
+        // Robot?
+        $('#menu-' + GUISTATE.gui.robot)
+            .parent()
+            .addClass('disabled');
+        // Tutorials?
+        updateTutorialMenu();
+    }
+    exports.setInitialState = setInitialState;
+    function setExtensions(extensions) {
+        GUISTATE.robot.extentions = extensions;
+    }
+    exports.setExtensions = setExtensions;
+    function getExtensions() {
+        return GUISTATE.robot.extentions;
+    }
+    exports.getExtensions = getExtensions;
+    function hasExtension(value) {
+        var hasExtension = false;
+        for (var extension in GUISTATE.robot.extentions) {
+            if (extension === value) {
+                hasExtension = true;
+            }
+        }
+        return hasExtension;
+    }
+    exports.hasExtension = hasExtension;
+    /**
+     * Check if a program is a standard program or not
+     *
+     */
+    function isProgramStandard() {
+        return GUISTATE.program.name == 'NEPOprog';
+    }
+    exports.isProgramStandard = isProgramStandard;
+    function isProgramWritable() {
+        if (GUISTATE.program.shared == 'WRITE') {
+            return true;
+        }
+        else if (GUISTATE.program.shared == 'READ') {
+            return false;
+        }
+        return true;
+    }
+    exports.isProgramWritable = isProgramWritable;
+    function isConfigurationStandard() {
+        return GUISTATE.configuration.name == getRobotGroup().toUpperCase() + 'basis';
+    }
+    exports.isConfigurationStandard = isConfigurationStandard;
+    function getConfigurationStandardName() {
+        return getRobotGroup().toUpperCase() + 'basis';
+    }
+    exports.getConfigurationStandardName = getConfigurationStandardName;
+    function isConfigurationAnonymous() {
+        return GUISTATE.configuration.name == '';
+    }
+    exports.isConfigurationAnonymous = isConfigurationAnonymous;
+    function isKioskMode() {
+        //@ts-ignore
+        return GUISTATE.kiosk && GUISTATE.kiosk === true;
+    }
+    exports.isKioskMode = isKioskMode;
+    function setState(result) {
+        if (result['serverVersion']) {
+            GUISTATE.server.version = result['serverVersion'];
+            $('.labReleaseVersion').text(GUISTATE.server.version);
+        }
+        if (result['robotVersion']) {
+            GUISTATE.robot.version = result['robotVersion'];
+        }
+        //if (getConnection() !== getConnectionTypeEnum().TDM) {
+        if (result['robotFirmwareName'] != undefined) {
+            GUISTATE.robot.fWName = result['robotFirmwareName'];
+        }
+        else {
+            GUISTATE.robot.fWName = '';
+        }
+        if (result['robotWait'] != undefined) {
+            GUISTATE.robot.time = result['robotWait'];
+        }
+        else {
+            GUISTATE.robot.time = -1;
+        }
+        if (result['robotBattery'] != undefined) {
+            GUISTATE.robot.battery = result['robotBattery'];
+        }
+        else {
+            GUISTATE.robot.battery = '';
+        }
+        if (result['robotName'] != undefined) {
+            GUISTATE.robot.name = result['robotName'];
+        }
+        else {
+            GUISTATE.robot.name = '';
+        }
+        if (result['robotState'] != undefined) {
+            GUISTATE.robot.state = result['robotState'];
+        }
+        else {
+            GUISTATE.robot.state = '';
+        }
+        //}
+        if (result['robotSensorvalues'] != undefined) {
+            GUISTATE.robot.sensorValues = result['robotSensorvalues'];
+        }
+        else {
+            GUISTATE.robot.sensorValues = '';
+        }
+        if (result['robotNepoexitvalue'] != undefined) {
+            //TODO: For different robots we have different error messages
+            if (result['robotNepoexitvalue'] !== GUISTATE.robot.nepoExitValue) {
+                GUISTATE.robot.nepoExitValue = result['robotNepoexitvalue'];
+                if (GUISTATE.robot.nepoExitValue !== 143 && GUISTATE.robot.nepoExitValue !== 0) {
+                    MSG.displayMessage('POPUP_PROGRAM_TERMINATED_UNEXPECTED', 'POPUP', '');
+                }
+            }
+        }
+        if (GUISTATE.user.accountName) {
+            $('#iconDisplayLogin').removeClass('error');
+            $('#iconDisplayLogin').addClass('ok');
+        }
+        else {
+            $('#iconDisplayLogin').removeClass('ok');
+            $('#iconDisplayLogin').addClass('error');
+        }
+        if (CONNECTION_C.getConnectionInstance() != null && CONNECTION_C.getConnectionInstance() !== undefined) {
+            CONNECTION_C.getConnectionInstance().setState();
+        }
+    }
+    exports.setState = setState;
+    function getBlocklyWorkspace() {
+        return GUISTATE.gui.blocklyWorkspace;
+    }
+    exports.getBlocklyWorkspace = getBlocklyWorkspace;
+    function setBlocklyWorkspace(workspace) {
+        GUISTATE.gui.blocklyWorkspace = workspace;
+    }
+    exports.setBlocklyWorkspace = setBlocklyWorkspace;
+    function getBricklyWorkspace() {
+        return GUISTATE.gui.bricklyWorkspace;
+    }
+    function setBricklyWorkspace(workspace) {
+        GUISTATE.gui.bricklyWorkspace = workspace;
+    }
+    exports.setBricklyWorkspace = setBricklyWorkspace;
+    function setRobot(robot, result, opt_init) {
+        // make sure we use the group instead of the specific robottype if the robot belongs to a group
+        var robotGroup = findGroup(robot);
+        GUISTATE.gui.program = result.program;
+        GUISTATE.gui.configuration = result.configuration;
+        GUISTATE.gui.sim = result.sim;
+        GUISTATE.gui.multipleSim = result.multipleSim;
+        GUISTATE.gui.markerSim = result.markerSim;
+        //@ts-ignore PluginSim is not a property of SetRobotResponse
+        GUISTATE.gui.pluginSim = result.pluginSim;
+        GUISTATE.gui.nnActivations = result.nnActivations;
+        GUISTATE.gui.webotsSim = result.webotsSim;
+        GUISTATE.gui.webotsUrl = result.webotsUrl;
+        GUISTATE.gui.vendor = result.vendor;
+        GUISTATE.gui.signature = result.signature;
+        GUISTATE.gui.commandLine = result.commandLine;
+        GUISTATE.gui.configurationUsed = result.configurationUsed;
+        GUISTATE.gui.sourceCodeFileExtension = result.sourceCodeFileExtension;
+        GUISTATE.gui.binaryFileExtension = result.binaryFileExtension;
+        GUISTATE.gui.firmwareDefault = result.firmwareDefault;
+        $('#blocklyDiv, #bricklyDiv').css('background', 'url(../../../../css/img/' + robotGroup + 'Background.jpg) repeat');
+        $('#blocklyDiv, #bricklyDiv').css('background-size', '100%');
+        $('#blocklyDiv, #bricklyDiv').css('background-position', 'initial');
+        if (!isConfigurationUsed()) {
+            $('#bricklyDiv').css('background', 'url(../../../../css/img/' + robotGroup + 'BackgroundConf.svg) no-repeat');
+            $('#bricklyDiv').css('background-position', 'center');
+            $('#bricklyDiv').css('background-size', '75% auto');
+        }
+        else if (CV.CircuitVisualization.isRobotVisualized(robotGroup, robot)) {
+            $('#bricklyDiv').css('background', '');
+            $('#bricklyDiv').css('background-position', '');
+            $('#bricklyDiv').css('background-size', '');
+        }
+        $('.robotType').removeClass('disabled');
+        $('.robotType.' + robot).addClass('disabled');
+        $('#head-navi-icon-robot').removeClass('typcn-open');
+        $('#head-navi-icon-robot').removeClass('typcn-' + GUISTATE.gui.robotGroup);
+        $('#head-navi-icon-robot').addClass('typcn-' + robotGroup);
+        $('.simWindow').removeClass('simWindow-openedButHidden');
+        checkSim();
+        setProgramOwnerName(null);
+        setProgramAuthorName(null);
+        setProgramShareRelation(null);
+        if (!opt_init) {
+            setProgramSaved(true);
+            setConfigurationSaved(true);
+            if (findGroup(robot) != getRobotGroup()) {
+                //@ts-ignore
+                setConfigurationName(robotGroup.toUpperCase() + 'basis');
+                setProgramName('NEPOprog');
+            }
+        }
+        else {
+            //@ts-ignore
+            setConfigurationName(robotGroup.toUpperCase() + 'basis');
+            setProgramName('NEPOprog');
+        }
+        $('#simRobot').removeClass('typcn-' + GUISTATE.gui.robotGroup);
+        $('#simRobot').addClass('typcn-' + robotGroup);
+        var groupSwitched = false;
+        if (findGroup(robot) != getRobotGroup()) {
+            groupSwitched = true;
+        }
+        if (GUISTATE.gui.firmwareDefault === undefined) {
+            $('#robotDefaultFirmware').addClass('hidden');
+        }
+        else {
+            $('#robotDefaultFirmware').removeClass('hidden');
+        }
+        GUISTATE.gui.robot = robot;
+        GUISTATE.gui.robotGroup = robotGroup;
+        var value = Blockly.Msg.MENU_START_BRICK;
+        if (value.indexOf('$') >= 0) {
+            value = value.replace('$', getRobotRealName());
+        }
+        $('#menuRunProg').html(value);
+        if (GUISTATE.gui.blocklyWorkspace) {
+            GUISTATE.gui.blocklyWorkspace.robControls.refreshTooltips(getRobotRealName());
+        }
+        if (groupSwitched) {
+            HELP_C.initView();
+            if (inWebview()) {
+                WEBVIEW_C.setRobotBehaviour();
+                WEBVIEW_C.jsToAppInterface({
+                    target: 'internal',
+                    type: 'setRobot',
+                    robot: robotGroup
+                });
+            }
+        }
+        if (hasExtension('nn')) {
+            $('#nn-activations').empty();
+            $('.tabLinkNN').show();
+            $.each(GUISTATE.gui.nnActivations, function (_, item) {
+                $('#nn-activations').append($('<option>', {
+                    value: item,
+                    text: UTIL.activationDisplayName[item]
+                }));
+            });
+        }
+        else {
+            $('.tabLinkNN').hide();
+        }
+        UTIL.clearTabAlert('tabConfiguration'); // also clear tab alert when switching robots
+        ACE_EDITOR.setCodeLanguage(getSourceCodeFileExtension());
+    }
+    exports.setRobot = setRobot;
+    function resetRobot() {
+        GUISTATE.gui.robot = undefined;
+    }
+    exports.resetRobot = resetRobot;
+    function setKioskMode(kiosk) {
+        //@ts-ignore
+        GUISTATE.kiosk = kiosk;
+    }
+    exports.setKioskMode = setKioskMode;
+    function findGroup(robot) {
+        var robots = getRobots();
+        for (var propt in robots) {
+            //@ts-ignore
+            if (robots[propt].name == robot && robots[propt].group !== '') {
+                //@ts-ignore
+                robot = robots[propt].group;
+                return robot;
+            }
+        }
+        return robot;
+    }
+    exports.findGroup = findGroup;
+    function findRobot(group) {
+        var robots = getRobots();
+        var robot;
+        for (robot in robots) {
+            if (robots[robot].group === group) {
+                return robots[robot].name;
+                break;
+            }
+        }
+        return null;
+    }
+    exports.findRobot = findRobot;
+    function setConnectionState(state) {
+        switch (state) {
+            case 'busy':
+                $('#head-navi-icon-robot').removeClass('error');
+                $('#head-navi-icon-robot').removeClass('wait');
+                $('#head-navi-icon-robot').addClass('busy');
+                setRunEnabled(false);
+                break;
+            case 'error':
+                $('#head-navi-icon-robot').removeClass('busy');
+                $('#head-navi-icon-robot').removeClass('wait');
+                $('#head-navi-icon-robot').addClass('error');
+                setRunEnabled(false);
+                break;
+            case 'wait':
+                if (isRobotConnected()) {
+                    $('#head-navi-icon-robot').removeClass('busy');
+                    $('#head-navi-icon-robot').removeClass('error');
+                    $('#head-navi-icon-robot').addClass('wait');
+                    setRunEnabled(true);
+                }
+                else {
+                    setConnectionState('error');
+                }
+                break;
+            default:
+                break;
+        }
+    }
+    exports.setConnectionState = setConnectionState;
+    function isRunEnabled() {
+        return GUISTATE.gui.runEnabled;
+    }
+    exports.isRunEnabled = isRunEnabled;
+    function setRunEnabled(running) {
+        running ? true : false;
+        GUISTATE.gui.runEnabled = running;
+        if (running) {
+            GUISTATE.gui.blocklyWorkspace && GUISTATE.gui.blocklyWorkspace.robControls.enable('runOnBrick');
+            GUISTATE.gui.blocklyWorkspace && GUISTATE.gui.blocklyWorkspace.robControls.enable('stopProgram');
+            $('.menuRunProg, #runSourceCodeEditor').removeClass('disabled');
+        }
+        else {
+            GUISTATE.gui.blocklyWorkspace && GUISTATE.gui.blocklyWorkspace.robControls.disable('runOnBrick');
+            GUISTATE.gui.blocklyWorkspace && GUISTATE.gui.blocklyWorkspace.robControls.disable('stopProgram');
+            $('.menuRunProg, #runSourceCodeEditor').addClass('disabled');
+        }
+    }
+    exports.setRunEnabled = setRunEnabled;
+    function getRobot() {
+        return GUISTATE.gui.robot;
+    }
+    exports.getRobot = getRobot;
+    function getRobotGroup() {
+        return GUISTATE.gui.robotGroup;
+    }
+    exports.getRobotGroup = getRobotGroup;
+    function setRobotPort(port) {
+        GUISTATE.robot.robotPort = port;
+    }
+    exports.setRobotPort = setRobotPort;
+    function getRobotPort() {
+        return GUISTATE.robot.robotPort;
+    }
+    exports.getRobotPort = getRobotPort;
+    function getRobotRealName() {
+        for (var robot in getRobots()) {
+            if (!getRobots().hasOwnProperty(robot)) {
+                continue;
+            }
+            if (getRobots()[robot].name == getRobot()) {
+                return getRobots()[robot].realName;
+            }
+        }
+        return getRobot();
+    }
+    exports.getRobotRealName = getRobotRealName;
+    function getMenuRobotRealName(robotName) {
+        for (var robot in getRobots()) {
+            if (!getRobots().hasOwnProperty(robot)) {
+                continue;
+            }
+            if (getRobots()[robot].name == robotName) {
+                return getRobots()[robot].realName;
+            }
+        }
+        return 'Robot not found';
+    }
+    exports.getMenuRobotRealName = getMenuRobotRealName;
+    function isRobotBeta(robotName) {
+        return getRobotsByName()[robotName].announcement == 'beta';
+    }
+    exports.isRobotBeta = isRobotBeta;
+    function isRobotDeprecated(robot) {
+        return getRobotsByName()[robot].announcement == 'deprecated';
+    }
+    exports.isRobotDeprecated = isRobotDeprecated;
+    function getRobotDeprecatedData(robot) {
+        if (isRobotDeprecated(robot)) {
+            return NOTIFICATION_C.getDeprecatedNotifications(robot, getLanguage());
+        }
+    }
+    exports.getRobotDeprecatedData = getRobotDeprecatedData;
+    function getRobotInfoDE(robotName) {
+        for (var robot in getRobots()) {
+            if (!getRobots().hasOwnProperty(robot)) {
+                continue;
+            }
+            if (getRobots()[robot].name == robotName) {
+                return getRobots()[robot].infoDE;
+            }
+        }
+        return '#';
+    }
+    exports.getRobotInfoDE = getRobotInfoDE;
+    function getRobotInfoEN(robotName) {
+        for (var robot in getRobots()) {
+            if (!getRobots().hasOwnProperty(robot)) {
+                continue;
+            }
+            if (getRobots()[robot].name == robotName) {
+                return getRobots()[robot].infoEN;
+            }
+        }
+        return '#';
+    }
+    exports.getRobotInfoEN = getRobotInfoEN;
+    function isRobotConnected() {
+        if (!CONNECTION_C.getConnectionInstance())
+            return false;
+        return CONNECTION_C.getConnectionInstance().isRobotConnected();
+    }
+    exports.isRobotConnected = isRobotConnected;
+    function isConfigurationUsed() {
+        return GUISTATE.gui.configurationUsed;
+    }
+    exports.isConfigurationUsed = isConfigurationUsed;
+    function isRobotDisconnected() {
+        return (GUISTATE.robot.time = -1);
+    }
+    exports.isRobotDisconnected = isRobotDisconnected;
+    function getRobotTime() {
+        return GUISTATE.robot.time;
+    }
+    exports.getRobotTime = getRobotTime;
+    function getRobotName() {
+        return GUISTATE.robot.name;
+    }
+    exports.getRobotName = getRobotName;
+    function getRobotBattery() {
+        return GUISTATE.robot.battery;
+    }
+    exports.getRobotBattery = getRobotBattery;
+    function getRobotState() {
+        return GUISTATE.robot.state;
+    }
+    exports.getRobotState = getRobotState;
+    function getRobotVersion() {
+        return GUISTATE.robot.version;
+    }
+    exports.getRobotVersion = getRobotVersion;
+    function hasRobotDefaultFirmware() {
+        return GUISTATE.gui.firmwareDefault;
+    }
+    exports.hasRobotDefaultFirmware = hasRobotDefaultFirmware;
+    function setView(view) {
+        if (GUISTATE.gui.view === view) {
+            return;
+        }
+        $('#head-navi-tooltip-program').attr('data-bs-toggle', 'dropdown');
+        $('#head-navi-tooltip-configuration').attr('data-bs-toggle', 'dropdown');
+        $('#head-navi-tooltip-robot').attr('data-bs-toggle', 'dropdown');
+        $('#head-navigation-program-edit').removeClass('disabled');
+        $('.robotType').removeClass('disabled');
+        $('#head-navigation-configuration-edit').removeClass('disabled');
+        GUISTATE.gui.prevView = GUISTATE.gui.view;
+        GUISTATE.gui.view = view;
+        if (!isRobotConnected()) {
+            setRunEnabled(false);
+            $('#runSourceCodeEditor').addClass('disabled');
+        }
+        if ($('.rightMenuButton.rightActive').length > 0) {
+            $('.rightMenuButton.rightActive').clickWrap();
+        }
+        if (view === 'tabConfiguration') {
+            $('#head-navigation-program-edit').css('display', 'none');
+            $('#head-navigation-configuration-edit').css('display', 'inline');
+            UTIL.clearTabAlert(view);
+        }
+        else if (view === 'tabProgram') {
+            $('#head-navigation-configuration-edit').css('display', 'none');
+            $('#head-navigation-program-edit').css('display', 'inline');
+        }
+        else if (view === 'tabNN') {
+            $('#head-navigation-configuration-edit').css('display', 'none');
+            $('#head-navigation-program-edit').css('display', 'inline');
+        }
+        else if (view === 'tabNNlearn') {
+            $('#head-navigation-configuration-edit').css('display', 'none');
+            $('#head-navigation-program-edit').css('display', 'inline');
+        }
+        else if (view === 'tabSourceCodeEditor') {
+            $('#head-navigation-configuration-edit').css('display', 'none');
+            $('#head-navigation-program-edit').css('display', 'inline');
+            $('#head-navigation-program-edit').addClass('disabled');
+            $('.robotType').addClass('disabled');
+            $('#head-navi-tooltip-program').attr('data-bs-toggle', '');
+            $('#head-navi-tooltip-configuration').attr('data-bs-toggle', '');
+        }
+        else {
+            $('#head-navi-tooltip-program').attr('data-bs-toggle', '');
+            $('#head-navi-tooltip-configuration').attr('data-bs-toggle', '');
+            $('#head-navigation-program-edit').addClass('disabled');
+            $('#head-navigation-configuration-edit').addClass('disabled');
+        }
+    }
+    exports.setView = setView;
+    function getView() {
+        return GUISTATE.gui.view;
+    }
+    exports.getView = getView;
+    function getPrevView() {
+        return GUISTATE.gui.prevView;
+    }
+    exports.getPrevView = getPrevView;
+    function setLanguage(language) {
+        $('#language li a[lang=' + language + ']')
+            .parent()
+            .addClass('disabled');
+        $('#language li a[lang=' + GUISTATE.gui.language + ']')
+            .parent()
+            .removeClass('disabled');
+        if (language === 'de') {
+            $('.EN').css('display', 'none');
+            $('.DE').css('display', 'inline');
+            $('li>a.DE').css('display', 'block');
+        }
+        else {
+            $('.DE').css('display', 'none');
+            $('.EN').css('display', 'inline');
+            $('li>a.EN').css('display', 'block');
+        }
+        GUISTATE.gui.language = language;
+        HELP_C.initView();
+        LEGAL_C.loadLegalTexts();
+        USER_C.initValidationMessages();
+        NOTIFICATION_C.reloadNotifications();
+        if (getView() !== 'tabStart') {
+            PROGRAM_C.reloadView();
+            CONFIGURATION_C.reloadView();
+            (0, progList_controller_1.switchLanguage)();
+            (0, confList_controller_1.switchLanguage)();
+            (0, galleryList_controller_1.switchLanguage)();
+            (0, tutorialList_controller_1.switchLanguage)();
+            (0, logList_controller_1.switchLanguage)();
+            (0, progInfo_controller_1.switchLanguage)();
+            NN_C.reloadViews();
+            var value = Blockly.Msg.MENU_START_BRICK;
+            if (value.indexOf('$') >= 0) {
+                value = value.replace('$', getRobotRealName());
+            }
+            $('#menuRunProg').text(value);
+            if (getBlocklyWorkspace()) {
+                getBlocklyWorkspace().robControls.refreshTooltips(getRobotRealName());
+            }
+            $('#infoContent').attr('data-placeholder', Blockly.Msg.INFO_DOCUMENTATION_HINT || 'Document your program here ...');
+            $('.bootstrap-tagsinput input').attr('placeholder', Blockly.Msg.INFO_TAGS || 'Tags');
+            updateTutorialMenu();
+        }
+    }
+    exports.setLanguage = setLanguage;
+    function getLanguage() {
+        return GUISTATE.gui.language;
+    }
+    exports.getLanguage = getLanguage;
+    function isProgramSaved() {
+        return GUISTATE.program.saved;
+    }
+    exports.isProgramSaved = isProgramSaved;
+    function setProgramSaved(save) {
+        if (save) {
+            $('#menuSaveProg').parent().removeClass('disabled');
+            $('#menuSaveProg').parent().addClass('disabled');
+            getBlocklyWorkspace().robControls.disable('saveProgram');
+        }
+        else {
+            if (isUserLoggedIn() && !isProgramStandard() && isProgramWritable()) {
+                $('#menuSaveProg').parent().removeClass('disabled');
+                getBlocklyWorkspace().robControls.enable('saveProgram');
+            }
+            else {
+                $('#menuSaveProg').parent().removeClass('disabled');
+                $('#menuSaveProg').parent().addClass('disabled');
+                getBlocklyWorkspace().robControls.disable('saveProgram');
+            }
+        }
+        GUISTATE.program.saved = save;
+    }
+    exports.setProgramSaved = setProgramSaved;
+    function isConfigurationSaved() {
+        return GUISTATE.configuration.saved;
+    }
+    exports.isConfigurationSaved = isConfigurationSaved;
+    function setConfigurationSaved(save) {
+        if (save) {
+            $('#menuSaveConfig').parent().removeClass('disabled');
+            $('#menuSaveConfig').parent().addClass('disabled');
+            getBricklyWorkspace().robControls.disable('saveProgram');
+        }
+        else {
+            if (isUserLoggedIn() && !isConfigurationStandard() && !isConfigurationAnonymous()) {
+                $('#menuSaveConfig').parent().removeClass('disabled');
+                getBricklyWorkspace().robControls.enable('saveProgram');
+            }
+            else {
+                $('#menuSaveConfig').parent().removeClass('disabled');
+                $('#menuSaveConfig').parent().addClass('disabled');
+                getBricklyWorkspace().robControls.disable('saveProgram');
+            }
+        }
+        GUISTATE.configuration.saved = save;
+    }
+    exports.setConfigurationSaved = setConfigurationSaved;
+    function getProgramShared() {
+        return GUISTATE.program.shared;
+    }
+    exports.getProgramShared = getProgramShared;
+    function setProgramSource(source) {
+        GUISTATE.program.source = source;
+    }
+    exports.setProgramSource = setProgramSource;
+    function getProgramSource() {
+        return GUISTATE.program.source;
+    }
+    exports.getProgramSource = getProgramSource;
+    function getSourceCodeFileExtension() {
+        return GUISTATE.gui.sourceCodeFileExtension;
+    }
+    exports.getSourceCodeFileExtension = getSourceCodeFileExtension;
+    function getBinaryFileExtension() {
+        return GUISTATE.gui.binaryFileExtension;
+    }
+    exports.getBinaryFileExtension = getBinaryFileExtension;
+    function isUserLoggedIn() {
+        return GUISTATE.user.id >= 0;
+    }
+    exports.isUserLoggedIn = isUserLoggedIn;
+    function getProgramTimestamp() {
+        return GUISTATE.program.timestamp;
+    }
+    exports.getProgramTimestamp = getProgramTimestamp;
+    function setProgramTimestamp(timestamp) {
+        GUISTATE.program.timestamp = timestamp;
+    }
+    exports.setProgramTimestamp = setProgramTimestamp;
+    function getProgramName() {
+        return GUISTATE.program.name;
+    }
+    exports.getProgramName = getProgramName;
+    function setProgramName(name) {
+        var displayName = name;
+        if (getProgramShareRelation() && getProgramShareRelation() !== 'NONE' && getProgramOwnerName() !== getUserAccountName()) {
+            var owner = getProgramOwnerName(), author = getProgramAuthorName(), relation = getProgramShareRelation(), icon = '', content = '', suffix = '';
+            if (owner === 'Gallery') {
+                // user has uploaded this program to the gallery
+                icon = 'th-large-outline';
+                if (relation === 'READ') {
+                    content = author;
+                }
+            }
+            else if (owner === 'Roberta') {
+                // user loads a program from the example program list
+                icon = 'roberta';
+            }
+            else if (relation == 'WRITE') {
+                // user loads a program, owned by another user, but with WRITE rights
+                icon = 'pencil';
+                suffix = '<span style="color:#33B8CA;">' + owner + '</span>';
+            }
+            else if (relation == 'READ') {
+                // user loads a program, owned by another user, but with READ rights
+                icon = 'eye';
+                suffix = '<span style="color:#33B8CA;">' + owner + '</span>';
+            }
+            displayName += ' <b><span style="color:#33B8CA;" class="typcn typcn-' + icon + ' progName">' + content + '</span></b>' + suffix;
+        }
+        $('#tabProgramName').html(displayName);
+        GUISTATE.program.name = name;
+    }
+    exports.setProgramName = setProgramName;
+    function getProgramOwnerName() {
+        return GUISTATE.program.owner || getUserAccountName();
+    }
+    exports.getProgramOwnerName = getProgramOwnerName;
+    function setProgramOwnerName(name) {
+        GUISTATE.program.owner = name;
+    }
+    exports.setProgramOwnerName = setProgramOwnerName;
+    function getProgramAuthorName() {
+        return GUISTATE.program.author || getUserAccountName();
+    }
+    exports.getProgramAuthorName = getProgramAuthorName;
+    function setProgramAuthorName(name) {
+        GUISTATE.program.author = name;
+    }
+    exports.setProgramAuthorName = setProgramAuthorName;
+    function getProgramShareRelation() {
+        return GUISTATE.program.shared;
+    }
+    exports.getProgramShareRelation = getProgramShareRelation;
+    function setProgramShareRelation(relation) {
+        GUISTATE.program.shared = relation;
+    }
+    exports.setProgramShareRelation = setProgramShareRelation;
+    function getConfigurationName() {
+        return GUISTATE.configuration.name;
+    }
+    exports.getConfigurationName = getConfigurationName;
+    function setConfigurationName(name) {
+        $('#tabConfigurationName').html(name);
+        GUISTATE.configuration.name = name;
+    }
+    exports.setConfigurationName = setConfigurationName;
+    function setConfigurationNameDefault() {
+        setConfigurationName(getConfigurationStandardName());
+    }
+    exports.setConfigurationNameDefault = setConfigurationNameDefault;
+    function setProgramToolboxLevel(level) {
+        $('.level').removeClass('disabled');
+        $('.level.' + level).addClass('disabled');
+        GUISTATE.program.toolbox.level = level;
+    }
+    exports.setProgramToolboxLevel = setProgramToolboxLevel;
+    function getProgramToolboxLevel() {
+        return GUISTATE.program.toolbox.level;
+    }
+    exports.getProgramToolboxLevel = getProgramToolboxLevel;
+    function getToolbox(level) {
+        return GUISTATE.gui.program.toolbox[level];
+    }
+    exports.getToolbox = getToolbox;
+    function getConfToolbox() {
+        //@ts-ignore
+        return GUISTATE.conf.toolbox;
+    }
+    exports.getConfToolbox = getConfToolbox;
+    function getRobotFWName() {
+        return GUISTATE.robot.fWName;
+    }
+    exports.getRobotFWName = getRobotFWName;
+    function setRobotToken(token) {
+        GUISTATE.robot.token = token;
+    }
+    exports.setRobotToken = setRobotToken;
+    function setRobotUrl(url) {
+        GUISTATE.robot.url = url;
+    }
+    exports.setRobotUrl = setRobotUrl;
+    function setConfigurationXML(xml) {
+        GUISTATE.configuration.xml = xml;
+    }
+    exports.setConfigurationXML = setConfigurationXML;
+    function getConfigurationXML() {
+        return GUISTATE.configuration.xml;
+    }
+    exports.getConfigurationXML = getConfigurationXML;
+    function setProgramXML(xml) {
+        GUISTATE.program.xml = xml;
+    }
+    exports.setProgramXML = setProgramXML;
+    function getProgramXML() {
+        return GUISTATE.program.xml;
+    }
+    exports.getProgramXML = getProgramXML;
+    function getRobots() {
+        return GUISTATE.server.robots;
+    }
+    exports.getRobots = getRobots;
+    function getRobotsByName() {
+        return GUISTATE.server.robotsByName;
+    }
+    function getProgramToolbox() {
+        if (GUISTATE.gui.program.dynamicToolbox) {
+            return GUISTATE.gui.program.dynamicToolbox;
+        }
+        else {
+            return GUISTATE.gui.program.toolbox[GUISTATE.program.toolbox.level];
+        }
+    }
+    exports.getProgramToolbox = getProgramToolbox;
+    function setDynamicProgramToolbox(toolbox) {
+        GUISTATE.gui.program['dynamicToolbox'] = toolbox;
+    }
+    exports.setDynamicProgramToolbox = setDynamicProgramToolbox;
+    function resetDynamicProgramToolbox() {
+        delete GUISTATE.gui.program['dynamicToolbox'];
+    }
+    exports.resetDynamicProgramToolbox = resetDynamicProgramToolbox;
+    function getConfigurationToolbox() {
+        return GUISTATE.gui.configuration.toolbox;
+    }
+    exports.getConfigurationToolbox = getConfigurationToolbox;
+    function getProgramProg() {
+        return GUISTATE.gui.program.prog;
+    }
+    exports.getProgramProg = getProgramProg;
+    function getConfigurationConf() {
+        return GUISTATE.gui.configuration.conf;
+    }
+    exports.getConfigurationConf = getConfigurationConf;
+    function getStartWithoutPopup() {
+        return GUISTATE.gui.startWithoutPopup;
+    }
+    exports.getStartWithoutPopup = getStartWithoutPopup;
+    function setStartWithoutPopup() {
+        return (GUISTATE.gui.startWithoutPopup = true);
+    }
+    exports.setStartWithoutPopup = setStartWithoutPopup;
+    function getServerVersion() {
+        return GUISTATE.server.version;
+    }
+    exports.getServerVersion = getServerVersion;
+    function isPublicServerVersion() {
+        return GUISTATE.server.isPublic;
+    }
+    exports.isPublicServerVersion = isPublicServerVersion;
+    function getUserName() {
+        return GUISTATE.user.name;
+    }
+    exports.getUserName = getUserName;
+    function getUserAccountName() {
+        return GUISTATE.user.accountName;
+    }
+    exports.getUserAccountName = getUserAccountName;
+    function isUserAccountActivated() {
+        return GUISTATE.user.isAccountActivated;
+    }
+    exports.isUserAccountActivated = isUserAccountActivated;
+    function isUserMemberOfUserGroup() {
+        return GUISTATE.user.userGroup != '';
+    }
+    exports.isUserMemberOfUserGroup = isUserMemberOfUserGroup;
+    function getUserUserGroup() {
+        return GUISTATE.user.userGroup;
+    }
+    exports.getUserUserGroup = getUserUserGroup;
+    function getUserUserGroupOwner() {
+        return GUISTATE.user.userGroupOwner;
+    }
+    exports.getUserUserGroupOwner = getUserUserGroupOwner;
+    function setLogin(result) {
+        setState(result);
+        GUISTATE.user.accountName = result.userAccountName;
+        if (result.userName === undefined || result.userName === '') {
+            GUISTATE.user.name = result.userAccountName;
+        }
+        else {
+            GUISTATE.user.name = result.userName;
+        }
+        GUISTATE.user.id = result.userId;
+        GUISTATE.user.isAccountActivated = result.isAccountActivated;
+        GUISTATE.user.userGroup = result.userGroupName;
+        GUISTATE.user.userGroupOwner = result.userGroupOwner;
+        $('.navbar-nav > li > ul > .login, .logout').removeClass('disabled');
+        $('.navbar-nav > li > ul > .login.unavailable').addClass('disabled');
+        $('.navbar-nav > li > ul > .logout').addClass('disabled');
+        $('#head-navi-icon-user').removeClass('error');
+        $('#head-navi-icon-user').addClass('ok');
+        $('.menuLogin').addClass('pe-none');
+        $('#menuSaveProg').parent().addClass('disabled');
+        $('#menuSaveConfig').parent().addClass('disabled');
+        if (getRobot()) {
+            setProgramSaved(true);
+            setConfigurationSaved(true);
+            if (GUISTATE.gui.view == 'tabGalleryList') {
+                $('#galleryList').find('button[name="refresh"]').clickWrap();
+            }
+        }
+        if (isUserMemberOfUserGroup()) {
+            $('#registerUserName, #registerUserEmail').prop('disabled', true);
+            $('#userGroupMemberDefaultPasswordHint').removeClass('hidden');
+        }
+    }
+    exports.setLogin = setLogin;
+    function setLogout() {
+        if (isUserMemberOfUserGroup()) {
+            $('#registerUserName, #registerUserEmail').prop('disabled', false);
+            $('#userGroupMemberDefaultPasswordHint').addClass('hidden');
+        }
+        GUISTATE.user.id = -1;
+        GUISTATE.user.accountName = '';
+        GUISTATE.user.name = '';
+        GUISTATE.user.userGroup = '';
+        GUISTATE.user.userGroupOwner = '';
+        if (getView() === 'tabUserGroupList') {
+            $('#' + getPrevView()).tabWrapShow();
+        }
+        setProgramName('NEPOprog');
+        setProgramOwnerName(null);
+        setProgramAuthorName(null);
+        setProgramShareRelation(null);
+        GUISTATE.program.shared = false;
+        $('.navbar-nav > li > ul > .logout, .login').removeClass('disabled');
+        $('.navbar-nav > li > ul > .login').addClass('disabled');
+        $('#head-navi-icon-user').removeClass('ok');
+        $('#head-navi-icon-user').addClass('error');
+        if (GUISTATE.gui.view == 'tabProgList') {
+            //@ts-ignore
+            $('#tabProgram').tabWrapShow();
+        }
+        else if (GUISTATE.gui.view == 'tabConfList') {
+            $('#tabConfiguration').clickWrap();
+        }
+        else if (GUISTATE.gui.view == 'tabGalleryList') {
+            $('#galleryList').find('button[name="refresh"]').clickWrap();
+        }
+        $('.menuLogin').removeClass('pe-none');
+    }
+    exports.setLogout = setLogout;
+    function setProgram(result, opt_owner, opt_author) {
+        if (result) {
+            GUISTATE.program.shared = result.programShared;
+            GUISTATE.program.timestamp = result.lastChanged;
+            setProgramSaved(true);
+            setConfigurationSaved(true);
+            var name_1 = result.name;
+            setProgramShareRelation(result.programShared);
+            if (opt_owner) {
+                setProgramOwnerName(opt_owner);
+            }
+            else if (result.parameters && result.parameters.OWNER_NAME) {
+                setProgramOwnerName(result.parameters.OWNER_NAME);
+            }
+            else {
+                setProgramOwnerName(null);
+            }
+            if (opt_author) {
+                setProgramAuthorName(opt_author);
+            }
+            else if (result.parameters && result.parameters.AUTHOR_NAME) {
+                setProgramAuthorName(result.parameters.AUTHOR_NAME);
+            }
+            else {
+                setProgramOwnerName(null);
+            }
+            setProgramName(result.name);
+        }
+    }
+    exports.setProgram = setProgram;
+    /**
+     * Set configuration
+     * @param {*} result
+     */
+    function setConfiguration(result) {
+        if (result) {
+            setConfigurationName(result.name);
+            GUISTATE.configuration.timestamp = result.lastChanged;
+            setConfigurationSaved(true);
+            setProgramSaved(false);
+            $('#tabConfigurationName').html(result.name);
+        }
+    }
+    exports.setConfiguration = setConfiguration;
+    function checkSim() {
+        if (hasSim()) {
+            if (hasMarkerSim()) {
+                $('#simMarkerObject').parent().css('display', 'inline-block');
+            }
+            else {
+                $('#simMarkerObject').parent().css('display', 'none');
+            }
+            $('#menuRunSim').parent().removeClass('disabled');
+            $('#simButton, #simDebugButton').show();
+        }
+        else {
+            $('#menuRunSim').parent().addClass('disabled');
+            $('#simButton, #simDebugButton').hide();
+        }
+        if (hasWebotsSim()) {
+            $('#simDebugButton').hide();
+        }
+        if (hasMultiSim()) {
+            $('#menuRunMulipleSim').parent().removeClass('unavailable');
+            $('#menuRunMulipleSim').parent().addClass('available');
+            $('#menuRunMulipleSim').parent().removeClass('disabled');
+        }
+        else {
+            $('#menuRunMulipleSim').parent().addClass('unavailable');
+            $('#menuRunMulipleSim').parent().removeClass('available');
+            $('#menuRunMulipleSim').parent().addClass('disabled');
+        }
+    }
+    exports.checkSim = checkSim;
+    function hasSim() {
+        return GUISTATE.gui.sim == true;
+    }
+    exports.hasSim = hasSim;
+    function hasMultiSim() {
+        return GUISTATE.gui.multipleSim == true;
+    }
+    exports.hasMultiSim = hasMultiSim;
+    function hasMarkerSim() {
+        return GUISTATE.gui.markerSim == true;
+    }
+    exports.hasMarkerSim = hasMarkerSim;
+    function getPluginSim() {
+        return GUISTATE.gui.pluginSim || null;
+    }
+    exports.getPluginSim = getPluginSim;
+    function hasWebotsSim() {
+        return GUISTATE.gui.webotsSim == true;
+    }
+    exports.hasWebotsSim = hasWebotsSim;
+    function getWebotsUrl() {
+        return GUISTATE.gui.webotsUrl;
+    }
+    exports.getWebotsUrl = getWebotsUrl;
+    function getListOfTutorials() {
+        return GUISTATE.server.tutorial;
+    }
+    exports.getListOfTutorials = getListOfTutorials;
+    function getVendor() {
+        return GUISTATE.gui.vendor;
+    }
+    exports.getVendor = getVendor;
+    function getSignature() {
+        return GUISTATE.gui.signature;
+    }
+    exports.getSignature = getSignature;
+    function getCommandLine() {
+        return GUISTATE.gui.commandLine;
+    }
+    exports.getCommandLine = getCommandLine;
+    function setPing(ping) {
+        GUISTATE.server.ping = ping;
+    }
+    exports.setPing = setPing;
+    function doPing() {
+        return GUISTATE.server.ping;
+    }
+    exports.doPing = doPing;
+    function setPingTime(time) {
+        GUISTATE.server.pingTime = time;
+    }
+    exports.setPingTime = setPingTime;
+    function getPingTime() {
+        return GUISTATE.server.pingTime;
+    }
+    exports.getPingTime = getPingTime;
+    function getAvailableHelp() {
+        return GUISTATE.server.help;
+    }
+    exports.getAvailableHelp = getAvailableHelp;
+    function getTheme() {
+        return GUISTATE.server.theme;
+    }
+    exports.getTheme = getTheme;
+    function inWebview() {
+        return GUISTATE.gui.webview || false;
+    }
+    exports.inWebview = inWebview;
+    function setWebview(webview) {
+        GUISTATE.gui.webview = webview;
+    }
+    exports.setWebview = setWebview;
+    function updateMenuStatus(numOfConnections) {
+        CONNECTION_C.getConnectionInstance().updateMenuStatus(numOfConnections);
+    }
+    exports.updateMenuStatus = updateMenuStatus;
+    function updateTutorialMenu() {
+        $('#head-navigation-tutorial').hide();
+        var tutorialList = getListOfTutorials();
+        for (var tutorial in tutorialList) {
+            if (tutorialList.hasOwnProperty(tutorial) && tutorialList[tutorial].language === getLanguage().toUpperCase()) {
+                $('#head-navigation-tutorial').show();
+                break;
+            }
+        }
+    }
+    exports.updateTutorialMenu = updateTutorialMenu;
+    function getLegalTextsMap() {
+        return GUISTATE.server.legalTexts;
+    }
+    exports.getLegalTextsMap = getLegalTextsMap;
+});

@@ -1,3 +1,47 @@
-define(["require","exports","log","util.roberta","message","program.model","jquery","bootstrap-table"],(function(e,r,o,a,i,n,t){Object.defineProperty(r,"__esModule",{value:!0}),r.init=void 0,r.init=function(){t("#doDeleteProgram").onWrap("click",(function(){for(var e=t("#confirmDeleteProgram").data("programs"),r=0;r<e.length;r++){var s=e[r],m=s[0],d=s[1],l=s[2],f=s[3];l.sharedFrom?n.deleteShare(m,d,f,(function(e,r){a.response(e),"ok"===e.rc&&(i.displayInformation(e,"MESSAGE_PROGRAM_DELETED",e.message,r),t("#progList").find('button[name="refresh"]').clickWrap(),o.info('remove shared program "'+r+'"form List'))})):n.deleteProgramFromListing(m,f,(function(e,r){a.response(e),"ok"===e.rc&&(i.displayInformation(e,"MESSAGE_PROGRAM_DELETED",e.message,r),t("#progList").find('button[name="refresh"]').clickWrap(),o.info('delete program "'+r))}))}t(".modal").modal("hide")}))}}));
-//# sourceMappingURL=progDelete.controller.js.map
-//# sourceMappingURL=progDelete.controller.js.map
+define(["require", "exports", "log", "util.roberta", "message", "program.model", "jquery", "bootstrap-table"], function (require, exports, LOG, UTIL, MSG, PROGRAM, $) {
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.init = void 0;
+    function init() {
+        //        initView();
+        initEvents();
+    }
+    exports.init = init;
+    function initView() { }
+    function initEvents() {
+        /**
+         * Delete the programs that were selected in program list
+         */
+        $('#doDeleteProgram').onWrap('click', function () {
+            var programs = $('#confirmDeleteProgram').data('programs');
+            for (var i = 0; i < programs.length; i++) {
+                var prog = programs[i];
+                var progName = prog[0];
+                var progOwner = prog[1];
+                var progRight = prog[2];
+                var author = prog[3];
+                if (progRight.sharedFrom) {
+                    PROGRAM.deleteShare(progName, progOwner, author, function (result, progName) {
+                        UTIL.response(result);
+                        if (result.rc === 'ok') {
+                            MSG.displayInformation(result, 'MESSAGE_PROGRAM_DELETED', result.message, progName);
+                            $('#progList').find('button[name="refresh"]').clickWrap();
+                            LOG.info('remove shared program "' + progName + '"form List');
+                        }
+                    });
+                }
+                else {
+                    PROGRAM.deleteProgramFromListing(progName, author, function (result, progName) {
+                        UTIL.response(result);
+                        if (result.rc === 'ok') {
+                            MSG.displayInformation(result, 'MESSAGE_PROGRAM_DELETED', result.message, progName);
+                            $('#progList').find('button[name="refresh"]').clickWrap();
+                            LOG.info('delete program "' + progName);
+                        }
+                    });
+                }
+            }
+            $('.modal').modal('hide');
+        }),
+            'delete programs clicked';
+    }
+});

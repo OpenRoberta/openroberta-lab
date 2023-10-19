@@ -1,3 +1,211 @@
-define(["require","exports","util.roberta","confList.model","blockly","jquery","guiState.controller","configuration.controller","bootstrap-table"],(function(e,t,o,a,n,l,i,r){function s(){l("#confNameTable").bootstrapTable({locale:i.getLanguage(),theadClasses:"table-dark",pageList:"[ 10, 25, All ]",toolbar:"#confListToolbar",showRefresh:"true",showPaginationSwitch:"true",pagination:"true",buttonsAlign:"right",resizable:"true",iconsPrefix:"typcn",icons:{paginationSwitchDown:"typcn-document-text",paginationSwitchUp:"typcn-book",refresh:"typcn-refresh"},columns:[{title:"<span lkey='Blockly.Msg.DATATABLE_CONFIGURATION_NAME'>"+(n.Msg.DATATABLE_CONFIGURATION_NAME||"Name der Configuration")+"</span>",sortable:!0,field:"0"},{title:"<span lkey='Blockly.Msg.DATATABLE_CREATED_BY'>"+(n.Msg.DATATABLE_CREATED_BY||"Erzeugt von")+"</span>",sortable:!0,field:"1"},{visible:!1,field:"2"},{title:"<span lkey='Blockly.Msg.DATATABLE_ACTUALIZATION'>"+(n.Msg.DATATABLE_ACTUALIZATION||"Letzte Aktualisierung")+"</span>",sortable:!0,field:"3",formatter:o.formatDate},{field:"4",title:'<input name="btSelectAll" type="checkbox">',valign:"middle",halign:"center",align:"center",formatter:function(e,t,o){return'<input type="checkbox" name="btSelectItem" data-index="'+o+'">'}},{field:"5",events:d,title:b,align:"left",valign:"top",formatter:f,width:"89px"}]}),l("#confList>.bootstrap-table").find('button[name="paginationSwitch"]').attr("title","").attr("rel","tooltip").attr("data-bs-original-title",l("#confNameTable").bootstrapTable.locales[i.getLanguage()].formatPaginationSwitch()).tooltip({trigger:"hover"}),l("#confList>.bootstrap-table").find('button[name="refresh"]').attr("title","").attr("rel","tooltip").attr("data-bs-original-title",l("#confNameTable").bootstrapTable.locales[i.getLanguage()].formatRefresh()).tooltip({trigger:"hover"}),l("#confNameTable").bootstrapTable("togglePagination")}function c(e){var t=l("#confNameTable");o.response(e),"ok"===e.rc&&t.bootstrapTable("load",e.configurationNames),l("#deleteSomeConf").attr("data-bs-original-title",n.Msg.CONFLIST_DELETE_ALL_TOOLTIP||"Click here to delete all selected robot configurations."),t.find(".delete").attr("data-bs-original-title",n.Msg.CONFLIST_DELETE_TOOLTIP||"Click here to delete your robot configuration."),t.find(".load").attr("data-bs-original-title",n.Msg.CONFLIST_LOAD_TOOLTIP||"Click here to load your robot configuration in the configuration environment."),t.find('[rel="tooltip"]').tooltip({trigger:"hover"})}Object.defineProperty(t,"__esModule",{value:!0}),t.switchLanguage=t.init=void 0,t.init=function(){s(),function(){var e=l("#tabConfList"),t=l("#confNameTable");function n(){t.bootstrapTable("resetView",{height:o.calcDataTableHeight()})}e.onWrap("shown.bs.tab",(function(){i.setView("tabConfList"),a.loadConfList(c)})),l("#confList").find('button[name="refresh"]').onWrap("click",(function(){return a.loadConfList(c),!1}),"refresh configuration list clicked"),t.onWrap("click-row.bs.table",(function(e,t){r.loadFromListing(t)}),"Load configuration from listing clicked"),t.onWrap("check-all.bs.table check.bs.table",(function(){l("#deleteSomeConfHeader").removeClass("disabled"),l("#deleteSomeConfHeader").tooltip({trigger:"hover"}),l(".delete").addClass("disabled"),l(".load").addClass("disabled")}),"check all configurations"),t.onWrap("uncheck-all.bs.table",(function(e,t){l("#deleteSomeConfHeader").addClass("disabled"),l(".delete").removeClass("disabled"),l(".load").removeClass("disabled")}),"uncheck all configurations"),t.onWrap("uncheck.bs.table",(function(){var e=t.bootstrapTable("getSelections");(e.length<=0||null==e)&&(l("#deleteSomeConfHeader").addClass("disabled"),l(".delete").removeClass("disabled"),l(".load").removeClass("disabled"))}),"uncheck one configuration"),l("#backConfList").onWrap("click",(function(){return l("#tabConfiguration").tabWrapShow(),!1}),"back to configuration view"),l(document).onWrap("click",".deleteSomeConf",(function(){for(var e=t.bootstrapTable("getSelections",{}),o="",n=0;n<e.length;n++)o+=e[n][0],o+="<br>";return l("#confirmDeleteConfName").html(o),l("#confirmDeleteConfiguration").oneWrap("hide.bs.modal",(function(){a.loadConfList(c)})),l("#confirmDeleteConfiguration").data("configurations",e),l("#confirmDeleteConfiguration").modal("show"),!1}),"delete configurations"),t.on("shown.bs.collapse hidden.bs.collapse",(function(){t.bootstrapTable("resetWidth")})),l(window).resize((function(){n()}))}()},t.switchLanguage=function(){l("#confNameTable").bootstrapTable("destroy"),s(),a.loadConfList(c)};var d={"click .delete":function(e,t,o){e.stopPropagation();for(var a=[o],n="",i=0;i<a.length;i++)n+=a[i][0],n+="<br>";return l("#confirmDeleteConfName").html(n),l("#confirmDeleteConfiguration").data("configurations",a),l("#confirmDeleteConfiguration").modal("show"),!1},"click .load":function(e,t,o){r.loadFromListing(o)}},f=function(e,t){return'<a href="#" class="delete" rel="tooltip" lkey="Blockly.Msg.CONFLIST_DELETE_TOOLTIP" data-bs-original-title="" title=""><span class="typcn typcn-delete"></span></a>','<a href="#" class="load" rel="tooltip" lkey="Blockly.Msg.CONFLIST_LOAD_TOOLTIP" data-bs-original-title="" title=""><span class="typcn typcn-document"></span></a>','<a href="#" class="delete" rel="tooltip" lkey="Blockly.Msg.CONFLIST_DELETE_TOOLTIP" data-bs-original-title="" title=""><span class="typcn typcn-delete"></span></a><a href="#" class="load" rel="tooltip" lkey="Blockly.Msg.CONFLIST_LOAD_TOOLTIP" data-bs-original-title="" title=""><span class="typcn typcn-document"></span></a>'},b='<a href="#" id="deleteSomeConfHeader" class="deleteSomeConf disabled" rel="tooltip" lkey="Blockly.Msg.CONFLIST_DELETE_ALL_TOOLTIP" data-bs-original-title="'+n.Msg.CONFLIST_DELETE_ALL_TOOLTIP+'" title=""><span class="typcn typcn-delete"></span></a>'}));
-//# sourceMappingURL=confList.controller.js.map
-//# sourceMappingURL=confList.controller.js.map
+define(["require", "exports", "util.roberta", "confList.model", "blockly", "jquery", "guiState.controller", "configuration.controller", "bootstrap-table"], function (require, exports, UTIL, CONFLIST, Blockly, $, GUISTATE_C, CONFIGURATION_C) {
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.switchLanguage = exports.init = void 0;
+    /**
+     * Initialize table of configurations
+     */
+    function init() {
+        initConfList();
+        initConfListEvents();
+    }
+    exports.init = init;
+    function switchLanguage() {
+        $('#confNameTable').bootstrapTable('destroy');
+        initConfList();
+        CONFLIST.loadConfList(update);
+    }
+    exports.switchLanguage = switchLanguage;
+    function initConfList() {
+        $('#confNameTable').bootstrapTable({
+            locale: GUISTATE_C.getLanguage(),
+            theadClasses: 'table-dark',
+            pageList: '[ 10, 25, All ]',
+            toolbar: '#confListToolbar',
+            showRefresh: 'true',
+            showPaginationSwitch: 'true',
+            pagination: 'true',
+            buttonsAlign: 'right',
+            resizable: 'true',
+            iconsPrefix: 'typcn',
+            icons: {
+                paginationSwitchDown: 'typcn-document-text',
+                paginationSwitchUp: 'typcn-book',
+                refresh: 'typcn-refresh',
+            },
+            columns: [
+                {
+                    title: "<span lkey='Blockly.Msg.DATATABLE_CONFIGURATION_NAME'>" +
+                        (Blockly.Msg.DATATABLE_CONFIGURATION_NAME || 'Name der Configuration') +
+                        '</span>',
+                    sortable: true,
+                    field: '0',
+                },
+                {
+                    title: "<span lkey='Blockly.Msg.DATATABLE_CREATED_BY'>" + (Blockly.Msg.DATATABLE_CREATED_BY || 'Erzeugt von') + '</span>',
+                    sortable: true,
+                    field: '1',
+                },
+                {
+                    visible: false,
+                    field: '2',
+                },
+                {
+                    title: "<span lkey='Blockly.Msg.DATATABLE_ACTUALIZATION'>" + (Blockly.Msg.DATATABLE_ACTUALIZATION || 'Letzte Aktualisierung') + '</span>',
+                    sortable: true,
+                    field: '3',
+                    formatter: UTIL.formatDate,
+                },
+                {
+                    field: '4',
+                    title: '<input name="btSelectAll" type="checkbox">',
+                    valign: 'middle',
+                    halign: 'center',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        return '<input type="checkbox" name="btSelectItem" data-index="' + index + '">';
+                    },
+                },
+                {
+                    field: '5',
+                    events: eventsDeleteLoad,
+                    title: titleActions,
+                    align: 'left',
+                    valign: 'top',
+                    formatter: formatDeleteLoad,
+                    width: '89px',
+                },
+            ],
+        });
+        $('#confList>.bootstrap-table')
+            .find('button[name="paginationSwitch"]')
+            .attr('title', '')
+            .attr('rel', 'tooltip')
+            //@ts-ignore
+            .attr('data-bs-original-title', $('#confNameTable').bootstrapTable.locales[GUISTATE_C.getLanguage()].formatPaginationSwitch())
+            .tooltip({ trigger: 'hover' });
+        $('#confList>.bootstrap-table')
+            .find('button[name="refresh"]')
+            .attr('title', '')
+            .attr('rel', 'tooltip')
+            //@ts-ignore
+            .attr('data-bs-original-title', $('#confNameTable').bootstrapTable.locales[GUISTATE_C.getLanguage()].formatRefresh())
+            .tooltip({ trigger: 'hover' });
+        $('#confNameTable').bootstrapTable('togglePagination');
+    }
+    function initConfListEvents() {
+        var $tabConfList = $('#tabConfList');
+        var $confNameTable = $('#confNameTable');
+        $tabConfList.onWrap('shown.bs.tab', function () {
+            GUISTATE_C.setView('tabConfList');
+            CONFLIST.loadConfList(update);
+        });
+        $('#confList')
+            .find('button[name="refresh"]')
+            .onWrap('click', function () {
+            CONFLIST.loadConfList(update);
+            return false;
+        }, 'refresh configuration list clicked');
+        $confNameTable.onWrap('click-row.bs.table', function ($element, row) {
+            CONFIGURATION_C.loadFromListing(row);
+        }, 'Load configuration from listing clicked');
+        $confNameTable.onWrap('check-all.bs.table check.bs.table', function () {
+            $('#deleteSomeConfHeader').removeClass('disabled');
+            $('#deleteSomeConfHeader').tooltip({ trigger: 'hover' });
+            $('.delete').addClass('disabled');
+            $('.load').addClass('disabled');
+        }, 'check all configurations');
+        $confNameTable.onWrap('uncheck-all.bs.table', function ($element, rows) {
+            $('#deleteSomeConfHeader').addClass('disabled');
+            $('.delete').removeClass('disabled');
+            $('.load').removeClass('disabled');
+        }, 'uncheck all configurations');
+        $confNameTable.onWrap('uncheck.bs.table', function () {
+            var selectedRows = $confNameTable.bootstrapTable('getSelections');
+            if (selectedRows.length <= 0 || selectedRows == null) {
+                $('#deleteSomeConfHeader').addClass('disabled');
+                $('.delete').removeClass('disabled');
+                $('.load').removeClass('disabled');
+            }
+        }, 'uncheck one configuration');
+        $('#backConfList').onWrap('click', function () {
+            //@ts-ignore
+            $('#tabConfiguration').tabWrapShow();
+            return false;
+        }, 'back to configuration view');
+        $(document).onWrap('click', '.deleteSomeConf', function () {
+            var configurations = $confNameTable.bootstrapTable('getSelections', {});
+            var names = '';
+            for (var i = 0; i < configurations.length; i++) {
+                names += configurations[i][0];
+                names += '<br>';
+            }
+            $('#confirmDeleteConfName').html(names);
+            $('#confirmDeleteConfiguration').oneWrap('hide.bs.modal', function () {
+                CONFLIST.loadConfList(update);
+            });
+            $('#confirmDeleteConfiguration').data('configurations', configurations);
+            $('#confirmDeleteConfiguration').modal('show');
+            return false;
+        }, 
+        //@ts-ignore
+        //helper.d.ts only got 3 params while the function in warp.ts got 4
+        'delete configurations');
+        $confNameTable.on('shown.bs.collapse hidden.bs.collapse', function () {
+            $confNameTable.bootstrapTable('resetWidth');
+        });
+        function resizeTable() {
+            $confNameTable.bootstrapTable('resetView', {
+                height: UTIL.calcDataTableHeight(),
+            });
+        }
+        $(window).resize(function () {
+            resizeTable();
+        });
+    }
+    function update(result) {
+        var $confNameTable = $('#confNameTable');
+        UTIL.response(result);
+        if (result.rc === 'ok') {
+            $confNameTable.bootstrapTable('load', result.configurationNames);
+        }
+        $('#deleteSomeConf').attr('data-bs-original-title', Blockly.Msg.CONFLIST_DELETE_ALL_TOOLTIP || 'Click here to delete all selected robot configurations.');
+        $confNameTable.find('.delete').attr('data-bs-original-title', Blockly.Msg.CONFLIST_DELETE_TOOLTIP || 'Click here to delete your robot configuration.');
+        $confNameTable
+            .find('.load')
+            .attr('data-bs-original-title', Blockly.Msg.CONFLIST_LOAD_TOOLTIP || 'Click here to load your robot configuration in the configuration environment.');
+        $confNameTable.find('[rel="tooltip"]').tooltip({
+            trigger: 'hover',
+        });
+    }
+    var eventsDeleteLoad = {
+        'click .delete': function (e, value, row) {
+            //var deleted = false;
+            e.stopPropagation();
+            var selectedRows = [row];
+            var names = '';
+            for (var i = 0; i < selectedRows.length; i++) {
+                names += selectedRows[i][0];
+                names += '<br>';
+            }
+            $('#confirmDeleteConfName').html(names);
+            $('#confirmDeleteConfiguration').data('configurations', selectedRows);
+            $('#confirmDeleteConfiguration').modal('show');
+            return false;
+        },
+        'click .load': function (e, value, row) {
+            CONFIGURATION_C.loadFromListing(row);
+        },
+    };
+    var formatDeleteLoad = function (value, row) {
+        var result = '';
+        result +=
+            '<a href="#" class="delete" rel="tooltip" lkey="Blockly.Msg.CONFLIST_DELETE_TOOLTIP" data-bs-original-title="" title=""><span class="typcn typcn-delete"></span></a>';
+        result +=
+            '<a href="#" class="load" rel="tooltip" lkey="Blockly.Msg.CONFLIST_LOAD_TOOLTIP" data-bs-original-title="" title=""><span class="typcn typcn-document"></span></a>';
+        return result;
+    };
+    var titleActions = '<a href="#" id="deleteSomeConfHeader" class="deleteSomeConf disabled" rel="tooltip" lkey="Blockly.Msg.CONFLIST_DELETE_ALL_TOOLTIP" data-bs-original-title="' +
+        Blockly.Msg.CONFLIST_DELETE_ALL_TOOLTIP +
+        '" title="">' +
+        '<span class="typcn typcn-delete"></span></a>';
+});

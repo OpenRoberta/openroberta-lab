@@ -1,3 +1,63 @@
-define(["require","exports","comm","jquery","log"],(function(e,t,o,r,n){Object.defineProperty(t,"__esModule",{value:!0}),t.setRobot=t.setToken=t.updateFirmware=t.setApiKey=void 0,t.setApiKey=function(e,t,o){return r.ajax({type:"GET",url:"http://"+t+"/api/v1/ping",dataType:"text",headers:{"X-API-KEY":e},timeout:2e3,success:o,error:WRAP.wrapErrorFn((function(){alert("Error while connecting the robot. Please make sure that the robot is connected via the same Network or usb cable"),n.info("Error while connecting the robot. LOG")}))})},t.updateFirmware=function(e){o.json("/admin/updateFirmware",{cmd:"updateFirmware"},e,"update firmware")},t.setToken=function(e,t){o.json("/admin/setToken",{cmd:"setToken",token:e},t,"set token '"+e+"'")},t.setRobot=function(e,t,r){return o.json("/admin/setRobot",{cmd:"setRobot",robot:e,extensions:t},r,"set robot '"+e+"'")}}));
-//# sourceMappingURL=robot.model.js.map
-//# sourceMappingURL=robot.model.js.map
+/**
+ * Rest calls to the server related to the robot.
+ *
+ * @module rest/program
+ */
+define(["require", "exports", "comm", "jquery", "log", "wrap"], function (require, exports, COMM, $, LOG, WRAP) {
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.setRobot = exports.setToken = exports.updateFirmware = exports.setApiKey = void 0;
+    function setApiKey(apiKey, url, successFn) {
+        return $.ajax({
+            type: 'GET',
+            url: 'http://' + url + '/api/v1/ping',
+            dataType: 'text',
+            headers: {
+                'X-API-KEY': apiKey
+            },
+            timeout: 2000,
+            success: successFn,
+            error: WRAP.wrapErrorFn(function () {
+                alert('Error while connecting the robot. Please make sure that the robot is connected via the same Network or usb cable'); // This is an annoying behavior ...
+                LOG.info('Error while connecting the robot. LOG');
+            })
+        });
+    }
+    exports.setApiKey = setApiKey;
+    /**
+     * Update firmware of the robot.
+     *
+     */
+    function updateFirmware(successFn) {
+        COMM.json('/admin/updateFirmware', {
+            cmd: 'updateFirmware'
+        }, successFn, 'update firmware');
+    }
+    exports.updateFirmware = updateFirmware;
+    /**
+     * Set token for paring with the robot.
+     *
+     * @param token
+     *            {String} - token for paring
+     */
+    function setToken(token, successFn) {
+        COMM.json('/admin/setToken', {
+            cmd: 'setToken',
+            token: token
+        }, successFn, 'set token \'' + token + '\'');
+    }
+    exports.setToken = setToken;
+    /**
+     * Set robot type
+     *
+     * @param robot
+     *            {String} - robot type
+     */
+    function setRobot(robot, extensions, successFn) {
+        return COMM.json('/admin/setRobot', {
+            cmd: 'setRobot',
+            robot: robot,
+            extensions: extensions
+        }, successFn, 'set robot \'' + robot + '\'');
+    }
+    exports.setRobot = setRobot;
+});

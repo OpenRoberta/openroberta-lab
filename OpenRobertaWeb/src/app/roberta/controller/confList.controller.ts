@@ -1,5 +1,6 @@
 import * as UTIL from 'util.roberta';
 import * as CONFLIST from 'confList.model';
+//@ts-ignore
 import * as Blockly from 'blockly';
 import * as $ from 'jquery';
 import 'bootstrap-table';
@@ -9,17 +10,17 @@ import * as CONFIGURATION_C from 'configuration.controller';
 /**
  * Initialize table of configurations
  */
-export function init() {
+export function init(): void {
     initConfList();
     initConfListEvents();
 }
 
-export function switchLanguage() {
+export function switchLanguage(): void {
     $('#confNameTable').bootstrapTable('destroy');
     initConfList();
     CONFLIST.loadConfList(update);
 }
-function initConfList() {
+function initConfList(): void {
     $('#confNameTable').bootstrapTable({
         locale: GUISTATE_C.getLanguage(),
         theadClasses: 'table-dark',
@@ -85,20 +86,22 @@ function initConfList() {
         .find('button[name="paginationSwitch"]')
         .attr('title', '')
         .attr('rel', 'tooltip')
+        //@ts-ignore
         .attr('data-bs-original-title', $('#confNameTable').bootstrapTable.locales[GUISTATE_C.getLanguage()].formatPaginationSwitch())
         .tooltip({ trigger: 'hover' });
     $('#confList>.bootstrap-table')
         .find('button[name="refresh"]')
         .attr('title', '')
         .attr('rel', 'tooltip')
+        //@ts-ignore
         .attr('data-bs-original-title', $('#confNameTable').bootstrapTable.locales[GUISTATE_C.getLanguage()].formatRefresh())
         .tooltip({ trigger: 'hover' });
     $('#confNameTable').bootstrapTable('togglePagination');
 }
 
-function initConfListEvents() {
-    let $tabConfList = $('#tabConfList');
-    let $confNameTable = $('#confNameTable');
+function initConfListEvents(): void {
+    let $tabConfList: JQuery<HTMLElement> = $('#tabConfList');
+    let $confNameTable: JQuery<HTMLElement> = $('#confNameTable');
     $tabConfList.onWrap('shown.bs.tab', function () {
         GUISTATE_C.setView('tabConfList');
         CONFLIST.loadConfList(update);
@@ -108,7 +111,7 @@ function initConfListEvents() {
         .find('button[name="refresh"]')
         .onWrap(
             'click',
-            function () {
+            function (): boolean {
                 CONFLIST.loadConfList(update);
                 return false;
             },
@@ -117,7 +120,7 @@ function initConfListEvents() {
 
     $confNameTable.onWrap(
         'click-row.bs.table',
-        function ($element, row) {
+        function ($element, row): void {
             CONFIGURATION_C.loadFromListing(row);
         },
         'Load configuration from listing clicked'
@@ -125,7 +128,7 @@ function initConfListEvents() {
 
     $confNameTable.onWrap(
         'check-all.bs.table check.bs.table',
-        function () {
+        function (): void {
             $('#deleteSomeConfHeader').removeClass('disabled');
             $('#deleteSomeConfHeader').tooltip({ trigger: 'hover' });
             $('.delete').addClass('disabled');
@@ -136,7 +139,7 @@ function initConfListEvents() {
 
     $confNameTable.onWrap(
         'uncheck-all.bs.table',
-        function ($element, rows) {
+        function ($element, rows): void {
             $('#deleteSomeConfHeader').addClass('disabled');
             $('.delete').removeClass('disabled');
             $('.load').removeClass('disabled');
@@ -146,7 +149,7 @@ function initConfListEvents() {
 
     $confNameTable.onWrap(
         'uncheck.bs.table',
-        function () {
+        function (): void {
             var selectedRows = $confNameTable.bootstrapTable('getSelections');
             if (selectedRows.length <= 0 || selectedRows == null) {
                 $('#deleteSomeConfHeader').addClass('disabled');
@@ -159,7 +162,8 @@ function initConfListEvents() {
 
     $('#backConfList').onWrap(
         'click',
-        function () {
+        function (): boolean {
+            //@ts-ignore
             $('#tabConfiguration').tabWrapShow();
             return false;
         },
@@ -169,10 +173,10 @@ function initConfListEvents() {
     $(document).onWrap(
         'click',
         '.deleteSomeConf',
-        function () {
-            var configurations = $confNameTable.bootstrapTable('getSelections', {});
-            var names = '';
-            for (var i = 0; i < configurations.length; i++) {
+        function (): boolean {
+            let configurations = $confNameTable.bootstrapTable('getSelections', {});
+            let names: string = '';
+            for (let i: number = 0; i < configurations.length; i++) {
                 names += configurations[i][0];
                 names += '<br>';
             }
@@ -184,25 +188,27 @@ function initConfListEvents() {
             $('#confirmDeleteConfiguration').modal('show');
             return false;
         },
+        //@ts-ignore
+        //helper.d.ts only got 3 params while the function in warp.ts got 4
         'delete configurations'
     );
 
-    $confNameTable.on('shown.bs.collapse hidden.bs.collapse', function () {
+    $confNameTable.on('shown.bs.collapse hidden.bs.collapse', function (): void {
         $confNameTable.bootstrapTable('resetWidth');
     });
 
-    function resizeTable() {
+    function resizeTable(): void {
         $confNameTable.bootstrapTable('resetView', {
             height: UTIL.calcDataTableHeight(),
         });
     }
-    $(window).resize(function () {
+    $(window).resize(function (): void {
         resizeTable();
     });
 }
 
-function update(result) {
-    let $confNameTable = $('#confNameTable');
+function update(result): void {
+    let $confNameTable: JQuery<HTMLElement> = $('#confNameTable');
     UTIL.response(result);
     if (result.rc === 'ok') {
         $confNameTable.bootstrapTable('load', result.configurationNames);
@@ -217,13 +223,13 @@ function update(result) {
     });
 }
 
-var eventsDeleteLoad = {
-    'click .delete': function (e, value, row) {
+let eventsDeleteLoad = {
+    'click .delete': function (e: Event, value, row): boolean {
         //var deleted = false;
         e.stopPropagation();
-        var selectedRows = [row];
-        var names = '';
-        for (var i = 0; i < selectedRows.length; i++) {
+        let selectedRows: any[] = [row];
+        let names: string = '';
+        for (let i: number = 0; i < selectedRows.length; i++) {
             names += selectedRows[i][0];
             names += '<br>';
         }
@@ -232,13 +238,13 @@ var eventsDeleteLoad = {
         $('#confirmDeleteConfiguration').modal('show');
         return false;
     },
-    'click .load': function (e, value, row) {
+    'click .load': function (e, value, row): void {
         CONFIGURATION_C.loadFromListing(row);
     },
 };
 
-var formatDeleteLoad = function (value, row) {
-    var result = '';
+let formatDeleteLoad = function (value, row) {
+    let result: string = '';
     result +=
         '<a href="#" class="delete" rel="tooltip" lkey="Blockly.Msg.CONFLIST_DELETE_TOOLTIP" data-bs-original-title="" title=""><span class="typcn typcn-delete"></span></a>';
     result +=
@@ -246,7 +252,7 @@ var formatDeleteLoad = function (value, row) {
     return result;
 };
 
-var titleActions =
+let titleActions: string =
     '<a href="#" id="deleteSomeConfHeader" class="deleteSomeConf disabled" rel="tooltip" lkey="Blockly.Msg.CONFLIST_DELETE_ALL_TOOLTIP" data-bs-original-title="' +
     Blockly.Msg.CONFLIST_DELETE_ALL_TOOLTIP +
     '" title="">' +

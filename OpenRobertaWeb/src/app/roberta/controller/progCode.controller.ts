@@ -3,30 +3,31 @@ import * as UTIL from 'util.roberta';
 import * as GUISTATE_C from 'guiState.controller';
 import * as PROG_C from 'program.controller';
 import * as PROGRAM from 'program.model';
+//@ts-ignore
 import * as Blockly from 'blockly';
 import * as $ from 'jquery';
 import * as ACE_EDITOR from 'aceEditor';
+import { ProjectSourceResponse } from '../ts/restEntities';
 
 const INITIAL_WIDTH = 0.5;
-var blocklyWorkspace;
-
-function init() {
+let blocklyWorkspace;
+/**
+ *
+ */
+export function init(): void {
     blocklyWorkspace = GUISTATE_C.getBlocklyWorkspace();
     initEvents();
 }
-
-export { init };
-
-function initEvents() {
+function initEvents(): void {
     $('#codeButton').off('click touchend');
-    $('#codeButton').onWrap('click touchend', function (event) {
+    $('#codeButton').onWrap('click touchend', function(event): boolean {
         toggleCode($(this));
         return false;
     });
     $('#codeDownload').onWrap(
         'click',
-        function (event) {
-            var filename = GUISTATE_C.getProgramName() + '.' + GUISTATE_C.getSourceCodeFileExtension();
+        function(event): void {
+            let filename: string = GUISTATE_C.getProgramName() + '.' + GUISTATE_C.getSourceCodeFileExtension();
             UTIL.download(filename, GUISTATE_C.getProgramSource());
             MSG.displayMessage('MENU_MESSAGE_DOWNLOAD', 'TOAST', filename);
         },
@@ -34,17 +35,17 @@ function initEvents() {
     );
     $('#codeRefresh').onWrap(
         'click',
-        function (event) {
+        function(event): void {
             event.stopPropagation();
-            var dom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
-            var xmlProgram = Blockly.Xml.domToText(dom);
-            var xmlConfiguration = GUISTATE_C.getConfigurationXML();
+            let dom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
+            let xmlProgram = Blockly.Xml.domToText(dom);
+            let xmlConfiguration = GUISTATE_C.getConfigurationXML();
 
-            var isNamedConfig = !GUISTATE_C.isConfigurationStandard() && !GUISTATE_C.isConfigurationAnonymous();
-            var configName = isNamedConfig ? GUISTATE_C.getConfigurationName() : undefined;
-            var xmlConfigText = GUISTATE_C.isConfigurationAnonymous() ? GUISTATE_C.getConfigurationXML() : undefined;
+            let isNamedConfig: boolean = !GUISTATE_C.isConfigurationStandard() && !GUISTATE_C.isConfigurationAnonymous();
+            let configName: string = isNamedConfig ? GUISTATE_C.getConfigurationName() : undefined;
+            let xmlConfigText = GUISTATE_C.isConfigurationAnonymous() ? GUISTATE_C.getConfigurationXML() : undefined;
 
-            var language = GUISTATE_C.getLanguage();
+            let language = GUISTATE_C.getLanguage();
 
             PROGRAM.showSourceProgram(
                 GUISTATE_C.getProgramName(),
@@ -54,7 +55,7 @@ function initEvents() {
                 PROG_C.getSSID(),
                 PROG_C.getPassword(),
                 language,
-                function (result) {
+                function(result): void {
                     PROG_C.reloadProgram(result, true);
                     if (result.rc == 'ok') {
                         GUISTATE_C.setState(result);
@@ -70,17 +71,17 @@ function initEvents() {
     );
 }
 
-function toggleCode($button) {
+function toggleCode($button): void {
     if ($('#codeButton').hasClass('rightActive')) {
         $('#blocklyDiv').closeRightView();
     } else {
-        var dom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
-        var xmlProgram = Blockly.Xml.domToText(dom);
+        let dom: HTMLElement = Blockly.Xml.workspaceToDom(blocklyWorkspace);
+        let xmlProgram = Blockly.Xml.domToText(dom);
 
-        var isNamedConfig = !GUISTATE_C.isConfigurationStandard() && !GUISTATE_C.isConfigurationAnonymous();
-        var configName = isNamedConfig ? GUISTATE_C.getConfigurationName() : undefined;
-        var xmlConfigText = GUISTATE_C.isConfigurationAnonymous() ? GUISTATE_C.getConfigurationXML() : undefined;
-        var language = GUISTATE_C.getLanguage();
+        let isNamedConfig: boolean = !GUISTATE_C.isConfigurationStandard() && !GUISTATE_C.isConfigurationAnonymous();
+        let configName: string = isNamedConfig ? GUISTATE_C.getConfigurationName() : undefined;
+        let xmlConfigText = GUISTATE_C.isConfigurationAnonymous() ? GUISTATE_C.getConfigurationXML() : undefined;
+        let language = GUISTATE_C.getLanguage();
         PROGRAM.showSourceProgram(
             GUISTATE_C.getProgramName(),
             configName,
@@ -89,7 +90,7 @@ function toggleCode($button) {
             PROG_C.getSSID(),
             PROG_C.getPassword(),
             language,
-            function (result) {
+            function(result: ProjectSourceResponse) {
                 PROG_C.reloadProgram(result);
                 if (result.rc == 'ok') {
                     GUISTATE_C.setState(result);

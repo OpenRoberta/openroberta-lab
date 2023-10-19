@@ -15,12 +15,12 @@ import * as GUI from 'guiState.model';
  * @param successFn
  *            {Function} - a callback that is called when the creation succeeds. Needs to take one parameter "data"
  */
-function loadUserGroup(groupName, successFn) {
+export function loadUserGroup(groupName: string, successFn: Function): void {
     COMM.json(
         '/userGroup/getUserGroup',
         {
             cmd: 'getUserGroup',
-            groupName: groupName,
+            groupName: groupName
         },
         successFn,
         'Got all information of the usergroup "' + groupName + '" of the user "' + GUI.user.accountName + '" from the server.'
@@ -33,11 +33,11 @@ function loadUserGroup(groupName, successFn) {
  * @param successFn
  *            {Function} - a callback that is called when the creation succeeds. Needs to take one parameter "data"
  */
-function loadUserGroupList(successFn) {
+export function loadUserGroupList(successFn: Function): void {
     COMM.json(
         '/userGroup/getUserGroupList',
         {
-            cmd: 'getUserGroupList',
+            cmd: 'getUserGroupList'
         },
         successFn,
         'Got the list of usergroups for the user "' + GUI.user.accountName + '" from the server.'
@@ -52,12 +52,12 @@ function loadUserGroupList(successFn) {
  * @param successFn
  *            {Function} - a callback that is called when the creation succeeds. Needs to take one parameter "data"
  */
-function loadUserGroupMemberList(groupName, successFn) {
+export function loadUserGroupMemberList(groupName: string, successFn: Function): void {
     COMM.json(
         '/userGroup/getUserGroupMemberList',
         {
             cmd: 'getUserGroupMemberList',
-            groupName: groupName,
+            groupName: groupName
         },
         successFn,
         'Got the list of members for the usergroup "' + groupName + '" of the user "' + GUI.user.accountName + '" from the server.'
@@ -73,150 +73,136 @@ function loadUserGroupMemberList(groupName, successFn) {
  *            {Function} - a callback that is called when the creation succeeds. Needs to take one parameter "data"
  *
  */
-function createUserGroup(groupName, initialMembers, successFn) {
+export function createUserGroup(groupName: string, initialMembers, successFn: Function): void {
     COMM.json(
         '/userGroup/createUserGroup',
         {
             cmd: 'createUserGroup',
             groupName: groupName,
-            groupMemberNames: initialMembers,
+            groupMemberNames: initialMembers
         },
-        function (data) {
+        function(data): void {
             successFn(data);
         },
         'Create usergroup "' + groupName + '" for user "' + GUI.user.accountName + '" on server.'
     );
 }
 
-function deleteUserGroup(groupName, successFn) {
+export function deleteUserGroup(groupName: string, successFn: Function): void {
     COMM.json(
         '/userGroup/deleteUserGroups',
         {
             cmd: 'deleteUserGroups',
-            groupNames: [groupName],
+            groupNames: [groupName]
         },
-        function (data) {
+        function(data): void {
             successFn(data);
         },
         'Delete usergroup "' + groupName + '" of user "' + GUI.user.accountName + '" on server.'
     );
 }
 
-function deleteUserGroups(groupNames, successFn) {
+export function deleteUserGroups(groupNames: string[], successFn: Function): void {
     COMM.json(
         '/userGroup/deleteUserGroups',
         {
             cmd: 'deleteUserGroups',
-            groupNames: groupNames,
+            groupNames: groupNames
         },
-        function (data) {
+        function(data): void {
             successFn(data);
         },
         'Deleted "' + groupNames.length + '" user groups of user "' + GUI.user.accountName + '" on server.'
     );
 }
 
-function addGroupMembers(groupName, newMemberNames, successFn) {
+export function addGroupMembers(groupName: string, newMemberNames: string[], successFn: Function): void {
     COMM.json(
         '/userGroup/addGroupMembers',
         {
             cmd: 'addGroupMembers',
             groupName: groupName,
-            groupMemberNames: newMemberNames,
+            groupMemberNames: newMemberNames
         },
-        function (data) {
+        function(data): void {
             successFn(data);
         },
         'Added ' + newMemberNames.length + ' members to usergroup "' + groupName + '" of user "' + GUI.user.accountName + '" on server.'
     );
 }
 
-function deleteGroupMember(groupName, memberAccount, successFn) {
+export function deleteGroupMember(groupName: string, memberAccount: string, successFn: Function): void {
     COMM.json(
         '/userGroup/deleteGroupMembers',
         {
             cmd: 'deleteGroupMembers',
             groupName: groupName,
-            groupMemberAccounts: [memberAccount],
+            groupMemberAccounts: [memberAccount]
         },
-        function (data) {
+        function(data): void {
             successFn(data);
         },
         'Deleted member "' + memberAccount + '" of usergroup "' + groupName + '" of user "' + GUI.user.accountName + '" on server.'
     );
 }
 
-function deleteGroupMembers(groupName, memberAccounts, successFn) {
+export function deleteGroupMembers(groupName: string, memberAccounts: string[], successFn: Function): void {
     COMM.json(
         '/userGroup/deleteGroupMembers',
         {
             cmd: 'deleteGroupMembers',
             groupName: groupName,
-            groupMemberAccounts: memberAccounts,
+            groupMemberAccounts: memberAccounts
         },
-        function (data) {
+        function(data): void {
             successFn(data);
         },
         'Deleted ' + memberAccounts.length + ' members of usergroup "' + groupName + '" of user "' + GUI.user.accountName + '" on server.'
     );
 }
 
-function setUserGroupMemberDefaultPassword(userGroupName, memberId, successFn) {
+export function setUserGroupMemberDefaultPassword(userGroupName: string, memberId: string, successFn: Function): void {
     COMM.json(
         '/userGroup/setUserGroupMemberDefaultPasswords',
         {
             cmd: 'setUserGroupMemberDefaultPasswords',
             groupName: userGroupName,
-            groupMemberAccounts: [memberId],
+            groupMemberAccounts: [memberId]
         },
-        function (data) {
+        function(data): void {
             successFn(data);
         },
         'Reset the password of user "' + memberId + '" (member of "' + userGroupName + '") to default on server.'
     );
 }
 
-function setUserGroupMemberDefaultPasswords(userGroupName, memberIds, successFn) {
+export function setUserGroupMemberDefaultPasswords(userGroupName: string, memberIds: string[], successFn: Function): void {
     COMM.json(
         '/userGroup/setUserGroupMemberDefaultPasswords',
         {
             cmd: 'setUserGroupMemberDefaultPasswords',
             groupName: userGroupName,
-            groupMemberAccounts: memberIds,
+            groupMemberAccounts: memberIds
         },
-        function (data) {
+        function(data): void {
             successFn(data);
         },
         'Reset the password of ' + memberIds.length + ' users of the group "' + userGroupName + '" to default value on server.'
     );
 }
 
-function updateMemberAccount(account, groupName, newAccount, successFn) {
+export function updateMemberAccount(account: string, groupName: string, newAccount: string, successFn: Function): void {
     COMM.json(
         '/userGroup/updateMemberAccount',
         {
             cmd: 'updateMemberAccount',
             groupName: groupName,
             currentGroupMemberAccount: account,
-            newGroupMemberAccount: newAccount,
+            newGroupMemberAccount: newAccount
         },
-        function (data) {
+        function(data): void {
             successFn(data);
         },
         'Set new account name for ' + account + ' of the group "' + groupName + '" to "' + newAccount + '" on server.'
     );
 }
-export {
-    loadUserGroup,
-    loadUserGroupList,
-    loadUserGroupMemberList,
-    createUserGroup,
-    deleteUserGroup,
-    deleteUserGroups,
-    addGroupMembers,
-    deleteGroupMember,
-    deleteGroupMembers,
-    setUserGroupMemberDefaultPassword,
-    setUserGroupMemberDefaultPasswords,
-    updateMemberAccount,
-};

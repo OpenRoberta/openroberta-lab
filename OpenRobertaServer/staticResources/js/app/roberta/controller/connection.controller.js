@@ -1,3 +1,149 @@
-var __awaiter=this&&this.__awaiter||function(n,t,e,o){return new(e||(e=Promise))((function(r,i){function c(n){try{u(o.next(n))}catch(n){i(n)}}function a(n){try{u(o.throw(n))}catch(n){i(n)}}function u(n){var t;n.done?r(n.value):(t=n.value,t instanceof e?t:new e((function(n){n(t)}))).then(c,a)}u((o=o.apply(n,t||[])).next())}))},__generator=this&&this.__generator||function(n,t){var e,o,r,i,c={label:0,sent:function(){if(1&r[0])throw r[1];return r[1]},trys:[],ops:[]};return i={next:a(0),throw:a(1),return:a(2)},"function"==typeof Symbol&&(i[Symbol.iterator]=function(){return this}),i;function a(a){return function(u){return function(a){if(e)throw new TypeError("Generator is already executing.");for(;i&&(i=0,a[0]&&(c=0)),c;)try{if(e=1,o&&(r=2&a[0]?o.return:a[0]?o.throw||((r=o.return)&&r.call(o),0):o.next)&&!(r=r.call(o,a[1])).done)return r;switch(o=0,r&&(a=[2&a[0],r.value]),a[0]){case 0:case 1:r=a;break;case 4:return c.label++,{value:a[1],done:!1};case 5:c.label++,o=a[1],a=[0];continue;case 7:a=c.ops.pop(),c.trys.pop();continue;default:if(!(r=c.trys,(r=r.length>0&&r[r.length-1])||6!==a[0]&&2!==a[0])){c=0;continue}if(3===a[0]&&(!r||a[1]>r[0]&&a[1]<r[3])){c.label=a[1];break}if(6===a[0]&&c.label<r[1]){c.label=r[1],r=a;break}if(r&&c.label<r[2]){c.label=r[2],c.ops.push(a);break}r[2]&&c.ops.pop(),c.trys.pop();continue}a=t.call(n,c)}catch(n){a=[6,n],o=0}finally{e=r=0}if(5&a[0])throw a[1];return{value:a[0]?a[1]:void 0,done:!0}}([a,u])}}};define(["require","exports","guiState.controller"],(function(n,t,e){var o;Object.defineProperty(t,"__esModule",{value:!0}),t.setIsAgent=t.getIsAgent=t.getSocket=t.setSocket=t.setConnectionInstance=t.getConnectionInstance=t.setConnection=t.switchConnection=t.initConnection=void 0;var r={socket:null,isAgent:!1};function i(n){return __awaiter(this,void 0,void 0,(function(){var t;return __generator(this,(function(e){switch(e.label){case 0:return t=u,[4,c(n)];case 1:return t.apply(void 0,[e.sent()]),function(){if(null==a()||null==a())throw new Error("could not resolve connection module/class")}(),a().init(),[2]}}))}))}function c(t){return __awaiter(this,void 0,void 0,(function(){var e;return __generator(this,(function(o){switch(o.label){case 0:return e=(r=t)[0].toUpperCase()+r.slice(1)+"Connection",[4,new Promise((function(t,e){n(["connections"],t,e)}))];case 1:return[2,new(o.sent()[e])]}var r}))}))}function a(){return o}function u(n){o=n}t.initConnection=function(n){return __awaiter(this,void 0,void 0,(function(){return __generator(this,(function(t){switch(t.label){case 0:return function(){if(null==e.getBlocklyWorkspace()||null==e.getBlocklyWorkspace())throw new Error("Blockly Workspace has not yet been loaded")}(),[4,i(n)];case 1:return t.sent(),[2]}}))}))},t.switchConnection=function(n){return __awaiter(this,void 0,void 0,(function(){return __generator(this,(function(t){switch(t.label){case 0:return a().terminate(),[4,i(n)];case 1:return t.sent(),[2]}}))}))},t.setConnection=i,t.getConnectionInstance=a,t.setConnectionInstance=u,t.setSocket=function(n){r.socket=n},t.getSocket=function(){return r.socket},t.getIsAgent=function(){return r.isAgent},t.setIsAgent=function(n){r.isAgent=n}}));
-//# sourceMappingURL=connection.controller.js.map
-//# sourceMappingURL=connection.controller.js.map
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __generator = (this && this.__generator) || function (thisArg, body) {
+    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
+    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
+    function verb(n) { return function (v) { return step([n, v]); }; }
+    function step(op) {
+        if (f) throw new TypeError("Generator is already executing.");
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
+            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+            if (y = 0, t) op = [op[0] & 2, t.value];
+            switch (op[0]) {
+                case 0: case 1: t = op; break;
+                case 4: _.label++; return { value: op[1], done: false };
+                case 5: _.label++; y = op[1]; op = [0]; continue;
+                case 7: op = _.ops.pop(); _.trys.pop(); continue;
+                default:
+                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
+                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
+                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
+                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
+                    if (t[2]) _.ops.pop();
+                    _.trys.pop(); continue;
+            }
+            op = body.call(thisArg, _);
+        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
+        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+    }
+};
+define(["require", "exports", "guiState.controller"], function (require, exports, GUISTATE_C) {
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.setIsAgent = exports.getIsAgent = exports.getSocket = exports.setSocket = exports.setConnectionInstance = exports.getConnectionInstance = exports.setConnection = exports.switchConnection = exports.initConnection = void 0;
+    var connectionInstance;
+    var robot = {
+        socket: null,
+        isAgent: false,
+    };
+    function initConnection(robotName) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        assertBlocklyWorkspaceLoaded();
+                        return [4 /*yield*/, setConnection(robotName)];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    }
+    exports.initConnection = initConnection;
+    function switchConnection(robotName) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        getConnectionInstance().terminate();
+                        return [4 /*yield*/, setConnection(robotName)];
+                    case 1:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    }
+    exports.switchConnection = switchConnection;
+    function setConnection(robotName) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _a = setConnectionInstance;
+                        return [4 /*yield*/, resolveClass(robotName)];
+                    case 1:
+                        _a.apply(void 0, [_b.sent()]);
+                        assertClassResolved();
+                        getConnectionInstance().init();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    }
+    exports.setConnection = setConnection;
+    function assertBlocklyWorkspaceLoaded() {
+        if (GUISTATE_C.getBlocklyWorkspace() == null || GUISTATE_C.getBlocklyWorkspace() == undefined) {
+            throw new Error('Blockly Workspace has not yet been loaded');
+        }
+    }
+    function assertClassResolved() {
+        if (getConnectionInstance() == null || getConnectionInstance() == undefined) {
+            throw new Error('could not resolve connection module/class');
+        }
+    }
+    /**
+     * resolves module and loads contents for use
+     * @param robotName
+     */
+    function resolveClass(robotName) {
+        return __awaiter(this, void 0, void 0, function () {
+            var className, module;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        className = capitalizeFirstLetter(robotName) + 'Connection';
+                        return [4 /*yield*/, new Promise(function (resolve_1, reject_1) { require(['connections'], resolve_1, reject_1); })];
+                    case 1:
+                        module = _a.sent();
+                        return [2 /*return*/, new module[className]()];
+                }
+            });
+        });
+    }
+    function capitalizeFirstLetter(string) {
+        return string[0].toUpperCase() + string.slice(1);
+    }
+    function getConnectionInstance() {
+        return connectionInstance;
+    }
+    exports.getConnectionInstance = getConnectionInstance;
+    function setConnectionInstance(connection) {
+        connectionInstance = connection;
+    }
+    exports.setConnectionInstance = setConnectionInstance;
+    function setSocket(socket) {
+        robot.socket = socket;
+    }
+    exports.setSocket = setSocket;
+    function getSocket() {
+        return robot.socket;
+    }
+    exports.getSocket = getSocket;
+    function getIsAgent() {
+        return robot.isAgent;
+    }
+    exports.getIsAgent = getIsAgent;
+    function setIsAgent(isAgent) {
+        robot.isAgent = isAgent;
+    }
+    exports.setIsAgent = setIsAgent;
+});

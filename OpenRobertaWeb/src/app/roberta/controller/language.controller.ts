@@ -2,14 +2,15 @@ import * as LOG from 'log';
 import * as $ from 'jquery';
 import 'bootstrap';
 import * as GUISTATE_C from 'guiState.controller';
+//@ts-ignore
 import * as Blockly from 'blockly';
 
 /**
  * Initialize language switching
  */
-function init() {
-    var ready = new $.Deferred();
-    var language;
+export function init() {
+    let ready: JQuery.Deferred<any, any, any> = $.Deferred();
+    let language: any;
     if (navigator.language.indexOf('de') > -1) {
         language = 'de';
     } else if (navigator.language.indexOf('fi') > -1) {
@@ -65,8 +66,8 @@ function init() {
     $('#language li a[lang=' + language + ']')
         .parent()
         .addClass('disabled');
-    var url = 'blockly/msg/js/' + language + '.js';
-    getCachedScript(url).done(function (data) {
+    let url: string = 'blockly/msg/js/' + language + '.js';
+    getCachedScript(url).done(function (data): void {
         translate();
         ready.resolve(language);
     });
@@ -75,22 +76,22 @@ function init() {
     return ready.promise(language);
 }
 
-function initEvents() {
-    $('#language').onWrap('click', 'li a', function () {
+function initEvents(): void {
+    $('#language').onWrap('click', 'li a', function (): void {
         LOG.info('language clicked');
-        var language = $(this).attr('lang');
+        let language: any = $(this).attr('lang');
         switchLanguage(language);
     }),
         'switch language clicked';
 }
 
-function switchLanguage(language) {
+function switchLanguage(language: any): void {
     if (GUISTATE_C.getLanguage == language) {
         return;
     }
 
-    var url = 'blockly/msg/js/' + language.toLowerCase() + '.js';
-    getCachedScript(url).done(function (data) {
+    let url: string = 'blockly/msg/js/' + language.toLowerCase() + '.js';
+    getCachedScript(url).done(function (data): void {
         GUISTATE_C.setLanguage(language);
         translate();
     });
@@ -100,14 +101,14 @@ function switchLanguage(language) {
 /**
  * Translate the web page
  */
-function translate($domElement) {
+export function translate($domElement?: any): void {
     if (!$domElement || typeof $domElement !== 'object' || !$domElement.length) {
         $domElement = $(document.body);
     }
 
-    $domElement.find('[lkey]').each(function (index) {
-        var lkey = $(this).attr('lkey');
-        var key, value;
+    $domElement.find('[lkey]').each(function (index): boolean {
+        let lkey: string = $(this).attr('lkey');
+        let key, value;
         if (lkey.toString().indexOf('+') > -1) {
             key = lkey.split('+').map((k) => k.trim().replace('Blockly.Msg.', '')); //.forEach((k) => k.replace('Blockly.Msg.', ''));
             value = key.map((k) => Blockly.Msg[k]).join('');
@@ -128,14 +129,13 @@ function translate($domElement) {
     });
     $('#start input.form-control.search-input').attr('placeholder', Blockly.Msg.START_FORMATSEARCH);
 }
-export { init, translate };
 
 /**
  * $.getScript() will append a timestamped query parameter to the url to
  * prevent caching. The cache control should be handled using http-headers.
  * see https://api.jquery.com/jquery.getscript/#caching-requests
  */
-function getCachedScript(url, options) {
+function getCachedScript(url: string, options?: any) {
     // Allow user to set any option except for dataType, cache, and url
     options = $.extend(options || {}, {
         dataType: 'script',

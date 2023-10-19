@@ -1,3 +1,107 @@
-define(["require","exports","log","guiState.controller","jquery","jquery-validate"],(function(e,i,t,n,l){Object.defineProperty(i,"__esModule",{value:!0}),i.loadLegalTexts=i.initView=i.init=void 0;var o,a,r,c=.5,d={},u={};function h(){a=l("#legalDiv"),o=l("#legalButton"),r=a.children("#legalDivHeader");var e="imprint_",i=a.children("#legalDivImprint"),t=r.children('[data-href="#legalDivImprint"]'),n="privacy_policy_",c=a.children("#legalDivPrivacyPolicy"),h=r.children('[data-href="#legalDivPrivacyPolicy"]'),f="terms_of_use_",p=a.children("#legalDivTermsOfUse"),v=r.children('[data-href="#legalDivTermsOfUse"]');d[e]=i,d[n]=c,d[f]=p,u[e]=t,u[n]=h,u[f]=v,s()}function s(){var e=n.getLanguage().toLowerCase(),i=n.getLegalTextsMap(),t=function(e,t){var n=d[e],o=u[e],a=i[e+t+".html"]||i[e+"en.html"]||i[e+"de.html"];n&&(n.children().remove(),a?(n.append(l(a)),o.show()):o.hide())};for(documentType in d)d.hasOwnProperty(documentType)&&t(documentType,e);0===r.children().filter((function(){return"none"!==l(this).css("display")})).length?o.hide():o.show()}i.init=function(){n.getBlocklyWorkspace(),h(),function(){var e=function(e){var i=u[e],t=d[e];t&&i&&i.onWrap("click touchend",(function(e){e.preventDefault(),a.animate({scrollTop:t.offset().top-92},"slow")}))};for(documentType in o.off("click touchend"),o.onWrap("click touchend",(function(e){var i;e.preventDefault(),i=l(this),l("#legalButton").hasClass("rightActive")?l("#blocklyDiv").closeRightView():(t.info("legal view opened"),a.animate({scrollTop:0},"fast"),i.openRightView(l("#legalDiv"),c))})),u)u.hasOwnProperty(documentType)&&e(documentType)}()},i.initView=h,i.loadLegalTexts=s}));
-//# sourceMappingURL=legal.controller.js.map
-//# sourceMappingURL=legal.controller.js.map
+define(["require", "exports", "log", "guiState.controller", "jquery", "jquery-validate"], function (require, exports, LOG, GUISTATE_C, $) {
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.loadLegalTexts = exports.initView = exports.init = void 0;
+    var INITIAL_WIDTH = 0.5;
+    /**
+     * The blocklyWorkspace is used to
+     */
+    var blocklyWorkspace, $legalButton, $legalDiv, $legalHeader, storages = {}, links = {}, 
+    /**
+     * The fileStorage is used to store the loaded legal texts, so that even if the internet is lost and the legal texts
+     * have to be loaded, the texts are available.
+     *
+     * fileStorage: {
+     *     documentType: {
+     *         languageKey: String fileContent
+     *     }
+     * }
+     */
+    fileStorage = {};
+    /**
+     *
+     */
+    function init() {
+        blocklyWorkspace = GUISTATE_C.getBlocklyWorkspace();
+        initView();
+        initEvents();
+    }
+    exports.init = init;
+    function initView() {
+        $legalDiv = $('#legalDiv');
+        $legalButton = $('#legalButton');
+        $legalHeader = $legalDiv.children('#legalDivHeader');
+        var imprintDocumentType = 'imprint_', $imprintStorage = $legalDiv.children('#legalDivImprint'), $imprintLink = $legalHeader.children('[data-href="#legalDivImprint"]'), privacyPolicyDocumentType = 'privacy_policy_', $privacyPolicyStorage = $legalDiv.children('#legalDivPrivacyPolicy'), $privacyPolicyLink = $legalHeader.children('[data-href="#legalDivPrivacyPolicy"]'), termsOfUseDocumentType = 'terms_of_use_', $termsOfUseStorage = $legalDiv.children('#legalDivTermsOfUse'), $termsOfUseLink = $legalHeader.children('[data-href="#legalDivTermsOfUse"]');
+        storages[imprintDocumentType] = $imprintStorage;
+        storages[privacyPolicyDocumentType] = $privacyPolicyStorage;
+        storages[termsOfUseDocumentType] = $termsOfUseStorage;
+        links[imprintDocumentType] = $imprintLink;
+        links[privacyPolicyDocumentType] = $privacyPolicyLink;
+        links[termsOfUseDocumentType] = $termsOfUseLink;
+        loadLegalTexts();
+    }
+    exports.initView = initView;
+    function initEvents() {
+        var setScrollEventForDocumentType = function (documentType) {
+            var $link = links[documentType], $storage = storages[documentType];
+            if ($storage && $link) {
+                $link.onWrap('click touchend', function (evt) {
+                    evt.preventDefault();
+                    $legalDiv.animate({
+                        scrollTop: $storage.offset().top - 92,
+                    }, 'slow');
+                });
+            }
+        };
+        $legalButton.off('click touchend');
+        $legalButton.onWrap('click touchend', function (event) {
+            event.preventDefault();
+            toggleLegal($(this));
+        });
+        for (var documentType in links) {
+            if (links.hasOwnProperty(documentType)) {
+                setScrollEventForDocumentType(documentType);
+            }
+        }
+    }
+    function loadLegalTexts() {
+        var language = GUISTATE_C.getLanguage().toLowerCase(), legalTextsMap = GUISTATE_C.getLegalTextsMap(), loadFile = function (documentType, language) {
+            var $storage = storages[documentType], $link = links[documentType], content = legalTextsMap[documentType + language + '.html'] || legalTextsMap[documentType + 'en.html'] || legalTextsMap[documentType + 'de.html'];
+            if ($storage) {
+                $storage.children().remove();
+                if (content) {
+                    $storage.append($(content));
+                    $link.show();
+                }
+                else {
+                    $link.hide();
+                }
+            }
+        };
+        for (var documentType in storages) {
+            if (storages.hasOwnProperty(documentType)) {
+                loadFile(documentType, language);
+            }
+        }
+        if ($legalHeader.children().filter(function () {
+            return $(this).css('display') !== 'none';
+        }).length === 0) {
+            $legalButton.hide();
+        }
+        else {
+            $legalButton.show();
+        }
+    }
+    exports.loadLegalTexts = loadLegalTexts;
+    function toggleLegal($button) {
+        if ($('#legalButton').hasClass('rightActive')) {
+            $('#blocklyDiv').closeRightView();
+        }
+        else {
+            LOG.info('legal view opened');
+            $legalDiv.animate({
+                scrollTop: 0,
+            }, 'fast');
+            $button.openRightView($('#legalDiv'), INITIAL_WIDTH);
+        }
+    }
+});

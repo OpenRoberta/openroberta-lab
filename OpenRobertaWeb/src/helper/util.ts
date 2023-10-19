@@ -23,26 +23,26 @@ export function getLinesFromRectangle(myObj: any): {
             x1: myObj.x,
             x2: myObj.x,
             y1: myObj.y,
-            y2: myObj.y + myObj.h,
+            y2: myObj.y + myObj.h
         },
         {
             x1: myObj.x,
             x2: myObj.x + myObj.w,
             y1: myObj.y,
-            y2: myObj.y,
+            y2: myObj.y
         },
         {
             x1: myObj.x + myObj.w,
             x2: myObj.x,
             y1: myObj.y + myObj.h,
-            y2: myObj.y + myObj.h,
+            y2: myObj.y + myObj.h
         },
         {
             x1: myObj.x + myObj.w,
             x2: myObj.x + myObj.w,
             y1: myObj.y + myObj.h,
-            y2: myObj.y,
-        },
+            y2: myObj.y
+        }
     ];
 }
 
@@ -125,7 +125,7 @@ export const activationDisplayName: { linear: string; relu: string; tanh: string
     relu: 'ReLU',
     tanh: 'Tanh',
     sigmoid: 'Sigmoid',
-    bool: 'Bool(0,1)',
+    bool: 'Bool(0,1)'
 };
 
 export const csvToArray: Function = (data: string, delimiter: string = ';', omitFirstRow: boolean = false) =>
@@ -186,7 +186,7 @@ export function clone(obj?: null | object): any {
         return copy;
     }
 
-    throw new Error("Unable to copy obj! Its type isn't supported.");
+    throw new Error('Unable to copy obj! Its type isn\'t supported.');
 }
 
 export function isEmpty(obj: object): boolean {
@@ -327,7 +327,7 @@ export function checkVisibility(): Function {
             hidden: 'visibilitychange',
             webkitHidden: 'webkitvisibilitychange',
             mozHidden: 'mozvisibilitychange',
-            msHidden: 'msvisibilitychange',
+            msHidden: 'msvisibilitychange'
         };
     for (stateKey in keys) {
         if (stateKey in document) {
@@ -335,7 +335,7 @@ export function checkVisibility(): Function {
             break;
         }
     }
-    return function (c) {
+    return function(c) {
         if (c) {
             document.addEventListener(eventKey, c);
         }
@@ -344,7 +344,7 @@ export function checkVisibility(): Function {
 }
 
 export function setFocusOnElement($elem: JQuery<HTMLElement>): void {
-    setTimeout(function (): void {
+    setTimeout(function(): void {
         if ($elem.is(':visible') == true) {
             $elem.focus();
         }
@@ -355,7 +355,7 @@ export function showSingleModal(customize: Function, onSubmit: Function, onHidde
     customize();
     $('#single-modal-form').onWrap(
         'submit',
-        function (e): void {
+        function(e): void {
             e.preventDefault();
             onSubmit();
         },
@@ -363,7 +363,7 @@ export function showSingleModal(customize: Function, onSubmit: Function, onHidde
     );
     $('#single-modal').onWrap(
         'hidden.bs.modal',
-        function () {
+        function() {
             $('#single-modal-form').off('submit');
             $('#singleModalInput').val('');
             $('#single-modal-form').validate().resetForm();
@@ -380,7 +380,7 @@ export function showSingleModal(customize: Function, onSubmit: Function, onHidde
 export function showSingleListModal(customize: Function, onSubmit: Function, onHidden: Function, validator?: JQueryValidation.ValidationOptions): void {
     $('#single-modal-list-form').onWrap(
         'submit',
-        function (e): void {
+        function(e): void {
             e.preventDefault();
             onSubmit();
         },
@@ -388,7 +388,7 @@ export function showSingleListModal(customize: Function, onSubmit: Function, onH
     );
     $('#single-modal-list').onWrap(
         'hidden.bs.modal',
-        function (): void {
+        function(): void {
             $('#single-modal-list-form').unbind('submit');
             onHidden();
         },
@@ -406,13 +406,13 @@ export function showMsgOnTop(msg: string): void {
     $('#show-message').find('button').removeAttr('data-bs-dismiss');
     $('#show-message')
         .find('button')
-        .oneWrap('click', function (e) {
+        .oneWrap('click', function(e) {
             $('#show-message').modal('hide');
             $('#show-message').find('button').attr('data-bs-dismiss', 'modal');
         });
     MSG.displayInformation(
         {
-            rc: 'not ok',
+            rc: 'not ok'
         },
         '',
         msg
@@ -478,7 +478,7 @@ function destroyClickedElement(event: any): void {
 export function download(fileName: string, content: string): void {
     if ('Blob' in window && navigator.userAgent.toLowerCase().match(/iPad|iPhone|Android/i) == null) {
         let contentAsBlob: Blob = new Blob([content], {
-            type: 'application/octet-stream',
+            type: 'application/octet-stream'
         });
         if ('msSaveOrOpenBlob' in navigator) {
             //@ts-ignore
@@ -491,7 +491,7 @@ export function download(fileName: string, content: string): void {
             downloadLink.onclick = destroyClickedElement;
             downloadLink.style.display = 'none';
             document.body.appendChild(downloadLink);
-            setTimeout(function () {
+            setTimeout(function() {
                 downloadLink.click();
             }, 0);
         }
@@ -502,7 +502,7 @@ export function download(fileName: string, content: string): void {
         downloadLink.style.display = 'none';
         document.body.appendChild(downloadLink);
         downloadLink.onclick = destroyClickedElement;
-        setTimeout(function () {
+        setTimeout(function() {
             downloadLink.click();
         }, 0);
     }
@@ -561,23 +561,23 @@ let __entityMap: object = {
     '<': '&lt;',
     '>': '&gt;',
     '"': '&quot;',
-    "'": '&#39;',
-    '/': '&#x2F;',
+    '\'': '&#39;',
+    '/': '&#x2F;'
 };
 //@ts-ignore
-String.prototype.escapeHTML = function () {
-    return String(this).replace(/[&<>"'\/]/g, function (s: string) {
+String.prototype.escapeHTML = function() {
+    return String(this).replace(/[&<>"'\/]/g, function(s: string) {
         return __entityMap[s];
     });
 };
 
-$.fn.draggable = function (opt: { handle: string; cursor: string; draggableClass: string; activeHandleClass: string; constraint: string; axis: string }): void {
+$.fn.draggable = function(opt: { handle: string; cursor: string; draggableClass: string; activeHandleClass: string; constraint: string; axis: string }): void {
     opt = $.extend(
         {
             handle: '',
             cursor: 'move',
             draggableClass: 'draggable',
-            activeHandleClass: 'active-handle',
+            activeHandleClass: 'active-handle'
         },
         opt
     );
@@ -587,7 +587,7 @@ $.fn.draggable = function (opt: { handle: string; cursor: string; draggableClass
 
     $elements
         .css('cursor', opt.cursor)
-        .on('mousedown touchstart', function (e): void {
+        .on('mousedown touchstart', function(e): void {
             let pageX: number = e.pageX || e.originalEvent.touches[0].pageX;
             let pageY: number = e.pageY || e.originalEvent.touches[0].pageY;
             if (opt.handle === '') {
@@ -602,7 +602,7 @@ $.fn.draggable = function (opt: { handle: string; cursor: string; draggableClass
                 pos_y: number = $selected.offset().top + drg_h - pageY,
                 pos_x: number = $selected.offset().left + drg_w - pageX;
             $(document)
-                .on('mousemove touchmove', function (e: JQuery.TouchEventBase): void {
+                .on('mousemove touchmove', function(e: JQuery.TouchEventBase): void {
                     let pageX: number = e.pageX || e.originalEvent.touches[0].pageX;
                     let pageY: number = e.pageY || e.originalEvent.touches[0].pageY;
                     let newXPosition: number = pageX + pos_x - drg_w;
@@ -627,29 +627,29 @@ $.fn.draggable = function (opt: { handle: string; cursor: string; draggableClass
                         left = Math.max(left, 42);
                         $selected.offset({
                             top: 0,
-                            left: left,
+                            left: left
                         });
                         $('#blocklyDiv').outerWidth(left);
                         /* $('.rightMenuButton').css({
                             right: $(window).width() - left,
                         });*/
                         $('.fromRight').css({
-                            width: $('#main-section').width() - $('#blocklyDiv').outerWidth(),
+                            width: $('#main-section').width() - $('#blocklyDiv').outerWidth()
                         });
                         ratioWorkspace = $('#blocklyDiv').outerWidth() / $('#main-section').width();
                         $(window).trigger('resize');
                     } else {
                         $selected.offset({
                             top: newYPosition,
-                            left: newXPosition,
+                            left: newXPosition
                         });
                     }
 
                     $selected.css({
-                        right: 'auto',
+                        right: 'auto'
                     });
                 })
-                .on('mouseup touchend', function (): void {
+                .on('mouseup touchend', function(): void {
                     $(document).off('mousemove touchmove'); // Unbind events from document
                     if ($selected !== null) {
                         $selected.removeClass(opt.draggableClass);
@@ -657,7 +657,7 @@ $.fn.draggable = function (opt: { handle: string; cursor: string; draggableClass
                     }
                 });
         })
-        .on('mouseup touchend', function (): void {
+        .on('mouseup touchend', function(): void {
             if ($selected) {
                 if (opt.handle === '') {
                     $selected.removeClass(opt.draggableClass);
@@ -671,39 +671,39 @@ $.fn.draggable = function (opt: { handle: string; cursor: string; draggableClass
 };
 
 const originalAddClass = $.fn.addClass;
-$.fn.addClass = function () {
+$.fn.addClass = function() {
     let result = originalAddClass.apply(this, arguments);
     $(this).trigger('classChange');
     return result;
 };
 
 const originalRemoveClass = $.fn.removeClass;
-$.fn.removeClass = function () {
+$.fn.removeClass = function() {
     let result = originalRemoveClass.apply(this, arguments);
     $(this).trigger('classChange');
     return result;
 };
 
-$.fn.toggleSimPopup = function (position: Coordinates): void {
+$.fn.toggleSimPopup = function(position: Coordinates): void {
     if ($(this).is(':hidden')) {
         $(this).css({
             top: position.top + $('#header').height() + 12,
-            left: position.left,
+            left: position.left
         });
     }
     $(this).animate(
         {
             opacity: 'toggle',
-            top: 'toggle',
+            top: 'toggle'
         },
         300
     );
     $(this).draggable({
-        constraint: 'window',
+        constraint: 'window'
     });
 };
 
-$.fn.closeRightView = function (opt_callBack: Function): void {
+$.fn.closeRightView = function(opt_callBack: Function): void {
     if ($('.fromRight.rightActive').hasClass('shifting')) {
         return;
     }
@@ -712,21 +712,21 @@ $.fn.closeRightView = function (opt_callBack: Function): void {
     let that = this; //$('#blocklyDiv')
     $('.fromRight.rightActive').animate(
         {
-            width: 0,
+            width: 0
         },
         {
             duration: ANIMATION_DURATION,
-            start: function (): void {
+            start: function(): void {
                 $('.modal').modal('hide');
                 $('.rightMenuButton.rightActive').removeClass('rightActive');
             },
-            step: function (now: number): void {
+            step: function(now: number): void {
                 $(window).trigger('resize');
                 that.width($('#main-section').width() - Math.ceil(now));
                 /*$('.rightMenuButton').css('right', now);*/
                 ratioWorkspace = $('#blocklyDiv').outerWidth() / $('#main-section').outerWidth();
             },
-            done: function (): void {
+            done: function(): void {
                 that.width($('#main-section').outerWidth());
                 /* $('.rightMenuButton').css('right', 0);*/
                 ratioWorkspace = 1;
@@ -740,14 +740,14 @@ $.fn.closeRightView = function (opt_callBack: Function): void {
                 }
                 $('.fromRight').trigger('closed');
             },
-            always: function (): void {
+            always: function(): void {
                 $('.fromRight.shifting').removeClass('shifting');
-            },
+            }
         }
     );
 };
 
-$.fn.openRightView = function ($view: JQuery<HTMLElement>, initialViewWidth: number, opt_callBack?: Function): void {
+$.fn.openRightView = function($view: JQuery<HTMLElement>, initialViewWidth: number, opt_callBack?: Function): void {
     if ($('.fromRight.rightActive').hasClass('shifting')) {
         return;
     }
@@ -785,17 +785,17 @@ $.fn.openRightView = function ($view: JQuery<HTMLElement>, initialViewWidth: num
     $(this).addClass('rightActive');
     $('.fromRight.rightActive').animate(
         {
-            width: width,
+            width: width
         },
         {
             duration: ANIMATION_DURATION,
-            step: function (now: number, tween: JQuery.Tween<HTMLElement>): void {
+            step: function(now: number, tween: JQuery.Tween<HTMLElement>): void {
                 $blockly.outerWidth($('#main-section').width() - now);
                 /*$('.rightMenuButton').css('right', Math.floor(now));*/
                 ratioWorkspace = $('#blocklyDiv').outerWidth() / $('#main-section').width();
                 $(window).trigger('resize');
             },
-            done: function (): void {
+            done: function(): void {
                 $('#sliderDiv').show();
                 $blockly.outerWidth($('#main-section').width() - $('.fromRight.rightActive').width());
                 /*  $('.rightMenuButton').css('right', $('.fromRight.rightActive').width());*/
@@ -805,20 +805,20 @@ $.fn.openRightView = function ($view: JQuery<HTMLElement>, initialViewWidth: num
                     $('.blocklyToolboxDiv').css('display', 'none');
                 }
                 $('#sliderDiv').css({
-                    left: $blockly.outerWidth(),
+                    left: $blockly.outerWidth()
                 });
                 if (typeof opt_callBack == 'function') {
                     opt_callBack();
                 }
             },
-            always: function (): void {
+            always: function(): void {
                 $view.removeClass('shifting');
-            },
+            }
         }
     );
 };
 
-$(window).on('resize', function (): void {
+$(window).on('resize', function(): void {
     let mainWidth: number = $('#main-section').width();
     let parentWidth: number = mainWidth;
     let height: number = $('#main-section').height(); //Math.max($('#blocklyDiv').outerHeight(), $('#brickly').outerHeight());
@@ -856,15 +856,15 @@ $(window).on('resize', function (): void {
             $('#configuration .blocklyToolboxDiv').removeClass('small');
         }
     }
-    $('.simWindow:visible').each(function (index: number, robotWindowElement: HTMLElement) {
+    $('.simWindow:visible').each(function(index: number, robotWindowElement: HTMLElement) {
         if (robotWindowElement.offsetLeft >= $(window).width() - 20) {
             $('#' + robotWindowElement.id).css({
-                left: '' + ($(window).width() - 20),
+                left: '' + ($(window).width() - 20)
             });
         }
         if (robotWindowElement.offsetTop >= $(window).height() - 20) {
             $('#' + robotWindowElement.id).css({
-                top: '' + ($(window).height() - 20),
+                top: '' + ($(window).height() - 20)
             });
         }
     });
@@ -942,10 +942,10 @@ export function annotateBlocks(workspace: any, annotations: any[]): void {
 
 export function removeLinks($elem: JQuery<HTMLElement>): void {
     $elem
-        .filter(function () {
+        .filter(function() {
             return $(this).attr('href') && ($(this).attr('href').indexOf('http') === 0 || $(this).attr('href').indexOf('javascript:linkTo') === 0);
         })
-        .each(function (): void {
+        .each(function(): void {
             $(this).removeAttr('href');
         });
 }
@@ -961,13 +961,13 @@ export function checkInCircle(px: number, py: number, cx: number, cy: number, r:
  *            {Number} - duration (optional) how long the simRobotWindow should take to show
  */
 export function openSimRobotWindow(): void {
-    $('.simWindow-openedButHidden').each(function (index, robotWindowElement) {
+    $('.simWindow-openedButHidden').each(function(index, robotWindowElement) {
         let position: number = $(window).width() * simRobotWindowPositions[robotWindowElement.id];
 
         $('#' + robotWindowElement.id).animate(
             {
                 opacity: 'show',
-                left: '' + position,
+                left: '' + position
             },
             ANIMATION_DURATION
         );
@@ -983,7 +983,7 @@ export function openSimRobotWindow(): void {
  */
 export function closeSimRobotWindow(): void {
     let SimWindows: JQuery<HTMLElement> = $('.simWindow:visible');
-    SimWindows.each(function (index, robotWindowElement) {
+    SimWindows.each(function(index, robotWindowElement) {
         let relativePosition: number;
         if ($(window).width() !== 0) {
             relativePosition = Math.abs((robotWindowElement.offsetLeft / $(window).width()) % 1);
@@ -995,7 +995,7 @@ export function closeSimRobotWindow(): void {
     SimWindows.addClass('simWindow-openedButHidden').animate(
         {
             opacity: 'hide',
-            left: '' + $(window).width(),
+            left: '' + $(window).width()
         },
         ANIMATION_DURATION
     );
@@ -1063,17 +1063,17 @@ export function initMicrophone(robot): void {
                     autoGainControl: false,
                     noiseSuppression: false,
                     //@ts-ignore
-                    highpassFilter: false,
-                },
+                    highpassFilter: false
+                }
             })
             .then(
-                function (stream: MediaStream): void {
+                function(stream: MediaStream): void {
                     let mediaStreamSource: MediaStreamAudioSourceNode = robot.webAudio.context.createMediaStreamSource(stream);
                     //@ts-ignore
                     robot.sound = Volume.createAudioMeter(robot.webAudio.context);
                     mediaStreamSource.connect(robot.sound);
                 },
-                function () {
+                function() {
                     console.log('Sorry, but there is no microphone available on your system');
                 }
             );
@@ -1184,11 +1184,11 @@ export function cleanUri(): void {
 }
 
 //TODO: Robot group names exists in plugin properties
-export function getRobotGroupsPrettyPrint(opt_robotGroup?): string | object {
+export function getRobotGroupsPrettyPrint(opt_robotGroup?): any {
     let robots = GUISTATE_C.getRobots();
     let groups: object = {};
 
-    let coerceName = function (name: string, group: string): string {
+    let coerceName = function(name: string, group: string): string {
         if (group === 'arduino') return 'Nepo4Arduino';
         if (group === 'ev3') return 'Ev3';
         return GUISTATE_C.getMenuRobotRealName(name);
@@ -1197,7 +1197,6 @@ export function getRobotGroupsPrettyPrint(opt_robotGroup?): string | object {
         return coerceName(opt_robotGroup, opt_robotGroup);
     }
     for (let propt in robots) {
-        //@ts-ignore
         let group: string = robots[propt].group;
         let name: string = robots[propt].name;
         if (group && !groups[group]) {

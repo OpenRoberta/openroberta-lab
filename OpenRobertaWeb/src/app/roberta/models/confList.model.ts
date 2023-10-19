@@ -10,14 +10,13 @@ import * as COMM from 'comm';
 /**
  * Refresh program list
  */
-function loadConfList(successFn) {
+export function loadConfList(successFn: Function): void {
     COMM.json(
         '/conf/loadCN',
         {
-            cmd: 'loadCN',
+            cmd: 'loadCN'
         },
         successFn,
         'refresh configuration list'
     );
 }
-export { loadConfList };

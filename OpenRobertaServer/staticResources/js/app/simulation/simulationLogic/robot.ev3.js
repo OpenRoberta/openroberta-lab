@@ -1,3 +1,160 @@
-var __extends=this&&this.__extends||function(){var e=function(t,s){return e=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(e,t){e.__proto__=t}||function(e,t){for(var s in t)Object.prototype.hasOwnProperty.call(t,s)&&(e[s]=t[s])},e(t,s)};return function(t,s){if("function"!=typeof s&&null!==s)throw new TypeError("Class extends value "+String(s)+" is not a constructor or null");function o(){this.constructor=t}e(t,s),t.prototype=null===s?Object.create(s):(o.prototype=s.prototype,new o)}}();define(["require","exports","robot.base.mobile","robot.sensors","robot.actuators","jquery"],(function(e,t,s,o,n,r){Object.defineProperty(t,"__esModule",{value:!0});var a=function(e){function t(t,s,r,a,i){var c=e.call(this,t,s,r,a,i)||this;return c.volume=.5,c.tts=new n.TTS,c.webAudio=new n.WebAudio,c.timer=new o.Timer(5),c}return __extends(t,e),t.prototype.updateActions=function(t,s,o){e.prototype.updateActions.call(this,t,s,o);var n=this.interpreter.getRobotBehaviour().getActionState("volume",!0);(n||0===n)&&(this.volume=n/100)},t.prototype.reset=function(){e.prototype.reset.call(this),this.volume=.5},t.prototype.configure=function(e){this.chassis=new n.EV3Chassis(this.id,e,2,this.pose),this.led=new n.StatusLed({x:-10,y:0},this.chassis.geom.color);var t=e.SENSORS,a=function(e){switch(t[e].TYPE){case"TOUCH":i[e]=new o.TouchSensor(e,25,0,i.chassis.geom.color);break;case"GYRO":i[e]=new o.GyroSensorExt(e,0,0,0);break;case"COLOR":var n=[],r=i;Object.keys(i).forEach((function(e){r[e]&&r[e]instanceof o.ColorSensor&&n.push(r[e])}));var a=10*(n.length+1)-5*(Object.keys(t).filter((function(e){return"COLOR"==t[e].TYPE})).length+1);i[e]=new o.ColorSensor(e,15,a,0,5);break;case"INFRARED":case"ULTRASONIC":var c=[],h=i;Object.keys(i).forEach((function(e){h[e]&&h[e]instanceof o.DistanceSensor&&c.push(h[e])}));var u=c.length+1,l=Object.keys(t).filter((function(e){return"ULTRASONIC"==t[e].TYPE||"INFRARED"==t[e].TYPE})).length,f=new s.Pose(i.chassis.geom.x+i.chassis.geom.w,0,0);if(3==l)1==u?f=new s.Pose(i.chassis.geom.h/2,-i.chassis.geom.h/2,-Math.PI/4):2==u&&(f=new s.Pose(i.chassis.geom.h/2,i.chassis.geom.h/2,Math.PI/4));else if(l%2==0)switch(u){case 1:f=new s.Pose(i.chassis.geom.x+i.chassis.geom.w,-i.chassis.geom.h/2,-Math.PI/4);break;case 2:f=new s.Pose(i.chassis.geom.x+i.chassis.geom.w,i.chassis.geom.h/2,Math.PI/4);break;case 3:f=new s.Pose(i.chassis.geom.x,-i.chassis.geom.h/2,-3*Math.PI/4);break;case 4:f=new s.Pose(i.chassis.geom.x,i.chassis.geom.h/2,3*Math.PI/4)}"ULTRASONIC"==t[e].TYPE?i[e]=new o.UltrasonicSensor(e,f.x,f.y,f.theta,255):i[e]=new o.InfraredSensor(e,f.x,f.y,f.theta,70)}},i=this;for(var c in t)a(c);this.buttons=new o.EV3Keys([{name:"escape",value:!1},{name:"up",value:!1},{name:"left",value:!1},{name:"enter",value:!1},{name:"right",value:!1},{name:"down",value:!1}],this.id);var h=this;for(var u in this.buttons.keys){var l=r("#"+this.buttons.keys[u].name+h.id);l.on("mousedown touchstart",(function(){h.buttons.keys[this.id.replace(/\d+$/,"")].value=!0})),l.on("mouseup touchend",(function(){h.buttons.keys[this.id.replace(/\d+$/,"")].value=!1}))}},t}(s.RobotBaseMobile);t.default=a}));
-//# sourceMappingURL=robot.ev3.js.map
-//# sourceMappingURL=robot.ev3.js.map
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+define(["require", "exports", "robot.base.mobile", "robot.sensors", "robot.actuators", "jquery"], function (require, exports, robot_base_mobile_1, robot_sensors_1, robot_actuators_1, $) {
+    Object.defineProperty(exports, "__esModule", { value: true });
+    var RobotEv3 = /** @class */ (function (_super) {
+        __extends(RobotEv3, _super);
+        function RobotEv3(id, configuration, interpreter, savedName, myListener) {
+            var _this = _super.call(this, id, configuration, interpreter, savedName, myListener) || this;
+            _this.volume = 0.5;
+            _this.tts = new robot_actuators_1.TTS();
+            _this.webAudio = new robot_actuators_1.WebAudio();
+            _this.timer = new robot_sensors_1.Timer(5);
+            return _this;
+            //this.configure(configuration);
+            //M.display(M.maze(8, 8));
+        }
+        RobotEv3.prototype.updateActions = function (robot, dt, interpreterRunning) {
+            _super.prototype.updateActions.call(this, robot, dt, interpreterRunning);
+            var volume = this.interpreter.getRobotBehaviour().getActionState('volume', true);
+            if (volume || volume === 0) {
+                this.volume = volume / 100.0;
+            }
+        };
+        RobotEv3.prototype.reset = function () {
+            _super.prototype.reset.call(this);
+            this.volume = 0.5;
+        };
+        // this method might go up to BaseMobileRobots as soon as the configuration has detailed information about the sensors geometry and location on the robot
+        RobotEv3.prototype.configure = function (configuration) {
+            this.chassis = new robot_actuators_1.EV3Chassis(this.id, configuration, 2, this.pose);
+            this.led = new robot_actuators_1.StatusLed({ x: -10, y: 0 }, this.chassis.geom.color);
+            var sensors = configuration['SENSORS'];
+            var _loop_1 = function (c) {
+                switch (sensors[c]['TYPE']) {
+                    case 'TOUCH':
+                        // only one is drawable as bumper
+                        this_1[c] = new robot_sensors_1.TouchSensor(c, 25, 0, this_1.chassis.geom.color);
+                        break;
+                    case 'GYRO':
+                        // only one is usable
+                        this_1[c] = new robot_sensors_1.GyroSensorExt(c, 0, 0, 0);
+                        break;
+                    case 'COLOR':
+                        var myColorSensors_1 = [];
+                        var ev3_1 = this_1;
+                        Object.keys(this_1).forEach(function (x) {
+                            if (ev3_1[x] && ev3_1[x] instanceof robot_sensors_1.ColorSensor) {
+                                myColorSensors_1.push(ev3_1[x]);
+                            }
+                        });
+                        var ord = myColorSensors_1.length + 1;
+                        var id = Object.keys(sensors).filter(function (port) { return sensors[port]['TYPE'] == 'COLOR'; }).length;
+                        var y = ord * 10 - 5 * (id + 1);
+                        this_1[c] = new robot_sensors_1.ColorSensor(c, 15, y, 0, 5);
+                        break;
+                    case 'INFRARED':
+                    case 'ULTRASONIC': {
+                        var mySensors_1 = [];
+                        var ev3_2 = this_1;
+                        Object.keys(this_1).forEach(function (x) {
+                            if (ev3_2[x] && ev3_2[x] instanceof robot_sensors_1.DistanceSensor) {
+                                mySensors_1.push(ev3_2[x]);
+                            }
+                        });
+                        var ord_1 = mySensors_1.length + 1;
+                        var num = Object.keys(sensors).filter(function (port) { return sensors[port]['TYPE'] == 'ULTRASONIC' || sensors[port]['TYPE'] == 'INFRARED'; }).length;
+                        var position = new robot_base_mobile_1.Pose(this_1.chassis.geom.x + this_1.chassis.geom.w, 0, 0);
+                        if (num == 3) {
+                            if (ord_1 == 1) {
+                                position = new robot_base_mobile_1.Pose(this_1.chassis.geom.h / 2, -this_1.chassis.geom.h / 2, -Math.PI / 4);
+                            }
+                            else if (ord_1 == 2) {
+                                position = new robot_base_mobile_1.Pose(this_1.chassis.geom.h / 2, this_1.chassis.geom.h / 2, Math.PI / 4);
+                            }
+                        }
+                        else if (num % 2 === 0) {
+                            switch (ord_1) {
+                                case 1:
+                                    position = new robot_base_mobile_1.Pose(this_1.chassis.geom.x + this_1.chassis.geom.w, -this_1.chassis.geom.h / 2, -Math.PI / 4);
+                                    break;
+                                case 2:
+                                    position = new robot_base_mobile_1.Pose(this_1.chassis.geom.x + this_1.chassis.geom.w, this_1.chassis.geom.h / 2, Math.PI / 4);
+                                    break;
+                                case 3:
+                                    position = new robot_base_mobile_1.Pose(this_1.chassis.geom.x, -this_1.chassis.geom.h / 2, (-3 * Math.PI) / 4);
+                                    break;
+                                case 4:
+                                    position = new robot_base_mobile_1.Pose(this_1.chassis.geom.x, this_1.chassis.geom.h / 2, (3 * Math.PI) / 4);
+                                    break;
+                            }
+                        }
+                        if (sensors[c]['TYPE'] == 'ULTRASONIC') {
+                            this_1[c] = new robot_sensors_1.UltrasonicSensor(c, position.x, position.y, position.theta, 255);
+                        }
+                        else {
+                            this_1[c] = new robot_sensors_1.InfraredSensor(c, position.x, position.y, position.theta, 70);
+                        }
+                        break;
+                    }
+                }
+            };
+            var this_1 = this;
+            for (var c in sensors) {
+                _loop_1(c);
+            }
+            var myButtons = [
+                {
+                    name: 'escape',
+                    value: false,
+                },
+                {
+                    name: 'up',
+                    value: false,
+                },
+                {
+                    name: 'left',
+                    value: false,
+                },
+                {
+                    name: 'enter',
+                    value: false,
+                },
+                {
+                    name: 'right',
+                    value: false,
+                },
+                {
+                    name: 'down',
+                    value: false,
+                },
+            ];
+            this.buttons = new robot_sensors_1.EV3Keys(myButtons, this.id);
+            var ev3 = this;
+            for (var property in this['buttons']['keys']) {
+                var $property = $('#' + this['buttons']['keys'][property].name + ev3.id);
+                $property.on('mousedown touchstart', function () {
+                    ev3['buttons']['keys'][this.id.replace(/\d+$/, '')]['value'] = true;
+                });
+                $property.on('mouseup touchend', function () {
+                    ev3['buttons']['keys'][this.id.replace(/\d+$/, '')]['value'] = false;
+                });
+            }
+        };
+        return RobotEv3;
+    }(robot_base_mobile_1.RobotBaseMobile));
+    exports.default = RobotEv3;
+});

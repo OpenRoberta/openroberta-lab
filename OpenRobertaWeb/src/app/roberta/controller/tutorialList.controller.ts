@@ -14,26 +14,26 @@ import * as $ from 'jquery';
 import 'bootstrap-table';
 import 'bootstrap-tagsinput';
 
-var BACKGROUND_COLORS = ['#33B8CA', '#EBC300', '#005A94', '#179C7D', '#F29400', '#E2001A', '#EB6A0A', '#8FA402', '#BACC1E', '#9085BA', '#FF69B4', '#DF01D7'];
-var currentColorIndex;
-var tutorialList;
+let BACKGROUND_COLORS: string[] = ['#33B8CA', '#EBC300', '#005A94', '#179C7D', '#F29400', '#E2001A', '#EB6A0A', '#8FA402', '#BACC1E', '#9085BA', '#FF69B4', '#DF01D7'];
+let currentColorIndex;
+let tutorialList;
 /**
  * Initialize table of tutorials
  */
-export function init() {
+export function init(): void {
     tutorialList = GUISTATE_C.getListOfTutorials();
-    for (var tutorial in tutorialList) {
+    for (let tutorial in tutorialList) {
         if (tutorialList.hasOwnProperty(tutorial)) {
             $('#head-navigation-tutorial-dropdown').append(
-                "<li class='" +
-                    tutorialList[tutorial].language +
-                    ' ' +
-                    tutorialList[tutorial].robot +
-                    "'><a href='#' id='" +
-                    tutorial +
-                    "' class='menu tutorial typcn typcn-mortar-board'>" +
-                    tutorialList[tutorial].name +
-                    '</a></li>'
+                '<li class=\'' +
+                tutorialList[tutorial].language +
+                ' ' +
+                tutorialList[tutorial].robot +
+                '\'><a href=\'#\' id=\'' +
+                tutorial +
+                '\' class=\'menu tutorial typcn typcn-mortar-board\'>' +
+                tutorialList[tutorial].name +
+                '</a></li>'
             );
         }
     }
@@ -41,7 +41,7 @@ export function init() {
     initTutorialListEvents();
 }
 
-export function switchLanguage() {
+export function switchLanguage(): void {
     $('#tutorialTable').bootstrapTable('destroy');
     init();
     if (GUISTATE_C.getView() === 'tabTutorialList') {
@@ -49,7 +49,7 @@ export function switchLanguage() {
     }
 }
 
-function initTutorialList() {
+function initTutorialList(): void {
     const myLang = GUISTATE_C.getLanguage();
     const myOptions = {
         columns: [
@@ -57,111 +57,112 @@ function initTutorialList() {
                 field: 'robot',
                 title: '',
                 sortable: true,
-                formatter: CardView.robot,
+                formatter: CardView.robot
             },
             {
                 field: 'name',
                 title: '',
                 sortable: true,
-                formatter: CardView.name,
+                formatter: CardView.name
             },
             {
                 field: 'overview.description',
                 title: '',
                 sortable: true,
-                formatter: CardView.description,
+                formatter: CardView.description
             },
             {
                 field: 'overview.goal',
                 title: '',
                 sortable: true,
-                formatter: function (goal) {
+                formatter: function(goal) {
                     return CardView.titleLabel(goal, 'TITLE_GOAL', 'cardViewDescription');
-                },
+                }
             },
             {
                 field: 'overview.previous',
                 title: '',
                 sortable: true,
-                formatter: function (goal) {
+                formatter: function(goal) {
                     return CardView.titleLabel(goal, 'TITLE_PREVIOUS', 'cardViewDescription');
-                },
+                }
             },
             {
                 field: 'time',
                 title: '',
-                formatter: function (time) {
+                formatter: function(time) {
                     return CardView.titleTypcn(time, 'stopwatch');
                 },
-                sortable: true,
+                sortable: true
             },
             {
                 field: 'age',
                 title: '',
-                formatter: function (age) {
+                formatter: function(age) {
                     return CardView.titleTypcn(age, 'group');
                 },
-                sortable: true,
+                sortable: true
             },
             {
                 field: 'sim',
                 title: '',
-                formatter: function (sim) {
+                formatter: function(sim) {
                     return CardView.titleTypcn(formatSim(sim), 'simulation');
                 },
-                sortable: true,
+                sortable: true
             },
             {
                 field: 'level',
                 title: '',
-                formatter: function (level) {
+                formatter: function(level) {
                     return CardView.titleTypcn(formatLevel(level), 'mortar-board');
                 },
-                sortable: true,
+                sortable: true
             },
             {
                 field: 'tags',
                 title: '',
                 sortable: true,
-                formatter: CardView.tags,
+                formatter: CardView.tags
             },
             {
                 field: 'index',
                 title: '',
-                visible: false,
+                visible: false
             },
             {
                 field: 'group',
                 title: '',
-                visible: false,
-            },
+                visible: false
+            }
         ],
         locale: myLang,
         rowAttributes: rowAttributes,
         sortName: 'index',
         sortOrder: 'asc',
-        toolbar: '#tutorialListToolbar',
+        toolbar: '#tutorialListToolbar'
     };
     const options = { ...CommonTable.options, ...CardView.options, ...myOptions };
     $('#tutorialTable').bootstrapTable(options);
 }
 
-function initTutorialListEvents() {
+function initTutorialListEvents(): void {
     $('#tabTutorialList').off();
     $('#tutorialTable').off();
     $('#backTutorialList').off();
     $('#tabTutorialList').onWrap(
         'shown.bs.tab',
-        function () {
+        function(): boolean {
+            //@ts-ignore
             guiStateController.setView('tabTutorialList');
             updateTutorialList();
             return false;
         },
         'tutorial clicked'
     );
-    var resizeTable = function () {
+    var resizeTable = function(): void {
         $('#tutorialTable').bootstrapTable('resetView', {
-            height: UTIL.calcDataTableHeight(),
+            height: UTIL.calcDataTableHeight()
         });
         configureTagsInput();
     };
@@ -172,7 +173,7 @@ function initTutorialListEvents() {
         .find('button[name="refresh"]')
         .onWrap(
             'click',
-            function () {
+            function(): boolean {
                 updateTutorialList();
                 return false;
             },
@@ -181,7 +182,7 @@ function initTutorialListEvents() {
 
     $('#tutorialTable').onWrap(
         'click-row.bs.table',
-        function ($element, row) {
+        function($element, row): void {
             $element.stopPropagation();
             $element.preventDefault();
             TUTORIAL_C.loadFromTutorial(row.id);
@@ -191,22 +192,22 @@ function initTutorialListEvents() {
 
     $('#backTutorialList').onWrap(
         'click',
-        function () {
+        function(): boolean {
             $('#' + GUISTATE_C.getPrevView()).tabWrapShow();
             return false;
         },
         'back to program view'
     );
 
-    $('#tutorialTable').on('shown.bs.collapse hidden.bs.collapse', function (e) {
+    $('#tutorialTable').on('shown.bs.collapse hidden.bs.collapse', function(e) {
         $('#tutorialTable').bootstrapTable('resetWidth');
     });
 }
 
 function updateTutorialList() {
     $('#tutorialTable').bootstrapTable('showLoading');
-    var tutorialArray = [];
-    for (var tutorial in tutorialList) {
+    let tutorialArray: any[] = [];
+    for (let tutorial in tutorialList) {
         if (tutorialList.hasOwnProperty(tutorial) && tutorialList[tutorial].language === GUISTATE_C.getLanguage().toUpperCase()) {
             tutorialList[tutorial].id = tutorial;
             tutorialArray.push(tutorialList[tutorial]);
@@ -216,11 +217,11 @@ function updateTutorialList() {
     configureTagsInput();
     $('#tutorialTable').bootstrapTable('hideLoading');
     $('#tutorialTable').bootstrapTable('resetView', {
-        height: UTIL.calcDataTableHeight(),
+        height: UTIL.calcDataTableHeight()
     });
 }
-var rowAttributes = function (row, index) {
-    var hash = UTIL.getHashFrom(row.robot + row.name + row.index);
+let rowAttributes = function(row, index): any {
+    let hash: number = UTIL.getHashFrom(row.robot + row.name + row.index);
     currentColorIndex = hash % BACKGROUND_COLORS.length;
     return {
         class: 'col-xxl-2 col-lg-3 col-md-4 col-sm-6',
@@ -228,19 +229,19 @@ var rowAttributes = function (row, index) {
             'background-color :' +
             BACKGROUND_COLORS[currentColorIndex] +
             ';' + //
-            '', // 'border: 4px solid #EEEEEE; z-index: 1; cursor: pointer;',
+            '' // 'border: 4px solid #EEEEEE; z-index: 1; cursor: pointer;',
     };
 };
 
-var emptyTitle = function () {
+let emptyTitle = function(): string {
     return '<span style="display:none"></span>';
 };
 
-var formatTutorialOverview = function (overview, row, index, field) {
-    return CardView.description(overview, row, index, field);
+let formatTutorialOverview = function(overview, row, index, field) {
+    return CardView.description(overview);
 };
 
-var formatSim = function (sim, row, index) {
+let formatSim = function(sim): string {
     if (sim && (sim === 'sim' || sim === 1)) {
         return 'ja';
     } else {
@@ -248,12 +249,12 @@ var formatSim = function (sim, row, index) {
     }
 };
 
-var formatLevel = function (level, row, index) {
-    var html = '';
+let formatLevel = function(level: any) {
+    let html: string = '';
     if (level) {
-        var maxLevel = isNaN(level) ? level.split('/')[1] : 3;
-        var thisLevel = isNaN(level) ? level.split('/')[0] : level;
-        for (var i = 1; i <= maxLevel; i++) {
+        let maxLevel = isNaN(level) ? level.split('/')[1] : 3;
+        let thisLevel = isNaN(level) ? level.split('/')[0] : level;
+        for (let i = 1; i <= maxLevel; i++) {
             if (i <= thisLevel) {
                 html = html + '<span style="left: 0;" class="tutorialLevel typcn typcn-star-full-outline"/>';
             } else {
@@ -266,7 +267,8 @@ var formatLevel = function (level, row, index) {
     return html;
 };
 
-function configureTagsInput() {
+function configureTagsInput(): void {
+    //@ts-ignore
     $('.infoTags').tagsinput();
     $('#tutorialTable .bootstrap-tagsinput').addClass('galleryTags');
     $('#tutorialList').find('.tutorialTags>input').attr('readonly', 'true');

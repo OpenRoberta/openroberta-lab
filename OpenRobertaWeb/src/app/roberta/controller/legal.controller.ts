@@ -8,7 +8,7 @@ const INITIAL_WIDTH = 0.5;
 /**
  * The blocklyWorkspace is used to
  */
-var blocklyWorkspace,
+let blocklyWorkspace,
     $legalButton,
     $legalDiv,
     $legalHeader,
@@ -29,24 +29,24 @@ var blocklyWorkspace,
 /**
  *
  */
-function init() {
+export function init(): void {
     blocklyWorkspace = GUISTATE_C.getBlocklyWorkspace();
     initView();
     initEvents();
 }
 
-function initView() {
+export function initView() {
     $legalDiv = $('#legalDiv');
     $legalButton = $('#legalButton');
     $legalHeader = $legalDiv.children('#legalDivHeader');
 
-    var imprintDocumentType = 'imprint_',
+    let imprintDocumentType: string = 'imprint_',
         $imprintStorage = $legalDiv.children('#legalDivImprint'),
         $imprintLink = $legalHeader.children('[data-href="#legalDivImprint"]'),
-        privacyPolicyDocumentType = 'privacy_policy_',
+        privacyPolicyDocumentType: string = 'privacy_policy_',
         $privacyPolicyStorage = $legalDiv.children('#legalDivPrivacyPolicy'),
         $privacyPolicyLink = $legalHeader.children('[data-href="#legalDivPrivacyPolicy"]'),
-        termsOfUseDocumentType = 'terms_of_use_',
+        termsOfUseDocumentType: string = 'terms_of_use_',
         $termsOfUseStorage = $legalDiv.children('#legalDivTermsOfUse'),
         $termsOfUseLink = $legalHeader.children('[data-href="#legalDivTermsOfUse"]');
 
@@ -61,13 +61,13 @@ function initView() {
     loadLegalTexts();
 }
 
-function initEvents() {
-    var setScrollEventForDocumentType = function (documentType) {
-        var $link = links[documentType],
+function initEvents(): void {
+    let setScrollEventForDocumentType: Function = function (documentType): void {
+        let $link = links[documentType],
             $storage = storages[documentType];
 
         if ($storage && $link) {
-            $link.onWrap('click touchend', function (evt) {
+            $link.onWrap('click touchend', function (evt): void {
                 evt.preventDefault();
                 $legalDiv.animate(
                     {
@@ -79,23 +79,23 @@ function initEvents() {
         }
     };
     $legalButton.off('click touchend');
-    $legalButton.onWrap('click touchend', function (event) {
+    $legalButton.onWrap('click touchend', function (event): void {
         event.preventDefault();
         toggleLegal($(this));
     });
 
-    for (documentType in links) {
+    for (let documentType in links) {
         if (links.hasOwnProperty(documentType)) {
             setScrollEventForDocumentType(documentType);
         }
     }
 }
 
-function loadLegalTexts() {
-    var language = GUISTATE_C.getLanguage().toLowerCase(),
+export function loadLegalTexts(): void {
+    let language: string = GUISTATE_C.getLanguage().toLowerCase(),
         legalTextsMap = GUISTATE_C.getLegalTextsMap(),
-        loadFile = function (documentType, language) {
-            var $storage = storages[documentType],
+        loadFile = function (documentType, language): void {
+            let $storage = storages[documentType],
                 $link = links[documentType],
                 content =
                     legalTextsMap[documentType + language + '.html'] || legalTextsMap[documentType + 'en.html'] || legalTextsMap[documentType + 'de.html'];
@@ -111,14 +111,14 @@ function loadLegalTexts() {
             }
         };
 
-    for (documentType in storages) {
+    for (let documentType in storages) {
         if (storages.hasOwnProperty(documentType)) {
             loadFile(documentType, language);
         }
     }
 
     if (
-        $legalHeader.children().filter(function () {
+        $legalHeader.children().filter(function (): boolean {
             return $(this).css('display') !== 'none';
         }).length === 0
     ) {
@@ -127,9 +127,8 @@ function loadLegalTexts() {
         $legalButton.show();
     }
 }
-export { init, initView, loadLegalTexts };
 
-function toggleLegal($button) {
+function toggleLegal($button: any): void {
     if ($('#legalButton').hasClass('rightActive')) {
         $('#blocklyDiv').closeRightView();
     } else {

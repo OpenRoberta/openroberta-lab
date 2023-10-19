@@ -1,3 +1,120 @@
-var __extends=this&&this.__extends||function(){var t=function(o,e){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,o){t.__proto__=o}||function(t,o){for(var e in o)Object.prototype.hasOwnProperty.call(o,e)&&(t[e]=o[e])},t(o,e)};return function(o,e){if("function"!=typeof e&&null!==e)throw new TypeError("Class extends value "+String(e)+" is not a constructor or null");function r(){this.constructor=o}t(o,e),o.prototype=null===e?Object.create(e):(r.prototype=e.prototype,new r)}}(),__assign=this&&this.__assign||function(){return __assign=Object.assign||function(t){for(var o,e=1,r=arguments.length;e<r;e++)for(var n in o=arguments[e])Object.prototype.hasOwnProperty.call(o,n)&&(t[n]=o[n]);return t},__assign.apply(this,arguments)};define(["require","exports","./port","./const.robots"],(function(t,o,e,r){Object.defineProperty(o,"__esModule",{value:!0}),o.createRobotBlock=void 0;var n=function(t){function o(o){var e=t.call(this)||this;return e.robot=o,e.robotImageSrc=r.ROBOTS[e.robot.group+"_"+e.robot.name]?e.robot.group+"_"+e.robot.name:r.ROBOTS[e.robot.group]?e.robot.group:null,e.robotImageSrc?(e.width=r.ROBOTS[e.robotImageSrc].width,e.height=r.ROBOTS[e.robotImageSrc].height,e.size=new window.goog.math.Size(e.width,e.height+2*window.Blockly.BlockSvg.INLINE_PADDING_Y),e.ports_=[]):console.error("robot image invalid!"),e}return __extends(o,t),o.prototype.init=function(){this.element_||(this.element_=window.Blockly.createSvgElement("g",{},null),this.visible_||(this.element_.style.display="none"),this.initBoardView_(),this.initPorts_(),this.sourceBlock_.getSvgRoot().appendChild(this.element_))},o.prototype.initBoardView_=function(){var t=window.Blockly.getMainWorkspace();this.board_=window.Blockly.createSvgElement("image",{},this.element_);var o=t.options.pathToMedia+"robots/"+this.robotImageSrc+".svg",e=this.board_;e.setAttribute("href",o),e.setAttribute("x",0),e.setAttribute("y",0),e.setAttribute("width",this.width),e.setAttribute("height",this.height)},o.prototype.initPorts_=function(){var t=window.Blockly.createSvgElement("g",{},this.element_),o=r.ROBOTS[this.robot.group+"_"+this.robot.name]||r.ROBOTS[this.robot.group];this.ports_=o.ports.map((function(o){var r=o.name,n=o.position,i=new e.Port(t,r,n);return __assign({portSvg:i.element},o)}))},o.prototype.getPortByName=function(t){var o=this.ports_.findIndex((function(o){return o.name===t}));return this.ports_[o]},o.prototype.setPosition=function(t){},o.EDITABLE=!1,o.rectElement_=null,o}(window.Blockly.Field);o.createRobotBlock=function(t){return{init:function(){var o=this;this.type_="robConf_robot",this.svgPath_.remove(),this.robot_=new n(function(t){var o=t.split("_"),e={};return e.group=o[0],e.name=o[1],e}(t)),this.appendDummyInput().setAlign(window.Blockly.ALIGN_CENTRE).appendField(this.robot_,"ROBOT"),this.getPortByName=function(t){return o.robot_.getPortByName(t)}}}}}));
-//# sourceMappingURL=robotBlock.js.map
-//# sourceMappingURL=robotBlock.js.map
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
+define(["require", "exports", "./port", "./const.robots"], function (require, exports, port_1, const_robots_1) {
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.createRobotBlock = void 0;
+    var RobotViewField = /** @class */ (function (_super) {
+        __extends(RobotViewField, _super);
+        function RobotViewField(robot) {
+            var _this = _super.call(this) || this;
+            _this.robot = robot;
+            _this.robotImageSrc = const_robots_1.ROBOTS[_this.robot.group + '_' + _this.robot.name]
+                ? _this.robot.group + '_' + _this.robot.name
+                : const_robots_1.ROBOTS[_this.robot.group]
+                    ? _this.robot.group
+                    : null;
+            if (_this.robotImageSrc) {
+                _this.width = const_robots_1.ROBOTS[_this.robotImageSrc]['width'];
+                _this.height = const_robots_1.ROBOTS[_this.robotImageSrc]['height'];
+                _this.size = new window.goog.math.Size(_this.width, _this.height + 2 * window.Blockly.BlockSvg.INLINE_PADDING_Y);
+                _this.ports_ = [];
+            }
+            else {
+                console.error('robot image invalid!');
+            }
+            return _this;
+        }
+        RobotViewField.prototype.init = function () {
+            if (this.element_) {
+                return;
+            }
+            this.element_ = window.Blockly.createSvgElement('g', {}, null);
+            if (!this.visible_) {
+                this.element_.style.display = 'none';
+            }
+            this.initBoardView_();
+            this.initPorts_();
+            this.sourceBlock_.getSvgRoot().appendChild(this.element_);
+        };
+        RobotViewField.prototype.initBoardView_ = function () {
+            var workspace = window.Blockly.getMainWorkspace();
+            this.board_ = window.Blockly.createSvgElement('image', {}, this.element_);
+            var robotSrc = workspace.options.pathToMedia + 'robots/' + this.robotImageSrc + '.svg';
+            var board = this.board_;
+            board.setAttribute('href', robotSrc);
+            board.setAttribute('x', 0);
+            board.setAttribute('y', 0);
+            board.setAttribute('width', this.width);
+            board.setAttribute('height', this.height);
+        };
+        RobotViewField.prototype.initPorts_ = function () {
+            var portsGroupSvg = window.Blockly.createSvgElement('g', {}, this.element_);
+            var robot = const_robots_1.ROBOTS[this.robot.group + '_' + this.robot.name] || const_robots_1.ROBOTS[this.robot.group];
+            this.ports_ = robot['ports'].map(function (props) {
+                var name = props.name, position = props.position;
+                var port = new port_1.Port(portsGroupSvg, name, position);
+                return __assign({ portSvg: port.element }, props);
+            });
+        };
+        RobotViewField.prototype.getPortByName = function (portName) {
+            var index = this.ports_['findIndex'](function (port) { return port.name === portName; });
+            return this.ports_[index];
+        };
+        RobotViewField.prototype.setPosition = function (position) {
+            if (!position) {
+                return;
+            }
+        };
+        RobotViewField.EDITABLE = false;
+        RobotViewField.rectElement_ = null;
+        return RobotViewField;
+    }(window.Blockly.Field));
+    function createRobotBlock(robotIdentifier) {
+        return {
+            init: function () {
+                var _this = this;
+                this.type_ = 'robConf_robot';
+                this.svgPath_.remove();
+                this.robot_ = new RobotViewField(identifierToRobot(robotIdentifier));
+                this.appendDummyInput()
+                    .setAlign(window.Blockly.ALIGN_CENTRE)
+                    .appendField(this.robot_, 'ROBOT');
+                this.getPortByName = function (portName) {
+                    return _this.robot_.getPortByName(portName);
+                };
+            },
+        };
+    }
+    exports.createRobotBlock = createRobotBlock;
+    function identifierToRobot(robotIdentifier) {
+        var splits = robotIdentifier.split('_');
+        var robot = {};
+        robot['group'] = splits[0];
+        robot['name'] = splits[1];
+        return robot;
+    }
+});

@@ -5,28 +5,27 @@ import * as PROGRAM from 'program.model';
 import * as $ from 'jquery';
 import 'bootstrap-table';
 
-function init() {
+export function init(): void {
     //        initView();
     initEvents();
 }
-export { init };
 
-function initView() {}
+function initView(): void {}
 
-function initEvents() {
+function initEvents(): void {
     /**
      * Delete the programs that were selected in program list
      */
     $('#doDeleteProgram').onWrap('click', function() {
-        var programs = $('#confirmDeleteProgram').data('programs');
-        for (var i = 0; i < programs.length; i++) {
-            var prog = programs[i];
-            var progName = prog[0];
-            var progOwner = prog[1];
-            var progRight = prog[2];
-            var author = prog[3];
+        let programs: any[] = $('#confirmDeleteProgram').data('programs');
+        for (let i = 0; i < programs.length; i++) {
+            let prog = programs[i];
+            let progName: string = prog[0];
+            let progOwner: string = prog[1];
+            let progRight = prog[2];
+            let author = prog[3];
             if (progRight.sharedFrom) {
-                PROGRAM.deleteShare(progName, progOwner, author, function(result, progName) {
+                PROGRAM.deleteShare(progName, progOwner, author, function(result, progName): void {
                     UTIL.response(result);
                     if (result.rc === 'ok') {
                         MSG.displayInformation(result, 'MESSAGE_PROGRAM_DELETED', result.message, progName);
@@ -35,7 +34,7 @@ function initEvents() {
                     }
                 });
             } else {
-                PROGRAM.deleteProgramFromListing(progName, author, function(result, progName) {
+                PROGRAM.deleteProgramFromListing(progName, author, function(result, progName): void {
                     UTIL.response(result);
                     if (result.rc === 'ok') {
                         MSG.displayInformation(result, 'MESSAGE_PROGRAM_DELETED', result.message, progName);

@@ -9,7 +9,7 @@ let toastDelay: JQuery.Duration = 3000;
 /**
  * Display popup messages
  */
-function displayPopupMessage(lkey: string, value: string, confirmMsg: string, opt_denyMsg?: string): void {
+export function displayPopupMessage(lkey: string, value: string, confirmMsg: string, opt_denyMsg?: string): void {
     $('#confirm').attr('value', confirmMsg);
     if (opt_denyMsg) {
         $('#confirmCancel').attr('value', opt_denyMsg);
@@ -26,7 +26,7 @@ function displayPopupMessage(lkey: string, value: string, confirmMsg: string, op
 /**
  * Display toast messages
  */
-function displayToastMessages(): void {
+export function displayToastMessages(): void {
     $('#toastText').html(toastMessages[toastMessages.length - 1]);
     $('#toastContainer')
         .delay(100)
@@ -52,7 +52,7 @@ function displayToastMessages(): void {
  * @param {replaceWith}
  *            Text to replace an optional '$' in the message-text
  */
-function displayMessage(messageId: string | undefined, output: string, replaceWith: string, opt_cancel?: boolean | string, opt_robot?: any): void {
+export function displayMessage(messageId: string | undefined, output: string, replaceWith: string, opt_cancel?: boolean | string, opt_robot?: any): void {
     let cancel: boolean = typeof opt_cancel !== 'string' ? opt_cancel : false;
     let robot: string = '';
     if (opt_robot) {
@@ -117,7 +117,7 @@ function displayMessage(messageId: string | undefined, output: string, replaceWi
  * @param {messageParam}
  *            Parameter to be used in the message text.
  */
-function displayInformation(result: any, successMessage: string, errorMessage, messageParam?: any, opt_robot?: string): void {
+export function displayInformation(result: any, successMessage: string, errorMessage, messageParam?: any, opt_robot?: string): void {
     if (result.rc === 'ok') {
         $('.modal').modal('hide'); // close all opened popups
         displayMessage(successMessage, 'TOAST', messageParam, false, opt_robot);
@@ -129,4 +129,3 @@ function displayInformation(result: any, successMessage: string, errorMessage, m
         }
     }
 }
-export { displayPopupMessage, displayToastMessages, displayMessage, displayInformation };

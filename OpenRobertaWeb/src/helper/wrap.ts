@@ -186,7 +186,7 @@ $.fn.onWrap = function(event: string, callbackOrFilter: string | Function, callb
 $.fn.clickWrap = function(callback?: Function) {
     numberOfActiveActions--;
     try {
-        if (callback === undefined) {
+        if (!callback) {
             this.trigger('click');
         } else {
             this.trigger('click', callback);

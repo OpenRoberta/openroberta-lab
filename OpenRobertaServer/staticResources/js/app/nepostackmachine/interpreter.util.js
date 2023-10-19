@@ -1,3 +1,92 @@
-define(["require","exports","./interpreter.constants"],(function(e,o,n){function t(e,o){if(e!==o){var n="DBC. Expected: "+e+" but got: "+o;throw console.trace(n),n}}Object.defineProperty(o,"__esModule",{value:!0}),o.getInfoResult=o.warn=o.info=o.debug=o.opLog=o.loggingEnabled=o.expectExc=o.dbcException=o.dbc=void 0,o.dbc=t,o.dbcException=function(e){throw console.trace(e),e},o.expectExc=function(e,o){try{e();var n="DBC. Expected exception was not thrown";throw console.trace(n),n}catch(e){void 0===o?console.log("expected exception suppressed"):t(o,e)}};var c=!0,r=!0,i="";function u(e){r&&console.log(e)}o.loggingEnabled=function(e,o){c=e,r=o,i=""},o.opLog=function(e,o,t){if(c){for(var r="",i=0,f=0,l=o;f<l.length;f++){var a=l[f],d=a[n.OPCODE];a[n.OPCODE]===n.EXPR&&(d=d+"["+a[n.EXPR],a[n.EXPR]===n.BINARY&&(d=d+"-"+a[n.OP]),d+="]"),r=r+(i++==t?"*":"")+d+" "}u(e+" pc:"+t+" "+r)}},o.debug=u,o.info=function(e){console.log(e),i=i+e+"\n"},o.warn=function(e){console.warn(e),i=i+e+"\n"},o.getInfoResult=function(){return i}}));
-//# sourceMappingURL=interpreter.util.js.map
-//# sourceMappingURL=interpreter.util.js.map
+define(["require", "exports", "./interpreter.constants"], function (require, exports, C) {
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.getInfoResult = exports.warn = exports.info = exports.debug = exports.opLog = exports.loggingEnabled = exports.expectExc = exports.dbcException = exports.dbc = void 0;
+    function dbc(expected, actual) {
+        if (expected !== actual) {
+            var msg = 'DBC. Expected: ' + expected + ' but got: ' + actual;
+            console.trace(msg);
+            throw msg;
+        }
+    }
+    exports.dbc = dbc;
+    function dbcException(s) {
+        console.trace(s);
+        throw s;
+    }
+    exports.dbcException = dbcException;
+    function expectExc(fct, cause) {
+        try {
+            fct();
+            var msg = 'DBC. Expected exception was not thrown';
+            console.trace(msg);
+            throw msg;
+        }
+        catch (e) {
+            if (cause === undefined) {
+                console.log('expected exception suppressed');
+            }
+            else {
+                dbc(cause, e);
+            }
+        }
+    }
+    exports.expectExc = expectExc;
+    var opLogEnabled = true;
+    var debugEnabled = true;
+    var infoResult = '';
+    function loggingEnabled(_opLogEnabled, _debugEnabled) {
+        opLogEnabled = _opLogEnabled;
+        debugEnabled = _debugEnabled;
+        infoResult = '';
+    }
+    exports.loggingEnabled = loggingEnabled;
+    /**
+     * FOR DEBUGGING: write the actual array of operations to the 'console.log'. The actual operation is prefixed by '*'
+     *
+     * . @param msg the prefix of the message (for easy reading of the logs)
+     * . @param operations the array of all operations to be executed
+     * . @param pc the program counter
+     */
+    function opLog(msg, operations, pc) {
+        if (!opLogEnabled) {
+            return;
+        }
+        var opl = '';
+        var counter = 0;
+        for (var _i = 0, operations_1 = operations; _i < operations_1.length; _i++) {
+            var op = operations_1[_i];
+            var opc = op[C.OPCODE];
+            if (op[C.OPCODE] === C.EXPR) {
+                opc = opc + '[' + op[C.EXPR];
+                if (op[C.EXPR] === C.BINARY) {
+                    opc = opc + '-' + op[C.OP];
+                }
+                opc = opc + ']';
+            }
+            opl = opl + (counter++ == pc ? '*' : '') + opc + ' ';
+        }
+        debug(msg + ' pc:' + pc + ' ' + opl);
+    }
+    exports.opLog = opLog;
+    function debug(s) {
+        if (!debugEnabled) {
+            return;
+        }
+        console.log(s);
+    }
+    exports.debug = debug;
+    function info(s) {
+        console.log(s);
+        infoResult = infoResult + s + '\n';
+    }
+    exports.info = info;
+    function warn(s) {
+        console.warn(s);
+        infoResult = infoResult + s + '\n';
+    }
+    exports.warn = warn;
+    function getInfoResult() {
+        return infoResult;
+    }
+    exports.getInfoResult = getInfoResult;
+});

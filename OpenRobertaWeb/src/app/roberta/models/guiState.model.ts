@@ -1,18 +1,18 @@
 import * as COMM from 'comm';
 
-export const server = {};
-export const gui = {};
-export const user = {};
-export const program = {};
-export const configuration = {};
+export const server: any = {};
+export const gui: any = {};
+export const user: any = {};
+export const program: any = {};
+export const configuration: any = {};
 export const toolbox = '';
-export const robot = {};
+export const robot: any = {};
 
 /**
  * Initialize gui state object
  */
-function init() {
-    var ready = new $.Deferred();
+export function init() {
+    let ready: JQuery.Deferred<any, any, any> = $.Deferred();
     //TODO changed default ping behaviour because we dont need to ping on init
     server.ping = true;
     server.pingTime = 3000;
@@ -79,19 +79,19 @@ function init() {
     robot.robotPort = '';
     robot.url = '';
 
-    var getInitFromServer = function () {
+    let getInitFromServer = function() {
         COMM.setInitToken(undefined);
         return COMM.json(
             '/init',
             {
                 cmd: 'init',
-                screenSize: [window.screen.availWidth, window.screen.availHeight],
+                screenSize: [window.screen.availWidth, window.screen.availHeight]
             },
-            function (result) {
+            function(result): void {
                 if (result.rc === 'ok') {
                     COMM.setInitToken(result.initToken);
                     $.extend(server, result.server);
-                    for (var key in server.robots) {
+                    for (let key in server.robots) {
                         server.robotsByName[server.robots[key].name] = server.robots[key];
                     }
                     server.version = result['server.version'];
@@ -109,4 +109,3 @@ function init() {
 
     return ready.promise();
 }
-export { init };

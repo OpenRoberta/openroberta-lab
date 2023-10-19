@@ -1,3 +1,280 @@
-var __extends=this&&this.__extends||function(){var t=function(e,o){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var o in e)Object.prototype.hasOwnProperty.call(e,o)&&(t[o]=e[o])},t(e,o)};return function(e,o){if("function"!=typeof o&&null!==o)throw new TypeError("Class extends value "+String(o)+" is not a constructor or null");function s(){this.constructor=e}t(e,o),e.prototype=null===o?Object.create(o):(s.prototype=o.prototype,new s)}}();define(["require","exports","robot.base","jquery","util.roberta","simulation.math","simulation.roberta","robot.sensors"],(function(t,e,o,s,i,r,n,a){Object.defineProperty(e,"__esModule",{value:!0}),e.RobotBaseMobile=e.Pose=void 0;var h=function(){function t(t,e,o){this.x=t,this.xOld=t,this.y=e,this.yOld=e,this.theta=o||0}return Object.defineProperty(t.prototype,"x",{get:function(){return this._x},set:function(t){this.xOld=this._x,this._x=t},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"y",{get:function(){return this._y},set:function(t){this.yOld=this._y,this._y=t},enumerable:!1,configurable:!0}),Object.defineProperty(t.prototype,"theta",{get:function(){return this._theta},set:function(t){this._theta=(t+2*Math.PI)%(2*Math.PI)},enumerable:!1,configurable:!0}),t.prototype.getThetaInDegree=function(){return this._theta*(180/Math.PI)},t}();e.Pose=h;var p=function(t){function e(e,o,s,i,r,n){var a=t.call(this,e,o,s,i,r)||this;return a._hasTrail=!1,a._thetaDiff=0,a.isDown=!1,a.observers=[],a.imgList=["simpleBackground","drawBackground","robertaBackground","rescueBackground","blank","mathBackground"],a.mouse={x:-5,y:0,rx:0,ry:0,r:30},a.mobile=!0,a.pose=n||new h(150,150,0),a.initialPose=n||new h(150,150,0),a.configure(o),a}return __extends(e,t),Object.defineProperty(e.prototype,"hasTrail",{get:function(){return this._hasTrail},set:function(t){this._hasTrail=t},enumerable:!1,configurable:!0}),Object.defineProperty(e.prototype,"pose",{get:function(){return this._pose},set:function(t){this._pose=t},enumerable:!1,configurable:!0}),Object.defineProperty(e.prototype,"initialPose",{get:function(){return this._initialPose},set:function(t){this._initialPose=t},enumerable:!1,configurable:!0}),Object.defineProperty(e.prototype,"thetaDiff",{get:function(){return this._thetaDiff},set:function(t){this._thetaDiff=t},enumerable:!1,configurable:!0}),e.prototype.handleKeyEvent=function(t){if(this.selected){switch(t.stopImmediatePropagation(),t.key){case"ArrowUp":this.pose.x+=Math.cos(this.pose.theta),this.pose.y+=Math.sin(this.pose.theta),t.preventDefault(),t.stopPropagation();break;case"ArrowLeft":var e=Math.PI/180;this.pose.theta-=e,Object.keys(this).filter((function(t){return t instanceof a.GyroSensorExt})).forEach((function(t){return t.angleValue-=r.toDegree(e)})),t.preventDefault(),t.stopPropagation();break;case"ArrowDown":this.pose.x-=Math.cos(this.pose.theta),this.pose.y-=Math.sin(this.pose.theta),t.preventDefault(),t.stopPropagation();break;case"ArrowRight":var o=Math.PI/180;this.pose.theta+=o,Object.keys(this).filter((function(t){return t instanceof a.GyroSensorExt})).forEach((function(t){return t.angleValue+=r.toDegree(o)})),t.preventDefault(),t.stopPropagation()}this.initialPose=new h(this.pose.x,this.pose.y,this.pose.theta)}},e.prototype.handleMouseDown=function(t){r.transform(this.pose,this.mouse),t&&!t.startX&&i.extendMouseEvent(t,n.SimulationRoberta.Instance.scale,s("#robotLayer"));var e=t,o=e.startX-this.mouse.rx,a=e.startY-this.mouse.ry;this.isDown=o*o+a*a<this.mouse.r*this.mouse.r,this.isDown&&(t.stopImmediatePropagation(),s("#robotLayer").css("cursor","pointer"),this.selected||(this.selected=!0))},e.prototype.handleMouseMove=function(t){r.transform(this.pose,this.mouse),t&&!t.startX&&i.extendMouseEvent(t,n.SimulationRoberta.Instance.scale,s("#robotLayer"));var e=t,o=e.startX-this.mouse.rx,a=e.startY-this.mouse.ry;o*o+a*a<this.mouse.r*this.mouse.r&&(s("#robotLayer").css("cursor","pointer"),s("#robotLayer").data("hovered",!0),this.selected&&t.stopImmediatePropagation()),this.isDown&&this.selected&&(this.pose.xOld=this.pose.x,this.pose.yOld=this.pose.y,this.pose.x+=o,this.pose.y+=a,this.mouse.rx+=o,this.mouse.ry+=a,this.chassis.transformNewPose(this.pose,this.chassis),this.initialPose=new h(this.pose.x,this.pose.y,this.pose.theta))},e.prototype.handleMouseOutUp=function(t){this.isDown&&(s("#robotLayer").css("cursor","auto"),t.stopImmediatePropagation(),this.isDown=!1)},e.prototype.handleNewSelection=function(t){t===this?(s("#brick"+this.id).show(),s("#robotIndex option[value="+this.id+"]").prop("selected",!0),s("#robotIndex").css("background-color",this.chassis.geom.color),this.lastSelected=!0):(this.selected=!1,this.isDown=!1,t instanceof o.RobotBase&&(s("#brick"+this.id).hide(),this.lastSelected=!1))},e.prototype.resetPose=function(){this.pose=new h(this.initialPose.x,this.initialPose.y,this.initialPose.theta)},e.prototype.drawTrail=function(t,e,o,s){this.hasTrail&&(t.beginPath(),t.lineCap="round",t.lineWidth=o,t.strokeStyle=s,t.moveTo(this.pose.xOld,this.pose.yOld),t.lineTo(this.pose.x,this.pose.y),t.stroke(),e.beginPath(),e.lineCap="round",e.lineWidth=o,e.strokeStyle=s,e.moveTo(this.pose.xOld,this.pose.yOld),e.lineTo(this.pose.x,this.pose.y),e.stroke(),this.pose.xOld=this.pose.x,this.pose.yOld=this.pose.y)},e.prototype.updateActions=function(e,o,s){t.prototype.updateActions.call(this,e,o,s),s&&this.notifyObservers()},e.prototype.addObserver=function(t){this.observers.push(t)},e.prototype.notifyObservers=function(){for(var t=0,e=this.observers;t<e.length;t++){e[t].update(this)}},e.prototype.removeObserver=function(t){var e=this.observers.findIndex((function(e){return t===e}));-1!==e&&this.observers.splice(e,1)},e}(o.RobotBase);e.RobotBaseMobile=p}));
-//# sourceMappingURL=robot.base.mobile.js.map
-//# sourceMappingURL=robot.base.mobile.js.map
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+define(["require", "exports", "robot.base", "jquery", "util.roberta", "simulation.math", "simulation.roberta", "robot.sensors"], function (require, exports, robot_base_1, $, UTIL, SIMATH, simulation_roberta_1, robot_sensors_1) {
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.RobotBaseMobile = exports.Pose = void 0;
+    var Pose = /** @class */ (function () {
+        function Pose(x, y, theta) {
+            this.x = x;
+            this.xOld = x;
+            this.y = y;
+            this.yOld = y;
+            this.theta = theta || 0;
+        }
+        Object.defineProperty(Pose.prototype, "x", {
+            get: function () {
+                return this._x;
+            },
+            set: function (value) {
+                this.xOld = this._x;
+                this._x = value;
+            },
+            enumerable: false,
+            configurable: true
+        });
+        Object.defineProperty(Pose.prototype, "y", {
+            get: function () {
+                return this._y;
+            },
+            set: function (value) {
+                this.yOld = this._y;
+                this._y = value;
+            },
+            enumerable: false,
+            configurable: true
+        });
+        Object.defineProperty(Pose.prototype, "theta", {
+            get: function () {
+                return this._theta;
+            },
+            set: function (value) {
+                this._theta = (value + 2 * Math.PI) % (2 * Math.PI);
+            },
+            enumerable: false,
+            configurable: true
+        });
+        Pose.prototype.getThetaInDegree = function () {
+            return this._theta * (180 / Math.PI);
+        };
+        return Pose;
+    }());
+    exports.Pose = Pose;
+    var RobotBaseMobile = /** @class */ (function (_super) {
+        __extends(RobotBaseMobile, _super);
+        function RobotBaseMobile(id, configuration, interpreter, savedName, mySelectionListener, pose) {
+            var _this = _super.call(this, id, configuration, interpreter, savedName, mySelectionListener) || this;
+            _this._hasTrail = false;
+            _this._thetaDiff = 0;
+            _this.isDown = false;
+            _this.observers = [];
+            _this.imgList = ['simpleBackground', 'drawBackground', 'robertaBackground', 'rescueBackground', 'blank', 'mathBackground'];
+            _this.mouse = {
+                x: -5,
+                y: 0,
+                rx: 0,
+                ry: 0,
+                r: 30,
+            };
+            _this.mobile = true;
+            _this.pose = pose || new Pose(150, 150, 0);
+            _this.initialPose = pose || new Pose(150, 150, 0);
+            _this.configure(configuration);
+            return _this;
+        }
+        Object.defineProperty(RobotBaseMobile.prototype, "hasTrail", {
+            get: function () {
+                return this._hasTrail;
+            },
+            set: function (value) {
+                this._hasTrail = value;
+            },
+            enumerable: false,
+            configurable: true
+        });
+        Object.defineProperty(RobotBaseMobile.prototype, "pose", {
+            get: function () {
+                return this._pose;
+            },
+            set: function (value) {
+                this._pose = value;
+            },
+            enumerable: false,
+            configurable: true
+        });
+        Object.defineProperty(RobotBaseMobile.prototype, "initialPose", {
+            get: function () {
+                return this._initialPose;
+            },
+            set: function (value) {
+                this._initialPose = value;
+            },
+            enumerable: false,
+            configurable: true
+        });
+        Object.defineProperty(RobotBaseMobile.prototype, "thetaDiff", {
+            get: function () {
+                return this._thetaDiff;
+            },
+            set: function (value) {
+                this._thetaDiff = value;
+            },
+            enumerable: false,
+            configurable: true
+        });
+        RobotBaseMobile.prototype.handleKeyEvent = function (e) {
+            if (this.selected) {
+                e.stopImmediatePropagation();
+                var keyName = e.key;
+                switch (keyName) {
+                    case 'ArrowUp':
+                        this.pose.x += Math.cos(this.pose.theta);
+                        this.pose.y += Math.sin(this.pose.theta);
+                        e.preventDefault();
+                        e.stopPropagation();
+                        break;
+                    case 'ArrowLeft':
+                        var angleLeft_1 = Math.PI / 180;
+                        this.pose.theta -= angleLeft_1;
+                        Object.keys(this)
+                            .filter(function (x) { return x instanceof robot_sensors_1.GyroSensorExt; })
+                            .forEach(function (gyro) { return (gyro.angleValue -= SIMATH.toDegree(angleLeft_1)); });
+                        e.preventDefault();
+                        e.stopPropagation();
+                        break;
+                    case 'ArrowDown':
+                        this.pose.x -= Math.cos(this.pose.theta);
+                        this.pose.y -= Math.sin(this.pose.theta);
+                        e.preventDefault();
+                        e.stopPropagation();
+                        break;
+                    case 'ArrowRight':
+                        var angleRight_1 = Math.PI / 180;
+                        this.pose.theta += angleRight_1;
+                        Object.keys(this)
+                            .filter(function (x) { return x instanceof robot_sensors_1.GyroSensorExt; })
+                            .forEach(function (gyro) { return (gyro.angleValue += SIMATH.toDegree(angleRight_1)); });
+                        e.preventDefault();
+                        e.stopPropagation();
+                        break;
+                    default:
+                        break;
+                }
+                this.initialPose = new Pose(this.pose.x, this.pose.y, this.pose.theta);
+            }
+        };
+        RobotBaseMobile.prototype.handleMouseDown = function (e) {
+            SIMATH.transform(this.pose, this.mouse);
+            if (e && !e.startX) {
+                UTIL.extendMouseEvent(e, simulation_roberta_1.SimulationRoberta.Instance.scale, $('#robotLayer'));
+            }
+            var myEvent = e;
+            var dx = myEvent.startX - this.mouse.rx;
+            var dy = myEvent.startY - this.mouse.ry;
+            this.isDown = dx * dx + dy * dy < this.mouse.r * this.mouse.r;
+            if (this.isDown) {
+                e.stopImmediatePropagation();
+                $('#robotLayer').css('cursor', 'pointer');
+                if (!this.selected) {
+                    this.selected = true;
+                }
+            }
+        };
+        RobotBaseMobile.prototype.handleMouseMove = function (e) {
+            SIMATH.transform(this.pose, this.mouse);
+            if (e && !e.startX) {
+                UTIL.extendMouseEvent(e, simulation_roberta_1.SimulationRoberta.Instance.scale, $('#robotLayer'));
+            }
+            var myEvent = e;
+            var dx = myEvent.startX - this.mouse.rx;
+            var dy = myEvent.startY - this.mouse.ry;
+            var onMe = dx * dx + dy * dy < this.mouse.r * this.mouse.r;
+            if (onMe) {
+                $('#robotLayer').css('cursor', 'pointer');
+                $('#robotLayer').data('hovered', true);
+                if (this.selected) {
+                    e.stopImmediatePropagation();
+                }
+            }
+            if (this.isDown && this.selected) {
+                this.pose.xOld = this.pose.x;
+                this.pose.yOld = this.pose.y;
+                this.pose.x += dx;
+                this.pose.y += dy;
+                this.mouse.rx += dx;
+                this.mouse.ry += dy;
+                this.chassis.transformNewPose(this.pose, this.chassis);
+                this.initialPose = new Pose(this.pose.x, this.pose.y, this.pose.theta);
+            }
+        };
+        RobotBaseMobile.prototype.handleMouseOutUp = function (e) {
+            if (this.isDown) {
+                $('#robotLayer').css('cursor', 'auto');
+                e.stopImmediatePropagation();
+                this.isDown = false;
+            }
+        };
+        RobotBaseMobile.prototype.handleNewSelection = function (who) {
+            if (who === this) {
+                $('#brick' + this.id).show();
+                $('#robotIndex option[value=' + this.id + ']').prop('selected', true);
+                $('#robotIndex').css('background-color', this.chassis.geom.color);
+                this.lastSelected = true;
+            }
+            else {
+                this.selected = false;
+                this.isDown = false;
+                if (who instanceof robot_base_1.RobotBase) {
+                    $('#brick' + this.id).hide();
+                    this.lastSelected = false;
+                }
+            }
+        };
+        RobotBaseMobile.prototype.resetPose = function () {
+            this.pose = new Pose(this.initialPose.x, this.initialPose.y, this.initialPose.theta);
+        };
+        RobotBaseMobile.prototype.drawTrail = function (dCtx, udCtx, width, color) {
+            if (this.hasTrail) {
+                dCtx.beginPath();
+                dCtx.lineCap = 'round';
+                dCtx.lineWidth = width;
+                dCtx.strokeStyle = color;
+                dCtx.moveTo(this.pose.xOld, this.pose.yOld);
+                dCtx.lineTo(this.pose.x, this.pose.y);
+                dCtx.stroke();
+                udCtx.beginPath();
+                udCtx.lineCap = 'round';
+                udCtx.lineWidth = width;
+                udCtx.strokeStyle = color;
+                udCtx.moveTo(this.pose.xOld, this.pose.yOld);
+                udCtx.lineTo(this.pose.x, this.pose.y);
+                udCtx.stroke();
+                this.pose.xOld = this.pose.x;
+                this.pose.yOld = this.pose.y;
+            }
+        };
+        RobotBaseMobile.prototype.updateActions = function (myRobot, dt, interpreterRunning) {
+            _super.prototype.updateActions.call(this, myRobot, dt, interpreterRunning);
+            interpreterRunning && this.notifyObservers();
+        };
+        RobotBaseMobile.prototype.addObserver = function (observer) {
+            this.observers.push(observer);
+        };
+        RobotBaseMobile.prototype.notifyObservers = function () {
+            for (var _i = 0, _a = this.observers; _i < _a.length; _i++) {
+                var observer = _a[_i];
+                observer.update(this);
+            }
+        };
+        RobotBaseMobile.prototype.removeObserver = function (observer) {
+            var removeIndex = this.observers.findIndex(function (obs) { return observer === obs; });
+            if (removeIndex !== -1) {
+                this.observers.splice(removeIndex, 1);
+            }
+        };
+        return RobotBaseMobile;
+    }(robot_base_1.RobotBase));
+    exports.RobotBaseMobile = RobotBaseMobile;
+});

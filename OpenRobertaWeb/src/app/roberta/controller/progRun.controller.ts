@@ -8,7 +8,7 @@ import * as GUISTATE from 'guiState.model';
 
 let blocklyWorkspace;
 
-export function init(workspace) {
+export function init(workspace): void {
     blocklyWorkspace = GUISTATE_C.getBlocklyWorkspace();
     initEvents();
 }
@@ -53,7 +53,7 @@ function initEvents() {
 /**
  * Start the program on brick from the source code editor
  */
-export function runNative(sourceCode) {
+export function runNative(sourceCode): void {
     let ping = GUISTATE_C.doPing();
     GUISTATE_C.setConnectionState('busy');
     GUISTATE_C.setPing(false);
@@ -65,7 +65,7 @@ export function runNative(sourceCode) {
 /**
  * Start the program on the brick
  */
-export function runOnBrick(opt_program?) {
+export function runOnBrick(opt_program?): void {
     let ping = GUISTATE.server.ping;
     GUISTATE_C.setConnectionState('busy');
     GUISTATE_C.setPing(false);

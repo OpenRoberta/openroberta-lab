@@ -10,11 +10,11 @@ import * as COMM from 'comm';
  * Clear user
  *
  */
-function clear(successFn) {
+export function clear(successFn: Function): void {
     COMM.json(
         '/user/clear',
         {
-            cmd: 'clear',
+            cmd: 'clear'
         },
         successFn,
         'clear user'
@@ -31,16 +31,16 @@ function clear(successFn) {
  *
  *
  */
-function login(accountName, passwd, successFn) {
+export function login(accountName: string, passwd: string, successFn: Function): void {
     COMM.json(
         '/user/login',
         {
             cmd: 'login',
             accountName: accountName,
-            password: passwd,
+            password: passwd
         },
         successFn,
-        "login user '" + accountName + "'"
+        'login user \'' + accountName + '\''
     );
 }
 
@@ -58,7 +58,7 @@ function login(accountName, passwd, successFn) {
  *
  *
  */
-function loginUserGroup(userGroupOwner, userGroupName, accountName, passwd, successFn) {
+export function loginUserGroup(userGroupOwner: string, userGroupName: string, accountName: string, passwd: string, successFn: Function): void {
     COMM.json(
         '/user/login',
         {
@@ -66,10 +66,10 @@ function loginUserGroup(userGroupOwner, userGroupName, accountName, passwd, succ
             accountName: accountName,
             password: passwd,
             userGroupOwner: userGroupOwner,
-            userGroupName: userGroupName,
+            userGroupName: userGroupName
         },
         successFn,
-        "login user '" + accountName + "' of group '" + userGroupOwner + '.' + userGroupName + "'."
+        'login user \'' + accountName + '\' of group \'' + userGroupOwner + '.' + userGroupName + '\'.'
     );
 }
 
@@ -78,11 +78,11 @@ function loginUserGroup(userGroupOwner, userGroupName, accountName, passwd, succ
  *
  * @memberof USER
  */
-function logout(successFn) {
+export function logout(successFn: Function): void {
     COMM.json(
         '/user/logout',
         {
-            cmd: 'logout',
+            cmd: 'logout'
         },
         successFn,
         'logout user'
@@ -92,7 +92,7 @@ function logout(successFn) {
 /**
  * Checks if the user is logged in
  */
-function userLoggedInCheck(successFn) {
+export function userLoggedInCheck(successFn: Function): void {
     COMM.json('/user/loggedInCheck', {}, successFn, 'Check for export all programs');
 }
 
@@ -104,11 +104,11 @@ function userLoggedInCheck(successFn) {
  *
  *
  */
-function getUserFromServer(accountName, successFn) {
+export function getUserFromServer(accountName: string, successFn: Function): void {
     COMM.json(
         '/user/getUser',
         {
-            cmd: 'getUser',
+            cmd: 'getUser'
         },
         successFn,
         'got user info from server'
@@ -128,7 +128,7 @@ function getUserFromServer(accountName, successFn) {
  *            {String} - user password
  *
  */
-function createUserToServer(accountName, userName, userEmail, passwd, isYoungerThen14, language, successFn) {
+export function createUserToServer(accountName: string, userName: string, userEmail: string, passwd: string, isYoungerThen14: string, language, successFn: Function): void {
     COMM.json(
         '/user/createUser',
         {
@@ -139,10 +139,10 @@ function createUserToServer(accountName, userName, userEmail, passwd, isYoungerT
             password: passwd,
             role: 'TEACHER',
             isYoungerThen14: isYoungerThen14 === '1' ? true : false,
-            language: language,
+            language: language
         },
         successFn,
-        "save user '" + accountName + "' to server"
+        'save user \'' + accountName + '\' to server'
     );
 }
 
@@ -157,7 +157,7 @@ function createUserToServer(accountName, userName, userEmail, passwd, isYoungerT
  *            {String} - user email address
  *
  */
-function updateUserToServer(accountName, userName, userEmail, isYoungerThen14, language, successFn) {
+export function updateUserToServer(accountName: string, userName: string, userEmail: string, isYoungerThen14: string, language, successFn: Function): void {
     COMM.json(
         '/user/updateUser',
         {
@@ -167,10 +167,10 @@ function updateUserToServer(accountName, userName, userEmail, isYoungerThen14, l
             userEmail: userEmail,
             isYoungerThen14: isYoungerThen14 === '1' ? true : false,
             language: language,
-            role: 'TEACHER',
+            role: 'TEACHER'
         },
         successFn,
-        "update user '" + accountName + "' to server"
+        'update user \'' + accountName + '\' to server'
     );
 }
 
@@ -184,17 +184,17 @@ function updateUserToServer(accountName, userName, userEmail, isYoungerThen14, l
  *            new password of the user account
  *
  */
-function updateUserPasswordToServer(accountName, oldPassword, newPassword, successFn) {
+export function updateUserPasswordToServer(accountName: string, oldPassword: string, newPassword: string, successFn: Function): void {
     COMM.json(
         '/user/changePassword',
         {
             cmd: 'changePassword',
             accountName: accountName,
             oldPassword: oldPassword,
-            newPassword: newPassword,
+            newPassword: newPassword
         },
         successFn,
-        "update user password '" + accountName + "' to server"
+        'update user password \'' + accountName + '\' to server'
     );
 }
 
@@ -208,16 +208,16 @@ function updateUserPasswordToServer(accountName, oldPassword, newPassword, succe
  *            {String} - new password for the user account
  *
  */
-function resetPasswordToServer(resetPasswordLink, newPassword, successFn) {
+export function resetPasswordToServer(resetPasswordLink: string, newPassword: string, successFn: Function): void {
     COMM.json(
         '/user/resetPassword',
         {
             cmd: 'resetPassword',
             resetPasswordLink: resetPasswordLink,
-            newPassword: newPassword,
+            newPassword: newPassword
         },
         successFn,
-        "update user password '" + resetPasswordLink + "' to server"
+        'update user password \'' + resetPasswordLink + '\' to server'
     );
 }
 
@@ -228,15 +228,15 @@ function resetPasswordToServer(resetPasswordLink, newPassword, successFn) {
  *            {String} - target from link
  *
  */
-function checkTargetRecovery(target, successFn) {
+export function checkTargetRecovery(target: string, successFn: Function): void {
     COMM.json(
         '/user/isResetPasswordLinkExpired',
         {
             cmd: 'isResetPasswordLinkExpired',
-            resetPasswordLink: target,
+            resetPasswordLink: target
         },
         successFn,
-        "check password recovery for '" + target + "'"
+        'check password recovery for \'' + target + '\''
     );
 }
 
@@ -247,16 +247,16 @@ function checkTargetRecovery(target, successFn) {
  *            {String} - email of the user
  *
  */
-function userPasswordRecovery(lostEmail, lang, successFn) {
+export function userPasswordRecovery(lostEmail: string, lang, successFn: Function): void {
     COMM.json(
         '/user/passwordRecovery',
         {
             cmd: 'passwordRecovery',
             lostEmail: lostEmail,
-            language: lang,
+            language: lang
         },
         successFn,
-        "password recovery for '" + lostEmail + "'"
+        'password recovery for \'' + lostEmail + '\''
     );
 }
 
@@ -269,16 +269,16 @@ function userPasswordRecovery(lostEmail, lang, successFn) {
  *            {String} - language of the current client
  *
  */
-function userSendAccountActivation(accountName, language, successFn) {
+export function userSendAccountActivation(accountName: string, language: string, successFn: Function): void {
     COMM.json(
         '/user/resendActivation',
         {
             cmd: 'resendActivation',
             accountName: accountName,
-            language: language,
+            language: language
         },
         successFn,
-        "send account activation mail for '" + accountName + "'"
+        'send account activation mail for \'' + accountName + '\''
     );
 }
 
@@ -288,15 +288,15 @@ function userSendAccountActivation(accountName, language, successFn) {
  * @param url
  *            {String} - url for the account
  */
-function userActivateAccount(url, successFn) {
+export function userActivateAccount(url: string, successFn: Function): void {
     COMM.json(
         '/user/activateUser',
         {
             cmd: 'activateUser',
-            userActivationLink: url,
+            userActivationLink: url
         },
         successFn,
-        "send account activation mail for '" + url + "'"
+        'send account activation mail for \'' + url + '\''
     );
 }
 
@@ -309,60 +309,40 @@ function userActivateAccount(url, successFn) {
  *            {String} - user account password
  *
  */
-function deleteUserOnServer(accountName, passwd, successFn) {
+export function deleteUserOnServer(accountName: string, passwd: string, successFn: Function): void {
     COMM.json(
         '/user/deleteUser',
         {
             cmd: 'deleteUser',
             accountName: accountName,
-            password: passwd,
+            password: passwd
         },
         successFn,
-        "delete user '" + accountName + "' on server"
+        'delete user \'' + accountName + '\' on server'
     );
 }
 
-function getStatusText(successFn) {
+export function getStatusText(successFn: Function): void {
     COMM.json(
         '/user/getStatusText',
         {
-            cmd: 'getStatusText',
+            cmd: 'getStatusText'
         },
         successFn,
         'get status text'
     );
 }
 
-function setStatusText(english, german, timestamp, successFn) {
+export function setStatusText(english, german, timestamp, successFn: Function): void {
     COMM.json(
         '/user/setStatusText',
         {
             cmd: 'setStatusText',
             english: english,
             german: german,
-            timestamp: timestamp,
+            timestamp: timestamp
         },
         successFn,
         'set status text'
     );
 }
-
-export {
-    clear,
-    login,
-    loginUserGroup,
-    logout,
-    userLoggedInCheck,
-    getUserFromServer,
-    createUserToServer,
-    updateUserToServer,
-    updateUserPasswordToServer,
-    resetPasswordToServer,
-    checkTargetRecovery,
-    userPasswordRecovery,
-    userSendAccountActivation,
-    userActivateAccount,
-    deleteUserOnServer,
-    getStatusText,
-    setStatusText,
-};

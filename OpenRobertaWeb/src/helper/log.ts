@@ -19,21 +19,22 @@ export function text(obj: string | JSON, marker?: string): void {
         marker = markerINFO;
     }
     /* jshint expr : true */
-    console.log();
     logToLog && logLog(obj, marker);
     logToComm && logComm(obj, marker);
     logToConsole && marker === markerERROR && logConsole(obj, marker);
 }
 
 /**
- * log info text
+ * log info text to a HTML-list with id #log or prepare it to be sent to the
+ * server or do both or do nothing, depending on switches
  */
 export function info(obj: string | JSON): void {
     text(obj, markerINFO);
 }
 
 /**
- * log error text
+ * log error text to a HTML-list with id #log or prepare it to be sent to
+ * the server or do both or do nothing, depending on switches
  */
 export function error(obj: string | JSON): void {
     text(obj, markerERROR);
@@ -106,7 +107,8 @@ function logLog(obj: any, marker: any): void {
 }
 
 /**
- * IMPLEMENTATION OF logging to the console
+ * IMPLEMENTATION OF logging to a HTML-list with id #log. expect: HTML-list
+ * with id #log expect: css-classes 'log0' and 'log1' and 'lERR'
  */
 function logConsole(obj: string | JSON, marker: string): void {
     if (typeof obj === 'object') {

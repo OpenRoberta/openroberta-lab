@@ -7,10 +7,10 @@ import 'jquery-validate';
 /**
  * initialize the callbacks needed by the NN tab. Called once at front end init time
  */
-export function init() {
+export function init(): void {
     $('#tabNN').onWrap(
         'show.bs.tab',
-        function(e) {
+        function (e) {
             $('#nn').show();
             GUISTATE_C.setView('tabNN');
         },
@@ -19,7 +19,7 @@ export function init() {
 
     $('#tabNN').onWrap(
         'shown.bs.tab',
-        function(e) {
+        function (e): void {
             GUISTATE_C.setProgramSaved(false);
             mkNNfromNNStepDataAndRunNNEditor();
         },
@@ -28,18 +28,18 @@ export function init() {
 
     $('#tabNN').onWrap(
         'hide.bs.tab',
-        function(e) {
+        function (e): void {
             saveNN2Blockly();
             $('#nn').hide();
         },
         'hide tabNN'
     );
 
-    $('#tabNN').onWrap('hidden.bs.tab', function(e) {}, 'hidden tabNN');
+    $('#tabNN').onWrap('hidden.bs.tab', function (e): void {}, 'hidden tabNN');
 
     $('#tabNNlearn').onWrap(
         'show.bs.tab',
-        function(e) {
+        function (e): void {
             $('#nn-learn').show();
             GUISTATE_C.setView('tabNNlearn');
         },
@@ -48,7 +48,7 @@ export function init() {
 
     $('#tabNNlearn').onWrap(
         'shown.bs.tab',
-        function(e) {
+        function (e): void {
             GUISTATE_C.setProgramSaved(false);
             mkNNfromNNStepDataAndRunNNEditorForTabLearn();
         },
@@ -57,21 +57,21 @@ export function init() {
 
     $('#tabNNlearn').onWrap(
         'hide.bs.tab',
-        function(e) {
+        function (e): void {
             saveNN2Blockly();
             $('#nn-learn').hide();
         },
         'hide tabNNlearn'
     );
 
-    $('#tabNNlearn').onWrap('hidden.bs.tab', function(e) {}, 'hidden tabNNlearn');
+    $('#tabNNlearn').onWrap('hidden.bs.tab', function (e): void {}, 'hidden tabNNlearn');
 }
 
 /**
  * notify, that a new program was imported into the program tab. In this case -if the simulation tab is open- at simulation close time the NN must
  * not be written back to the blockly XML.
  */
-export function programWasReplaced() {
+export function programWasReplaced(): void {
     NN_UI.programWasReplaced();
     NN_UI.resetUserInputs();
 }
@@ -82,7 +82,7 @@ export function programWasReplaced() {
  * - close the edit card
  * - reset node selection (yellow node)
  */
-export function saveNN2Blockly(neuralNetwork = null) {
+export function saveNN2Blockly(neuralNetwork = null): void {
     NN_UI.saveNN2Blockly(neuralNetwork);
     NN_UI.resetUiOnTerminate();
 }
@@ -90,8 +90,8 @@ export function saveNN2Blockly(neuralNetwork = null) {
 /**
  * create the NN from the program XML. Called, when the simulation starts
  */
-export function mkNNfromProgramStartBlock() {
-    var startBlock = UTIL.getTheStartBlock();
+export function mkNNfromProgramStartBlock(): void {
+    let startBlock = UTIL.getTheStartBlock();
     let nnStateAsJson;
     try {
         nnStateAsJson = JSON.parse(startBlock.data);

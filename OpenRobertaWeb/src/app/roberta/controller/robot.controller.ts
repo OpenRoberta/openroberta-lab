@@ -14,23 +14,23 @@ import { ConnectionInterface } from 'connection.interface';
 import * as CONNECTION_C from 'connection.controller';
 
 let $formSingleModal;
-let robotPort;
+let robotPort: string;
 let connectionInstance: ConnectionInterface;
 
 /**
  * Initialize robot
  */
-function init(robot, extensions) {
+export function init(robot: any, extensions: any) {
     let ready = $.Deferred();
     extend(robot, extensions);
     $.when(
-        ROBOT.setRobot(robot, extensions, function (result) {
+        ROBOT.setRobot(robot, extensions, function(result) {
             if (result.rc == 'ok') {
                 GUISTATE_C.setExtensions(extensions);
                 GUISTATE_C.setRobot(robot, result, true);
             }
         })
-    ).then(function () {
+    ).then(function(): void {
         initRobotForms();
         ready.resolve();
     });
@@ -42,10 +42,10 @@ function init(robot, extensions) {
  *
  * @param token Token value to be set
  */
-function setToken(token: string) {
+function setToken(token: string): void {
     $formSingleModal.validate();
     if ($formSingleModal.valid()) {
-        ROBOT.setToken(token, function (result) {
+        ROBOT.setToken(token, function(result): void {
             if (result.rc === 'ok') {
                 GUISTATE_C.setRobotToken(token);
                 GUISTATE_C.setState(result);
@@ -62,14 +62,14 @@ function setToken(token: string) {
     }
 }
 
-function setApiKey(apiKey: string, url: string) {
+function setApiKey(apiKey: string, url: string): void {
     $formSingleModal.validate();
-    let checkUrl = (url) => {
-        let reg = new RegExp('^txt40\\.local$|^192\\.168(\\.[0-9]{1,3}){2}$');
+    let checkUrl = (url: string) => {
+        let reg: RegExp = new RegExp('^txt40\\.local$|^192\\.168(\\.[0-9]{1,3}){2}$');
         return reg.test(url);
     };
     if ($formSingleModal.valid() && checkUrl(url)) {
-        ROBOT.setApiKey(apiKey, url, function () {
+        ROBOT.setApiKey(apiKey, url, function(): void {
             GUISTATE_C.setRobotToken(apiKey);
             GUISTATE_C.setRobotUrl(url);
             GUISTATE_C.setRunEnabled(true);
@@ -78,29 +78,28 @@ function setApiKey(apiKey: string, url: string) {
             $('#head-navi-icon-robot').removeClass('error');
             $('#head-navi-icon-robot').removeClass('busy');
             $('#head-navi-icon-robot').addClass('wait');
-            // @ts-ignore
             MSG.displayInformation({ rc: 'ok' }, 'MESSAGE_ROBOT_CONNECTED', '', GUISTATE_C.getRobotName());
-            setTimeout(function () {
+            setTimeout(function(): void {
                 $('.modal').modal('hide');
             }, 100);
         });
     }
 }
 
-function setPort(port) {
+export function setPort(port: string): void {
     robotPort = port;
     $('#single-modal-list').modal('hide');
     GUISTATE_C.setRobotPort(port);
 }
 
-function getPort() {
+export function getPort(): string {
     return robotPort;
 }
 
-function initRobotForms() {
+function initRobotForms(): void {
     $('#iconDisplayRobotState').onWrap(
         'click',
-        function () {
+        function() {
             connectionInstance.showRobotInfo();
         },
         'display robot state'
@@ -109,7 +108,7 @@ function initRobotForms() {
     $('#wlan-form').removeData('validator');
     $.validator.addMethod(
         'wlanRegex',
-        function (value, element) {
+        function(value, element: HTMLElement) {
             return this.optional(element) || /^[a-zA-Z0-9$ *\(\)\{\}\[\]><~`\'\\\/|=+!?.,%#+&^@_\-äöüÄÖÜß]+$/gi.test(value);
         },
         'This field contains nonvalid symbols.'
@@ -118,32 +117,32 @@ function initRobotForms() {
         rules: {
             wlanSsid: {
                 required: true,
-                wlanRegex: true,
+                wlanRegex: true
             },
             wlanPassword: {
                 required: true,
-                wlanRegex: true,
-            },
+                wlanRegex: true
+            }
         },
         errorClass: 'form-invalid',
-        errorPlacement: function (label, element) {
+        errorPlacement: function(label: JQuery<HTMLElement>, element: JQuery<HTMLElement>): void {
             label.insertBefore(element.parent());
         },
         messages: {
             wlanSsid: {
                 required: Blockly.Msg['VALIDATION_FIELD_REQUIRED'],
-                wlanRegex: Blockly.Msg['VALIDATION_CONTAINS_SPECIAL_CHARACTERS'],
+                wlanRegex: Blockly.Msg['VALIDATION_CONTAINS_SPECIAL_CHARACTERS']
             },
             wlanPassword: {
                 required: Blockly.Msg['VALIDATION_FIELD_REQUIRED'],
-                wlanRegex: Blockly.Msg['VALIDATION_CONTAINS_SPECIAL_CHARACTERS'],
-            },
-        },
+                wlanRegex: Blockly.Msg['VALIDATION_CONTAINS_SPECIAL_CHARACTERS']
+            }
+        }
     });
 
     $('#setWlanCredentials').onWrap(
         'click',
-        function (e) {
+        function(e): void {
             e.preventDefault();
             $('#wlan-form').validate();
             if ($('#wlan-form').valid()) {
@@ -157,7 +156,7 @@ function initRobotForms() {
 
     $('#doUpdateFirmware').onWrap(
         'click',
-        function () {
+        function(): void {
             $('#set-token').modal('hide');
             $('#confirmUpdateFirmware').modal('hide');
             updateFirmware();
@@ -168,48 +167,48 @@ function initRobotForms() {
     $formSingleModal = $('#single-modal-form');
 
     $('#connectionsTable').bootstrapTable({
-        formatNoMatches: function () {
+        formatNoMatches: function(): string {
             return '<div class="lds-ellipsis"></div>';
         },
         columns: [
             {
                 // TODO: translations
                 title: 'Name',
-                field: 'name',
+                field: 'name'
             },
             {
                 visible: false,
-                field: 'id',
-            },
-        ],
+                field: 'id'
+            }
+        ]
     });
     $('#connectionsTable').onWrap(
         'click-row.bs.table',
-        function (e, row) {
+        function(e, row): void {
             WEBVIEW_C.jsToAppInterface({
                 target: GUISTATE_C.getRobot(),
                 type: 'connect',
-                robot: row.id,
+                robot: row.id
             });
         },
         'connect to robot'
     );
-    $('#show-available-connections').on('hidden.bs.modal', function (e) {
+    $('#show-available-connections').on('hidden.bs.modal', function(e): void {
         WEBVIEW_C.jsToAppInterface({
             target: GUISTATE_C.getRobot(),
-            type: 'stopScan',
+            type: 'stopScan'
         });
     });
 
     $('#show-available-connections').onWrap(
         'add',
-        function (event, data) {
+        function(event, data): void {
             $('#connectionsTable').bootstrapTable('insertRow', {
                 index: 999,
                 row: {
                     name: data.brickname,
-                    id: data.brickid,
-                },
+                    id: data.brickid
+                }
             });
         },
         'insert robot connections'
@@ -217,7 +216,7 @@ function initRobotForms() {
 
     $('#show-available-connections').onWrap(
         'connect',
-        function (event, data) {
+        function(event, data: any): void {
             let result = {};
             result['robotName'] = data.brickname;
             result['robotState'] = 'wait';
@@ -228,9 +227,9 @@ function initRobotForms() {
     );
 }
 
-function showSetTokenModal(tokenMinLength: number, tokenMaxLength: number) {
+export function showSetTokenModal(tokenMinLength: number, tokenMaxLength: number): void {
     UTIL.showSingleModal(
-        function () {
+        function(): void {
             $('#singleModalInput').attr('type', 'text');
             $('#single-modal h5').text(Blockly.Msg['MENU_CONNECT']);
             $('#single-modal label').text(Blockly.Msg['POPUP_VALUE']);
@@ -238,11 +237,11 @@ function showSetTokenModal(tokenMinLength: number, tokenMaxLength: number) {
             $('#single-modal a[href]').text(Blockly.Msg['POPUP_STARTUP_HELP']);
             $('#single-modal a[href]').attr('href', 'http://wiki.open-roberta.org');
         },
-        function () {
+        function(): void {
             // @ts-ignore
             setToken($('#singleModalInput').val().toUpperCase());
         },
-        function () {
+        function(): void {
             $('#singleModalInput').removeClass('capitalLetters');
         },
         {
@@ -250,27 +249,27 @@ function showSetTokenModal(tokenMinLength: number, tokenMaxLength: number) {
                 singleModalInput: {
                     required: true,
                     minlength: tokenMinLength,
-                    maxlength: tokenMaxLength,
-                },
+                    maxlength: tokenMaxLength
+                }
             },
             errorClass: 'form-invalid',
-            errorPlacement: function (label, element) {
+            errorPlacement: function(label: JQuery<HTMLElement>, element: JQuery<HTMLElement>): void {
                 label.insertAfter(element);
             },
             messages: {
                 singleModalInput: {
                     required: Blockly.Msg['VALIDATION_FIELD_REQUIRED'],
                     minlength: Blockly.Msg['VALIDATION_TOKEN_LENGTH'],
-                    maxlength: Blockly.Msg['VALIDATION_TOKEN_LENGTH'],
-                },
-            },
+                    maxlength: Blockly.Msg['VALIDATION_TOKEN_LENGTH']
+                }
+            }
         }
     );
 }
 // TODO add blocklyMsg
-function showSetApiKeyModal(placeHolderUrl) {
+export function showSetApiKeyModal(placeHolderUrl): void {
     UTIL.showSingleModal(
-        function () {
+        function() {
             $('.form-label-ip').removeClass('hidden');
             $('.ip-input-group').removeClass('hidden');
             $('#singleModalInput').attr('type', 'text');
@@ -283,11 +282,11 @@ function showSetApiKeyModal(placeHolderUrl) {
             $('#single-modal a[href]').text(Blockly.Msg['POPUP_STARTUP_HELP']);
             $('#single-modal a[href]').attr('href', 'http://wiki.open-roberta.org');
         },
-        function () {
+        function() {
             // @ts-ignore
             setApiKey($('#singleModalInput').val(), $('#singleModalInputIp').val());
         },
-        function () {
+        function() {
             $('.form-label-ip').addClass('hidden');
             $('.ip-input-group').addClass('hidden');
         },
@@ -296,81 +295,80 @@ function showSetApiKeyModal(placeHolderUrl) {
                 singleModalInput: {
                     required: true,
                     minlength: 6,
-                    maxlength: 6,
+                    maxlength: 6
                 },
                 singleModalInputIp: {
-                    required: true,
-                },
+                    required: true
+                }
             },
             errorClass: 'form-invalid',
-            errorPlacement: function (label, element) {
+            errorPlacement: function(label: JQuery<HTMLElement>, element: JQuery<HTMLElement>): void {
                 label.insertAfter(element);
             },
             messages: {
                 singleModalInput: {
                     required: Blockly.Msg['VALIDATION_FIELD_REQUIRED'],
                     minlength: Blockly.Msg['VALIDATION_TOKEN_LENGTH'],
-                    maxlength: Blockly.Msg['VALIDATION_TOKEN_LENGTH'],
+                    maxlength: Blockly.Msg['VALIDATION_TOKEN_LENGTH']
                 },
                 singleModalInputIp: {
-                    required: 'Wifi: txt40.local, USB: 192.168.7.2, or Ip address of your robot: INFO > Wi-FI > IP',
-                },
-            },
+                    required: 'Wifi: txt40.local, USB: 192.168.7.2, or Ip address of your robot: INFO > Wi-FI > IP'
+                }
+            }
         }
     );
 }
 
-function showScanModal() {
+export function showScanModal(): void {
     if ($('#show-available-connections').is(':visible')) {
         return;
     }
     $('#connectionsTable').bootstrapTable('removeAll');
     WEBVIEW_C.jsToAppInterface({
         target: GUISTATE_C.getRobot(),
-        type: 'startScan',
+        type: 'startScan'
     });
     $('#show-available-connections').modal('show');
 }
 
-function showListModal() {
+export function showListModal(): void {
     UTIL.showSingleListModal(
-        function () {
+        function(): void {
             $('#single-modal-list h3').text(Blockly.Msg['MENU_CONNECT']);
             $('#single-modal-list label').text(Blockly.Msg['POPUP_VALUE']);
             $('#single-modal-list a[href]').text(Blockly.Msg['POPUP_STARTUP_HELP']);
             $('#single-modal-list a[href]').attr('href', 'http://wiki.open-roberta.org');
         },
-        function () {
+        function(): void {
             // @ts-ignore
             setPort(document.getElementById('singleModalListInput').value);
         },
-        function () {}
+        function(): void {}
     );
 }
 
 /**
  * Handle firmware conflict between server and robot
  */
-function handleFirmwareConflict(updateInfo, robotServerVersion: string) {
+export function handleFirmwareConflict(updateInfo: number, robotServerVersion: string): boolean {
     if (updateInfo < 0) {
         LOG.info(
-            "The firmware version '" +
-                robotServerVersion +
-                "' on the server is newer than the firmware version '" +
-                GUISTATE_C.getRobotVersion() +
-                "' on the robot"
+            'The firmware version \'' +
+            robotServerVersion +
+            '\' on the server is newer than the firmware version \'' +
+            GUISTATE_C.getRobotVersion() +
+            '\' on the robot'
         );
         $('#confirmUpdateFirmware').modal('show');
         return true;
     } else if (updateInfo > 0) {
         LOG.info(
-            "The firmware version '" +
-                robotServerVersion +
-                "' on the server is older than the firmware version '" +
-                GUISTATE_C.getRobotVersion() +
-                "' on the robot"
+            'The firmware version \'' +
+            robotServerVersion +
+            '\' on the server is older than the firmware version \'' +
+            GUISTATE_C.getRobotVersion() +
+            '\' on the robot'
         );
-        // @ts-ignore
         MSG.displayMessage('MESSAGE_FIRMWARE_ERROR', 'POPUP', '');
         return true;
     }
@@ -380,14 +378,13 @@ function handleFirmwareConflict(updateInfo, robotServerVersion: string) {
 /**
  * Update robot firmware
  */
-function updateFirmware() {
-    ROBOT.updateFirmware(function (result) {
+export function updateFirmware(): void {
+    ROBOT.updateFirmware(function(result): void {
         GUISTATE_C.setState(result);
         if (result.rc === 'ok') {
             // @ts-ignore
             MSG.displayMessage('MESSAGE_RESTART_ROBOT', 'POPUP', '');
         } else {
-            // @ts-ignore
             MSG.displayInformation(result, '', result.message, GUISTATE_C.getRobotFWName());
         }
     });
@@ -411,7 +408,7 @@ function extend(robot: string, extensions: object) {
 /**
  * Switch robot
  */
-function switchRobot(robot: string, extensions: object, opt_continue?: boolean, opt_callback?: Function) {
+export function switchRobot(robot: string, extensions: object, opt_continue?: boolean, opt_callback?: Function) {
     PROGRAM_C['SSID'] = null;
     PROGRAM_C['password'] = null;
     $('#wlanSsid').text('');
@@ -449,7 +446,7 @@ function switchRobot(robot: string, extensions: object, opt_continue?: boolean, 
             typeof opt_callback === 'function' && opt_callback();
             return;
         }
-        ROBOT.setRobot(robot, extensions, function (result) {
+        ROBOT.setRobot(robot, extensions, function(result) {
             if (result.rc === 'ok') {
                 if ($('.rightMenuButton.rightActive').length > 0) {
                     $('.rightMenuButton.rightActive').clickWrap();
@@ -477,11 +474,11 @@ function switchRobot(robot: string, extensions: object, opt_continue?: boolean, 
                 typeof opt_callback === 'function'
                     ? opt_callback()
                     : // @ts-ignore
-                      MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getRobotRealName());
+                    MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getRobotRealName());
                 let deprecatedData = GUISTATE_C.getRobotDeprecatedData(robot);
                 if (deprecatedData !== undefined) {
                     $('#show-message>.modal-dialog').removeClass('modal-sm');
-                    $('#show-message').on('hidden.bs.modal', function () {
+                    $('#show-message').on('hidden.bs.modal', function() {
                         $('#show-message>.modal-dialog').addClass('modal-sm');
                     });
                     MSG.displayPopupMessage(GUISTATE_C.getLanguage(), deprecatedData, 'OK', 'false');
@@ -492,11 +489,11 @@ function switchRobot(robot: string, extensions: object, opt_continue?: boolean, 
             }
         });
     } else {
-        $('#show-message-confirm').oneWrap('shown.bs.modal', function (e) {
+        $('#show-message-confirm').oneWrap('shown.bs.modal', function(e) {
             $('#confirm').off();
             $('#confirm').onWrap(
                 'click',
-                function (e) {
+                function(e) {
                     e.preventDefault();
                     switchRobot(robot, extensions, true, opt_callback);
                 },
@@ -505,7 +502,7 @@ function switchRobot(robot: string, extensions: object, opt_continue?: boolean, 
             $('#confirmCancel').off();
             $('#confirmCancel').onWrap(
                 'click',
-                function (e) {
+                function(e) {
                     e.preventDefault();
                     $('.modal').modal('hide');
                 },
@@ -521,4 +518,3 @@ function switchRobot(robot: string, extensions: object, opt_continue?: boolean, 
         }
     }
 }
-export { init, setPort, getPort, showSetTokenModal, showSetApiKeyModal, showScanModal, showListModal, handleFirmwareConflict, updateFirmware, switchRobot };

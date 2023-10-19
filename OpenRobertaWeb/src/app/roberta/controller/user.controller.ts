@@ -3,43 +3,46 @@ import * as UTIL from 'util.roberta';
 import * as USER from 'user.model';
 import * as GUISTATE_C from 'guiState.controller';
 import * as $ from 'jquery';
+//@ts-ignore
 import * as Blockly from 'blockly';
+import { GetUserResponse } from '../ts/restEntities';
 
-var $divForms;
-var $formLogin;
-var $formLost;
-var $formRegister;
-var $formUserPasswordChange;
-var $formSingleModal;
+let $divForms;
+let $formLogin;
+let $formLost;
+let $formRegister;
+let $formUserPasswordChange;
+let $formSingleModal;
 
-var $h3Login;
-var $h3Register;
-var $h3Lost;
+let $h3Login;
+let $h3Register;
+let $h3Lost;
 
-var $formUserGroupLogin;
-var $articleLostUserGroupPassword;
+let $formUserGroupLogin;
+let $articleLostUserGroupPassword;
 
-var $h3LoginUserGroupLogin;
-var $h3LostPasswordUsergroupLogin;
+let $h3LoginUserGroupLogin;
+let $h3LostPasswordUsergroupLogin;
 
-var $modalAnimateTime = 300;
-var $msgAnimateTime = 150;
-var $msgShowTime = 2000;
+let $modalAnimateTime: number = 300;
+let $msgAnimateTime: number = 150;
+let $msgShowTime: number = 2000;
 
 /**
  * Create new user
  */
-function createUserToServer() {
+function createUserToServer(): void {
     $formRegister.validate();
     if ($formRegister.valid()) {
         USER.createUserToServer(
+            //@ts-ignore
             $('#registerAccountName').val(),
             $('#registerUserName').val(),
             $('#registerUserEmail').val(),
             $('#registerPass').val(),
             $('#registerUserAge').val(),
             GUISTATE_C.getLanguage(),
-            function(result) {
+            function(result: GetUserResponse): void {
                 if (result.rc === 'ok') {
                     $('#loginAccountName').val($('#registerAccountName').val());
                     $('#loginPassword').val($('#registerPass').val());
@@ -54,7 +57,7 @@ function createUserToServer() {
 /**
  * Update user
  */
-function updateUserToServer() {
+function updateUserToServer(): void {
     if (GUISTATE_C.isUserMemberOfUserGroup()) {
         $('#login-user').modal('hide');
         return;
@@ -64,13 +67,15 @@ function updateUserToServer() {
     if ($formRegister.valid()) {
         USER.updateUserToServer(
             GUISTATE_C.getUserAccountName(),
+            //@ts-ignore
             $('#registerUserName').val(),
             $('#registerUserEmail').val(),
             $('#registerUserAge').val(),
             GUISTATE_C.getLanguage(),
-            function(result) {
+            function(result: GetUserResponse): void {
                 if (result.rc === 'ok') {
-                    USER.getUserFromServer(function(result) {
+                    //@ts-ignore
+                    USER.getUserFromServer(function(result: GetUserResponse): void {
                         if (result.rc === 'ok') {
                             GUISTATE_C.setLogin(result);
                         }
@@ -85,12 +90,12 @@ function updateUserToServer() {
 /**
  * Update User Password
  */
-function updateUserPasswordOnServer() {
-    restPasswordLink = $('#resetPassLink').val();
+function updateUserPasswordOnServer(): void {
+    let restPasswordLink = $('#resetPassLink').val();
     $formUserPasswordChange.validate();
     if ($formUserPasswordChange.valid()) {
         if (restPasswordLink) {
-            USER.resetPasswordToServer(restPasswordLink, $('#passNew').val(), function(result) {
+            USER.resetPasswordToServer(restPasswordLink.toString(), $('#passNew').val().toString(), function(result) {
                 if (result.rc === 'ok') {
                     $('#change-user-password').modal('hide');
                     $('#resetPassLink').val(undefined);
@@ -101,7 +106,7 @@ function updateUserPasswordOnServer() {
                 }
             });
         } else {
-            USER.updateUserPasswordToServer(GUISTATE_C.getUserAccountName(), $('#passOld').val(), $('#passNew').val(), function(result) {
+            USER.updateUserPasswordToServer(GUISTATE_C.getUserAccountName(), $('#passOld').val().toString(), $('#passNew').val().toString(), function(result) {
                 if (result.rc === 'ok') {
                     $('#change-user-password').modal('hide');
                 }
@@ -114,8 +119,8 @@ function updateUserPasswordOnServer() {
 /**
  * Get user from server
  */
-function getUserFromServer() {
-    USER.getUserFromServer(GUISTATE_C.getUserAccountName(), function(result) {
+function getUserFromServer(): void {
+    USER.getUserFromServer(GUISTATE_C.getUserAccountName(), function(result): void {
         if (result.rc === 'ok') {
             $('#registerAccountName').val(result.userAccountName);
             $('#registerUserEmail').val(result.userEmail);
@@ -128,9 +133,9 @@ function getUserFromServer() {
 /**
  * resend account activation
  */
-function sendAccountActivation() {
+function sendAccountActivation(): void {
     //        if ($("#registerUserEmail").val() != "") {
-    USER.userSendAccountActivation(GUISTATE_C.getUserAccountName(), GUISTATE_C.getLanguage(), function(result) {
+    USER.userSendAccountActivation(GUISTATE_C.getUserAccountName(), GUISTATE_C.getLanguage(), function(result): void {
         MSG.displayInformation(result, result.message, result.message);
     });
     //        }
@@ -139,8 +144,8 @@ function sendAccountActivation() {
 /**
  * account activation
  */
-function activateAccount(url) {
-    USER.userActivateAccount(url, function(result) {
+export function activateAccount(url): void {
+    USER.userActivateAccount(url, function(result): void {
         MSG.displayInformation(result, result.message, result.message);
     });
 }
@@ -151,7 +156,7 @@ function activateAccount(url) {
 function login() {
     $formLogin.validate();
     if ($formLogin.valid()) {
-        USER.login($('#loginAccountName').val(), $('#loginPassword').val(), function(result) {
+        USER.login($('#loginAccountName').val().toString(), $('#loginPassword').val().toString(), function(result) {
             if (result.rc === 'ok') {
                 GUISTATE_C.setLogin(result);
                 if (result.userId === 1) {
@@ -169,10 +174,10 @@ function login() {
 function loginToUserGroup() {
     $formUserGroupLogin.validate();
     if ($formUserGroupLogin.valid()) {
-        var values = $formUserGroupLogin.serializeArray(),
-            valuesObj = {};
+        let values = $formUserGroupLogin.serializeArray(),
+            valuesObj: any = {};
 
-        for (var i = 0; i < values.length; i++) {
+        for (let i: number = 0; i < values.length; i++) {
             if (typeof values[i].name === 'undefined' || typeof values[i].value === 'undefined') {
                 continue;
             }
@@ -183,7 +188,7 @@ function loginToUserGroup() {
             valuesObj.userGroupName,
             valuesObj.userGroupName + ':' + valuesObj.accountName,
             valuesObj.password,
-            function(result) {
+            function(result): void {
                 if (result.rc === 'ok') {
                     $('#menuDeleteUser, #menuGroupPanel').parent().addClass('unavailable');
                     GUISTATE_C.setLogin(result);
@@ -204,8 +209,8 @@ function loginToUserGroup() {
 /**
  * Logout user
  */
-function logout() {
-    USER.logout(function(result) {
+export function logout(): void {
+    USER.logout(function(result): void {
         UTIL.response(result);
         if (result.rc === 'ok') {
             if (GUISTATE_C.isUserMemberOfUserGroup()) {
@@ -220,10 +225,10 @@ function logout() {
 /**
  * Update user password
  */
-function userPasswordRecovery() {
+function userPasswordRecovery(): void {
     $formLost.validate();
     if ($formLost.valid()) {
-        USER.userPasswordRecovery($('#lost_email').val(), GUISTATE_C.getLanguage(), function(result) {
+        USER.userPasswordRecovery($('#lost_email').val().toString(), GUISTATE_C.getLanguage(), function(result) {
             MSG.displayInformation(result, result.message, result.message);
         });
     }
@@ -235,7 +240,7 @@ function userPasswordRecovery() {
 function deleteUserOnServer() {
     $formSingleModal.validate();
     if ($formSingleModal.valid()) {
-        USER.deleteUserOnServer(GUISTATE_C.getUserAccountName(), $('#singleModalInput').val(), function(result) {
+        USER.deleteUserOnServer(GUISTATE_C.getUserAccountName(), $('#singleModalInput').val().toString(), function(result) {
             if (result.rc === 'ok') {
                 logout();
             }
@@ -305,7 +310,7 @@ function validateLoginUserGroupMember() {
             }
         },
         errorClass: 'form-invalid',
-        errorPlacement: function(label, element) {
+        errorPlacement: function(label, element): void {
             label.insertBefore(element.parent());
         },
         messages: {
@@ -327,11 +332,11 @@ function validateLoginUserGroupMember() {
     });
 }
 
-function validateRegisterUser() {
+function validateRegisterUser(): void {
     $formRegister.removeData('validator');
     $.validator.addMethod(
         'emailRegex',
-        function(value, element) {
+        function(value, element: HTMLElement) {
             return (
                 this.optional(element) ||
                 /^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([ \t]*\r\n)?[ \t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([ \t]*\r\n)?[ \t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i.test(
@@ -343,7 +348,7 @@ function validateRegisterUser() {
     );
     $.validator.addMethod(
         'loginRegex',
-        function(value, element) {
+        function(value, element: HTMLElement) {
             return this.optional(element) || /^[a-zA-Z0-9=+!?.,%#+&^@_\- ]+$/gi.test(value);
         },
         'This field must contain only letters, numbers, or dashes.'
@@ -373,19 +378,19 @@ function validateRegisterUser() {
                 emailRegex: true
             },
             registerUserAge: {
-                required: function(element) {
+                required: function(element): boolean {
                     return $('#registerUserEmail').val() != '';
                 }
             }
         },
         onfocusout: false,
         errorClass: 'form-invalid',
-        errorPlacement: function(label, element) {
+        errorPlacement: function(label, element): void {
             label.insertBefore(element.parent());
         },
-        showErrors: function(errorMap, errorList) {
+        showErrors: function(errorMap, errorList): void {
             if (errorList.length) {
-                var firstError = errorList.shift();
+                let firstError = errorList.shift();
                 this.errorList = [firstError];
             }
             this.defaultShowErrors();
@@ -420,7 +425,7 @@ function validateRegisterUser() {
     });
 }
 
-function validateUserPasswordChange() {
+function validateUserPasswordChange(): void {
     $formUserPasswordChange.removeData('validator');
     $formUserPasswordChange.validate({
         rules: {
@@ -435,7 +440,7 @@ function validateUserPasswordChange() {
             }
         },
         errorClass: 'form-invalid',
-        errorPlacement: function(label, element) {
+        errorPlacement: function(label, element): void {
             label.insertBefore(element.parent());
         },
         messages: {
@@ -454,7 +459,7 @@ function validateUserPasswordChange() {
     });
 }
 
-function validateLostPassword() {
+function validateLostPassword(): void {
     $formLost.removeData('validator');
     $formLost.validate({
         rules: {
@@ -464,7 +469,7 @@ function validateLostPassword() {
             }
         },
         errorClass: 'form-invalid',
-        errorPlacement: function(label, element) {
+        errorPlacement: function(label, element): void {
             label.insertBefore(element.parent());
         },
         messages: {
@@ -477,20 +482,20 @@ function validateLostPassword() {
 }
 
 //Animate between forms in login modal
-function modalAnimate($oldForm, $newForm) {
-    $oldForm.fadeToggle($modalAnimateTime, function() {
+function modalAnimate($oldForm, $newForm): void {
+    $oldForm.fadeToggle($modalAnimateTime, function(): void {
         $newForm.fadeToggle();
     });
 }
 
-function msgFade($msgId, $msgText) {
-    $msgId.fadeOut($msgAnimateTime, function() {
+function msgFade($msgId, $msgText): void {
+    $msgId.fadeOut($msgAnimateTime, function(): void {
         $(this).text($msgText).fadeIn($msgAnimateTime);
     });
 }
 
 //header change of the modal login
-function headerChange($oldHeder, $newHeder) {
+function headerChange($oldHeder, $newHeder): void {
     $oldHeder.addClass('hidden');
     $newHeder.removeClass('hidden');
 }
@@ -499,7 +504,7 @@ function headerChange($oldHeder, $newHeder) {
  * Resets the validation of every form in login modal
  * also resets the shown hint
  */
-function resetForm() {
+function resetForm(): void {
     $formLogin.validate().resetForm();
     $formLost.validate().resetForm();
     $formRegister.validate().resetForm();
@@ -509,16 +514,16 @@ function resetForm() {
 /**
  * Clear input fields in login modal
  */
-function clearInputs() {
+function clearInputs(): void {
     $divForms.find('input').val('');
     $('#registerUserAge').val('none');
 }
 
-function showRegisterForm() {
+function showRegisterForm(): void {
     $formRegister.off('submit');
     $formRegister.onWrap(
         'submit',
-        function(e) {
+        function(e): void {
             e.preventDefault();
             createUserToServer();
         },
@@ -538,7 +543,7 @@ function showRegisterForm() {
     $('#register_lost_btn').show();
 }
 
-function initLoginModal() {
+function initLoginModal(): void {
     $('#login-user').onWrap('hidden.bs.modal', function() {
         resetForm();
         clearInputs();
@@ -546,7 +551,7 @@ function initLoginModal() {
 
     $formLost.onWrap(
         'submit',
-        function(e) {
+        function(e): void {
             e.preventDefault();
             userPasswordRecovery();
         },
@@ -554,7 +559,7 @@ function initLoginModal() {
     );
     $formLogin.onWrap(
         'submit',
-        function(e) {
+        function(e): void {
             e.preventDefault();
             login();
         },
@@ -566,7 +571,7 @@ function initLoginModal() {
         $hint.slideDown($msgAnimateTime);
     });
 
-    $('#registerUserEmail').on('change paste keyup', function() {
+    $('#registerUserEmail').on('change paste keyup', function(): void {
         if ($('#registerUserEmail').val() == '') {
             $('#fgUserAge').fadeOut();
         } else {
@@ -577,7 +582,7 @@ function initLoginModal() {
     // Login form change between sub-form
     $('#login_register_btn').onWrap(
         'click',
-        function() {
+        function(): void {
             showRegisterForm();
             headerChange($h3Login, $h3Register);
             modalAnimate($formLogin, $formRegister);
@@ -587,7 +592,7 @@ function initLoginModal() {
     );
     $('#register_login_btn').onWrap(
         'click',
-        function() {
+        function(): void {
             headerChange($h3Register, $h3Login);
             modalAnimate($formRegister, $formLogin);
             UTIL.setFocusOnElement($('#loginAccountName'));
@@ -596,7 +601,7 @@ function initLoginModal() {
     );
     $('#login_lost_btn').onWrap(
         'click',
-        function() {
+        function(): void {
             headerChange($h3Login, $h3Lost);
             modalAnimate($formLogin, $formLost);
             UTIL.setFocusOnElement($('#lost_email'));
@@ -605,7 +610,7 @@ function initLoginModal() {
     );
     $('#lost_login_btn').onWrap(
         'click',
-        function() {
+        function(): void {
             headerChange($h3Lost, $h3Login);
             modalAnimate($formLost, $formLogin);
             UTIL.setFocusOnElement($('#loginAccountName'));
@@ -614,7 +619,7 @@ function initLoginModal() {
     );
     $('#lost_register_btn').onWrap(
         'click',
-        function() {
+        function(): void {
             headerChange($h3Lost, $h3Register);
             modalAnimate($formLost, $formRegister);
             UTIL.setFocusOnElement($('#registerAccountName'));
@@ -623,7 +628,7 @@ function initLoginModal() {
     );
     $('#register_lost_btn').onWrap(
         'click',
-        function() {
+        function(): void {
             headerChange($h3Register, $h3Lost);
             modalAnimate($formRegister, $formLost);
             UTIL.setFocusOnElement($('#lost_email'));
@@ -636,29 +641,29 @@ function initLoginModal() {
     validateLostPassword();
 }
 
-function initUserGroupLoginModal() {
-    $('#usergroupLoginPopup').onWrap('hidden.bs.modal', function() {
+function initUserGroupLoginModal(): void {
+    $('#usergroupLoginPopup').onWrap('hidden.bs.modal', function(): void {
         $formUserGroupLogin.validate().resetForm();
         $formUserGroupLogin.find('input, select').val('');
     });
-    $formUserGroupLogin.onWrap('submit', function(e) {
+    $formUserGroupLogin.onWrap('submit', function(e): void {
         e.preventDefault();
         loginToUserGroup();
     });
 
-    $formUserGroupLogin.find('input, select').focus(function(e) {
+    $formUserGroupLogin.find('input, select').focus(function(e): void {
         var $hint = $(this).parent().next('.hint');
         $formUserGroupLogin.find('.hint').not($hint).slideUp($msgAnimateTime);
         $hint.slideDown($msgAnimateTime);
     });
 
     // Login form change between sub-form
-    $('#lostPasswordUsergroupLogin').onWrap('click', function() {
+    $('#lostPasswordUsergroupLogin').onWrap('click', function(): void {
         headerChange($h3LoginUserGroupLogin, $h3LostPasswordUsergroupLogin);
         modalAnimate($formUserGroupLogin, $articleLostUserGroupPassword);
         UTIL.setFocusOnElement($articleLostUserGroupPassword);
     });
-    $('#loginUsergroupLogin').onWrap('click', function() {
+    $('#loginUsergroupLogin').onWrap('click', function(): void {
         headerChange($h3LostPasswordUsergroupLogin, $h3LoginUserGroupLogin);
         modalAnimate($articleLostUserGroupPassword, $formUserGroupLogin);
         UTIL.setFocusOnElement($('#usergroupLoginOwner'));
@@ -667,23 +672,23 @@ function initUserGroupLoginModal() {
     validateLoginUserGroupMember();
 }
 
-function initUserPasswordChangeModal() {
-    $formUserPasswordChange.onWrap('submit', function(e) {
+function initUserPasswordChangeModal(): void {
+    $formUserPasswordChange.onWrap('submit', function(e): void {
         e.preventDefault();
         updateUserPasswordOnServer();
     });
 
-    $('#showChangeUserPassword').onWrap('click', function() {
+    $('#showChangeUserPassword').onWrap('click', function(): void {
         /* $('.modal.show').modal('hide');
          $('.modal.show').one('bs');*/
         $('#change-user-password').modal('show');
     });
 
-    $('#resendActivation').onWrap('click', function() {
+    $('#resendActivation').onWrap('click', function(): void {
         sendAccountActivation();
     });
 
-    $('#change-user-password').onWrap('hidden.bs.modal', function() {
+    $('#change-user-password').onWrap('hidden.bs.modal', function(): void {
         $formUserPasswordChange.validate().resetForm();
         $('#grOldPassword').show();
         $('#passOld').val('');
@@ -697,13 +702,13 @@ function initUserPasswordChangeModal() {
 /**
  * Initialize the login modal
  */
-function init() {
-    var ready = $.Deferred();
+export function init() {
+    let ready: any = $.Deferred();
     $.when(
         USER.clear(function(result) {
             UTIL.response(result);
         })
-    ).then(function() {
+    ).then(function(): void {
         $divForms = $('#div-login-forms');
         $formLogin = $('#login-form');
         $formLost = $('#lost-form');
@@ -723,7 +728,7 @@ function init() {
 
         $('#iconDisplayLogin').onWrap(
             'click',
-            function() {
+            function(): void {
                 showUserInfo();
             },
             'icon user click'
@@ -737,10 +742,10 @@ function init() {
     return ready.promise();
 }
 
-function showUserDataForm() {
+export function showUserDataForm(): void {
     getUserFromServer();
     $formRegister.off('submit');
-    $formRegister.onWrap('submit', function(e) {
+    $formRegister.onWrap('submit', function(e): void {
         e.preventDefault();
         updateUserToServer();
     });
@@ -767,7 +772,7 @@ function showUserDataForm() {
     }
 }
 
-function showLoginForm() {
+export function showLoginForm(): void {
     $('#userInfoLabel').addClass('hidden');
     $('#registerInfoLabel').addClass('hidden');
     $('#forgotPasswordLabel').addClass('hidden');
@@ -777,16 +782,16 @@ function showLoginForm() {
     $('#login-user').modal('show');
 }
 
-function showUserGroupLoginForm() {
+export function showUserGroupLoginForm(): void {
     $('#lostPasswordUsergroupLoginTitle').addClass('hidden');
     $formUserGroupLogin.show();
     $articleLostUserGroupPassword.hide();
     $('#usergroupLoginPopup').modal('show');
 }
 
-function showDeleteUserModal() {
+export function showDeleteUserModal(): void {
     UTIL.showSingleModal(
-        function() {
+        function(): void {
             $('#singleModalInput').attr('type', 'password');
             $('#single-modal h5').text(Blockly.Msg['MENU_DELETE_USER']);
             $('#single-modal label').text(Blockly.Msg['POPUP_PASSWORD']);
@@ -805,7 +810,7 @@ function showDeleteUserModal() {
                 }
             },
             errorClass: 'form-invalid',
-            errorPlacement: function(label, element) {
+            errorPlacement: function(label: JQuery<HTMLElement>, element: JQuery<HTMLElement>): void {
                 label.insertBefore(element.parent());
             },
             messages: {
@@ -820,7 +825,7 @@ function showDeleteUserModal() {
 /**
  * Show user info
  */
-function showUserInfo() {
+export function showUserInfo(): void {
     $('#loggedIn').text(GUISTATE_C.getUserAccountName());
     if (GUISTATE_C.isUserLoggedIn()) {
         $('#popup_username').text(Blockly.Msg['POPUP_USERNAME'] + ': ');
@@ -837,8 +842,8 @@ function showUserInfo() {
     $('#show-state-info').modal('show');
 }
 
-function showResetPassword(target) {
-    USER.checkTargetRecovery(target, function(result) {
+export function showResetPassword(target): void {
+    USER.checkTargetRecovery(target, function(result): void {
         if (result.rc === 'ok') {
             $('#passOld').val(target);
             $('#resetPassLink').val(target);
@@ -851,20 +856,8 @@ function showResetPassword(target) {
     });
 }
 
-function initValidationMessages() {
+export function initValidationMessages(): void {
     validateLoginUser();
     validateRegisterUser();
     validateLostPassword();
 }
-export {
-    activateAccount,
-    logout,
-    init,
-    showUserDataForm,
-    showLoginForm,
-    showUserGroupLoginForm,
-    showDeleteUserModal,
-    showUserInfo,
-    showResetPassword,
-    initValidationMessages
-};

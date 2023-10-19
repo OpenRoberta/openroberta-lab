@@ -4,34 +4,36 @@ import * as USERGROUP from 'userGroup.model';
 import * as GUISTATE_C from 'guiState.controller';
 import * as LANG from 'language.controller';
 import * as $ from 'jquery';
+//@ts-ignore
 import * as Blockly from 'blockly';
 import 'bootstrap-table';
 import 'bootstrap-tagsinput';
 
-var $userGroupTable;
-var $userGroupMemberTable;
-var userGroupMemberThreshold = 99;
-var memberNameValidators = {};
+let $userGroupTable;
+let $userGroupMemberTable;
+let userGroupMemberThreshold: number = 99;
+let memberNameValidators = {};
 
-function showPanel() {
+export function showPanel(): void {
     $userGroupTable.bootstrapTable('showLoading');
-    USERGROUP.loadUserGroupList(function (data) {
+    USERGROUP.loadUserGroupList(function(data): void {
         if (data.rc === 'ok') {
             $userGroupTable.bootstrapTable('load', data.userGroups);
         } else {
             $userGroupTable.bootstrapTable('removeAll');
             MSG.displayInformation(data, data.cause, data.cause);
         }
-        setTimeout(function () {
+        setTimeout(function(): void {
             //The fronted can not calculate the height of the table if it tries to directly after the table is filled.
             //So we wait 250ms. If you set it to a shorter amount, it wont work again.
             $userGroupTable.bootstrapTable('resetView', {
-                height: UTIL.calcDataTableHeight(),
+                height: UTIL.calcDataTableHeight()
             });
             $userGroupTable.find('[data-bs-toggle="tooltip"]').tooltip({ trigger: 'hover' });
             $userGroupTable.bootstrapTable('hideLoading');
         }, 250);
     });
+    //@ts-ignore
     $('#tabUserGroupList').tabWrapShow();
     if (GUISTATE_C.getView() !== 'tabUserGroupList') {
         GUISTATE_C.setView('tabUserGroupList');
@@ -41,7 +43,7 @@ function showPanel() {
 /**
  * Initialize table of tutorials
  */
-function init() {
+export function init(): void {
     $userGroupTable = $('#userGroupTable');
     $userGroupMemberTable = $('#userGroupMemberTable');
 
@@ -52,10 +54,9 @@ function init() {
     initUserGroupMemberEvents();
     initAddMembersToGroupEvents();
 }
-export { showPanel, init };
 
-function initUserGroupListTable() {
-    var $actionItemsTemplate = $userGroupTable.find('.action-items-template');
+function initUserGroupListTable(): void {
+    let $actionItemsTemplate = $userGroupTable.find('.action-items-template');
 
     $actionItemsTemplate.remove();
 
@@ -76,8 +77,8 @@ function initUserGroupListTable() {
                 html:
                     '<button class="btn btn-secondary" id="showCreateUserGroupPopup" title="' +
                     Blockly.Msg.USERGROUP_CREATE_TOOLTIP +
-                    '" type="button" name="btnGroupAdd"><i class="typcn typcn-plus"></i> </button>',
-            },
+                    '" type="button" name="btnGroupAdd"><i class="typcn typcn-plus"></i> </button>'
+            }
         },
         /* <div className='bars pull-right'>
              <button className='btn typcn typcn-plus' data-bs-toggle='tooltip' data-container='body' data-bs-placement='top' data-translation-targets='title'
@@ -88,40 +89,40 @@ function initUserGroupListTable() {
         icons: {
             paginationSwitchDown: 'typcn-document-text',
             paginationSwitchUp: 'typcn-book',
-            refresh: 'typcn-refresh',
+            refresh: 'typcn-refresh'
         },
         columns: [
             {
-                title: "<span lkey='Blockly.Msg.DATATABLE_USERGROUP_NAME'>" + (Blockly.Msg.DATATABLE_USERGROUP_NAME || 'Name der Gruppe') + '</span>',
+                title: '<span lkey=\'Blockly.Msg.DATATABLE_USERGROUP_NAME\'>' + (Blockly.Msg.DATATABLE_USERGROUP_NAME || 'Name der Gruppe') + '</span>',
                 field: 'name',
-                sortable: true,
+                sortable: true
             },
             {
-                title: "<span lkey='Blockly.Msg.DATATABLE_MEMBERS'>" + (Blockly.Msg.DATATABLE_MEMBERS || 'Mitglieder') + '</span>',
+                title: '<span lkey=\'Blockly.Msg.DATATABLE_MEMBERS\'>' + (Blockly.Msg.DATATABLE_MEMBERS || 'Mitglieder') + '</span>',
                 field: 'members',
                 sortable: true,
-                sorter: function (a, b) {
+                sorter: function(a, b) {
                     return (a.length || 0) - (b.length || 0);
                 },
-                formatter: function (value, row, index) {
+                formatter: function(value, row, index) {
                     return value.length || 0;
-                },
+                }
             },
             {
-                title: "<span lkey='Blockly.Msg.DATATABLE_SHARED_PROGRAMS'>" + (Blockly.Msg.DATATABLE_SHARED_PROGRAMS || 'Geteilte Programme') + '</span>',
+                title: '<span lkey=\'Blockly.Msg.DATATABLE_SHARED_PROGRAMS\'>' + (Blockly.Msg.DATATABLE_SHARED_PROGRAMS || 'Geteilte Programme') + '</span>',
                 field: 'programs',
                 sortable: false,
-                formatter: function (value, row, index) {
+                formatter: function(value, row, index): any {
                     if (!value || !value.length) {
-                        var $returnValue = $(
+                        let $returnValue: JQuery<HTMLElement> = $(
                             '<div><span lkey="Blockly.Msg.SHARE_PROGRAMS_USERGROUP_HINT" data-translation-targets="title" data-bs-toggle="tooltip" data-container="body" data-bs-placement="right" title="">-</span></div>'
                         );
                         LANG.translate($returnValue);
                         return $returnValue.html();
                     }
 
-                    var programFormatter = function (program) {
-                        var relationIconKey = '';
+                    let programFormatter = function(program) {
+                        let relationIconKey: string = '';
                         if (program.right === 'READ') {
                             relationIconKey = 'eye';
                         } else if (program.right === 'X_WRITE') {
@@ -130,18 +131,18 @@ function initUserGroupListTable() {
                             relationIconKey = 'pencil';
                         }
 
-                        var $returnValue = $(
+                        let $returnValue: JQuery<HTMLElement> = $(
                             '<div>' +
-                                '<span>' +
-                                '<span class="typcn typcn-' +
-                                program.robot +
-                                '"></span> ' +
-                                '<span class="typcn typcn-' +
-                                relationIconKey +
-                                '"></span> ' +
-                                program.name +
-                                '</span>' +
-                                '</div>'
+                            '<span>' +
+                            '<span class="typcn typcn-' +
+                            program.robot +
+                            '"></span> ' +
+                            '<span class="typcn typcn-' +
+                            relationIconKey +
+                            '"></span> ' +
+                            program.name +
+                            '</span>' +
+                            '</div>'
                         );
                         LANG.translate($returnValue);
 
@@ -151,62 +152,62 @@ function initUserGroupListTable() {
                     if (value.length === 1) {
                         return programFormatter(value[0]);
                     } else {
-                        var entries = value.map(function (program) {
+                        let entries = value.map(function(program) {
                             return programFormatter(program);
                         });
 
-                        var $returnValue = $(
+                        let $returnValue: JQuery<HTMLElement> = $(
                             '<div>' +
-                                '<div style="white-space:nowrap;">' +
-                                '<span style="float:left;">' +
-                                entries.shift() +
-                                '</span>' +
-                                '<a class="collapsed showRelations" href="#" style="float:right;" href="#" data-bs-toggle="collapse" data-bs-target=".relation' +
-                                index +
-                                '"></a>' +
-                                '</div>' +
-                                entries
-                                    .map(function (entry) {
-                                        return '<div style="clear:both;" class="collapse relation' + index + '"> ' + entry + '</div>';
-                                    })
-                                    .join('') +
-                                '</div>'
+                            '<div style="white-space:nowrap;">' +
+                            '<span style="float:left;">' +
+                            entries.shift() +
+                            '</span>' +
+                            '<a class="collapsed showRelations" href="#" style="float:right;" href="#" data-bs-toggle="collapse" data-bs-target=".relation' +
+                            index +
+                            '"></a>' +
+                            '</div>' +
+                            entries
+                                .map(function(entry): string {
+                                    return '<div style="clear:both;" class="collapse relation' + index + '"> ' + entry + '</div>';
+                                })
+                                .join('') +
+                            '</div>'
                         );
                         LANG.translate($returnValue);
                         return $returnValue.html();
                     }
                 },
                 events: {
-                    'click .showRelations': function (e, value, row, index) {
+                    'click .showRelations': function(e, value, row, index): void {
                         e.stopPropagation();
-                        var collapseName = '.relation' + index;
+                        let collapseName: string = '.relation' + index;
                         $(collapseName).collapse('toggle');
-                    },
-                },
+                    }
+                }
             },
             {
-                title: "<span lkey='Blockly.Msg.DATATABLE_CREATED_ON'>" + (Blockly.Msg.DATATABLE_CREATED_ON || 'Erzeugt am') + '</span>',
+                title: '<span lkey=\'Blockly.Msg.DATATABLE_CREATED_ON\'>' + (Blockly.Msg.DATATABLE_CREATED_ON || 'Erzeugt am') + '</span>',
                 field: 'created',
                 sortable: true,
-                formatter: UTIL.formatDate,
+                formatter: UTIL.formatDate
             },
             {
                 checkbox: true,
-                valign: 'middle',
+                valign: 'middle'
             },
             {
                 title:
                     '<a href="#" id="deleteUserGroups" class="deleteSome disabled" rel="tooltip" lkey="Blockly.Msg.USERGROUP_LIST_DELETE_ALL_TOOLTIP" data-bs-original-title="" data-container="body" title="" data-translation-targets="title data-bs-original-title">' +
                     '<span class="typcn typcn-delete"></span></a>',
                 events: {
-                    'click .delete': function (e, value, row, index) {
+                    'click .delete': function(e, value, row, index): void {
                         e.stopPropagation();
 
-                        var groupName = typeof row.name === undefined ? null : row.name,
+                        let groupName = typeof row.name === undefined ? null : row.name,
                             groupMembers = typeof row.members === undefined ? [] : row.members,
                             $button = $(this),
-                            deleteFunction = function () {
-                                USERGROUP.deleteUserGroup(row.name, function (data) {
+                            deleteFunction = function(): void {
+                                USERGROUP.deleteUserGroup(row.name, function(data): void {
                                     if (data.rc === 'ok') {
                                         $userGroupTable.bootstrapTable('remove', { field: 'name', values: [row.name] });
                                     } else {
@@ -223,22 +224,23 @@ function initUserGroupListTable() {
                             deleteFunction();
                             return;
                         } else if (
-                            groupMembers.filter(function (groupMember) {
+                            groupMembers.filter(function(groupMember) {
                                 return !groupMember.hasDefaultPassword;
                             }).length === 0
                         ) {
-                            var modalMessageKey = 'USERGROUP_DELETE_WITH_MEMBERS_WARNING',
+                            let modalMessageKey: string = 'USERGROUP_DELETE_WITH_MEMBERS_WARNING',
                                 modalMessage =
                                     Blockly.Msg[modalMessageKey] ||
                                     'Are your sure that you want to delete the usergroup including all members? No member did log in so far.';
-                            $('#show-message-confirm').oneWrap('shown.bs.modal', function (e) {
+                            $('#show-message-confirm').oneWrap('shown.bs.modal', function(e): void {
                                 $('#confirm').off();
-                                $('#confirm').onWrap('click', function (e) {
+                                $('#confirm').onWrap('click', function(e): void {
                                     e.preventDefault();
-                                    deleteFunction(true);
+                                    //deleteFunction(true);
+                                    deleteFunction();
                                 });
                                 $('#confirmCancel').off();
-                                $('#confirmCancel').onWrap('click', function (e) {
+                                $('#confirmCancel').onWrap('click', function(e): void {
                                     e.preventDefault();
                                     $('.modal').modal('hide');
                                 });
@@ -247,16 +249,16 @@ function initUserGroupListTable() {
                         } else {
                             UTIL.showMsgOnTop('ORA_GROUP_DELETE_ERROR_GROUP_HAS_MEMBERS');
                         }
-                    },
+                    }
                 },
                 align: 'left',
                 valign: 'top',
-                formatter: function (value, row, index) {
+                formatter: function(value, row, index) {
                     return $actionItemsTemplate.find('td').html();
                 },
-                width: '117px',
-            },
-        ],
+                width: '117px'
+            }
+        ]
     });
 
     $('#userGroupList').find('[data-bs-toggle="tooltip"]').tooltip({ trigger: 'hover' });
@@ -265,20 +267,20 @@ function initUserGroupListTable() {
 }
 /* This is an internal function and a part of the initialization. Do not export it. */
 
-function initUserGroupEvents() {
-    var $userGroupList = $userGroupTable.closest('#userGroupList');
+function initUserGroupEvents(): void {
+    let $userGroupList = $userGroupTable.closest('#userGroupList');
     $('#tabUserGroupList').onWrap(
         'shown.bs.tab',
-        function () {
+        function(): boolean {
             //guiStateController.setView('tabTutorialList');
             showPanel();
             return false;
         },
         'tutorial clicked'
     );
-    $(window).resize(function () {
+    $(window).resize(function(): void {
         $userGroupTable.bootstrapTable('resetView', {
-            height: UTIL.calcDataTableHeight(),
+            height: UTIL.calcDataTableHeight()
         });
     });
 
@@ -287,7 +289,7 @@ function initUserGroupEvents() {
 
     $userGroupList.find('button[name="refresh"]').onWrap(
         'click',
-        function (evt) {
+        function(evt): void {
             evt.preventDefault();
             showPanel();
         },
@@ -296,7 +298,7 @@ function initUserGroupEvents() {
 
     $userGroupTable.onWrap(
         'check-all.bs.table',
-        function ($element, rows) {
+        function($element, rows): void {
             $userGroupList.find('.deleteSome').removeClass('disabled');
             $userGroupTable.find('.delete').addClass('disabled');
         },
@@ -305,7 +307,7 @@ function initUserGroupEvents() {
 
     $userGroupTable.onWrap(
         'check.bs.table',
-        function ($element, row) {
+        function($element, row): void {
             $userGroupList.find('.deleteSome').removeClass('disabled');
             $userGroupTable.find('.delete').addClass('disabled');
         },
@@ -314,7 +316,7 @@ function initUserGroupEvents() {
 
     $userGroupTable.onWrap(
         'uncheck-all.bs.table',
-        function ($element, rows) {
+        function($element, rows): void {
             $userGroupList.find('.deleteSome').addClass('disabled');
             $userGroupTable.find('.delete').filter(':not([data-status="disabled"])').removeClass('disabled');
         },
@@ -323,8 +325,8 @@ function initUserGroupEvents() {
 
     $userGroupTable.onWrap(
         'uncheck.bs.table',
-        function ($element, row) {
-            var selectedRows = $userGroupTable.bootstrapTable('getSelections');
+        function($element, row): void {
+            let selectedRows = $userGroupTable.bootstrapTable('getSelections');
             if (!selectedRows || selectedRows.length === 0) {
                 $userGroupList.find('.deleteSome').addClass('disabled');
                 $userGroupTable.find('.delete').filter(':not([data-status="disabled"])').removeClass('disabled');
@@ -335,29 +337,29 @@ function initUserGroupEvents() {
 
     $userGroupList.find('.deleteSome').onWrap(
         'click',
-        function () {
-            var selectedRows = $userGroupTable.bootstrapTable('getSelections'),
+        function(): void {
+            let selectedRows = $userGroupTable.bootstrapTable('getSelections'),
                 $deleteAllButton = $userGroupList.find('.deleteSome');
 
             if (!selectedRows || selectedRows.length === 0 || $deleteAllButton.hasClass('disabled')) {
                 return;
             }
 
-            var groupNames = selectedRows.map(function (row) {
+            let groupNames = selectedRows.map(function(row) {
                 return row.name;
             });
             if (
-                selectedRows.reduce(function (carry, element) {
+                selectedRows.reduce(function(carry, element) {
                     return carry || (element && element.members && element.members.length > 0);
                 }, false)
             ) {
                 if (
-                    selectedRows.reduce(function (carry, element) {
+                    selectedRows.reduce(function(carry, element) {
                         return (
                             carry ||
                             (element &&
                                 element.members &&
-                                element.members.filter(function (member) {
+                                element.members.filter(function(member) {
                                     return !member.hasDefaultPassword;
                                 }).length > 0)
                         );
@@ -366,15 +368,15 @@ function initUserGroupEvents() {
                     //Logged in users exist. Delete them first.
                     MSG.displayInformation({}, '', 'ORA_GROUP_DELETE_ERROR_GROUP_HAS_MEMBERS');
                 } else {
-                    var modalMessageKey = 'USERGROUP_DELETE_WITH_MEMBERS_WARNING',
+                    let modalMessageKey: string = 'USERGROUP_DELETE_WITH_MEMBERS_WARNING',
                         modalMessage =
                             Blockly.Msg[modalMessageKey] ||
                             'Are your sure that you want to delete the usergroup including all members? No member did log in so far.';
-                    $('#show-message-confirm').oneWrap('shown.bs.modal', function (e) {
+                    $('#show-message-confirm').oneWrap('shown.bs.modal', function(e): void {
                         $('#confirm').off();
-                        $('#confirm').onWrap('click', function (e) {
+                        $('#confirm').onWrap('click', function(e): void {
                             e.preventDefault();
-                            USERGROUP.deleteUserGroups(groupNames, function (data) {
+                            USERGROUP.deleteUserGroups(groupNames, function(data): void {
                                 if (data.rc === 'ok') {
                                     $userGroupTable.bootstrapTable('remove', { field: 'name', values: groupNames });
                                 } else {
@@ -383,7 +385,7 @@ function initUserGroupEvents() {
                             });
                         });
                         $('#confirmCancel').off();
-                        $('#confirmCancel').onWrap('click', function (e) {
+                        $('#confirmCancel').onWrap('click', function(e): void {
                             e.preventDefault();
                             $('.modal').modal('hide');
                         });
@@ -392,7 +394,7 @@ function initUserGroupEvents() {
                 }
             } else {
                 //No group has members. => Delete all directly
-                USERGROUP.deleteUserGroups(groupNames, function (data) {
+                USERGROUP.deleteUserGroups(groupNames, function(data): void {
                     if (data.rc === 'ok') {
                         $userGroupTable.bootstrapTable('remove', { field: 'name', values: groupNames });
                     } else {
@@ -406,7 +408,8 @@ function initUserGroupEvents() {
 
     $('#backUserGroupList').onWrap(
         'click',
-        function () {
+        function(): boolean {
+            //@ts-ignore
             $('#' + GUISTATE_C.getPrevView()).tabWrapShow();
             return false;
         },
@@ -415,7 +418,7 @@ function initUserGroupEvents() {
 
     $userGroupTable.onWrap(
         'click-row.bs.table',
-        function (e, rowData, row) {
+        function(e, rowData, row): void {
             openDetailUserGroupView(rowData);
         },
         'show usergroup member view'
@@ -425,38 +428,38 @@ function initUserGroupEvents() {
 }
 /* This is an internal function and a part of the initialization. Do not export it. */
 
-function initCreateUserGroupEvents() {
-    var $createUserGroupModal = $('#create-user-group'),
-        $createUserGroupForm = $createUserGroupModal.find('#user-group-form');
+function initCreateUserGroupEvents(): void {
+    let $createUserGroupModal: JQuery<HTMLElement> = $('#create-user-group'),
+        $createUserGroupForm: JQuery<HTMLElement> = $createUserGroupModal.find('#user-group-form');
 
-    $('#showCreateUserGroupPopup').onWrap('click', function () {
+    $('#showCreateUserGroupPopup').onWrap('click', function(): boolean {
         $createUserGroupForm.validate();
         $createUserGroupModal.modal('show');
         return false;
     });
 
-    $('#create-user-group .close-button').onWrap('click', function () {
+    $('#create-user-group .close-button').onWrap('click', function(): boolean {
         $createUserGroupModal.modal('hide');
         return false;
     });
 
     $.validator.addMethod(
         'isValidGroupName',
-        function (value, element) {
+        function(value, element: HTMLElement) {
             return value.trim() !== '' && !/[^a-zA-Z0-9=+!?.,%#+&^@_\- ]/gi.test(value.trim());
         },
         Blockly.Msg['ORA_GROUP_ERROR_NAME_INVALID']
     );
     $.validator.addMethod(
         'isOptionalIntBiggerEquals0Regex',
-        function (value, element) {
+        function(value, element: HTMLElement) {
             return /^\d*$/.test(value.trim());
         },
         Blockly.Msg['ORA_GROUP_ADD_MEMBER_ERROR_SMALLER_THAN_ONE']
     );
     $.validator.addMethod(
         'isOptionalOrNotOverThreshold',
-        function (value, element) {
+        function(value, element: HTMLElement) {
             return isNaN(value) || value.trim() === '' || parseInt(value.trim()) <= userGroupMemberThreshold;
         },
         Blockly.Msg['ORA_GROUP_ADD_MEMBER_ERROR_LIMIT_REACHED']
@@ -467,21 +470,21 @@ function initCreateUserGroupEvents() {
         rules: {
             name: {
                 required: true,
-                isValidGroupName: true,
+                isValidGroupName: true
             },
             initialMembers: {
                 isOptionalIntBiggerEquals0Regex: true,
-                isOptionalOrNotOverThreshold: true,
-            },
+                isOptionalOrNotOverThreshold: true
+            }
         },
         errorClass: 'form-invalid',
-        errorPlacement: function (label, element) {
+        errorPlacement: function(label: JQuery<HTMLElement>, element: JQuery<HTMLElement>): void {
             label.insertBefore(element.parent());
         },
         messages: {
             name: {
                 required: Blockly.Msg['VALIDATION_FIELD_REQUIRED'],
-                isValidGroupName: Blockly.Msg['ORA_GROUP_ERROR_NAME_INVALID'],
+                isValidGroupName: Blockly.Msg['ORA_GROUP_ERROR_NAME_INVALID']
             },
             initialMembers: {
                 isOptionalIntBiggerEquals0Regex: Blockly.Msg['ORA_GROUP_ADD_MEMBER_ERROR_SMALLER_THAN_ONE'],
@@ -489,17 +492,18 @@ function initCreateUserGroupEvents() {
                 min: Blockly.Msg['ORA_GROUP_ADD_MEMBER_ERROR_SMALLER_THAN_ONE'],
                 max: Blockly.Msg['ORA_GROUP_ADD_MEMBER_ERROR_SMALLER_THAN_ONE'],
                 step: Blockly.Msg['ORA_GROUP_ADD_MEMBER_ERROR_SMALLER_THAN_ONE'],
-                number: Blockly.Msg['ORA_GROUP_ADD_MEMBER_ERROR_SMALLER_THAN_ONE'],
-            },
-        },
+                number: Blockly.Msg['ORA_GROUP_ADD_MEMBER_ERROR_SMALLER_THAN_ONE']
+            }
+        }
     });
 
-    $('#create-user-group .accept-button').onWrap('click', function () {
-        var validator = $createUserGroupForm.validate(),
-            groupName = $('#userGroupNameInput').val(),
+    $('#create-user-group .accept-button').onWrap('click', function(): boolean {
+        let validator: JQueryValidation.Validator = $createUserGroupForm.validate(),
+            groupName: string = $('#userGroupNameInput').val().toString(),
+            //@ts-ignore
             initialMembersCount = $('#initialMembersInput').val().trim(),
-            initialMembers = [],
-            formatter = new Intl.NumberFormat('en-US', { minimumIntegerDigits: 2 });
+            initialMembers: string[] = [],
+            formatter: Intl.NumberFormat = new Intl.NumberFormat('en-US', { minimumIntegerDigits: 2 });
 
         if (!$createUserGroupForm.valid()) {
             return;
@@ -507,17 +511,17 @@ function initCreateUserGroupEvents() {
 
         initialMembersCount = initialMembersCount === '' ? 0 : parseInt(initialMembersCount);
 
-        for (var i = 1; i <= initialMembersCount; i++) {
+        for (let i: number = 1; i <= initialMembersCount; i++) {
             initialMembers.push(formatter.format(i));
         }
 
-        USERGROUP.createUserGroup(groupName, initialMembers, function (data) {
+        USERGROUP.createUserGroup(groupName, initialMembers, function(data): void {
             if (data.rc === 'ok') {
-                var tableData = $userGroupTable.bootstrapTable('getData');
+                let tableData = $userGroupTable.bootstrapTable('getData');
 
                 //Clone array, because the original array is directly linked to the bootstrap table.
                 //No need to clone the items in it, though, normal reference copy is enough.
-                tableData = tableData.map(function (item) {
+                tableData = tableData.map(function(item) {
                     return item;
                 });
                 tableData.unshift(data.userGroup);
@@ -536,14 +540,14 @@ function initCreateUserGroupEvents() {
                     case 'ORA_GROUP_ADD_MEMBER_ERROR_SMALLER_THAN_ONE':
                     case 'ORA_GROUP_ADD_MEMBER_ERROR_LIMIT_REACHED':
                         validator.showErrors({
-                            initialMembers: Blockly.Msg[data.cause],
+                            initialMembers: Blockly.Msg[data.cause]
                         });
                         break;
                     case 'ORA_GROUP_ERROR_NAME_INVALID':
                     case 'ORA_GROUP_CREATE_ERROR_GROUP_ALREADY_EXISTS':
                     default:
                         validator.showErrors({
-                            name: Blockly.Msg[data.cause],
+                            name: Blockly.Msg[data.cause]
                         });
                 }
             }
@@ -553,8 +557,8 @@ function initCreateUserGroupEvents() {
 }
 /* This is an internal function and a part of the initialization. Do not export it. */
 
-function initUserGroupMemberListTable() {
-    var $memberPasswordResetTemplate = $userGroupMemberTable.find('.reset-password-template'),
+function initUserGroupMemberListTable(): void {
+    let $memberPasswordResetTemplate = $userGroupMemberTable.find('.reset-password-template'),
         $memberActionItemsTemplate = $userGroupMemberTable.find('.action-items-template'),
         $memberActionItemsHeaderTemplate = $userGroupMemberTable.find('.action-items-header-template'),
         $memberNameTemplate = $userGroupMemberTable.find('.edit-member-template'),
@@ -562,19 +566,19 @@ function initUserGroupMemberListTable() {
             rules: {
                 name: {
                     maxlength: 25,
-                    loginRegex: true,
-                },
+                    loginRegex: true
+                }
             },
             errorClass: 'form-invalid',
-            errorPlacement: function (label, element) {
+            errorPlacement: function(label, element): void {
                 label.insertBefore(element);
             },
             messages: {
                 name: {
                     maxlength: Blockly.Msg['VALIDATION_MAX_LENGTH'],
-                    loginRegex: Blockly.Msg['VALIDATION_CONTAINS_SPECIAL_CHARACTERS'],
-                },
-            },
+                    loginRegex: Blockly.Msg['VALIDATION_CONTAINS_SPECIAL_CHARACTERS']
+                }
+            }
         };
 
     $memberPasswordResetTemplate.remove();
@@ -584,7 +588,7 @@ function initUserGroupMemberListTable() {
 
     $.validator.addMethod(
         'loginRegex',
-        function (value, element) {
+        function(value, element: HTMLElement) {
             return this.optional(element) || /^[a-zA-Z0-9=+!?.,%#+&^@_\- ]+$/gi.test(value);
         },
         Blockly.Msg['VALIDATION_CONTAINS_SPECIAL_CHARACTERS']
@@ -609,26 +613,26 @@ function initUserGroupMemberListTable() {
                 html:
                     '<button class="btn" id="showAddMembersPopup" title="' +
                     Blockly.Msg.USERGROUP_MEMBER_CREATE_TOOLTIP +
-                    '" type="button" name="btnGroupMemberAdd"><i class="typcn typcn-user-add"></i> </button>',
-            },
+                    '" type="button" name="btnGroupMemberAdd"><i class="typcn typcn-user-add"></i> </button>'
+            }
         },
         btnGroupAdd: {
             html:
                 '<button class="btn btn-secondary" id="showCreateUserGroupPopup" title="' +
                 Blockly.Msg.USERGROUP_CREATE_TOOLTIP +
-                '" type="button" name="btnGroupAdd"><i class="typcn typcn-plus"></i> </button>',
+                '" type="button" name="btnGroupAdd"><i class="typcn typcn-plus"></i> </button>'
         },
         icons: {
             paginationSwitchDown: 'typcn-document-text',
             paginationSwitchUp: 'typcn-book',
-            refresh: 'typcn-refresh',
+            refresh: 'typcn-refresh'
         },
         columns: [
             {
-                title: "<span lkey='Blockly.Msg.MENU_USER_TOOLTIP'>" + (Blockly.Msg.MENU_USER_TOOLTIP || 'User') + '</span>',
+                title: '<span lkey=\'Blockly.Msg.MENU_USER_TOOLTIP\'>' + (Blockly.Msg.MENU_USER_TOOLTIP || 'User') + '</span>',
                 field: 'account',
-                formatter: function (value, row, index) {
-                    var $memberNameTemplateClone = $memberNameTemplate.find('td').clone(false),
+                formatter: function(value, row, index) {
+                    let $memberNameTemplateClone = $memberNameTemplate.find('td').clone(false),
                         name = value.substr(value.lastIndexOf(':') + 1);
 
                     $memberNameTemplateClone.find('.member-name').text(name);
@@ -649,10 +653,10 @@ function initUserGroupMemberListTable() {
                     return $memberNameTemplateClone.html();
                 },
                 events: {
-                    'click .member-name-toggle-button': function (e, value, row, index) {
-                        var $self = $(e.target).closest('td'),
+                    'click .member-name-toggle-button': function(e, value, row, index): void {
+                        let $self: JQuery<any> = $(e.target).closest('td'),
                             oldName = value.substr(value.lastIndexOf(':') + 1),
-                            newName = $self.find('input').first().val();
+                            newName: string = $self.find('input').first().val();
 
                         if (typeof memberNameValidators[index] === 'undefined') {
                             memberNameValidators[index] = $self.find('form').first().validate(nameChangeValidateOptions);
@@ -662,7 +666,7 @@ function initUserGroupMemberListTable() {
                             $self.find('.member-name').removeClass('active');
                             $self.find('.edit-member-name').addClass('active');
                             $self.find('.member-name-column').addClass('active');
-                            $(document.body).onWrap('click', function (e) {
+                            $(document.body).onWrap('click', function(e): void {
                                 if (
                                     $(e.target).closest('tr[data-index="' + index + '"]').length === 0 &&
                                     !$self.find('.member-name-toggle-button').hasClass('disabled') &&
@@ -678,6 +682,7 @@ function initUserGroupMemberListTable() {
                                     $(document.body).off(e);
                                 }
                             });
+                            //@ts-ignore
                             $self.find('input').first().handleNewSelection();
                         } else {
                             $self.find('.member-name').addClass('active');
@@ -685,8 +690,8 @@ function initUserGroupMemberListTable() {
                             $self.find('.member-name-column').removeClass('active');
                         }
                     },
-                    'dblclick .member-name.active': function (e, value, row, index) {
-                        var $toggleButton = $(e.target).closest('td').find('.member-name-toggle-button');
+                    'dblclick .member-name.active': function(e, value, row, index): void {
+                        let $toggleButton: JQuery<HTMLElement> = $(e.target).closest('td').find('.member-name-toggle-button');
                         if (
                             $toggleButton.is(':visible') &&
                             $toggleButton.css('visibility') !== 'hidden' &&
@@ -696,12 +701,12 @@ function initUserGroupMemberListTable() {
                             $(this).closest('td').find('.member-name-toggle-button').clickWrap();
                         }
                     },
-                    'click .member-name-edit-button': function (e, value, row, index) {
-                        var $button = $(e.target),
-                            $self = $button.closest('td'),
-                            $input = $self.find('input').first(),
+                    'click .member-name-edit-button': function(e, value, row, index): void {
+                        let $button: JQuery<any> = $(e.target),
+                            $self: JQuery<any> = $button.closest('td'),
+                            $input: JQuery<HTMLElement> = $self.find('input').first(),
                             oldName = value.substr(value.lastIndexOf(':') + 1),
-                            newName = $input.val();
+                            newName: string = $input.val().toString();
 
                         if (typeof memberNameValidators[index] === 'undefined') {
                             memberNameValidators[index] = $self.find('form').first().validate(nameChangeValidateOptions);
@@ -724,11 +729,11 @@ function initUserGroupMemberListTable() {
                         $('.member-name-edit-button').closest('td').find('input').prop('disabled', true);
                         $('.member-name-edit-button').closest('td').find('.member-name-toggle-button').addClass('disabled');
 
-                        USERGROUP.updateMemberAccount(value, $('#userGroupMemberListHeader').text(), newName, function (data) {
+                        USERGROUP.updateMemberAccount(value, $('#userGroupMemberListHeader').text(), newName, function(data): void {
                             if (data.rc === 'ok') {
                                 if (row.id !== 0) {
                                     //clone the current row data
-                                    var rowData = JSON.parse(JSON.stringify(row));
+                                    let rowData = JSON.parse(JSON.stringify(row));
                                     rowData.account = $('#userGroupMemberListHeader').text() + ':' + newName;
 
                                     delete memberNameValidators[index];
@@ -736,18 +741,18 @@ function initUserGroupMemberListTable() {
                                     $userGroupMemberTable.bootstrapTable('updateRow', {
                                         index: index,
                                         row: rowData,
-                                        replace: true,
+                                        replace: true
                                     });
                                 } else {
                                     $userGroupMemberTable.bootstrapTable('append', {
                                         id: 123,
                                         account: $('#userGroupMemberListHeader').text() + ':' + newName,
-                                        hasDefaultPassword: true,
+                                        hasDefaultPassword: true
                                     });
                                 }
                             } else {
                                 memberNameValidators[index].showErrors({
-                                    name: Blockly.Msg[data.cause] || data.message,
+                                    name: Blockly.Msg[data.cause] || data.message
                                 });
                                 $button.removeClass('iais-loading-spin');
                                 $button.addClass('typcn-tick');
@@ -757,21 +762,21 @@ function initUserGroupMemberListTable() {
                             }
                         });
                     },
-                    'keydown input': function (e, value, row, index) {
+                    'keydown input': function(e, value, row, index): boolean {
                         if (e.originalEvent.keyCode === 13) {
                             e.preventDefault();
                             $(e.target).closest('td').find('.member-name-edit-button').clickWrap();
                             return false;
                         }
                     },
-                    'submit form': function (e) {
+                    'submit form': function(e): boolean {
                         e.preventDefault();
                         $(e.target).closest('td').find('.member-name-edit-button').clickWrap();
                         return false;
-                    },
+                    }
                 },
                 sortable: true,
-                sorter: function (a, b) {
+                sorter: function(a, b): number {
                     if (a === '') {
                         return 1;
                     }
@@ -779,23 +784,23 @@ function initUserGroupMemberListTable() {
                         return -1;
                     }
                     return a.localeCompare(b);
-                },
+                }
             },
             {
-                title: "<span lkey='Blockly.Msg.POPUP_PASSWORD'>" + (Blockly.Msg.POPUP_PASSWORD || 'Password') + '</span>',
+                title: '<span lkey=\'Blockly.Msg.POPUP_PASSWORD\'>' + (Blockly.Msg.POPUP_PASSWORD || 'Password') + '</span>',
                 field: 'password',
-                formatter: function (value, row, index) {
+                formatter: function(value, row, index): string {
                     if (row.id === 0 && row.account === '') {
                         return '';
                     }
                     return row.hasDefaultPassword ? row.account : '************';
                 },
                 sortable: false,
-                width: '33.3333%',
+                width: '33.3333%'
             },
             {
                 title: '<input name="btSelectAll" type="checkbox">',
-                formatter: function (value, row, index) {
+                formatter: function(value, row, index): string {
                     if (row.id === 0) {
                         return '';
                     }
@@ -804,33 +809,33 @@ function initUserGroupMemberListTable() {
                 valign: 'middle',
                 halign: 'center',
                 align: 'center',
-                width: '37px',
+                width: '37px'
             },
             {
                 title: $memberActionItemsHeaderTemplate.find('td').html(),
                 events: {
-                    'click .delete': function (e, value, row, index) {
+                    'click .delete': function(e, value, row, index): void {
                         e.stopPropagation();
 
-                        var $button = $(this);
+                        let $button: JQuery<any> = $(this);
 
                         if ($button.hasClass('disabled') || !row.account) {
                             return;
                         }
 
-                        var deleteFunction = function (members) {
+                        let deleteFunction = function(members): void {
                             if (!members) {
                                 return;
                             }
-                            var memberAccountNames = members.map(function (member) {
+                            let memberAccountNames = members.map(function(member) {
                                 return member.account;
                             });
 
-                            USERGROUP.deleteGroupMembers(memberAccountNames[0].split(':', 2)[0], memberAccountNames, function (data) {
+                            USERGROUP.deleteGroupMembers(memberAccountNames[0].split(':', 2)[0], memberAccountNames, function(data): void {
                                 if (data.rc === 'ok') {
                                     $userGroupMemberTable.bootstrapTable('remove', {
                                         field: 'account',
-                                        values: memberAccountNames,
+                                        values: memberAccountNames
                                     });
                                 } else {
                                     UTIL.showMsgOnTop(data.message);
@@ -845,65 +850,65 @@ function initUserGroupMemberListTable() {
                     }, true);
                      */
 
-                        var modalMessageKey = row.hasDefaultPassword ? 'DELETE_USERGROUP_MEMBER_WARNING' : 'DELETE_USERGROUP_MEMBER_AFTER_LOGIN_WARNING',
+                        let modalMessageKey: string = row.hasDefaultPassword ? 'DELETE_USERGROUP_MEMBER_WARNING' : 'DELETE_USERGROUP_MEMBER_AFTER_LOGIN_WARNING',
                             modalMessage =
                                 Blockly.Msg[modalMessageKey] ||
                                 'The member you want to delete might have create own programs and did already log in. Are you sure, that you want to delete the member?';
-                        $('#show-message-confirm').oneWrap('shown.bs.modal', function (e) {
+                        $('#show-message-confirm').oneWrap('shown.bs.modal', function(e): void {
                             $('#confirm').off();
-                            $('#confirm').onWrap('click', function (e) {
+                            $('#confirm').onWrap('click', function(e): void {
                                 e.preventDefault();
                                 deleteFunction([row]);
                             });
                             $('#confirmCancel').off();
-                            $('#confirmCancel').onWrap('click', function (e) {
+                            $('#confirmCancel').onWrap('click', function(e): void {
                                 e.preventDefault();
                                 $('.modal').modal('hide');
                             });
                         });
                         MSG.displayPopupMessage(modalMessageKey, modalMessage, 'OK', Blockly.Msg.POPUP_CANCEL);
                     },
-                    'click .reset-password': function (e, value, row, index) {
+                    'click .reset-password': function(e, value, row, index): void {
                         e.stopPropagation();
 
-                        var $button = $(this);
+                        let $button: JQuery<any> = $(this);
                         if ($button.hasClass('disabled') || !row.account) {
                             return;
                         }
 
-                        USERGROUP.setUserGroupMemberDefaultPassword(row.account.split(':', 2)[0], row.account, function (data) {
+                        USERGROUP.setUserGroupMemberDefaultPassword(row.account.split(':', 2)[0], row.account, function(data): void {
                             if (data.rc === 'ok') {
                                 row.hasDefaultPassword = true;
                                 $userGroupMemberTable.bootstrapTable('updateRow', {
                                     index: index,
                                     row: row,
-                                    replace: true,
+                                    replace: true
                                 });
                                 $button.addClass('disabled');
                             } else {
                                 UTIL.showMsgOnTop(data.message);
                             }
                         });
-                    },
+                    }
                 },
                 align: 'left',
                 valign: 'top',
-                formatter: function (value, row, index) {
+                formatter: function(value, row, index): string {
                     if (row.id === 0 && row.account === '') {
                         return '';
                     }
-                    var $element = $memberActionItemsTemplate.clone(true);
+                    let $element = $memberActionItemsTemplate.clone(true);
                     if (row.hasDefaultPassword) {
-                        var $button = $element.find('.reset-password');
+                        let $button = $element.find('.reset-password');
                         $button.addClass('disabled');
                         $button.attr('data-status', 'disabled');
                     }
                     LANG.translate($element);
                     return $element.find('td').html();
                 },
-                width: '117px',
-            },
-        ],
+                width: '117px'
+            }
+        ]
     });
     $('#userGroupMemberList').find('[data-bs-toggle="tooltip"]').tooltip({ trigger: 'hover' });
     $userGroupMemberTable.bootstrapTable('togglePagination');
@@ -911,10 +916,10 @@ function initUserGroupMemberListTable() {
 }
 /* This is an internal function and a part of the initialization. Do not export it. */
 
-function initUserGroupMemberEvents() {
-    $(window).resize(function () {
+function initUserGroupMemberEvents(): void {
+    $(window).resize(function(): void {
         $userGroupMemberTable.bootstrapTable('resetView', {
-            height: UTIL.calcDataTableHeight(),
+            height: UTIL.calcDataTableHeight()
         });
     });
 
@@ -923,19 +928,19 @@ function initUserGroupMemberEvents() {
         .find('button[name="refresh"]')
         .onWrap(
             'click',
-            function (evt) {
+            function(evt): void {
                 evt.preventDefault();
 
-                var groupName = $('#userGroupMemberListHeader').text();
+                let groupName: string = $('#userGroupMemberListHeader').text();
 
                 $userGroupMemberTable.bootstrapTable('showLoading');
-                USERGROUP.loadUserGroup(groupName, function (data) {
+                USERGROUP.loadUserGroup(groupName, function(data): void {
                     if (data.rc === 'ok' && typeof data.userGroup !== 'undefined' && typeof data.userGroup.members !== 'undefined') {
-                        var members = data.userGroup.members;
+                        let members = data.userGroup.members;
                         members.push({
                             id: 0,
                             account: '',
-                            hasDefaultPassword: false,
+                            hasDefaultPassword: false
                         });
                         $userGroupMemberTable.bootstrapTable('load', data.userGroup.members);
                         memberNameValidators = {};
@@ -943,11 +948,11 @@ function initUserGroupMemberEvents() {
                         $userGroupMemberTable.bootstrapTable('removeAll');
                         MSG.displayInformation(data, data.cause, data.cause);
                     }
-                    setTimeout(function () {
+                    setTimeout(function(): void {
                         //The fronted can not calculate the height of the table if it tries to directly after the table is filled.
                         //So we wait 250ms. If you set it to a shorter amount, it wont work again.
                         $userGroupMemberTable.bootstrapTable('resetView', {
-                            height: UTIL.calcDataTableHeight(),
+                            height: UTIL.calcDataTableHeight()
                         });
                         $userGroupMemberTable.bootstrapTable('hideLoading');
                     }, 250);
@@ -958,10 +963,10 @@ function initUserGroupMemberEvents() {
 
     $userGroupMemberTable.onWrap(
         'check-all.bs.table',
-        function (e, rows) {
+        function(e, rows): void {
             $userGroupMemberTable.closest('#userGroupMemberList').find('.deleteSome').removeClass('disabled');
 
-            var atLeastOneHasNotDefaultPassword = rows.reduce(function (noDefaultPasswordFound, row) {
+            let atLeastOneHasNotDefaultPassword = rows.reduce(function(noDefaultPasswordFound, row) {
                 return noDefaultPasswordFound || !row.hasDefaultPassword;
             }, false);
 
@@ -976,7 +981,7 @@ function initUserGroupMemberEvents() {
 
     $userGroupMemberTable.onWrap(
         'check.bs.table',
-        function (e, row, $element) {
+        function(e, row, $element): void {
             $userGroupMemberTable.closest('#userGroupMemberList').find('.deleteSome').removeClass('disabled');
             if (!row.hasDefaultPassword) {
                 $userGroupMemberTable.closest('#userGroupMemberList').find('.resetPasswords').removeClass('disabled');
@@ -988,7 +993,7 @@ function initUserGroupMemberEvents() {
 
     $userGroupMemberTable.onWrap(
         'uncheck-all.bs.table',
-        function (e, rows) {
+        function(e, rows): void {
             $userGroupMemberTable.closest('#userGroupMemberList').find('.deleteSome, .resetPasswords').addClass('disabled');
             $userGroupMemberTable.find('.delete, .reset-password').filter(':not([data-status="disabled"])').removeClass('disabled');
         },
@@ -997,13 +1002,13 @@ function initUserGroupMemberEvents() {
 
     $userGroupMemberTable.onWrap(
         'uncheck.bs.table',
-        function (e, row, $element) {
-            var selectedRows = $userGroupMemberTable.bootstrapTable('getSelections');
+        function(e, row, $element): void {
+            let selectedRows = $userGroupMemberTable.bootstrapTable('getSelections');
             if (!selectedRows || selectedRows.length === 0) {
                 $userGroupMemberTable.closest('#userGroupMemberList').find('.deleteSome, .resetPasswords').addClass('disabled');
                 $userGroupMemberTable.find('.delete, .reset-password').filter(':not([data-status="disabled"])').removeClass('disabled');
             } else {
-                var atLeastOneHasNotDefaultPassword = selectedRows.reduce(function (noDefaultPasswordFound, row) {
+                let atLeastOneHasNotDefaultPassword = selectedRows.reduce(function(noDefaultPasswordFound, row) {
                     return noDefaultPasswordFound || !row.hasDefaultPassword;
                 }, false);
                 if (!atLeastOneHasNotDefaultPassword) {
@@ -1019,30 +1024,30 @@ function initUserGroupMemberEvents() {
         .find('.deleteSome')
         .onWrap(
             'click',
-            function () {
-                var selectedRows = $userGroupMemberTable.bootstrapTable('getSelections'),
+            function(): void {
+                let selectedRows = $userGroupMemberTable.bootstrapTable('getSelections'),
                     $deleteSomeButton = $userGroupMemberTable.closest('#userGroupMemberList').find('.deleteSome');
 
                 if (!selectedRows || selectedRows.length === 0 || $deleteSomeButton.hasClass('disabled')) {
                     return;
                 }
 
-                var hasDefaultPassword = selectedRows.reduce(function (carry, member) {
+                let hasDefaultPassword = selectedRows.reduce(function(carry, member) {
                         return carry && member.hasDefaultPassword;
                     }, true),
-                    deleteFunction = function (members) {
+                    deleteFunction = function(members): void {
                         if (!members) {
                             return;
                         }
-                        var memberAccountNames = members.map(function (member) {
+                        let memberAccountNames = members.map(function(member) {
                             return member.account;
                         });
 
-                        USERGROUP.deleteGroupMembers(memberAccountNames[0].split(':', 2)[0], memberAccountNames, function (data) {
+                        USERGROUP.deleteGroupMembers(memberAccountNames[0].split(':', 2)[0], memberAccountNames, function(data): void {
                             if (data.rc === 'ok') {
                                 $userGroupMemberTable.bootstrapTable('remove', {
                                     field: 'account',
-                                    values: memberAccountNames,
+                                    values: memberAccountNames
                                 });
                             } else {
                                 UTIL.showMsgOnTop(data.message);
@@ -1050,18 +1055,18 @@ function initUserGroupMemberEvents() {
                         });
                     };
 
-                var modalMessageKey = hasDefaultPassword ? 'DELETE_USERGROUP_MEMBER_WARNING' : 'DELETE_USERGROUP_MEMBER_AFTER_LOGIN_WARNING',
+                let modalMessageKey: string = hasDefaultPassword ? 'DELETE_USERGROUP_MEMBER_WARNING' : 'DELETE_USERGROUP_MEMBER_AFTER_LOGIN_WARNING',
                     modalMessage =
                         Blockly.Msg[modalMessageKey] ||
                         'The member you want to delete might have create own programs and did already log in. Are you sure, that you want to delete the member?';
-                $('#show-message-confirm').oneWrap('shown.bs.modal', function (e) {
+                $('#show-message-confirm').oneWrap('shown.bs.modal', function(e) {
                     $('#confirm').off();
-                    $('#confirm').onWrap('click', function (e) {
+                    $('#confirm').onWrap('click', function(e): void {
                         e.preventDefault();
                         deleteFunction(selectedRows);
                     });
                     $('#confirmCancel').off();
-                    $('#confirmCancel').onWrap('click', function (e) {
+                    $('#confirmCancel').onWrap('click', function(e): void {
                         e.preventDefault();
                         $('.modal').modal('hide');
                     });
@@ -1076,24 +1081,24 @@ function initUserGroupMemberEvents() {
         .find('.resetPasswords')
         .onWrap(
             'click',
-            function () {
-                var selectedRows = $userGroupMemberTable.bootstrapTable('getSelections'),
+            function(): void {
+                let selectedRows = $userGroupMemberTable.bootstrapTable('getSelections'),
                     $resetAllButton = $userGroupMemberTable.closest('#userGroupMemberList').find('.resetPasswords');
 
                 if (!selectedRows || selectedRows.length === 0 || $resetAllButton.hasClass('disabled')) {
                     return;
                 }
 
-                var userGroupName = selectedRows[0].account.split(':', 2)[0],
+                let userGroupName = selectedRows[0].account.split(':', 2)[0],
                     memberAccounts = selectedRows
-                        .filter(function (row) {
+                        .filter(function(row) {
                             return !row.hasDefaultPassword;
                         })
-                        .map(function (row) {
+                        .map(function(row) {
                             return row.account;
                         });
 
-                USERGROUP.setUserGroupMemberDefaultPasswords(userGroupName, memberAccounts, function (data) {
+                USERGROUP.setUserGroupMemberDefaultPasswords(userGroupName, memberAccounts, function(data): void {
                     if (data.rc === 'ok') {
                         $userGroupMemberTable.closest('#userGroupMemberList').find('button[name="refresh"]').clickWrap();
                     } else {
@@ -1104,40 +1109,41 @@ function initUserGroupMemberEvents() {
             'Bulk resetted passwords of usergroup members.'
         );
 
-    $('#backUserGroupMemberList').onWrap('click', function () {
+    $('#backUserGroupMemberList').onWrap('click', function(): boolean {
         showPanel();
         return false;
     });
 }
 
 /* This is an internal function and a part of the initialization. Do not export it. */
-function initAddMembersToGroupEvents() {
-    var $addMembersModal = $('#user-group-add-members'),
-        $addMembersForm = $addMembersModal.find('form'),
-        $memberCountInput = $addMembersForm.find('#additionalMembersInput'),
-        $memberCountInputHint = $addMembersModal.find('label[for="additionalMembersInput"] ~ .hint');
+function initAddMembersToGroupEvents(): void {
+    let $addMembersModal: JQuery<HTMLElement> = $('#user-group-add-members'),
+        $addMembersForm: JQuery<HTMLElement> = $addMembersModal.find('form'),
+        $memberCountInput: JQuery<HTMLElement> = $addMembersForm.find('#additionalMembersInput'),
+        $memberCountInputHint: JQuery<HTMLElement> = $addMembersModal.find('label[for="additionalMembersInput"] ~ .hint');
 
-    $('#showAddMembersPopup').onWrap('click', function () {
+    $('#showAddMembersPopup').onWrap('click', function(): boolean {
         $addMembersForm.validate();
         $addMembersModal.modal('show');
         return false;
     });
 
-    $addMembersModal.find('.close-button').clickWrap(function () {
+    //@ts-ignore
+    $addMembersModal.find('.close-button').clickWrap(function(): boolean {
         $addMembersModal.modal('hide');
         return false;
     });
 
     $.validator.addMethod(
         'isIntBiggerThan1Regex',
-        function (value, element) {
+        function(value, element: HTMLElement) {
             return /^\s*0*[1-9]\d*\s*$/.test(value.trim());
         },
         Blockly.Msg['ORA_GROUP_ADD_MEMBER_ERROR_SMALLER_THAN_ONE']
     );
     $.validator.addMethod(
         'notOverThreshold',
-        function (value, element) {
+        function(value, element: HTMLElement) {
             return !isNaN(value) && $userGroupMemberTable.bootstrapTable('getData').length - 1 + parseInt(value.trim()) <= userGroupMemberThreshold;
         },
         Blockly.Msg['ORA_GROUP_ADD_MEMBER_ERROR_LIMIT_REACHED']
@@ -1149,11 +1155,11 @@ function initAddMembersToGroupEvents() {
             additionalMembers: {
                 required: true,
                 isIntBiggerThan1Regex: true,
-                notOverThreshold: true,
-            },
+                notOverThreshold: true
+            }
         },
         errorClass: 'form-invalid',
-        errorPlacement: function (label, element) {
+        errorPlacement: function(label: JQuery<HTMLElement>, element: JQuery<HTMLElement>): void {
             label.insertBefore(element.parent());
         },
         messages: {
@@ -1164,18 +1170,18 @@ function initAddMembersToGroupEvents() {
                 min: Blockly.Msg['ORA_GROUP_ADD_MEMBER_ERROR_SMALLER_THAN_ONE'],
                 max: Blockly.Msg['ORA_GROUP_ADD_MEMBER_ERROR_SMALLER_THAN_ONE'],
                 step: Blockly.Msg['ORA_GROUP_ADD_MEMBER_ERROR_SMALLER_THAN_ONE'],
-                number: Blockly.Msg['ORA_GROUP_ADD_MEMBER_ERROR_SMALLER_THAN_ONE'],
-            },
-        },
+                number: Blockly.Msg['ORA_GROUP_ADD_MEMBER_ERROR_SMALLER_THAN_ONE']
+            }
+        }
     });
 
-    $addMembersForm.submit(function (e) {
+    $addMembersForm.submit(function(e: JQuery.SubmitEvent<HTMLElement, null, HTMLElement, HTMLElement>): boolean {
         e.preventDefault();
         $addMembersModal.find('.accept-button').clickWrap();
         return false;
     });
 
-    $memberCountInput.keydown(function (e) {
+    $memberCountInput.keydown(function(e: JQuery.KeyDownEvent<HTMLElement, null, HTMLElement, HTMLElement>): boolean {
         if (e.originalEvent.keyCode === 13) {
             e.stopPropagation();
             e.preventDefault();
@@ -1184,25 +1190,26 @@ function initAddMembersToGroupEvents() {
         }
     });
 
-    $addMembersModal.find('.accept-button').onWrap('click', function () {
-        var validator = $addMembersForm.validate();
+    $addMembersModal.find('.accept-button').onWrap('click', function(): boolean {
+        let validator: JQueryValidation.Validator = $addMembersForm.validate();
 
         if (!$addMembersForm.valid()) {
             return;
         }
 
-        var additionalMembersCount = parseInt($memberCountInput.val().trim()),
-            additionalMembers = [],
-            formatter = new Intl.NumberFormat('en-US', { minimumIntegerDigits: 2 }),
-            currentMaximum = 0,
-            groupName = $('#userGroupMemberListHeader').text().trim(),
+
+        let additionalMembersCount: number = parseInt($memberCountInput.val().toString().trim()),
+            additionalMembers: string[] = [],
+            formatter: Intl.NumberFormat = new Intl.NumberFormat('en-US', { minimumIntegerDigits: 2 }),
+            currentMaximum: number = 0,
+            groupName: string = $('#userGroupMemberListHeader').text().trim(),
             rows = $userGroupMemberTable.bootstrapTable('getData');
 
-        currentMaximum = rows.reduce(function (maximum, row) {
+        currentMaximum = rows.reduce(function(maximum, row): number {
             if (row === null || row.id === 0) {
                 return maximum;
             }
-            var accountName = row.account.substr(row.account.indexOf(':') + 1);
+            let accountName = row.account.substr(row.account.indexOf(':') + 1);
             if (isNaN(accountName)) {
                 return maximum;
             }
@@ -1210,11 +1217,11 @@ function initAddMembersToGroupEvents() {
             return Math.max(maximum, accountName);
         }, currentMaximum);
 
-        for (var i = currentMaximum + 1; i <= currentMaximum + additionalMembersCount; i++) {
+        for (let i: number = currentMaximum + 1; i <= currentMaximum + additionalMembersCount; i++) {
             additionalMembers.push(formatter.format(i));
         }
 
-        USERGROUP.addGroupMembers(groupName, additionalMembers, function (data) {
+        USERGROUP.addGroupMembers(groupName, additionalMembers, function(data): void {
             if (data.rc === 'ok') {
                 $addMembersModal.modal('hide');
                 $memberCountInput.val('');
@@ -1223,7 +1230,7 @@ function initAddMembersToGroupEvents() {
                 }
             } else {
                 validator.showErrors({
-                    additionalMembers: Blockly.Msg[data.cause],
+                    additionalMembers: Blockly.Msg[data.cause]
                 });
             }
         });
@@ -1232,7 +1239,7 @@ function initAddMembersToGroupEvents() {
 }
 
 /* This is an internal function and a part of the initialization. Do not export it. */
-function openDetailUserGroupView(userGroupData) {
+function openDetailUserGroupView(userGroupData): void {
     if (userGroupData == null || typeof userGroupData.name !== 'string') {
         MSG.displayPopupMessage('ORA_GROUP_GET_MEMBERS_ERROR', 'Could not open group detail view for that group.', 'OK');
         return;
@@ -1241,14 +1248,14 @@ function openDetailUserGroupView(userGroupData) {
     $('#userGroupMemberListHeader').html(userGroupData.name.trim() || '&nbsp;');
     $('#additionalMembersInput').val('');
 
-    var members = userGroupData.members.map(function (member) {
+    let members = userGroupData.members.map(function(member) {
         return member;
     });
 
     members.push({
         id: 0,
         account: '',
-        hasDefaultPassword: false,
+        hasDefaultPassword: false
     });
 
     $userGroupMemberTable.bootstrapTable('showLoading');
@@ -1256,13 +1263,14 @@ function openDetailUserGroupView(userGroupData) {
     $userGroupMemberTable.bootstrapTable('load', members);
     memberNameValidators = {};
 
-    setTimeout(function () {
+    setTimeout(function(): void {
         //The fronted can not calculate the height of the table if it tries to directly after the table is filled.
         //So we wait 250ms. If you set it to a shorter amount, it wont work again.
         $userGroupMemberTable.bootstrapTable('resetView', {
-            height: UTIL.calcDataTableHeight(),
+            height: UTIL.calcDataTableHeight()
         });
         $userGroupMemberTable.bootstrapTable('hideLoading');
     }, 250);
+    //@ts-ignore
     $('#tabUserGroupMemberList').tabWrapShow();
 }

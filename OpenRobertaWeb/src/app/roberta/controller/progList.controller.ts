@@ -12,6 +12,7 @@ import 'bootstrap-table';
 import { CommonTable } from 'table';
 // @ts-ignore
 import * as Blockly from 'blockly';
+import { ListingNamesResponse } from '../ts/restEntities';
 
 enum View {
     Examples = 'Examples',
@@ -50,38 +51,38 @@ function initProgList() {
         showPaginationSwitch: 'true',
         columns: [
             {
-                title: "<span lkey='Blockly.Msg.DATATABLE_PROGRAM_NAME'>" + (Blockly.Msg.DATATABLE_PROGRAM_NAME || 'Name des Programms') + '</span>',
-                sortable: true,
+                title: '<span lkey=\'Blockly.Msg.DATATABLE_PROGRAM_NAME\'>' + (Blockly.Msg.DATATABLE_PROGRAM_NAME || 'Name des Programms') + '</span>',
+                sortable: true
             },
             {
-                title: "<span lkey='Blockly.Msg.DATATABLE_CREATED_BY'>" + (Blockly.Msg.DATATABLE_CREATED_BY || 'Erzeugt von') + '</span>',
-                sortable: true,
+                title: '<span lkey=\'Blockly.Msg.DATATABLE_CREATED_BY\'>' + (Blockly.Msg.DATATABLE_CREATED_BY || 'Erzeugt von') + '</span>',
+                sortable: true
             },
             {
                 events: eventsRelations,
-                title: "<span class='typcn typcn-flow-merge'></span>",
+                title: '<span class=\'typcn typcn-flow-merge\'></span>',
                 sortable: true,
                 sorter: sortRelations,
                 formatter: formatRelations,
                 align: 'left',
-                valign: 'middle',
+                valign: 'middle'
             },
             {
-                visible: false,
+                visible: false
             },
             {
-                title: "<span lkey='Blockly.Msg.DATATABLE_CREATED_ON'>" + (Blockly.Msg.DATATABLE_CREATED_ON || 'Erzeugt am') + '</span>',
+                title: '<span lkey=\'Blockly.Msg.DATATABLE_CREATED_ON\'>' + (Blockly.Msg.DATATABLE_CREATED_ON || 'Erzeugt am') + '</span>',
                 sortable: true,
-                formatter: UTIL.formatDate,
+                formatter: UTIL.formatDate
             },
             {
-                title: "<span lkey='Blockly.Msg.DATATABLE_ACTUALIZATION'>" + (Blockly.Msg.DATATABLE_ACTUALIZATION || 'Letzte Aktualisierung') + '</span>',
+                title: '<span lkey=\'Blockly.Msg.DATATABLE_ACTUALIZATION\'>' + (Blockly.Msg.DATATABLE_ACTUALIZATION || 'Letzte Aktualisierung') + '</span>',
                 sortable: true,
-                formatter: UTIL.formatDate,
+                formatter: UTIL.formatDate
             },
             {
                 title: '<input name="btSelectAll" type="checkbox">',
-                formatter: function (value, row, index) {
+                formatter: function(value, row, index) {
                     if (GUISTATE_C.isUserMemberOfUserGroup() && row[1] === GUISTATE_C.getUserUserGroupOwner()) {
                         return '<input type="checkbox" name="btSelectItem" data-index="' + index + '" disabled>';
                     }
@@ -89,7 +90,7 @@ function initProgList() {
                 },
                 valign: 'middle',
                 halign: 'center',
-                align: 'center',
+                align: 'center'
             },
             {
                 events: eventsDeleteShareLoad,
@@ -97,45 +98,45 @@ function initProgList() {
                 align: 'left',
                 valign: 'top',
                 formatter: formatDeleteShareLoad,
-                width: '117px',
-            },
-        ],
+                width: '117px'
+            }
+        ]
     };
     const options = { ...CommonTable.options, ...myOptions };
     $programNameTable.bootstrapTable(options);
     $programNameTable.bootstrapTable('togglePagination');
 }
 
-function initProgListViewEvents() {
+function initProgListViewEvents(): void {
     let $tabProgList = $('#tabProgList');
-    $tabProgList.onWrap('show.bs.tab', function () {
+    $tabProgList.onWrap('show.bs.tab', function() {
         GUISTATE_C.setView('tabProgList');
         view = View[$tabProgList.data('type')];
         showView();
     });
     $('#backProgList').onWrap(
         'click',
-        function () {
+        function(): boolean {
             // @ts-ignore
             $('#tabProgram').tabWrapShow();
             return false;
         },
         'back to program view'
     );
-    $programNameTable.onWrap('toggle-pagination.bs.table shown.bs.collapse', function () {
+    $programNameTable.onWrap('toggle-pagination.bs.table shown.bs.collapse', function(): void {
         resizeTable();
     });
-    $(window).onWrap('resize', function () {
+    $(window).onWrap('resize', function(): void {
         resizeTable();
     });
-    function resizeTable() {
+    function resizeTable(): void {
         $programNameTable.bootstrapTable('resetView', {
-            height: UTIL.calcDataTableHeight(),
+            height: UTIL.calcDataTableHeight()
         });
     }
 }
 
-function showView() {
+function showView(): void {
     if (view === View.Programs) {
         showViewUserProgram();
     } else {
@@ -144,14 +145,14 @@ function showView() {
     initProgListEvents();
 }
 
-function initProgListEvents() {
+function initProgListEvents(): void {
     $progList = $('#progList');
     $userGroupOptGroup = $('#progListUserGroupScope');
     $userGroupSelect = $userGroupOptGroup.closest('select');
 
     $progList.find('button[name="refresh"]').onWrap(
         'click',
-        function () {
+        function(): boolean {
             switch (view) {
                 case View.Programs:
                     $userGroupSelect.trigger('change');
@@ -166,11 +167,11 @@ function initProgListEvents() {
         'refresh prog list'
     );
 
-    $userGroupSelect.change(function () {
+    $userGroupSelect.change(function(): void {
         if (view == View.Examples) {
             return;
         }
-        var selectVal = $userGroupSelect.val();
+        let selectVal: any = $userGroupSelect.val();
         $('#programNameTable').bootstrapTable('showLoading');
         if (selectVal === 'userProgram') {
             PROGLIST.loadProgList(update);
@@ -181,7 +182,7 @@ function initProgListEvents() {
 
     $programNameTable.onWrap(
         'click-row.bs.table',
-        function ($element, row) {
+        function($element, row): void {
             loadFromListing(row);
         },
         'Load program from listing clicked'
@@ -189,7 +190,7 @@ function initProgListEvents() {
 
     $programNameTable.onWrap(
         'check-all.bs.table check.bs.table',
-        function () {
+        function(): void {
             $('#deleteSomeProgHeader').removeClass('disabled');
             $('#deleteSomeProgHeader').tooltip({ trigger: 'hover' });
             $programNameTable.find('#shareSome').removeClass('disabled');
@@ -200,7 +201,7 @@ function initProgListEvents() {
 
     $programNameTable.onWrap(
         'uncheck-all.bs.table',
-        function () {
+        function(): void {
             $('#deleteSomeProgHeader').addClass('disabled');
             $programNameTable.find('#shareSome').addClass('disabled');
             $programNameTable.find('.delete, .share, .gallery, .load').filter(':not([data-status="disabled"])').removeClass('disabled');
@@ -210,8 +211,8 @@ function initProgListEvents() {
 
     $programNameTable.onWrap(
         'uncheck.bs.table',
-        function () {
-            var selectedRows = $programNameTable.bootstrapTable('getSelections');
+        function(): void {
+            let selectedRows = $programNameTable.bootstrapTable('getSelections');
             if (!selectedRows || selectedRows.length === 0) {
                 $('#deleteSomeProgHeader').addClass('disabled');
                 $programNameTable.find('#shareSome').addClass('disabled');
@@ -221,20 +222,20 @@ function initProgListEvents() {
         'uncheck one program'
     );
 
-    $programNameTable.on('shown.bs.collapse hidden.bs.collapse', function () {
+    $programNameTable.on('shown.bs.collapse hidden.bs.collapse', function(): void {
         $programNameTable.bootstrapTable('resetWidth');
     });
 
-    $('#deleteSomeProgHeader').onWrap('click', function () {
-        var programs = $programNameTable.bootstrapTable('getSelections', {});
-        var names = '<br>';
-        for (var i = 0; i < programs.length; i++) {
+    $('#deleteSomeProgHeader').onWrap('click', function(): boolean {
+        let programs = $programNameTable.bootstrapTable('getSelections', {});
+        let names: string = '<br>';
+        for (let i = 0; i < programs.length; i++) {
             names += programs[i][0];
             names += '<br>';
         }
         $('#confirmDeleteProgramName').html(names);
-        let $confirmDeleteProgram = $('#confirmDeleteProgram');
-        $confirmDeleteProgram.oneWrap('hide.bs.modal', function () {
+        let $confirmDeleteProgram: JQuery<HTMLElement> = $('#confirmDeleteProgram');
+        $confirmDeleteProgram.oneWrap('hide.bs.modal', function(): void {
             $('#programNameTable').bootstrapTable('showLoading');
             PROGLIST.loadProgList(update);
         });
@@ -244,30 +245,30 @@ function initProgListEvents() {
     });
 }
 
-function showViewUserProgram() {
+function showViewUserProgram(): void {
     $('#programNameTable').bootstrapTable('showLoading');
     $programNameTable.bootstrapTable('showColumn', [2, 6]);
     $programNameTable.bootstrapTable('refreshOptions', {
         sortName: 4,
         sortOrder: 'desc',
         search: true,
-        filterControl: true,
+        filterControl: true
     });
-    var $selectProg = $(
-        "<select class='form-select filter' id='progListScopeSelect'>" +
-            "<option data-translation-targets='html' value='userProgram'>" +
-            Blockly.Msg.MENU_LIST_PROG +
-            '</option>' +
-            "<optGroup data-translation-targets='label' id='progListUserGroupScope' label=" +
-            Blockly.Msg.DATATABLE_USERGROUPS +
-            '></optGroup>' +
-            '</select>'
+    let $selectProg: JQuery<HTMLElement> = $(
+        '<select class=\'form-select filter\' id=\'progListScopeSelect\'>' +
+        '<option data-translation-targets=\'html\' value=\'userProgram\'>' +
+        Blockly.Msg.MENU_LIST_PROG +
+        '</option>' +
+        '<optGroup data-translation-targets=\'label\' id=\'progListUserGroupScope\' label=' +
+        Blockly.Msg.DATATABLE_USERGROUPS +
+        '></optGroup>' +
+        '</select>'
     );
     $('#progList .search').prepend($selectProg);
     if (!GUISTATE_C.isUserMemberOfUserGroup()) {
-        USERGROUP.loadUserGroupList(function (result) {
+        USERGROUP.loadUserGroupList(function(result): void {
             if (result.rc == 'ok' && result.userGroups.length > 0) {
-                result.userGroups.forEach(function (userGroup) {
+                result.userGroups.forEach(function(userGroup): void {
                     $('#progListUserGroupScope').append('<option value="' + userGroup.name + '">' + userGroup.name + '</option>');
                 });
             }
@@ -276,19 +277,19 @@ function showViewUserProgram() {
     PROGLIST.loadProgList(update);
 }
 
-function showViewExampleProgram() {
+function showViewExampleProgram(): void {
     $('#programNameTable').bootstrapTable('showLoading');
     $programNameTable.bootstrapTable('hideColumn', [2, 6]);
     $programNameTable.bootstrapTable('refreshOptions', {
         sortName: 0,
         sortOrder: 'asc',
         search: false,
-        filterControl: false,
+        filterControl: false
     });
     PROGLIST.loadExampleList(updateExamplePrograms);
 }
 
-function updateTooltips() {
+function updateTooltips(): void {
     $('#progList>.bootstrap-table')
         .find('button[name="paginationSwitch"]')
         .attr('title', '')
@@ -303,7 +304,7 @@ function updateTooltips() {
         .tooltip({ trigger: 'hover' });
     $programNameTable.find('[rel="tooltip"]').tooltip({ trigger: 'hover' });
 }
-function update(result) {
+function update(result): void {
     UTIL.response(result);
     if (result.rc === 'ok') {
         $programNameTable.bootstrapTable('load', result.programNames);
@@ -318,7 +319,7 @@ function update(result) {
     updateTooltips();
 }
 
-function updateExamplePrograms(result) {
+function updateExamplePrograms(result: ListingNamesResponse): void {
     UTIL.response(result);
     if (result.rc === 'ok') {
         $('#programNameTable').bootstrapTable('load', result.programNames);
@@ -333,15 +334,15 @@ function updateExamplePrograms(result) {
 }
 
 var eventsRelations = {
-    'click .showRelations': function (e, value, row, index) {
+    'click .showRelations': function(e, value, row, index): void {
         e.stopPropagation();
         var collapseName = '.relation' + index;
         $(collapseName).collapse('toggle');
-    },
+    }
 };
 
 var eventsDeleteShareLoad = {
-    'click .delete': function (e, value, row) {
+    'click .delete': function(e, value, row) {
         e.stopPropagation();
         var selectedRows = [row];
         var names = '<br>';
@@ -352,31 +353,31 @@ var eventsDeleteShareLoad = {
         $('#confirmDeleteProgramName').html(names);
         let $confirmDeleteProgram = $('#confirmDeleteProgram');
         $confirmDeleteProgram.data('programs', selectedRows);
-        $confirmDeleteProgram.oneWrap('hidden.bs.modal', function () {});
+        $confirmDeleteProgram.oneWrap('hidden.bs.modal', function() {});
         $confirmDeleteProgram.modal('show');
         return false;
     },
-    'click .share': function (e, value, row) {
+    'click .share': function(e, value, row) {
         e.stopPropagation();
         if (!row[2].sharedFrom) {
             $('#show-relations').trigger('updateAndShow', [row]);
         }
         return false;
     },
-    'click .gallery': function (e, value, row) {
+    'click .gallery': function(e, value, row) {
         e.stopPropagation();
         if (!row[2].sharedFrom && !GUISTATE_C.isUserMemberOfUserGroup()) {
             $('#share-with-gallery').trigger('updateAndShow', [row]);
         }
         return false;
     },
-    'click .load': function (e, value, row) {
+    'click .load': function(e, value, row) {
         e.stopPropagation();
         loadFromListing(row);
-    },
+    }
 };
 
-var formatRelations = function (value, row, index) {
+var formatRelations = function(value, row, index) {
     if ($.isEmptyObject(value)) {
         return '<span class="typcn typcn-minus"></span>';
     }
@@ -391,7 +392,7 @@ var formatRelations = function (value, row, index) {
     }
     if (value.sharedWith && value.sharedWith.length == 1) {
         var result = '';
-        $.each(value.sharedWith, function (i, obj) {
+        $.each(value.sharedWith, function(i, obj) {
             result += '<span>';
             if (obj.type === 'User' && obj.label === 'Roberta') {
                 // should not happen
@@ -420,7 +421,7 @@ var formatRelations = function (value, row, index) {
     }
     if (value.sharedWith && Object.keys(value.sharedWith).length > 1) {
         let result: string[] = [];
-        $.each(value.sharedWith, function (i, obj) {
+        $.each(value.sharedWith, function(i, obj) {
             var typeLabel = '';
 
             if (obj.type === 'User') {
@@ -453,7 +454,7 @@ var formatRelations = function (value, row, index) {
     }
 };
 
-var formatDeleteShareLoad = function (value, row) {
+var formatDeleteShareLoad = function(value, row) {
     // TODO check here and on the server, if this user is allowed to share programs
     var result = '';
     if (view === View.Programs) {
@@ -490,7 +491,7 @@ var formatDeleteShareLoad = function (value, row) {
     return result;
 };
 
-var sortRelations = function (a, b) {
+var sortRelations = function(a, b) {
     if ($.isEmptyObject(a) && $.isEmptyObject(b)) {
         return 0;
     }
@@ -502,7 +503,7 @@ var sortRelations = function (a, b) {
     if (a.sharedWith && b.sharedWith) {
         var value = {
             a: a.sharedWith[0].right,
-            b: b.sharedWith[0].right,
+            b: b.sharedWith[0].right
         };
         if (value.a === value.b) return 0;
         if (value.a === 'WRITE') return 1;
@@ -529,7 +530,7 @@ var titleActions =
  */
 function loadFromListing(program) {
     LOG.info('loadFromList ' + program[0]);
-    PROGRAM.loadProgramFromListing(program[0], program[1], program[3], function (result) {
+    PROGRAM.loadProgramFromListing(program[0], program[1], program[3], function(result) {
         if (result.rc === 'ok') {
             result.programShared = false;
             var alien = program[1] === GUISTATE_C.getUserAccountName() ? null : program[1];
@@ -558,7 +559,7 @@ function loadFromListing(program) {
                 GUISTATE_C.setConfigurationName(result.configName);
                 GUISTATE_C.setConfigurationXML(result.confXML);
             }
-            $('#tabProgram').oneWrap('shown.bs.tab', function () {
+            $('#tabProgram').oneWrap('shown.bs.tab', function() {
                 CONFIGURATION_C.reloadConf();
                 PROGRAM_C.reloadProgram();
             });

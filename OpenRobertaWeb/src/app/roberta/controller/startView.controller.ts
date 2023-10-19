@@ -19,16 +19,16 @@ import * as IMPORT_C from 'import.controller';
 import * as UTIL from 'util.roberta';
 import * as MSG from 'message';
 
-var robots = [];
-var mainCallback: Function;
-var uniqueProgLanguages: string[] = [];
+let robots: any[] = [];
+let mainCallback: Function;
+let uniqueProgLanguages: string[] = [];
 const numPopularRobots: number = 8;
 
 export function init(callback: Function) {
     mainCallback = callback;
-    let ready = $.Deferred();
+    let ready: any = $.Deferred();
     let r = GUISTATE_C.getRobots();
-    robots = Object.keys(r).map(function (index) {
+    robots = Object.keys(r).map(function(index: string) {
         let robot = r[index];
         if (robot['sim']) {
             robot['extensions']['sim'] = true;
@@ -38,40 +38,40 @@ export function init(callback: Function) {
         delete robot['sim'];
         return robot;
     });
-    const iCalliopeNoBlue = robots.findIndex((robot, index) => {
+    const iCalliopeNoBlue: number = robots.findIndex((robot, index: number): boolean => {
         return robot.name === 'calliope2017NoBlue';
     });
-    const iCalliopeBlue: number = robots.findIndex((robot, index) => {
+    const iCalliopeBlue: number = robots.findIndex((robot, index: number): boolean => {
         return robot.name === 'calliope2017';
     });
     if (iCalliopeNoBlue > -1 && iCalliopeBlue > -1) {
         robots[iCalliopeNoBlue].extensions.blue = true;
         robots.splice(iCalliopeBlue, 1);
     }
-    robots.forEach(function (row, index) {
+    robots.forEach(function(row, index: number): void {
         row.rowNum = index;
     });
-    let progLanguages = robots.map((robot) => robot.progLanguage);
-    uniqueProgLanguages = progLanguages.filter(function (item, pos) {
+    let progLanguages: any[] = robots.map((robot) => robot.progLanguage);
+    uniqueProgLanguages = progLanguages.filter(function(item, pos: number): boolean {
         return progLanguages.indexOf(item) == pos;
     });
 
     const preload = (src) =>
-        new Promise(function (resolve, reject) {
-            const img = new Image();
-            img.onload = function () {
+        new Promise(function(resolve, reject): void {
+            const img: HTMLImageElement = new Image();
+            img.onload = function(): void {
                 resolve(img);
             };
-            img.onerror = function () {
+            img.onerror = function() {
                 console.error('could not preload ' + src);
                 resolve(null);
             };
             img.src = src;
         });
 
-    const preloadAll = (images) => Promise.all(images.map(preload));
-    let images = robots.map((robot) => '/css/img/system_preview/' + robot.name + '.jpg');
-    $.when(preloadAll(images)).then((images) => {
+    const preloadAll = (images: any) => Promise.all(images.map(preload));
+    let images: string[] = robots.map((robot): string => '/css/img/system_preview/' + robot.name + '.jpg');
+    $.when(preloadAll(images)).then((images: any[]): void => {
         initRobotList();
         initRobotToolbar();
         initRobotListEvents();
@@ -81,28 +81,28 @@ export function init(callback: Function) {
     return ready.promise();
 }
 
-function initRobotToolbar() {
-    let selectFeature = $('#startFeatureTemplate').html();
-    let selectProgLanguage = $('#startProgrammingLanguageTemplate').html();
-    let $selectFeature = $(selectFeature);
-    let $selectProgLanguage = $(selectProgLanguage);
+function initRobotToolbar(): void {
+    let selectFeature: string = $('#startFeatureTemplate').html();
+    let selectProgLanguage: string = $('#startProgrammingLanguageTemplate').html();
+    let $selectFeature: JQuery<HTMLElement> = $(selectFeature);
+    let $selectProgLanguage: JQuery<HTMLElement> = $(selectProgLanguage);
     translate($selectFeature);
     translate($selectProgLanguage);
     $('#start .fixed-table-toolbar').append($selectFeature);
     $('#start .fixed-table-toolbar .btn-group:last-child').prepend($selectProgLanguage);
 }
 
-function initRobotList() {
+function initRobotList(): void {
     const myLang = GUISTATE_C.getLanguage();
-    const startRobots = robots.slice(0, numPopularRobots);
-    function clickRobot(e, value, row, optBookmark?) {
+    const startRobots: any[] = robots.slice(0, numPopularRobots);
+    function clickRobot(e, value, row, optBookmark?): boolean {
         e.stopPropagation();
         $('.accordion-collapse.show').collapse('hide');
-        let extensions = {};
+        let extensions: any = {};
         $(e.target)
             .closest('.card-views')
             .find('.form-check-input')
-            .each(function () {
+            .each(function() {
                 if ($(this).prop('checked')) {
                     let extension: string = $(this).val().toString();
                     extensions[extension] = true;
@@ -115,15 +115,15 @@ function initRobotList() {
         mainCallback(robot, extensions); // TODO call mainCallback(row.name, extensions)
         UTIL.cleanUri();
         if (optBookmark) {
-            var uri;
-            $(window).oneWrap('hashchange', function () {
+            let uri;
+            $(window).oneWrap('hashchange', function(): void {
                 window.history.replaceState({}, document.title, uri);
             });
-            const extensionsArray: string[] = Object.keys(extensions).map((key) => key);
+            const extensionsArray: string[] = Object.keys(extensions).map((key: string) => key);
             uri = window.location.toString();
             uri += '?loadSystem=' + robot + '&extensions=' + extensionsArray.join(',');
             window.history.replaceState({}, document.title, uri);
-            $('#show-message').oneWrap('hidden.bs.modal', function (e) {
+            $('#show-message').oneWrap('hidden.bs.modal', function(e): void {
                 e.preventDefault();
                 UTIL.cleanUri();
             });
@@ -132,7 +132,7 @@ function initRobotList() {
         }
         return false;
     }
-    function clickBookmark(e, value, row) {
+    function clickBookmark(e, value, row): void {
         clickRobot(e, value, row, true);
     }
     const myOptions = {
@@ -141,13 +141,13 @@ function initRobotList() {
                 field: 'rowNum',
                 sortable: true,
                 visible: false,
-                searchable: false,
+                searchable: false
             },
             {
                 field: 'announcement',
                 title: '',
                 searchable: false,
-                formatter: function (announcement, row, index) {
+                formatter: function(announcement, row, index): string {
                     let html: string =
                         '<a href="#" class="pick typcn typcn-star-outline bookmark" rel="tooltip" data-bs-placement="top" data-bs-original-title="' +
                         Blockly.Msg.START_BOOKMARK_TOOLTIP +
@@ -155,22 +155,22 @@ function initRobotList() {
                         Blockly.Msg.START_BOOKMARK_TOOLTIP +
                         '"  lkey="Blockly.Msg.START_BOOKMARK_TOOLTIP" title=""></a>';
                     if (announcement && announcement === 'beta') {
-                        return html + "<img class='img-beta' src='/css/img/beta.png' alt='beta' />";
+                        return html + '<img class=\'img-beta\' src=\'/css/img/beta.png\' alt=\'beta\' />';
                     } else if (announcement && announcement === 'deprecated') {
-                        return html + "<img class='img-deprecated' src='/css/img/deprecated.png' alt='deprecated' />";
+                        return html + '<img class=\'img-deprecated\' src=\'/css/img/deprecated.png\' alt=\'deprecated\' />';
                     } else {
                         return html;
                     }
                 },
                 events: {
-                    'click .pick': clickBookmark,
-                },
+                    'click .pick': clickBookmark
+                }
             },
             {
                 field: 'group',
                 sortable: true,
                 searchable: true,
-                visible: false,
+                visible: false
             },
             {
                 field: 'name',
@@ -179,16 +179,16 @@ function initRobotList() {
                 searchable: false,
                 formatter: CardView.robotImage,
                 events: {
-                    'click .robotImage': function (e, value, row) {
+                    'click .robotImage': function(e, value, row): void {
                         clickRobot(e, value, row, false);
-                    },
-                },
+                    }
+                }
             },
             {
                 field: 'progLanguage',
                 visible: false,
                 sortable: true,
-                searchable: false,
+                searchable: false
             },
             {
                 field: 'realName',
@@ -197,17 +197,17 @@ function initRobotList() {
                 searchable: true,
                 searchFormatter: false,
                 searchAccentNeutralise: true,
-                formatter: function (realName) {
+                formatter: function(realName: string): string {
                     return '<div class="robotName">' + realName + '</div>';
-                },
+                }
             },
             {
                 title: '',
                 field: 'extensions',
                 searchable: false,
-                formatter: function (extensions, row, index) {
-                    let myextensions = $('#startSelectionTemplate').html();
-                    let $myextensions = $(myextensions);
+                formatter: function(extensions, row, index) {
+                    let myextensions: string = $('#startSelectionTemplate').html();
+                    let $myextensions: JQuery<HTMLElement> = $(myextensions);
                     $myextensions.addClass('invisible');
                     $myextensions.find('.accordion-button.collapsed').attr({ 'aria-controls': 'extend_' + index, 'data-bs-target': '#extend_' + index });
                     $myextensions.find('.accordion-collapse.collapse').attr({ id: 'extend_' + index });
@@ -229,13 +229,13 @@ function initRobotList() {
                         }
                     }
                     return $myextensions[0].outerHTML;
-                },
+                }
             },
             {
                 title: '',
                 field: 'startNow',
                 searchable: false,
-                formatter: function () {
+                formatter: function(): string {
                     return (
                         '<button href="#" lkey="Blockly.Msg.START_START" class="btn start pick typcn typcn-arrow-right" role="button">' +
                         Blockly.Msg.START_START +
@@ -243,11 +243,11 @@ function initRobotList() {
                     );
                 },
                 events: {
-                    'click .pick': function (e, value, row) {
+                    'click .pick': function(e, value, row): void {
                         clickRobot(e, value, row, false);
-                    },
-                },
-            },
+                    }
+                }
+            }
         ],
         locale: myLang,
         toolbar: '#robotListToolbar',
@@ -255,16 +255,16 @@ function initRobotList() {
         search: true,
         rowStyle: {
             //classes: 'col-xxl-2  col-md-4 col-sm-6 col-xs-12',
-            classes: 'col-xxl-3 col-sm-6 col-xs-12',
+            classes: 'col-xxl-3 col-sm-6 col-xs-12'
         },
         showRefresh: false,
-        buttons: function () {
+        buttons: function(): any {
             return {
                 popularRobots: {
                     html:
                         '<button class="nav-link active start" data-bs-toggle="button" autocomplete="off" aria-pressed="true" data-bs-original-title="" id="popularRobots" lkey="Blockly.Msg.START_POPULAR_ROBOTS">' +
                         Blockly.Msg.START_POPULAR_ROBOTS +
-                        '</button>',
+                        '</button>'
                 },
                 allRobots: {
                     html:
@@ -272,12 +272,12 @@ function initRobotList() {
                         Blockly.Msg.START_ALL_ROBOTS +
                         '</button><span id="results"></span>&nbsp;<span id="labelResults" lkey="Blockly.Msg.START_RESULTS">' +
                         Blockly.Msg.START_RESULTS +
-                        '</span>',
-                },
+                        '</span>'
+                }
             };
         },
         buttonsAlign: 'left',
-        filterControlContainer: true,
+        filterControlContainer: true
     };
     $('#robotTable').bootstrapTable(myOptions);
     $('#robotTable').bootstrapTable('load', startRobots);
@@ -287,18 +287,18 @@ function initRobotList() {
     $('#start .fixed-table-toolbar>.float-right').toggleClass('hidden');
     $('span#results').text(startRobots.length);
 }
-function initView() {
+function initView(): void {
     $('.mainTab').parent().addClass('invisible');
     $('.notStart').addClass('disabled');
     $('#header').removeClass('shadow');
     GUISTATE_C.resetRobot();
     GUISTATE_C.setView('tabStart');
 }
-function initRobotListEvents() {
-    $('#tabStart').onWrap('show.bs.tab', function (e) {
+function initRobotListEvents(): void {
+    $('#tabStart').onWrap('show.bs.tab', function(e): void {
         initView();
     });
-    let popularRobots = function () {
+    let popularRobots = function(): boolean {
         if (!$('#allRobots').hasClass('active')) {
             $(this).addClass('active');
             return false;
@@ -317,12 +317,12 @@ function initRobotListEvents() {
         $('#start').animate({ scrollTop: $('.section--white').height() }, 500);
     };
     $('#popularRobots').onWrap('click', popularRobots);
-    let allRobots = function () {
+    let allRobots = function(): boolean {
         if (!$('#popularRobots').hasClass('active')) {
             $(this).addClass('active');
             return false;
         }
-        $('input.progLang, input.feature').each(function () {
+        $('input.progLang, input.feature').each(function(): void {
             $(this).prop('checked', false);
         });
         $('#more').toggleClass('more');
@@ -338,8 +338,8 @@ function initRobotListEvents() {
         $('#start input.form-control.search-input').trigger('focus');
     };
     $('#allRobots').onWrap('click', allRobots);
-    $('#more').onWrap('click', function () {
-        var $this = $(this);
+    $('#more').onWrap('click', function(): void {
+        let $this = $(this);
         if ($this.hasClass('more')) {
             $('#allRobots').trigger('click');
             allRobots();
@@ -348,16 +348,16 @@ function initRobotListEvents() {
             popularRobots();
         }
     });
-    $('#robotTable').on('post-body.bs.table', function (e, data) {
+    $('#robotTable').on('post-body.bs.table', function(e, data): void {
         $('span#results').text(data.length);
         $('.bookmark').tooltip({ trigger: 'hover' });
     });
-    $('#start .btn-group input').onWrap('change', function (e) {
+    $('#start .btn-group input').onWrap('change', function(e): void {
         let myFilter: {} = {};
         const myFilterAlgorithm: {} = {
             filterAlgorithm: (row, filters) => {
                 let foundExt: boolean = true;
-                filters.extensions.forEach((filterExtension) => {
+                filters.extensions.forEach((filterExtension): void => {
                     if (!row.extensions[filterExtension]) {
                         foundExt = false;
                     } else if (row.extensions[filterExtension] === 'never') {
@@ -365,17 +365,17 @@ function initRobotListEvents() {
                     }
                 });
                 let foundProgLang: boolean = false;
-                filters.progLanguage.forEach((filterProgLanguage) => {
+                filters.progLanguage.forEach((filterProgLanguage): void => {
                     if (row.progLanguage === filterProgLanguage) {
                         foundProgLang = true;
                     }
                 });
                 return foundExt && foundProgLang;
-            },
+            }
         };
         myFilter['progLanguage'] = [];
         myFilter['extensions'] = [];
-        $('input.progLang').each(function () {
+        $('input.progLang').each(function(): void {
             if ($(this).prop('checked')) {
                 myFilter['progLanguage'].push($(this).val().toString());
             }
@@ -383,7 +383,7 @@ function initRobotListEvents() {
         if (myFilter['progLanguage'].length === 0) {
             myFilter['progLanguage'] = uniqueProgLanguages;
         }
-        $('input.feature').each(function () {
+        $('input.feature').each(function(): void {
             if ($(this).prop('checked')) {
                 myFilter['extensions'].push($(this).val().toString());
             }
@@ -392,7 +392,7 @@ function initRobotListEvents() {
     });
     $('#startImportProg').onWrap(
         'click',
-        function (e) {
+        function(e) {
             e.stopPropagation();
             IMPORT_C.importXmlFromStart(mainCallback);
         },
@@ -400,9 +400,9 @@ function initRobotListEvents() {
     );
     $('#takeATour').onWrap(
         'click',
-        function (e) {
+        function(e): void {
             e.stopPropagation();
-            mainCallback('ev3lejosv1', {}, function () {
+            mainCallback('ev3lejosv1', {}, function(): void {
                 PROGRAM_C.newProgram(true);
                 TOUR_C.start('welcome');
             });
@@ -412,9 +412,9 @@ function initRobotListEvents() {
 }
 
 function translate($element: JQuery<HTMLElement>): void {
-    $element.find('[lkey]').each(function (index) {
-        let lkey = $(this).attr('lkey');
-        let key = lkey.replace('Blockly.Msg.', '');
+    $element.find('[lkey]').each(function(index: number): void {
+        let lkey: string = $(this).attr('lkey');
+        let key: string = lkey.replace('Blockly.Msg.', '');
         if ($(this).attr('rel') === 'tooltip') {
             $(this).attr('data-bs-original-title', Blockly.Msg[key]);
         } else {
@@ -423,18 +423,18 @@ function translate($element: JQuery<HTMLElement>): void {
     });
 }
 
-function loadImages(names: string[]) {
+function loadImages(names: string[]): any {
     let imgPath: string = '/css/img/system_preview/';
-    let i = 0;
-    let numLoading = names.length;
-    const onload = function () {
+    let i: number = 0;
+    let numLoading: number = names.length;
+    const onload = function(): void {
         --numLoading === 0;
     };
-    const images = {};
+    const images: any = {};
     while (i < names.length) {
-        const img = (images[names[i]] = new Image());
+        const img: HTMLImageElement = (images[names[i]] = new Image());
         img.onload = onload;
-        img.onerror = function (e) {
+        img.onerror = function(e: any): void {
             console.error(e);
         };
         img.src = imgPath + names[i++];
@@ -442,23 +442,23 @@ function loadImages(names: string[]) {
     return images;
 }
 
-function fetchRSSFeed() {
-    let errorFn = function () {
+function fetchRSSFeed(): void {
+    let errorFn = function(): void {
         // $('#section--news').remove(); Just do nothing
     };
-    let successFn = function (response) {
-        var $newsContainer = $(
+    let successFn = function(response: any): void {
+        let $newsContainer: JQuery<HTMLElement> = $(
             '<section class="section--white" id="section--news"><div class="container-fluid"><div class="row justify-content-center"><div class="col col-12 col-xl-10 col-xxl-8 col-xxxl-6 my-4"><div class="teaser-news"><div class="row justify-content-between align-items-center"><div class="col col-12 col-md-6"><div class="teaser-news--header">Neues aus dem Open Roberta Lab</div><div class="teaser-news--body" id="teaser-news--rss"></div></div><div class="col col-12 col-md-6 col-lg-4 offset-md-0 offset-lg-2 mt-5 mt-md-0" id="teaser-news--rss-image"></div></div></div></div></div></div></section>'
         );
         $newsContainer.insertBefore('footer');
         $(response)
             .find('item')
-            .each(function () {
-                var $rssImage = $('<div class="teaser-news--body"></div>');
-                var rss_title = $(this).find('title').text();
-                var rss_description = $(this).find('description').text();
-                var rss_link = $(this).find('link').text();
-                var rss_image = $(this).find('enclosure').attr('url');
+            .each(function(): void {
+                let $rssImage: JQuery<HTMLElement> = $('<div class="teaser-news--body"></div>');
+                let rss_title: string = $(this).find('title').text();
+                let rss_description: string = $(this).find('description').text();
+                let rss_link: string = $(this).find('link').text();
+                let rss_image: string = $(this).find('enclosure').attr('url');
                 $rssImage.append('<div><img src="' + rss_image + '" /></div>');
                 $('#teaser-news--rss')
                     .append('<h3>' + rss_title + '</h3>')
