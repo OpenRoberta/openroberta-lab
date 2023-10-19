@@ -2,24 +2,24 @@ import * as GUISTATE_C from 'guiState.controller';
 import * as INTERPRETER from 'interpreter.interpreter';
 import * as WEDO_B from 'interpreter.robotWeDoBehaviour';
 import * as LOG from 'log';
+// @ts-ignore
 import * as Blockly from 'blockly';
 import * as $ from 'jquery';
 
-var ready;
-var aLanguage;
-var webViewType;
-var interpreter;
-var theRobotBehaviour;
+let ready: JQuery.Deferred<string, string, string>;
+let aLanguage: string;
+let webViewType: string;
+let interpreter: INTERPRETER.Interpreter;
+let theRobotBehaviour: WEDO_B.RobotWeDoBehaviour;
 
 /**
- * Init webview
+ * Init webviewbotWeDoBehaviour;
+
  */
-function init(language) {
+export function init(language: string): JQuery.Promise<string, string, string> {
     aLanguage = language;
     ready = $.Deferred();
-    var a = {};
-    a.target = 'internal';
-    a.type = 'identify';
+    let a: { target: string; type: string } = { target: 'internal', type: 'identify' };
     if (tryAndroid(a)) {
         webViewType = 'Android';
     } else if (tryIOS(a)) {
@@ -31,9 +31,9 @@ function init(language) {
     return ready.promise();
 }
 
-function appToJsInterface(jsonData) {
+export function appToJsInterface(jsonData: string): void {
     try {
-        var data = JSON.parse(jsonData);
+        let data: any = JSON.parse(jsonData); //Todo: exchange any
         if (!data.target || !data.type) {
             throw 'invalid arguments';
         }
@@ -54,15 +54,15 @@ function appToJsInterface(jsonData) {
                 $('#show-available-connections').trigger('connect', data);
                 theRobotBehaviour.update(data);
                 GUISTATE_C.setConnectionState('wait');
-                var bricklyWorkspace = GUISTATE_C.getBricklyWorkspace();
-                var blocks = bricklyWorkspace.getAllBlocks();
-                for (var i = 0; i < blocks.length; i++) {
+                let bricklyWorkspace: any = GUISTATE_C.getBricklyWorkspace();
+                let blocks: any[] = bricklyWorkspace.getAllBlocks();
+                for (let i: number = 0; i < blocks.length; i++) {
                     if (blocks[i].type === 'robBrick_WeDo-Brick') {
-                        var field = blocks[i].getField('VAR');
+                        let field: Blockly.field = blocks[i].getField('VAR');
                         field.setValue(data.brickname.replace(/\s/g, ''));
                         blocks[i].render();
-                        var dom = Blockly.Xml.workspaceToDom(bricklyWorkspace);
-                        var xml = Blockly.Xml.domToText(dom);
+                        let dom: HTMLElement = Blockly.Xml.workspaceToDom(bricklyWorkspace);
+                        let xml: XMLDocument = Blockly.Xml.domToText(dom);
                         GUISTATE_C.setConfigurationXML(xml);
                         break;
                     }
@@ -72,15 +72,15 @@ function appToJsInterface(jsonData) {
                 if (interpreter != undefined) {
                     interpreter.terminate();
                 }
-                var bricklyWorkspace = GUISTATE_C.getBricklyWorkspace();
-                var blocks = bricklyWorkspace.getAllBlocks();
-                for (var i = 0; i < blocks.length; i++) {
+                let bricklyWorkspace: any = GUISTATE_C.getBricklyWorkspace();
+                let blocks: any[] = bricklyWorkspace.getAllBlocks();
+                for (let i: number = 0; i < blocks.length; i++) {
                     if (blocks[i].type === 'robBrick_WeDo-Brick') {
-                        var field = blocks[i].getField('VAR');
+                        let field: Blockly.field = blocks[i].getField('VAR');
                         field.setValue(Blockly.Msg.ROBOT_DEFAULT_NAME_WEDO || Blockly.Msg.ROBOT_DEFAULT_NAME || 'Brick1');
                         blocks[i].render();
-                        var dom = Blockly.Xml.workspaceToDom(bricklyWorkspace);
-                        var xml = Blockly.Xml.domToText(dom);
+                        let dom: HTMLElement = Blockly.Xml.workspaceToDom(bricklyWorkspace);
+                        let xml: XMLDocument = Blockly.Xml.domToText(dom);
                         GUISTATE_C.setConfigurationXML(xml);
                         break;
                     }
@@ -97,21 +97,22 @@ function appToJsInterface(jsonData) {
     }
 }
 
-function callbackOnTermination() {
+function callbackOnTermination(): void {
     GUISTATE_C.setConnectionState('wait');
     GUISTATE_C.getBlocklyWorkspace().robControls.switchToStart();
 }
 
-function getInterpreter(program) {
-    interpreter = new INTERPRETER.Interpreter(program, theRobotBehaviour, callbackOnTermination, []);
+export function getInterpreter(program: any): INTERPRETER.Interpreter {
+    //Todo: exchange any
+    interpreter = new INTERPRETER.Interpreter(program, theRobotBehaviour, callbackOnTermination, [], null, null);
     return interpreter;
 }
 
-function isRobotConnected() {
+export function isRobotConnected(): boolean {
     return theRobotBehaviour && theRobotBehaviour.getConnectedBricks().length > 0;
 }
 
-function setRobotBehaviour() {
+export function setRobotBehaviour(): void {
     switch (GUISTATE_C.getRobot()) {
         case 'wedo':
             theRobotBehaviour = new WEDO_B.RobotWeDoBehaviour(jsToAppInterface, jsToDisplay);
@@ -121,11 +122,13 @@ function setRobotBehaviour() {
     }
 }
 
-function jsToAppInterface(jsonData) {
+export function jsToAppInterface(jsonData: any): void {
     try {
         if (webViewType === 'Android') {
+            // @ts-ignore
             OpenRoberta.jsToAppInterface(JSON.stringify(jsonData));
         } else if (webViewType === 'IOS') {
+            // @ts-ignore
             window.webkit.messageHandlers.OpenRoberta.postMessage(JSON.stringify(jsonData));
         } else {
             throw 'invalid webview type';
@@ -135,8 +138,9 @@ function jsToAppInterface(jsonData) {
     }
 }
 
-function tryAndroid(data) {
+function tryAndroid(data: any): boolean {
     try {
+        // @ts-ignore
         OpenRoberta.jsToAppInterface(JSON.stringify(data));
         return true;
     } catch (error) {
@@ -144,8 +148,9 @@ function tryAndroid(data) {
     }
 }
 
-function tryIOS(data) {
+function tryIOS(data: any): boolean {
     try {
+        // @ts-ignore
         window.webkit.messageHandlers.OpenRoberta.postMessage(JSON.stringify(data));
         return true;
     } catch (error) {
@@ -153,11 +158,11 @@ function tryIOS(data) {
     }
 }
 
-function jsToDisplay(action) {
+export function jsToDisplay(action: any): void {
     if (action.show !== undefined) {
         $('#showDisplayText').append('<div>' + action.show + '</div>');
         if (!$('#showDisplayText').is(':visible')) {
-            $('#showDisplay').oneWrap('hidden.bs.modal', function () {
+            $('#showDisplay').oneWrap('hidden.bs.modal', function (): void {
                 $('#showDisplayText').empty();
             });
             $('#showDisplay').modal('show');
@@ -167,4 +172,3 @@ function jsToDisplay(action) {
         $('#showDisplayText').empty();
     }
 }
-export { init, appToJsInterface, getInterpreter, isRobotConnected, setRobotBehaviour, jsToAppInterface, jsToDisplay };
