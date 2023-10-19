@@ -16,6 +16,7 @@ import * as $ from 'jquery';
 // @ts-ignore
 import * as Blockly from 'blockly';
 import { ISensor } from 'robot.sensors';
+import { WebAudioBase } from '../../roberta/ts/baseInterfaces';
 
 export abstract class ChassisMobile implements IUpdateAction, ISensor, IDrawable, IReset, ISimulationObstacle {
     abstract backLeft: PointRobotWorldBumped;
@@ -2422,7 +2423,7 @@ export class TTS implements IUpdateAction {
     }
 }
 
-export class WebAudio implements IUpdateAction {
+export class WebAudio implements WebAudioBase, IUpdateAction {
     context: AudioContext;
     gainNode: GainNode;
     tone = {

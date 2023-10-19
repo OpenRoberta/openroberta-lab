@@ -1,15 +1,15 @@
-import * as exports from 'exports';
 import * as LOG from 'log';
 import * as $ from 'jquery';
+// @ts-ignore
 import * as Blockly from 'blockly';
 
-var toastMessages = [];
-var toastDelay = 3000;
+let toastMessages: any[] = [];
+let toastDelay: JQuery.Duration = 3000;
 
 /**
  * Display popup messages
  */
-function displayPopupMessage(lkey, value, confirmMsg, opt_denyMsg) {
+function displayPopupMessage(lkey: string, value: string, confirmMsg: string, opt_denyMsg?: string): void {
     $('#confirm').attr('value', confirmMsg);
     if (opt_denyMsg) {
         $('#confirmCancel').attr('value', opt_denyMsg);
@@ -26,14 +26,14 @@ function displayPopupMessage(lkey, value, confirmMsg, opt_denyMsg) {
 /**
  * Display toast messages
  */
-function displayToastMessages() {
+function displayToastMessages(): void {
     $('#toastText').html(toastMessages[toastMessages.length - 1]);
     $('#toastContainer')
         .delay(100)
-        .fadeIn('slow', function () {
+        .fadeIn('slow', function(): void {
             $(this)
                 .delay(toastDelay)
-                .fadeOut('slow', function () {
+                .fadeOut('slow', function(): void {
                     toastMessages.pop();
                     if (toastMessages.length > 0) {
                         displayToastMessages();
@@ -52,9 +52,9 @@ function displayToastMessages() {
  * @param {replaceWith}
  *            Text to replace an optional '$' in the message-text
  */
-function displayMessage(messageId, output, replaceWith, opt_cancel, opt_robot) {
-    var cancel = opt_cancel || false;
-    var robot = '';
+function displayMessage(messageId: string | undefined, output: string, replaceWith: string, opt_cancel?: boolean | string, opt_robot?: any): void {
+    let cancel: boolean = typeof opt_cancel !== 'string' ? opt_cancel : false;
+    let robot: string = '';
     if (opt_robot) {
         robot = '_' + opt_robot.toUpperCase();
     }
@@ -64,8 +64,8 @@ function displayMessage(messageId, output, replaceWith, opt_cancel, opt_robot) {
             LOG.info('Invalid message-key received: ' + messageId);
         }
 
-        var lkey = 'Blockly.Msg.' + messageId + robot;
-        var value = Blockly.Msg[messageId + robot] || Blockly.Msg[messageId];
+        let lkey: string = 'Blockly.Msg.' + messageId + robot;
+        let value: string | undefined = Blockly.Msg[messageId + robot] || Blockly.Msg[messageId];
         if (value === undefined || value === '') {
             value = messageId;
         }
@@ -78,10 +78,11 @@ function displayMessage(messageId, output, replaceWith, opt_cancel, opt_robot) {
             }
         } else if (typeof replaceWith === 'object') {
             if (value.indexOf('$') >= 0) {
-                var keys = Object.keys(replaceWith);
+                let keys: string[] = Object.keys(replaceWith);
                 value = value.replace('$', replaceWith[keys[0]]);
             } else {
-                Object.keys(replaceWith).forEach(function (key) {
+                Object.keys(replaceWith).forEach(function(key: string): void {
+                    //@ts-ignore
                     if (replaceWith.hasOwnProperty(key)) {
                         value = value.replace('{' + key + '}', replaceWith[key]);
                     }
@@ -116,7 +117,7 @@ function displayMessage(messageId, output, replaceWith, opt_cancel, opt_robot) {
  * @param {messageParam}
  *            Parameter to be used in the message text.
  */
-function displayInformation(result, successMessage, errorMessage, messageParam, opt_robot) {
+function displayInformation(result: any, successMessage: string, errorMessage, messageParam?: any, opt_robot?: string): void {
     if (result.rc === 'ok') {
         $('.modal').modal('hide'); // close all opened popups
         displayMessage(successMessage, 'TOAST', messageParam, false, opt_robot);
