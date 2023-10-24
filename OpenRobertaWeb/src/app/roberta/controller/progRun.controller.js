@@ -360,10 +360,13 @@ function runForAgentConnection(result) {
     $('#head-navi-icon-robot').addClass('busy');
     GUISTATE_C.setState(result);
     if (result.rc == 'ok') {
-        SOCKET_C.uploadProgram(result.compiledCode, GUISTATE_C.getRobotPort());
-        setTimeout(function () {
-            GUISTATE_C.setConnectionState('error');
-        }, 5000);
+        //TODO TEST THIS
+        getBinaryStringFromURL(result.binaryURL).then((compiledCode) => {
+            SOCKET_C.uploadProgram(compiledCode, GUISTATE_C.getRobotPort());
+            setTimeout(function () {
+                GUISTATE_C.setConnectionState('error');
+            }, 5000);
+        });
     } else {
         GUISTATE_C.setConnectionState('error');
     }
@@ -443,24 +446,48 @@ function stopProgram() {
 function runForWebviewConnection(result) {
     MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName());
     if (result.rc === 'ok') {
-        var programSrc = result.compiledCode;
-        var program = JSON.parse(programSrc);
-        interpreter = WEBVIEW_C.getInterpreter(program);
-        if (interpreter !== null) {
-            GUISTATE_C.setConnectionState('busy');
-            blocklyWorkspace.robControls.switchToStop();
-            try {
-                runStepInterpreter();
-            } catch (error) {
-                interpreter.terminate();
-                interpreter = null;
-                alert(error);
+        getBinaryStringFromURL(result.binaryURL).then((compiledCode) => {
+            var program = JSON.parse(compiledCode);
+            interpreter = WEBVIEW_C.getInterpreter(program);
+            if (interpreter !== null) {
+                GUISTATE_C.setConnectionState('busy');
+                blocklyWorkspace.robControls.switchToStop();
+                try {
+                    runStepInterpreter();
+                } catch (error) {
+                    interpreter.terminate();
+                    interpreter = null;
+                    alert(error);
+                }
             }
-        }
-        // TODO
+        });
     }
 }
 
+/**
+ * Fetches binaryFile from a URL and returns it as a string.
+ *
+ * @param {string} url - The URL to fetch data from.
+ * @returns {Promise<string>} A promise that resolves to the binary string.
+ *
+ * @example
+ * // Using .then:
+ * getBinaryStringFromURL('your_url_here')
+ *   .then(compiledCode => {
+ *     console.log(compiledCode); // Use the compiledCode here
+ *   });
+ *   */
+async function getBinaryStringFromURL(url) {
+    const response = await fetch(url, { method: 'GET' });
+    const blob = await response.blob();
+    return await new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = function () {
+            resolve(reader.result);
+        };
+        reader.readAsText(blob);
+    });
+}
 function runStepInterpreter() {
     if (!interpreter.isTerminated() && !reset) {
         var maxRunTime = new Date().getTime() + 100;
