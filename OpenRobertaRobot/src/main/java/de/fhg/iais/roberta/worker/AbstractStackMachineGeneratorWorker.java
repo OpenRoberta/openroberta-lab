@@ -2,10 +2,12 @@ package de.fhg.iais.roberta.worker;
 
 import org.json.JSONObject;
 
+import de.fhg.iais.roberta.bean.CompilerSetupBean;
 import de.fhg.iais.roberta.bean.NNBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.util.Key;
+import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.basic.C;
 import de.fhg.iais.roberta.visitor.lang.codegen.AbstractStackMachineVisitor;
 
@@ -22,8 +24,10 @@ public abstract class AbstractStackMachineGeneratorWorker implements IWorker {
         visitor.generateCodeFromPhrases(project.getProgramAst().getTree());
         JSONObject generatedCode = new JSONObject();
         generatedCode.put(C.OPS, visitor.getCode());
+
         project.setSourceCode(generatedCode.toString(2));
-        project.setCompiledHex(generatedCode.toString(2));
+        Util.storeGeneratedProgram(project, "/tmp/", generatedCode.toString(2), project.getToken(), project.getProgramName(), "." + project.getBinaryFileExtension());
+
         project.setResult(Key.COMPILERWORKFLOW_PROGRAM_GENERATION_SUCCESS);
     }
 
