@@ -26,7 +26,7 @@ public abstract class AbstractStackMachineGeneratorWorker implements IWorker {
         generatedCode.put(C.OPS, visitor.getCode());
 
         project.setSourceCode(generatedCode.toString(2));
-        Util.storeGeneratedProgram(project, "/tmp/", generatedCode.toString(2), project.getToken(), project.getProgramName(), "." + project.getBinaryFileExtension());
+        project.setCompiledHex(generatedCode.toString(2));
 
         project.setResult(Key.COMPILERWORKFLOW_PROGRAM_GENERATION_SUCCESS);
     }

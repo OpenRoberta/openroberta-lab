@@ -177,12 +177,9 @@ public class ArduinoCompilerWorker implements ICompilerWorker {
                 default:
                     throw new DbcException("Unsupported file extension: " + project.getRobot());
             }
-            project.setCompiledHex(base64EncodedHex);
-            if ( project.getCompiledHex() != null ) {
-                resultKey = Key.COMPILERWORKFLOW_SUCCESS;
-            } else {
-                resultKey = Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
-            }
+            if ( project.getRobot().equals("bob3") || project.getRobot().equals("rob3rta") ) {
+                Util.storeGeneratedProgram(project, tempDir, base64EncodedHex, token, programName, "." + project.getBinaryFileExtension());
+            }    
         }
         project.setResult(resultKey);
         project.addResultParam("MESSAGE", result.getSecond());
