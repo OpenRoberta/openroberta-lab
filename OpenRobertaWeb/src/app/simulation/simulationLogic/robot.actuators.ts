@@ -602,6 +602,11 @@ export class RobotinoChassis extends ChassisMobile {
         let mY = Math.sin(robot.pose.theta) * tempXVel + Math.cos(robot.pose.theta) * tempYVel;
         let l = Math.sqrt(mX * mX + mY * mY);
         let a = (Math.atan2(mY, mX) + 2 * Math.PI) % (2 * Math.PI);
+        if (robot.interpreter.getRobotBehaviour().getBlocking() && this.bumpedAngle.length > 0) {
+            this.xVel = 0;
+            this.yVel = 0;
+            this.thetaVel = 0;
+        }
         for (let i = 0; i < this.bumpedAngle.length; i++) {
             if (Math.min(Math.abs(this.bumpedAngle[i] - a), 2 * Math.PI - Math.abs(this.bumpedAngle[i] - a)) < Math.PI) {
                 let x = l * Math.cos(this.bumpedAngle[i]);
