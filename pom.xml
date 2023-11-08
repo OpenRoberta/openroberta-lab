@@ -68,7 +68,7 @@
         <pluginRepository>
             <id>NM-releases</id>
             <name>Netmedia releases repository</name>
-            <url>https://maven.iais.fraunhofer.de/artifactory/nm-public-release</url>
+            <url>https://jfrog.iais.fraunhofer.de/artifactory/nm-public-release</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
