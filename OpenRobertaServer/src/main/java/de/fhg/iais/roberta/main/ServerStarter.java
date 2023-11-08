@@ -87,6 +87,8 @@ public class ServerStarter {
         initLoggingBeforeFirstUse(args);
 
         try {
+            // HyperSQL DataBase <2.7.1 vulnerable to remote code execution when processing untrusted input. This property remedies that.
+            System.setProperty("hsqldb.method_class_names", "java.lang.Math");
             OptionParser parser = new OptionParser();
             OptionSpec<String> serverDefineOpt = parser.acceptsAll(asList("d", "server-property")).withRequiredArg().ofType(String.class);
             OptionSpec<String> pluginDefineOpt = parser.acceptsAll(asList("D", "plugin-property")).withRequiredArg().ofType(String.class);
