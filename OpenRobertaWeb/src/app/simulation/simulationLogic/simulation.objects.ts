@@ -301,6 +301,7 @@ export class RectangleSimulationObject extends BaseSimulationObject {
                 ctx.shadowOffsetY = 5;
                 ctx.shadowOffsetX = 5;
                 ctx.shadowBlur = 5;
+                ctx.globalCompositeOperation = 'lighten';
                 if (!this._img) {
                     ctx.fillRect(this.x, this.y, this.w, this.h);
                 } else {
@@ -670,6 +671,7 @@ export class CircleSimulationObject extends BaseSimulationObject {
                 ctx.shadowOffsetY = 5;
                 ctx.shadowOffsetX = 5;
                 ctx.shadowBlur = 5;
+                ctx.globalCompositeOperation = 'lighten';
             }
             ctx.fillStyle = this.color;
             ctx.beginPath();
@@ -928,6 +930,7 @@ export class TriangleSimulationObject extends BaseSimulationObject {
                 ctx.shadowOffsetY = 5;
                 ctx.shadowOffsetX = 5;
                 ctx.shadowBlur = 5;
+                ctx.globalCompositeOperation = 'lighten';
             }
             ctx.fillStyle = this.color;
             ctx.beginPath();

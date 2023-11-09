@@ -269,6 +269,7 @@ define(["require", "exports", "jquery", "util", "simulation.roberta", "simulatio
                     ctx.shadowOffsetY = 5;
                     ctx.shadowOffsetX = 5;
                     ctx.shadowBlur = 5;
+                    ctx.globalCompositeOperation = 'lighten';
                     if (!this._img) {
                         ctx.fillRect(this.x, this.y, this.w, this.h);
                     }
@@ -623,6 +624,7 @@ define(["require", "exports", "jquery", "util", "simulation.roberta", "simulatio
                     ctx.shadowOffsetY = 5;
                     ctx.shadowOffsetX = 5;
                     ctx.shadowBlur = 5;
+                    ctx.globalCompositeOperation = 'lighten';
                 }
                 ctx.fillStyle = this.color;
                 ctx.beginPath();
@@ -872,6 +874,7 @@ define(["require", "exports", "jquery", "util", "simulation.roberta", "simulatio
                     ctx.shadowOffsetY = 5;
                     ctx.shadowOffsetX = 5;
                     ctx.shadowBlur = 5;
+                    ctx.globalCompositeOperation = 'lighten';
                 }
                 ctx.fillStyle = this.color;
                 ctx.beginPath();
