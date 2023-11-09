@@ -66,13 +66,16 @@ to download them to a user-defined directory, such as `/opt/compilers/`, as this
     * download and unpack [xtensa-esp32-elf](https://dl.espressif.com/dl/xtensa-esp32-elf-linux64-1.22.0-61-gab8375a-5.2.0.tar.gz) to a directory of your
       choice.
 
-Next, add all of the downloaded binaries to the `PATH`. The `<path-to-the-compiler-folder>` should be replaced with the download directory (created earlier)
-followed by the compiler folder:
+Next, add all of the downloaded binaries to the `PATH`. The `<path-to-the-bin-folder>` should be replaced with the download directory (created earlier)
+followed by the path to the bin folder in each compiler folder:
 
 ```shell
-echo export PATH="$PATH:<path-to-the-compiler-folder>/bin" >> ~/.profile`
+echo export PATH="$PATH:<path-to-the-bin-folder>" >> ~/.profile
+source .profile
 ```
 
+use `source .profile` to execute your changes.
+use `echo $PATH` to verify that the `PATH` is updated correctly.
 #### Resources
 
 The cross-compiler need resources to work properly (header files, libraries, ...). These resources change little over time and are stored in
@@ -80,6 +83,12 @@ the '[ora-cc-rsc](https://github.com/OpenRoberta/ora-cc-rsc)' repository.
 
 Please clone that directory and build it using `mvn clean install`. If the resources are not available, everything works fine, but running programs on real
 robots doesn't work, because the cross-compiler will fail.
+
+After successfully building the directory, make sure to add its path to `robot_crosscompiler_resourcebase` variable:
+
+```shell
+echo export robot_crosscompiler_resourcebase="<path-to-ora-cc-rsc-folder>" >> ~/.bashrc
+```
 
 ### Installation
 
