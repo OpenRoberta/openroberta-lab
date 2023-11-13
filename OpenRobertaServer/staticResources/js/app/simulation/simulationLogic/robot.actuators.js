@@ -557,6 +557,11 @@ define(["require", "exports", "interpreter.constants", "simulation.math", "guiSt
             var mY = Math.sin(robot.pose.theta) * tempXVel + Math.cos(robot.pose.theta) * tempYVel;
             var l = Math.sqrt(mX * mX + mY * mY);
             var a = (Math.atan2(mY, mX) + 2 * Math.PI) % (2 * Math.PI);
+            if (robot.interpreter.getRobotBehaviour().getBlocking() && this.bumpedAngle.length > 0) {
+                this.xVel = 0;
+                this.yVel = 0;
+                this.thetaVel = 0;
+            }
             for (var i = 0; i < this.bumpedAngle.length; i++) {
                 if (Math.min(Math.abs(this.bumpedAngle[i] - a), 2 * Math.PI - Math.abs(this.bumpedAngle[i] - a)) < Math.PI) {
                     var x = l * Math.cos(this.bumpedAngle[i]);
