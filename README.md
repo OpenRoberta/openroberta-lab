@@ -70,12 +70,47 @@ Next, add all of the downloaded binaries to the `PATH`. The `<path-to-the-bin-fo
 followed by the path to the bin folder in each compiler folder:
 
 ```shell
-echo export PATH="$PATH:<path-to-the-bin-folder>" >> ~/.profile
-source .profile
+echo export 'PATH="$PATH:<path-to-the-bin-folder>"' >> ~/.profile
+source ~/.profile
 ```
 
-use `source .profile` to execute your changes.
+use `source ~/.profile` to execute your changes.
 use `echo $PATH` to verify that the `PATH` is updated correctly.
+
+Make sure to execute `source ~/.profile` again after closing your terminal for future uses.
+
+The compiler versions have to be as listed below, to check the compiler installations execute:
+
+```shell
+xtensa-esp32-elf-g++ --version 
+#>> 5.2.0
+arm-none-eabi-g++ --version 
+#>> 10.3.1 
+avr-gcc --version 
+#>> 7.3.0
+```
+
+The other installed package versions should be similar or equal to the versions listed below, to check the other installed components execute:
+
+```shell
+dpkg -l | grep libusb-0.1-4 
+#>> 2:0.1.12-32build3
+dpkg -l | grep binutils-avr 
+#>> 2.26.20160125+Atmel3.6.2-4
+avr-gdb --version 
+#>> 10.1.90.20210103-git
+avrdude -v 
+#>> 6.3-20171130
+nbc --version 
+#>> 1.2
+dpkg -l | grep libssl-dev  
+#>> 3.0.2
+dpkg -l | grep srecord 
+#>> 1.64-3
+dpkg -l | grep g++-arm-linux-gnueabi 
+#>> 4:11.2.0
+```
+
 #### Resources
 
 The cross-compiler need resources to work properly (header files, libraries, ...). These resources change little over time and are stored in
