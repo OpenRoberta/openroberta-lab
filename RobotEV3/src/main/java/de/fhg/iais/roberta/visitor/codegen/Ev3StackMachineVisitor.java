@@ -122,7 +122,6 @@ public class Ev3StackMachineVisitor extends AbstractStackMachineVisitor implemen
     @Override
     public Void visitClearDisplayAction(ClearDisplayAction clearDisplayAction) {
         JSONObject o = makeNode(C.CLEAR_DISPLAY_ACTION);
-
         return add(o);
     }
 

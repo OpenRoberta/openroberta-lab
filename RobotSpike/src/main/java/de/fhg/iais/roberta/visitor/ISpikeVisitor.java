@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.visitor;
 
 import de.fhg.iais.roberta.syntax.action.light.RgbLedOffHiddenAction;
 import de.fhg.iais.roberta.syntax.action.light.RgbLedOnHiddenAction;
+import de.fhg.iais.roberta.syntax.action.motor.MotorOnForAction;
 import de.fhg.iais.roberta.syntax.action.spike.DisplayClearAction;
 import de.fhg.iais.roberta.syntax.action.spike.DisplayImageAction;
 import de.fhg.iais.roberta.syntax.action.spike.DisplayTextAction;
@@ -13,7 +14,6 @@ import de.fhg.iais.roberta.syntax.action.spike.MotorDiffStopAction;
 import de.fhg.iais.roberta.syntax.action.spike.MotorDiffTurnAction;
 import de.fhg.iais.roberta.syntax.action.spike.MotorDiffTurnForAction;
 import de.fhg.iais.roberta.syntax.action.spike.MotorOnAction;
-import de.fhg.iais.roberta.syntax.action.spike.MotorOnForAction;
 import de.fhg.iais.roberta.syntax.action.spike.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.spike.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.spike.PlayToneAction;

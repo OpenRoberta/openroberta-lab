@@ -1,0 +1,186 @@
+<export xmlns="http://de.fhg.iais.roberta.blockly">
+    <program>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="txt4" xmlversion="3.1" description="" tags="">
+            <instance x="410" y="50">
+                <block type="robControls_start" id="1" intask="true" deletable="false">
+                    <mutation declare="false"></mutation>
+                    <field name="DEBUG"></field>
+                </block>
+                <block type="robActions_serial_print" id="~{;VNeF~%D5g.b99tY1c" intask="true">
+                    <value name="OUT">
+                        <block type="text" id="C?!l]WNSWbLXoqxBom9}" intask="true">
+                            <field name="TEXT">LED on port O5 test</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robActions_serial_print" id="?[xqYoMsTm1RAE8I^zEi" intask="true">
+                    <value name="OUT">
+                        <block type="text" id="I(r%etL,_RC`^d2MV0dk" intask="true">
+                            <field name="TEXT">LED ON</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_led_set_brightness" id="tA,`w}IpkGYo*nN-TH#0" intask="true">
+                    <field name="ACTORPORT">L</field>
+                    <value name="BRIGHTNESS">
+                        <block type="math_number" id="Dy#ytr1sQ2WFyWrdDQ_!" intask="true">
+                            <field name="NUM">100</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robControls_wait_time" id=")u:DQv`.4ae.~*4#4,id" intask="true">
+                    <value name="WAIT">
+                        <block type="math_number" id="?@fe.UOFFtf%3;?I@ce#" intask="true">
+                            <field name="NUM">2000</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robActions_serial_print" id="|#A*7~H5EayVJG,;H:iJ" intask="true">
+                    <value name="OUT">
+                        <block type="text" id="aV@Gxq[(b/9%;);MaUlW" intask="true">
+                            <field name="TEXT">LED OFF</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_led_set_brightness" id="-K)Kzeg1WMo+;#bUr04w" intask="true">
+                    <field name="ACTORPORT">L</field>
+                    <value name="BRIGHTNESS">
+                        <block type="math_number" id="*M97qxehI1knd2kZ7DF=" intask="true">
+                            <field name="NUM">0</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robControls_for" id="ACDv0o8!,%c)x?FE*;/:" intask="true">
+                    <field name="VAR">i</field>
+                    <value name="FROM">
+                        <block type="math_number" id="aea*zpmq,eeOJ(RpJo.u" intask="true">
+                            <field name="NUM">1</field>
+                        </block>
+                    </value>
+                    <value name="TO">
+                        <block type="math_number" id="xp.Md:7uk+{:kz~RJTFz" intask="true">
+                            <field name="NUM">100</field>
+                        </block>
+                    </value>
+                    <value name="BY">
+                        <block type="math_number" id="I/^KuO%IG%]2;2^vu.Z-" intask="true">
+                            <field name="NUM">1</field>
+                        </block>
+                    </value>
+                    <statement name="DO">
+                        <block type="robActions_serial_print" id="5?EszHvh5.^r5VJeYFtb" intask="true">
+                            <value name="OUT">
+                                <block type="robText_join" id=".V00k,u.Bx%r+0F`+a}Y" intask="true">
+                                    <mutation items="2"></mutation>
+                                    <value name="ADD0">
+                                        <block type="text" id="s#B@CBC2PPlYGpFr-3?Q" intask="true">
+                                            <field name="TEXT">Brightness =</field>
+                                        </block>
+                                    </value>
+                                    <value name="ADD1">
+                                        <block type="variables_get" id="Dv1O=}=R@Xr*?g9{OIwn" intask="true">
+                                            <mutation datatype="Number"></mutation>
+                                            <field name="VAR">i</field>
+                                        </block>
+                                    </value>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="actions_led_set_brightness" id="sqpv3ww-S?+Tz4CdY_0m" intask="true">
+                            <field name="ACTORPORT">L</field>
+                            <value name="BRIGHTNESS">
+                                <block type="variables_get" id="^;YoKN-`7VE]hf{s^QZy" intask="true">
+                                    <mutation datatype="Number"></mutation>
+                                    <field name="VAR">i</field>
+                                </block>
+                            </value>
+                        </block>
+                    </statement>
+                </block>
+                <block type="robActions_serial_print" id="DInOq=3@g?j/hrV(ls|3" intask="true">
+                    <value name="OUT">
+                        <block type="text" id="Zi/e=-@,HWb_L;cGUwVe" intask="true">
+                            <field name="TEXT">DONE</field>
+                        </block>
+                    </value>
+                </block>
+            </instance>
+        </block_set>
+    </program>
+    <config>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="txt4" xmlversion="" description="" tags="">
+            <instance x="70" y="103">
+                <block type="robConf_differentialdrive" id="AM=n{?7R#nO#1~?a3j~u" intask="true">
+                    <field name="NAME">_D</field>
+                    <field name="BRICK_WHEEL_DIAMETER">6</field>
+                    <field name="BRICK_TRACK_WIDTH">15</field>
+                    <field name="MOTOR_L">M1</field>
+                    <field name="MOTOR_R">M2</field>
+                </block>
+            </instance>
+            <instance x="350" y="103">
+                <block type="robConf_encodermotor_txt4" id="`CW3f_/xL#;Z!)*[EZz@" intask="true">
+                    <field name="NAME">ML</field>
+                    <field name="PORT">M1</field>
+                    <statement name="ENCODER">
+                        <block type="robConf_encoder" id="S(Xm/UHHH;N[4Km1TML1" intask="true">
+                            <field name="NAME">EL</field>
+                            <field name="PORT">C1</field>
+                        </block>
+                    </statement>
+                </block>
+            </instance>
+            <instance x="600" y="103">
+                <block type="robConf_encodermotor_txt4" id="S(Xm/UHHH;N[4Km1TML0" intask="true">
+                    <field name="NAME">MR</field>
+                    <field name="PORT">M2</field>
+                    <statement name="ENCODER">
+                        <block type="robConf_encoder" id="8Y2Lj021taCbo-KIP:RM" intask="true">
+                            <field name="NAME">ER</field>
+                            <field name="PORT">C2</field>
+                        </block>
+                    </statement>
+                </block>
+            </instance>
+            <instance x="350" y="310">
+                <block type="robConf_display" id="DI" intask="true" deletable="false">
+                    <field name="NAME">_B</field>
+                </block>
+            </instance>
+            <instance x="70" y="360">
+                <block type="robConf_camera_txt4" id="CAM" intask="true">
+                    <field name="NAME">C</field>
+                    <field name="COLOURSIZE">30</field>
+                    <field name="MOTION">2</field>
+                    <field name="PORT">USB1</field>
+                    <value name="COLOUR">
+                        <block type="robColour_picker" id="COL" intask="true" deletable="false">
+                            <field name="COLOUR">#FFA500</field>
+                        </block>
+                    </value>
+                </block>
+            </instance>
+            <instance x="350" y="360">
+                <block type="robConf_infrared" id="L" intask="true">
+                    <field name="NAME">I</field>
+                    <field name="PORTL">I1</field>
+                    <field name="PORTR">I2</field>
+                </block>
+            </instance>
+            <instance x="640" y="417">
+                <block type="robConf_led" id="(PeVNj%V2CUY2kzAHHis" intask="true">
+                    <field name="NAME">L</field>
+                    <field name="PORT">O5</field>
+                    <field name="GND">GND</field>
+                </block>
+            </instance>
+            <instance x="350" y="460">
+                <block type="robConf_ultrasonic" id="U" intask="true">
+                    <field name="NAME">U</field>
+                    <field name="PORT">I3</field>
+                    <field name="VCC">9V</field>
+                </block>
+            </instance>
+        </block_set>
+    </config>
+</export>

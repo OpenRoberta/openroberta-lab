@@ -62,12 +62,14 @@ export abstract class RobotBaseMobile extends RobotBase {
     private _pose: Pose;
     private _thetaDiff: number = 0;
     private isDown: boolean = false;
+    override readonly imgList = ['simpleBackground', 'drawBackground', 'robertaBackground', 'rescueBackground', 'blank', 'mathBackground'];
+
     protected mouse = {
         x: -5,
         y: 0,
         rx: 0,
         ry: 0,
-        r: 30
+        r: 30,
     };
 
     protected constructor(id: number, configuration: object, interpreter: Interpreter, savedName: string, mySelectionListener: SelectionListener) {

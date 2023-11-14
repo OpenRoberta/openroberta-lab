@@ -3,6 +3,7 @@ import { State } from './interpreter.state';
 import * as C from './interpreter.constants';
 import * as U from './interpreter.util';
 import * as UTIL from 'util.roberta';
+import * as SIMATH from 'simulation.math';
 
 declare global {
     var rob3rtaNumber: number;
@@ -517,5 +518,15 @@ export class RobotSimBehaviour extends ARobotBehaviour {
 
     temperatureLedAction(blue: number, red: number): void {
         this.hardwareState.actions.temperatureLeds = [red, blue];
+    }
+
+    colourCompare(colour1: number[], colour2: number[], tolerance: number): boolean {
+        if (colour1.length !== 3 || colour2.length !== 3) {
+            return false;
+        }
+        let hsv1 = SIMATH.rgbToHsv(colour1[0], colour1[1], colour1[2]);
+        let hsv2 = SIMATH.rgbToHsv(colour2[0], colour2[1], colour2[2]);
+        let hueDistance = Math.min(Math.abs(hsv1[0] - hsv2[0]), 360 - Math.abs(hsv1[0] - hsv2[0]));
+        return hueDistance <= tolerance / 2;
     }
 }

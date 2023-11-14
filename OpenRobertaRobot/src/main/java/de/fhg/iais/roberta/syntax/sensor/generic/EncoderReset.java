@@ -5,7 +5,7 @@ import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
 import de.fhg.iais.roberta.transformer.forField.NepoField;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 
-@NepoPhrase(name = "ENCODER_RESET", category = "SENSOR", blocklyNames = {"robSensors_encoder_reset"})
+@NepoPhrase(name = "ENCODER_RESET", category = "SENSOR", blocklyNames = {"robSensors_encoder_reset", "robSensors_encoder_reset_txt4"})
 public final class EncoderReset extends Sensor {
 
     @NepoField(name = "SENSORPORT")

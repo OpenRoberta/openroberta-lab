@@ -2,10 +2,10 @@ package de.fhg.iais.roberta.visitor;
 
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.display.ShowTextAction;
+import de.fhg.iais.roberta.syntax.action.light.LedBrightnessAction;
 import de.fhg.iais.roberta.syntax.action.mbot2.CommunicationReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbot2.CommunicationSendAction;
 import de.fhg.iais.roberta.syntax.action.mbot2.DisplaySetColourAction;
-import de.fhg.iais.roberta.syntax.action.mbot2.LedBrightnessAction;
 import de.fhg.iais.roberta.syntax.action.mbot2.Mbot2RgbLedOffHiddenAction;
 import de.fhg.iais.roberta.syntax.action.mbot2.Mbot2RgbLedOnHiddenAction;
 import de.fhg.iais.roberta.syntax.action.mbot2.PlayRecordingAction;

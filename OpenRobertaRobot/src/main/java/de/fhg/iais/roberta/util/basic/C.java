@@ -363,4 +363,5 @@ public class C {
     public static final String WRITE_PIN_ACTION = "writePinAction";
     public static final String X = "x";
     public static final String Y = "y";
+    public static final String COLOUR_COMPARE = "compareColour";
 }

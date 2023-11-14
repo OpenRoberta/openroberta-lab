@@ -1,0 +1,265 @@
+include: "classpath:/common.methods.yml"
+
+## FunctionNames
+
+MOTORSTART:
+  PYTHON: |
+    def motor_start(motor, speed):
+        motor.set_speed(int((speed / 100) * 512), Motor.CCW)
+        motor.start()
+
+MOTORSTARTFOR:
+  PYTHON: |
+    def motor_start_for(motor, speed, degrees):
+        steps = int((degrees / 360) * STEPS_PER_ROTATION)
+        motor.set_speed(int((speed / 100) * 512), Motor.CCW)
+        motor.set_distance(steps)
+        while True:
+            if not motor.is_running():
+                break
+            time.sleep(0.010)
+        motor.stop()
+
+DIFFERENTIALDRIVE:
+  PYTHON: |
+    def diffdrive(speed):
+        speed = int((speed / 100) * 512)
+        left_motor.set_speed(speed, Motor.CCW)
+        right_motor.set_speed(speed, Motor.CCW)
+        left_motor.start_sync(right_motor)
+    
+DIFFERENTIALDRIVECURVE:
+  PYTHON: |
+    def diffdrive_curve(speed_l, speed_r):
+        motor_start(left_motor, speed_l)
+        motor_start(right_motor, speed_r)
+
+OMNIDRIVECURVE:
+  PYTHON: |
+    def omnidrive_curve(speed_fl, speed_fr, speed_rl, speed_rr):
+        motor_start(front_left_motor, speed_fl)
+        motor_start(front_right_motor, speed_fr)
+        motor_start(rear_left_motor, speed_rl)
+        motor_start(rear_right_motor, speed_rr)
+
+DIFFERENTIALDRIVEDISTANCE:
+  PYTHON: |
+    def diffdrive_distance(distance, speed_l, speed_r):
+        if distance < 0:
+            speed_l = -speed_l
+            speed_r = -speed_r
+        left_direction = 1 if speed_l > 0 else -1
+        right_direction = 1 if speed_r > 0 else -1
+        diffdrive_curve(speed_l, speed_r)
+        wheel_circumference = WHEEL_DIAMETER * math.pi
+        time.sleep(0.010)
+        while True:
+            distance_left = left_direction * (wheel_circumference * left_motor.get_distance() / STEPS_PER_ROTATION)
+            distance_right = right_direction * (wheel_circumference * right_motor.get_distance() / STEPS_PER_ROTATION)
+            distance_traveled = (distance_left + distance_right) / 2
+            if abs(distance_traveled) >= abs(distance):
+                left_motor.stop_sync(right_motor)
+                break
+            time.sleep(0.010)
+
+OMNIDRIVECURVEDISTANCE:
+  PYTHON: |
+    def omnidrive_curve_distance(distance, speed_l, speed_r):
+        if distance < 0:
+            speed_l = -speed_l
+            speed_r = -speed_r
+        left_direction = 1 if speed_l > 0 else -1
+        right_direction = 1 if speed_r > 0 else -1
+        omnidrive_curve(speed_l, speed_r, speed_l, speed_r)
+        wheel_circumference = WHEEL_DIAMETER * math.pi
+        time.sleep(0.010)
+        while True:
+            distance_left = left_direction * (wheel_circumference * front_left_motor.get_distance() / STEPS_PER_ROTATION)
+            distance_right = right_direction * (wheel_circumference * front_right_motor.get_distance() / STEPS_PER_ROTATION)
+            distance_traveled = (distance_left + distance_right) / 2
+            if abs(distance_traveled) >= abs(distance):
+                front_left_motor.stop_sync(front_right_motor, rear_left_motor, rear_right_motor)
+                break
+            time.sleep(0.010)
+
+OMNIDRIVESTRAIGHTDISTANCE:
+  PYTHON: |
+    def omnidrive_straight_distance(distance, speed_fl, speed_fr, speed_rl, speed_rr):
+        direction = 1
+        if distance < 0:
+            direction = -1
+            distance = abs(distance)
+        constant = WHEEL_DIAMETER / (2 * 4)
+        distance_per_wheel = distance / constant / 4
+        steps_per_wheel = int(distance_per_wheel / (2 * math.pi) * STEPS_PER_ROTATION)
+        front_left_motor.set_speed(int((direction * speed_fl / 100) * 512), Motor.CCW)
+        front_right_motor.set_speed(int((direction * speed_fr / 100) * 512), Motor.CCW)
+        rear_left_motor.set_speed(int((direction * speed_rl / 100) * 512), Motor.CCW)
+        rear_right_motor.set_speed(int((direction * speed_rr / 100) * 512), Motor.CCW)
+        front_left_motor.set_distance(steps_per_wheel, front_right_motor, rear_left_motor, rear_right_motor)
+        while True:
+            if (not front_left_motor.is_running()
+            and not front_right_motor.is_running()
+            and not rear_left_motor.is_running()
+            and not rear_right_motor.is_running()):
+                break
+            time.sleep(0.010)
+        front_left_motor.stop_sync(front_right_motor, rear_left_motor, rear_right_motor)
+
+OMNIDRIVEDIAGONALTLDISTANCE:
+  PYTHON: |
+    def omnidrive_diagonal_tl_distance(distance, speed):
+        if distance < 0:
+            speed = -speed
+            distance = abs(distance)
+        speed = int((speed / 100) * 512)
+        constant = WHEEL_DIAMETER / (2 * 4)
+        distance_per_wheel = math.sqrt(1 / 2 * math.pow(distance, 2)) / constant / 4
+        steps_per_wheel = int(distance_per_wheel / (2 * math.pi) * STEPS_PER_ROTATION) * 2
+    
+        front_left_motor.stop_sync(rear_right_motor)
+        front_right_motor.set_speed(speed, Motor.CCW)
+        rear_left_motor.set_speed(speed, Motor.CCW)
+        front_right_motor.set_distance(steps_per_wheel, rear_left_motor)
+        while True:
+            if not front_right_motor.is_running() and not rear_left_motor.is_running():
+                break
+            time.sleep(0.010)
+        front_left_motor.stop_sync(front_right_motor, rear_left_motor, rear_right_motor)
+
+OMNIDRIVEDIAGONALTRDISTANCE:
+  PYTHON: |
+    def omnidrive_diagonal_tr_distance(distance, speed):
+        if distance < 0:
+            speed = -speed
+            distance = abs(distance)
+        speed = int((speed / 100) * 512)
+        constant = WHEEL_DIAMETER / (2 * 4)
+        distance_per_wheel = math.sqrt(1 / 2 * math.pow(distance, 2)) / constant / 4
+        steps_per_wheel = int(distance_per_wheel / (2 * math.pi) * STEPS_PER_ROTATION) * 2
+        front_right_motor.stop_sync(rear_left_motor)
+    
+        front_left_motor.set_speed(speed, Motor.CCW)
+        rear_right_motor.set_speed(speed, Motor.CCW)
+        front_left_motor.set_distance(steps_per_wheel, rear_right_motor)
+        while True:
+            if not front_left_motor.is_running() and not rear_right_motor.is_running():
+                break
+            time.sleep(0.010)
+        front_left_motor.stop_sync(front_right_motor, rear_left_motor, rear_right_motor)
+
+OMNIDRIVETURNDEGREES:
+  PYTHON: |
+    def omnidrive_turn_degrees(speed, degrees):
+        if degrees < 0:
+            speed = -speed
+            degrees = abs(degrees)
+        speed = int((speed / 100) * 512)
+        rotations = (WHEEL_DIAMETER * math.pi * degrees) / (360 * TRACK_WIDTH)
+        steps_per_wheel = int(rotations * STEPS_PER_ROTATION)
+    
+        front_left_motor.set_speed(speed, Motor.CCW)
+        front_right_motor.set_speed(speed, Motor.CW)
+        rear_left_motor.set_speed(speed, Motor.CCW)
+        rear_right_motor.set_speed(speed, Motor.CW)
+        front_left_motor.set_distance(steps_per_wheel, front_right_motor, rear_left_motor, rear_right_motor)
+        while True:
+            if (not front_left_motor.is_running()
+            and not front_right_motor.is_running()
+            and not rear_left_motor.is_running()
+            and not rear_right_motor.is_running()):
+                break
+            time.sleep(0.010)
+        front_left_motor.stop_sync(front_right_motor, rear_left_motor, rear_right_motor)
+
+DIFFDRIVETURNDEGREES:
+  PYTHON: |
+    def diffdrive_turn_degrees(speed, degrees):
+        if degrees < 0:
+            speed = -speed
+            degrees = abs(degrees)
+        speed = int((speed / 100) * 512)
+        arc_length = math.radians(degrees) * (TRACK_WIDTH / 2)
+        rotations = arc_length / (WHEEL_DIAMETER * math.pi)
+        steps_per_wheel = int(rotations * STEPS_PER_ROTATION)
+    
+        left_motor.set_speed(speed, Motor.CCW)
+        right_motor.set_speed(speed, Motor.CW)
+        left_motor.set_distance(steps_per_wheel, right_motor)
+        while True:
+            if not left_motor.is_running() and not right_motor.is_running():
+                break
+            time.sleep(0.010)
+        left_motor.stop_sync(right_motor)
+
+
+DISPLAYLEDON:
+  PYTHON: |
+    def led_on(color_hex):
+        global current_led
+        color_led = get_closest_color(color_hex) + "Led"
+        if color_led != current_led:
+            display.set_attr(color_led + ".visible", str(True).lower())
+            display.set_attr(current_led + ".visible", str(False).lower())
+            current_led = color_led
+        display.set_attr(current_led + ".active", str(True).lower())
+    
+    def get_closest_color(hex_value):
+        r, g, b = (hex_value >> i & 0xFF for i in (16, 8, 0))
+        color_diffs = []
+        for name, color in led_colors.items():
+            cr, cg, cb = (color >> i & 0xFF for i in (16, 8, 0))
+            distance = math.sqrt((r - cr) ** 2 + (g - cg) ** 2 + (b - cb) ** 2)
+            color_diffs.append((distance, name))
+        return min(color_diffs)[1]
+
+CAMERAGETCOLOUR:
+  PYTHON: |
+    def get_camera_colour():
+        if color_detector.detected():
+            result = color_detector.get_result().value.get_hex()
+            return int(result[1:], 16)
+        else:
+            return -1
+
+LINEGETCOLOUR:
+  PYTHON: |
+    def get_line_colour(index):
+        line = line_detector.get_line_by_index(index)
+        if line:
+            colour = line.color.get_hex()
+            return int(colour[1:], 16)
+        else:
+            return -1
+
+LINEINFORMATION:
+  PYTHON: |
+    def get_line_information(index):
+        line = line_detector.get_line_by_index(index)
+        if line is not None:
+            return [line.position, line.width]
+        else:
+            return [-1, -1]
+
+BALLINFORMATION:
+  PYTHON: |
+    def get_ball_information():
+        if ball_detector.detected():
+            return [ball_detector.get_center_x(),
+                    ball_detector.get_center_y(),
+                    ball_detector.get_diameter()]
+        return [-1, -1, -1]
+
+COLOURCOMPARE:
+  PYTHON: |
+    def compare_colour(hex1, hex2, tolerance):
+        hex_1_as_string = "#{:06x}".format(hex1 & 0xFFFFFF)
+        hex_2_as_string = "#{:06x}".format(hex2 & 0xFFFFFF)
+        color_1 = Color(hex=hex_1_as_string)
+        return color_1.compare(hex=hex_2_as_string, hue_tolerance=tolerance)
+
+CLEARDISPLAY:
+  PYTHON: |
+    def clear_display():
+        for i in range(8):
+            display.set_attr("line" + str(i) + ".text", "")

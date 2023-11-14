@@ -9,7 +9,6 @@ import { CircleSimulationObject, MarkerSimulationObject } from 'simulation.objec
 import * as Blockly from 'blockly';
 // @ts-ignore
 import * as VolumeMeter from 'volume-meter';
-import * as $ from 'jquery';
 import { SimulationRoberta } from 'simulation.roberta';
 import RobotRobotino from 'robot.robotino';
 
@@ -291,7 +290,7 @@ export class UltrasonicSensor extends DistanceSensor {
             ' ' +
             Blockly.Msg['SENSOR_ULTRASONIC'] +
             '</label><span>' +
-            UTIL.roundUltraSound(this.distance / 3.0, 0) +
+            UTIL.round(this.distance / 3.0, 0) +
             ' cm</span></div>'
         );
     }
@@ -331,13 +330,7 @@ export class InfraredSensor extends DistanceSensor {
     getLabel(): string {
         if (this.name) {
             return (
-                '<div><label>' +
-                this.name +
-                ' ' +
-                Blockly.Msg['SENSOR_INFRARED'] +
-                '</label><span>' +
-                UTIL.roundUltraSound(this.distance / 3.0, 0) +
-                ' cm</span></div>'
+                '<div><label>' + this.name + ' ' + Blockly.Msg['SENSOR_INFRARED'] + '</label><span>' + UTIL.round(this.distance / 3.0, 0) + ' cm</span></div>'
             );
         }
         return (
@@ -346,7 +339,7 @@ export class InfraredSensor extends DistanceSensor {
             ' ' +
             Blockly.Msg['SENSOR_INFRARED'] +
             '</label><span>' +
-            UTIL.roundUltraSound(this.distance / 3.0, 0) +
+            UTIL.round(this.distance / 3.0, 0) +
             ' cm</span></div>'
         );
     }
@@ -395,7 +388,7 @@ export class ThymioInfraredSensor extends InfraredSensor {
             distance = 100.0;
         }
         distance = UTIL.round(distance, 0);
-        return '<div><label>&nbsp;-&nbsp;' + this.name + '</label><span>' + UTIL.roundUltraSound(distance, 0) + ' %</span></div>';
+        return '<div><label>&nbsp;-&nbsp;' + this.name + '</label><span>' + UTIL.round(distance, 0) + ' %</span></div>';
     }
 
     override updateSensor(
@@ -442,11 +435,7 @@ export class EdisonInfraredSensor extends InfraredSensor {
         const distance = this.distance / 3.0;
         values['infrared'] = values['infrared'] || {};
         values['infrared'][this.port] = values['infrared'][this.port] ? values['infrared'][this.port] : {};
-        if (distance < this.maxDistance) {
-            values['infrared'][this.port]['obstacle'] = true;
-        } else {
-            values['infrared'][this.port]['obstacle'] = false;
-        }
+        values['infrared'][this.port]['obstacle'] = distance < this.maxDistance;
     }
 }
 
@@ -456,7 +445,6 @@ export class LineSensor implements ISensor, IDrawable, ILabel {
     readonly color: string;
     drawPriority: number = 4;
     labelPriority: number = 4;
-    readonly port: string;
     readonly theta: number;
     readonly x: number;
     readonly y: number;
@@ -532,48 +520,44 @@ export class LineSensor implements ISensor, IDrawable, ILabel {
         values['infrared'] = values['infrared'] || {};
         let infraredSensor = this;
         function setValue(side: string, location: Point) {
-            var red = 0;
-            var green = 0;
-            var blue = 0;
-            var colors = uCtx.getImageData(
+            let red = 0;
+            let green = 0;
+            let blue = 0;
+            const colors = uCtx.getImageData(
                 Math.round(location.x - infraredSensor.radius),
                 Math.round(location.y - infraredSensor.radius),
                 infraredSensor.diameter,
                 infraredSensor.diameter
             );
-            var colorsD = udCtx.getImageData(
+            const colorsD = udCtx.getImageData(
                 Math.round(location.x - infraredSensor.radius),
                 Math.round(location.y - infraredSensor.radius),
                 infraredSensor.diameter,
                 infraredSensor.diameter
             );
-            for (var i = 0; i <= colors.data.length; i += 4) {
+            for (let i = 0; i <= colors.data.length; i += 4) {
                 if (colorsD.data[i + 3] === 255) {
-                    for (var j = i; j < i + 3; j++) {
+                    for (let j = i; j < i + 3; j++) {
                         colors.data[j] = colorsD.data[j];
                     }
                 }
             }
-            for (var j = 0; j < colors.data.length; j += 12) {
-                for (var i = j; i < j + 12; i += 4) {
+            for (let j = 0; j < colors.data.length; j += 12) {
+                for (let i = j; i < j + 12; i += 4) {
                     if (infraredSensor.in.indexOf(i) >= 0) {
-                        red += colors.data[i + 0];
+                        red += colors.data[i];
                         green += colors.data[i + 1];
                         blue += colors.data[i + 2];
                     }
                 }
             }
-            var num = colors.data.length / 4 - 4; // 12 are outside
+            const num = colors.data.length / 4 - 4; // 12 are outside
             red = red / num;
             green = green / num;
             blue = blue / num;
 
-            var lightValue = (red + green + blue) / 3 / 2.55;
-            if (lightValue < 50) {
-                infraredSensor['line'] = true;
-            } else {
-                infraredSensor['line'] = false;
-            }
+            const lightValue = (red + green + blue) / 3 / 2.55;
+            infraredSensor['line'] = lightValue < 50;
             infraredSensor['light'] = UTIL.round(lightValue, 0);
             values['infrared']['light'] = values['infrared']['light'] ? values['infrared']['light'] : {};
             values['infrared']['light'] = infraredSensor['light'];
@@ -649,6 +633,69 @@ export class ThymioLineSensors implements ILabel, ISensor, IDrawable {
         values['infrared']['line'] = {};
         values['infrared']['line']['left'] = this.left.line;
         values['infrared']['line']['right'] = this.right.line;
+    }
+
+    drawPriority: number = 4;
+
+    draw(rCtx: CanvasRenderingContext2D, myRobot: RobotBase): void {
+        this.left.draw(rCtx, myRobot);
+        this.right.draw(rCtx, myRobot);
+    }
+}
+
+export class Txt4InfraredSensors implements ILabel, IExternalSensor, IDrawable {
+    left: LineSensor;
+    right: LineSensor;
+    color: string;
+    port: string;
+    theta: number;
+    x: number;
+    y: number;
+
+    constructor(port: string, location: Point) {
+        this.port = port;
+        this.left = new LineSensor({ x: location.x, y: location.y - 3 }, 3);
+        this.right = new LineSensor({ x: location.x, y: location.y + 3 }, 3);
+    }
+
+    labelPriority: number;
+
+    getLabel(): string {
+        return (
+            '<div><label>' +
+            Blockly.Msg['SENSOR_INFRARED'] +
+            ' ' +
+            Blockly.Msg.MODE_LINE +
+            '</label></div>' +
+            '<div><label>&nbsp;-&nbsp;' +
+            Blockly.Msg['BOTTOM_LEFT'] +
+            '</label><span>' +
+            this.left.line +
+            '</span></div>' +
+            '<div><label>&nbsp;-&nbsp;' +
+            Blockly.Msg['BOTTOM_RIGHT'] +
+            '</label><span>' +
+            this.right.line +
+            '</span></div>'
+        );
+    }
+
+    updateSensor(
+        running: boolean,
+        dt: number,
+        myRobot: RobotBase,
+        values: object,
+        uCtx: CanvasRenderingContext2D,
+        udCtx: CanvasRenderingContext2D,
+        personalObstacleList: any[],
+        markerList: MarkerSimulationObject[]
+    ): void {
+        this.left.updateSensor(running, dt, myRobot, values, uCtx, udCtx, personalObstacleList);
+        this.right.updateSensor(running, dt, myRobot, values, uCtx, udCtx, personalObstacleList);
+        values['infrared'] = {};
+        values['infrared'][this.port] = {};
+        values['infrared'][this.port]['left'] = this.left.line;
+        values['infrared'][this.port]['right'] = this.right.line;
     }
 
     drawPriority: number = 4;
@@ -744,40 +791,36 @@ export class MbotInfraredSensor implements IExternalSensor, IDrawable, ILabel {
         values['infrared'][this.port] = {};
         let infraredSensor = this;
         function setValue(side: string, location: Point) {
-            var red = 0;
-            var green = 0;
-            var blue = 0;
-            var colors = uCtx.getImageData(Math.round(location.x - 3), Math.round(location.y - 3), 6, 6);
-            var colorsD = udCtx.getImageData(Math.round(location.x - 3), Math.round(location.y - 3), 6, 6);
-            for (var i = 0; i <= colors.data.length; i += 4) {
+            let red = 0;
+            let green = 0;
+            let blue = 0;
+            const colors = uCtx.getImageData(Math.round(location.x - 3), Math.round(location.y - 3), 6, 6);
+            const colorsD = udCtx.getImageData(Math.round(location.x - 3), Math.round(location.y - 3), 6, 6);
+            for (let i = 0; i <= colors.data.length; i += 4) {
                 if (colorsD.data[i + 3] === 255) {
-                    for (var j = i; j < i + 3; j++) {
+                    for (let j = i; j < i + 3; j++) {
                         colors.data[j] = colorsD.data[j];
                     }
                 }
             }
-            var out = [0, 4, 16, 20, 24, 44, 92, 116, 120, 124, 136, 140]; // outside the circle
-            for (var j = 0; j < colors.data.length; j += 24) {
-                for (var i = j; i < j + 24; i += 4) {
+            const out = [0, 4, 16, 20, 24, 44, 92, 116, 120, 124, 136, 140]; // outside the circle
+            for (let j = 0; j < colors.data.length; j += 24) {
+                for (let i = j; i < j + 24; i += 4) {
                     if (out.indexOf(i) < 0) {
-                        red += colors.data[i + 0];
+                        red += colors.data[i];
                         green += colors.data[i + 1];
                         blue += colors.data[i + 2];
                     }
                 }
             }
 
-            var num = colors.data.length / 4 - 12; // 12 are outside
+            const num = colors.data.length / 4 - 12; // 12 are outside
             red = red / num;
             green = green / num;
             blue = blue / num;
 
-            var lightValue = (red + green + blue) / 3 / 2.55;
-            if (lightValue < 50) {
-                infraredSensor[side].value = true;
-            } else {
-                infraredSensor[side].value = false;
-            }
+            const lightValue = (red + green + blue) / 3 / 2.55;
+            infraredSensor[side].value = lightValue < 50;
             values['infrared'][infraredSensor.port][side] = infraredSensor[side].value;
         }
         setValue('left', { x: leftPoint.rx, y: leftPoint.ry });
@@ -1253,7 +1296,7 @@ export class OpticalSensor extends LightSensor {
         super.updateSensor(running, dt, myRobot, values, uCtx, udCtx);
 
         this.lightValue = this.lightValue > 50 ? 100 : 0;
-        this.light = this.lightValue == 0 ? false : true;
+        this.light = this.lightValue != 0;
         this.color = this.lightValue == 0 ? 'black' : 'white';
 
         values['optical'] = values['optical'] || {};
@@ -1990,7 +2033,7 @@ export class VolumeMeterSensor implements ISensor, ILabel {
                 })
                 .then(
                     function (stream) {
-                        var mediaStreamSource = sensor.webAudio.context.createMediaStreamSource(stream);
+                        const mediaStreamSource = sensor.webAudio.context.createMediaStreamSource(stream);
                         sensor.sound = VolumeMeter.createAudioMeter(sensor.webAudio.context);
                         // @ts-ignore
                         mediaStreamSource.connect(sensor.sound);
@@ -2079,7 +2122,7 @@ export class SoundSensorBoolean extends VolumeMeterSensor {
         personalObstacleList: any[]
     ): void {
         super.updateSensor(running, dt, myRobot, values, uCtx, udCtx, personalObstacleList);
-        values['sound']['volume'] = this.volume > 25 ? true : false;
+        values['sound']['volume'] = this.volume > 25;
     }
 }
 
@@ -2190,6 +2233,9 @@ export class CameraSensor implements ISensor, IUpdateAction, IDrawable, ILabel, 
     readonly MAX_CAM_Y = Math.sqrt(this.MAX_MARKER_DIST_SQR);
     readonly MAX_BLOB_DIST_SQR = this.MAX_MARKER_DIST_SQR;
     readonly LINE_RADIUS: number = 60;
+    readonly markerEnabled: boolean = true;
+    readonly lineEnabled: boolean = true;
+    readonly colorEnabled: boolean = true;
     x: number;
     y: number;
     h: number;
@@ -2209,8 +2255,8 @@ export class CameraSensor implements ISensor, IUpdateAction, IDrawable, ILabel, 
     bB: Rectangle = { x: 0, y: 0, w: 0, h: 0 };
 
     labelPriority: number = 8;
-    private THRESHOLD: number = 126;
-    private line: number;
+    protected THRESHOLD: number = 126;
+    protected line: number;
 
     constructor(pose: Pose, aov: number) {
         this.x = pose.x;
@@ -2244,42 +2290,43 @@ export class CameraSensor implements ISensor, IUpdateAction, IDrawable, ILabel, 
         rCtx.beginPath();
         rCtx.strokeStyle = '#0000ff';
         rCtx.beginPath();
-        rCtx.arc(this.x, this.y, 1000, Math.PI / 5, -Math.PI / 5, true);
+        rCtx.arc(this.x, this.y, this.MAX_CAM_Y, Math.PI / 5, -Math.PI / 5, true);
         rCtx.arc(this.x, this.y, this.LINE_RADIUS, -Math.PI / 5, +Math.PI / 5, false);
         rCtx.closePath();
         rCtx.stroke();
-        /* rCtx.beginPath();
-     rCtx.moveTo(0, 0);
-     rCtx.lineTo(300, 0);
-     rCtx.stroke();
-     rCtx.rotate(-(myRobot as RobotBaseMobile).pose.theta);
-     rCtx.translate(-(myRobot as RobotBaseMobile).pose.x, -(myRobot as RobotBaseMobile).pose.y);
-     rCtx.beginPath();
-     rCtx.strokeStyle = '#ff0000';
-     if (this.bB) {
-         rCtx.rect(this.bB.x, this.bB.y, this.bB.w, this.bB.h);
-         rCtx.stroke();
-     }*/
+        /*
+        rCtx.rotate(-(myRobot as RobotBaseMobile).pose.theta);
+        rCtx.translate(-(myRobot as RobotBaseMobile).pose.x, -(myRobot as RobotBaseMobile).pose.y);
+        rCtx.beginPath();
+        rCtx.strokeStyle = '#ff0000';
+        if (this.bB) {
+            rCtx.rect(this.bB.x, this.bB.y, this.bB.w, this.bB.h);
+            rCtx.stroke();
+        }
+        */
         rCtx.restore();
     }
 
     getLabel(): string {
-        let myLabel: string = '<div><label>' + 'Line Sensor' + '</label><span>' + UTIL.round(this.line, 2) + '</span></div>';
-
-        myLabel += '<div><label>' + 'Marker Sensor' + '</label></div>';
-        for (let i = 0; i < this.listOfMarkersFound.length; i++) {
-            let marker = this.listOfMarkersFound[i];
-            myLabel += '<div><label>&nbsp;-&nbsp;id ';
-            myLabel += marker.markerId;
-            myLabel += '</label><span>[';
-            myLabel += UTIL.round(marker.xDist, 0);
-            myLabel += ', ';
-            myLabel += UTIL.round(marker.yDist, 0);
-            myLabel += ', ';
-            myLabel += UTIL.round(marker.zDist, 0);
-            myLabel += '] cm</span></div>';
+        let myLabel: string = '';
+        if (this.lineEnabled) {
+            myLabel += '<div><label>' + 'Line Sensor' + '</label><span>' + UTIL.round(this.line, 2) + '</span></div>';
         }
-
+        if (this.markerEnabled) {
+            myLabel += '<div><label>' + 'Marker Sensor' + '</label></div>';
+            for (let i = 0; i < this.listOfMarkersFound.length; i++) {
+                let marker = this.listOfMarkersFound[i];
+                myLabel += '<div><label>&nbsp;-&nbsp;id ';
+                myLabel += marker.markerId;
+                myLabel += '</label><span>[';
+                myLabel += UTIL.round(marker.xDist, 0);
+                myLabel += ', ';
+                myLabel += UTIL.round(marker.yDist, 0);
+                myLabel += ', ';
+                myLabel += UTIL.round(marker.zDist, 0);
+                myLabel += '] cm</span></div>';
+            }
+        }
         return myLabel;
     }
 
@@ -2295,243 +2342,247 @@ export class CameraSensor implements ISensor, IUpdateAction, IDrawable, ILabel, 
         personalObstacleList: any[],
         markerList: MarkerSimulationObject[]
     ): void {
-        this.listOfMarkersFound = [];
         let robot: RobotRobotino = myRobot as RobotRobotino;
         SIMATH.transform(robot.pose, this as PointRobotWorld);
         let myPose: Pose = new Pose(this.rx, this.ry, this.theta);
-
         let left = ((myRobot as RobotBaseMobile).pose.theta - this.AOV / 2 + 2 * Math.PI) % (2 * Math.PI);
         let right = ((myRobot as RobotBaseMobile).pose.theta + this.AOV / 2 + 2 * Math.PI) % (2 * Math.PI);
-        markerList
-            .filter((marker) => {
-                let visible: boolean = false;
-                marker.sqrDist = SIMATH.getDistance(myPose, marker);
-                if (marker.sqrDist <= this.MAX_MARKER_DIST_SQR) {
-                    let myMarkerPoints: Point[] = [
-                        { x: marker.x - myPose.x, y: marker.y - myPose.y },
-                        { x: marker.x + marker.w - myPose.x, y: marker.y - myPose.y },
-                        { x: marker.x + marker.w - myPose.x, y: marker.y + marker.h - myPose.y },
-                        { x: marker.x - myPose.x, y: marker.y + marker.h - myPose.y },
-                    ];
-                    let visible: boolean = true;
-                    for (let i = 0; i < myMarkerPoints.length; i++) {
-                        let myAngle = (Math.atan2(myMarkerPoints[i].y, myMarkerPoints[i].x) + 2 * Math.PI) % (2 * Math.PI);
-                        if ((left < right && myAngle > left && myAngle < right) || (left > right && (myAngle > left || myAngle < right))) {
-                            let p: Point = this.checkVisibility(robot.id, marker, personalObstacleList);
-                            if (p) {
+
+        if (this.markerEnabled) {
+            this.listOfMarkersFound = [];
+            markerList
+                .filter((marker) => {
+                    let visible: boolean = false;
+                    marker.sqrDist = SIMATH.getDistance(myPose, marker);
+                    if (marker.sqrDist <= this.MAX_MARKER_DIST_SQR) {
+                        let myMarkerPoints: Point[] = [
+                            { x: marker.x - myPose.x, y: marker.y - myPose.y },
+                            { x: marker.x + marker.w - myPose.x, y: marker.y - myPose.y },
+                            { x: marker.x + marker.w - myPose.x, y: marker.y + marker.h - myPose.y },
+                            { x: marker.x - myPose.x, y: marker.y + marker.h - myPose.y },
+                        ];
+                        let visible: boolean = true;
+                        for (let i = 0; i < myMarkerPoints.length; i++) {
+                            let myAngle = (Math.atan2(myMarkerPoints[i].y, myMarkerPoints[i].x) + 2 * Math.PI) % (2 * Math.PI);
+                            if ((left < right && myAngle > left && myAngle < right) || (left > right && (myAngle > left || myAngle < right))) {
+                                let p: Point = this.checkVisibility(robot.id, marker, personalObstacleList);
+                                if (p) {
+                                    visible = false;
+                                }
+                            } else {
                                 visible = false;
                             }
-                        } else {
-                            visible = false;
+                        }
+                        return visible;
+                    }
+                })
+                .forEach((marker) => {
+                    let myAngle = (Math.atan2(marker.y + marker.h / 2 - myPose.y, marker.x + marker.w / 2 - myPose.x) + 2 * Math.PI) % (2 * Math.PI);
+                    let myRight = right;
+                    if (left > myRight) {
+                        myRight += 2 * Math.PI;
+                        if (myAngle < left) {
+                            myAngle = myAngle + 2 * Math.PI;
                         }
                     }
-                    return visible;
-                }
-            })
-            .forEach((marker) => {
-                let myAngle = (Math.atan2(marker.y + marker.h / 2 - myPose.y, marker.x + marker.w / 2 - myPose.x) + 2 * Math.PI) % (2 * Math.PI);
-                let myRight = right;
-                if (left > myRight) {
-                    myRight += 2 * Math.PI;
-                    if (myAngle < left) {
-                        myAngle = myAngle + 2 * Math.PI;
-                    }
-                }
-                let dist: number = Math.sqrt(marker.sqrDist);
-                marker.xDist = (((myAngle - left) / (myRight - left) - 0.5) * this.AOV * dist) / 3;
-                marker.yDist = ((dist / this.MAX_CAM_Y - 0.5) * this.MAX_CAM_Y) / 3;
-                marker.zDist = dist / 3;
-                this.listOfMarkersFound.push(marker);
-            });
+                    let dist: number = Math.sqrt(marker.sqrDist);
+                    marker.xDist = (((myAngle - left) / (myRight - left) - 0.5) * this.AOV * dist) / 3;
+                    marker.yDist = ((dist / this.MAX_CAM_Y - 0.5) * this.MAX_CAM_Y) / 3;
+                    marker.zDist = dist / 3;
+                    this.listOfMarkersFound.push(marker);
+                });
+            values['marker'] = {};
+            values['marker'][C.INFO] = {};
 
-        this.line = -1;
-        let leftPoint = { x: this.LINE_RADIUS * Math.cos(left), y: this.LINE_RADIUS * Math.sin(left) };
-        let rightPoint = { x: this.LINE_RADIUS * Math.cos(right), y: this.LINE_RADIUS * Math.sin(right) };
-        let l = Math.atan2(leftPoint.y, leftPoint.x);
-        let r = Math.atan2(rightPoint.y, rightPoint.x);
-        let pixYWidth = Math.abs(rightPoint.y - leftPoint.y);
-        let pixXWidth = Math.abs(rightPoint.x - leftPoint.x);
-        let redPixOld = undefined;
-        this.bB = { h: 0, w: 0, x: 0, y: 0 };
+            for (let i = 0; i < 16; i++) {
+                values['marker'][C.INFO][i] = [-1, -1, 0];
+            }
 
-        if (pixYWidth > pixXWidth) {
-            if (leftPoint.x > 0) {
-                this.bB.x = Math.min(leftPoint.x, rightPoint.x) + this.rx;
-                this.bB.y = Math.min(leftPoint.y, rightPoint.y) + this.ry;
-                this.bB.w = Math.max(Math.max(leftPoint.x, rightPoint.x), this.LINE_RADIUS) + this.rx - this.bB.x + 1;
-                this.bB.h = -this.bB.y + Math.max(Math.max(leftPoint.y, rightPoint.y)) + this.ry + 1;
-                this.constrainBB(uCtx);
-                let data: ImageData = this.bB && uCtx.getImageData(this.bB.x, this.bB.y, this.bB.w, this.bB.h);
-                let dataD: ImageData = this.bB && udCtx.getImageData(this.bB.x, this.bB.y, this.bB.w, this.bB.h);
-                if (data) {
-                    for (let i = 0; i < data.height; i++) {
-                        let a: number = this.LINE_RADIUS * this.LINE_RADIUS - (i + this.bB.y - this.ry) * (i + this.bB.y - this.ry);
-                        let xi = Math.round(Math.sqrt(a) - (this.bB.x - this.rx));
-                        let myIndex = (xi + i * data.width) * 4;
-                        const __ret = this.getPixelData(dataD, myIndex, data, redPixOld);
-                        let redPix = __ret.redPix;
-                        redPixOld = __ret.redPixOld;
-                        if (redPix !== redPixOld) {
-                            let me = Math.atan2(i + this.bB.y - this.ry, xi + this.bB.x - this.rx);
-                            this.line = (me - l) / (r - l) + -0.5;
-                            break;
+            if (this.listOfMarkersFound.length == 0) {
+                values['marker'][C.ID] = [-1];
+            } else {
+                values['marker'][C.ID] = this.listOfMarkersFound.map((marker) => marker.markerId);
+                this.listOfMarkersFound.forEach((marker) => {
+                    values['marker'][C.INFO][marker.markerId] = [marker.xDist, marker.yDist, marker.zDist];
+                });
+            }
+        }
+        if (this.lineEnabled) {
+            this.line = -1;
+            let leftPoint = { x: this.LINE_RADIUS * Math.cos(left), y: this.LINE_RADIUS * Math.sin(left) };
+            let rightPoint = { x: this.LINE_RADIUS * Math.cos(right), y: this.LINE_RADIUS * Math.sin(right) };
+            let l = Math.atan2(leftPoint.y, leftPoint.x);
+            let r = Math.atan2(rightPoint.y, rightPoint.x);
+            let pixYWidth = Math.abs(rightPoint.y - leftPoint.y);
+            let pixXWidth = Math.abs(rightPoint.x - leftPoint.x);
+            let redPixOld = undefined;
+            this.bB = { h: 0, w: 0, x: 0, y: 0 };
+
+            if (pixYWidth > pixXWidth) {
+                if (leftPoint.x > 0) {
+                    this.bB.x = Math.min(leftPoint.x, rightPoint.x) + this.rx;
+                    this.bB.y = Math.min(leftPoint.y, rightPoint.y) + this.ry;
+                    this.bB.w = Math.max(Math.max(leftPoint.x, rightPoint.x), this.LINE_RADIUS) + this.rx - this.bB.x + 1;
+                    this.bB.h = -this.bB.y + Math.max(Math.max(leftPoint.y, rightPoint.y)) + this.ry + 1;
+                    this.constrainBB(uCtx);
+                    let data: ImageData = this.bB && uCtx.getImageData(this.bB.x, this.bB.y, this.bB.w, this.bB.h);
+                    let dataD: ImageData = this.bB && udCtx.getImageData(this.bB.x, this.bB.y, this.bB.w, this.bB.h);
+                    if (data) {
+                        for (let i = 0; i < data.height; i++) {
+                            let a: number = this.LINE_RADIUS * this.LINE_RADIUS - (i + this.bB.y - this.ry) * (i + this.bB.y - this.ry);
+                            let xi = Math.round(Math.sqrt(a) - (this.bB.x - this.rx));
+                            let myIndex = (xi + i * data.width) * 4;
+                            const __ret = this.getPixelData(dataD, myIndex, data, redPixOld);
+                            let redPix = __ret['redPix'];
+                            redPixOld = __ret['redPixOld'];
+                            if (redPix !== redPixOld) {
+                                let me = Math.atan2(i + this.bB.y - this.ry, xi + this.bB.x - this.rx);
+                                this.line = (me - l) / (r - l) + -0.5;
+                                break;
+                            }
+                            redPixOld = redPix;
                         }
-                        redPixOld = redPix;
+                    }
+                } else {
+                    this.bB.y = Math.min(leftPoint.y, rightPoint.y) + this.ry - 1;
+                    this.bB.x = Math.min(Math.min(leftPoint.x, rightPoint.x), -this.LINE_RADIUS) + this.rx - 1;
+                    this.bB.w = Math.max(leftPoint.x, rightPoint.x) + this.rx - this.bB.x;
+                    this.bB.h = -this.bB.y + Math.max(Math.max(leftPoint.y, rightPoint.y)) + this.ry;
+                    this.constrainBB(uCtx);
+                    let data: ImageData = this.bB && uCtx.getImageData(this.bB.x, this.bB.y, this.bB.w, this.bB.h);
+                    let dataD: ImageData = this.bB && udCtx.getImageData(this.bB.x, this.bB.y, this.bB.w, this.bB.h);
+                    if (data) {
+                        for (let i = data.height - 1; i > 0; i--) {
+                            let a: number = this.LINE_RADIUS * this.LINE_RADIUS - (i + this.bB.y - this.ry) * (i + this.bB.y - this.ry);
+                            let xi = Math.round(-Math.sqrt(a) - (this.bB.x - this.rx));
+                            let myIndex = (xi + i * data.width) * 4 - 4;
+                            const __ret = this.getPixelData(dataD, myIndex, data, redPixOld);
+                            let redPix = __ret['redPix'];
+                            redPixOld = __ret['redPixOld'];
+                            if (redPix !== redPixOld) {
+                                let me = Math.atan2(i + this.bB.y - this.ry, xi + this.bB.x - this.rx);
+                                if (me <= 0) {
+                                    me += 2 * Math.PI;
+                                }
+                                if (l <= 0) {
+                                    l += 2 * Math.PI;
+                                }
+                                if (r <= 0) {
+                                    r += 2 * Math.PI;
+                                }
+                                this.line = (me - l) / (r - l) - 0.5;
+                                break;
+                            }
+                            redPixOld = redPix;
+                        }
                     }
                 }
             } else {
-                this.bB.y = Math.min(leftPoint.y, rightPoint.y) + this.ry - 1;
-                this.bB.x = Math.min(Math.min(leftPoint.x, rightPoint.x), -this.LINE_RADIUS) + this.rx - 1;
-                this.bB.w = Math.max(leftPoint.x, rightPoint.x) + this.rx - this.bB.x;
-                this.bB.h = -this.bB.y + Math.max(Math.max(leftPoint.y, rightPoint.y)) + this.ry;
-                this.constrainBB(uCtx);
-                let data: ImageData = this.bB && uCtx.getImageData(this.bB.x, this.bB.y, this.bB.w, this.bB.h);
-                let dataD: ImageData = this.bB && udCtx.getImageData(this.bB.x, this.bB.y, this.bB.w, this.bB.h);
-                if (data) {
-                    for (let i = data.height - 1; i > 0; i--) {
-                        let a: number = this.LINE_RADIUS * this.LINE_RADIUS - (i + this.bB.y - this.ry) * (i + this.bB.y - this.ry);
-                        let xi = Math.round(-Math.sqrt(a) - (this.bB.x - this.rx));
-                        let myIndex = (xi + i * data.width) * 4 - 4;
-                        const __ret = this.getPixelData(dataD, myIndex, data, redPixOld);
-                        let redPix = __ret.redPix;
-                        redPixOld = __ret.redPixOld;
-                        if (redPix !== redPixOld) {
-                            let me = Math.atan2(i + this.bB.y - this.ry, xi + this.bB.x - this.rx);
-                            if (me <= 0) {
-                                me += 2 * Math.PI;
+                if (leftPoint.y < 0) {
+                    this.bB.x = Math.min(Math.min(leftPoint.x, rightPoint.x), this.LINE_RADIUS) + this.rx;
+                    this.bB.w = Math.max(leftPoint.x, rightPoint.x) + this.rx - this.bB.x + 1;
+                    this.bB.y = Math.min(Math.min(leftPoint.y, rightPoint.y), -this.LINE_RADIUS) + this.ry;
+                    this.bB.h = Math.max(leftPoint.y, rightPoint.y) + this.ry - this.bB.y + 1;
+                    this.constrainBB(uCtx);
+                    let data: ImageData = this.bB && uCtx.getImageData(this.bB.x, this.bB.y, this.bB.w + 1, this.bB.h + 1);
+                    let dataD: ImageData = this.bB && udCtx.getImageData(this.bB.x, this.bB.y, this.bB.w + 1, this.bB.h + 1);
+                    if (data) {
+                        for (let i = 0; i < data.width - 1; i++) {
+                            let a: number = this.LINE_RADIUS * this.LINE_RADIUS - (i + this.bB.x - this.rx) * (i + this.bB.x - this.rx);
+                            let yi = Math.round(-Math.sqrt(a) - this.bB.y + this.ry);
+                            let myIndex = (i + yi * data.width) * 4;
+                            const __ret = this.getPixelData(dataD, myIndex, data, redPixOld);
+                            let redPix = __ret['redPix'];
+                            redPixOld = __ret['redPixOld'];
+                            if (redPix !== redPixOld) {
+                                let me = Math.atan2(yi + this.bB.y - this.ry, i + this.bB.x - this.rx);
+                                this.line = -1 * ((me - r) / (l - r) - 0.5);
+                                break;
                             }
-                            if (l <= 0) {
-                                l += 2 * Math.PI;
-                            }
-                            if (r <= 0) {
-                                r += 2 * Math.PI;
-                            }
-                            this.line = (me - l) / (r - l) - 0.5;
-                            break;
+                            redPixOld = redPix;
                         }
-                        redPixOld = redPix;
+                    }
+                } else {
+                    this.bB.x = Math.min(Math.min(leftPoint.x, rightPoint.x), this.LINE_RADIUS) + this.rx;
+                    this.bB.w = Math.max(leftPoint.x, rightPoint.x) + this.rx - this.bB.x + 1;
+                    this.bB.y = Math.min(leftPoint.y, rightPoint.y) + this.ry;
+                    this.bB.h = Math.max(Math.max(leftPoint.y, rightPoint.y), this.LINE_RADIUS) + this.ry - this.bB.y + 1;
+                    this.constrainBB(uCtx);
+                    let data: ImageData = this.bB && uCtx.getImageData(this.bB.x, this.bB.y, this.bB.w, this.bB.h);
+                    let dataD: ImageData = this.bB && udCtx.getImageData(this.bB.x, this.bB.y, this.bB.w, this.bB.h);
+                    if (data) {
+                        for (let i = data.width - 1; i >= 0; i--) {
+                            let a: number = this.LINE_RADIUS * this.LINE_RADIUS - (i + this.bB.x - this.rx) * (i + this.bB.x - this.rx);
+                            let yi = Math.round(Math.sqrt(a) - this.bB.y + this.ry) - 1;
+                            let myIndex = (i + yi * data.width) * 4 - 4;
+                            const __ret = this.getPixelData(dataD, myIndex, data, redPixOld);
+                            let redPix = __ret['redPix'];
+                            redPixOld = __ret['redPixOld'];
+                            if (redPix !== redPixOld) {
+                                let me = Math.atan2(yi + this.bB.y - this.ry, i + this.bB.x - this.rx);
+                                this.line = (me - l) / (r - l) - 0.5;
+                                break;
+                            }
+                            redPixOld = redPix;
+                        }
                     }
                 }
             }
-        } else {
-            if (leftPoint.y < 0) {
-                this.bB.x = Math.min(Math.min(leftPoint.x, rightPoint.x), this.LINE_RADIUS) + this.rx;
-                this.bB.w = Math.max(leftPoint.x, rightPoint.x) + this.rx - this.bB.x + 1;
-                this.bB.y = Math.min(Math.min(leftPoint.y, rightPoint.y), -this.LINE_RADIUS) + this.ry;
-                this.bB.h = Math.max(leftPoint.y, rightPoint.y) + this.ry - this.bB.y + 1;
-                this.constrainBB(uCtx);
-                let data: ImageData = this.bB && uCtx.getImageData(this.bB.x, this.bB.y, this.bB.w + 1, this.bB.h + 1);
-                let dataD: ImageData = this.bB && udCtx.getImageData(this.bB.x, this.bB.y, this.bB.w + 1, this.bB.h + 1);
-                if (data) {
-                    for (let i = 0; i < data.width - 1; i++) {
-                        let a: number = this.LINE_RADIUS * this.LINE_RADIUS - (i + this.bB.x - this.rx) * (i + this.bB.x - this.rx);
-                        let yi = Math.round(-Math.sqrt(a) - this.bB.y + this.ry);
-                        let myIndex = (i + yi * data.width) * 4;
-                        const __ret = this.getPixelData(dataD, myIndex, data, redPixOld);
-                        let redPix = __ret.redPix;
-                        redPixOld = __ret.redPixOld;
-                        if (redPix !== redPixOld) {
-                            let me = Math.atan2(yi + this.bB.y - this.ry, i + this.bB.x - this.rx);
-                            this.line = -1 * ((me - r) / (l - r) - 0.5);
-                            break;
-                        }
-                        redPixOld = redPix;
-                    }
-                }
-            } else {
-                this.bB.x = Math.min(Math.min(leftPoint.x, rightPoint.x), this.LINE_RADIUS) + this.rx;
-                this.bB.w = Math.max(leftPoint.x, rightPoint.x) + this.rx - this.bB.x + 1;
-                this.bB.y = Math.min(leftPoint.y, rightPoint.y) + this.ry;
-                this.bB.h = Math.max(Math.max(leftPoint.y, rightPoint.y), this.LINE_RADIUS) + this.ry - this.bB.y + 1;
-                this.constrainBB(uCtx);
-                let data: ImageData = this.bB && uCtx.getImageData(this.bB.x, this.bB.y, this.bB.w, this.bB.h);
-                let dataD: ImageData = this.bB && udCtx.getImageData(this.bB.x, this.bB.y, this.bB.w, this.bB.h);
-                if (data) {
-                    for (let i = data.width - 1; i >= 0; i--) {
-                        let a: number = this.LINE_RADIUS * this.LINE_RADIUS - (i + this.bB.x - this.rx) * (i + this.bB.x - this.rx);
-                        let yi = Math.round(Math.sqrt(a) - this.bB.y + this.ry) - 1;
-                        let myIndex = (i + yi * data.width) * 4 - 4;
-                        const __ret = this.getPixelData(dataD, myIndex, data, redPixOld);
-                        let redPix = __ret.redPix;
-                        redPixOld = __ret.redPixOld;
-                        if (redPix !== redPixOld) {
-                            let me = Math.atan2(yi + this.bB.y - this.ry, i + this.bB.x - this.rx);
-                            this.line = (me - l) / (r - l) - 0.5;
-                            break;
-                        }
-                        redPixOld = redPix;
-                    }
-                }
-            }
+            values['camera'] = {};
+            values['camera'][C.LINE] = this.line;
         }
-        values['marker'] = {};
-        values['marker'][C.INFO] = {};
-
-        for (let i = 0; i < 16; i++) {
-            values['marker'][C.INFO][i] = [-1, -1, 0];
-        }
-
-        if (this.listOfMarkersFound.length == 0) {
-            values['marker'][C.ID] = [-1];
-        } else {
-            values['marker'][C.ID] = this.listOfMarkersFound.map((marker) => marker.markerId);
-            this.listOfMarkersFound.forEach((marker) => {
-                values['marker'][C.INFO][marker.markerId] = [marker.xDist, marker.yDist, marker.zDist];
-            });
-        }
-        values['camera'] = {};
-        values['camera'][C.LINE] = this.line;
 
         //if (this.colourBlob !== null) {
-        personalObstacleList.filter((obstacle) => {
-            let visible: boolean = false;
-            let inHSVRange = this.checkHSVRange(obstacle.hsv);
-            if (inHSVRange) {
-                obstacle.sqrDist = SIMATH.getDistance(myPose, obstacle);
-                if (obstacle.sqrDist <= this.MAX_BLOB_DIST_SQR) {
-                    let myObstaclePoints: Point[] = [{ x: obstacle.x - myPose.x, y: obstacle.y - myPose.y }]; /*,
-                       { x: obstacle.x + obstacle.w - myPose.x, y: obstacle.y - myPose.y },
-                       { x: obstacle.x + obstacle.w - myPose.x, y: obstacle.y + obstacle.h - myPose.y },
-                       { x: obstacle.x - myPose.x, y: obstacle.y + obstacle.h - myPose.y },
-                   ];*/
+        /*       let a = personalObstacleList.filter((obstacle) => {
+                   let visible: boolean = false;
+                   let inHSVRange = this.checkHSVRange(obstacle.hsv);
+                   if (inHSVRange) {
+                       obstacle.sqrDist = SIMATH.getDistance(myPose, obstacle);
+                       if (obstacle.sqrDist <= this.MAX_BLOB_DIST_SQR) {
+                           let myObstaclePoints: Point[] = [{ x: obstacle.x - myPose.x, y: obstacle.y - myPose.y }]; /!*,
+                              { x: obstacle.x + obstacle.w - myPose.x, y: obstacle.y - myPose.y },
+                              { x: obstacle.x + obstacle.w - myPose.x, y: obstacle.y + obstacle.h - myPose.y },
+                              { x: obstacle.x - myPose.x, y: obstacle.y + obstacle.h - myPose.y },
+                          ];*!/
 
-                    let visible: boolean = true;
-                    for (let i = 0; i < myObstaclePoints.length; i++) {
-                        let myAngle = (Math.atan2(myObstaclePoints[i].y, myObstaclePoints[i].x) + 2 * Math.PI) % (2 * Math.PI);
-                        if ((left < right && myAngle > left && myAngle < right) || (left > right && (myAngle > left || myAngle < right))) {
-                            let p: Point = this.checkVisibility(robot.id, obstacle, personalObstacleList);
-                            if (p) {
-                                visible = false;
-                            }
-                        } else {
-                            visible = false;
-                        }
-                    }
-                    return visible;
-                }
-            }
-        });
+                           let visible: boolean = true;
+                           for (let i = 0; i < myObstaclePoints.length; i++) {
+                               let myAngle = (Math.atan2(myObstaclePoints[i].y, myObstaclePoints[i].x) + 2 * Math.PI) % (2 * Math.PI);
+                               if ((left < right && myAngle > left && myAngle < right) || (left > right && (myAngle > left || myAngle < right))) {
+                                   let p: Point = this.checkVisibility(robot.id, obstacle, personalObstacleList);
+                                   if (p) {
+                                       visible = false;
+                                   }
+                               } else {
+                                   visible = false;
+                               }
+                           }
+                           return visible;
+                       }
+                   }
+               });
+               console.log(a);*/
     }
 
-    private getPixelData(dataD: ImageData, myIndex: number, data: ImageData, redPixOld) {
+    protected getPixelData(dataD: ImageData, myIndex: number, data: ImageData, redPixOld): {} {
         if (dataD.data[myIndex + 3] === 255) {
             for (let j = myIndex; j < myIndex + 3; j++) {
                 data.data[j] = dataD.data[j];
             }
         }
-        let redPix = this.calculatePix(data.data.slice(myIndex, myIndex + 3));
+        let redPix = this.calculatePix(Array.prototype.slice.call(data.data.slice(myIndex, myIndex + 3)));
         if (redPixOld == undefined) {
             redPixOld = redPix;
         }
         return { redPix, redPixOld };
     }
 
-    private calculatePix(rawPix: Uint8ClampedArray): number {
+    protected calculatePix(rawPix: number[]): number {
         let pix = 0.299 * rawPix[0] + 0.587 * rawPix[1] + 0.114 * rawPix[2];
         return pix > this.THRESHOLD ? 255 : 0;
     }
 
-    private checkVisibility(id: number, mP: Point, personalObstacleList: any[]): Point {
+    protected checkVisibility(id: number, mP: Point, personalObstacleList: any[]): Point {
         let myIntersectionPoint: Point;
         let myLine: Line = { x1: this.rx, y1: this.ry, x2: mP.x, y2: mP.y };
         for (let i = 0; i < personalObstacleList.length - 1; i++) {
@@ -2577,7 +2628,7 @@ export class CameraSensor implements ISensor, IUpdateAction, IDrawable, ILabel, 
         return false;
     }
 
-    private constrainBB(uCtx: CanvasRenderingContext2D) {
+    protected constrainBB(uCtx: CanvasRenderingContext2D) {
         this.bB.x = this.bB.x < 0 ? 0 : this.bB.x;
         this.bB.y = this.bB.y < 0 ? 0 : this.bB.y;
         if (this.bB.x + this.bB.w > uCtx.canvas.width) {
@@ -2594,5 +2645,365 @@ export class CameraSensor implements ISensor, IUpdateAction, IDrawable, ILabel, 
                 return;
             }
         }
+    }
+}
+
+export class Txt4CameraSensor extends CameraSensor {
+    override readonly MAX_CAM_Y = 150;
+    override readonly MAX_BLOB_DIST_SQR = this.MAX_MARKER_DIST_SQR;
+    override readonly LINE_RADIUS: number = 45;
+    override readonly THRESHOLD: number = 175;
+    readonly BLOBSIZE: number;
+    private lineWidth: number;
+    private lineColor: number[];
+    private color: number[];
+    p: PointRobotWorld = { x: 0, y: 0, rx: 0, ry: 0 };
+    rect: Point4Rectangle = { p1: this.p, p2: this.p, p3: this.p, p4: this.p };
+
+    constructor(pose: Pose, aov: number, blobSize: number) {
+        super(pose, aov);
+        this.BLOBSIZE = blobSize;
+    }
+
+    override draw(rCtx: CanvasRenderingContext2D, myRobot: RobotBase): void {
+        super.draw(rCtx, myRobot);
+        rCtx.save();
+        //***********
+        rCtx.rotate(-(myRobot as RobotBaseMobile).pose.theta);
+        rCtx.translate(-(myRobot as RobotBaseMobile).pose.x, -(myRobot as RobotBaseMobile).pose.y);
+        rCtx.beginPath();
+        rCtx.strokeStyle = '#00ffff';
+        rCtx.moveTo(this.rect.p1.rx, this.rect.p1.ry);
+        rCtx.lineTo(this.rect.p2.rx, this.rect.p2.ry);
+        rCtx.lineTo(this.rect.p3.rx, this.rect.p3.ry);
+        rCtx.lineTo(this.rect.p4.rx, this.rect.p4.ry);
+        rCtx.lineTo(this.rect.p1.rx, this.rect.p1.ry);
+        rCtx.stroke();
+        //*******************
+        rCtx.restore();
+    }
+
+    override updateSensor(
+        running: boolean,
+        dt: number,
+        myRobot: RobotBase,
+        values: object,
+        uCtx: CanvasRenderingContext2D,
+        udCtx: CanvasRenderingContext2D,
+        personalObstacleList: any[],
+        markerList: MarkerSimulationObject[]
+    ): void {
+        let robot: RobotRobotino = myRobot as RobotRobotino;
+        SIMATH.transform(robot.pose, this as PointRobotWorld);
+        let myPose: Pose = new Pose(this.rx, this.ry, this.theta);
+        let left = ((myRobot as RobotBaseMobile).pose.theta - this.AOV / 2 + 2 * Math.PI) % (2 * Math.PI);
+        let right = ((myRobot as RobotBaseMobile).pose.theta + this.AOV / 2 + 2 * Math.PI) % (2 * Math.PI);
+        values[C.CAMERA] = {};
+
+        if (this.lineEnabled) {
+            var calculateLineValues = function (lineBegin: number, lineEnd: number, lineColor: number[][]) {
+                this.line = (lineBegin + lineEnd) * 100;
+                this.lineWidth = Math.abs(Math.round((lineBegin - lineEnd) * 100));
+                let colorArray = [0, 0, 0];
+                lineColor.forEach((row) => {
+                    colorArray[0] += row[0];
+                    colorArray[1] += row[1];
+                    colorArray[2] += row[2];
+                });
+                this.lineColor = [
+                    Math.round(colorArray[0] / lineColor.length),
+                    Math.round(colorArray[1] / lineColor.length),
+                    Math.round(colorArray[2] / lineColor.length),
+                ];
+            };
+            this.line = -1;
+            this.lineWidth = 0;
+            this.lineColor = [];
+            let leftPoint = { x: this.LINE_RADIUS * Math.cos(left), y: this.LINE_RADIUS * Math.sin(left) };
+            let rightPoint = { x: this.LINE_RADIUS * Math.cos(right), y: this.LINE_RADIUS * Math.sin(right) };
+            let l = Math.atan2(leftPoint.y, leftPoint.x);
+            let r = Math.atan2(rightPoint.y, rightPoint.x);
+            let pixYWidth = Math.abs(rightPoint.y - leftPoint.y);
+            let pixXWidth = Math.abs(rightPoint.x - leftPoint.x);
+            let redPixOld = undefined;
+            let lineBegin: number;
+            let lineEnd: number;
+            let lineColor: number[][] = [];
+            this.bB = { h: 0, w: 0, x: 0, y: 0 };
+
+            if (pixYWidth > pixXWidth) {
+                if (leftPoint.x > 0) {
+                    this.bB.x = Math.min(leftPoint.x, rightPoint.x) + this.rx;
+                    this.bB.y = Math.min(leftPoint.y, rightPoint.y) + this.ry;
+                    this.bB.w = Math.max(Math.max(leftPoint.x, rightPoint.x), this.LINE_RADIUS) + this.rx - this.bB.x + 1;
+                    this.bB.h = -this.bB.y + Math.max(Math.max(leftPoint.y, rightPoint.y)) + this.ry + 1;
+                    this.constrainBB(uCtx);
+                    let data: ImageData = this.bB && uCtx.getImageData(this.bB.x, this.bB.y, this.bB.w, this.bB.h);
+                    let dataD: ImageData = this.bB && udCtx.getImageData(this.bB.x, this.bB.y, this.bB.w, this.bB.h);
+                    if (data) {
+                        for (let i = 0; i < data.height; i++) {
+                            let a: number = this.LINE_RADIUS * this.LINE_RADIUS - (i + this.bB.y - this.ry) * (i + this.bB.y - this.ry);
+                            let xi = Math.round(Math.sqrt(a) - (this.bB.x - this.rx));
+                            let myIndex = (xi + i * data.width) * 4;
+                            const __ret = this.getPixelData(dataD, myIndex, data, redPixOld);
+                            let redPix = __ret['redPix'];
+                            redPixOld = __ret['redPixOld'];
+                            if (redPix !== redPixOld) {
+                                let me = Math.atan2(i + this.bB.y - this.ry, xi + this.bB.x - this.rx);
+                                if (lineBegin === undefined) {
+                                    lineBegin = (me - l) / (r - l) + -0.5;
+                                } else if (lineEnd === undefined) {
+                                    lineEnd = (me - l) / (r - l) + -0.5;
+                                    calculateLineValues.call(this, lineBegin, lineEnd, lineColor);
+                                    break;
+                                }
+                                if (lineBegin !== undefined) {
+                                    lineColor.push(__ret['pixColor']);
+                                }
+                            }
+                            redPixOld = redPix;
+                        }
+                    }
+                } else {
+                    this.bB.y = Math.min(leftPoint.y, rightPoint.y) + this.ry - 1;
+                    this.bB.x = Math.min(Math.min(leftPoint.x, rightPoint.x), -this.LINE_RADIUS) + this.rx - 1;
+                    this.bB.w = Math.max(leftPoint.x, rightPoint.x) + this.rx - this.bB.x;
+                    this.bB.h = -this.bB.y + Math.max(Math.max(leftPoint.y, rightPoint.y)) + this.ry;
+                    this.constrainBB(uCtx);
+                    let data: ImageData = this.bB && uCtx.getImageData(this.bB.x, this.bB.y, this.bB.w, this.bB.h);
+                    let dataD: ImageData = this.bB && udCtx.getImageData(this.bB.x, this.bB.y, this.bB.w, this.bB.h);
+                    if (data) {
+                        for (let i = data.height - 1; i > 0; i--) {
+                            let a: number = this.LINE_RADIUS * this.LINE_RADIUS - (i + this.bB.y - this.ry) * (i + this.bB.y - this.ry);
+                            let xi = Math.round(-Math.sqrt(a) - (this.bB.x - this.rx));
+                            let myIndex = (xi + i * data.width) * 4 - 4;
+                            const __ret = this.getPixelData(dataD, myIndex, data, redPixOld);
+                            let redPix = __ret['redPix'];
+                            redPixOld = __ret['redPixOld'];
+                            if (redPix !== redPixOld) {
+                                let me = Math.atan2(i + this.bB.y - this.ry, xi + this.bB.x - this.rx);
+                                if (me <= 0) {
+                                    me += 2 * Math.PI;
+                                }
+                                if (l <= 0) {
+                                    l += 2 * Math.PI;
+                                }
+                                if (r <= 0) {
+                                    r += 2 * Math.PI;
+                                }
+                                if (lineBegin == undefined) {
+                                    lineBegin = (me - l) / (r - l) - 0.5;
+                                } else if (lineEnd == undefined) {
+                                    lineEnd = (me - l) / (r - l) - 0.5;
+                                    calculateLineValues.call(this, lineBegin, lineEnd, lineColor);
+                                    break;
+                                }
+                            }
+                            if (lineBegin !== undefined) {
+                                lineColor.push(__ret['pixColor']);
+                            }
+                            redPixOld = redPix;
+                        }
+                    }
+                }
+            } else {
+                if (leftPoint.y < 0) {
+                    this.bB.x = Math.min(Math.min(leftPoint.x, rightPoint.x), this.LINE_RADIUS) + this.rx;
+                    this.bB.w = Math.max(leftPoint.x, rightPoint.x) + this.rx - this.bB.x + 1;
+                    this.bB.y = Math.min(Math.min(leftPoint.y, rightPoint.y), -this.LINE_RADIUS) + this.ry;
+                    this.bB.h = Math.max(leftPoint.y, rightPoint.y) + this.ry - this.bB.y + 1;
+                    this.constrainBB(uCtx);
+                    let data: ImageData = this.bB && uCtx.getImageData(this.bB.x, this.bB.y, this.bB.w + 1, this.bB.h + 1);
+                    let dataD: ImageData = this.bB && udCtx.getImageData(this.bB.x, this.bB.y, this.bB.w + 1, this.bB.h + 1);
+                    if (data) {
+                        for (let i = 0; i < data.width - 1; i++) {
+                            let a: number = this.LINE_RADIUS * this.LINE_RADIUS - (i + this.bB.x - this.rx) * (i + this.bB.x - this.rx);
+                            let yi = Math.round(-Math.sqrt(a) - this.bB.y + this.ry);
+                            let myIndex = (i + yi * data.width) * 4;
+                            const __ret = this.getPixelData(dataD, myIndex, data, redPixOld);
+                            let redPix = __ret['redPix'];
+                            redPixOld = __ret['redPixOld'];
+                            if (redPix !== redPixOld) {
+                                let me = Math.atan2(yi + this.bB.y - this.ry, i + this.bB.x - this.rx);
+                                if (lineBegin == undefined) {
+                                    lineBegin = -1 * ((me - r) / (l - r) - 0.5);
+                                } else if (lineEnd == undefined) {
+                                    lineEnd = -1 * ((me - r) / (l - r) - 0.5);
+                                    calculateLineValues.call(this, lineBegin, lineEnd, lineColor);
+                                    break;
+                                }
+                            }
+                            if (lineBegin !== undefined) {
+                                lineColor.push(__ret['pixColor']);
+                            }
+                            redPixOld = redPix;
+                        }
+                    }
+                } else {
+                    this.bB.x = Math.min(Math.min(leftPoint.x, rightPoint.x), this.LINE_RADIUS) + this.rx;
+                    this.bB.w = Math.max(leftPoint.x, rightPoint.x) + this.rx - this.bB.x + 1;
+                    this.bB.y = Math.min(leftPoint.y, rightPoint.y) + this.ry;
+                    this.bB.h = Math.max(Math.max(leftPoint.y, rightPoint.y), this.LINE_RADIUS) + this.ry - this.bB.y + 1;
+                    this.constrainBB(uCtx);
+                    let data: ImageData = this.bB && uCtx.getImageData(this.bB.x, this.bB.y, this.bB.w, this.bB.h);
+                    let dataD: ImageData = this.bB && udCtx.getImageData(this.bB.x, this.bB.y, this.bB.w, this.bB.h);
+                    if (data) {
+                        for (let i = data.width - 1; i > 0; i--) {
+                            let a: number = this.LINE_RADIUS * this.LINE_RADIUS - (i + this.bB.x - this.rx) * (i + this.bB.x - this.rx);
+                            let yi = Math.round(Math.sqrt(a) - this.bB.y + this.ry) - 1;
+                            let myIndex = (i + yi * data.width) * 4 - 4;
+                            const __ret = this.getPixelData(dataD, myIndex, data, redPixOld);
+                            let redPix = __ret['redPix'];
+                            redPixOld = __ret['redPixOld'];
+                            if (redPix !== redPixOld) {
+                                let me = Math.atan2(yi + this.bB.y - this.ry, i + this.bB.x - this.rx);
+                                if (lineBegin == undefined) {
+                                    lineBegin = (me - l) / (r - l) - 0.5;
+                                } else if (lineEnd == undefined) {
+                                    lineEnd = (me - l) / (r - l) - 0.5;
+                                    calculateLineValues.call(this, lineBegin, lineEnd, lineColor);
+                                    break;
+                                }
+                            }
+                            if (lineBegin !== undefined) {
+                                lineColor.push(__ret['pixColor']);
+                            }
+                            redPixOld = redPix;
+                        }
+                    }
+                }
+            }
+            values[C.CAMERA][C.LINE] = {};
+            values[C.CAMERA][C.LINE][C.INFO] = [this.line, this.lineWidth];
+            values[C.CAMERA][C.LINE][C.COLOR] = this.lineColor;
+            values[C.CAMERA][C.LINE][C.NUMBER] = this.lineWidth === 0 ? 0 : 1;
+        }
+        if (this.colorEnabled) {
+            this.color = [];
+            let colorAOV: number = (this.AOV * this.BLOBSIZE) / 100;
+            left = (-colorAOV / 2 + 2 * Math.PI) % (2 * Math.PI);
+            right = (colorAOV / 2 + 2 * Math.PI) % (2 * Math.PI);
+            let lowerRadius: number = this.LINE_RADIUS + ((this.MAX_CAM_Y - this.LINE_RADIUS) * (100 - this.BLOBSIZE)) / 200;
+            let upperRadius: number = lowerRadius + ((this.MAX_CAM_Y - this.LINE_RADIUS) * this.BLOBSIZE) / 100;
+            let leftPoint: Point = { x: lowerRadius * Math.cos(left), y: lowerRadius * Math.sin(left) };
+            let rightPoint: Point = { x: lowerRadius * Math.cos(right), y: lowerRadius * Math.sin(right) };
+            let leftPointW: Point = { x: upperRadius * Math.cos(left), y: upperRadius * Math.sin(left) };
+            let rightPointW: Point = { x: upperRadius * Math.cos(right), y: upperRadius * Math.sin(right) };
+            this.bB = { h: 0, w: 0, x: 0, y: 0 };
+            let p: PointRobotWorld = { x: leftPoint.x, y: leftPoint.y, rx: 0, ry: 0 };
+            SIMATH.transform(robot.pose, p);
+            this.rect.p1 = p;
+            p = { x: leftPointW.x, y: leftPointW.y, rx: 0, ry: 0 };
+            SIMATH.transform(robot.pose, p);
+            this.rect.p2 = p;
+            p = { x: rightPointW.x, y: rightPointW.y, rx: 0, ry: 0 };
+            SIMATH.transform(robot.pose, p);
+            this.rect.p3 = p;
+            p = { x: rightPoint.x, y: rightPoint.y, rx: 0, ry: 0 };
+            SIMATH.transform(robot.pose, p);
+            this.rect.p4 = p;
+            this.bB.x = Math.min(this.rect.p1.rx, this.rect.p2.rx, this.rect.p3.rx, this.rect.p4.rx);
+            this.bB.y = Math.min(this.rect.p1.ry, this.rect.p2.ry, this.rect.p3.ry, this.rect.p4.ry);
+            this.bB.w = Math.max(this.rect.p1.rx, this.rect.p2.rx, this.rect.p3.rx, this.rect.p4.rx) - this.bB.x;
+            this.bB.h = Math.max(this.rect.p1.ry, this.rect.p2.ry, this.rect.p3.ry, this.rect.p4.ry) - this.bB.y;
+            this.constrainBB(uCtx);
+            let data: ImageData = this.bB && uCtx.getImageData(this.bB.x, this.bB.y, this.bB.w, this.bB.h);
+            let dataD: ImageData = this.bB && udCtx.getImageData(this.bB.x, this.bB.y, this.bB.w, this.bB.h);
+            let oCtx = ($('#objectLayer')[0] as HTMLCanvasElement).getContext('2d', { willReadFrequently: true }); // object context
+            oCtx.restore();
+            oCtx.save();
+            let scale = SimulationRoberta.Instance.scale;
+            let dataO: ImageData;
+            try {
+                dataO =
+                    this.bB &&
+                    oCtx.getImageData(
+                        Math.round(this.bB.x * scale),
+                        Math.round(this.bB.y * scale),
+                        Math.round(this.bB.w * scale),
+                        Math.round(this.bB.h * scale)
+                    );
+            } catch (e) {
+                // ignored
+            }
+            let red = 0,
+                green = 0,
+                blue = 0;
+            let oScale = dataO ? dataO.data.length / data.data.length : 0;
+            if (data) {
+                for (let i = 0; i < data.data.length; i += 4) {
+                    let obstacleIndex: number = 4 * Math.floor((i * oScale) / 4);
+                    if (dataO && dataO.data[obstacleIndex + 3] === 255) {
+                        red += dataO.data[obstacleIndex];
+                        green += dataO.data[obstacleIndex + 1];
+                        blue += dataO.data[obstacleIndex + 2];
+                    } else if (dataD.data[i + 3] === 255) {
+                        red += dataD.data[i];
+                        green += dataD.data[i + 1];
+                        blue += dataD.data[i + 2];
+                    } else {
+                        red += data.data[i];
+                        green += data.data[i + 1];
+                        blue += data.data[i + 2];
+                    }
+                }
+
+                const num = data.data.length / 4;
+                red /= num;
+                green /= num;
+                blue /= num;
+                this.color = [Math.round(red), Math.round(green), Math.round(blue)];
+                values[C.CAMERA][C.COLOR] = this.color;
+            }
+        }
+    }
+
+    override getLabel(): string {
+        let myLabel: string = '';
+        if (this.lineEnabled) {
+            myLabel +=
+                '<div><label>' +
+                Blockly.Msg.SENSOR_CAMERA +
+                ' ' +
+                Blockly.Msg.MODE_LINE +
+                '</label></div>' +
+                '<div><label>&nbsp;-&nbsp;' +
+                Blockly.Msg.MODE_LINE +
+                '</label><span>' +
+                UTIL.round(this.line, 0) +
+                '</span></div>' +
+                '<div><label>&nbsp;-&nbsp;' +
+                'Breite' +
+                '</label><span>' +
+                this.lineWidth +
+                '</span></div>' +
+                '<div><label>&nbsp;-&nbsp;' +
+                Blockly.Msg.MODE_COLOUR +
+                '</label><span style="margin-left:6px; width: 20px; border-style:solid; border-width:thin; background-color:' +
+                (this.lineColor.length > 0 ? SIMATH.rgbToHex(this.lineColor[0], this.lineColor[1], this.lineColor[2]) : '#fff') +
+                '">&nbsp;</span></div>' +
+                '<div><label>' +
+                Blockly.Msg.SENSOR_CAMERA +
+                ' ' +
+                Blockly.Msg.MODE_COLOUR +
+                '</label><span style="margin-left:6px; width: 20px; border-style:solid; border-width:thin; background-color:' +
+                (this.color.length > 0 ? SIMATH.rgbToHex(this.color[0], this.color[1], this.color[2]) : '#fff') +
+                '">&nbsp;</span></div>';
+        }
+        return myLabel;
+    }
+
+    override getPixelData(dataD: ImageData, myIndex: number, data: ImageData, redPixOld): {} {
+        if (dataD.data[myIndex + 3] === 255) {
+            for (let j = myIndex; j < myIndex + 3; j++) {
+                data.data[j] = dataD.data[j];
+            }
+        }
+        let pixColor: number[] = Array.prototype.slice.call(data.data.slice(myIndex, myIndex + 3));
+        let redPix = this.calculatePix(pixColor);
+        if (redPixOld == undefined) {
+            redPixOld = redPix;
+        }
+        return { redPix, redPixOld, pixColor };
     }
 }

@@ -1141,30 +1141,15 @@ button#simCustomObstacle.typcn:before {
 .simWindow#simValuesWindow button.close {
     top: 4px;
     right: 14px;
-    color: #bbb;
     position: absolute;
-}
-
-.simWindow#simValuesWindow button.close:hover {
-    top: 4px;
-    right: 14px;
-    color: #333;
 }
 
 .simWindow#simRobotWindow button.close {
     top: 4px;
-    right: 24px;
-    color: #f1f1f1;
+    right: 16px;
     position: absolute;
     z-index: 99999;
 }
-
-.simWindow#simRobotWindow button.close:hover {
-    top: 4px;
-    right: 24px;
-    color: #bbb;
-}
-
 
 #VariablesContent {
     height: 300px;

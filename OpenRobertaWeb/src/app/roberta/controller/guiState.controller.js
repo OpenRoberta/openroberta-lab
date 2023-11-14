@@ -831,6 +831,10 @@ function setRobotToken(token) {
     GUISTATE.robot.token = token;
 }
 
+function setRobotUrl(url) {
+    GUISTATE.robot.url = url;
+}
+
 function setConfigurationXML(xml) {
     GUISTATE.configuration.xml = xml;
 }
@@ -1219,6 +1223,7 @@ export {
     getConfToolbox,
     getRobotFWName,
     setRobotToken,
+    setRobotUrl,
     setConfigurationXML,
     getConfigurationXML,
     setProgramXML,

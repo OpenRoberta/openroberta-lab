@@ -1,0 +1,12 @@
+SerialWriteAction[value: StringConst[value: LED on port O5 test]]
+SerialWriteAction[value: StringConst[value: LED ON]]
+LedBrightnessAction[brightness: NumConst[value: 100], port: L]
+WaitTimeStmt[time: NumConst[value: 2000]]
+SerialWriteAction[value: StringConst[value: LED OFF]]
+LedBrightnessAction[brightness: NumConst[value: 0], port: L]
+
+(repeat [FOR, Var [i], NumConst[value: 1], NumConst[value: 100], NumConst[value: 1]]
+AktionStmt [SerialWriteAction[value: FunctionExpr [TextJoinFunct [StringConst[value: Brightness =], Var [i]]]]]
+AktionStmt [LedBrightnessAction[brightness: Var [i], port: L]]
+)
+SerialWriteAction[value: StringConst[value: DONE]]

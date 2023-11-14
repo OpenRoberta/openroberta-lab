@@ -10,6 +10,7 @@ export default class RobotMicrobit extends RobotCalliope {
         // TODO display to configuration
         // TODO separate sensors and actuators in the configuration
         $('#simRobotContent').append(this.topView);
+        $('#simRobotWindow button').removeClass('btn-close-white');
         $.validator.addClassRules('range', { required: true, number: true });
         this.gestureSensor = new GestureSensor();
 

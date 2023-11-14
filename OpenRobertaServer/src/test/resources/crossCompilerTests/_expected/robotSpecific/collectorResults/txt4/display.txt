@@ -1,0 +1,6 @@
+Sensors: 
+[UsedSensor [DISPLAY, BUTTON, PRESSED]]
+Actors: 
+[UsedActor [_B, DISPLAY], UsedActor [- EMPTY_PORT -, DISPLAY], UsedActor [DISPLAY, DISPLAY], UsedActor [_B, DISPLAYLED]]
+Methods: 
+[CLEARDISPLAY, DISPLAYLEDON]

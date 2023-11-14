@@ -412,4 +412,8 @@ export class RobotWeDoBehaviour extends ARobotBehaviour {
     omniDrivePositionAction(power, x, y): number {
         return 0;
     }
+
+    colourCompare(colour1: number[], colour2: number[], tolerance: number): boolean {
+        return false;
+    }
 }

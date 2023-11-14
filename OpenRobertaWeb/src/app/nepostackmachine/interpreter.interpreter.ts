@@ -298,6 +298,13 @@ export class Interpreter {
                     this.robotBehaviour.getSample(this.state, stmt[C.NAME], stmt[C.GET_SAMPLE], stmt[C.PORT], stmt[C.MODE], stmt[C.SLOT]);
                     break;
                 }
+                case C.COLOUR_COMPARE: {
+                    const tolerance = this.state.pop();
+                    const colour2 = this.state.pop();
+                    const colour1 = this.state.pop();
+                    this.state.push(this.robotBehaviour.colourCompare(colour1, colour2, tolerance));
+                    break;
+                }
                 case C.MARKER:
                     const markerId = this.state.pop();
                     this.robotBehaviour.getSample(this.state, stmt[C.NAME], stmt[C.GET_SAMPLE], stmt[C.PORT], stmt[C.MODE], markerId);
@@ -492,8 +499,11 @@ export class Interpreter {
                 case C.SHOW_TEXT_ACTION: {
                     const text = this.state.pop();
                     const name = stmt[C.NAME];
-                    if (name === 'ev3') {
-                        const x = this.state.pop();
+                    if (name === 'ev3' || name === 'txt4') {
+                        let x = 0;
+                        if (name === 'ev3') {
+                            x = this.state.pop();
+                        }
                         const y = this.state.pop();
                         this.robotBehaviour.showTextActionPosition(text, x, y);
                         return [0, true];
@@ -539,7 +549,7 @@ export class Interpreter {
                 }
                 case C.LIGHT_ACTION:
                     let color;
-                    if (stmt[C.NAME] === 'mbot') {
+                    if (stmt[C.NAME] === 'mbot' || stmt[C.NAME] === 'txt4') {
                         const rgb = this.state.pop();
                         color = 'rgb(' + rgb[0] + ',' + rgb[1] + ',' + rgb[2] + ')';
                     } else {

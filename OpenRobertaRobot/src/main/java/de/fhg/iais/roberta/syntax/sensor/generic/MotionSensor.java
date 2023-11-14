@@ -7,7 +7,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.ast.ExternalSensorBean;
 
 @NepoExpr(name = "MOTION_SENSING", category = "SENSOR", blocklyNames = {"robSensors_motion_getSample"},
-    sampleValues = {@F2M(field = "MOTION_PRESENCE", mode = "PRESENCE")})
+    sampleValues = {@F2M(field = "MOTION_PRESENCE", mode = "PRESENCE"), @F2M(field = "CAMERA_MOTION", mode = "MOTION")})
 public final class MotionSensor extends ExternalSensor {
 
     public MotionSensor(BlocklyProperties properties, ExternalSensorBean externalSensorBean) {

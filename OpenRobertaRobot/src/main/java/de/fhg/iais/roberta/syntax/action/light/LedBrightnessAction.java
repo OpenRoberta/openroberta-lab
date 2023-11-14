@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.syntax.action.mbot2;
+package de.fhg.iais.roberta.syntax.action.light;
 
 import de.fhg.iais.roberta.blockly.generated.Hide;
 import de.fhg.iais.roberta.syntax.action.Action;
@@ -8,12 +8,12 @@ import de.fhg.iais.roberta.transformer.forField.NepoField;
 import de.fhg.iais.roberta.transformer.forField.NepoHide;
 import de.fhg.iais.roberta.transformer.forField.NepoValue;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
+import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.syntax.WithUserDefinedPort;
 
-@NepoPhrase(category = "ACTOR", blocklyNames = {"robActions_led_setBrightness"}, name = "CYBERPI_SET_BRIGHTNESS_ACTION")
+@NepoPhrase(category = "ACTOR", blocklyNames = {"robActions_led_setBrightness", "actions_led_set_brightness"}, name = "SET_BRIGHTNESS_ACTION")
 public final class LedBrightnessAction extends Action implements WithUserDefinedPort {
     @NepoValue(name = BlocklyConstants.BRIGHTNESS, type = BlocklyType.NUMBER_INT)
     public final Expr brightness;

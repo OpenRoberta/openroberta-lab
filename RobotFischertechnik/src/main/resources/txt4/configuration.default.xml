@@ -1,0 +1,72 @@
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="txt4" xmlversion="" description="" tags="">
+    <instance x="714" y="110">
+        <block type="robConf_camera_txt4" id="CAM" intask="true">
+            <field name="NAME">C</field>
+            <field name="COLOURSIZE">30</field>
+            <field name="MOTION">2</field>
+            <field name="PORT">USB1</field>
+            <value name="COLOUR">
+                <block type="robColour_picker" id="COL" intask="true" deletable="false">
+                    <field name="COLOUR">#FFA500</field>
+                </block>
+            </value>
+        </block>
+    </instance>
+    <instance x="498" y="168">
+        <block type="robConf_display" id="DI" intask="true" deletable="false">
+            <field name="NAME">_B</field>
+        </block>
+    </instance>
+    <instance x="558" y="250">
+        <block type="robConf_robot" id="robot" intask="true">
+            <field name="ROBOT">undefined</field>
+        </block>
+    </instance>
+    <instance x="385" y="287">
+        <block type="robConf_infrared" id="L" intask="true">
+            <field name="NAME">I</field>
+            <field name="PORTL">I1</field>
+            <field name="PORTR">I2</field>
+        </block>
+    </instance>
+    <instance x="215" y="333">
+        <block type="robConf_ultrasonic" id="U" intask="true">
+            <field name="NAME">U</field>
+            <field name="PORT">I3</field>
+            <field name="VCC">9V</field>
+        </block>
+    </instance>
+    <instance x="1041" y="291">
+        <block type="robConf_encodermotor_txt4" id="`CW3f_/xL#;Z!)*[EZz@" intask="true">
+            <field name="NAME">ML</field>
+            <field name="PORT">M1</field>
+            <statement name="ENCODER">
+                <block type="robConf_encoder" id="S(Xm/UHHH;N[4Km1TML1" intask="true">
+                    <field name="NAME">EL</field>
+                    <field name="PORT">C1</field>
+                </block>
+            </statement>
+        </block>
+    </instance>
+    <instance x="877" y="312">
+        <block type="robConf_encodermotor_txt4" id="S(Xm/UHHH;N[4Km1TML0" intask="true">
+            <field name="NAME">MR</field>
+            <field name="PORT">M2</field>
+            <statement name="ENCODER">
+                <block type="robConf_encoder" id=":2[`i_YPGOtEr2:L3W1_" intask="true">
+                    <field name="NAME">ER</field>
+                    <field name="PORT">C2</field>
+                </block>
+            </statement>
+        </block>
+    </instance>
+    <instance x="877" y="434">
+        <block type="robConf_differentialdrive" id="AM=n{?7R#nO#1~?a3j~u" intask="true">
+            <field name="NAME">_D</field>
+            <field name="BRICK_WHEEL_DIAMETER">6</field>
+            <field name="BRICK_TRACK_WIDTH">15</field>
+            <field name="MOTOR_L">M1</field>
+            <field name="MOTOR_R">M2</field>
+        </block>
+    </instance>
+</block_set>

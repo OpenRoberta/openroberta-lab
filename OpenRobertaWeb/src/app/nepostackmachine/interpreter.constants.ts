@@ -361,3 +361,4 @@ export const WHILE: string = "WHILE";
 export const WRITE_PIN_ACTION: string = "writePinAction";
 export const X: string = "x";
 export const Y: string = "y";
+export const COLOUR_COMPARE: string = "compareColour";

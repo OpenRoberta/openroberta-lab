@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.syntax.sensors.arduino.sensebox;
+package de.fhg.iais.roberta.syntax.sensor.generic;
 
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.transformer.forClass.F2M;
@@ -10,7 +10,8 @@ import de.fhg.iais.roberta.util.ast.ExternalSensorBean;
     sampleValues = {@F2M(field = "ENVIRONMENTAL_TEMPERATURE", mode = "TEMPERATURE"), @F2M(field = "ENVIRONMENTAL_VOCEQUIVALENT", mode = "VOCEQUIVALENT"),
         @F2M(field = "ENVIRONMENTAL_CALIBRATION", mode = "CALIBRATION"), @F2M(field = "ENVIRONMENTAL_IAQ", mode = "IAQ"),
         @F2M(field = "ENVIRONMENTAL_PRESSURE", mode = "PRESSURE"), @F2M(field = "ENVIRONMENTAL_HUMIDITY", mode = "HUMIDITY"),
-        @F2M(field = "ENVIRONMENTAL_CO2EQUIVALENT", mode = "CO2EQUIVALENT")})
+        @F2M(field = "ENVIRONMENTAL_CO2EQUIVALENT", mode = "CO2EQUIVALENT"), @F2M(field = "ENVIRONMENTAL_ACCURACY", mode = "ACCURACY"),
+        @F2M(field = "ENVIRONMENTAL_CALIBRATIONNEED", mode = "CALIBRATIONNEED")})
 public final class EnvironmentalSensor extends ExternalSensor {
 
     public EnvironmentalSensor(BlocklyProperties properties, ExternalSensorBean externalSensorBean) {

@@ -1,0 +1,349 @@
+<export xmlns="http://de.fhg.iais.roberta.blockly">
+    <program>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="txt4" xmlversion="3.1" description="" tags="">
+            <instance x="296" y="50">
+                <block type="robControls_start" id="1" intask="true" deletable="false">
+                    <mutation declare="false"/>
+                    <field name="DEBUG"/>
+                    <data>
+                        {"learningRate":0.03,"regularizationRate":0,"noise":0,"batchSize":10,"discretize":false,"percTrainData":50,"activationKey":"linear","activation":{},"regularization":null,"initUntil":null,"collectStats":false,"numHiddenLayers":0,"networkShape":[],"weights":[[["1"]],[[]]],"biases":[["0"],["0"]],"precision":"2","weightArcMaxSize":8,"weightSuppressMultOp":true,"inputs":["n1"],"outputs":["n2"],"hiddenNeurons":[]}
+                    </data>
+                </block>
+                <block type="robActions_serial_print" id="6!fw-rUqCvjmf5f#r`nh" intask="true">
+                    <value name="OUT">
+                        <block type="text" id="bVSDbeHqN)uS_S{xk(FF" intask="true">
+                            <field name="TEXT">Moving Motors</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robActions_serial_print" id="cMcIrF1v??g+OYaiZr1N" intask="true">
+                    <value name="OUT">
+                        <block type="text" id="NNF8x=.6V@^?Ly;2OSdl" intask="true">
+                            <field name="TEXT">M1 Motor for 2 seconds</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_motor_on_txt4" id="m5Y;T?L;TLK)knczE+3}" intask="true">
+                    <field name="ACTORPORT">ML</field>
+                    <value name="POWER">
+                        <block type="math_number" id="653" intask="true">
+                            <field name="NUM">30</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robControls_wait_time" id="2td%te6tP9!U;(4,M#dA" intask="true">
+                    <value name="WAIT">
+                        <block type="math_number" id="YDNTPVX/*{tF)doOJI0-" intask="true">
+                            <field name="NUM">2000</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_motor_stop_txt4" id="JeiS]xJ8~Hv!`xp:,^K_" intask="true">
+                    <field name="ACTORPORT">ML</field>
+                </block>
+                <block type="robActions_serial_print" id="6?L9+Sv7h1VYUcT.B^94" intask="true">
+                    <value name="OUT">
+                        <block type="text" id="eeXAtF|^z_oekm(esTI2" intask="true">
+                            <field name="TEXT">M2 Motor for 2 seconds</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_motor_on_txt4" id="]g,lrP])?+`DjI@m4#co" intask="true">
+                    <field name="ACTORPORT">MR</field>
+                    <value name="POWER">
+                        <block type="math_number" id="(+{/KLSgxgnSP2}?Va*;" intask="true">
+                            <field name="NUM">30</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_motor_stop_txt4" id="*z@F^bAxz+X9}}jWO.e4" intask="true">
+                    <field name="ACTORPORT">MR</field>
+                </block>
+                <block type="robControls_wait_time" id="aruG9f8*?Yzk#cu@@][d" intask="true">
+                    <value name="WAIT">
+                        <block type="math_number" id="Y_Z80Y!NzHV(_BQe1Kqr" intask="true">
+                            <field name="NUM">2000</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robActions_serial_print" id="f?GdZOW9mKgVOORiVIa?" intask="true">
+                    <value name="OUT">
+                        <block type="text" id="i8]@~]s9Pt!5iG=fXr9H" intask="true">
+                            <field name="TEXT">M1 Motor for 2 seconds negative speed</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_motor_on_txt4" id="}{agx-jjVC?%n40oQjQL" intask="true">
+                    <field name="ACTORPORT">MR</field>
+                    <value name="POWER">
+                        <block type="math_number" id="O_ji|fc6:%h}E.tV*jpA" intask="true">
+                            <field name="NUM">-50</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robControls_wait_time" id="d}6?X3W4{~~^E{iz7DNY" intask="true">
+                    <value name="WAIT">
+                        <block type="math_number" id="6pqMYwbxB|HfU5?}e4~/" intask="true">
+                            <field name="NUM">2000</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_motor_stop_txt4" id="z8%5`)=7-zkB3US~.xfo" intask="true">
+                    <field name="ACTORPORT">MR</field>
+                </block>
+                <block type="robActions_serial_print" id="kN+y@x]wL;oP%3W9nYBT" intask="true">
+                    <value name="OUT">
+                        <block type="text" id="+hfk8MwjT.*k8|@b+_#w" intask="true">
+                            <field name="TEXT">M1 then M2 Motor for 5 rotations</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_motor_on_for_txt4" id=".FdsJ.^2T#hSl%I,guv|" intask="true">
+                    <field name="ACTORPORT">ML</field>
+                    <field name="UNIT">ROTATIONS</field>
+                    <value name="POWER">
+                        <block type="math_number" id="[5%mqTDtf|+u=VR?0?0t" intask="true">
+                            <field name="NUM">30</field>
+                        </block>
+                    </value>
+                    <value name="VALUE">
+                        <block type="math_number" id=",x2x,*%td7Nuu0tT(Ii_" intask="true">
+                            <field name="NUM">5</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_motor_on_for_txt4" id=";Wm?3,.L!~d|PJNV8v@J" intask="true">
+                    <field name="ACTORPORT">MR</field>
+                    <field name="UNIT">ROTATIONS</field>
+                    <value name="POWER">
+                        <block type="math_number" id="Rj7o7CD6{W.7L1r@]+J@" intask="true">
+                            <field name="NUM">30</field>
+                        </block>
+                    </value>
+                    <value name="VALUE">
+                        <block type="math_number" id="6=e)TavH{?BY5x[HPXQO" intask="true">
+                            <field name="NUM">5</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robActions_serial_print" id="{ZGi4@/8(CT_#Lm`IrT[" intask="true">
+                    <value name="OUT">
+                        <block type="text" id="{({mLTlcV`^y*kPXG*lg" intask="true">
+                            <field name="TEXT">M1 then M2 Motor for 180 degrees</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robControls_wait_time" id="WY]eew9yP*n|ep*MVw3=" intask="true">
+                    <value name="WAIT">
+                        <block type="math_number" id="soMgIE=e2Xtu_i)AeksM" intask="true">
+                            <field name="NUM">500</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_motor_on_for_txt4" id="(onm+^|6oJ=WAtyX=ALz" intask="true">
+                    <field name="ACTORPORT">ML</field>
+                    <field name="UNIT">DEGREES</field>
+                    <value name="POWER">
+                        <block type="math_number" id="[OgT|AD{gD~oGAL;m?T/" intask="true">
+                            <field name="NUM">30</field>
+                        </block>
+                    </value>
+                    <value name="VALUE">
+                        <block type="math_number" id="*]QMe/}LdO%oi7oZwijV" intask="true">
+                            <field name="NUM">180</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_motor_on_for_txt4" id="1#y113t^QSD+3%0zj^(." intask="true">
+                    <field name="ACTORPORT">MR</field>
+                    <field name="UNIT">DEGREES</field>
+                    <value name="POWER">
+                        <block type="math_number" id="gY^l_Sd`Z612/J#|=4F7" intask="true">
+                            <field name="NUM">30</field>
+                        </block>
+                    </value>
+                    <value name="VALUE">
+                        <block type="math_number" id=")5utos%4+KC-)61`;L!O" intask="true">
+                            <field name="NUM">180</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robActions_serial_print" id="jBNJKd!vR}.jnO3r]|z0" intask="true">
+                    <value name="OUT">
+                        <block type="text" id="tMPc5UiGP8j*tS!+H4Q8" intask="true">
+                            <field name="TEXT">Servo test on S1</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robActions_serial_print" id="4E05FmJS*M.B2.ny[rz4" intask="true">
+                    <value name="OUT">
+                        <block type="text" id="O]=]coe.z[K7K9Eb2?w+" intask="true">
+                            <field name="TEXT">to 180 degrees</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robActions_servo_on_for_txt4" id="meO=z.]RahZ_0;4NdVJD" intask="true">
+                    <field name="ACTORPORT">S</field>
+                    <value name="VALUE">
+                        <block type="math_number" id="Dy#ytr1sQ2WFyWrdDQ_!" intask="true">
+                            <field name="NUM">180</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robControls_wait_time" id="sqJH3cowB+_(@+p5oztV" intask="true">
+                    <value name="WAIT">
+                        <block type="math_number" id="/ZKP+c[LLYiTr*-7#2nK" intask="true">
+                            <field name="NUM">1000</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robActions_serial_print" id="cTl[=v+yA67ScpNn/M3P" intask="true">
+                    <value name="OUT">
+                        <block type="text" id="LU5{*bdl_LRB))-ftYxj" intask="true">
+                            <field name="TEXT">to 0 degrees</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robActions_servo_on_for_txt4" id="m9:)t.qt+m{kz5jt:.Z|" intask="true">
+                    <field name="ACTORPORT">S</field>
+                    <value name="VALUE">
+                        <block type="math_number" id="UWG5#RFjP=S4kOZe:Mzi" intask="true">
+                            <field name="NUM">0</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robControls_wait_time" id="^jdL4q=Q1mB+2djeo3F*" intask="true">
+                    <value name="WAIT">
+                        <block type="math_number" id="4Hzf.@CXEA(DY[U[{(/@" intask="true">
+                            <field name="NUM">1000</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robActions_serial_print" id="}tt^b(F~bGTzoBQz*jt:" intask="true">
+                    <value name="OUT">
+                        <block type="text" id="8*;?0,v=YT`gU=7`)_X6" intask="true">
+                            <field name="TEXT">to 90 degrees</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robActions_servo_on_for_txt4" id="`zHB3q``]q/^)5^8v)+P" intask="true">
+                    <field name="ACTORPORT">S</field>
+                    <value name="VALUE">
+                        <block type="math_number" id=".M^jrN{n8{lSP)k|YF?D" intask="true">
+                            <field name="NUM">90</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robControls_wait_time" id="aRo8aT)66JzGq8CiaQl/" intask="true">
+                    <value name="WAIT">
+                        <block type="math_number" id=".{ohY-}e;^0=:0e,,;k`" intask="true">
+                            <field name="NUM">1000</field>
+                        </block>
+                    </value>
+                </block>
+            </instance>
+        </block_set>
+    </program>
+    <config>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="txt4" xmlversion="" description="" tags="">
+            <instance x="85" y="52">
+                <block type="robConf_omnidrive" id="XufV?IHE1fQS/;ebZJ:v" intask="true">
+                    <field name="NAME">_O</field>
+                    <field name="BRICK_WHEEL_DIAMETER">6</field>
+                    <field name="BRICK_TRACK_WIDTH">15</field>
+                    <field name="WHEEL_BASE">10.2</field>
+                    <field name="MOTOR_FL">M1</field>
+                    <field name="MOTOR_FR">M2</field>
+                    <field name="MOTOR_RL">M3</field>
+                    <field name="MOTOR_RR">M4</field>
+                </block>
+            </instance>
+            <instance x="281" y="44">
+                <block type="robConf_servo" id="a%5;(-PUjfWh:c(OlaC[" intask="true">
+                    <field name="NAME">S</field>
+                    <field name="PORT">S1</field>
+                </block>
+            </instance>
+            <instance x="350" y="103">
+                <block type="robConf_encodermotor_txt4" id="`CW3f_/xL#;Z!)*[EZz@" intask="true">
+                    <field name="NAME">ML</field>
+                    <field name="PORT">M1</field>
+                    <statement name="ENCODER">
+                        <block type="robConf_encoder" id="S(Xm/UHHH;N[4Km1TML1" intask="true">
+                            <field name="NAME">EL</field>
+                            <field name="PORT">C1</field>
+                        </block>
+                    </statement>
+                </block>
+            </instance>
+            <instance x="600" y="103">
+                <block type="robConf_encodermotor_txt4" id="S(Xm/UHHH;N[4Km1TML0" intask="true">
+                    <field name="NAME">MR</field>
+                    <field name="PORT">M2</field>
+                    <statement name="ENCODER">
+                        <block type="robConf_encoder" id="g0|qa:P?~/Nmy~x_@suI" intask="true">
+                            <field name="NAME">ER</field>
+                            <field name="PORT">C2</field>
+                        </block>
+                    </statement>
+                </block>
+            </instance>
+            <instance x="555" y="252">
+                <block type="robConf_encodermotor_txt4" id="%|!-a?el?z{~cfrEsC8T" intask="true">
+                    <field name="NAME">ML2</field>
+                    <field name="PORT">M3</field>
+                    <statement name="ENCODER">
+                        <block type="robConf_encoder" id=".Gu7(da@n6Nmt=.]KCO!" intask="true">
+                            <field name="NAME">EL2</field>
+                            <field name="PORT">C3</field>
+                        </block>
+                    </statement>
+                </block>
+            </instance>
+            <instance x="726" y="257">
+                <block type="robConf_encodermotor_txt4" id="e:8p1-QOG3mBEpI,bg50" intask="true">
+                    <field name="NAME">ML3</field>
+                    <field name="PORT">M4</field>
+                    <statement name="ENCODER">
+                        <block type="robConf_encoder" id="vOYrums5+Kz!{`X0kP?i" intask="true">
+                            <field name="NAME">EL3</field>
+                            <field name="PORT">C4</field>
+                        </block>
+                    </statement>
+                </block>
+            </instance>
+            <instance x="350" y="310">
+                <block type="robConf_display" id="DI" intask="true" deletable="false">
+                    <field name="NAME">_B</field>
+                </block>
+            </instance>
+            <instance x="70" y="360">
+                <block type="robConf_camera_txt4" id="CAM" intask="true">
+                    <field name="NAME">C</field>
+                    <field name="COLOURSIZE">30</field>
+                    <field name="MOTION">2</field>
+                    <field name="PORT">USB1</field>
+                    <value name="COLOUR">
+                        <block type="robColour_picker" id="COL" intask="true" deletable="false">
+                            <field name="COLOUR">#FFA500</field>
+                        </block>
+                    </value>
+                </block>
+            </instance>
+            <instance x="350" y="360">
+                <block type="robConf_infrared" id="L" intask="true">
+                    <field name="NAME">I</field>
+                    <field name="PORTL">I1</field>
+                    <field name="PORTR">I2</field>
+                </block>
+            </instance>
+            <instance x="350" y="460">
+                <block type="robConf_ultrasonic" id="U" intask="true">
+                    <field name="NAME">U</field>
+                    <field name="PORT">I3</field>
+                    <field name="VCC">9V</field>
+                </block>
+            </instance>
+        </block_set>
+    </config>
+</export>

@@ -548,4 +548,34 @@ export const ROBOTS = {
         width: '417px',
         height: '272px',
     },
+    txt4: {
+        ports: [
+            // ports
+            { name: 'EXT', position: { x: 2, y: 65 } },
+            { name: 'I1', position: { x: 22, y: 77 } },
+            { name: 'I2', position: { x: 22, y: 98 } },
+            { name: 'I3', position: { x: 22, y: 119 } },
+            { name: 'I4', position: { x: 22, y: 140 } },
+            { name: 'I5', position: { x: 22, y: 162 } },
+            { name: 'I6', position: { x: 22, y: 183 } },
+            { name: 'I7', position: { x: 22, y: 204 } },
+            { name: 'I8', position: { x: 22, y: 225 } },
+            { name: 'M1', position: { x: 228, y: 77 } },
+            { name: 'M2', position: { x: 228, y: 98 } },
+            { name: 'M3', position: { x: 228, y: 119 } },
+            { name: 'M4', position: { x: 228, y: 140 } },
+            { name: 'C1', position: { x: 228, y: 162 } },
+            { name: 'C2', position: { x: 228, y: 183 } },
+            { name: 'C3', position: { x: 228, y: 204 } },
+            { name: 'C4', position: { x: 228, y: 225 } },
+            { name: 'USB1', position: { x: 71, y: 1 } },
+            { name: 'USB2', position: { x: 160, y: 1 } },
+            { name: '9V', position: { x: 64.5, y: 225 } },
+
+            //build in
+            { name: 'display', position: { x: 126, y: 118 } },
+        ],
+        width: '255px',
+        height: '255px',
+    },
 };

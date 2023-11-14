@@ -1,0 +1,406 @@
+<export xmlns="http://de.fhg.iais.roberta.blockly">
+    <program>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="txt4" xmlversion="3.1" description="" tags="">
+            <instance x="296" y="50">
+                <block type="robControls_start" id="1" intask="true" deletable="false">
+                    <mutation declare="false"></mutation>
+                    <field name="DEBUG"></field>
+                </block>
+                <block type="robActions_serial_print" id="Hsl;lrMb*2E4^,mL=%bW" intask="true">
+                    <value name="OUT">
+                        <block type="text" id="EXLE)?wx7pbSSOSsueM5" intask="true">
+                            <field name="TEXT">Driving Forwards</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_motorOmniDiff_on_txt4" id="Q]osoFeu18ZpJR)wgLq4" intask="true">
+                    <field name="DIRECTION">FORWARD</field>
+                    <hide name="ACTORPORT" value="NO PORT"></hide>
+                    <value name="POWER">
+                        <block type="math_number" id="653" intask="true">
+                            <field name="NUM">30</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robControls_wait_time" id="sU%O-Jx;8=qF;RrT_}J@" intask="true">
+                    <value name="WAIT">
+                        <block type="math_number" id="gtE*UPRurI*=|-@~J[[1" intask="true">
+                            <field name="NUM">1000</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_motorOmniDiff_on_txt4" id="^v[9^%n|9)]Be*I--,K|" intask="true">
+                    <field name="DIRECTION">BACKWARD</field>
+                    <hide name="ACTORPORT" value="NO PORT"></hide>
+                    <value name="POWER">
+                        <block type="math_number" id="zQW3F8/[y0nrj:kWb6~(" intask="true">
+                            <field name="NUM">30</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robActions_serial_print" id="Grn%GRXw%W8Aa,{Tv!c`" intask="true">
+                    <value name="OUT">
+                        <block type="text" id="~oxU_+FX0Q%u-a)y1[:#" intask="true">
+                            <field name="TEXT">Driving Backwards</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robControls_wait_time" id="/UenzyGR18w}sJecFiKu" intask="true">
+                    <value name="WAIT">
+                        <block type="math_number" id="!w]~%~SqB/GfR}u8:NI7" intask="true">
+                            <field name="NUM">1000</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_motorOmniDiff_stop_txt4" id="t3J!I^W~@6!U4RsUttgE" intask="true">
+                    <hide name="ACTORPORT" value="_D"></hide>
+                </block>
+                <block type="robActions_serial_print" id="uxWU@#exRDOaMBd_iPR7" intask="true">
+                    <value name="OUT">
+                        <block type="text" id="y%YpFFAFh)NX=zVSCq=;" intask="true">
+                            <field name="TEXT">Testing 20cm</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_motorOmniDiff_on_for_txt4" id="x]bX8!j}NYLBLAbUHvLR" intask="true">
+                    <field name="DIRECTION">FORWARD</field>
+                    <hide name="ACTORPORT" value="NO PORT"></hide>
+                    <value name="POWER">
+                        <block type="math_number" id="hpx+]UJ_f4mcQL3{3JC3" intask="true">
+                            <field name="NUM">30</field>
+                        </block>
+                    </value>
+                    <value name="DISTANCE">
+                        <block type="math_number" id="(|;#_)Y86qp/!yx%n],v" intask="true">
+                            <field name="NUM">20</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_motorOmniDiff_stop_txt4" id="mzjMq[S3[qp8H_d5iE]6" intask="true">
+                    <hide name="ACTORPORT" value="_D"></hide>
+                </block>
+                <block type="robControls_wait_time" id="iUnKd3MI%=@n[`v%uBy!" intask="true">
+                    <value name="WAIT">
+                        <block type="math_number" id="s4X*38O{H.gDMBs][O2E" intask="true">
+                            <field name="NUM">500</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_motorOmniDiff_on_for_txt4" id="g~sMW*tO`m5Jx,iYwK`N" intask="true">
+                    <field name="DIRECTION">BACKWARD</field>
+                    <hide name="ACTORPORT" value="NO PORT"></hide>
+                    <value name="POWER">
+                        <block type="math_number" id="NMk%jf@9**w^,kbS|aNn" intask="true">
+                            <field name="NUM">30</field>
+                        </block>
+                    </value>
+                    <value name="DISTANCE">
+                        <block type="math_number" id="MoMl[@vU*=?mov#}IV{@" intask="true">
+                            <field name="NUM">20</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_motorOmniDiff_stop_txt4" id="pz/wE6_}W:#5T|K1DB_f" intask="true">
+                    <hide name="ACTORPORT" value="_D"></hide>
+                </block>
+                <block type="robControls_wait_time" id=")ZqlFYi0Bn.Op#=*J;4^" intask="true">
+                    <value name="WAIT">
+                        <block type="math_number" id="=pu_+?{21uqNMAjm:Hoc" intask="true">
+                            <field name="NUM">500</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_motorOmniDiff_on_for_txt4" id="cHtpRMHp,=0SwOh4b]3O" intask="true">
+                    <field name="DIRECTION">BACKWARD</field>
+                    <hide name="ACTORPORT" value="NO PORT"></hide>
+                    <value name="POWER">
+                        <block type="math_number" id="5.}G^7WX}G0h_+X_8i:S" intask="true">
+                            <field name="NUM">30</field>
+                        </block>
+                    </value>
+                    <value name="DISTANCE">
+                        <block type="math_number" id="aj`r=f?B6]hMS;J}SiJ=" intask="true">
+                            <field name="NUM">-20</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_motorOmniDiff_on_for_txt4" id="aK*)0hSN6w.O,;PrP7JR" intask="true">
+                    <field name="DIRECTION">FORWARD</field>
+                    <hide name="ACTORPORT" value="NO PORT"></hide>
+                    <value name="POWER">
+                        <block type="math_number" id="B,5+PGEnf9oROLtrJT(V" intask="true">
+                            <field name="NUM">-30</field>
+                        </block>
+                    </value>
+                    <value name="DISTANCE">
+                        <block type="math_number" id="Q;q:|[Q^rbvxu7g@OC^2" intask="true">
+                            <field name="NUM">20</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_motorOmniDiff_stop_txt4" id="R1u,+/f)w12G~:{0:+s?" intask="true">
+                    <hide name="ACTORPORT" value="_D"></hide>
+                </block>
+                <block type="robControls_wait_time" id="L+UCQ=O|~yH=fdx0WPDy" intask="true">
+                    <value name="WAIT">
+                        <block type="math_number" id="pz_J|Ddc#Tlz!r.U/:GT" intask="true">
+                            <field name="NUM">500</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robActions_serial_print" id="!]3,xE;LIySI9;WEE[O:" intask="true">
+                    <value name="OUT">
+                        <block type="text" id="~q(hHB_QyXD1J4~PLB=(" intask="true">
+                            <field name="TEXT">Testing Curve</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_motorOmniDiff_curve" id="0}KN;lJ{x@E4V{Y+3uT+" intask="true">
+                    <field name="DIRECTION">FORWARD</field>
+                    <hide name="ACTORPORT" value="_D"></hide>
+                    <value name="POWER_LEFT">
+                        <block type="math_integer" id="fXw0RFe[xr4507!nYyTE" intask="true">
+                            <field name="NUM">40</field>
+                        </block>
+                    </value>
+                    <value name="POWER_RIGHT">
+                        <block type="math_integer" id="Qd:;Gc5I:SDDP[50p#F+" intask="true">
+                            <field name="NUM">30</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_motorOmniDiff_curve" id="])M(-cK[VRFQ0`|jl%H4" intask="true">
+                    <field name="DIRECTION">BACKWARD</field>
+                    <hide name="ACTORPORT" value="_D"></hide>
+                    <value name="POWER_LEFT">
+                        <block type="math_integer" id="ylYb1YN6:|#iK9l~fNYw" intask="true">
+                            <field name="NUM">40</field>
+                        </block>
+                    </value>
+                    <value name="POWER_RIGHT">
+                        <block type="math_integer" id=",hq-}sSkrQ7Sp4AHnD0X" intask="true">
+                            <field name="NUM">30</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_motorOmniDiff_curve" id="(k4fM{DglZKC{#xVy)!3" intask="true">
+                    <field name="DIRECTION">FORWARD</field>
+                    <hide name="ACTORPORT" value="_D"></hide>
+                    <value name="POWER_LEFT">
+                        <block type="math_integer" id=")fhE(EN+Tq2Qc{o8B:B)" intask="true">
+                            <field name="NUM">-40</field>
+                        </block>
+                    </value>
+                    <value name="POWER_RIGHT">
+                        <block type="math_integer" id="}dsZ2ufjKBlZvX_5M)(o" intask="true">
+                            <field name="NUM">40</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_motorOmniDiff_curve_for" id="7[P@nC)t/%`j;+/10)Ue" intask="true">
+                    <field name="DIRECTION">FORWARD</field>
+                    <hide name="ACTORPORT" value="_D"></hide>
+                    <value name="POWER_LEFT">
+                        <block type="math_integer" id="0zcx3UlksaIWDEqIID(M" intask="true">
+                            <field name="NUM">30</field>
+                        </block>
+                    </value>
+                    <value name="POWER_RIGHT">
+                        <block type="math_integer" id="v;!(@T.#AdVTfc/.`]e}" intask="true">
+                            <field name="NUM">40</field>
+                        </block>
+                    </value>
+                    <value name="DISTANCE">
+                        <block type="math_integer" id="n_NHfK;H^st,CE:y=B5a" intask="true">
+                            <field name="NUM">20</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_motorOmniDiff_stop_txt4" id="9Q51Yh]{RZ@iLNGbobs[" intask="true">
+                    <hide name="ACTORPORT" value="_D"></hide>
+                </block>
+                <block type="robControls_wait_time" id="z:kvCSuCV=]gs_5*x;HY" intask="true">
+                    <value name="WAIT">
+                        <block type="math_number" id="xLO?EP}RI(+@PmS8C{8w" intask="true">
+                            <field name="NUM">500</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robActions_serial_print" id="D=+WAMkOx?(5Dp@!h|xu" intask="true">
+                    <value name="OUT">
+                        <block type="text" id="~dpx`BOjT?)v,5;5yoWS" intask="true">
+                            <field name="TEXT">90 Degree right turn</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_motorOmniDiff_turn_for_txt4" id="F29q+#b7Ri|f;FS~TE.D" intask="true">
+                    <field name="DIRECTION">RIGHT</field>
+                    <hide name="ACTORPORT" value="_D"></hide>
+                    <value name="POWER">
+                        <block type="math_number" id="g}7o]Wxk:uo}.5w38~OV" intask="true">
+                            <field name="NUM">30</field>
+                        </block>
+                    </value>
+                    <value name="DEGREES">
+                        <block type="math_number" id=":Ym]@lB!1{%~R-_GN_1g" intask="true">
+                            <field name="NUM">90</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robActions_serial_print" id="0]03b4NAZHm4Q#/;~Fa5" intask="true">
+                    <value name="OUT">
+                        <block type="text" id="VKn9:zc;v+vF}7y-3K/r" intask="true">
+                            <field name="TEXT">45 Degree left turn twice</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_motorOmniDiff_turn_for_txt4" id="qa{o=2P]Yji+lmz[[t{5" intask="true">
+                    <field name="DIRECTION">LEFT</field>
+                    <hide name="ACTORPORT" value="_D"></hide>
+                    <value name="POWER">
+                        <block type="math_number" id="9qM`y0)viCj_Gno~GLmc" intask="true">
+                            <field name="NUM">30</field>
+                        </block>
+                    </value>
+                    <value name="DEGREES">
+                        <block type="math_number" id="Y;y6~Y?61Zu9[lgo/o;P" intask="true">
+                            <field name="NUM">45</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_motorOmniDiff_turn_for_txt4" id="Ni=WX@H4SXEf%p)OUZ`)" intask="true">
+                    <field name="DIRECTION">LEFT</field>
+                    <hide name="ACTORPORT" value="_D"></hide>
+                    <value name="POWER">
+                        <block type="math_number" id="G!+nN^.Jd*H*oQ1r,~`a" intask="true">
+                            <field name="NUM">30</field>
+                        </block>
+                    </value>
+                    <value name="DEGREES">
+                        <block type="math_number" id="H[U%zU9X[]%ktL4sr5U?" intask="true">
+                            <field name="NUM">45</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robActions_serial_print" id="oI!4ihz6Z?K)Ma=fc,Qz" intask="true">
+                    <value name="OUT">
+                        <block type="text" id="p)(CNn@d}G@pm9Q6c2gY" intask="true">
+                            <field name="TEXT">turn right 2 seconds</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_motorOmniDiff_turn_txt4" id=")v2,qPT~q6Qe([672^1P" intask="true">
+                    <field name="DIRECTION">RIGHT</field>
+                    <hide name="ACTORPORT" value="_D"></hide>
+                    <value name="POWER">
+                        <block type="math_number" id=".-ax)h]g@ay7*uA.3^m=" intask="true">
+                            <field name="NUM">30</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robControls_wait_time" id="bxL`z.7[3E=o^A*A(xWb" intask="true">
+                    <value name="WAIT">
+                        <block type="math_number" id="c^CaXI6G}`W18MKvUa8a" intask="true">
+                            <field name="NUM">2000</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robActions_serial_print" id="e4~O[c}.V[=u_o|2ezE-" intask="true">
+                    <value name="OUT">
+                        <block type="text" id="#Tu)VBHIT^2?DP-|tY,+" intask="true">
+                            <field name="TEXT">turn left 2 seconds</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_motorOmniDiff_turn_txt4" id="9x2N5Jc3A`eJTPMd=9M5" intask="true">
+                    <field name="DIRECTION">LEFT</field>
+                    <hide name="ACTORPORT" value="_D"></hide>
+                    <value name="POWER">
+                        <block type="math_number" id="7s8{QQ,6XfMZMc7-P)Vv" intask="true">
+                            <field name="NUM">30</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robControls_wait_time" id="tYF8!3t6?-D%{tiC=c,J" intask="true">
+                    <value name="WAIT">
+                        <block type="math_number" id="xCGiJ4JshS65n@B}`y3y" intask="true">
+                            <field name="NUM">2000</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_motorOmniDiff_stop_txt4" id="gMzYbrS+nt{MUIpZdfK:" intask="true">
+                    <hide name="ACTORPORT" value="_D"></hide>
+                </block>
+            </instance>
+        </block_set>
+    </program>
+    <config>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="txt4" xmlversion="" description="" tags="">
+            <instance x="70" y="103">
+                <block type="robConf_differentialdrive" id="AM=n{?7R#nO#1~?a3j~u" intask="true">
+                    <field name="NAME">_D</field>
+                    <field name="BRICK_WHEEL_DIAMETER">6</field>
+                    <field name="BRICK_TRACK_WIDTH">15</field>
+                    <field name="MOTOR_L">M1</field>
+                    <field name="MOTOR_R">M2</field>
+                </block>
+            </instance>
+            <instance x="350" y="103">
+                <block type="robConf_encodermotor_txt4" id="`CW3f_/xL#;Z!)*[EZz@" intask="true">
+                    <field name="NAME">ML</field>
+                    <field name="PORT">M1</field>
+                    <statement name="ENCODER">
+                        <block type="robConf_encoder" id="S(Xm/UHHH;N[4Km1TML1" intask="true">
+                            <field name="NAME">EL</field>
+                            <field name="PORT">C1</field>
+                        </block>
+                    </statement>
+                </block>
+            </instance>
+            <instance x="600" y="103">
+                <block type="robConf_encodermotor_txt4" id="S(Xm/UHHH;N[4Km1TML0" intask="true">
+                    <field name="NAME">MR</field>
+                    <field name="PORT">M2</field>
+                    <statement name="ENCODER">
+                        <block type="robConf_encoder" id="g0|qa:P?~/Nmy~x_@suI" intask="true">
+                            <field name="NAME">ER</field>
+                            <field name="PORT">C2</field>
+                        </block>
+                    </statement>
+                </block>
+            </instance>
+            <instance x="350" y="310">
+                <block type="robConf_display" id="DI" intask="true" deletable="false">
+                    <field name="NAME">_B</field>
+                </block>
+            </instance>
+            <instance x="70" y="360">
+                <block type="robConf_camera_txt4" id="CAM" intask="true">
+                    <field name="NAME">C</field>
+                    <field name="COLOURSIZE">30</field>
+                    <field name="MOTION">2</field>
+                    <field name="PORT">USB1</field>
+                    <value name="COLOUR">
+                        <block type="robColour_picker" id="COL" intask="true" deletable="false">
+                            <field name="COLOUR">#FFA500</field>
+                        </block>
+                    </value>
+                </block>
+            </instance>
+            <instance x="350" y="360">
+                <block type="robConf_infrared" id="L" intask="true">
+                    <field name="NAME">I</field>
+                    <field name="PORTL">I1</field>
+                    <field name="PORTR">I2</field>
+                </block>
+            </instance>
+            <instance x="350" y="460">
+                <block type="robConf_ultrasonic" id="U" intask="true">
+                    <field name="NAME">U</field>
+                    <field name="PORT">I3</field>
+                    <field name="VCC">9V</field>
+                </block>
+            </instance>
+        </block_set>
+    </config>
+</export>

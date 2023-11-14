@@ -245,6 +245,7 @@ function initConfigurationEnvironment() {
     }
     var dom = confVis ? confVis.getXml() : Blockly.Xml.workspaceToDom(bricklyWorkspace);
     var xml = Blockly.Xml.domToText(dom);
+    GUISTATE_C.setConfigurationXML(xml);
 }
 
 function showSaveAsModal() {

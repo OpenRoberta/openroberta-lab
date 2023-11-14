@@ -53,6 +53,7 @@ public class Util {
     private static final Pattern PORT_NAME_PATTERN = Pattern.compile("^\\w+$");
     private static final Pattern IFDEF_PATTERN = Pattern.compile("^\\s*#ifdef (.*)$");
     private static final Pattern END_PATTERN = Pattern.compile("^\\s*#end$");
+    private static final Pattern HEX_VALUE_PATTERN = Pattern.compile("^#[0-9a-fA-F]+$");
     private static final String INVALID = "invalid";
     /**
      * YAML parser. NOT thread-safe!
@@ -684,7 +685,7 @@ public class Util {
         for ( Map.Entry<String, String> pair : componentProperties.entrySet() ) {
             String key = pair.getKey();
             String value = pair.getValue();
-            boolean isValid = key.equals("NAO_FILENAME") ? FILENAME_PATTERN.matcher(value).matches() : CONFIG_NAME_PATTERN.matcher(value).matches() || NUMBER_PATTERN.matcher(value).matches();
+            boolean isValid = key.equals("NAO_FILENAME") ? FILENAME_PATTERN.matcher(value).matches() : CONFIG_NAME_PATTERN.matcher(value).matches() || NUMBER_PATTERN.matcher(value).matches() || HEX_VALUE_PATTERN.matcher(value).matches();
             if ( !isValid ) {
                 try {
                     pair.setValue(INVALID);

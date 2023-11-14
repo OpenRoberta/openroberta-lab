@@ -2,6 +2,7 @@
     <category name="TOOLBOX_ACTION" svg="true">
         <block type="robConf_motor"></block>
         <block type="robConf_differentialdrive"></block>
+        <block type='robConf_servo'></block>
     </category>
     <category name="TOOLBOX_SENSOR" svg="true">
         <block type="robConf_colour"></block>

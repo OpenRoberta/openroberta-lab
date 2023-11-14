@@ -1,19 +1,18 @@
 import { Pose, RobotBaseMobile } from 'robot.base.mobile';
 import { ColorSensor, DistanceSensor, EV3Keys, GyroSensorExt, InfraredSensor, Keys, Timer, TouchSensor, UltrasonicSensor } from 'robot.sensors';
-import { ChassisDiffDrive, EV3Chassis, StatusLed, TTS, WebAudio } from 'robot.actuators';
+import { EncoderChassisDiffDrive, EV3Chassis, StatusLed, TTS, WebAudio } from 'robot.actuators';
 import { RobotBase, SelectionListener } from 'robot.base';
 import { Interpreter } from 'interpreter.interpreter';
 import * as $ from 'jquery';
 
 export default class RobotEv3 extends RobotBaseMobile {
-    chassis: ChassisDiffDrive;
+    chassis: EncoderChassisDiffDrive;
     led: StatusLed;
     volume: number = 0.5;
     tts: TTS = new TTS();
     webAudio: WebAudio = new WebAudio();
     override timer: Timer = new Timer(5);
     buttons: Keys;
-    override readonly imgList = ['simpleBackground', 'drawBackground', 'robertaBackground', 'rescueBackground', 'blank', 'mathBackground'];
 
     constructor(id: number, configuration: object, interpreter: Interpreter, savedName: string, myListener: SelectionListener) {
         super(id, configuration, interpreter, savedName, myListener);
@@ -37,7 +36,7 @@ export default class RobotEv3 extends RobotBaseMobile {
     // this method might go up to BaseMobileRobots as soon as the configuration has detailed information about the sensors geometry and location on the robot
     protected configure(configuration: object): void {
         this.chassis = new EV3Chassis(this.id, configuration, 2, this.pose);
-        this.led = new StatusLed();
+        this.led = new StatusLed({ x: -10, y: 0 }, this.chassis.geom.color);
         let sensors: object = configuration['SENSORS'];
         for (const c in sensors) {
             switch (sensors[c]['TYPE']) {

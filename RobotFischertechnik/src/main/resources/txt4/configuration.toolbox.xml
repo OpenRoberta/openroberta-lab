@@ -1,0 +1,29 @@
+<toolbox_set id="toolbox-Configuration" style="display: none">
+    <category name="TOOLBOX_ACTION" svg="true">
+        <block type="robConf_encodermotor_txt4"/>
+        <block type='robConf_servo'></block>
+        <block type='robConf_differentialdrive'></block>
+        <block type='robConf_omnidrive'></block>
+        <block type='robConf_led'></block>
+    </category>
+    <category name="TOOLBOX_SENSOR" svg="true">
+        <block type='robConf_ultrasonic'></block>
+        <block type='robConf_encoder'></block>
+        <block type='robConf_key'></block>
+        <block type='robConf_infrared'></block>
+        <block type='robConf_camera_txt4'>
+            <value name='COLOUR'>
+                <block type='robColour_picker' deletable="false">
+                    <field name='COLOUR'>#FFA500</field>
+                </block>
+            </value>
+        </block>
+        <block type='robConf_light'></block>
+        <block type='robConf_i2c_port_txt4'></block>
+        <block type='robConf_environmental'></block>
+        <block type='robConf_gesture'></block>
+        <block type='robConf_imu'></block>
+    </category>
+
+
+</toolbox_set>

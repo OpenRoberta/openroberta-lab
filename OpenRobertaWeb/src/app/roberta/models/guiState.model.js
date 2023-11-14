@@ -79,6 +79,7 @@ function init() {
     robot.nepoExitValue = 0;
     robot.time = -1;
     robot.robotPort = '';
+    robot.url = '';
 
     var getInitFromServer = function () {
         COMM.setInitToken(undefined);

@@ -96,7 +96,7 @@ public class MbotStackMachineVisitor extends AbstractStackMachineVisitor impleme
         } else if ( slot.equals("2") ) {
             slot = C.RIGHT;
         }
-        JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.INFRARED).put(C.PORT, port).put(C.MODE, slot).put(C.NAME, "mbot");
+        JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.INFRARED).put(C.PORT, port).put(C.MODE, slot);
         return add(o);
     }
 

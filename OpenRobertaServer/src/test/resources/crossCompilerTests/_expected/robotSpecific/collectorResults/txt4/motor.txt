@@ -1,0 +1,6 @@
+Sensors: 
+[UsedSensor [ML, ENCODER, ENCODERMOTOR], UsedSensor [MR, ENCODER, ENCODERMOTOR]]
+Actors: 
+[UsedActor [M1, ENCODERMOTOR], UsedActor [M2, ENCODERMOTOR], UsedActor [ML, ENCODERMOTOR], UsedActor [MR, ENCODERMOTOR], UsedActor [S, SERVOMOTOR]]
+Methods: 
+[MOTORSTART, MOTORSTARTFOR]

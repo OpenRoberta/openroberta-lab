@@ -50,6 +50,7 @@
         <module>RobotThymio</module>
         <module>RobotRobotino</module>
         <module>RobotSpike</module>
+        <module>RobotFischertechnik</module>
     </modules>
     <pluginRepositories>
         <pluginRepository>
@@ -134,6 +135,11 @@
             <dependency>
                 <groupId>de.fhg.iais.openroberta</groupId>
                 <artifactId>RobotSpike</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>de.fhg.iais.openroberta</groupId>
+                <artifactId>RobotFischertechnik</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

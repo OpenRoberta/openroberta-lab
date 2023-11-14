@@ -5,6 +5,25 @@
  */
 
 import * as COMM from 'comm';
+import * as $ from 'jquery';
+import * as LOG from 'log';
+
+export function setApiKey(apiKey, url, successFn) {
+    return $.ajax({
+        type: 'GET',
+        url: 'http://' + url + '/api/v1/ping',
+        dataType: 'text',
+        headers: {
+            'X-API-KEY': apiKey,
+        },
+        timeout: 2000,
+        success: successFn,
+        error: WRAP.wrapErrorFn(function () {
+            alert('Error while connecting the robot. Please make sure that the robot is connected via the same Network or usb cable'); // This is an annoying behavior ...
+            LOG.info('Error while connecting the robot. LOG');
+        }),
+    });
+}
 
 /**
  * Update firmware of the robot.

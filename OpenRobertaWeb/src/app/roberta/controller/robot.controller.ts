@@ -63,6 +63,31 @@ function setToken(token: string) {
     }
 }
 
+function setApiKey(apiKey: string, url: string) {
+    $formSingleModal.validate();
+    let checkUrl = (url) => {
+        let reg = new RegExp('^txt40\\.local$|^192\\.168(\\.[0-9]{1,3}){2}$');
+        return reg.test(url);
+    };
+    if ($formSingleModal.valid() && checkUrl(url)) {
+        ROBOT.setApiKey(apiKey, url, function () {
+            GUISTATE_C.setRobotToken(apiKey);
+            GUISTATE_C.setRobotUrl(url);
+            GUISTATE_C.setRunEnabled(true);
+            GUISTATE_C.setConnectionState('wait');
+            $('#stopProgram').addClass('disabled');
+            $('#head-navi-icon-robot').removeClass('error');
+            $('#head-navi-icon-robot').removeClass('busy');
+            $('#head-navi-icon-robot').addClass('wait');
+            // @ts-ignore
+            MSG.displayInformation({ rc: 'ok' }, 'MESSAGE_ROBOT_CONNECTED', '', GUISTATE_C.getRobotName());
+            setTimeout(function () {
+                $('.modal').modal('hide');
+            }, 100);
+        });
+    }
+}
+
 function setPort(port) {
     robotPort = port;
     $('#single-modal-list').modal('hide');
@@ -204,7 +229,7 @@ function initRobotForms() {
     );
 }
 
-function showSetTokenModal() {
+function showSetTokenModal(tokenMinLength: number, tokenMaxLength: number) {
     UTIL.showSingleModal(
         function () {
             $('#singleModalInput').attr('type', 'text');
@@ -225,8 +250,8 @@ function showSetTokenModal() {
             rules: {
                 singleModalInput: {
                     required: true,
-                    minlength: 8,
-                    maxlength: 8,
+                    minlength: tokenMinLength,
+                    maxlength: tokenMaxLength,
                 },
             },
             errorClass: 'form-invalid',
@@ -238,6 +263,58 @@ function showSetTokenModal() {
                     required: Blockly.Msg['VALIDATION_FIELD_REQUIRED'],
                     minlength: Blockly.Msg['VALIDATION_TOKEN_LENGTH'],
                     maxlength: Blockly.Msg['VALIDATION_TOKEN_LENGTH'],
+                },
+            },
+        }
+    );
+}
+// TODO add blocklyMsg
+function showSetApiKeyModal(placeHolderUrl) {
+    UTIL.showSingleModal(
+        function () {
+            $('.form-label-ip').removeClass('hidden');
+            $('.ip-input-group').removeClass('hidden');
+            $('#singleModalInput').attr('type', 'text');
+            $('#singleModalInputIp').attr('type', 'text');
+            $('#single-modal #singleModalInputIp').val(placeHolderUrl);
+
+            $('#single-modal h5').text(Blockly.Msg['MENU_CONNECT']);
+            $('#single-modal .form-label').text(Blockly.Msg['POPUP_VALUE']);
+            $('#single-modal .form-label-ip').text('URL or IP address');
+            $('#single-modal a[href]').text(Blockly.Msg['POPUP_STARTUP_HELP']);
+            $('#single-modal a[href]').attr('href', 'http://wiki.open-roberta.org');
+        },
+        function () {
+            // @ts-ignore
+            setApiKey($('#singleModalInput').val(), $('#singleModalInputIp').val());
+        },
+        function () {
+            $('.form-label-ip').addClass('hidden');
+            $('.ip-input-group').addClass('hidden');
+        },
+        {
+            rules: {
+                singleModalInput: {
+                    required: true,
+                    minlength: 6,
+                    maxlength: 6,
+                },
+                singleModalInputIp: {
+                    required: true,
+                },
+            },
+            errorClass: 'form-invalid',
+            errorPlacement: function (label, element) {
+                label.insertAfter(element);
+            },
+            messages: {
+                singleModalInput: {
+                    required: Blockly.Msg['VALIDATION_FIELD_REQUIRED'],
+                    minlength: Blockly.Msg['VALIDATION_TOKEN_LENGTH'],
+                    maxlength: Blockly.Msg['VALIDATION_TOKEN_LENGTH'],
+                },
+                singleModalInputIp: {
+                    required: 'Wifi: txt40.local, USB: 192.168.7.2, or Ip address of your robot: INFO > Wi-FI > IP',
                 },
             },
         }
@@ -437,4 +514,4 @@ function switchRobot(robot: string, extensions: object, opt_continue?: boolean, 
         }
     }
 }
-export { init, setPort, getPort, showSetTokenModal, showScanModal, showListModal, handleFirmwareConflict, updateFirmware, switchRobot };
+export { init, setPort, getPort, showSetTokenModal, showSetApiKeyModal, showScanModal, showListModal, handleFirmwareConflict, updateFirmware, switchRobot };

@@ -533,3 +533,12 @@ export function hexToHsv(hex: string): number[] {
     let rgb = hexToRGB(hex);
     return rgbToHsv(rgb[0], rgb[1], rgb[2]);
 }
+
+export const rgbToHex = (r, g, b) =>
+    '#' +
+    [r, g, b]
+        .map((x) => {
+            const hex = x.toString(16);
+            return hex.length === 1 ? '0' + hex : hex;
+        })
+        .join('');

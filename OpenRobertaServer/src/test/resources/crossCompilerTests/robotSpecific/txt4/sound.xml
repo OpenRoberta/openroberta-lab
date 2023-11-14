@@ -1,0 +1,202 @@
+<export xmlns="http://de.fhg.iais.roberta.blockly">
+    <program>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="txt4" xmlversion="3.1" description="" tags="">
+            <instance x="296" y="50">
+                <block type="robControls_start" id="1" intask="true" deletable="false">
+                    <mutation declare="false"/>
+                    <field name="DEBUG"/>
+                </block>
+                <block type="actions_play_file_txt4" id="}G)fKex@Ac)b3_E^u%t9" intask="true">
+                    <field name="FILE">01_Airplane</field>
+                    <hide name="ACTORPORT" value="NO PORT"/>
+                </block>
+                <block type="actions_play_file_txt4" id="5nZ|tYs{QTCI:?D@^mpB" intask="true">
+                    <field name="FILE">02_Alarm</field>
+                    <hide name="ACTORPORT" value="NO PORT"/>
+                </block>
+                <block type="actions_play_file_txt4" id="j?s/A*yvQIKS_/7lL+5," intask="true">
+                    <field name="FILE">03_Bell</field>
+                    <hide name="ACTORPORT" value="NO PORT"/>
+                </block>
+                <block type="actions_play_file_txt4" id="V-5x9GaCXW1VFm%z7K2." intask="true">
+                    <field name="FILE">04_Braking</field>
+                    <hide name="ACTORPORT" value="NO PORT"/>
+                </block>
+                <block type="actions_play_file_txt4" id="Me([KZ!(9Hh_~sXN+}Dw" intask="true">
+                    <field name="FILE">05_Car_horn_long</field>
+                    <hide name="ACTORPORT" value="NO PORT"/>
+                </block>
+                <block type="actions_play_file_txt4" id="wS^zVvp3N^U*|!q=K5bc" intask="true">
+                    <field name="FILE">06_Car_horn_short</field>
+                    <hide name="ACTORPORT" value="NO PORT"/>
+                </block>
+                <block type="actions_play_file_txt4" id="U?K5Rr-XA(]/vkcSev73" intask="true">
+                    <field name="FILE">07_Crackling_wood</field>
+                    <hide name="ACTORPORT" value="NO PORT"/>
+                </block>
+                <block type="actions_play_file_txt4" id="?`1-H#QSU_LnX%,.}T-Q" intask="true">
+                    <field name="FILE">08_Excavator</field>
+                    <hide name="ACTORPORT" value="NO PORT"/>
+                </block>
+                <block type="actions_play_file_txt4" id=":Djexk!fK.jc.5xIygB@" intask="true">
+                    <field name="FILE">09_Fantasy_1</field>
+                    <hide name="ACTORPORT" value="NO PORT"/>
+                </block>
+                <block type="actions_play_file_txt4" id="q:SE#3z~Pupdli3@bKig" intask="true">
+                    <field name="FILE">10_Fantasy_2</field>
+                    <hide name="ACTORPORT" value="NO PORT"/>
+                </block>
+                <block type="actions_play_file_txt4" id="Lc[6*Y73tD4=+/DV~=|." intask="true">
+                    <field name="FILE">11_Fantasy_3</field>
+                    <hide name="ACTORPORT" value="NO PORT"/>
+                </block>
+                <block type="actions_play_file_txt4" id="-oi6=DYZ6|;JVr3y}[v{" intask="true">
+                    <field name="FILE">12_Fantasy_4</field>
+                    <hide name="ACTORPORT" value="NO PORT"/>
+                </block>
+                <block type="actions_play_file_txt4" id="DlY3SrF*uJl!Jk4P8Bff" intask="true">
+                    <field name="FILE">13_Farm</field>
+                    <hide name="ACTORPORT" value="NO PORT"/>
+                </block>
+                <block type="actions_play_file_txt4" id="#uAsQSP7bG5L23.Sl4iT" intask="true">
+                    <field name="FILE">14_Fire_department</field>
+                    <hide name="ACTORPORT" value="NO PORT"/>
+                </block>
+                <block type="actions_play_file_txt4" id="!hD-zrn53{MC=3(d[~2s" intask="true">
+                    <field name="FILE">15_Fire_noises</field>
+                    <hide name="ACTORPORT" value="NO PORT"/>
+                </block>
+                <block type="actions_play_file_txt4" id="shq_]_:a^{aCQgd?;4(Y" intask="true">
+                    <field name="FILE">16_Formula1</field>
+                    <hide name="ACTORPORT" value="NO PORT"/>
+                </block>
+                <block type="actions_play_file_txt4" id="m|FgtWya:{{|=.D6wOY`" intask="true">
+                    <field name="FILE">17_Helicopter</field>
+                    <hide name="ACTORPORT" value="NO PORT"/>
+                </block>
+                <block type="actions_play_file_txt4" id="x|2:T1(s|?M1pB~(RK2m" intask="true">
+                    <field name="FILE">18_Hydraulic</field>
+                    <hide name="ACTORPORT" value="NO PORT"/>
+                </block>
+                <block type="actions_play_file_txt4" id="`z#iJzxQ;lAb5_?gG_o_" intask="true">
+                    <field name="FILE">19_Motor_sound</field>
+                    <hide name="ACTORPORT" value="NO PORT"/>
+                </block>
+                <block type="actions_play_file_txt4" id="Cr?V,VDe`1?^AAp1V@J7" intask="true">
+                    <field name="FILE">20_Motor_starting</field>
+                    <hide name="ACTORPORT" value="NO PORT"/>
+                </block>
+                <block type="actions_play_file_txt4" id="qXVVC2^kUn]1Z1,]e]A@" intask="true">
+                    <field name="FILE">21_Propeller_airplane</field>
+                    <hide name="ACTORPORT" value="NO PORT"/>
+                </block>
+                <block type="actions_play_file_txt4" id="Yqs;43XEBmWw*^O6Vcls" intask="true">
+                    <field name="FILE">22_Roller_coaster</field>
+                    <hide name="ACTORPORT" value="NO PORT"/>
+                </block>
+                <block type="actions_play_file_txt4" id="^,8pcR9yF|E_55Fu3_%a" intask="true">
+                    <field name="FILE">23_Ships_horn</field>
+                    <hide name="ACTORPORT" value="NO PORT"/>
+                </block>
+                <block type="actions_play_file_txt4" id="z-6DvCw+DXHm7t*%a_;w" intask="true">
+                    <field name="FILE">24_Tractor</field>
+                    <hide name="ACTORPORT" value="NO PORT"/>
+                </block>
+                <block type="actions_play_file_txt4" id="a}iB]OHw.u+rRt2Ed[S0" intask="true">
+                    <field name="FILE">25_Truck</field>
+                    <hide name="ACTORPORT" value="NO PORT"/>
+                </block>
+                <block type="actions_play_file_txt4" id="L!C|[Ja=`P7u@-QAMv7S" intask="true">
+                    <field name="FILE">26_Augenzwinkern</field>
+                    <hide name="ACTORPORT" value="NO PORT"/>
+                </block>
+                <block type="actions_play_file_txt4" id="*kH3ETuiZ/:J!H3G*M9*" intask="true">
+                    <field name="FILE">27_Fahrgeraeusch</field>
+                    <hide name="ACTORPORT" value="NO PORT"/>
+                </block>
+                <block type="actions_play_file_txt4" id="Uikk~b]zLnnjCxi*qHF(" intask="true">
+                    <field name="FILE">28_Kopf_heben</field>
+                    <hide name="ACTORPORT" value="NO PORT"/>
+                </block>
+                <block type="actions_play_file_txt4" id="ADPg#8(_P^/K!d8NEN!I" intask="true">
+                    <field name="FILE">29_Kopf_neigen</field>
+                    <hide name="ACTORPORT" value="NO PORT"/>
+                </block>
+            </instance>
+        </block_set>
+    </program>
+    <config>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="txt4" xmlversion="" description="" tags="">
+            <instance x="714" y="110">
+                <block type="robConf_camera_txt4" id="CAM" intask="true">
+                    <field name="NAME">C</field>
+                    <field name="COLOURSIZE">30</field>
+                    <field name="MOTION">2</field>
+                    <field name="PORT">USB1</field>
+                    <value name="COLOUR">
+                        <block type="robColour_picker" id="COL" intask="true" deletable="false">
+                            <field name="COLOUR">#FFA500</field>
+                        </block>
+                    </value>
+                </block>
+            </instance>
+            <instance x="498" y="168">
+                <block type="robConf_display" id="DI" intask="true" deletable="false">
+                    <field name="NAME">_B</field>
+                </block>
+            </instance>
+            <instance x="558" y="250">
+                <block type="robConf_robot" id="robot" intask="true">
+                    <field name="ROBOT">undefined</field>
+                </block>
+            </instance>
+            <instance x="385" y="287">
+                <block type="robConf_infrared" id="L" intask="true">
+                    <field name="NAME">I</field>
+                    <field name="PORTL">I1</field>
+                    <field name="PORTR">I2</field>
+                </block>
+            </instance>
+            <instance x="215" y="333">
+                <block type="robConf_ultrasonic" id="U" intask="true">
+                    <field name="NAME">U</field>
+                    <field name="PORT">I3</field>
+                    <field name="VCC">9V</field>
+                </block>
+            </instance>
+            <instance x="1041" y="291">
+                <block type="robConf_encodermotor_txt4" id="`CW3f_/xL#;Z!)*[EZz@" intask="true">
+                    <field name="NAME">ML</field>
+                    <field name="PORT">M1</field>
+                    <statement name="ENCODER">
+                        <block type="robConf_encoder" id="S(Xm/UHHH;N[4Km1TML1" intask="true">
+                            <field name="NAME">EL</field>
+                            <field name="PORT">C1</field>
+                        </block>
+                    </statement>
+                </block>
+            </instance>
+            <instance x="877" y="312">
+                <block type="robConf_encodermotor_txt4" id="S(Xm/UHHH;N[4Km1TML0" intask="true">
+                    <field name="NAME">MR</field>
+                    <field name="PORT">M2</field>
+                    <statement name="ENCODER">
+                        <block type="robConf_encoder" id=":2[`i_YPGOtEr2:L3W1_" intask="true">
+                            <field name="NAME">ER</field>
+                            <field name="PORT">C2</field>
+                        </block>
+                    </statement>
+                </block>
+            </instance>
+            <instance x="877" y="434">
+                <block type="robConf_differentialdrive" id="AM=n{?7R#nO#1~?a3j~u" intask="true">
+                    <field name="NAME">_D</field>
+                    <field name="BRICK_WHEEL_DIAMETER">6</field>
+                    <field name="BRICK_TRACK_WIDTH">15</field>
+                    <field name="MOTOR_L">M1</field>
+                    <field name="MOTOR_R">M2</field>
+                </block>
+            </instance>
+        </block_set>
+    </config>
+</export>

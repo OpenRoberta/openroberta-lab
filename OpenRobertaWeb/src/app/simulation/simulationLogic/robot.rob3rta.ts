@@ -25,6 +25,7 @@ export default class RobotRob3rta extends RobotBaseStationary {
 
     protected configure(configuration): void {
         $('#simRobotContent').append(this.topView);
+        $('#simRobotWindow button').removeClass('btn-close-white');
         $.validator.addClassRules('range', { required: true, number: true });
         this.infraredSensor = new Rob3rtaInfraredSensor();
         this.temperatureSensor = new TemperatureSensor();

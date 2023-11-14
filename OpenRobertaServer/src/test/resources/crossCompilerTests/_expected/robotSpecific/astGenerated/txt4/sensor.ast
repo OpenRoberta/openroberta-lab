@@ -1,0 +1,91 @@
+SerialWriteAction[value: StringConst[value: SENSOR TEST]]
+SerialWriteAction[value: StringConst[value: Press right button on Display to continue]]
+SerialWriteAction[value: StringConst[value: Ultrasonic distance on port I3]]
+
+(repeat [FOREVER, BoolConst[value: true]]
+if SensorExpr [TouchKeySensor [RIGHT, PRESSED, - EMPTY_SLOT -]]
+,thenStmtFlowCon[flow: BREAK]
+
+AktionStmt [SerialWriteAction[value: SensorExpr [UltrasonicSensor [U, DISTANCE, - EMPTY_SLOT -]]]]WaitTimeStmt[time: NumConst[value: 500]]
+)
+SerialWriteAction[value: StringConst[value: Bottom Infrared left]]
+WaitTimeStmt[time: NumConst[value: 500]]
+
+(repeat [FOREVER, BoolConst[value: true]]
+if SensorExpr [TouchKeySensor [RIGHT, PRESSED, - EMPTY_SLOT -]]
+,thenStmtFlowCon[flow: BREAK]
+
+AktionStmt [SerialWriteAction[value: SensorExpr [InfraredSensor [I, LINE, LEFT]]]]WaitTimeStmt[time: NumConst[value: 500]]
+)
+SerialWriteAction[value: StringConst[value: Bottom Infrared right]]
+WaitTimeStmt[time: NumConst[value: 500]]
+
+(repeat [FOREVER, BoolConst[value: true]]
+if SensorExpr [TouchKeySensor [RIGHT, PRESSED, - EMPTY_SLOT -]]
+,thenStmtFlowCon[flow: BREAK]
+
+AktionStmt [SerialWriteAction[value: SensorExpr [InfraredSensor [I, LINE, LEFT]]]]WaitTimeStmt[time: NumConst[value: 500]]
+)
+SerialWriteAction[value: StringConst[value: Encoder C1 in degree]]
+SerialWriteAction[value: StringConst[value: Starting M1 Motor]]
+WaitTimeStmt[time: NumConst[value: 1000]]
+MotorOnAction[power: NumConst[value: 30], port: ML]
+
+(repeat [FOREVER, BoolConst[value: true]]
+if SensorExpr [TouchKeySensor [RIGHT, PRESSED, - EMPTY_SLOT -]]
+,thenStmtFlowCon[flow: BREAK]
+
+AktionStmt [SerialWriteAction[value: SensorExpr [EncoderSensor [EL, DEGREE, - EMPTY_SLOT -]]]]WaitTimeStmt[time: NumConst[value: 500]]
+)
+MotorStopAction[port: ML]
+SerialWriteAction[value: StringConst[value: Encoder C2 in rotation]]
+SerialWriteAction[value: StringConst[value: Starting M2 Motor]]
+WaitTimeStmt[time: NumConst[value: 1000]]
+MotorOnAction[power: NumConst[value: 30], port: MR]
+
+(repeat [FOREVER, BoolConst[value: true]]
+if SensorExpr [TouchKeySensor [RIGHT, PRESSED, - EMPTY_SLOT -]]
+,thenStmtFlowCon[flow: BREAK]
+
+AktionStmt [SerialWriteAction[value: SensorExpr [EncoderSensor [ER, ROTATION, - EMPTY_SLOT -]]]]WaitTimeStmt[time: NumConst[value: 500]]
+)
+MotorStopAction[port: MR]
+SerialWriteAction[value: StringConst[value: Reset Encoder and return value]]
+EncoderReset[sensorPort: EL]
+WaitTimeStmt[time: NumConst[value: 1000]]
+SerialWriteAction[value: SensorExpr [EncoderSensor [EL, DEGREE, - EMPTY_SLOT -]]]
+SerialWriteAction[value: StringConst[value: Timer 1-5]]
+WaitTimeStmt[time: NumConst[value: 1000]]
+
+(repeat [FOREVER, BoolConst[value: true]]
+if SensorExpr [TouchKeySensor [RIGHT, PRESSED, - EMPTY_SLOT -]]
+,thenStmtFlowCon[flow: BREAK]
+
+AktionStmt [SerialWriteAction[value: SensorExpr [TimerSensor [1, VALUE, - EMPTY_SLOT -]]]]
+AktionStmt [SerialWriteAction[value: SensorExpr [TimerSensor [2, VALUE, - EMPTY_SLOT -]]]]
+AktionStmt [SerialWriteAction[value: SensorExpr [TimerSensor [3, VALUE, - EMPTY_SLOT -]]]]
+AktionStmt [SerialWriteAction[value: SensorExpr [TimerSensor [4, VALUE, - EMPTY_SLOT -]]]]
+AktionStmt [SerialWriteAction[value: SensorExpr [TimerSensor [5, VALUE, - EMPTY_SLOT -]]]]WaitTimeStmt[time: NumConst[value: 500]]
+)
+SerialWriteAction[value: StringConst[value: Reset and return Timer 1]]
+TimerReset[sensorPort: 1]
+SerialWriteAction[value: SensorExpr [TimerSensor [1, VALUE, - EMPTY_SLOT -]]]
+SerialWriteAction[value: StringConst[value: Mini-Switch on Port I4]]
+WaitTimeStmt[time: NumConst[value: 1000]]
+
+(repeat [FOREVER, BoolConst[value: true]]
+if SensorExpr [TouchKeySensor [RIGHT, PRESSED, - EMPTY_SLOT -]]
+,thenStmtFlowCon[flow: BREAK]
+
+AktionStmt [SerialWriteAction[value: SensorExpr [KeysSensor [M, PRESSED, - EMPTY_SLOT -]]]]WaitTimeStmt[time: NumConst[value: 500]]
+)
+SerialWriteAction[value: StringConst[value: Light Sensor on I5]]
+WaitTimeStmt[time: NumConst[value: 1000]]
+
+(repeat [FOREVER, BoolConst[value: true]]
+if SensorExpr [TouchKeySensor [RIGHT, PRESSED, - EMPTY_SLOT -]]
+,thenStmtFlowCon[flow: BREAK]
+
+AktionStmt [SerialWriteAction[value: SensorExpr [LightSensor [L, VALUE, - EMPTY_SLOT -]]]]WaitTimeStmt[time: NumConst[value: 500]]
+)
+SerialWriteAction[value: StringConst[value: DONE]]

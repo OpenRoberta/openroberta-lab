@@ -433,26 +433,6 @@ function round(value, decimals) {
 }
 
 /**
- * Rounds a number to required decimal and clips value to the range [0, 255]
- * (Range of UltraSound sensor)
- *
- * @param value
- *            {Number} - to be rounded
- * @param decimals
- *            {Number} - number of decimals after rounding
- * @return {Number} rounded and clipped number
- *
- */
-function roundUltraSound(value, decimals) {
-    var ultraReading = round(value, decimals);
-    if (ultraReading > 255) {
-        ultraReading = 255;
-    }
-
-    return ultraReading;
-}
-
-/**
  * Get the sign of the number.
  *
  * @param x

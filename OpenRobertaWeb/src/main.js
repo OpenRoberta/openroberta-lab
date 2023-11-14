@@ -85,6 +85,7 @@ require.config({
         'robot.thymio': 'js/app/simulation/simulationLogic/robot.thymio',
         'robot.edison': 'js/app/simulation/simulationLogic/robot.edison',
         'robot.robotino': 'js/app/simulation/simulationLogic/robot.robotino',
+        'robot.txt4': 'js/app/simulation/simulationLogic/robot.txt4',
         'robot.base.mobile': 'js/app/simulation/simulationLogic/robot.base.mobile',
         'robot.base.stationary': 'js/app/simulation/simulationLogic/robot.base.stationary',
         'robot.base': 'js/app/simulation/simulationLogic/robot.base',

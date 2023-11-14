@@ -68,6 +68,7 @@ public final class BlocklyConstants {
     public static final String COL = "COL";
     public static final String OUT = "OUT";
     public static final String DEGREE = "DEGREE";
+    public static final String DEGREES = "DEGREES";
     public static final String MOTORROTATION = "MOTORROTATION";
     public static final String DISTANCE = "DISTANCE";
     public static final String DIRECTION = "DIRECTION";

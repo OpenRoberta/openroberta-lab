@@ -77,3 +77,10 @@ type Rectangle = {
     w: number;
     h: number;
 };
+
+type Point4Rectangle = {
+    p1: PointRobotWorld;
+    p2: PointRobotWorld;
+    p3: PointRobotWorld;
+    p4: PointRobotWorld;
+};

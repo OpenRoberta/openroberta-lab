@@ -137,7 +137,7 @@ robots:
     dir: spikePybricks
     suffix: ".py"
     pylintIgnoredModules: [ "pybricks.hubs", "pybricks.pupdevices","pybricks.parameters","pybricks.tools","pybricks.robotics","umath","urandom" ]
-
+ 
 progs:
   assign:
     decl: default

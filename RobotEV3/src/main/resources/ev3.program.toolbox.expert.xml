@@ -367,7 +367,6 @@
                 <block type="math_number"/>
             </value>
         </block>
-        Lists
         <block type="robLists_repeat">
             <value name="NUM">
                 <block type="math_number">

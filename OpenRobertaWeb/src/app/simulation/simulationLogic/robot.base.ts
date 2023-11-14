@@ -360,6 +360,7 @@ export class RobotFactory {
         robotType: string
     ): Promise<{ robots: RobotBase[]; robotClass: any }> {
         $('#simRobotContent').html('');
+        $('#simRobot').show();
         let myRobotType = 'robot.' + robotType.toLowerCase();
         let myRobotClass = await import(myRobotType);
         let myRobots: RobotBaseMobile[] = [];

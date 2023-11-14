@@ -1,17 +1,19 @@
 import { SelectionListener } from 'robot.base';
 import { Interpreter } from 'interpreter.interpreter';
-import RobotEv3 from 'robot.ev3';
-import { MbotChassis, MbotDisplay, MbotRGBLed } from 'robot.actuators';
-import { DistanceSensor, MbotButton, MbotInfraredSensor, UltrasonicSensor } from 'robot.sensors';
-import { Pose } from 'robot.base.mobile';
+import { ChassisMobile, MbotChassis, MbotDisplay, MbotRGBLed } from 'robot.actuators';
+import { DistanceSensor, Keys, MbotButton, MbotInfraredSensor, UltrasonicSensor } from 'robot.sensors';
+import { Pose, RobotBaseMobile } from 'robot.base.mobile';
 
-export default class RobotMbot extends RobotEv3 {
+export default class RobotMbot extends RobotBaseMobile {
+    chassis: ChassisMobile;
+    buttons: Keys;
     private RGBLedLeft: MbotRGBLed;
     private RGBLedRight: MbotRGBLed;
     private display: MbotDisplay;
 
     constructor(id: number, configuration: object, interpreter: Interpreter, savedName: string, myListener: SelectionListener) {
         super(id, configuration, interpreter, savedName, myListener);
+        this.configure(configuration);
     }
 
     protected override configure(configuration: object): void {

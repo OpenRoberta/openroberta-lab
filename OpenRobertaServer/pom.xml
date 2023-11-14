@@ -122,6 +122,10 @@
         </dependency>
         <dependency>
             <groupId>de.fhg.iais.openroberta</groupId>
+            <artifactId>RobotFischertechnik</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>de.fhg.iais.openroberta</groupId>
             <artifactId>OpenRobertaRobot</artifactId>
         </dependency>
 

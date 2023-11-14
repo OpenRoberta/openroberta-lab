@@ -1003,7 +1003,7 @@ class TokenConnection extends AbstractConnection {
     public override showConnectionModal() {
         $('#buttonCancelFirmwareUpdate').css('display', 'inline');
         $('#buttonCancelFirmwareUpdateAndRun').css('display', 'none');
-        ROBOT_C.showSetTokenModal();
+        ROBOT_C.showSetTokenModal(8, 8);
     }
 
     public override stopProgram() {
@@ -1488,6 +1488,174 @@ export class RobotinoROSConnection extends TokenConnection {
 export class SpikePybricksConnection extends SpikePybricksWebBleConnection {}
 
 export class SpikeConnection extends TokenConnection {}
+
+export class Txt4Connection extends TokenConnection {
+    public override showConnectionModal() {
+        $('#buttonCancelFirmwareUpdate').css('display', 'inline');
+        $('#buttonCancelFirmwareUpdateAndRun').css('display', 'none');
+        ROBOT_C.showSetTokenModal(6, 8);
+    }
+
+    public override init(): void {
+        super.init();
+        GUISTATE_C.getBlocklyWorkspace().robControls.showStopProgram();
+        $('#stopProgram').addClass('disabled');
+    }
+
+    public override terminate(): void {
+        super.terminate();
+        $('#stopProgram').addClass('disabled');
+        GUISTATE_C.getBlocklyWorkspace().robControls.hideStopProgram();
+        GUISTATE_C.setRobotToken('');
+        // GUISTATE_C.setRobotUrl('');
+    }
+
+    // private dirName: string = 'OpenRoberta';
+    // private fileName: string = 'OpenRoberta.py';
+    // private url: string;
+    // private path = {
+    //     API: '/api/v1',
+    //     WORKSPACE: '/workspaces/' + this.dirName,
+    //     CREATEWORKSPACE: '/workspaces?workspace_name=' + this.dirName,
+    //     WORKSPACEFILES: '/workspaces/' + this.dirName + '/files',
+    //     START: '/application/' + this.dirName + '/start',
+    //     STOP: '/application/stop',
+    //     PING: '/ping',
+    // };
+    //
+    // private address = {
+    //     WIFI: 'txt40.local',
+    //     USB: '192.168.7.2',
+    //     HTTP: 'https://',
+    // };
+    //
+    // private errorCode = {
+    //     400: 'BAD REQUEST',
+    //     404: 'NOT FOUND',
+    //     412: 'PRECONDITION FAILED',
+    //     500: 'INTERNAL ERROR',
+    //     timeout: 'timeout',
+    // };
+    //
+    // private errorFn = (jqXHR, textStatus, errorThrow) => {
+    //     console.log(errorThrow);
+    //     if (errorThrow == this.errorCode['400'] || errorThrow == this.errorCode['500'] || errorThrow == this.errorCode['timeout']) {
+    //         LOG.info('Robot disconnected');
+    //         GUISTATE_C.setConnectionState('error');
+    //         MSG.displayInformation(
+    //             { rc: 'error' },
+    //             null,
+    //             errorThrow + '\nPlease check your robots connection',
+    //             GUISTATE_C.getProgramName(),
+    //             GUISTATE_C.getRobot()
+    //         );
+    //     } else {
+    //         LOG.info('Resource does not exist');
+    //         GUISTATE_C.setConnectionState('wait');
+    //     }
+    // };
+    //
+    //
+    //
+    //
+    // public override isRobotConnected(): boolean {
+    //     return true;
+    // }
+    //
+    //public override run(result) {
+    //GUISTATE_C.setState(result);
+    // this.buildUrl();
+    // this.upload(result);
+    //}
+    //
+    //private buildUrl() {
+    //let reg = new RegExp('^txt40\\.local$|^192\\.168(\\.[0-9]{1,3}){2}$');
+    //let url: string = GUISTATE.robot.url;
+    //this.url = reg.test(url) ? url : this.address.WIFI;
+    //this.url = this.address.HTTP + this.url + this.path.API;
+    //}
+    //
+    // private upload(result): any {
+    //     let successFn = () => {
+    //         this.fileTransfer(result.compiledCode);
+    //     };
+    //     let errorFn = (jqXHR, textStatus, errorThrow) => {
+    //         if (errorThrow == this.errorCode['404']) {
+    //             this.createWorkspace(result);
+    //         } else {
+    //             this.errorFn(jqXHR, textStatus, errorThrow);
+    //         }
+    //     };
+    //     this.request(this.url + this.path.WORKSPACE, 'GET', 'json', successFn, errorFn);
+    // }
+    //
+    // private createWorkspace(result) {
+    //     let successFn = () => {
+    //         this.fileTransfer(result.compiledCode);
+    //     };
+    //     this.request(this.url + this.path.CREATEWORKSPACE, 'POST', 'json', successFn, this.errorFn);
+    // }
+    //
+    // private fileTransfer(compiledCode: string) {
+    //     let successFn = (data, textStatus, jqXHR) => {
+    //         LOG.info('Program successfully uploaded');
+    //         this.execute();
+    //     };
+    //
+    //     let data = new FormData();
+    //     let blob = new Blob([compiledCode]);
+    //     data.append('files', blob, this.fileName);
+    //
+    //     this.request(this.url + this.path.WORKSPACEFILES, 'POST', false, successFn, this.errorFn, false, data, false);
+    // }
+    //
+    // private execute() {
+    //     let successFn = () => {
+    //         LOG.info('Program executed');
+    //         GUISTATE_C.setConnectionState('wait');
+    //         $('#stopProgram').removeClass('disabled');
+    //     };
+    //     this.request(this.url + this.path.START, 'POST', 'text', successFn, this.errorFn);
+    // }
+    //
+    // public override stopProgram() {
+    //     let successFn = () => {
+    //         $('#stopProgram').addClass('disabled');
+    //     };
+    //     this.request(this.url + this.path.STOP, 'DELETE', 'json', successFn, this.errorFn);
+    // }
+    //
+    // private request(url, type, dataType, successFn, errorFn, contentType?, data?, processData?): any {
+    //     if (contentType != undefined && data != undefined && processData != undefined) {
+    //         $.ajax({
+    //             url: url,
+    //             method: type,
+    //             dataType: dataType,
+    //             contentType: contentType,
+    //             processData: processData,
+    //             data: data,
+    //             timeout: 2000,
+    //             success: successFn,
+    //             error: this.errorFn,
+    //             headers: {
+    //                 'X-API-KEY': GUISTATE.robot.token,
+    //             },
+    //         });
+    //     } else {
+    //         $.ajax({
+    //             url: url,
+    //             method: type,
+    //             dataType: dataType,
+    //             timeout: 2000,
+    //             success: successFn,
+    //             error: errorFn,
+    //             headers: {
+    //                 'X-API-KEY': GUISTATE.robot.token,
+    //             },
+    //         });
+    //     }
+    // }
+}
 
 //Thymio
 export class ThymioConnection extends ThymioDeviceManagerConnection {}

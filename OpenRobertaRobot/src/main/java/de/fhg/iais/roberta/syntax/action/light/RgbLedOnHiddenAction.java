@@ -9,7 +9,7 @@ import de.fhg.iais.roberta.transformer.forField.NepoValue;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 
-@NepoPhrase(name = "RGBLED_ON_HIDDEN_ACTION", category = "ACTOR", blocklyNames = {"actions_rgbLed_hidden_on", "actions_rgbLed_hidden_on_calliope"})
+@NepoPhrase(name = "RGBLED_ON_HIDDEN_ACTION", category = "ACTOR", blocklyNames = {"actions_rgbLed_hidden_on", "actions_rgbLed_hidden_on_calliope", "actions_display_rgbled_hidden_on_txt4"})
 public final class RgbLedOnHiddenAction extends Action {
     @NepoValue(name = "COLOUR", type = BlocklyType.COLOR)
     public final Expr colour;

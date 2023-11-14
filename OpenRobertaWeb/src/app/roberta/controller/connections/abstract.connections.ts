@@ -68,7 +68,7 @@ export abstract class AbstractConnection implements ConnectionInterface {
     public showConnectionModal(): void {
         $('#buttonCancelFirmwareUpdate').css('display', 'inline');
         $('#buttonCancelFirmwareUpdateAndRun').css('display', 'none');
-        ROBOT_C.showSetTokenModal();
+        ROBOT_C.showSetTokenModal(8, 8);
     }
 
     reset2DefaultFirmware(): void {
