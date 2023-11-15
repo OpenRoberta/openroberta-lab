@@ -10,9 +10,6 @@ import * as WEBVIEW_C from 'webview.controller';
 import * as $ from 'jquery';
 import * as Blockly from 'blockly';
 import * as GUISTATE from 'guiState.model';
-import { robot, server } from 'guiState.model';
-import * as COMM from 'comm';
-import { downloadFromUrl } from 'util';
 
 var blocklyWorkspace;
 var interpreter;
@@ -304,8 +301,11 @@ function runForJSPlayConnection(result) {
         } else {
             //All non-IE browsers can play WAV files in the browser, see: https://www.w3schools.com/html/html5_audio.asp
             $('#OKButtonModalFooter').addClass('hidden');
-            audio = new Audio(result.binaryURL);
-            createPlayButton(audio);
+            getBlobFromURL(result.binaryURL).then((blob) => {
+                var audioBlob = new Blob([blob], { type: 'audio/wav' });
+                var audio = new Audio(URL.createObjectURL(audioBlob));
+                createPlayButton(audio);
+            });
         }
 
         var textH = $('#popupDownloadHeader').text();
@@ -463,7 +463,16 @@ function runForWebviewConnection(result) {
         });
     }
 }
-
+/**
+ * Fetches a Blob from a URL and returns it.
+ *
+ * @param {string} url - The URL to fetch the Blob from.
+ * @returns {Promise<Blob>} A promise that resolves to the fetched Blob.
+ **/
+async function getBlobFromURL(url) {
+    const response = await fetch(url, { method: 'GET' });
+    return await response.blob();
+}
 /**
  * Fetches binaryFile from a URL and returns it as a string.
  *
@@ -478,8 +487,7 @@ function runForWebviewConnection(result) {
  *   });
  *   */
 async function getBinaryStringFromURL(url) {
-    const response = await fetch(url, { method: 'GET' });
-    const blob = await response.blob();
+    const blob = await getBlobFromURL(url);
     return await new Promise((resolve) => {
         const reader = new FileReader();
         reader.onload = function () {

@@ -301,8 +301,11 @@ define(["require", "exports", "util", "log", "message", "program.controller", "p
             else {
                 //All non-IE browsers can play WAV files in the browser, see: https://www.w3schools.com/html/html5_audio.asp
                 $('#OKButtonModalFooter').addClass('hidden');
-                audio = new Audio(result.binaryURL);
-                createPlayButton(audio);
+                getBlobFromURL(result.binaryURL).then(function (blob) {
+                    var audioBlob = new Blob([blob], { type: 'audio/wav' });
+                    var audio = new Audio(URL.createObjectURL(audioBlob));
+                    createPlayButton(audio);
+                });
             }
             var textH = $('#popupDownloadHeader').text();
             $('#popupDownloadHeader').text(textH.replace('$', $.trim(GUISTATE_C.getRobotRealName())));
@@ -446,6 +449,26 @@ define(["require", "exports", "util", "log", "message", "program.controller", "p
         }
     }
     /**
+     * Fetches a Blob from a URL and returns it.
+     *
+     * @param {string} url - The URL to fetch the Blob from.
+     * @returns {Promise<Blob>} A promise that resolves to the fetched Blob.
+     **/
+    function getBlobFromURL(url) {
+        return __awaiter(this, void 0, void 0, function () {
+            var response;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, fetch(url, { method: 'GET' })];
+                    case 1:
+                        response = _a.sent();
+                        return [4 /*yield*/, response.blob()];
+                    case 2: return [2 /*return*/, _a.sent()];
+                }
+            });
+        });
+    }
+    /**
      * Fetches binaryFile from a URL and returns it as a string.
      *
      * @param {string} url - The URL to fetch data from.
@@ -460,14 +483,11 @@ define(["require", "exports", "util", "log", "message", "program.controller", "p
      *   */
     function getBinaryStringFromURL(url) {
         return __awaiter(this, void 0, void 0, function () {
-            var response, blob;
+            var blob;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, fetch(url, { method: 'GET' })];
+                    case 0: return [4 /*yield*/, getBlobFromURL(url)];
                     case 1:
-                        response = _a.sent();
-                        return [4 /*yield*/, response.blob()];
-                    case 2:
                         blob = _a.sent();
                         return [4 /*yield*/, new Promise(function (resolve) {
                                 var reader = new FileReader();
@@ -476,7 +496,7 @@ define(["require", "exports", "util", "log", "message", "program.controller", "p
                                 };
                                 reader.readAsText(blob);
                             })];
-                    case 3: return [2 /*return*/, _a.sent()];
+                    case 2: return [2 /*return*/, _a.sent()];
                 }
             });
         });
