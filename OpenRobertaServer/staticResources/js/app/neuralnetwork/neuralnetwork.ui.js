@@ -48,7 +48,7 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     }
     return to.concat(ar || Array.prototype.slice.call(from));
 };
-define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", "./neuralnetwork.uistate", "log", "./neuralnetwork.msg", "util", "neuralnetwork.linechart", "message"], function (require, exports, H, neuralnetwork_nn_1, neuralnetwork_uistate_1, LOG, NN_MSG, UTIL, neuralnetwork_linechart_1, MSG) {
+define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", "./neuralnetwork.uistate", "log", "./neuralnetwork.msg", "util", "neuralnetwork.linechart", "message", "jquery"], function (require, exports, H, neuralnetwork_nn_1, neuralnetwork_uistate_1, LOG, NN_MSG, UTIL, neuralnetwork_linechart_1, MSG, $) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.getNetwork = exports.saveNN2Blockly = exports.programWasReplaced = exports.resetUserInputs = exports.resetSelections = exports.drawNetworkUIForTabDefine = exports.drawNetworkUIForTabLearn = exports.reconstructNNIncludingUI = exports.resetUiOnTerminate = exports.runNNEditorForTabLearn = exports.runNNEditor = exports.setupNN = void 0;
     var NodeType;
@@ -528,19 +528,8 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
                                 D3.timer(function () {
                                     var currentLoss = network.getLoss(userInputsForLearning);
                                     if (isLearning && epoch < epochsToTrain) {
-                                        if (svgContainer.select('g.learning').node() === null) {
-                                            // add ... overlay to indicate the network is learning
-                                            svgContainer.attr('opacity', '0.3');
-                                            var learningOverlay = svgContainer.insert('g', ':first-child').classed('learning', true).attr('width', '100%').attr('height', '75%');
-                                            learningOverlay
-                                                .append('text')
-                                                .attr('x', '50%')
-                                                .attr('y', '25%')
-                                                .attr('dominant-baseline', 'middle')
-                                                .attr('text-anchor', 'middle')
-                                                .attr('font-size', 100)
-                                                .text('...');
-                                        }
+                                        svgContainer.attr('opacity', '0.3');
+                                        $('.pace').show(); // Show loading icon
                                         trainOneEpoch();
                                         updateEpochCountAndTrainingLossChart(currentLoss);
                                         return false; // Not done.
@@ -551,6 +540,7 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
                                     runPauseIcon.classList.toggle('typcn-media-fast-forward-outline');
                                     isLearning = false;
                                     hideAllCards();
+                                    $('.pace').fadeOut(300); // Hide loading icon
                                     drawNetworkUIForTabLearn();
                                     return true; // Done.
                                 }, 0, 0);
@@ -789,8 +779,6 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
         if (userInputs && userInputs[0].length !== inputOutputNeurons.length) {
             userInputs = userInputs.map(function (val) { return __spreadArray(__spreadArray([], val, true), new Array(Math.abs(inputOutputNeurons.length - val.length)).fill('0'), true); });
         }
-        var modalEL = $('.nn-popup-modal');
-        modalEL.width("".concat(inputOutputNeurons.length * 7.5, "%"));
         var rowData = [];
         var columnData = [];
         function formatCellsAsInputs(value) {

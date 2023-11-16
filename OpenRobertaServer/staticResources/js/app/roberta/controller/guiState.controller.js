@@ -402,6 +402,8 @@ define(["require", "exports", "util", "message", "guiState.model", "progHelp.con
         }
         if (GUISTATE.gui.nn) {
             $('#nn-activations').empty();
+            $('#tabNNctxt').show();
+            $('#tabNNlearnctxt').show();
             $('#menuTabNNctxt').show();
             $('#menuTabNNLearnctxt').show();
             $.each(GUISTATE.gui.nnActivations, function (_, item) {
@@ -412,6 +414,8 @@ define(["require", "exports", "util", "message", "guiState.model", "progHelp.con
             });
         }
         else {
+            $('#tabNNctxt').hide();
+            $('#tabNNlearnctxt').hide();
             $('#menuTabNNctxt').hide();
             $('#menuTabNNLearnctxt').hide();
         }

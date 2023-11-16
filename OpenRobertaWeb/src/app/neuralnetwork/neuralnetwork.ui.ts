@@ -13,6 +13,7 @@ import * as _D3 from 'd3';
 import * as UTIL from 'util';
 import { AppendingLineChart } from 'neuralnetwork.linechart';
 import * as MSG from 'message';
+import * as $ from 'jquery';
 
 enum NodeType {
     INPUT,
@@ -501,19 +502,8 @@ export async function runNNEditorForTabLearn(hasSim: boolean) {
             () => {
                 let currentLoss: number = network.getLoss(userInputsForLearning);
                 if (isLearning && epoch < epochsToTrain) {
-                    if (svgContainer.select('g.learning').node() === null) {
-                        // add ... overlay to indicate the network is learning
-                        svgContainer.attr('opacity', '0.3');
-                        let learningOverlay = svgContainer.insert('g', ':first-child').classed('learning', true).attr('width', '100%').attr('height', '75%');
-                        learningOverlay
-                            .append('text')
-                            .attr('x', '50%')
-                            .attr('y', '25%')
-                            .attr('dominant-baseline', 'middle')
-                            .attr('text-anchor', 'middle')
-                            .attr('font-size', 100)
-                            .text('...');
-                    }
+                    svgContainer.attr('opacity', '0.3');
+                    $('.pace').show(); // Show loading icon
                     trainOneEpoch();
                     updateEpochCountAndTrainingLossChart(currentLoss);
                     return false; // Not done.
@@ -524,6 +514,7 @@ export async function runNNEditorForTabLearn(hasSim: boolean) {
                 runPauseIcon.classList.toggle('typcn-media-fast-forward-outline');
                 isLearning = false;
                 hideAllCards();
+                $('.pace').fadeOut(300); // Hide loading icon
                 drawNetworkUIForTabLearn();
                 return true; // Done.
             },
@@ -785,9 +776,6 @@ const createUserInputTableBs = (tableDiv: JQuery<HTMLElement>, tableEl: JQuery<H
     if (userInputs && userInputs[0].length !== inputOutputNeurons.length) {
         userInputs = userInputs.map((val: number[]) => [...val, ...new Array(Math.abs(inputOutputNeurons.length - val.length)).fill('0')]);
     }
-
-    let modalEL = $('.nn-popup-modal');
-    modalEL.width(`${inputOutputNeurons.length * 7.5}%`);
 
     let rowData: [
         {

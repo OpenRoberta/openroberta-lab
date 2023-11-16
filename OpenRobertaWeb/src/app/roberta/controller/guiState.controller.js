@@ -415,6 +415,8 @@ function setRobot(robot, result, opt_init) {
 
     if (GUISTATE.gui.nn) {
         $('#nn-activations').empty();
+        $('#tabNNctxt').show();
+        $('#tabNNlearnctxt').show();
         $('#menuTabNNctxt').show();
         $('#menuTabNNLearnctxt').show();
         $.each(GUISTATE.gui.nnActivations, function (_, item) {
@@ -426,6 +428,8 @@ function setRobot(robot, result, opt_init) {
             );
         });
     } else {
+        $('#tabNNctxt').hide();
+        $('#tabNNlearnctxt').hide();
         $('#menuTabNNctxt').hide();
         $('#menuTabNNLearnctxt').hide();
     }
