@@ -27,6 +27,7 @@ import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
+import de.fhg.iais.roberta.typecheck.InfoCollector;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.Assoc;
@@ -42,54 +43,21 @@ public final class EvalExpr extends Expr {
 
     public final String exprAsString;
     public final Expr exprAsBlock;
+    private Integer errorCountOfSubtree = null;
 
-    public EvalExpr(String exprAsString, Expr exprBlock, BlocklyType type, BlocklyProperties properties) throws Exception {
+    public EvalExpr(String exprAsString, Expr exprBlock, BlocklyType type, BlocklyProperties properties) {
         super(properties);
         setBlocklyType(type);
         this.exprAsString = exprAsString;
         if ( exprBlock instanceof ExprList ) {
+            // TODO: refactor, should be removed (if possible?), simplified 27.11.23 rb
             ExprList exprList = (ExprList) exprBlock;
-            BlocklyType blocklyType;
-            String blocklyName = type.getBlocklyName();
-            if ( blocklyName.equals("Array_Number") ) {
-                blocklyType = BlocklyType.NUMBER;
-            } else if ( blocklyName.equals("Array_Boolean") ) {
-                blocklyType = BlocklyType.BOOLEAN;
-            } else if ( blocklyName.equals("Array_String") ) {
-                blocklyType = BlocklyType.STRING;
-            } else if ( blocklyName.equals("Array_Colour") ) {
-                blocklyType = BlocklyType.COLOR;
-            } else if ( blocklyName.equals("Array_Connection") ) {
-                blocklyType = BlocklyType.CONNECTION;
-            } else {
-                blocklyType = BlocklyType.ANY;
-            }
-            this.exprAsBlock = new ListCreate(blocklyType, exprList, BlocklyProperties.make("robLists_create_with", "1", true, null));
+            BlocklyType elementTypeOfArrayType = type.getMatchingElementTypeForArrayType();
+            this.exprAsBlock = new ListCreate(elementTypeOfArrayType, exprList, BlocklyProperties.make("robLists_create_with", "1", true, null));
         } else {
             this.exprAsBlock = exprBlock;
         }
         this.setReadOnly();
-    }
-
-    /**
-     * factory method: create an AST instance of {@link EvalExpr}.
-     *
-     * @param expr representation of the expression to evaluate
-     * @param type type for this expression,
-     * @param properties of the block (see {@link BlocklyProperties}),
-     * @param comment added from the user,
-     * @return read only object representing the binary expression
-     */
-    public static EvalExpr make(String expr, BlocklyType type, BlocklyProperties properties) throws Exception {
-        final List<NepoInfo> annotations = new ArrayList<>();
-        Expr astOfExpr = EvalExpr.expr2AST(expr, annotations);
-        astOfExpr.setReadOnly();
-        EvalExpr evalExpr = new EvalExpr(expr, astOfExpr, type, properties);
-        for ( NepoInfo nepoInfo : annotations ) {
-            evalExpr.addInfo(nepoInfo);
-            astOfExpr.addInfo(nepoInfo);
-        }
-        return evalExpr;
     }
 
     @Override
@@ -129,30 +97,37 @@ public final class EvalExpr extends Expr {
         List<Field> fields = Jaxb2Ast.extractFields(block, (short) 2);
         String expr = Jaxb2Ast.extractField(fields, "EXPRESSION");
         String typeAsString = Jaxb2Ast.extractField(fields, "TYPE");
-        return (Phrase) EvalExpr.make(expr, BlocklyType.getByBlocklyName(typeAsString), Jaxb2Ast.extractBlocklyProperties(block));
+        BlocklyType type = BlocklyType.getByBlocklyName(typeAsString);
+        BlocklyProperties properties = Jaxb2Ast.extractBlocklyProperties(block);
 
+        final List<NepoInfo> annotations = new ArrayList<>();
+        Expr astOfExpr = EvalExpr.expr2AST(expr, annotations);
+        astOfExpr.setReadOnly();
+
+        EvalExpr evalExpr = new EvalExpr(expr, astOfExpr, type, properties);
+        for ( NepoInfo nepoInfo : annotations ) {
+            evalExpr.addInfo(nepoInfo);
+        }
+        return (Phrase) evalExpr;
     }
 
     /**
      * Function to create an abstract syntax tree from an expression, that has been submitted as a string
      */
-    private static Expr expr2AST(String expr, List<NepoInfo> annotations) throws Exception {
-        ExprlyParser parser = EvalExpr.mkParser(expr);
+    private static Expr expr2AST(String exprAsString, List<NepoInfo> annotations) throws Exception {
+        ExprlyParser parser = EvalExpr.mkParser(exprAsString);
         EvalExprErrorListener err = new EvalExprErrorListener();
         parser.removeErrorListeners();
         parser.addErrorListener(err);
         ExpressionContext expression = parser.expression();
         if ( parser.getNumberOfSyntaxErrors() > 0 || !parser.isMatchedEOF() ) {
-            for ( String s : err.getError() ) {
-                LOG.error(s);
-            }
-            NullConst errorExpr = new NullConst(BlocklyProperties.make("EVAL", "1", null));
+            NullConst errorExpr = new NullConst(BlocklyProperties.make("EVAL", "1", expression));
             annotations.add(NepoInfo.error("PROGRAM_ERROR_EXPRBLOCK_PARSE"));
             return errorExpr;
         } else {
-            ExprlyVisitor eval = new ExprlyVisitor();
-            Expr blk = eval.visitExpression(expression);
-            return blk;
+            ExprlyVisitor exprlyVisitor = new ExprlyVisitor();
+            Expr expr = exprlyVisitor.visitExpression(expression);
+            return expr;
         }
     }
 
@@ -166,5 +141,18 @@ public final class EvalExpr extends Expr {
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         ExprlyParser parser = new ExprlyParser(tokens);
         return parser;
+    }
+
+    /**
+     * retrieve typecheck errors from the AST sub-tree of this EvalExpr block.
+     * They must be elevated to this block, because the EvalExpr block is explicitly designed to hide the sub-tree.
+     *
+     * @return the number of <b>errors</b> detected during this type check visit
+     */
+    public void elevateNepoInfos() {
+        List<NepoInfo> infos = InfoCollector.collectInfos(this);
+        for ( NepoInfo info : infos ) {
+            addInfo(info);
+        }
     }
 }

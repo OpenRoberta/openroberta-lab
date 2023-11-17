@@ -52,6 +52,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.TernaryExpr;
 import de.fhg.iais.roberta.transformer.AnnotationHelper;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
+import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.syntax.FunctionNames;
@@ -239,7 +240,6 @@ public class ExprlyVisitor extends ExprlyBaseVisitor<Expr> {
      */
     @Override
     public Expr visitFunc(ExprlyParser.FuncContext ctx) throws UnsupportedOperationException {
-
         String f = ctx.FNAME().getText();
         List<Expr> args = new LinkedList();
 
@@ -248,7 +248,6 @@ public class ExprlyVisitor extends ExprlyBaseVisitor<Expr> {
             ast.setReadOnly();
             args.add(ast);
         }
-
         for ( int i = 0; i < args.size(); i++ ) {
             if ( args.get(i) instanceof ExprList ) {
                 ExprList e = (ExprList) args.get(i);
@@ -256,192 +255,147 @@ public class ExprlyVisitor extends ExprlyBaseVisitor<Expr> {
                 args.set(i, new ListCreate(BlocklyType.ARRAY, e, mkInlineProperty(ctx, "robLists_create_with")));
             }
         }
+        return mkExpr(f, args, ctx);
+    }
 
-        // check the function name and return the corresponfing one math_random_float
-        if ( f.equals("sin") || f.equals("cos") || f.equals("tan") || f.equals("asin") || f.equals("acos") || f.equals("atan") ) {
-            return new FunctionExpr(new MathSingleFunct(FunctionNames.get(f), args, mkInlineProperty(ctx, "math_trig")));
-        }
-
-        if ( f.equals("exp") || f.equals("sqrt") || f.equals("abs") || f.equals("log10") || f.equals("ln") || f.equals("square") || f.equals("pow10") ) {
-            return new FunctionExpr(new MathSingleFunct(FunctionNames.get(f), args, mkInlineProperty(ctx, "math_single")));
-        }
-
-        if ( f.equals("round") || f.equals("roundUp") || f.equals("roundDown") ) {
-            return new FunctionExpr(new MathSingleFunct(FunctionNames.get(f), args, mkInlineProperty(ctx, "math_round")));
-        }
-
-        if ( f.equals("randInt") ) {
-            return new FunctionExpr(new MathRandomIntFunct(mkExternalProperty(ctx, "math_random_int"), args.get(0), args.get(1)));
-        }
-        if ( f.equals("randFloat") ) {
-            return new FunctionExpr(new MathRandomFloatFunct(mkExternalProperty(ctx, "math_random_float")));
-        }
-        if ( f.equals("isEven") || f.equals("isOdd") || f.equals("isPrime") || f.equals("isWhole") || f.equals("isPositive") || f.equals("isNegative") ) {
-            f = f.substring(2);
-            return new FunctionExpr(new MathNumPropFunct(FunctionNames.get(f), args, mkPropertyFromClass(ctx, MathNumPropFunct.class)));
-        }
-        if ( f.equals("isDivisibleBy") ) {
-            return new FunctionExpr(new MathNumPropFunct(FunctionNames.DIVISIBLE_BY, args, mkPropertyFromClass(ctx, MathNumPropFunct.class)));
-        }
-        if ( f.equals("avg") ) {
-            return new FunctionExpr(new MathOnListFunct(mkPropertyFromClass(ctx, MathOnListFunct.class), null, FunctionNames.AVERAGE, args.get(0)));
-        }
-        if ( f.equals("sd") ) {
-            f = "std_dev";
-            return new FunctionExpr(new MathOnListFunct(mkPropertyFromClass(ctx, MathOnListFunct.class), null, FunctionNames.get(f), args.get(0)));
-        }
-        if ( f.equals("randItem") ) {
-            f = "random";
-            return new FunctionExpr(new MathOnListFunct(mkPropertyFromClass(ctx, MathOnListFunct.class), null, FunctionNames.get(f), args.get(0)));
-        }
-        if ( f.equals("min") || f.equals("max") || f.equals("sum") || f.equals("median") ) {
-            return new FunctionExpr(new MathOnListFunct(mkPropertyFromClass(ctx, MathOnListFunct.class), null, FunctionNames.get(f), args.get(0)));
-        }
-        if ( f.equals("lengthOf") ) {
-            return new FunctionExpr(new LengthOfListFunct(mkExternalProperty(ctx, "robLists_length"), args.get(0)));
-        }
-        if ( f.equals("indexOfFirst") ) {
-            return new FunctionExpr(new IndexOfFunct(mkExternalProperty(ctx, "robLists_indexOf"), IndexLocation.FIRST, args.get(0), args.get(1)));
-        }
-        if ( f.equals("indexOfLast") ) {
-            return new FunctionExpr(new IndexOfFunct(mkExternalProperty(ctx, "robLists_indexOf"), IndexLocation.LAST, args.get(0), args.get(1)));
-        }
-        if ( f.contains("setIndex") ) {
-            if ( f.equals("setIndex") ) {
+    private Expr mkExpr(String f, List<Expr> args, ExprlyParser.FuncContext ctx) {
+        switch ( f ) {
+            case "sin":
+            case "cos":
+            case "tan":
+            case "asin":
+            case "acos":
+            case "atan":
+                return new FunctionExpr(new MathSingleFunct(FunctionNames.get(f), args, mkInlineProperty(ctx, "math_trig")));
+            case "exp":
+            case "sqrt":
+            case "abs":
+            case "log10":
+            case "ln":
+            case "square":
+            case "pow10":
+                return new FunctionExpr(new MathSingleFunct(FunctionNames.get(f), args, mkInlineProperty(ctx, "math_single")));
+            case "round":
+            case "roundUp":
+            case "roundDown":
+                return new FunctionExpr(new MathSingleFunct(FunctionNames.get(f), args, mkInlineProperty(ctx, "math_round")));
+            case "randInt":
+                return new FunctionExpr(new MathRandomIntFunct(mkExternalProperty(ctx, "math_random_int"), args.get(0), args.get(1)));
+            case "randFloat":
+                return new FunctionExpr(new MathRandomFloatFunct(mkExternalProperty(ctx, "math_random_float")));
+            case "isEven":
+            case "isOdd":
+            case "isPrime":
+            case "isWhole":
+            case "isPositive":
+            case "isNegative":
+                return new FunctionExpr(new MathNumPropFunct(FunctionNames.get(f), args, mkPropertyFromClass(ctx, MathNumPropFunct.class)));
+            case "isDivisibleBy":
+                return new FunctionExpr(new MathNumPropFunct(FunctionNames.DIVISIBLE_BY, args, mkPropertyFromClass(ctx, MathNumPropFunct.class)));
+            case "avg":
+                return new FunctionExpr(new MathOnListFunct(mkPropertyFromClass(ctx, MathOnListFunct.class), null, FunctionNames.AVERAGE, args.get(0)));
+            case "sd":
+                return new FunctionExpr(new MathOnListFunct(mkPropertyFromClass(ctx, MathOnListFunct.class), null, FunctionNames.get(f), args.get(0)));
+            case "randItem":
+                return new FunctionExpr(new MathOnListFunct(mkPropertyFromClass(ctx, MathOnListFunct.class), null, FunctionNames.get(f), args.get(0)));
+            case "min":
+            case "max":
+            case "sum":
+            case "median":
+                return new FunctionExpr(new MathOnListFunct(mkPropertyFromClass(ctx, MathOnListFunct.class), null, FunctionNames.get(f), args.get(0)));
+            case "lengthOf":
+                return new FunctionExpr(new LengthOfListFunct(mkExternalProperty(ctx, "robLists_length"), args.get(0)));
+            case "indexOfFirst":
+                return new FunctionExpr(new IndexOfFunct(mkExternalProperty(ctx, "robLists_indexOf"), IndexLocation.FIRST, args.get(0), args.get(1)));
+            case "indexOfLast":
+                return new FunctionExpr(new IndexOfFunct(mkExternalProperty(ctx, "robLists_indexOf"), IndexLocation.LAST, args.get(0), args.get(1)));
+            case "setIndex":
                 return new FunctionExpr(new ListSetIndex(ListElementOperations.SET, IndexLocation.FROM_START, args, mkPropertyFromClass(ctx, ListSetIndex.class)));
-            }
-            if ( f.equals("setIndexFromEnd") ) {
+            case "setIndexFromEnd":
                 return new FunctionExpr(new ListSetIndex(ListElementOperations.SET, IndexLocation.FROM_END, args, mkPropertyFromClass(ctx, ListSetIndex.class)));
-            }
-            if ( f.equals("setIndexFirst") ) {
+            case "setIndexFirst":
                 return new FunctionExpr(new ListSetIndex(ListElementOperations.SET, IndexLocation.FIRST, args, mkPropertyFromClass(ctx, ListSetIndex.class)));
-            }
-            if ( f.equals("setIndexLast") ) {
+            case "setIndexLast":
                 return new FunctionExpr(new ListSetIndex(ListElementOperations.SET, IndexLocation.LAST, args, mkPropertyFromClass(ctx, ListSetIndex.class)));
-            }
-        }
-        if ( f.contains("insertIndex") ) {
-            if ( f.equals("insertIndex") ) {
+            case "insertIndex":
                 return new FunctionExpr(new ListSetIndex(ListElementOperations.INSERT, IndexLocation.FROM_START, args, mkPropertyFromClass(ctx, ListSetIndex.class)));
-            }
-            if ( f.equals("insertIndexFromEnd") ) {
+            case "insertIndexFromEnd":
                 return new FunctionExpr(new ListSetIndex(ListElementOperations.INSERT, IndexLocation.FROM_END, args, mkPropertyFromClass(ctx, ListSetIndex.class)));
-            }
-            if ( f.equals("insertIndexFirst") ) {
+            case "insertIndexFirst":
                 return new FunctionExpr(new ListSetIndex(ListElementOperations.INSERT, IndexLocation.FIRST, args, mkPropertyFromClass(ctx, ListSetIndex.class)));
-            }
-            if ( f.equals("insertIndexLast") ) {
+            case "insertIndexLast":
                 return new FunctionExpr(new ListSetIndex(ListElementOperations.INSERT, IndexLocation.LAST, args, mkPropertyFromClass(ctx, ListSetIndex.class)));
-            }
-        }
-        if ( f.contains("getIndex") ) {
-            if ( f.equals("getIndex") ) {
+            case "getIndex":
                 return new FunctionExpr(new ListGetIndex(ListElementOperations.GET, IndexLocation.FROM_START, args, "VOID", mkExternalProperty(ctx, "robLists_getIndex")));
-            }
-            if ( f.equals("getIndexFromEnd") ) {
+            case "getIndexFromEnd":
                 return new FunctionExpr(new ListGetIndex(ListElementOperations.GET, IndexLocation.FROM_END, args, "VOID", mkExternalProperty(ctx, "robLists_getIndex")));
-            }
-            if ( f.equals("getIndexFirst") ) {
+            case "getIndexFirst":
                 return new FunctionExpr(new ListGetIndex(ListElementOperations.GET, IndexLocation.FIRST, args, "VOID", mkExternalProperty(ctx, "robLists_getIndex")));
-            }
-            if ( f.equals("getIndexLast") ) {
+            case "getIndexLast":
                 return new FunctionExpr(new ListGetIndex(ListElementOperations.GET, IndexLocation.LAST, args, "VOID", mkExternalProperty(ctx, "robLists_getIndex")));
-            }
-        }
-        if ( f.contains("getAndRemoveIndex") ) {
-            if ( f.equals("getAndRemoveIndex") ) {
+            case "getAndRemoveIndex":
                 return new FunctionExpr(new ListGetIndex(ListElementOperations.GET_REMOVE, IndexLocation.FROM_START, args, "VOID", mkExternalProperty(ctx, "robLists_getIndex")));
-            }
-            if ( f.equals("getAndRemoveIndexFromEnd") ) {
+            case "getAndRemoveIndexFromEnd":
                 return new FunctionExpr(new ListGetIndex(ListElementOperations.GET_REMOVE, IndexLocation.FROM_END, args, "VOID", mkExternalProperty(ctx, "robLists_getIndex")));
-            }
-            if ( f.equals("getAndRemoveIndexFirst") ) {
+            case "getAndRemoveIndexFirst":
                 return new FunctionExpr(new ListGetIndex(ListElementOperations.GET_REMOVE, IndexLocation.FIRST, args, "VOID", mkExternalProperty(ctx, "robLists_getIndex")));
-            }
-            if ( f.equals("getAndRemoveIndexLast") ) {
+            case "getAndRemoveIndexLast":
                 return new FunctionExpr(new ListGetIndex(ListElementOperations.GET_REMOVE, IndexLocation.LAST, args, "VOID", mkExternalProperty(ctx, "robLists_getIndex")));
-            }
-        }
-        if ( f.contains("removeIndex") ) {
-            if ( f.equals("removeIndex") ) {
+            case "removeIndex":
                 return new FunctionExpr(new ListGetIndex(ListElementOperations.REMOVE, IndexLocation.FROM_START, args, "VOID", mkExternalProperty(ctx, "robLists_getIndex")));
-            }
-            if ( f.equals("removeIndexFromEnd") ) {
+            case "removeIndexFromEnd":
                 return new FunctionExpr(new ListGetIndex(ListElementOperations.REMOVE, IndexLocation.FROM_END, args, "VOID", mkExternalProperty(ctx, "robLists_getIndex")));
-            }
-            if ( f.equals("removeIndexFirst") ) {
+            case "removeIndexFirst":
                 return new FunctionExpr(new ListGetIndex(ListElementOperations.REMOVE, IndexLocation.FIRST, args, "VOID", mkExternalProperty(ctx, "robLists_getIndex")));
-            }
-            if ( f.equals("removeIndexLast") ) {
+            case "removeIndexLast":
                 return new FunctionExpr(new ListGetIndex(ListElementOperations.REMOVE, IndexLocation.LAST, args, "VOID", mkExternalProperty(ctx, "robLists_getIndex")));
-            }
-        }
-        if ( f.equals("repeatList") ) {
-            return new FunctionExpr(new ListRepeat(BlocklyType.VOID, args, mkExternalProperty(ctx, "robLists_repeat")));
-        }
-        if ( f.contains("subList") ) {
-
-            if ( f.equals("subList") ) {
+            case "repeatList":
+                return new FunctionExpr(new ListRepeat(BlocklyType.VOID, args, mkExternalProperty(ctx, "robLists_repeat")));
+            case "subList":
                 return new FunctionExpr(new GetSubFunct(FunctionNames.GET_SUBLIST, new ArrayList<IMode>(Arrays.asList(IndexLocation.FROM_START, IndexLocation.FROM_START)), args, mkExternalProperty(ctx, "robLists_getSublist")));
-            }
-            if ( f.equals("subListFromIndexToLast") ) {
+            case "subListFromIndexToLast":
                 return new FunctionExpr(new GetSubFunct(FunctionNames.SUBFIRSTORLAST, new ArrayList<IMode>(Arrays.asList(IndexLocation.FROM_START, IndexLocation.LAST)), args, mkExternalProperty(ctx, "robLists_getSublist")));
-            }
-            if ( f.equals("subListFromIndexToEnd") ) {
+            case "subListFromIndexToEnd":
                 return new FunctionExpr(new GetSubFunct(FunctionNames.GET_SUBLIST, new ArrayList<IMode>(Arrays.asList(IndexLocation.FROM_START, IndexLocation.FROM_END)), args, mkExternalProperty(ctx, "robLists_getSublist")));
-            }
-            if ( f.equals("subListFromFirstToIndex") ) {
+            case "subListFromFirstToIndex":
                 return new FunctionExpr(new GetSubFunct(FunctionNames.SUBFIRSTORLAST, new ArrayList<IMode>(Arrays.asList(IndexLocation.FIRST, IndexLocation.FROM_START)), args, mkExternalProperty(ctx, "robLists_getSublist")));
-            }
-            if ( f.equals("subListFromFirstToLast") ) {
+            case "subListFromFirstToLast":
                 return new FunctionExpr(new GetSubFunct(FunctionNames.SUBFIRSTANDLAST, new ArrayList<IMode>(Arrays.asList(IndexLocation.FIRST, IndexLocation.LAST)), args, mkExternalProperty(ctx, "robLists_getSublist")));
-            }
-            if ( f.equals("subListFromFirstToEnd") ) {
+            case "subListFromFirstToEnd":
                 return new FunctionExpr(new GetSubFunct(FunctionNames.SUBFIRSTORLAST, new ArrayList<IMode>(Arrays.asList(IndexLocation.FIRST, IndexLocation.FROM_END)), args, mkExternalProperty(ctx, "robLists_getSublist")));
-            }
-            if ( f.equals("subListFromEndToIndex") ) {
+            case "subListFromEndToIndex":
                 return new FunctionExpr(new GetSubFunct(FunctionNames.GET_SUBLIST, new ArrayList<IMode>(Arrays.asList(IndexLocation.FROM_END, IndexLocation.FROM_START)), args, mkExternalProperty(ctx, "robLists_getSublist")));
-            }
-            if ( f.equals("subListFromEndToLast") ) {
+            case "subListFromEndToLast":
                 return new FunctionExpr(new GetSubFunct(FunctionNames.SUBFIRSTORLAST, new ArrayList<IMode>(Arrays.asList(IndexLocation.FROM_END, IndexLocation.LAST)), args, mkExternalProperty(ctx, "robLists_getSublist")));
-            }
-            if ( f.equals("subListFromEndToEnd") ) {
+            case "subListFromEndToEnd":
                 return new FunctionExpr(new GetSubFunct(FunctionNames.GET_SUBLIST, new ArrayList<IMode>(Arrays.asList(IndexLocation.FROM_END, IndexLocation.FROM_END)), args, mkExternalProperty(ctx, "robLists_getSublist")));
-            }
-        }
-        if ( f.equals("print") ) {
-            return new FunctionExpr(new TextPrintFunct(args, mkPropertyFromClass(ctx, TextPrintFunct.class)));
-        }
-        if ( f.equals("createTextWith") ) {
-            ExprList args0 = new ExprList();
-            for ( Expr e : args ) {
-                e.setReadOnly();
-                args0.addExpr(e);
-            }
-            args0.setReadOnly();
-            return new FunctionExpr(new TextJoinFunct(args0, mkInlineProperty(ctx, "robText_join")));
-        }
-        if ( f.equals("constrain") ) {
-            return new FunctionExpr(new MathConstrainFunct(mkPropertyFromClass(ctx, MathConstrainFunct.class), args.get(0), args.get(1), args.get(2)));
-        }
-        if ( f.equals("isEmpty") ) {
-            return new FunctionExpr(new IsListEmptyFunct(mkInlineProperty(ctx, "robLists_isEmpty"), args.get(0)));
-        }
-        if ( f.equals("getRGB") ) {
-            if ( args.size() == 3 ) {
-                return new RgbColor(mkInlineProperty(ctx, "robColour_rgb"), args.get(0), args.get(1), args.get(2), new EmptyExpr(BlocklyType.NUMBER_INT));
-            } else if ( args.size() == 4 ) {
-                return new RgbColor(mkPropertyFromClass(ctx, RgbColor.class), args.get(0), args.get(1), args.get(2), args.get(3));
-            } else {
+            case "print":
+                return new FunctionExpr(new TextPrintFunct(args, mkPropertyFromClass(ctx, TextPrintFunct.class)));
+            case "createTextWith":
+                ExprList args0 = new ExprList();
+                for ( Expr e : args ) {
+                    e.setReadOnly();
+                    args0.addExpr(e);
+                }
+                args0.setReadOnly();
+                return new FunctionExpr(new TextJoinFunct(args0, mkInlineProperty(ctx, "robText_join")));
+            case "constrain":
+                return new FunctionExpr(new MathConstrainFunct(mkPropertyFromClass(ctx, MathConstrainFunct.class), args.get(0), args.get(1), args.get(2)));
+            case "isEmpty":
+                return new FunctionExpr(new IsListEmptyFunct(mkInlineProperty(ctx, "robLists_isEmpty"), args.get(0)));
+            case "getRGB":
                 Expr empty = new EmptyExpr(BlocklyType.NUMBER_INT);
-                return new RgbColor(mkPropertyFromClass(ctx, RgbColor.class), empty, empty, empty, empty);
-            }
+                if ( args.size() == 3 ) {
+                    return new RgbColor(mkInlineProperty(ctx, "robColour_rgb"), args.get(0), args.get(1), args.get(2), empty);
+                } else if ( args.size() == 4 ) {
+                    return new RgbColor(mkPropertyFromClass(ctx, RgbColor.class), args.get(0), args.get(1), args.get(2), args.get(3));
+                } else {
+                    return new RgbColor(mkPropertyFromClass(ctx, RgbColor.class), empty, empty, empty, empty);
+                }
         }
-        try {
-            return new FunctionExpr(new MathSingleFunct(FunctionNames.get(f), args, mkPropertyFromClass(ctx, MathSingleFunct.class)));
-        } catch ( Exception e ) {
-            throw new UnsupportedOperationException("Invalid function name: " + f);
-        }
+        Expr result = new EmptyExpr(BlocklyType.NOTHING);
+        result.addInfo(NepoInfo.error("invalid function name " + f));
+        return result;
     }
 
     /**
@@ -560,6 +514,7 @@ public class ExprlyVisitor extends ExprlyBaseVisitor<Expr> {
     private static BlocklyProperties mkInlineProperty(ParserRuleContext ctx, String type) {
         return BlocklyProperties.make(type, "1", true, ctx);
     }
+
 
     private static BlocklyProperties mkExternalProperty(ParserRuleContext ctx, String type) {
         return BlocklyProperties.make(type, "1", false, ctx);

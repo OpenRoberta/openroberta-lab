@@ -6,20 +6,16 @@ import java.util.List;
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
-import com.google.common.collect.ClassToInstanceMap;
-import com.google.common.collect.ImmutableClassToInstanceMap;
-
 import de.fhg.iais.roberta.AstTest;
-import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.stmt.AssignStmt;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
+import de.fhg.iais.roberta.visitor.TestTypecheckCommonLanguageVisitor;
 import de.fhg.iais.roberta.visitor.validate.TypecheckCommonLanguageVisitor;
 
 public class TypecheckEvalExprTest extends AstTest {
@@ -31,10 +27,13 @@ public class TypecheckEvalExprTest extends AstTest {
     public static final BlocklyType STRING = BlocklyType.STRING;
     public static final BlocklyType COLOR = BlocklyType.COLOR;
     public static final BlocklyType ARRAY_NUMBER = BlocklyType.ARRAY_NUMBER;
-    private ClassToInstanceMap<IProjectBean.IBuilder> beans;
-    private String evalExprTemplate;
+    public static final BlocklyType ARRAY_BOOLEAN = BlocklyType.ARRAY_BOOLEAN;
+    public static final BlocklyType ARRAY_STRING = BlocklyType.ARRAY_STRING;
+    public static final BlocklyType ARRAY_COLOUR = BlocklyType.ARRAY_COLOUR;
 
+    private String evalExprTemplate;
     private List<String> errorMessages = new ArrayList<>();
+    private UsedHardwareBean usedHardwareBean;
 
     @Before
     public void setup() throws Exception {
@@ -47,15 +46,14 @@ public class TypecheckEvalExprTest extends AstTest {
         usedHardware.addDeclaredVariable("bl", BlocklyType.ARRAY_BOOLEAN);
         usedHardware.addDeclaredVariable("sl", BlocklyType.ARRAY_STRING);
         usedHardware.addDeclaredVariable("cl", BlocklyType.ARRAY_COLOUR);
-        ImmutableClassToInstanceMap.Builder beansBuilder = new ImmutableClassToInstanceMap.Builder();
-        beansBuilder.put(UsedHardwareBean.Builder.class, usedHardware);
-        this.beans = beansBuilder.build();
+        this.usedHardwareBean = usedHardware.build();
         this.evalExprTemplate = IOUtils.toString(JaxbHelper.class.getResourceAsStream("/ast/expressions/evalExprTemplate.xml"), "UTF-8");
     }
 
     @Test
     /**
      * tests for typechecking NEPO programs presented as Strings. The variables as defined above in the {@link setup()} method can be used.
+     * TODO: we need a group of its own to check the number of parameters of functions (both ok + error)
      */
     public void testEvalExpr() throws Exception {
         errorMessages = new ArrayList<>();
@@ -86,6 +84,7 @@ public class TypecheckEvalExprTest extends AstTest {
         testEvalExpr(NUMBER, "1.4", true);
         testEvalExpr(BOOL, "true", true);
         testEvalExpr(BOOL, "TRUE", false);
+        testEvalExpr(STRING, " \"OpenRoberta is awesome!\" ", true);
 
         // TODO: problem when you define a list only with constans ! testEvalExpr(BlocklyType.ARRAY_NUMBER, "[n,n,n]", true);
         testEvalExpr(ARRAY_NUMBER, "[1,2,3,4,5]", true);
@@ -239,16 +238,24 @@ public class TypecheckEvalExprTest extends AstTest {
         testEvalExpr(BOOL, "getAndRemoveIndexFirst([true,false,false,true])", true);
         testEvalExpr(NUMBER, "getAndRemoveIndexFirst([true,false,false,true])", false);
 
+        // ListRepeat Functions:
+        testEvalExpr(ARRAY_NUMBER, "repeatList(654,5)", true);
+        testEvalExpr(ARRAY_BOOLEAN, "repeatList(true,5)", true);
+        testEvalExpr(ARRAY_COLOUR, "repeatList(#black,6)", true);
+        testEvalExpr(ARRAY_STRING, "repeatList(\"abc\",4)", true);
+        testEvalExpr(ARRAY_NUMBER, "repeatList(654,5,9)", false);
+        testEvalExpr(ARRAY_COLOUR, "repeatList(true,4)", false);
+
         // GetSub Functions
-        testEvalExpr(BlocklyType.ARRAY_NUMBER, "subList([1,2,3,4,5],0,3)", true);
-        testEvalExpr(BlocklyType.ARRAY_BOOLEAN, "subList([true,false,false,true,true],1,2)", true);
-        testEvalExpr(BlocklyType.ARRAY_NUMBER, "subListFromIndexToLast([1,2,3,4,5],2)", true);
-        testEvalExpr(BlocklyType.ARRAY_NUMBER, "subListFromIndexToEnd([1,2,3,4,5],2,5)", true);
-        testEvalExpr(BlocklyType.ARRAY_BOOLEAN, "subListFromFirstToIndex([true,false,false,false,true],2)", true);
-        testEvalExpr(BlocklyType.ARRAY_COLOUR, "subListFromFirstToLast([#black,#white,#yellow,#green,#red])", true);
-        testEvalExpr(BlocklyType.ARRAY_COLOUR, "subListFromFirstToEnd([#black,#white,#yellow,#green,#red],2)", true);
-        testEvalExpr(BlocklyType.ARRAY_NUMBER, "subListFromEndToIndex([1,2,3,4,5,6],5,2)", true);
-        testEvalExpr(BlocklyType.ARRAY_STRING, "subListFromEndToEnd([1,2,3,4,5,6],5,4)", false);
+        testEvalExpr(ARRAY_NUMBER, "subList([1,2,3,4,5],0,3)", true);
+        testEvalExpr(ARRAY_BOOLEAN, "subList([true,false,false,true,true],1,2)", true);
+        testEvalExpr(ARRAY_NUMBER, "subListFromIndexToLast([1,2,3,4,5],2)", true);
+        testEvalExpr(ARRAY_NUMBER, "subListFromIndexToEnd([1,2,3,4,5],2,5)", true);
+        testEvalExpr(ARRAY_BOOLEAN, "subListFromFirstToIndex([true,false,false,false,true],2)", true);
+        testEvalExpr(ARRAY_COLOUR, "subListFromFirstToLast([#black,#white,#yellow,#green,#red])", true);
+        testEvalExpr(ARRAY_COLOUR, "subListFromFirstToEnd([#black,#white,#yellow,#green,#red],2)", true);
+        testEvalExpr(ARRAY_NUMBER, "subListFromEndToIndex([1,2,3,4,5,6],5,2)", true);
+        testEvalExpr(ARRAY_STRING, "subListFromEndToEnd([1,2,3,4,5,6],5,4)", false);
 
         // TextJoin Functions
         testEvalExpr(STRING, "createTextWith(s,12,true,#black)", true);
@@ -259,17 +266,26 @@ public class TypecheckEvalExprTest extends AstTest {
         testEvalExpr(NUMBER, "constrain(102,1,100)", true);
         testEvalExpr(STRING, "constrain(102,1,100)", false);
 
+        // RGBColor Function:
+        testEvalExpr(COLOR, "getRGB(0,0,0)", true);
+        testEvalExpr(COLOR, "getRGB(n,n,n)", true);
+        testEvalExpr(COLOR, "getRGB(s,0,0)", false);
+
+        // TODO: print test
         showErrorsAndFailWithErrors();
     }
 
     @Test
-    @Ignore
     /**
-     * tests for typechecking one NEPO programs presented as String. The variables as defined above in the {@link setup()} method can be used.
+     * tests for typechecking one NEPO programs presented as String. The variables as defined above in the {@link setup()} method can be used.<br>
+     * <b>for test and debug. Usually @Ignore-d</b>
      */
-    public void testEvalExprSingle() throws Exception {
+    public void testEvalExprForDebug() throws Exception {
         errorMessages = new ArrayList<>();
-        testEvalExpr(NUMBER, "indexOfFirst(bl,true)", true);
+        testEvalExpr(STRING, "createTextWith(1)", true);
+        testEvalExpr(STRING, "createTextWith(1,2,3,4)", true);
+        testEvalExpr(STRING, "createTextWith(1,2,3,4,5,6)", true);
+        testEvalExpr(STRING, "createTextWith(#black,12)", true);
         showErrorsAndFailWithErrors();
     }
 
@@ -283,7 +299,6 @@ public class TypecheckEvalExprTest extends AstTest {
     private void testEvalExpr(BlocklyType type, String eval, boolean shouldSucceed) {
         String typeAsString = type.getBlocklyName();
         String testCaseMessage = "typechecking \"" + eval + "\" as " + typeAsString + " and expecting " + (shouldSucceed ? "success" : "failure");
-        TypecheckCommonLanguageVisitor typechecker = null;
         try {
             if ( VERBOSE ) {
                 System.out.println("***** " + testCaseMessage);
@@ -293,18 +308,23 @@ public class TypecheckEvalExprTest extends AstTest {
             Jaxb2ProgramAst transformer = new Jaxb2ProgramAst(testFactory);
             List<List<Phrase>> tree = transformer.blocks2ast(evalExprBlockSet).getTree();
             Phrase evalBlock = ((AssignStmt) tree.get(0).get(1)).expr;
-            typechecker = TypecheckCommonLanguageVisitor.makeVisitorAndTypecheck(evalBlock, beans);
-            if ( (typechecker.getErrorCount() == 0) != shouldSucceed ) {
+            Assert.assertNotNull(evalBlock);
+            TypecheckCommonLanguageVisitor astVisitor = new TestTypecheckCommonLanguageVisitor(usedHardwareBean);
+            evalBlock.accept(astVisitor);
+            List<NepoInfo> infos = InfoCollector.collectInfos(evalBlock);
+            ;
+            int errorCount = infos.size();
+            if ( (errorCount == 0) != shouldSucceed ) {
                 if ( !VERBOSE ) {
                     System.out.println("----- ERROR when " + testCaseMessage);
                 }
                 errorMessages.add(testCaseMessage + " ... failed");
             }
-            if ( typechecker.getErrorCount() > 0 && (shouldSucceed || (!shouldSucceed && VERBOSE)) ) {
+            if ( errorCount > 0 && (shouldSucceed || (!shouldSucceed && VERBOSE)) ) {
                 System.out.println("      error messages:");
-                typechecker.getInfos().stream().map(i -> "        " + i.getMessage()).forEach(System.out::println);
+                infos.stream().map(i -> "        " + i.getMessage()).forEach(System.out::println);
             }
-            if ( (typechecker.getErrorCount() == 0) != shouldSucceed ) {
+            if ( (errorCount == 0) != shouldSucceed ) {
                 System.out.println("      ERROR");
             } else {
                 if ( VERBOSE ) {
@@ -337,4 +357,10 @@ public class TypecheckEvalExprTest extends AstTest {
             System.out.println("typechecking terminated without errors");
         }
     }
+
+    public static List<NepoInfo> returnAllInfosOfPhrase(Phrase phrase) {
+        List<NepoInfo> infos = InfoCollector.collectInfos(phrase);
+        return infos;
+    }
+
 }

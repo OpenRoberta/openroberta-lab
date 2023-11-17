@@ -620,11 +620,7 @@ public abstract class TransformerVisitor implements IVisitor<Phrase> {
     }
 
     public Phrase visitEvalExpr(EvalExpr evalExpr) {
-        try {
-            return EvalExpr.make(evalExpr.exprAsString, evalExpr.getBlocklyType(), evalExpr.getProperty());
-        } catch ( Exception e ) {
-            throw new DbcException("Could not modify EvalExpr!", e);
-        }
+        return new EvalExpr(evalExpr.exprAsString, (Expr) evalExpr.exprAsBlock.modify(this), evalExpr.getBlocklyType(), evalExpr.getProperty());
     }
 
     public Phrase visitAssertStmt(AssertStmt assertStmt) {

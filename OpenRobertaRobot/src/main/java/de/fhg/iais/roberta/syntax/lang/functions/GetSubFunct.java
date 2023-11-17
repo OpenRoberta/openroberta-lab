@@ -21,9 +21,6 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.syntax.FunctionNames;
 
-/**
- * This class represents the <b>text_getSubstring</b> block
- */
 @NepoBasic(name = "GET_SUB_FUNCT", category = "FUNCTION", blocklyNames = {"lists_getSublist", "robLists_getSublist"})
 public final class GetSubFunct extends Function {
     public final FunctionNames functName;

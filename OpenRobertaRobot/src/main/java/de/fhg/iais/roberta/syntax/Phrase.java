@@ -150,10 +150,7 @@ abstract public class Phrase {
      */
     public final <V> V accept(IVisitor<V> visitor) {
         // LOG.info("{}", this);
-        BlocklyProperties blocklyProperties = getProperty();
-        BlocklyProperties blocklyProperties1 = getProperty();
-        BlocklyProperties blocklyProperties2 = getProperty();
-        if ( blocklyProperties.blocklyRegion.disabled || (blocklyProperties2.blocklyRegion.inTask != null && blocklyProperties1.blocklyRegion.inTask == false) ) {
+        if ( property.blocklyRegion.disabled || (property.blocklyRegion.inTask != null && property.blocklyRegion.inTask == false) ) {
             return null;
         }
         return visitor.visit(this);

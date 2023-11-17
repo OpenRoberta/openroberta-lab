@@ -31,7 +31,7 @@ public final class Unary extends Expr {
     public final Expr expr;
 
     public Unary(Op op, Expr expr, BlocklyProperties properties) {
-        super(properties, op.sig.returnType);
+        super(properties, op.signature.returnType);
         Assert.isTrue(op != null && expr != null && expr.isReadOnly());
         this.op = op;
         this.expr = expr;
@@ -65,13 +65,13 @@ public final class Unary extends Expr {
 
         public final int precedence;
         public final Assoc assoc;
-        public final Sig sig;
+        public final Sig signature;
         public final String[] values;
 
-        private Op(int precedence, Assoc assoc, Sig sig, String... values) {
+        private Op(int precedence, Assoc assoc, Sig signature, String... values) {
             this.precedence = precedence;
             this.assoc = assoc;
-            this.sig = sig;
+            this.signature = signature;
             this.values = values;
         }
 

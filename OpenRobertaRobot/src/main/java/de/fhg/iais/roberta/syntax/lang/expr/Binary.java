@@ -35,7 +35,7 @@ public final class Binary extends Expr {
     public final String operationRange;
 
     public Binary(Op op, Expr left, Expr right, String operationRange, BlocklyProperties properties) {
-        super(properties, op.sig.returnType);
+        super(properties, op.signature.returnType);
         Assert.isTrue(op != null && left != null && right != null && left.isReadOnly() && right.isReadOnly());
         this.op = op;
         this.left = left;
@@ -96,13 +96,13 @@ public final class Binary extends Expr {
         public final String[] values;
         public final int precedence;
         public final Assoc assoc;
-        public final Sig sig;
+        public final Sig signature;
 
-        Op(int precedence, Assoc assoc, Sig sig, String... values) {
+        Op(int precedence, Assoc assoc, Sig signature, String... values) {
             this.precedence = precedence;
             this.assoc = assoc;
             this.values = values;
-            this.sig = sig;
+            this.signature = signature;
         }
 
         /**
@@ -125,7 +125,7 @@ public final class Binary extends Expr {
          * @return the signature; if not found, return <code>null</code>
          */
         public Sig getSignature() {
-            return this.sig;
+            return this.signature;
         }
 
         /**

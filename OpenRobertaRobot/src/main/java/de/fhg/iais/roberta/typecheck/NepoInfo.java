@@ -1,5 +1,7 @@
 package de.fhg.iais.roberta.typecheck;
 
+import java.util.Objects;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -50,7 +52,20 @@ public class NepoInfo {
 
     @Override
     public String toString() {
-        return "NepoProblem [" + this.severity + ": " + this.message + "]";
+        return "NepoInfo[" + this.severity + ": " + this.message + "]";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if ( this == o ) return true;
+        if ( o == null || getClass() != o.getClass() ) return false;
+        NepoInfo nepoInfo = (NepoInfo) o;
+        return severity == nepoInfo.severity && Objects.equals(message, nepoInfo.message);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(severity, message);
     }
 
     public static enum Severity {

@@ -81,63 +81,29 @@ import de.fhg.iais.roberta.visitor.IVisitor;
 
 public interface ILanguageVisitor<V> extends IVisitor<V> {
 
-    default V visitGetSampleSensor(GetSampleSensor sensorGetSample) {
-        return sensorGetSample.sensor.accept(this);
-    }
+    V visitGetSampleSensor(GetSampleSensor sensorGetSample);
 
-    default V visitActionExpr(ActionExpr actionExpr) {
-        actionExpr.action.accept(this);
-        return null;
-    }
+    V visitActionExpr(ActionExpr actionExpr);
 
-    default V visitActionStmt(ActionStmt actionStmt) {
-        actionStmt.action.accept(this);
-        return null;
-    }
+    V visitActionStmt(ActionStmt actionStmt);
 
-    default V visitEvalExpr(EvalExpr evalExpr) {
-        evalExpr.exprAsBlock.accept(this);
-        return null;
-    }
+    V visitEvalExpr(EvalExpr evalExpr);
 
-    default V visitExprStmt(ExprStmt exprStmt) {
-        exprStmt.expr.accept(this);
-        return null;
-    }
+    V visitExprStmt(ExprStmt exprStmt);
 
-    default V visitFunctionExpr(FunctionExpr functionExpr) {
-        functionExpr.getFunction().accept(this);
-        return null;
-    }
+    V visitFunctionExpr(FunctionExpr functionExpr);
 
-    default V visitFunctionStmt(FunctionStmt functionStmt) {
-        functionStmt.function.accept(this);
-        return null;
-    }
+    V visitFunctionStmt(FunctionStmt functionStmt);
 
-    default V visitLocation(Location location) {
-        return null;
-    }
+    V visitLocation(Location location);
 
-    default V visitMethodExpr(MethodExpr methodExpr) {
-        methodExpr.getMethod().accept(this);
-        return null;
-    }
+    V visitMethodExpr(MethodExpr methodExpr);
 
-    default V visitSensorExpr(SensorExpr sensorExpr) {
-        sensorExpr.sensor.accept(this);
-        return null;
-    }
+    V visitSensorExpr(SensorExpr sensorExpr);
 
-    default V visitSensorStmt(SensorStmt sensorStmt) {
-        sensorStmt.sensor.accept(this);
-        return null;
-    }
+    V visitSensorStmt(SensorStmt sensorStmt);
 
-    default V visitStmtExpr(StmtExpr stmtExpr) {
-        stmtExpr.stmt.accept(this);
-        return null;
-    }
+    V visitStmtExpr(StmtExpr stmtExpr);
 
     V visitAssertStmt(AssertStmt assertStmt);
 

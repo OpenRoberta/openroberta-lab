@@ -64,6 +64,7 @@ public enum BlocklyType {
     VOID(""),
     CAPTURED_TYPE(""),
     CAPTURED_TYPE_ARRAY_ITEM(""),
+    VARARGS("", ANY),
 
     ARRAY("Array",CAPTURED_TYPE,true,COMPARABLE),
     ARRAY_NUMBER("Array_Number",NUMBER,true,COMPARABLE),
@@ -103,6 +104,25 @@ public enum BlocklyType {
 
     public BlocklyType[] getSuperTypes() {
         return this.superTypes;
+    }
+
+    public boolean hasAsSuperType(BlocklyType potentialSuperType) {
+        if ( this.equals(potentialSuperType) ) {
+            return true;
+        } else if ( this.superTypes.length == 0 ) {
+            return false;
+        } else {
+            for ( BlocklyType superType : this.superTypes ) {
+                if ( superType.equals(potentialSuperType) ) {
+                    return true;
+                } else {
+                    if ( hasAsSuperType(superType) ) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     public boolean isArray() {
@@ -157,5 +177,13 @@ public enum BlocklyType {
             }
         }
         throw new DbcException("blockly type name is invalid: " + blocklyName);
+    }
+
+    public boolean equalAsTypes(BlocklyType other) {
+        if ( this.equals(BlocklyType.NOTHING) || other.equals(BlocklyType.NOTHING) ) {
+            return false;
+        } else {
+            return this.equals(other);
+        }
     }
 }

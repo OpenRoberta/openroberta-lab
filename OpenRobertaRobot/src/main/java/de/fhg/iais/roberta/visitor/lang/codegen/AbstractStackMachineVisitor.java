@@ -26,9 +26,7 @@ import de.fhg.iais.roberta.mode.general.ListElementOperations;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
-import de.fhg.iais.roberta.syntax.lang.blocksequence.Location;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
-import de.fhg.iais.roberta.syntax.lang.expr.ActionExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary.Op;
 import de.fhg.iais.roberta.syntax.lang.expr.BoolConst;
@@ -37,18 +35,14 @@ import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.EmptyList;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
-import de.fhg.iais.roberta.syntax.lang.expr.FunctionExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
-import de.fhg.iais.roberta.syntax.lang.expr.MethodExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.NNGetBias;
 import de.fhg.iais.roberta.syntax.lang.expr.NNGetOutputNeuronVal;
 import de.fhg.iais.roberta.syntax.lang.expr.NNGetWeight;
 import de.fhg.iais.roberta.syntax.lang.expr.NullConst;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
-import de.fhg.iais.roberta.syntax.lang.expr.SensorExpr;
-import de.fhg.iais.roberta.syntax.lang.expr.StmtExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Unary;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
@@ -78,7 +72,6 @@ import de.fhg.iais.roberta.syntax.lang.methods.MethodCall;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodIfReturn;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodReturn;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodVoid;
-import de.fhg.iais.roberta.syntax.lang.stmt.ActionStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.AssertStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.AssignStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
@@ -93,7 +86,6 @@ import de.fhg.iais.roberta.syntax.lang.stmt.NNSetWeightStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNStepStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt.Mode;
-import de.fhg.iais.roberta.syntax.lang.stmt.SensorStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.Stmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon.Flow;
@@ -115,9 +107,8 @@ import de.fhg.iais.roberta.util.syntax.MotorDuration;
 import de.fhg.iais.roberta.util.visitor.StackMachineBuilder;
 import de.fhg.iais.roberta.visitor.BaseVisitor;
 import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 
-public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> implements ILanguageVisitor<Void> {
+public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> {
     private static final Predicate<String> IS_INVALID_BLOCK_ID = s -> s.equals("1");
     private static final List<Class<? extends Phrase>> DONT_ADD_DEBUG_STOP = Arrays.asList(Expr.class, VarDeclaration.class, Sensor.class, MainTask.class, ExprStmt.class, StmtList.class, RepeatStmt.class, WaitStmt.class);
 
@@ -345,24 +336,6 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
     }
 
     @Override
-    public final Void visitActionExpr(ActionExpr actionExpr) {
-        actionExpr.action.accept(this);
-        return null;
-    }
-
-    @Override
-    public final Void visitSensorExpr(SensorExpr sensorExpr) {
-        sensorExpr.sensor.accept(this);
-        return null;
-    }
-
-    @Override
-    public final Void visitMethodExpr(MethodExpr methodExpr) {
-        methodExpr.getMethod().accept(this);
-        return null;
-    }
-
-    @Override
     public final Void visitEmptyList(EmptyList emptyList) {
         throw new DbcException("Operation not supported");
     }
@@ -421,18 +394,6 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
                 expr.accept(this);
             }
         }
-        return null;
-    }
-
-    @Override
-    public final Void visitStmtExpr(StmtExpr stmtExpr) {
-        stmtExpr.stmt.accept(this);
-        return null;
-    }
-
-    @Override
-    public final Void visitActionStmt(ActionStmt actionStmt) {
-        actionStmt.action.accept(this);
         return null;
     }
 
@@ -693,12 +654,6 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
     }
 
     @Override
-    public final Void visitSensorStmt(SensorStmt sensorStmt) {
-        sensorStmt.sensor.accept(this);
-        return null;
-    }
-
-    @Override
     public final Void visitStmtFlowCon(StmtFlowCon stmtFlowCon) {
         int uniqueCompundNumber = codeBuilder.getUniqueCompoundNumberForBreakOrContinue();
         JSONObject jump = makeNode(C.JUMP).put(C.CONDITIONAL, C.ALWAYS);
@@ -789,11 +744,6 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
     }
 
     @Override
-    public final Void visitLocation(Location location) {
-        throw new DbcException("Operation not supported");
-    }
-
-    @Override
     public Void visitMathChangeStmt(MathChangeStmt mathChangeStmt) {
         mathChangeStmt.var.accept(this);
         mathChangeStmt.delta.accept(this);
@@ -835,12 +785,6 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> impl
     @Override
     public final Void visitFunctionStmt(FunctionStmt functionStmt) {
         functionStmt.function.accept(this);
-        return null;
-    }
-
-    @Override
-    public final Void visitFunctionExpr(FunctionExpr functionExpr) {
-        functionExpr.getFunction().accept(this);
         return null;
     }
 

@@ -38,7 +38,6 @@ import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.lang.functions.MathModuloFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathPowerFunct;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodCall;
-import de.fhg.iais.roberta.syntax.lang.stmt.ActionStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.AssignStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.MathChangeStmt;
@@ -56,9 +55,8 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.visitor.SourceBuilder;
 import de.fhg.iais.roberta.visitor.BaseVisitor;
-import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 
-public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> implements ILanguageVisitor<Void> {
+public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> {
     //TODO find more simple way of handling the loops
     private int loopCounter = 0;
     protected LinkedList<Integer> currentLoop = new LinkedList<>();
@@ -501,12 +499,6 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> implemen
                 expr.accept(this);
             }
         }
-        return null;
-    }
-
-    @Override
-    public Void visitActionStmt(ActionStmt actionStmt) {
-        actionStmt.action.accept(this);
         return null;
     }
 

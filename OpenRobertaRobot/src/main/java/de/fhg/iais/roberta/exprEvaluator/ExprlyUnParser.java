@@ -669,6 +669,7 @@ public class ExprlyUnParser {
     // Fill the HashMap of Function Names
     static {
         HashMap<FunctionNames, String> names = new HashMap<>();
+
         names.put(FunctionNames.MAX, "max");
         names.put(FunctionNames.MIN, "min");
         names.put(FunctionNames.EVEN, "isEven");
@@ -704,7 +705,6 @@ public class ExprlyUnParser {
         names.put(FunctionNames.GETLISTELEMENT, "getIndex");
         names.put(FunctionNames.GETFIRST, "getIndexFirst");
         names.put(FunctionNames.GETLAST, "getIndexLast");
-
         fnames = Collections.unmodifiableMap(names);
     }
 

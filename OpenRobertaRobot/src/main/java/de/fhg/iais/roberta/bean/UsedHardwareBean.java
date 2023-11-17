@@ -13,7 +13,6 @@ import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.lang.methods.Method;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.dbc.Assert;
 
 /**
  * Container for all used hardware related information, used in for example code generation. Currently used for more than just used hardware, should be split up
@@ -57,8 +56,7 @@ public class UsedHardwareBean implements IProjectBean {
 
     public BlocklyType getTypeOfDeclaredVariable(String variableName) {
         BlocklyType type = this.declaredVariables.get(variableName);
-        Assert.notNull(type);
-        return type;
+        return type == null ? BlocklyType.NOTHING : type;
     }
 
     public boolean isProgramEmpty() {

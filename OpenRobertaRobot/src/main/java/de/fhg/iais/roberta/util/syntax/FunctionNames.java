@@ -9,64 +9,95 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 
 public enum FunctionNames {
     TIME(VOID),
-    DIVISIBLE_BY(Sig.of(BlocklyType.BOOLEAN, BlocklyType.NUMBER, BlocklyType.NUMBER)),
-    MAX(Sig.of(BlocklyType.NUMBER, BlocklyType.ARRAY_NUMBER)),
-    MIN(Sig.of(BlocklyType.NUMBER, BlocklyType.ARRAY_NUMBER)),
-    LISTS_REPEAT(Sig.of(BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE, BlocklyType.NUMBER)),
-    RANDOM(Sig.of(BlocklyType.CAPTURED_TYPE_ARRAY_ITEM, BlocklyType.CAPTURED_TYPE)),
-    RANDOM_DOUBLE(VOID),
-    EVEN(Sig.of(BlocklyType.BOOLEAN, BlocklyType.NUMBER)),
-    ODD(Sig.of(BlocklyType.BOOLEAN, BlocklyType.NUMBER)),
-    PRIME(Sig.of(BlocklyType.BOOLEAN, BlocklyType.NUMBER)),
-    WHOLE(Sig.of(BlocklyType.BOOLEAN, BlocklyType.NUMBER)),
-    POSITIVE(Sig.of(BlocklyType.BOOLEAN, BlocklyType.NUMBER)),
-    NEGATIVE(Sig.of(BlocklyType.BOOLEAN, BlocklyType.NUMBER)),
-    SUM(Sig.of(BlocklyType.NUMBER, BlocklyType.ARRAY_NUMBER)),
-    AVERAGE(Sig.of(BlocklyType.NUMBER, BlocklyType.ARRAY_NUMBER)),
-    MEDIAN(Sig.of(BlocklyType.NUMBER, BlocklyType.ARRAY_NUMBER)),
     MODE(VOID),
-    STD_DEV(Sig.of(BlocklyType.NUMBER, BlocklyType.ARRAY_NUMBER)),
-    SQUARE(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER)),
-    ROOT(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER), "SQRT"),
-    ABS(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER)),
-    LN(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER)),
-    LOG10(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER)),
-    EXP(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER)),
-    POW10(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER)),
-    SIN(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER)),
-    COS(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER)),
-    TAN(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER)),
-    ASIN(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER)),
-    ACOS(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER)),
-    ATAN(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER)),
-    POWER(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER, BlocklyType.NUMBER), "^"),
-    ROUND(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER)),
-    ROUNDUP(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER), "CEIL"),
-    ROUNDDOWN(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER), "FLOOR"),
-    LIST_IS_EMPTY(Sig.of(BlocklyType.BOOLEAN, BlocklyType.CAPTURED_TYPE)),
-    LEFT(VOID),
-    RIGHT(VOID),
-    TEXT(VOID, "TEXT"),
-    NUMBER(VOID, "NUMBER"),
-    LIST_LENGTH(Sig.of(BlocklyType.NUMBER, BlocklyType.CAPTURED_TYPE)),
-    GET_SUBLIST(Sig.of(BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE, BlocklyType.NUMBER, BlocklyType.NUMBER)),
-    CAST(VOID),
-    INDEXOF(Sig.of(BlocklyType.NUMBER, BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE_ARRAY_ITEM)),
-    GETLISTELEMENT(Sig.of(BlocklyType.CAPTURED_TYPE_ARRAY_ITEM, BlocklyType.CAPTURED_TYPE, BlocklyType.NUMBER)),
-    GETFIRST(Sig.of(BlocklyType.CAPTURED_TYPE_ARRAY_ITEM, BlocklyType.CAPTURED_TYPE)),
-    GETLAST(Sig.of(BlocklyType.CAPTURED_TYPE_ARRAY_ITEM, BlocklyType.CAPTURED_TYPE)),
-    SUBFIRSTORLAST(Sig.of(BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE, BlocklyType.NUMBER)),
-    SUBFIRSTANDLAST(Sig.of(BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE)),
-    TEXTJOIN(Sig.of(BlocklyType.STRING, BlocklyType.CAPTURED_TYPE)),
-    CONSTRAIN(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER, BlocklyType.NUMBER, BlocklyType.NUMBER)),
-    GETRGB(Sig.of(BlocklyType.ARRAY_NUMBER)),
-    RANDOMINT(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER, BlocklyType.NUMBER)),
+    // MathConst:
     PI(Sig.of(BlocklyType.NUMBER)),
     GOLDEN_RATIO(Sig.of(BlocklyType.NUMBER)),
     SQRT2(Sig.of(BlocklyType.NUMBER)),
     SQRT1_2(Sig.of(BlocklyType.NUMBER)),
     INFINITY(Sig.of(BlocklyType.NUMBER)),
-    E(Sig.of(BlocklyType.NUMBER));
+    E(Sig.of(BlocklyType.NUMBER)),
+
+    //MathSingleFunct Trigonometric:
+    SIN(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER), "sin"),
+    COS(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER), "cos"),
+    TAN(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER), "tan"),
+    ASIN(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER), "asin"),
+    ACOS(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER), "acos"),
+    ATAN(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER), "atan"),
+
+    //MathSingleFunct Singles:
+    EXP(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER), "exp"),
+    ROOT(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER), "sqrt"),
+    ABS(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER), "abs"),
+    LN(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER), "ln"),
+    LOG10(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER), "log10"),
+    SQUARE(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER), "square"),
+    POW10(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER), "pow10"),
+
+    //MathSingleFunct Round:
+    ROUND(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER), "round"),
+    ROUNDUP(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER), "ceil"),
+    ROUNDDOWN(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER), "floor"),
+
+    // MathRandomIntFunct and MathRandomFloatFunct:
+    RANDOMINT(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER, BlocklyType.NUMBER), "randInt"),
+    RANDOM_DOUBLE(Sig.of(BlocklyType.NUMBER), "randFloat"),
+
+    //MathNumPropFunct:
+    EVEN(Sig.of(BlocklyType.BOOLEAN, BlocklyType.NUMBER), "isEven"),
+    ODD(Sig.of(BlocklyType.BOOLEAN, BlocklyType.NUMBER), "isOdd"),
+    PRIME(Sig.of(BlocklyType.BOOLEAN, BlocklyType.NUMBER), "isPrime"),
+    WHOLE(Sig.of(BlocklyType.BOOLEAN, BlocklyType.NUMBER), "isWhole"),
+    POSITIVE(Sig.of(BlocklyType.BOOLEAN, BlocklyType.NUMBER), "isPositive"),
+    NEGATIVE(Sig.of(BlocklyType.BOOLEAN, BlocklyType.NUMBER), "isNegative"),
+    DIVISIBLE_BY(Sig.of(BlocklyType.BOOLEAN, BlocklyType.NUMBER, BlocklyType.NUMBER), "isDivisibleBy"),
+
+    //MathOnListFunct:
+    AVERAGE(Sig.of(BlocklyType.NUMBER, BlocklyType.ARRAY_NUMBER), "avg"),
+    STD_DEV(Sig.of(BlocklyType.NUMBER, BlocklyType.ARRAY_NUMBER), "sd"),
+    RANDOM(Sig.of(BlocklyType.CAPTURED_TYPE_ARRAY_ITEM, BlocklyType.CAPTURED_TYPE), "randItem"),
+    MIN(Sig.of(BlocklyType.NUMBER, BlocklyType.ARRAY_NUMBER), "min"),
+    MAX(Sig.of(BlocklyType.NUMBER, BlocklyType.ARRAY_NUMBER), "max"),
+    SUM(Sig.of(BlocklyType.NUMBER, BlocklyType.ARRAY_NUMBER), "sum"),
+    MEDIAN(Sig.of(BlocklyType.NUMBER, BlocklyType.ARRAY_NUMBER), "median"),
+
+    //LengthOfListFunct:
+    LIST_LENGTH(Sig.of(BlocklyType.NUMBER, BlocklyType.CAPTURED_TYPE), "lengthOf"),
+
+    //IndexOfFunct:
+    INDEXOF(Sig.of(BlocklyType.NUMBER, BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE_ARRAY_ITEM), "indexOfFirst", "indexOfLast"),
+
+    // ListGetIndex:
+    GETLISTELEMENT(Sig.of(BlocklyType.CAPTURED_TYPE_ARRAY_ITEM, BlocklyType.CAPTURED_TYPE, BlocklyType.NUMBER), "getIndex", "getIndexFromEnd", "getAndRemoveIndex", "getAndRemoveIndexFromEnd"),
+    GETFIRST(Sig.of(BlocklyType.CAPTURED_TYPE_ARRAY_ITEM, BlocklyType.CAPTURED_TYPE), "getIndexFirst", "getAndRemoveIndexFirst"),
+    GETLAST(Sig.of(BlocklyType.CAPTURED_TYPE_ARRAY_ITEM, BlocklyType.CAPTURED_TYPE), "getIndexLast", "getAndRemoveIndexLast"),
+
+    //ListRepeat:
+    LISTS_REPEAT(Sig.of(BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE_ARRAY_ITEM, BlocklyType.NUMBER), "repeatList"),
+
+    //GetSubFunct:
+    GET_SUBLIST(Sig.of(BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE, BlocklyType.NUMBER, BlocklyType.NUMBER), "subList", "subListFromIndexToEnd", "subListFromEndToIndex", "subListFromEndToEnd"),
+    SUBFIRSTORLAST(Sig.of(BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE, BlocklyType.NUMBER), "subListFromIndexToLast", "subListFromFirstToIndex", "subListFromFirstToEnd", "subListFromEndToLast"),
+    SUBFIRSTANDLAST(Sig.of(BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE), "subListFromFirstToLast"),
+
+    // TextJoinFunct:
+    TEXTJOIN(Sig.of(BlocklyType.STRING, BlocklyType.VARARGS, BlocklyType.ANY), "createTextWith"),
+
+    //MathConstrainFunct:
+    CONSTRAIN(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER, BlocklyType.NUMBER, BlocklyType.NUMBER), "constrain"),
+    //  IsListEmptyFunct:
+    LIST_IS_EMPTY(Sig.of(BlocklyType.BOOLEAN, BlocklyType.CAPTURED_TYPE), "isEmpty"),
+    //RgbColor:
+    GETRGB(Sig.of(BlocklyType.COLOR, BlocklyType.NUMBER, BlocklyType.NUMBER, BlocklyType.NUMBER), "getRGB"),
+    //MathPowerFunct:
+    POWER(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER, BlocklyType.NUMBER), "^"),
+
+    LEFT(VOID),
+    RIGHT(VOID),
+    TEXT(VOID, "text"),
+    NUMBER(VOID, "number"),
+    CAST(VOID);
     private final String[] values;
     public final Sig signature;
 
@@ -74,6 +105,7 @@ public enum FunctionNames {
         this.signature = signature;
         this.values = values;
     }
+
 
     /**
      * @return symbol of the function if it exists otherwise the name of the function.
@@ -93,6 +125,7 @@ public enum FunctionNames {
      * @param functName of the function
      * @return function from the enum {@link FunctionNames}
      */
+
     public static FunctionNames get(String s) {
         if ( s == null || s.isEmpty() ) {
             throw new DbcException("Invalid function name: " + s);
@@ -110,4 +143,8 @@ public enum FunctionNames {
         }
         throw new DbcException("Invalid function name: " + s);
     }
+
 }
+
+
+

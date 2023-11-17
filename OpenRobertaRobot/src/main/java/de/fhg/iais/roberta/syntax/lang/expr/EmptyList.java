@@ -7,7 +7,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-@NepoExpr(category = "EXPR", blocklyNames = {"lists_create_empty"}, name = "EMPTY_LIST", blocklyType = BlocklyType.ARRAY)
+@NepoExpr(category = "EXPR", blocklyNames = {"lists_create_empty"}, name = "EMPTY_LIST", blocklyType = BlocklyType.NOTHING)
 public final class EmptyList extends Expr {
     @NepoField(name = BlocklyConstants.LIST_TYPE)
     public final BlocklyType typeVar;

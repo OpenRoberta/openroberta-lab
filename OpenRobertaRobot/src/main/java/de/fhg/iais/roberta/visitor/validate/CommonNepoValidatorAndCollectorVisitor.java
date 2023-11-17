@@ -81,9 +81,8 @@ import de.fhg.iais.roberta.typecheck.InfoCollector;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.FunctionNames;
-import de.fhg.iais.roberta.visitor.lang.ILanguageVisitor;
 
-public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractValidatorAndCollectorVisitor implements ILanguageVisitor<Void> {
+public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractValidatorAndCollectorVisitor {
 
     private final HashMap<Integer, Integer> waitsInLoops = new HashMap<>();
     private int loopCounter = 0;
@@ -106,7 +105,6 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
     @Override
     public Void visitEvalExpr(EvalExpr evalExpr) {
         requiredComponentVisited(evalExpr, evalExpr.exprAsBlock);
-        TypecheckCommonLanguageVisitor.makeVisitorAndTypecheck(evalExpr.exprAsBlock, beanBuilders);
         List<NepoInfo> infosOfSubAst = InfoCollector.collectInfos(evalExpr);
         if ( !infosOfSubAst.isEmpty() ) {
             addErrorToPhrase(evalExpr, "PROGRAM_ERROR_EXPRBLOCK_TYPECHECK");
