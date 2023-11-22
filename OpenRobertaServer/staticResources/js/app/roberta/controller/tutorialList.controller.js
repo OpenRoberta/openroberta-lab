@@ -1,4 +1,15 @@
-define(["require", "exports", "util", "guiState.controller", "progTutorial.controller", "cardView", "jquery", "bootstrap-table", "bootstrap-tagsinput"], function (require, exports, UTIL, GUISTATE_C, TUTORIAL_C, CardView, $) {
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
+define(["require", "exports", "util", "guiState.controller", "progTutorial.controller", "table", "jquery", "bootstrap-table", "bootstrap-tagsinput"], function (require, exports, UTIL, GUISTATE_C, TUTORIAL_C, table_1, $) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.switchLanguage = exports.init = void 0;
     var BACKGROUND_COLORS = ['#33B8CA', '#EBC300', '#005A94', '#179C7D', '#F29400', '#E2001A', '#EB6A0A', '#8FA402', '#BACC1E', '#9085BA', '#FF69B4', '#DF01D7'];
@@ -35,49 +46,33 @@ define(["require", "exports", "util", "guiState.controller", "progTutorial.contr
     }
     exports.switchLanguage = switchLanguage;
     function initTutorialList() {
-        $('#tutorialTable').bootstrapTable({
-            locale: GUISTATE_C.getLanguage(),
-            toolbar: '#tutorialListToolbar',
-            height: UTIL.calcDataTableHeight(),
-            cardView: 'true',
-            rowAttributes: rowAttributes,
-            search: 'true',
-            showRefresh: 'true',
-            sortName: 'index',
-            sortOrder: 'asc',
-            buttonsAlign: 'right',
-            resizable: 'true',
-            iconsPrefix: 'typcn',
-            icons: {
-                paginationSwitchDown: 'typcn-document-text',
-                paginationSwitchUp: 'typcn-book',
-                refresh: 'typcn-refresh',
-            },
+        var myLang = GUISTATE_C.getLanguage();
+        var myOptions = {
             columns: [
                 {
                     field: 'robot',
                     title: '',
                     sortable: true,
-                    formatter: CardView.robot,
+                    formatter: table_1.CardView.robot,
                 },
                 {
                     field: 'name',
                     title: '',
                     sortable: true,
-                    formatter: CardView.name,
+                    formatter: table_1.CardView.name,
                 },
                 {
                     field: 'overview.description',
                     title: '',
                     sortable: true,
-                    formatter: CardView.description,
+                    formatter: table_1.CardView.description,
                 },
                 {
                     field: 'overview.goal',
                     title: '',
                     sortable: true,
                     formatter: function (goal) {
-                        return CardView.label(goal, 'TITLE_GOAL', 'cardViewDescription');
+                        return table_1.CardView.titleLabel(goal, 'TITLE_GOAL', 'cardViewDescription');
                     },
                 },
                 {
@@ -85,36 +80,46 @@ define(["require", "exports", "util", "guiState.controller", "progTutorial.contr
                     title: '',
                     sortable: true,
                     formatter: function (goal) {
-                        return CardView.label(goal, 'TITLE_PREVIOUS', 'cardViewDescription');
+                        return table_1.CardView.titleLabel(goal, 'TITLE_PREVIOUS', 'cardViewDescription');
                     },
                 },
                 {
                     field: 'time',
-                    title: CardView.titleTypcn('stopwatch'),
+                    title: '',
+                    formatter: function (time) {
+                        return table_1.CardView.titleTypcn(time, 'stopwatch');
+                    },
                     sortable: true,
                 },
                 {
                     field: 'age',
-                    title: CardView.titleTypcn('group'),
+                    title: '',
+                    formatter: function (age) {
+                        return table_1.CardView.titleTypcn(age, 'group');
+                    },
                     sortable: true,
                 },
                 {
                     field: 'sim',
-                    title: CardView.titleTypcn('simulation'),
+                    title: '',
+                    formatter: function (sim) {
+                        return table_1.CardView.titleTypcn(formatSim(sim), 'simulation');
+                    },
                     sortable: true,
-                    formatter: formatSim,
                 },
                 {
                     field: 'level',
-                    title: CardView.titleTypcn('mortar-board'),
+                    title: '',
+                    formatter: function (level) {
+                        return table_1.CardView.titleTypcn(formatLevel(level), 'mortar-board');
+                    },
                     sortable: true,
-                    formatter: formatLevel,
                 },
                 {
                     field: 'tags',
                     title: '',
                     sortable: true,
-                    formatter: CardView.tags,
+                    formatter: table_1.CardView.tags,
                 },
                 {
                     field: 'index',
@@ -127,7 +132,14 @@ define(["require", "exports", "util", "guiState.controller", "progTutorial.contr
                     visible: false,
                 },
             ],
-        });
+            locale: myLang,
+            rowAttributes: rowAttributes,
+            sortName: 'index',
+            sortOrder: 'asc',
+            toolbar: '#tutorialListToolbar',
+        };
+        var options = __assign(__assign(__assign({}, table_1.CommonTable.options), table_1.CardView.options), myOptions);
+        $('#tutorialTable').bootstrapTable(options);
         $('#tutorialTable').bootstrapTable('togglePagination');
     }
     function initTutorialListEvents() {
@@ -164,6 +176,7 @@ define(["require", "exports", "util", "guiState.controller", "progTutorial.contr
         });
     }
     function updateTutorialList() {
+        $('#tutorialTable').bootstrapTable('showLoading');
         var tutorialArray = [];
         for (var tutorial in tutorialList) {
             if (tutorialList.hasOwnProperty(tutorial) && tutorialList[tutorial].language === GUISTATE_C.getLanguage().toUpperCase()) {
@@ -173,6 +186,10 @@ define(["require", "exports", "util", "guiState.controller", "progTutorial.contr
         }
         $('#tutorialTable').bootstrapTable('load', tutorialArray);
         configureTagsInput();
+        $('#tutorialTable').bootstrapTable('hideLoading');
+        $('#tutorialTable').bootstrapTable('resetView', {
+            height: UTIL.calcDataTableHeight(),
+        });
     }
     var rowAttributes = function (row, index) {
         var hash = UTIL.getHashFrom(row.robot + row.name + row.index);
@@ -189,7 +206,7 @@ define(["require", "exports", "util", "guiState.controller", "progTutorial.contr
         return '<span style="display:none"></span>';
     };
     var formatTutorialOverview = function (overview, row, index, field) {
-        return CardView.description(overview, row, index, field);
+        return table_1.CardView.description(overview, row, index, field);
     };
     var formatSim = function (sim, row, index) {
         if (sim && (sim === 'sim' || sim === 1)) {

@@ -661,54 +661,58 @@ class ProgSimMultiController extends ProgSimController {
 
     private showTable(dataList: any[]) {
         let C = this;
-        $('#multipleRobotsTable').bootstrapTable({
-            sortName: 'name',
-            toggle: 'multipleRobotsTable',
-            theadClasses: 'table-dark',
-            iconsPrefix: 'typcn',
-            search: true,
-            icons: {
-                paginationSwitchDown: 'typcn-document-text',
-                paginationSwitchUp: 'typcn-book',
-                refresh: 'typcn-refresh',
-            },
-            pagination: 'true',
-            buttonsAlign: 'right',
-            resizable: 'true',
-            rowStyle: C.rowStyle,
+        let lang = GUISTATE_C.getLanguage();
+        $('#multipleRobotsTable')
+            .bootstrapTable('destroy')
+            .bootstrapTable({
+                locale: lang,
+                sortName: 'name',
+                toggle: 'multipleRobotsTable',
+                theadClasses: 'table-dark',
+                iconsPrefix: 'typcn',
+                search: true,
+                icons: {
+                    paginationSwitchDown: 'typcn-document-text',
+                    paginationSwitchUp: 'typcn-book',
+                    refresh: 'typcn-refresh',
+                },
+                pagination: 'true',
+                buttonsAlign: 'right',
+                resizable: 'true',
+                rowStyle: C.rowStyle,
 
-            columns: [
-                {
-                    field: 'programName',
-                    title: "<span lkey='Blockly.Msg.DATATABLE_PROGRAM_NAME'>" + (Blockly.Msg.DATATABLE_PROGRAM_NAME || 'Name des Programms') + '</span>',
-                    sortable: true,
-                },
-                {
-                    field: 'creator',
-                    title: "<span lkey='Blockly.Msg.DATATABLE_CREATED_BY'>" + (Blockly.Msg.DATATABLE_CREATED_BY || 'Erzeugt von') + '</span>',
-                    sortable: true,
-                },
-                {
-                    field: 'owner',
-                    visible: false,
-                },
-                {
-                    field: 'date',
-                    title: "<span lkey='Blockly.Msg.DATATABLE_CREATED_ON'>" + (Blockly.Msg.DATATABLE_CREATED_ON || 'Erzeugt am') + '</span>',
-                    sortable: true,
-                    formatter: UTIL.formatDate,
-                },
-                {
-                    field: 'num',
-                    events: C.eventTimesProgram,
-                    align: 'left',
-                    valign: 'top',
-                    formatter: C.formatTimesProgram,
-                    width: '117px',
-                },
-            ],
-            data: dataList,
-        });
+                columns: [
+                    {
+                        field: 'programName',
+                        title: "<span lkey='Blockly.Msg.DATATABLE_PROGRAM_NAME'>" + (Blockly.Msg.DATATABLE_PROGRAM_NAME || 'Name des Programms') + '</span>',
+                        sortable: true,
+                    },
+                    {
+                        field: 'creator',
+                        title: "<span lkey='Blockly.Msg.DATATABLE_CREATED_BY'>" + (Blockly.Msg.DATATABLE_CREATED_BY || 'Erzeugt von') + '</span>',
+                        sortable: true,
+                    },
+                    {
+                        field: 'owner',
+                        visible: false,
+                    },
+                    {
+                        field: 'date',
+                        title: "<span lkey='Blockly.Msg.DATATABLE_CREATED_ON'>" + (Blockly.Msg.DATATABLE_CREATED_ON || 'Erzeugt am') + '</span>',
+                        sortable: true,
+                        formatter: UTIL.formatDate,
+                    },
+                    {
+                        field: 'num',
+                        events: C.eventTimesProgram,
+                        align: 'left',
+                        valign: 'top',
+                        formatter: C.formatTimesProgram,
+                        width: '117px',
+                    },
+                ],
+                data: dataList,
+            });
         $('#showMultipleSimPrograms').modal('show');
     }
 

@@ -589,7 +589,11 @@ define(["require", "exports", "message", "util", "guiState.controller", "tour.co
         };
         ProgSimMultiController.prototype.showTable = function (dataList) {
             var C = this;
-            $('#multipleRobotsTable').bootstrapTable({
+            var lang = GUISTATE_C.getLanguage();
+            $('#multipleRobotsTable')
+                .bootstrapTable('destroy')
+                .bootstrapTable({
+                locale: lang,
                 sortName: 'name',
                 toggle: 'multipleRobotsTable',
                 theadClasses: 'table-dark',

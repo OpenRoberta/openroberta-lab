@@ -63,13 +63,11 @@ body {
     height: 100%;
     width: 100%;
     font-family: 'Roboto', sans-serif;
-    -webkit-transform: translate3d(0px, 0px, 0px);
     overflow: hidden;
     font-size: 1em;
 }
 
 .pace {
-    -webkit-pointer-events: none;
     pointer-events: none;
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -83,7 +81,6 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    height: 12rem;
     line-height: 12rem;
     font-size: 2rem;
     color: transparent;
@@ -91,30 +88,11 @@ body {
     text-align: center;
     -webkit-animation: pace-theme-center-circle-spin linear infinite 2s;
     -moz-animation: pace-theme-center-circle-spin linear infinite 2s;
-    -ms-animation: pace-theme-center-circle-spin linear infinite 2s;
     -o-animation: pace-theme-center-circle-spin linear infinite 2s;
     animation: pace-theme-center-circle-spin linear infinite 2s;
     background-image: url(../css/img/Nepo_N.png);
     background-repeat: no-repeat;
     background-size: cover;
-}
-
-@-webkit-keyframes pace-theme-center-circle-spin {
-    from {
-        -webkit-transform: perspective(12rem) rotateY(0deg);
-    }
-    to {
-        -webkit-transform: perspective(12rem) rotateY(360deg);
-    }
-}
-
-@-moz-keyframes pace-theme-center-circle-spin {
-    0% {
-        -moz-transform: perspective(12rem) rotateY(0deg);
-    }
-    100% {
-        -moz-transform: perspective(12rem) rotateY(360deg);
-    }
 }
 
 @-ms-keyframes pace-theme-center-circle-spin {
@@ -123,15 +101,6 @@ body {
     }
     100% {
         -ms-transform: perspective(12rem) rotateY(360deg);
-    }
-}
-
-@-o-keyframes pace-theme-center-circle-spin {
-    0% {
-        -o-transform: perspective(12rem) rotateY(0deg);
-    }
-    100% {
-        -o-transform: perspective(12rem) rotateY(360deg);
     }
 }
 
@@ -223,15 +192,9 @@ body.blocklyMinimalBody * {
     width: 210px;
     height: 65px;
     padding: 0;
-    margin: 4px 16px 0px 0;
-    width: 210px;
+    margin: 4px 16px 0 0;
 }
 
-/* #language {
-    float: left;
-    margin: 0;
-    padding: 0;
-} */
 #language.nav > li > a {
     color: #333333;
     padding: 0;
@@ -256,9 +219,6 @@ body.blocklyMinimalBody * {
     position: relative;
     bottom: 100px;
     left: 66px;
-    -moz-transform: rotate(-10deg);
-    -webkit-transform: rotate(-10deg);
-    -o-transform: rotate(-10deg);
     -ms-transform: rotate(-10deg);
     transform: rotate(-10deg);
     visibility: hidden;
@@ -268,9 +228,6 @@ body.blocklyMinimalBody * {
     position: relative;
     bottom: 133px;
     left: 36px;
-    -moz-transform: rotate(-10deg);
-    -webkit-transform: rotate(-10deg);
-    -o-transform: rotate(-10deg);
     -ms-transform: rotate(-10deg);
     transform: rotate(-10deg);
     visibility: hidden;
@@ -289,7 +246,6 @@ body.blocklyMinimalBody * {
 .scroller {
     margin: 0;
     font-size: 24px;
-    padding: 8px 2px 0 8px;
     cursor: pointer;
     background-color: #fff;
     padding: 8px 2px 0 28px;
@@ -497,7 +453,6 @@ canvas.border {
     height: 100%;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
-    -khtml-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
@@ -777,7 +732,7 @@ div.rightMenuButton:hover,
     background-image: none;
 }
 
-#simButtons {
+.bottomLeftButtons {
     left: 12px;
     bottom: 6px;
     position: absolute;
@@ -809,8 +764,7 @@ button#simCustomObstacle.typcn:before {
     position: absolute;
     left: 0;
     top: 6px;
-    padding: 10px;
-    padding-top: 24px;
+    padding: 24px 10px 10px;
     background: #e7e7e7;
     border-radius: 2px;
     box-shadow: none;
@@ -833,7 +787,7 @@ button#simCustomObstacle.typcn:before {
     position: absolute;
     width: 24px;
     height: 24px;
-    top: 0px;
+    top: 0;
     right: 0;
     border-radius: 0;
     background: none;
@@ -854,7 +808,7 @@ button#simCustomObstacle.typcn:before {
 
 #codeButtons {
     left: 12px;
-    bottom: 0px;
+    bottom: 0;
     position: absolute;
     z-index: 99;
     width: 100%;
@@ -1084,8 +1038,8 @@ button#simCustomObstacle.typcn:before {
 
 .cover {
     position: fixed;
-    left: 0px;
-    top: 0px;
+    left: 0;
+    top: 0;
     width: 100%;
     height: 100%;
     z-index: 2000;
@@ -1128,7 +1082,7 @@ button#simCustomObstacle.typcn:before {
 .popup-checkbox input,
 .download-checkbox input {
     position: relative;
-    top: 2;
+    top: 2px;
     margin-right: 6px;
     margin-bottom: 6px;
 }
@@ -1136,7 +1090,6 @@ button#simCustomObstacle.typcn:before {
 .popup-checkbox label,
 .download-checkbox label {
     font-weight: normal;
-    display: inline;
     display: initial;
 }
 
@@ -1147,7 +1100,7 @@ button#simCustomObstacle.typcn:before {
 #download-instructions {
     list-style-type: none;
     padding: 0;
-    margin: 32px 16px 0px 16px;
+    margin: 32px 16px 0 16px;
 }
 
 #download-instructions li {
@@ -1246,7 +1199,6 @@ button#simCustomObstacle.typcn:before {
 .simWindow text {
     -webkit-touch-callout: none;
     -webkit-user-select: none;
-    -khtml-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
@@ -1284,8 +1236,7 @@ button#simCustomObstacle.typcn:before {
 .modal-header,
 .modal-footer {
     border: 0;
-    padding: 16px;
-    padding-bottom: 20px;
+    padding: 16px 16px 20px;
     text-align: left;
 }
 
@@ -1356,7 +1307,6 @@ button#simCustomObstacle.typcn:before {
     -webkit-box-shadow: none;
     box-shadow: none;
     outline: none;
-    box-shadow: none;
 }
 
 .btn:not(.editor, .galleryLike) {
@@ -1370,7 +1320,6 @@ button#simCustomObstacle.typcn:before {
     -webkit-box-shadow: none;
     box-shadow: none;
     cursor: pointer;
-    box-shadow: none;
 }
 
 button.editor {
@@ -1413,7 +1362,6 @@ button.editor:hover {
     -webkit-box-shadow: none;
     box-shadow: none;
     cursor: pointer;
-    box-shadow: none;
 }
 
 .fixed-table-toolbar button:last-child {
@@ -1425,7 +1373,7 @@ button.editor:hover {
 }
 
 .btn-group.pull-right > .btn:last-child {
-    margin-right: 0px;
+    margin-right: 0;
 }
 
 table .typcn-flow-merge:before,
@@ -1453,10 +1401,7 @@ table [data-toggle="collapse"]:after {
 }
 
 table [data-toggle="collapse"].collapsed:after {
-    -webkit-transform: rotate(180deg);
-    -moz-transform: rotate(180deg);
     -ms-transform: rotate(180deg);
-    -o-transform: rotate(180deg);
     transform: rotate(180deg);
 }
 
@@ -1478,7 +1423,6 @@ table [data-toggle="collapse"].collapsed:after {
     -webkit-box-shadow: none;
     box-shadow: none;
     cursor: pointer;
-    box-shadow: none;
 }
 
 .blbtn:hover {
@@ -1508,9 +1452,8 @@ table [data-toggle="collapse"].collapsed:after {
 }
 
 .robot-container {
-    border: 1px solid;
     border-radius: 4px;
-    border-color: #ddd;
+    border: 1px solid #ddd;
     width: 140px;
     height: 88px;
     display: inline-grid;
@@ -1580,11 +1523,6 @@ table [data-toggle="collapse"].collapsed:after {
     background-image: url("/css/img/calliope2016.png");
     width: 178px;
     height: 157px;
-}
-
-.robotSpecial span.img-mbot {
-    background-image: url("/css/img/mblock.jpg");
-    background-size: 100% 100%;
 }
 
 .robotSpecial span.img-botnroll {
@@ -1673,7 +1611,7 @@ table [data-toggle="collapse"].collapsed:after {
 
 .blocklyToolboxDiv > .nav-tabs .typcn:before {
     position: relative;
-    top: 1;
+    top: 1px;
 }
 
 .blbtn.typcn:before {
@@ -1709,15 +1647,13 @@ label.form-invalid {
 
 label.form-invalid:after {
     right: 10%;
-    border: solid transparent;
     content: " ";
     height: 0;
     width: 0;
     position: absolute;
     pointer-events: none;
-    border-color: transparent;
+    border: 6px solid transparent;
     border-top-color: #E2001A;
-    border-width: 6px;
     margin-top: 28px;
     z-index: 20;
 }
@@ -1734,7 +1670,6 @@ label.form-invalid:after {
     position: relative;
     border-radius: 2px;
     margin-top: 12px;
-    color: #8FA402;
     color: #333;
     background: rgb(221, 221, 221);
     background: rgba(221, 221, 221, 0.9);
@@ -1747,8 +1682,8 @@ label.form-invalid:after {
 .hint:before {
     position: absolute;
     content: '';
-    width: 0px;
-    height: 0px;
+    width: 0;
+    height: 0;
     border-style: solid;
     border-width: 0 6px 6px 6px;
     border-color: transparent transparent #8FA402 transparent;
@@ -1795,11 +1730,11 @@ input.shareLabelInput.form-control, select.shareLabelInput.form-control {
 }
 
 legend {
-    margin-bottom: 0px;
+    margin-bottom: 0;
 }
 
 .progName:before {
-    margin-right: 0px;
+    margin-right: 0;
 }
 
 /***** END JQuery-Popup-Input-Fields *****/
@@ -1817,10 +1752,10 @@ legend {
     text-decoration: none;
 }
 
-.bootstrap-table .extend:a {
-    margin-right: 0px;
-    margin-left: 0px;
-}
+/*.bootstrap-table .extend:a {
+    margin-right: 0;
+    margin-left: 0;
+}*/
 
 .bootstrap-table a.disabled {
     color: #bbb;
@@ -1840,7 +1775,7 @@ legend {
 }
 
 td.bs-checkbox {
-    padding: 14px 8px 0px 8px !important;
+    padding: 14px 8px 0 8px !important;
 }
 
 .bootstrap-table a:hover,
@@ -1900,6 +1835,10 @@ a.page-link:focus, a.page-link:hover {
     left: 40px;
 }
 
+.fixed-table-container.fixed-height.has-card-view {
+    overflow: auto;
+}
+
 span.card-view-title {
     min-width: auto !important;
 }
@@ -1908,7 +1847,7 @@ span.card-view-title {
     position: relative;
     color: #fff;
     font-size: 24px;
-    top: 0svi;
+    top: 0;
     left: 0;
     margin-left: 0;
     margin-right: 12px;
@@ -2059,9 +1998,6 @@ div.imgSol img, div.imgSol svg {
     max-height: 34px;
     min-height: 34px;
     margin-bottom: 12px;
-    -ms-word-break: break-all;
-    word-break: break-all;
-    word-break: break-word;
     -webkit-hyphens: auto;
     -moz-hyphens: auto;
     hyphens: auto;
@@ -2070,7 +2006,6 @@ div.imgSol img, div.imgSol svg {
 .galleryTable.table, .galleryTable tr {
     border: 4px solid #EEEEEE;
     border-collapse: collapse;
-    border-color: #EEEEEE;
 }
 
 div.galleryLike {
@@ -2233,7 +2168,7 @@ div.cardViewLabel {
 }
 
 .dataTables_wrapper {
-    margin: 0px 68px;
+    margin: 0 68px;
 }
 
 #progList table tbody tr.selected,
@@ -2298,14 +2233,14 @@ input[type=range]::-webkit-slider-runnable-track {
     height: 8px;
     cursor: pointer;
     animate: 0.2s;
-    box-shadow: 0px 0px 0px #000000;
+    box-shadow: 0 0 0 #000000;
     background: #BACC1E;
     border-radius: 2px;
-    border: 0px solid #000000;
+    border: 0 solid #000000;
 }
 
 input[type=range]::-webkit-slider-thumb {
-    box-shadow: 0px 0px 0px #000000;
+    box-shadow: 0 0 0 #000000;
     border: 1px solid #333333;
     height: 24px;
     width: 12px;
@@ -2325,14 +2260,14 @@ input[type=range]::-moz-range-track {
     height: 8px;
     cursor: pointer;
     animate: 0.2s;
-    box-shadow: 0px 0px 0px #000000;
+    box-shadow: 0 0 0 #000000;
     background: #BACC1E;
     border-radius: 2px;
-    border: 0px solid #000000;
+    border: 0 solid #000000;
 }
 
 input[type=range]::-moz-range-thumb {
-    box-shadow: 0px 0px 0px #000000;
+    box-shadow: 0 0 0 #000000;
     border: 1px solid #333333;
     height: 24px;
     width: 12px;
@@ -2353,20 +2288,20 @@ input[type=range]::-ms-track {
 
 input[type=range]::-ms-fill-lower {
     background: #BACC1E;
-    border: 0px solid #000000;
+    border: 0 solid #000000;
     border-radius: 4px;
-    box-shadow: 0px 0px 0px #000000;
+    box-shadow: 0 0 0 #000000;
 }
 
 input[type=range]::-ms-fill-upper {
     background: #BACC1E;
-    border: 0px solid #000000;
+    border: 0 solid #000000;
     border-radius: 4px;
-    box-shadow: 0px 0px 0px #000000;
+    box-shadow: 0 0 0 #000000;
 }
 
 input[type=range]::-ms-thumb {
-    box-shadow: 0px 0px 0px #000000;
+    box-shadow: 0 0 0 #000000;
     border: 1px solid #333333;
     height: 24px;
     width: 12px;
@@ -2433,7 +2368,7 @@ input[type=range]:focus::-ms-fill-upper {
 
 
 #create-user-group .modal-body {
-    margin-bottom: 1em 0 2.5em;
+    margin-bottom: 1em;
 }
 
 #userGroupList .btn-group > .btn:not(.dropdown-toggle),
@@ -2497,10 +2432,10 @@ input[type=range]:focus::-ms-fill-upper {
 
 #userGroupMemberTable .edit-member-name form label.form-invalid {
     position: absolute;
-    left: 0px;
-    right: 0px;
+    left: 0;
+    right: 0;
     bottom: 0;
-    margin-bottom: 0px;
+    margin-bottom: 0;
     transform: translateY(100%);
 }
 
@@ -2647,7 +2582,7 @@ input[type=range]:focus::-ms-fill-upper {
     }
 
     .dataTables_wrapper {
-        margin: 0px 16px;
+        margin: 0 16px;
     }
 
     #progList > h2,
@@ -2777,10 +2712,6 @@ img.img-responsive {
         display: none;
     }
 
-    .tab-content container {
-        padding: 0;
-    }
-
     .blocklyMainBackground {
         stroke: none;
     }
@@ -2908,8 +2839,7 @@ ul#tutorial-close {
     font-weight: bold;
     box-sizing: border-box;
     float: left;
-    margin: 0;
-    margin-left: -15px;
+    margin: 0 0 0 -15px;
 }
 
 #tutorial-navigation li:first-child a {
@@ -2961,8 +2891,7 @@ ul#tutorial-close {
     overflow: hidden;
     height: 92px;
     margin: 0;
-    padding: 0;
-    padding-left: 36px;
+    padding: 0 0 0 36px;
     line-height: 92px;
     vertical-align: middle;
 }
@@ -3081,7 +3010,6 @@ p.quiz {
     height: 14px;
     border: solid white;
     border-width: 0 3px 3px 0;
-    -webkit-transform: rotate(45deg);
     -ms-transform: rotate(45deg);
     transform: rotate(45deg);
 }
@@ -3201,12 +3129,12 @@ td[lkey="Blockly.Msg.POPUP_DOWNLOAD_STEP_A_SENSEBOX"] {
 
 #sourceCodeEditor pre {
     position: absolute;
-    top: 0px;
-    padding: 0px;
+    top: 0;
+    padding: 0;
     line-height: 18px;
     background-color: transparent;
-    border: 0px solid #ccc;
-    border-radius: 0px;
+    border: 0 solid #ccc;
+    border-radius: 0;
     color: #000;
     font-family: 'Roboto', sans-serif;
 }
@@ -3220,10 +3148,10 @@ td[lkey="Blockly.Msg.POPUP_DOWNLOAD_STEP_A_SENSEBOX"] {
 
 #sourceCodeEditor textarea {
     position: absolute;
-    top: 0px;
+    top: 0;
     line-height: 18px;
     font-size: 13px;
-    padding: 0px;
+    padding: 0;
     z-index: 5;
     color: transparent;
 }
@@ -3231,21 +3159,21 @@ td[lkey="Blockly.Msg.POPUP_DOWNLOAD_STEP_A_SENSEBOX"] {
 #codeDiv pre {
     position: absolute;
     background-color: transparent;
-    border: 0px solid #ccc;
-    border-radius: 0px;
+    border: 0 solid #ccc;
+    border-radius: 0;
     color: #000;
     font-family: 'Roboto', sans-serif;
     background-image: linear-gradient(transparent 50%, rgba(247, 247, 247, 1) 0%);
     background-size: 100% 2.77em;
     background-repeat: repeat;
     width: 100%;
-    margin-top: 0px;
+    margin-top: 0;
     line-height: 18px;
-    padding: 0px;
+    padding: 0;
 }
 
 #sourceCodeEditor .codeflask__flatten {
-    padding-top: 0px !important;
+    padding-top: 0 !important;
     line-height: 18px;
 }
 
@@ -3254,14 +3182,14 @@ td[lkey="Blockly.Msg.POPUP_DOWNLOAD_STEP_A_SENSEBOX"] {
     z-index: 8;
     color: rgba(255, 255, 255, 0) !important;
     height: calc(100% - 82px);
-    margin-top: 0px;
+    margin-top: 0;
     line-height: 18px;
-    padding: 0px;
+    padding: 0;
 }
 
 #codeDiv .codeflask__flatten {
     background-color: #FFF0;
-    padding-top: 0px !important;
+    padding-top: 0 !important;
     line-height: 18px;
 }
 
@@ -3272,7 +3200,7 @@ td[lkey="Blockly.Msg.POPUP_DOWNLOAD_STEP_A_SENSEBOX"] {
 
 .codeflask__lines {
     background-color: #EEE;
-    padding-top: 0px !important;
+    padding-top: 0 !important;
     z-index: 5 !important;
 }
 
@@ -3408,12 +3336,13 @@ pre code {
 }
 
 .panel-title > a:before {
+    position: relative;
     background-size: 10px;
     display: inline-block;
     width: 10px;
     height: 10px;
     content: "";
-    margin: 0 12px 0 -8px;
+    margin: 0 4px 0 4px;
     background-image: url('data:image/svg+xml,<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><title>minus</title><path d="M24 14.667h-16c-1.472 0-2.667 1.195-2.667 2.667s1.195 2.667 2.667 2.667h16c1.472 0 2.667-1.195 2.667-2.667s-1.195-2.667-2.667-2.667z"></path> </svg>');
 }
 
@@ -3423,7 +3352,7 @@ pre code {
     width: 10px;
     height: 10px;
     content: "";
-    margin: 0 12px 0 -8px;
+    margin: 0 4px 0 4px;
     background-image: url('data:image/svg+xml,<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"> <title>plus</title><path d="M24 13.333h-5.333v-5.333c0-1.472-1.195-2.667-2.667-2.667s-2.667 1.195-2.667 2.667l0.095 5.333h-5.428c-1.472 0-2.667 1.195-2.667 2.667s1.195 2.667 2.667 2.667l5.428-0.095-0.095 5.428c0 1.472 1.195 2.667 2.667 2.667s2.667-1.195 2.667-2.667v-5.428l5.333 0.095c1.472 0 2.667-1.195 2.667-2.667s-1.195-2.667-2.667-2.667z"></path></svg>');
 }
 
@@ -3432,6 +3361,8 @@ pre code {
     display: inline-block;
     width: 100%;
     height: 100%;
+    color: inherit;
+    line-height: 1.5;
 }
 
 #accordion .panel-body {

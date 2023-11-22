@@ -9,7 +9,7 @@
 import * as UTIL from 'util';
 import * as GUISTATE_C from 'guiState.controller';
 import * as TUTORIAL_C from 'progTutorial.controller';
-import * as CardView from 'cardView';
+import { CardView, CommonTable } from 'table';
 import * as $ from 'jquery';
 import 'bootstrap-table';
 import 'bootstrap-tagsinput';
@@ -50,24 +50,8 @@ export function switchLanguage() {
 }
 
 function initTutorialList() {
-    $('#tutorialTable').bootstrapTable({
-        locale: GUISTATE_C.getLanguage(),
-        toolbar: '#tutorialListToolbar',
-        height: UTIL.calcDataTableHeight(),
-        cardView: 'true',
-        rowAttributes: rowAttributes,
-        search: 'true',
-        showRefresh: 'true',
-        sortName: 'index',
-        sortOrder: 'asc',
-        buttonsAlign: 'right',
-        resizable: 'true',
-        iconsPrefix: 'typcn',
-        icons: {
-            paginationSwitchDown: 'typcn-document-text',
-            paginationSwitchUp: 'typcn-book',
-            refresh: 'typcn-refresh',
-        },
+    const myLang = GUISTATE_C.getLanguage();
+    const myOptions = {
         columns: [
             {
                 field: 'robot',
@@ -92,7 +76,7 @@ function initTutorialList() {
                 title: '',
                 sortable: true,
                 formatter: function (goal) {
-                    return CardView.label(goal, 'TITLE_GOAL', 'cardViewDescription');
+                    return CardView.titleLabel(goal, 'TITLE_GOAL', 'cardViewDescription');
                 },
             },
             {
@@ -100,30 +84,40 @@ function initTutorialList() {
                 title: '',
                 sortable: true,
                 formatter: function (goal) {
-                    return CardView.label(goal, 'TITLE_PREVIOUS', 'cardViewDescription');
+                    return CardView.titleLabel(goal, 'TITLE_PREVIOUS', 'cardViewDescription');
                 },
             },
             {
                 field: 'time',
-                title: CardView.titleTypcn('stopwatch'),
+                title: '',
+                formatter: function (time) {
+                    return CardView.titleTypcn(time, 'stopwatch');
+                },
                 sortable: true,
             },
             {
                 field: 'age',
-                title: CardView.titleTypcn('group'),
+                title: '',
+                formatter: function (age) {
+                    return CardView.titleTypcn(age, 'group');
+                },
                 sortable: true,
             },
             {
                 field: 'sim',
-                title: CardView.titleTypcn('simulation'),
+                title: '',
+                formatter: function (sim) {
+                    return CardView.titleTypcn(formatSim(sim), 'simulation');
+                },
                 sortable: true,
-                formatter: formatSim,
             },
             {
                 field: 'level',
-                title: CardView.titleTypcn('mortar-board'),
+                title: '',
+                formatter: function (level) {
+                    return CardView.titleTypcn(formatLevel(level), 'mortar-board');
+                },
                 sortable: true,
-                formatter: formatLevel,
             },
             {
                 field: 'tags',
@@ -142,7 +136,14 @@ function initTutorialList() {
                 visible: false,
             },
         ],
-    });
+        locale: myLang,
+        rowAttributes: rowAttributes,
+        sortName: 'index',
+        sortOrder: 'asc',
+        toolbar: '#tutorialListToolbar',
+    };
+    const options = { ...CommonTable.options, ...CardView.options, ...myOptions };
+    $('#tutorialTable').bootstrapTable(options);
     $('#tutorialTable').bootstrapTable('togglePagination');
 }
 
@@ -205,6 +206,7 @@ function initTutorialListEvents() {
 }
 
 function updateTutorialList() {
+    $('#tutorialTable').bootstrapTable('showLoading');
     var tutorialArray = [];
     for (var tutorial in tutorialList) {
         if (tutorialList.hasOwnProperty(tutorial) && tutorialList[tutorial].language === GUISTATE_C.getLanguage().toUpperCase()) {
@@ -214,6 +216,10 @@ function updateTutorialList() {
     }
     $('#tutorialTable').bootstrapTable('load', tutorialArray);
     configureTagsInput();
+    $('#tutorialTable').bootstrapTable('hideLoading');
+    $('#tutorialTable').bootstrapTable('resetView', {
+        height: UTIL.calcDataTableHeight(),
+    });
 }
 var rowAttributes = function (row, index) {
     var hash = UTIL.getHashFrom(row.robot + row.name + row.index);

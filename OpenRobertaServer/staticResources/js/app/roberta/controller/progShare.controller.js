@@ -1,8 +1,8 @@
-define(["require", "exports", "log", "util", "message", "guiState.controller", "language.controller", "galleryList.controller", "program.model", "userGroup.model", "blockly", "jquery", "cardView", "bootstrap-table"], function (require, exports, LOG, UTIL, MSG, GUISTATE_C, LANG, GALLERY_C, PROGRAM, USERGROUP, Blockly, $, CardView) {
+define(["require", "exports", "log", "util", "message", "guiState.controller", "language.controller", "galleryList.controller", "program.model", "userGroup.model", "blockly", "jquery", "table", "bootstrap-table"], function (require, exports, LOG, UTIL, MSG, GUISTATE_C, LANG, GALLERY_C, PROGRAM, USERGROUP, Blockly, $, table_1) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.init = void 0;
     function init() {
-        initView();
+        //initView();
         initEvents();
     }
     exports.init = init;
@@ -64,45 +64,45 @@ define(["require", "exports", "log", "util", "message", "guiState.controller", "
                 {
                     sortable: true,
                     title: '',
-                    formatter: CardView.robot,
+                    formatter: table_1.CardView.robot,
                 },
                 {
                     title: '',
                     sortable: true,
-                    formatter: CardView.name,
+                    formatter: table_1.CardView.name,
                 },
                 {
                     title: '',
                     sortable: true,
-                    formatter: CardView.programDescription,
+                    formatter: table_1.CardView.programDescription,
                 },
                 {
                     title: '',
                     sortable: true,
                     formatter: function (goal) {
-                        return CardView.label(goal, 'GALLERY_BY', 'cardViewInfo');
+                        return table_1.CardView.label(goal, 'GALLERY_BY', 'cardViewInfo');
                     },
                 },
                 {
                     sortable: true,
                     title: '',
                     formatter: function (date) {
-                        return CardView.label(UTIL.formatDate(date), 'GALLERY_DATE', 'cardViewInfo');
+                        return table_1.CardView.label(UTIL.formatDate(date), 'GALLERY_DATE', 'cardViewInfo');
                     },
                 },
                 {
-                    title: CardView.titleTypcn('eye-outline'),
+                    title: table_1.CardView.titleTypcn('eye-outline'),
                     sortable: true,
                 },
                 {
-                    title: CardView.titleTypcn('heart-full-outline'),
+                    title: table_1.CardView.titleTypcn('heart-full-outline'),
                     sortable: true,
                 },
                 {
                     title: '',
                     sortable: true,
                     formatter: function (value, row) {
-                        return CardView.programTags(row[2]);
+                        return table_1.CardView.programTags(row[2]);
                     },
                 },
                 {

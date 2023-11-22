@@ -377,7 +377,7 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
                             drawNetworkUIForTabDefine();
                         });
                         D3.select('#nn-explore-upload').on('click', function () {
-                            tableDiv.modal('hide');
+                            tableDiv.hide();
                             var fileInputEl = $('#nn-test-data-upload');
                             processUserInputTable(fileInputEl, tableDiv, tableEl, false);
                         });
@@ -407,7 +407,7 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
                         acceptUserInputPopupTableListener = function () {
                             inputsForExploringEnteringMode = false;
                             currentInputRowForLearning = 0;
-                            tableDiv.modal('hide');
+                            tableDiv.hide();
                             $('#nn-explore-upload-popup').trigger('blur');
                             numTableRowsChanged = 0;
                             userInputsForExploring = tableToArray(tableEl);
@@ -418,7 +418,7 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
                                 inputTableNumRowsForExploring -= numTableRowsChanged;
                             }
                             numTableRowsChanged = 0;
-                            tableDiv.modal('hide');
+                            tableDiv.hide();
                             $('#nn-explore-upload-popup').trigger('blur');
                         };
                         D3.select('#nn-explore-modal-ok').on('click', acceptUserInputPopupTableListener);
@@ -439,7 +439,7 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
                             }
                         });
                         D3.select('#nn-show-next-neuron').html('');
-                        tableDiv.modal('hide');
+                        tableDiv.hide();
                         $('#nn-show-next-neuron-all').hide();
                         $('#nn-show-iteration-all').hide();
                         // Listen for css-responsive changes and redraw the svg network.
@@ -603,7 +603,7 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
                             drawNetworkUIForTabLearn();
                         });
                         D3.select('#nn-learn-upload').on('click', function () {
-                            tableDiv.modal('hide');
+                            tableDiv.hide();
                             var fileInputEl = $('#nn-training-data-upload');
                             processUserInputTable(fileInputEl, tableDiv, tableEl, true);
                         });
@@ -633,7 +633,7 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
                         acceptUserInputPopupTableListener = function () {
                             inputsForLearningEnteringMode = false;
                             currentInputRowForLearning = 0;
-                            tableDiv.modal('hide');
+                            tableDiv.hide();
                             $('#nn-learn-upload-popup').trigger('blur');
                             numTableRowsChanged = 0;
                             userInputsForLearning = tableToArray(tableEl);
@@ -644,7 +644,7 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
                                 inputTableNumRowsForLearning -= numTableRowsChanged;
                             }
                             numTableRowsChanged = 0;
-                            tableDiv.modal('hide');
+                            tableDiv.hide();
                             $('#nn-learn-upload-popup').trigger('blur');
                         };
                         D3.select('#nn-learn-modal-ok').on('click', acceptUserInputPopupTableListener);
@@ -681,7 +681,7 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
                         D3.select('#nn-get-epoch').on('change', updateEpochsToTrainListener);
                         D3.select('#nn-epoch-finished-button').on('click', updateEpochsToTrainListener);
                         D3.select('#nn-learn-show-activation').html(UTIL.activationDisplayName[state.activationKey]);
-                        tableDiv.modal('hide');
+                        tableDiv.hide();
                         trainingLossLineChart.reset();
                         network.forEachNode(true, function (node) { return (node.biasHistory = []); });
                         network.forEachLink(function (link) { return (link.weightHistory = []); });

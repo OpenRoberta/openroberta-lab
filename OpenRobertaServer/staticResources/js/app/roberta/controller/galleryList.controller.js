@@ -1,6 +1,17 @@
-define(["require", "exports", "util", "message", "guiState.controller", "progList.model", "program.model", "program.controller", "blockly", "cardView", "jquery", "bootstrap-table", "bootstrap-tagsinput"], function (require, exports, UTIL, MSG, GUISTATE_C, PROGLIST, PROGRAM, PROGRAM_C, Blockly, CardView, $) {
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
+define(["require", "exports", "util", "message", "guiState.controller", "progList.model", "program.model", "program.controller", "blockly", "table", "jquery", "bootstrap-table", "bootstrap-tagsinput"], function (require, exports, UTIL, MSG, GUISTATE_C, PROGLIST, PROGRAM, PROGRAM_C, Blockly, table_1, $) {
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.titleLikes = exports.titleNumberOfViews = exports.rowAttributes = exports.rowStyle = exports.init = exports.switchLanguage = void 0;
+    exports.titleLikes = exports.titleNumberOfViews = exports.rowAttributes = exports.init = exports.switchLanguage = void 0;
     var BACKGROUND_COLORS = ['#33B8CA', '#EBC300', '#005A94', '#179C7D', '#F29400', '#E2001A', '#EB6A0A', '#8FA402', '#BACC1E', '#9085BA', '#FF69B4', '#DF01D7'];
     var currentColorIndex;
     var currentViewMode = 'gallery';
@@ -40,71 +51,57 @@ define(["require", "exports", "util", "message", "guiState.controller", "progLis
         $('#galleryList .search').append($selectOrderBy);
     }
     function initGalleryList() {
-        $('#galleryTable').bootstrapTable({
-            locale: GUISTATE_C.getLanguage(),
-            toolbar: '#galleryListToolbar',
-            height: UTIL.calcDataTableHeight(),
-            cardView: 'true',
-            rowStyle: rowStyle,
-            rowAttributes: rowAttributes,
-            search: true,
-            showRefresh: 'true',
-            sortName: 4,
-            sortOrder: 'desc',
-            filterControl: true,
-            buttonsAlign: 'right',
-            resizable: 'true',
-            iconsPrefix: 'typcn',
-            pageSize: 12,
-            pageList: [12, 24, 48, 96],
-            icons: {
-                paginationSwitchDown: 'typcn-document-text',
-                paginationSwitchUp: 'typcn-book',
-                refresh: 'typcn-refresh',
-            },
+        var myLang = GUISTATE_C.getLanguage();
+        var myOptions = {
             columns: [
                 {
                     sortable: true,
                     title: '',
-                    formatter: CardView.robot,
+                    formatter: table_1.CardView.robot,
                 },
                 {
                     title: '',
                     sortable: true,
-                    formatter: CardView.name,
+                    formatter: table_1.CardView.name,
                 },
                 {
                     title: '',
                     sortable: true,
-                    formatter: CardView.programDescription,
+                    formatter: table_1.CardView.programDescription,
                 },
                 {
                     title: '',
                     sortable: true,
                     formatter: function (goal) {
-                        return CardView.label(goal, 'GALLERY_BY', 'cardViewInfo');
+                        return table_1.CardView.titleLabel(goal, 'GALLERY_BY', 'cardViewInfo');
                     },
                 },
                 {
                     sortable: true,
                     title: '',
                     formatter: function (date) {
-                        return CardView.label(UTIL.formatDate(date.replace(/\s/, 'T')), 'GALLERY_DATE', 'cardViewInfo');
+                        return table_1.CardView.titleLabel(UTIL.formatDate(date.replace(/\s/, 'T')), 'GALLERY_DATE', 'cardViewInfo');
                     },
                 },
                 {
-                    title: CardView.titleTypcn('eye-outline'),
+                    title: '',
+                    formatter: function (num) {
+                        return table_1.CardView.titleTypcn(num, 'eye-outline');
+                    },
                     sortable: true,
                 },
                 {
-                    title: CardView.titleTypcn('heart-full-outline'),
+                    title: '',
+                    formatter: function (num) {
+                        return table_1.CardView.titleTypcn(num, 'heart-full-outline');
+                    },
                     sortable: true,
                 },
                 {
                     title: '',
                     sortable: true,
                     formatter: function (value, row) {
-                        return CardView.programTags(row[2]);
+                        return table_1.CardView.programTags(row[2]);
                     },
                 },
                 {
@@ -113,7 +110,13 @@ define(["require", "exports", "util", "message", "guiState.controller", "progLis
                     formatter: formatLike,
                 },
             ],
-        });
+            filterControl: true,
+            locale: myLang,
+            rowAttributes: rowAttributes,
+            toolbar: '#galleryListToolbar',
+        };
+        var options = __assign(__assign(__assign({}, table_1.CommonTable.options), table_1.CardView.options), myOptions);
+        $('#galleryTable').bootstrapTable(options);
         $('#galleryTable').bootstrapTable('togglePagination');
     }
     function initGalleryListEvents() {
@@ -136,7 +139,7 @@ define(["require", "exports", "util", "message", "guiState.controller", "progLis
         $('#galleryList')
             .find('button[name="refresh"]')
             .onWrap('click', function () {
-            loadGalleryData();
+            loadTableData();
             return false;
         }, 'refresh gallery list clicked');
         $('#galleryTable').onWrap('click-row.bs.table', function ($element, row) {
@@ -149,7 +152,7 @@ define(["require", "exports", "util", "message", "guiState.controller", "progLis
         $('#galleryTable').on('shown.bs.collapse hidden.bs.collapse', function (e) {
             $('#galleryTable').bootstrapTable('resetWidth');
         });
-        $('#filterRobot').onWrap('change', loadGalleryData, 'gallery filter changed');
+        $('#filterRobot').onWrap('change', loadTableData, 'gallery filter changed');
         $('#fieldOrderBy').change(function (e) {
             var fieldData = e.target.value.split(':');
             var row = parseInt(fieldData[0]);
@@ -159,37 +162,27 @@ define(["require", "exports", "util", "message", "guiState.controller", "progLis
             });
             configureTagsInput();
         });
-        //        TODO reactivate this once the table-view is improved
-        //        $('#toogleView').clickWrap(function (e) {
-        //            // toggle button icon
-        //            var iconClassName = '';
-        //            if (currentViewMode === 'gallery') {
-        //                currentViewMode = 'list';
-        //                iconClassName = 'typcn-th-large';
-        //            } else {
-        //                currentViewMode = 'gallery';
-        //                iconClassName = 'typcn-th-list';
-        //            }
-        //            $('#toogleView > i').attr('class', 'typcn ' + iconClassName);
-        //            $('#galleryTable').bootstrapTable('refreshOptions', {});
-        //        });
     }
-    function loadGalleryData() {
+    function loadTableData() {
+        $('#galleryTable').bootstrapTable('showLoading');
         var params = {};
         var group = $('#filterRobot').val();
         if (group !== 'all') {
             params['group'] = group;
         }
-        PROGLIST.loadGalleryList(update, params);
+        PROGLIST.loadGalleryList(updateTable, params);
     }
-    function update(result) {
+    function updateTable(result) {
         UTIL.response(result);
         if (result.rc === 'ok') {
             allRows = result.programNames;
             $('#galleryTable').bootstrapTable('load', result.programNames);
             configureTagsInput();
         }
-        $('.pace').fadeOut(300); // Hide loading icon and show gallery table
+        $('#galleryTable').bootstrapTable('hideLoading');
+        $('#galleryTable').bootstrapTable('resetView', {
+            height: UTIL.calcDataTableHeight(),
+        });
     }
     function updateLike(value, index, row) {
         var myIndex = allRows.indexOf(row);
@@ -203,10 +196,7 @@ define(["require", "exports", "util", "message", "guiState.controller", "progLis
     }
     function showView() {
         $('#filterRobot').val(GUISTATE_C.getRobotGroup());
-        if ($('#galleryTable').bootstrapTable('getData').length === 0) {
-            $('.pace').show(); // Show loading icon and hide gallery table
-        }
-        loadGalleryData();
+        loadTableData();
     }
     //TODO: Robot group names exists in plugin properties
     function getRobotGroups() {
@@ -264,12 +254,6 @@ define(["require", "exports", "util", "message", "guiState.controller", "progLis
             return false;
         },
     };
-    var rowStyle = function (row, index) {
-        return {
-            classes: currentViewMode === 'gallery' ? 'galleryNode col-xxl-2 col-lg-3 col-md-4 col-sm-6' : 'listNode',
-        };
-    };
-    exports.rowStyle = rowStyle;
     // TODO extend this, if more customization features are available, eg. robot graphics, uploaded images.
     var rowAttributes = function (row, index) {
         var hash = UTIL.getHashFrom(row[0] + row[1] + row[3]);

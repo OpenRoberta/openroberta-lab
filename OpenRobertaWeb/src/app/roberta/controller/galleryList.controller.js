@@ -13,7 +13,7 @@ import * as PROGLIST from 'progList.model';
 import * as PROGRAM from 'program.model';
 import * as PROGRAM_C from 'program.controller';
 import * as Blockly from 'blockly';
-import * as CardView from 'cardView';
+import { CardView, CommonTable } from 'table';
 import * as $ from 'jquery';
 import 'bootstrap-table';
 import 'bootstrap-tagsinput';
@@ -61,28 +61,8 @@ function initGalleryToolbar() {
 }
 
 function initGalleryList() {
-    $('#galleryTable').bootstrapTable({
-        locale: GUISTATE_C.getLanguage(),
-        toolbar: '#galleryListToolbar',
-        height: UTIL.calcDataTableHeight(),
-        cardView: 'true',
-        rowStyle: rowStyle,
-        rowAttributes: rowAttributes,
-        search: true,
-        showRefresh: 'true',
-        sortName: 4,
-        sortOrder: 'desc',
-        filterControl: true,
-        buttonsAlign: 'right',
-        resizable: 'true',
-        iconsPrefix: 'typcn',
-        pageSize: 12,
-        pageList: [12, 24, 48, 96],
-        icons: {
-            paginationSwitchDown: 'typcn-document-text',
-            paginationSwitchUp: 'typcn-book',
-            refresh: 'typcn-refresh',
-        },
+    const myLang = GUISTATE_C.getLanguage();
+    const myOptions = {
         columns: [
             {
                 sortable: true,
@@ -103,22 +83,28 @@ function initGalleryList() {
                 title: '',
                 sortable: true,
                 formatter: function (goal) {
-                    return CardView.label(goal, 'GALLERY_BY', 'cardViewInfo');
+                    return CardView.titleLabel(goal, 'GALLERY_BY', 'cardViewInfo');
                 },
             },
             {
                 sortable: true,
                 title: '',
                 formatter: function (date) {
-                    return CardView.label(UTIL.formatDate(date.replace(/\s/, 'T')), 'GALLERY_DATE', 'cardViewInfo');
+                    return CardView.titleLabel(UTIL.formatDate(date.replace(/\s/, 'T')), 'GALLERY_DATE', 'cardViewInfo');
                 },
             },
             {
-                title: CardView.titleTypcn('eye-outline'),
+                title: '',
+                formatter: function (num) {
+                    return CardView.titleTypcn(num, 'eye-outline');
+                },
                 sortable: true,
             },
             {
-                title: CardView.titleTypcn('heart-full-outline'),
+                title: '',
+                formatter: function (num) {
+                    return CardView.titleTypcn(num, 'heart-full-outline');
+                },
                 sortable: true,
             },
             {
@@ -134,7 +120,13 @@ function initGalleryList() {
                 formatter: formatLike,
             },
         ],
-    });
+        filterControl: true,
+        locale: myLang,
+        rowAttributes: rowAttributes,
+        toolbar: '#galleryListToolbar',
+    };
+    const options = { ...CommonTable.options, ...CardView.options, ...myOptions };
+    $('#galleryTable').bootstrapTable(options);
     $('#galleryTable').bootstrapTable('togglePagination');
 }
 
@@ -176,7 +168,7 @@ function initGalleryListEvents() {
         .onWrap(
             'click',
             function () {
-                loadGalleryData();
+                loadTableData();
                 return false;
             },
             'refresh gallery list clicked'
@@ -203,7 +195,7 @@ function initGalleryListEvents() {
         $('#galleryTable').bootstrapTable('resetWidth');
     });
 
-    $('#filterRobot').onWrap('change', loadGalleryData, 'gallery filter changed');
+    $('#filterRobot').onWrap('change', loadTableData, 'gallery filter changed');
 
     $('#fieldOrderBy').change(function (e) {
         var fieldData = e.target.value.split(':');
@@ -214,39 +206,29 @@ function initGalleryListEvents() {
         });
         configureTagsInput();
     });
-    //        TODO reactivate this once the table-view is improved
-    //        $('#toogleView').clickWrap(function (e) {
-    //            // toggle button icon
-    //            var iconClassName = '';
-    //            if (currentViewMode === 'gallery') {
-    //                currentViewMode = 'list';
-    //                iconClassName = 'typcn-th-large';
-    //            } else {
-    //                currentViewMode = 'gallery';
-    //                iconClassName = 'typcn-th-list';
-    //            }
-    //            $('#toogleView > i').attr('class', 'typcn ' + iconClassName);
-    //            $('#galleryTable').bootstrapTable('refreshOptions', {});
-    //        });
 }
 
-function loadGalleryData() {
+function loadTableData() {
+    $('#galleryTable').bootstrapTable('showLoading');
     var params = {};
     var group = $('#filterRobot').val();
     if (group !== 'all') {
         params['group'] = group;
     }
-    PROGLIST.loadGalleryList(update, params);
+    PROGLIST.loadGalleryList(updateTable, params);
 }
 
-function update(result) {
+function updateTable(result) {
     UTIL.response(result);
     if (result.rc === 'ok') {
         allRows = result.programNames;
         $('#galleryTable').bootstrapTable('load', result.programNames);
         configureTagsInput();
     }
-    $('.pace').fadeOut(300); // Hide loading icon and show gallery table
+    $('#galleryTable').bootstrapTable('hideLoading');
+    $('#galleryTable').bootstrapTable('resetView', {
+        height: UTIL.calcDataTableHeight(),
+    });
 }
 
 function updateLike(value, index, row) {
@@ -262,10 +244,7 @@ function updateLike(value, index, row) {
 
 function showView() {
     $('#filterRobot').val(GUISTATE_C.getRobotGroup());
-    if ($('#galleryTable').bootstrapTable('getData').length === 0) {
-        $('.pace').show(); // Show loading icon and hide gallery table
-    }
-    loadGalleryData();
+    loadTableData();
 }
 //TODO: Robot group names exists in plugin properties
 function getRobotGroups() {
@@ -321,12 +300,6 @@ var eventsLike = {
     },
 };
 
-var rowStyle = function (row, index) {
-    return {
-        classes: currentViewMode === 'gallery' ? 'galleryNode col-xxl-2 col-lg-3 col-md-4 col-sm-6' : 'listNode',
-    };
-};
-
 // TODO extend this, if more customization features are available, eg. robot graphics, uploaded images.
 var rowAttributes = function (row, index) {
     var hash = UTIL.getHashFrom(row[0] + row[1] + row[3]);
@@ -340,7 +313,7 @@ var titleNumberOfViews = '<span class="galleryIcon typcn typcn-eye-outline" />';
 
 var titleLikes = '<span class="galleryIcon typcn typcn-heart-full-outline" />';
 
-export { init, rowStyle, rowAttributes, titleNumberOfViews, titleLikes };
+export { init, rowAttributes, titleNumberOfViews, titleLikes };
 
 var formatLike = function (value, row, index) {
     if (GUISTATE_C.isUserLoggedIn()) {

@@ -687,7 +687,7 @@ $.fn.removeClass = function () {
 $.fn.toggleSimPopup = function (position) {
     if ($(this).is(':hidden')) {
         $(this).css({
-            top: position.top + 12,
+            top: position.top + $('#header').height() + 12,
             left: position.left,
         });
     }

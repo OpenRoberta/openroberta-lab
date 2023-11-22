@@ -96,7 +96,7 @@ require.config({
         message: 'helper/msg',
         util: 'helper/util',
         wrap: 'helper/wrap',
-        cardView: 'helper/cardView',
+        table: 'helper/table',
         'interpreter.constants': 'app/nepostackmachine/interpreter.constants',
         'interpreter.interpreter': 'app/nepostackmachine/interpreter.interpreter',
         'interpreter.aRobotBehaviour': 'app/nepostackmachine/interpreter.aRobotBehaviour',
@@ -150,6 +150,7 @@ require.config({
         'bootstrap-table-locals': {
             deps: ['bootstrap-table'],
         },
+        'bootstrap-tagsinput': { deps: ['bootstrap-table'] },
         blockly: {
             exports: 'Blockly',
         },
@@ -247,7 +248,6 @@ require([
     userModel = require('user.model');
     socketController = require('socket.controller');
     tutorialController = require('progTutorial.controller');
-    tutorialListController = require('tutorialList.controller');
     userGroupController = require('userGroup.controller');
     webviewController = require('webview.controller');
     sourceCodeEditorController = require('sourceCodeEditor.controller');

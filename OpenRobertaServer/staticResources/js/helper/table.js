@@ -1,5 +1,6 @@
 define(["require", "exports", "guiState.controller", "blockly", "util"], function (require, exports, GUISTATE_C, Blockly, UTIL) {
     Object.defineProperty(exports, "__esModule", { value: true });
+    exports.CardView = exports.CommonTable = void 0;
     var CommonTable;
     (function (CommonTable) {
         CommonTable.options = {
@@ -14,11 +15,10 @@ define(["require", "exports", "guiState.controller", "blockly", "util"], functio
                 refresh: 'typcn-refresh',
             },
             iconsPrefix: 'typcn',
-            locale: GUISTATE_C.getLanguage,
-            resizable: 'true',
             showRefresh: 'true',
+            resizable: 'true',
         };
-    })(CommonTable || (CommonTable = {}));
+    })(CommonTable = exports.CommonTable || (exports.CommonTable = {}));
     var CardView;
     (function (CardView) {
         CardView.options = {
@@ -26,14 +26,10 @@ define(["require", "exports", "guiState.controller", "blockly", "util"], functio
             pageList: [12, 24, 48, 96],
             pageSize: 12,
             search: true,
-            rowStyle: rowStyle,
-        };
-        function rowStyle() {
-            return {
+            rowStyle: {
                 classes: 'col-xxl-2 col-lg-3 col-md-4 col-sm-6',
-            };
-        }
-        CardView.rowStyle = rowStyle;
+            },
+        };
         function robot(robot) {
             return '<div class="typcn typcn-' + GUISTATE_C.findGroup(robot) + '"></div>';
         }
@@ -68,11 +64,11 @@ define(["require", "exports", "guiState.controller", "blockly", "util"], functio
             var text = xmlDoc.getAttribute(attribute);
             return text ? text : '&nbsp;';
         }
-        function titleTypcn(typicon) {
-            return '<span class="tutorialIcon typcn typcn-' + typicon + '"></span>';
+        function titleTypcn(value, typicon) {
+            return '<div><div class="cardViewLabel tutorialIcon typcn typcn-' + typicon + '"></div><span>' + value + '</span></div>';
         }
         CardView.titleTypcn = titleTypcn;
-        function label(text, label, type) {
+        function titleLabel(text, label, type) {
             var myLabel = Blockly.Msg[label] || label;
             return ('<div class="' +
                 type +
@@ -84,6 +80,6 @@ define(["require", "exports", "guiState.controller", "blockly", "util"], functio
                 text +
                 '</span></div>');
         }
-        CardView.label = label;
-    })(CardView || (CardView = {}));
+        CardView.titleLabel = titleLabel;
+    })(CardView = exports.CardView || (exports.CardView = {}));
 });

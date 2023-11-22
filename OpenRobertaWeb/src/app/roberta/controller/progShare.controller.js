@@ -8,11 +8,11 @@ import * as PROGRAM from 'program.model';
 import * as USERGROUP from 'userGroup.model';
 import * as Blockly from 'blockly';
 import * as $ from 'jquery';
-import * as CardView from 'cardView';
+import { CardView } from 'table';
 import 'bootstrap-table';
 
 function init() {
-    initView();
+    //initView();
     initEvents();
 }
 export { init };

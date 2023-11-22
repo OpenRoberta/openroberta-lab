@@ -92,15 +92,15 @@
     height: 36px;
 }
 
-.nn-explore-btns, .nn-learn-btns {
+/*.nn-explore-btns, .nn-learn-btns {
     position: absolute;
     left: 10px;
     bottom: 10px;
     z-index: 9999;
     display: flex;
-}
+}*/
 
-.nn-explore-btn {
+/*.nn-explore-btn {
     min-height: 48px;
     max-width: 48px;
     min-width: 48px;
@@ -116,7 +116,7 @@
 
 .nn-explore-btn:hover, .nn-learn-btn:hover {
     background-color: #BACC1E;
-}
+}*/
 
 #goto-sim, #learn-goto-sim {
     position: absolute;
@@ -194,6 +194,7 @@
 
 .nn-modal-content {
     border: 1px solid;
+    background-color: #ffffff;
 }
 
 .nn-popup-modal {
@@ -254,9 +255,9 @@ button.nn-btn {
     display: none;
 }
 
-.nn-popup-modal > .modal-backdrop {
+/*.nn-popup-modal > .modal-backdrop {
     background-color: transparent;
-}
+}*/
 
 .nn-table-input {
     width: 100px;

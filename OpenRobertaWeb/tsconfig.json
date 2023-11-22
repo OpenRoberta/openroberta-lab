@@ -173,7 +173,6 @@
       "robot.roberta": [
         "app/simulation/simulationLogic/robot.roberta"
       ],
-
       "robot.nxt": [
         "app/simulation/simulationLogic/robot.nxt"
       ],
@@ -231,8 +230,8 @@
       "wrap": [
         "helper/wrap"
       ],
-      "cardview": [
-        "helper/cardview"
+      "table": [
+        "helper/table"
       ],
       "interpreter.constants": [
         "app/nepostackmachine/interpreter.constants"
@@ -290,12 +289,12 @@
       ],
       "@cor3ntin/flexbuffers-wasm": [
         "../node_modules/@cor3ntin/flexbuffers-wasm/flexbuffers"
-      ],
+      ]
     },
     "allowSyntheticDefaultImports": true
   },
   "types": [
-    "@cor3ntin/flexbuffers-wasm",
+    "@cor3ntin/flexbuffers-wasm"
   ],
   "include": [
     "src/**/*"
