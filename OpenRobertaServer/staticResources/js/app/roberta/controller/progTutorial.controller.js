@@ -1,4 +1,4 @@
-define(["require", "exports", "message", "log", "guiState.controller", "program.controller", "robot.controller", "import.controller", "blockly", "util", "jquery"], function (require, exports, MSG, LOG, GUISTATE_C, PROG_C, ROBOT_C, IMPORT_C, Blockly, U, $) {
+define(["require", "exports", "message", "log", "guiState.controller", "program.controller", "robot.controller", "import.controller", "blockly", "util", "jquery", "bootstrap"], function (require, exports, MSG, LOG, GUISTATE_C, PROG_C, ROBOT_C, IMPORT_C, Blockly, U, $, bootstrap_1) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.loadFromTutorial = exports.init = void 0;
     var INITIAL_WIDTH = 0.5;
@@ -58,10 +58,10 @@ define(["require", "exports", "message", "log", "guiState.controller", "program.
                     break;
                 }
             }
-            $('#tutorial-list').empty();
+            $('#tutorialHeader').empty();
             // create this tutorial navigation
             for (var i = 0; i < tutorial.step.length; i++) {
-                $('#tutorial-list').append($('<li>')
+                $('#tutorialHeader').append($('<li>')
                     .attr('class', 'step')
                     .append($('<a>')
                     .attr({
@@ -69,12 +69,12 @@ define(["require", "exports", "message", "log", "guiState.controller", "program.
                 })
                     .append(i + 1)));
             }
-            $('#tutorial-list li:last-child').addClass('last');
+            $('#tutorialHeader li:last-child').addClass('last');
             $('#tutorial-header').html(tutorial.name);
             // prepare the view
-            $('#tutorial-navigation').fadeIn(750);
-            $('#head-navigation').fadeOut(750);
-            $('#tutorial-list :first-child').addClass('active');
+            $('#tutorial-navigation, #tutorialEnd').toggle();
+            $('#head-navigation, #tab-navigation').toggle();
+            $('#tutorialHeader :first-child').addClass('active');
             $('#tutorialButton').show();
             $('.blocklyToolboxDiv>.levelTabs').addClass('invisible');
             initStepEvents();
@@ -85,7 +85,7 @@ define(["require", "exports", "message", "log", "guiState.controller", "program.
     }
     exports.loadFromTutorial = loadFromTutorial;
     function initStepEvents() {
-        $('#tutorial-list.nav li.step a').on('click', function () {
+        $('#tutorialHeader.nav li.step a').on('click', function () {
             step = $(this).text() - 2;
             nextStep();
             openTutorialView();
@@ -137,11 +137,11 @@ define(["require", "exports", "message", "log", "guiState.controller", "program.
         $('#tutorialContinue').onWrap('click.dismiss.bs.modal', function (event) {
             LOG.info('tutorial executed ' + tutorial.index + tutorialId);
         }, 'tuorial continue');
-        $('#tutorialOverview').modal({
+        var myModal = new bootstrap_1.Modal(document.getElementById('tutorialOverview'), {
             backdrop: 'static',
             keyboard: false,
-            show: true,
-        }, 'tutorial overview');
+        });
+        myModal.show();
     }
     function createInstruction() {
         if (tutorial.step[step]) {
@@ -269,12 +269,12 @@ define(["require", "exports", "message", "log", "guiState.controller", "program.
     function nextStep() {
         step += 1;
         if (step < maxSteps) {
-            $('#tutorial-list .active').removeClass('active');
-            $('#tutorial-list .preActive').removeClass('preActive');
-            $("#tutorial-list .step a:contains('" + (step + 1) + "')")
+            $('#tutorialHeader .active').removeClass('active');
+            $('#tutorialHeader .preActive').removeClass('preActive');
+            $("#tutorialHeader .step a:contains('" + (step + 1) + "')")
                 .parent()
                 .addClass('active');
-            $("#tutorial-list .step a:contains('" + step + "')")
+            $("#tutorialHeader .step a:contains('" + step + "')")
                 .parent()
                 .addClass('preActive');
             createInstruction();
@@ -437,9 +437,8 @@ define(["require", "exports", "message", "log", "guiState.controller", "program.
         }
     }
     function exitTutorial() {
-        $('#tutorial-navigation').fadeOut(750);
-        $('#head-navigation').fadeIn(750);
-        $('#tutorialButton').fadeOut();
+        $('#tutorial-navigation, #tutorialEnd').toggle();
+        $('#head-navigation, #tab-navigation').toggle();
         $('.blocklyToolboxDiv>.levelTabs').removeClass('invisible');
         GUISTATE_C.resetDynamicProgramToolbox();
         PROG_C.loadExternalToolbox(GUISTATE_C.getProgramToolbox());
@@ -450,7 +449,7 @@ define(["require", "exports", "message", "log", "guiState.controller", "program.
         }
         else {
             closeTutorialView();
-            $('#tabTutorialList').clickWrap();
+            $('#tabTutorialList').tabWrapShow();
         }
     }
 });

@@ -150,7 +150,12 @@ require.config({
         'bootstrap-table-locals': {
             deps: ['bootstrap-table'],
         },
-        'bootstrap-tagsinput': { deps: ['bootstrap-table'] },
+        'bootstrap-tagsinput': {
+            deps: ['bootstrap-table'],
+        },
+        'bootstrap.wysiwyg': {
+            deps: ['bootstrap-table'],
+        },
         blockly: {
             exports: 'Blockly',
         },
