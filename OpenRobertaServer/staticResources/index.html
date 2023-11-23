@@ -397,11 +397,13 @@ limitations under the License.
             </div>
         </div>
         <div class='navbar navbar-expand-lg' id='tab-navigation' role='navigation'>
-            <!--<div class='container-fluid '>-->
             <div class='collapse navbar-collapse navbar-default' id='tabNavigation'>
                 <ul class='navbar-nav' id='head-navigation-tabs' role='tablist'>
                     <li class='nav-item'>
-                        <a class='nav-link active' data-bs-toggle='tab' href='#program' id='tabProgram' role='tab'>
+                        <a class='nav-link active hidden' data-bs-toggle='tab' href='#start' id='tabStart' role='tab'></a>
+                    </li>
+                    <li class='nav-item'>
+                        <a class='nav-link' data-bs-toggle='tab' href='#program' id='tabProgram' role='tab'>
                             <span class='menuTab' lkey='Blockly.Msg.TAB_PROGRAM'>Program</span>&nbsp;<span id='tabProgramName'></span>
                         </a>
                     </li>
@@ -450,11 +452,6 @@ limitations under the License.
                     </li>
                 </ul>
             </div>
-            <!-- Head-navigation-tabs -->
-            <!-- <div class='navbar-collapse navbar-default' id='headNavigationTabs'>
-
-             </div>-->
-            <!--</div>-->
         </div>
         <div>
             <img alt='Open Roberta Lab logo' class='position-absolute top-0 end-0' id='imgLogo' src='/css/svg/logo-word.svg'></img>
@@ -464,7 +461,14 @@ limitations under the License.
     <!-- ################## END HEAD NAVIGATION ################## -->
     <!-- ################## TABS ################## -->
     <div class='tab-content container-fluid' id='main-section'>
-        <div class='tab-pane fade show active' id='program'>
+        <div class='tab-pane fade show active' id='start'>
+            <div class='d-flex justify-content-center h-100 align-items-center bg-info'>
+                <div class=''>
+                    <button class='btn btn-success' id='next'>Hier geht's los!</button>
+                </div>
+            </div>
+        </div>
+        <div class='tab-pane fade' id='program'>
             <div class='position-relative float-start' id='blocklyDiv'>
                 <!-- <div class='float-none' id='blockly'></div>-->
                 <div class='position-absolute min-vh-100 top-0 end-0' id='sliderBorder'></div>
@@ -807,7 +811,6 @@ limitations under the License.
                 </div>
             </div>
         </div>
-
         <div class='tab-pane fade' id='galleryList'>
             <div class='listToolbar' id='galleryListToolbar'>
                 <button class='btn' id='backGalleryList'>
@@ -1978,7 +1981,7 @@ limitations under the License.
         <div class='modal-dialog'>
             <div id='simRobotContent'></div>
         </div>
-        <button aria-label='Close' class='btn-close close' data-bs-target='#simRobotWindow' data-bs-dismiss='modal' type='button'></button>
+        <button aria-label='Close' class='btn-close close' data-bs-dismiss='modal' data-bs-target='#simRobotWindow' type='button'></button>
     </div>
     <!-- Popup for simulation sensor data -->
     <div class='simWindow slide-in' data-backdrop='false' id='simValuesWindow'>
@@ -2204,10 +2207,7 @@ limitations under the License.
         <span id='releaseInfoContent'>There are some changes for your robot!</span>
         <button aria-hidden='true' class='btn-close no-button' onclick='$(this).parent().fadeOut(400)' type='button'></button>
     </div>
-    <div id='device-size'>
-        <div class='visible-xs' id='xs'></div>
-    </div>
-    <div class='hidden'>
+    <div style='display:none'>
         <input display='none' id='fileSelector' type='file'></input> <input display='none' id='backgroundFileSelector' type='file'></input>
     </div>
 

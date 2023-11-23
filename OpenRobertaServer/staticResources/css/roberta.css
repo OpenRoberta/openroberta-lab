@@ -224,6 +224,10 @@ body.blocklyMinimalBody * {
     visibility: hidden;
 }
 
+.hidden {
+    visibility: hidden;
+}
+
 .img-deprecated {
     position: relative;
     bottom: 133px;
@@ -250,10 +254,6 @@ body.blocklyMinimalBody * {
     background-color: #fff;
     padding: 8px 2px 0 28px;
     float: left;
-}
-
-.hidden {
-    display: none;
 }
 
 #main-section {

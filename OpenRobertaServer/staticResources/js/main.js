@@ -53,7 +53,6 @@ require.config({
         'program.model': 'app/roberta/models/program.model',
         'progTutorial.controller': 'app/roberta/controller/progTutorial.controller',
         'progShare.controller': 'app/roberta/controller/progShare.controller',
-        'progSim.controller': 'app/roberta/controller/progSim.controller',
         'robot.controller': 'app/roberta/controller/robot.controller',
         'robot.model': 'app/roberta/models/robot.model',
         'tour.controller': 'app/roberta/controller/tour.controller',
@@ -313,16 +312,18 @@ function init() {
                 });
             }
             else {
+                $('#tabProgram, #tabConfiguration').toggleClass('hidden');
+                $('#next').onWrap('click', function () {
+                    $('#tabProgram, #tabConfiguration').toggleClass('hidden');
+                    $('#tabProgram').tabWrapShow();
+                });
                 //$('#show-startup-message').modal('show'); TODO decide if we want to have the old popup with bootstrap 5 (much work for short usage!)
             }
         });
         $('body>.pace').fadeOut(500);
     });
 }
-/**
- * Handle server errors
- */
-ALLOWED_PING_NUM = 5;
+var ALLOWED_PING_NUM = 5;
 function handleServerErrors(jqXHR) {
     // TODO more?
     LOG.error('Client connection issue: ' + jqXHR.status);
