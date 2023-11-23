@@ -1,9 +1,9 @@
 require.config({
-    baseUrl: 'js',
+    baseUrl: 'dist',
     paths: {
         codeflask: 'libs/codeflask/codeflask.min',
         blockly: '../blockly/blockly_compressed',
-        bootstrap: 'libs/bootstrap/bootstrap-5.3.2-dist/js/bootstrap.bundle.min',
+        bootstrap: 'libs/bootstrap/bootstrap.bundle.min',
         'bootstrap-table': 'libs/bootstrap/bootstrap-table-1.22.1-dist/js/bootstrap-table.min',
         'bootstrap-table-locals': 'libs/bootstrap/bootstrap-table-1.22.1-dist/js/bootstrap-table-locale-all.min',
         'bootstrap-tagsinput': 'libs/bootstrap/bootstrap-tagsinput.min',

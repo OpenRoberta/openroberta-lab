@@ -1,0 +1,1 @@
+var ws=null;"undefined"!=typeof WebSocket?ws=WebSocket:"undefined"!=typeof MozWebSocket?ws=MozWebSocket:"undefined"!=typeof global?ws=global.WebSocket||global.MozWebSocket:"undefined"!=typeof window?ws=window.WebSocket||window.MozWebSocket:"undefined"!=typeof self&&(ws=self.WebSocket||self.MozWebSocket);
