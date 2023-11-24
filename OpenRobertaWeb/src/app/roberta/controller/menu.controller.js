@@ -123,7 +123,7 @@ function init() {
     cleanUri();
 
     var firsttime = true;
-    $('#show-startup-message').on('shown.bs.modal', function (e) {
+    /*$('#show-startup-message').on('shown.bs.modal', function (e) {
         $(function () {
             if (firsttime) {
                 // *******************
@@ -172,7 +172,7 @@ function init() {
                 $('#popup-robot-main').slick('refresh');
             }
         });
-    });
+    });*/
 }
 
 export { init };
@@ -337,7 +337,12 @@ function initMenu() {
  * Initialize the navigation bar in the head of the page
  */
 function initMenuEvents() {
-    // TODO check if this prevents iPads and iPhones to only react on double clicks
+    // TODO check if this prevents iPads and iPhones to only react on double clicks'.
+    $('#next').click(function () {
+        $('.notStart').toggleClass('hidden');
+        $('#tabProgram').tabWrapShow();
+        $('#tabProgram, #tabConfiguration').toggleClass('invisible');
+    });
 
     $('.navbar-collapse a:not(.dropdown-toggle)').click(function () {
         $('.dropdown-menu.show').collapse('hide');

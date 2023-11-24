@@ -143,6 +143,9 @@ require.config({
         bootstrap: {
             deps: ['jquery'],
         },
+        'jquery-hotkeys': {
+            deps: ['jquery'],
+        },
         'bootstrap-table': {
             deps: ['bootstrap'],
         },
@@ -303,22 +306,18 @@ function init() {
         notificationController.init();
         nnController.init();
         menuController.init();
+        $('#tabProgram, #tabConfiguration').toggleClass('invisible');
+        $('.notStart').toggleClass('hidden');
         $('.cover').fadeOut(100, function () {
-            if (guiStateController.getStartWithoutPopup()) {
+            /*if (guiStateController.getStartWithoutPopup()) {
                 userModel.getStatusText(function (result) {
                     if (result.statustext[0] !== '' && result.statustext[1] !== '') {
                         $('#modal-statustext').modal('show');
                     }
                 });
-            }
-            else {
-                $('#tabProgram, #tabConfiguration').toggleClass('hidden');
-                $('#next').onWrap('click', function () {
-                    $('#tabProgram, #tabConfiguration').toggleClass('hidden');
-                    $('#tabProgram').tabWrapShow();
-                });
-                //$('#show-startup-message').modal('show'); TODO decide if we want to have the old popup with bootstrap 5 (much work for short usage!)
-            }
+            } else {*/
+            //$('#show-startup-message').modal('show'); TODO decide if we want to have the old popup with bootstrap 5 (much work for short usage!)
+            //}
         });
         $('body>.pace').fadeOut(500);
     });

@@ -101,7 +101,7 @@ define(["require", "exports", "message", "comm", "wrap", "robot.controller", "so
         handleQuery();
         cleanUri();
         var firsttime = true;
-        $('#show-startup-message').on('shown.bs.modal', function (e) {
+        /*$('#show-startup-message').on('shown.bs.modal', function (e) {
             $(function () {
                 if (firsttime) {
                     // *******************
@@ -115,9 +115,9 @@ define(["require", "exports", "message", "comm", "wrap", "robot.controller", "so
                         $('#slick-container').mouseleave(function () {
                             autoplayOn = true;
                         });
+    
                         window.setInterval(function () {
-                            if (!autoplayOn)
-                                return;
+                            if (!autoplayOn) return;
                             $('#popup-robot-main').slick('slickPrev');
                         }, autoplaySpeed);
                     });
@@ -146,12 +146,11 @@ define(["require", "exports", "message", "comm", "wrap", "robot.controller", "so
                         ],
                     });
                     firsttime = false;
-                }
-                else {
+                } else {
                     $('#popup-robot-main').slick('refresh');
                 }
             });
-        });
+        });*/
     }
     exports.init = init;
     function initMenu() {
@@ -308,7 +307,12 @@ define(["require", "exports", "message", "comm", "wrap", "robot.controller", "so
      * Initialize the navigation bar in the head of the page
      */
     function initMenuEvents() {
-        // TODO check if this prevents iPads and iPhones to only react on double clicks
+        // TODO check if this prevents iPads and iPhones to only react on double clicks'.
+        $('#next').click(function () {
+            $('.notStart').toggleClass('hidden');
+            $('#tabProgram').tabWrapShow();
+            $('#tabProgram, #tabConfiguration').toggleClass('invisible');
+        });
         $('.navbar-collapse a:not(.dropdown-toggle)').click(function () {
             $('.dropdown-menu.show').collapse('hide');
             $('.navbar-collapse.show').collapse('hide');

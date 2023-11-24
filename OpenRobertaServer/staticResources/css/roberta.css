@@ -224,8 +224,12 @@ body.blocklyMinimalBody * {
     visibility: hidden;
 }
 
-.hidden {
+.invisible {
     visibility: hidden;
+}
+
+.hidden {
+    display: none;
 }
 
 .img-deprecated {
@@ -2497,8 +2501,10 @@ input[type=range]:focus::-ms-fill-upper {
     cursor: not-allowed;
 }
 
-.disabled a {
+.disabled a, li.disabled {
+    color: #bbb; /* TODO check where this is used: color: #F6B3B9 !important;*/
     cursor: not-allowed;
+    pointer-events: none
 }
 
 .disabled:hover, .disabled *:hover {
