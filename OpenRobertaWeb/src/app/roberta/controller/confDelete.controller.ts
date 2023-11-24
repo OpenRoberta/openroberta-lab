@@ -5,11 +5,10 @@ import * as CONFIGURATION from 'configuration.model';
 import * as $ from 'jquery';
 import 'bootstrap-table';
 
-function init(): void {
+export function init(): void {
     //        initView();
     initEvents();
 }
-export { init };
 
 class ConfDeleteResult {
     cause: string;
@@ -20,12 +19,7 @@ class ConfDeleteResult {
     rc: string;
 }
 
-function initView(): void {}
-
 function initEvents(): void {
-    /**
-     * Delete the configurations that were selected in configuration list
-     */
     $('#doDeleteConfiguration').onWrap('click', function (): void {
         let configurations: [] = $('#confirmDeleteConfiguration').data('configurations');
         for (let i: number = 0; i < configurations.length; i++) {
