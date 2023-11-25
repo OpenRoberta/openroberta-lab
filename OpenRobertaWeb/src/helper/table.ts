@@ -9,6 +9,7 @@ export namespace CommonTable {
         formatLoadingMessage: function () {
             return '<div class="pace"></div>';
         },
+        // @ts-ignore
         height: UTIL.calcDataTableHeight,
         icons: {
             paginationSwitchDown: 'typcn-document-text',

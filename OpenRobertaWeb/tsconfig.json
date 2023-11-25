@@ -149,6 +149,9 @@
       "sourceCodeEditor.controller": [
         "app/roberta/controller/sourceCodeEditor.controller"
       ],
+      "startView.controller": [
+        "app/roberta/controller/startView.controller"
+      ],
       "simulation.constants": [
         "app/simulation/simulationLogic/constants"
       ],

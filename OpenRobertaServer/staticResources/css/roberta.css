@@ -1816,6 +1816,10 @@ td.bs-checkbox {
     top: 10px;
 }
 
+#start .galleryTable .typcn:before {
+    color: #333;
+}
+
 .table-hover > tbody > tr:hover > * {
     --bs-table-color-state: 0;
     --bs-table-bg-state: 0;

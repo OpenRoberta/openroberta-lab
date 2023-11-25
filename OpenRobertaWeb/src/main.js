@@ -24,6 +24,7 @@ require.config({
         'webots.enum': 'libs/webots/enum',
         'webots.wren': 'libs/webots/wrenjs',
 
+        'startView.controller': 'app/roberta/controller/startView.controller',
         'confDelete.controller': 'app/roberta/controller/confDelete.controller',
         'configuration.controller': 'app/roberta/controller/configuration.controller',
         'configuration.model': 'app/roberta/models/configuration.model',
@@ -231,6 +232,7 @@ require([
     'codeflask',
     'confVisualization',
     'robotBlock',
+    'startView.controller',
 ], function (require) {
     /* window.jQuery = window.$ = require('jquery');*/
     WRAP = require('wrap');
@@ -269,6 +271,7 @@ require([
     codeflask = require('codeflask');
     confVisualization = require('confVisualization');
     robotBlock = require('robotBlock');
+    startViewController = require('startView.controller');
 
     $(document).ready(WRAP.wrapTotal(init, 'page init'));
 });
@@ -316,6 +319,7 @@ function init() {
             notificationController.init();
             nnController.init();
             menuController.init();
+            startViewController.init();
             $('#tabProgram, #tabConfiguration').toggleClass('invisible');
             $('.notStart').toggleClass('hidden');
 

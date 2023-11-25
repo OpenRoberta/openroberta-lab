@@ -8,6 +8,7 @@ define(["require", "exports", "guiState.controller", "blockly", "util"], functio
             formatLoadingMessage: function () {
                 return '<div class="pace"></div>';
             },
+            // @ts-ignore
             height: UTIL.calcDataTableHeight,
             icons: {
                 paginationSwitchDown: 'typcn-document-text',
