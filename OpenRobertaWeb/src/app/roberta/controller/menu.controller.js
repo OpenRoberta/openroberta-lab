@@ -330,20 +330,13 @@ function initMenu() {
         $('.popup-robot .DE').css('display', 'none');
         $('.popup-robot .EN').css('display', 'inline');
     }
-    GUISTATE_C.setInitialState();
 }
 
 /**
  * Initialize the navigation bar in the head of the page
  */
 function initMenuEvents() {
-    // TODO check if this prevents iPads and iPhones to only react on double clicks'.
-    $('#next').click(function () {
-        $('.notStart').toggleClass('hidden');
-        $('#tabProgram').tabWrapShow();
-        $('#tabProgram, #tabConfiguration').toggleClass('invisible');
-    });
-
+    // TODO check if this prevents iPads and iPhones to only react on double clicks'
     $('.navbar-collapse a:not(.dropdown-toggle)').click(function () {
         $('.dropdown-menu.show').collapse('hide');
         $('.navbar-collapse.show').collapse('hide');
@@ -375,7 +368,7 @@ function initMenuEvents() {
             if ($(e.target).filter('.blocklyHtmlInput').length > 0 && !e.metaKey) {
                 return;
             }
-            Blockly.hideChaff();
+            Blockly && Blockly.getMainWorkspace() && Blockly.hideChaff(); //TODO
         }
     });
 

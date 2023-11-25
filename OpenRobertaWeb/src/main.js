@@ -297,33 +297,39 @@ function init() {
         .then(function () {
             galleryListController.init();
             tutorialListController.init();
-            progListController.init();
-            progDeleteController.init();
-            confListController.init();
-            confDeleteController.init();
-            progShareController.init();
             logListController.init();
             legalController.init();
             sourceCodeEditorController.init();
-            programController.init();
-            configurationController.init();
-            progHelpController.init();
-            progInfoController.init();
-            progCodeController.init();
-            progSimController.createProgSimInstance();
-            progSimController.createProgSimDebugInstance();
-            progSimController.createProgSimMultiInstance();
-            progRunController.init();
             tutorialController.init();
             userGroupController.init();
             notificationController.init();
-            nnController.init();
             menuController.init();
             startViewController.init();
             $('#tabProgram, #tabConfiguration').toggleClass('invisible');
             $('.notStart').toggleClass('hidden');
 
             $('.cover').fadeOut(100, function () {
+                $('#robotTable tr').oneWrap('click', function () {
+                    $('#tabProgram, #tabConfiguration').toggleClass('invisible');
+                    $('.notStart').toggleClass('hidden');
+                    programController.init();
+                    configurationController.init();
+                    progHelpController.init();
+                    progInfoController.init();
+                    progCodeController.init();
+                    progSimController.createProgSimInstance();
+                    progSimController.createProgSimDebugInstance();
+                    progSimController.createProgSimMultiInstance();
+                    progRunController.init();
+                    nnController.init();
+                    progListController.init();
+                    progDeleteController.init();
+                    confListController.init();
+                    confDeleteController.init();
+                    progShareController.init();
+                    guiStateController.setInitialState();
+                    $('#tabProgram').tabWrapShow();
+                });
                 /*if (guiStateController.getStartWithoutPopup()) {
                     userModel.getStatusText(function (result) {
                         if (result.statustext[0] !== '' && result.statustext[1] !== '') {

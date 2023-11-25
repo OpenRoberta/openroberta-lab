@@ -1820,6 +1820,14 @@ td.bs-checkbox {
     color: #333;
 }
 
+#start .fixed-table-container.fixed-height {
+    border: none;
+}
+
+#start .galleryTable.table, #start .galleryTable tr {
+    border-color: #34CAF0;
+}
+
 .table-hover > tbody > tr:hover > * {
     --bs-table-color-state: 0;
     --bs-table-bg-state: 0;
