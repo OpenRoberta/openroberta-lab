@@ -1,0 +1,133 @@
+package de.fhg.iais.roberta.visitor;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
+import com.google.common.collect.ClassToInstanceMap;
+
+import de.fhg.iais.roberta.bean.IProjectBean;
+import de.fhg.iais.roberta.components.ConfigurationAst;
+import de.fhg.iais.roberta.components.UsedActor;
+import de.fhg.iais.roberta.components.UsedSensor;
+import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.action.MotorOnAction;
+import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
+import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
+import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
+import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
+import de.fhg.iais.roberta.util.basic.C;
+import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.dbc.DbcException;
+import de.fhg.iais.roberta.util.syntax.SC;
+import de.fhg.iais.roberta.util.syntax.WithUserDefinedPort;
+import de.fhg.iais.roberta.visitor.validate.CommonNepoValidatorAndCollectorVisitor;
+
+
+public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndCollectorVisitor implements ITxt4Visitor<Void> {
+
+
+    private static final Map<String, String> SENSOR_COMPONENT_TYPE_MAP = Collections.unmodifiableMap(new HashMap<String, String>() {{
+    }});
+
+    public Txt4ValidatorAndCollectorVisitor(ConfigurationAst robotConfiguration, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
+        super(robotConfiguration, beanBuilders);
+    }
+
+    @Override
+    public Void visitMotorOnAction(MotorOnAction motorOnAction) {
+        requiredComponentVisited(motorOnAction, motorOnAction.power);
+        if ( checkActorPort(motorOnAction) ) {
+            ConfigurationComponent motor = getMotorFromPort(motorOnAction.port);
+            usedHardwareBuilder.addUsedActor(new UsedActor(motor.getOptProperty("PORT"), SC.ENCODER));
+        }
+        return null;
+    }
+
+    public Void visitTimerReset(TimerReset timerReset) {
+        usedHardwareBuilder.addUsedSensor(new UsedSensor(timerReset.sensorPort, SC.TIMER, SC.DEFAULT));
+        return null;
+    }
+
+    public Void visitTimerSensor(TimerSensor timerSensor) {
+        usedHardwareBuilder.addUsedSensor(new UsedSensor(timerSensor.getUserDefinedPort(), SC.TIMER, timerSensor.getMode()));
+        return null;
+    }
+
+    @Override
+    public Void visitMathRandomFloatFunct(MathRandomFloatFunct mathRandomFloatFunct) {
+        usedHardwareBuilder.addUsedActor(new UsedActor(null, C.RANDOM_DOUBLE));
+        return null;
+    }
+
+    @Override
+    public Void visitMathRandomIntFunct(MathRandomIntFunct mathRandomIntFunct) {
+        super.visitMathRandomIntFunct(mathRandomIntFunct);
+        usedHardwareBuilder.addUsedActor(new UsedActor(null, C.RANDOM));
+        return null;
+    }
+
+    protected void checkSensorPort(ExternalSensor sensor) {
+        ConfigurationComponent configurationComponent = this.robotConfiguration.optConfigurationComponent(sensor.getUserDefinedPort());
+        if ( configurationComponent == null ) {
+            addErrorToPhrase(sensor, "CONFIGURATION_ERROR_SENSOR_MISSING");
+            return;
+        }
+        String expectedComponentType = SENSOR_COMPONENT_TYPE_MAP.get(sensor.getKind().getName());
+        if ( expectedComponentType != null && !expectedComponentType.equalsIgnoreCase(configurationComponent.componentType) ) {
+            addErrorToPhrase(sensor, "CONFIGURATION_ERROR_SENSOR_WRONG");
+        }
+    }
+
+    private ConfigurationComponent getMotorFromUserName(String userName) {
+        for ( Map.Entry<String, ConfigurationComponent> entry : this.robotConfiguration.getConfigurationComponents().entrySet() ) {
+            ConfigurationComponent component = entry.getValue();
+            String comProp = component.componentProperties.get("PORT");
+            if ( comProp != null && comProp.equals(userName) ) {
+                return component;
+            }
+        }
+        return null;
+    }
+
+    private ConfigurationComponent getMotorFromPort(String portName) {
+        for ( Map.Entry<String, ConfigurationComponent> entry : this.robotConfiguration.getConfigurationComponents().entrySet() ) {
+            ConfigurationComponent component = entry.getValue();
+            if ( component.userDefinedPortName.equals(portName) ) {
+                return component;
+            }
+        }
+        throw new DbcException("port " + portName + " is missing");
+    }
+
+    private Void checkDiffDrive(Phrase phrase) {
+        ConfigurationComponent diffDrive = this.robotConfiguration.optConfigurationComponentByType("DIFFERENTIALDRIVE");
+        if ( diffDrive == null ) {
+            addErrorToPhrase(phrase, "CONFIGURATION_ERROR_ACTOR_MISSING");
+        } else {
+            String leftUserPort = diffDrive.getComponentProperties().get("MOTOR_L");
+            String rightUserPort = diffDrive.getComponentProperties().get("MOTOR_R");
+            ConfigurationComponent leftMotor = getMotorFromUserName(leftUserPort);
+            ConfigurationComponent rightMotor = getMotorFromUserName(rightUserPort);
+            if ( leftMotor == null || rightMotor == null ) {
+                addErrorToPhrase(phrase, "CONFIGURATION_ERROR_ACTOR_MISSING");
+            } else {
+                usedHardwareBuilder.addUsedActor(new UsedActor("DIFFERENTIALDRIVE", SC.DIFFERENTIALDRIVE));
+            }
+        }
+        return null;
+    }
+
+    private boolean checkActorPort(WithUserDefinedPort action) {
+        Assert.isTrue(action instanceof Phrase, "checking Port of a non Phrase");
+        ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.optConfigurationComponent(action.getUserDefinedPort());
+        if ( usedConfigurationBlock == null ) {
+            Phrase actionAsPhrase = (Phrase) action;
+            addErrorToPhrase(actionAsPhrase, "CONFIGURATION_ERROR_ACTOR_MISSING");
+            return false;
+        }
+        return true;
+    }
+}

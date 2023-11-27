@@ -1,3 +1,8 @@
 <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="txt4" xmlversion="" description="" tags="">
-
+    <instance x="143" y="251">
+        <block type="robConf_encoder" id="`CW3f_/xL#;Z!)*[EZz@" intask="true">
+            <field name="NAME">MA</field>
+            <field name="PORT">M1</field>
+        </block>
+    </instance>
 </block_set>

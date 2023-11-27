@@ -1,3 +1,9 @@
 <toolbox_set id="toolbox-Configuration" style="display: none">
-   
+    <category name="TOOLBOX_ACTION" svg="true">
+        <block type="robConf_encoder"/>
+    </category>
+    <category name="TOOLBOX_SENSOR" svg="true">
+    </category>
+
+    
 </toolbox_set>
