@@ -1,1 +1,0 @@
-var baseIsEqual=require("./_baseIsEqual");function isEqual(a,s){return baseIsEqual(a,s)}module.exports=isEqual;
