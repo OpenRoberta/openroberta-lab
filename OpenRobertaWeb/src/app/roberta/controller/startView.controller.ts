@@ -7,7 +7,7 @@
  * @author Beate Jost <beate.jost@smail.inf.h-brs.de>
  */
 import * as GUISTATE_C from 'guiState.controller';
-import { CardView, CommonTable } from 'table';
+import { CardView } from 'table';
 import * as $ from 'jquery';
 import 'bootstrap-table';
 import 'bootstrap-tagsinput';
@@ -27,8 +27,8 @@ export function init() {
 
     console.log(robots);
     initRobotList();
-    /* initGalleryToolbar();
-     initGalleryListEvents();*/
+    /* initGalleryToolbar();*/
+    initGalleryListEvents();
 }
 
 export function switchLanguage() {
@@ -85,6 +85,7 @@ function initRobotList() {
                 visible: false,
             },
             {
+                title: '',
                 field: 'realName',
                 sortable: true,
                 formatter: CardView.name,
@@ -99,22 +100,65 @@ function initRobotList() {
         filterControl: true,
         locale: myLang,
         rowAttributes: rowAttributes,
-        toolbar: '#robotToolbar',
+        toolbar: '#robotListToolbar',
         cardView: 'true',
         search: true,
         rowStyle: {
             classes: 'col-xxl-3 col-lg-3 col-md-6 col-sm-6 col-xs-12',
         },
-        height: 300,
+        height: 152 + 68,
         showRefresh: false,
+        buttons: function () {
+            return {
+                popularRobots: {
+                    html:
+                        '<button class="btn btn-outline-dark active start" data-bs-toggle="button" autocomplete="off" aria-pressed="true" data-original-title="" id="popularRobots" lkey="">' +
+                        'Beliebte Systeme' +
+                        '</button>',
+                },
+                allRobots: {
+                    html:
+                        '<button class="btn btn-outline-dark start" data-bs-toggle="button" autocomplete="off" aria-pressed="false" data-original-title="" id="allRobots" lkey="">' +
+                        'Alle Systeme und Filteroptionen' +
+                        '</button>',
+                },
+            };
+        },
+        buttonsAlign: 'left',
     };
-    const options = { ...CommonTable.options, ...myOptions };
+    const options = { ...myOptions };
     $('#robotTable').bootstrapTable(options);
     //$('#robotTable').bootstrapTable('togglePagination');
     $('#robotTable').bootstrapTable('load', startRobots);
 }
 
 function initGalleryListEvents() {
+    $('#popularRobots').onWrap('click', function () {
+        $('#allRobots').toggleClass('active');
+        $('#allRobots').attr('aria-pressed', 'false');
+        let startRobots = robots.slice(0, 4);
+        //$('#robotTable').bootstrapTable('refreshOptions', { h
+        // eigth: (startRobots.length / 4) * 152 + 68 });
+        $('#robotTable').bootstrapTable('load', startRobots);
+        console.log($('#robotTable').height());
+        /* $('#robotTable').bootstrapTable('resetView', { heigth: $('#robotTable').height() });
+         $('#robotTable').bootstrapTable('resetView');*/
+    });
+    $('#allRobots').onWrap('click', function () {
+        $('#popularRobots').toggleClass('active');
+        $('#popularRobots').attr('aria-pressed', 'false');
+        $('#robotTable').bootstrapTable('load', robots);
+        console.log($('#robotTable').height());
+        /* $('#robotTable').bootstrapTable('resetView');
+ 
+         $('#robotTable').bootstrapTable('resetView', { heigth: $('#robotTable').height() }); // (robots.length / 4) * $('#robotTable tr:first-child').height() + 68 });*/
+    });
+    $('#robotTable').on('post-body.bs.table', function (e) {
+        console.log($('#robotTable').height() + '  ' + $('#start .fixed-table-toolbar').height());
+        $('#robotTable').bootstrapTable('resetView', { heigth: $('#robotTable').height() + $('#start .fixed-table-toolbar').height() });
+        $('#robotTable .fixed-table-container.fixed-height').height($('#robotTable').height());
+    });
+
     /*$('#tabGalleryList').onWrap(
         'shown.bs.tab',
         function () {

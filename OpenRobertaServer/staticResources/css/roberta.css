@@ -1299,13 +1299,13 @@ button#simCustomObstacle.typcn:before {
     border-color: #afca04;
 }
 
-.btn:hover:not(.editor),
-.btn:active:focus:not(.editor),
-.btn:focus:not(.editor),
-.btn .focus:not(.editor),
-.btn:active:not(.editor),
-.btn .active:not(.editor),
-.open > .dropdown-toggle .btn:not(.editor) {
+.btn:hover:not(.editor, .start),
+.btn:active:focus:not(.editor, .start),
+.btn:focus:not(.editor, .start),
+.btn .focus:not(.editor, .start),
+.btn:active:not(.editor, .start),
+.btn .active:not(.editor, .start),
+.open > .dropdown-toggle .btn:not(.editor, .start) {
     background-color: #C7D92B;
     color: #fff;
     -webkit-box-shadow: none;
@@ -1313,7 +1313,7 @@ button#simCustomObstacle.typcn:before {
     outline: none;
 }
 
-.btn:not(.editor, .galleryLike) {
+.btn:not(.editor, .galleryLike, .start) {
     margin-right: 16px;
     margin-left: 0;
     background-color: #BACC1E;
@@ -1353,7 +1353,7 @@ button.editor:hover {
     cursor: pointer;
 }
 
-.fixed-table-toolbar .btn {
+.fixed-table-toolbar .btn:not(.start) {
     width: 48px;
     height: 48px;
     margin-right: 4px;
@@ -1372,7 +1372,7 @@ button.editor:hover {
     margin-right: 0;
 }
 
-.fixed-table-toolbar .btn:hover {
+.fixed-table-toolbar .btn:hover:not(.start) {
     background-color: #C7D92B;
 }
 
@@ -1820,12 +1820,21 @@ td.bs-checkbox {
     color: #333;
 }
 
-#start .fixed-table-container.fixed-height {
+#start .fixed-table-container.fixed-height, #start .fixed-table-body {
     border: none;
+    height: auto !important;
 }
 
 #start .galleryTable.table, #start .galleryTable tr {
     border-color: #34CAF0;
+}
+
+#start .galleryTable.table {
+    position: relative;
+}
+
+#start .galleryTable td {
+    color: #333;
 }
 
 .table-hover > tbody > tr:hover > * {
