@@ -6,8 +6,8 @@ import * as LOG from 'log';
 import * as Blockly from 'blockly';
 import * as $ from 'jquery';
 
-let ready;
-let aLanguage;
+let ready: JQuery.Deferred<string, string, string>;
+let aLanguage: string;
 let webViewType: string;
 let interpreter;
 let theRobotBehaviour;
@@ -15,7 +15,7 @@ let theRobotBehaviour;
 /**
  * Init webview
  */
-export function init(language): void {
+export function init(language: string): JQuery.Promise<string, string, string> {
     aLanguage = language;
     ready = $.Deferred();
     let a: { target: string; type: string } = { target: null, type: null };
