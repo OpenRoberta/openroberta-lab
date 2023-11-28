@@ -9,7 +9,7 @@ import * as $ from 'jquery';
 let ready: JQuery.Deferred<string, string, string>;
 let aLanguage: string;
 let webViewType: string;
-let interpreter;
+let interpreter: INTERPRETER.Interpreter;
 let theRobotBehaviour;
 
 /**
@@ -125,8 +125,10 @@ export function setRobotBehaviour(): void {
 export function jsToAppInterface(jsonData): void {
     try {
         if (webViewType === 'Android') {
+            // @ts-ignore
             OpenRoberta.jsToAppInterface(JSON.stringify(jsonData));
         } else if (webViewType === 'IOS') {
+            // @ts-ignore
             window.webkit.messageHandlers.OpenRoberta.postMessage(JSON.stringify(jsonData));
         } else {
             throw 'invalid webview type';
@@ -138,6 +140,7 @@ export function jsToAppInterface(jsonData): void {
 
 function tryAndroid(data): boolean {
     try {
+        // @ts-ignore
         OpenRoberta.jsToAppInterface(JSON.stringify(data));
         return true;
     } catch (error) {
@@ -147,6 +150,7 @@ function tryAndroid(data): boolean {
 
 function tryIOS(data): boolean {
     try {
+        // @ts-ignore
         window.webkit.messageHandlers.OpenRoberta.postMessage(JSON.stringify(data));
         return true;
     } catch (error) {

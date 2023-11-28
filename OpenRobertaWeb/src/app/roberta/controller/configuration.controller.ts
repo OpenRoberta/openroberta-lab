@@ -6,7 +6,7 @@ import * as GUISTATE_C from 'guiState.controller';
 import * as Blockly from 'blockly';
 import * as CONFIGURATION from 'configuration.model';
 import * as CV from 'confVisualization';
-import * as $ from 'jquery';
+import $ from 'jquery';
 import 'jquery-validate';
 
 let $formSingleModal: JQuery<HTMLElement>;
@@ -40,7 +40,6 @@ export function init(): void {
 /**
  * Inject Brickly with initial toolbox
  *
- * @param {response}
  *            toolbox
  */
 function initView(): void {
@@ -75,13 +74,14 @@ function initView(): void {
 }
 
 function initEvents(): void {
-    $('#tabConfiguration').onWrap('show.bs.tab', function (e): void {
+    console.log('pllllllllllll');
+    $('#tabConfiguration').onWrap('show.bs.tab', function (): void {
         GUISTATE_C.setView('tabConfiguration');
     });
 
     $('#tabConfiguration').onWrap(
         'shown.bs.tab',
-        function (e): void {
+        function (): void {
             bricklyWorkspace.markFocused();
             if (GUISTATE_C.isConfigurationUsed()) {
                 bricklyWorkspace.setVisible(true);
@@ -103,19 +103,19 @@ function initEvents(): void {
         'tabConfiguration clicked'
     );
 
-    $('#tabConfiguration').onWrap('hidden.bs.tab', function (e): void {
+    $('#tabConfiguration').onWrap('hidden.bs.tab', function (): void {
         let dom: HTMLElement = confVis ? confVis.getXml() : Blockly.Xml.workspaceToDom(bricklyWorkspace);
         let xml: XMLDocument = Blockly.Xml.domToText(dom);
         GUISTATE_C.setConfigurationXML(xml);
         bricklyWorkspace.setVisible(false);
     });
 
-    Blockly.bindEvent_(bricklyWorkspace.robControls.saveProgram, 'mousedown', null, function (e): void {
+    Blockly.bindEvent_(bricklyWorkspace.robControls.saveProgram, 'mousedown', null, function (): void {
         LOG.info('saveConfiguration from brickly button');
         saveToServer();
     });
 
-    bricklyWorkspace.addChangeListener(function (event): void {
+    bricklyWorkspace.addChangeListener(function (event: Event): void {
         if (listenToBricklyEvents && event.type != Blockly.Events.UI && GUISTATE_C.isConfigurationSaved()) {
             if (GUISTATE_C.isConfigurationStandard()) {
                 GUISTATE_C.setConfigurationName('');
@@ -162,8 +162,7 @@ export function saveAsToServer(): void {
     $formSingleModal.validate();
     if ($formSingleModal.valid()) {
         $('.modal').modal('hide'); // close all opened popups
-        // @ts-ignore
-        let confName: string = $('#singleModalInput').val().trim();
+        let confName: string = $('#singleModalInput').val().toString().trim();
         if (GUISTATE_C.getConfigurationStandardName() === confName) {
             LOG.error('saveAsToServer may NOT use the config standard name');
             return;
@@ -182,12 +181,12 @@ export function saveAsToServer(): void {
                 let modalMessage: string =
                     Blockly.Msg.POPUP_BACKGROUND_REPLACE_CONFIGURATION ||
                     'A configuration with the same name already exists! <br> Would you like to replace it?';
-                $('#show-message-confirm').onWrap('shown.bs.modal', function (e): void {
+                $('#show-message-confirm').onWrap('shown.bs.modal', function (): void {
                     $('#confirm').off();
                     $('#confirm').onWrap(
                         'click',
-                        function (e) {
-                            e.preventDefault;
+                        function (e: Event) {
+                            e.preventDefault();
                             CONFIGURATION.saveConfigurationToServer(confName, xmlText, function (result: ConfResult): void {
                                 if (result.rc == 'ok') {
                                     result.name = confName;
@@ -212,7 +211,7 @@ export function saveAsToServer(): void {
                     $('#confirmCancel').off();
                     $('#confirmCancel').onWrap(
                         'click',
-                        function (e) {
+                        function (e: Event) {
                             e.preventDefault();
                             $('.modal').modal('hide');
                         },
@@ -279,7 +278,7 @@ export function showSaveAsModal(): void {
     let regexString: RegExp = new RegExp('^(?!\\b' + GUISTATE_C.getConfigurationStandardName() + '\\b)([a-zA-Z_öäüÖÄÜß$€][a-zA-Z0-9_öäüÖÄÜß$€]*)$');
     $.validator.addMethod(
         'regex',
-        function (value, element, regexp) {
+        function (value: any, _element: HTMLElement, regexp: RegExp) {
             value = value.trim();
             return value.match(regexp);
         },
@@ -332,14 +331,14 @@ export function newConfiguration(opt_further: boolean): void {
         GUISTATE_C.setConfiguration(result);
         initConfigurationEnvironment();
     } else {
-        $('#show-message-confirm').oneWrap('shown.bs.modal', function (e): void {
+        $('#show-message-confirm').oneWrap('shown.bs.modal', function (): void {
             $('#confirm').off();
-            $('#confirm').onWrap('click', function (e): void {
+            $('#confirm').onWrap('click', function (e: Event): void {
                 e.preventDefault();
                 newConfiguration(true);
             });
             $('#confirmCancel').off();
-            $('#confirmCancel').onWrap('click', function (e): void {
+            $('#confirmCancel').onWrap('click', function (e: Event): void {
                 e.preventDefault();
                 $('.modal').modal('hide');
             });
@@ -355,10 +354,9 @@ export function newConfiguration(opt_further: boolean): void {
 /**
  * Show configuration
  *
- * @param {load}
  *            load configuration
- * @param {data}
  *            data of server call
+ * @param result
  */
 export function showConfiguration(result: ConfResult): void {
     if (result.rc == 'ok') {
@@ -465,11 +463,7 @@ export function configurationToBricklyWorkspace(xml: XMLDocument): void {
     setTimeout(function (): void {
         listenToBricklyEvents = true;
     }, 500);
-    if (isVisible()) {
-        seen = true;
-    } else {
-        seen = false;
-    }
+    seen = isVisible();
     if (GUISTATE_C.isConfigurationUsed()) {
         bricklyWorkspace.setVisible(true);
     } else {
