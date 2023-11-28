@@ -1,6 +1,6 @@
 import * as LOG from 'log';
 import * as MSG from 'message';
-import * as UTIL from 'util';
+import * as UTIL from 'util.roberta';
 import * as USER from 'user.model';
 import * as GUISTATE_C from 'guiState.controller';
 import * as $ from 'jquery';

@@ -1,4 +1,4 @@
-define(["require", "exports", "log", "util", "message", "guiState.controller", "blockly", "configuration.model", "confVisualization", "jquery", "jquery-validate"], function (require, exports, LOG, UTIL, MSG, GUISTATE_C, Blockly, CONFIGURATION, CV, $) {
+define(["require", "exports", "log", "util.roberta", "message", "guiState.controller", "blockly", "configuration.model", "confVisualization", "jquery", "jquery-validate"], function (require, exports, LOG, UTIL, MSG, GUISTATE_C, Blockly, CONFIGURATION, CV, $) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.configurationToBricklyWorkspace = exports.resetView = exports.changeRobotSvg = exports.reloadView = exports.reloadConf = exports.getBricklyWorkspace = exports.showConfiguration = exports.newConfiguration = exports.showSaveAsModal = exports.initConfigurationEnvironment = exports.loadFromListing = exports.saveAsToServer = exports.saveToServer = exports.initConfigurationForms = exports.init = void 0;
     var $formSingleModal;

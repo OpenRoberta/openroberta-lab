@@ -1,4 +1,4 @@
-define(["require", "exports", "log", "util", "message", "progList.model", "userGroup.model", "program.model", "configuration.controller", "program.controller", "guiState.controller", "blockly", "jquery", "bootstrap-table"], function (require, exports, LOG, UTIL, MSG, PROGLIST, USERGROUP, PROGRAM, CONFIGURATION_C, PROGRAM_C, GUISTATE_C, Blockly, $) {
+define(["require", "exports", "require", "log", "util.roberta", "comm", "message", "progList.model", "userGroup.model", "program.model", "configuration.controller", "program.controller", "guiState.controller", "blockly", "jquery", "bootstrap-table"], function (require, exports, require, LOG, UTIL, COMM, MSG, PROGLIST, USERGROUP, PROGRAM, CONFIGURATION_C, PROGRAM_C, GUISTATE_C, Blockly, $) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.init = void 0;
     /**

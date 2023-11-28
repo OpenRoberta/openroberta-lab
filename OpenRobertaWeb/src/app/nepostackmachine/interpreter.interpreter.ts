@@ -5,7 +5,7 @@ import { getNetwork, setupNN } from './neuralnetwork.ui';
 import * as C from './interpreter.constants';
 import * as U from './interpreter.util';
 import { SimulationRoberta } from 'simulation.roberta';
-import * as UTIL from 'util';
+import * as UTIL from 'util.roberta';
 
 export class Interpreter {
     public breakpoints: any[];

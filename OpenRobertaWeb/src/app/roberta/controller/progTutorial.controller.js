@@ -5,7 +5,7 @@ import * as PROG_C from 'program.controller';
 import * as ROBOT_C from 'robot.controller';
 import * as IMPORT_C from 'import.controller';
 import * as Blockly from 'blockly';
-import * as U from 'util';
+import * as U from 'util.roberta';
 import * as $ from 'jquery';
 
 const INITIAL_WIDTH = 0.5;

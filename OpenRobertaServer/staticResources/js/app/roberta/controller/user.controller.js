@@ -1,4 +1,4 @@
-define(["require", "exports", "message", "util", "user.model", "guiState.controller", "jquery", "blockly"], function (require, exports, MSG, UTIL, USER, GUISTATE_C, $, Blockly) {
+define(["require", "exports", "log", "message", "util.roberta", "user.model", "guiState.controller", "jquery", "blockly"], function (require, exports, LOG, MSG, UTIL, USER, GUISTATE_C, $, Blockly) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.initValidationMessages = exports.showResetPassword = exports.showUserInfo = exports.showDeleteUserModal = exports.showUserGroupLoginForm = exports.showLoginForm = exports.showUserDataForm = exports.init = exports.logout = exports.activateAccount = void 0;
     var $divForms;

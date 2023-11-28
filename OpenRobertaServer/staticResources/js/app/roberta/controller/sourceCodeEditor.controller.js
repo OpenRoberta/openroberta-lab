@@ -1,4 +1,4 @@
-define(["require", "exports", "message", "util", "guiState.controller", "program.model", "program.controller", "progRun.controller", "import.controller", "blockly", "codeflask", "jquery"], function (require, exports, MSG, UTIL, GUISTATE_C, PROGRAM, PROG_C, PROGRUN_C, IMPORT_C, Blockly, CodeFlask, $) {
+define(["require", "exports", "require", "message", "log", "util.roberta", "comm", "wrap", "guiState.controller", "program.model", "program.controller", "progRun.controller", "import.controller", "blockly", "codeflask", "jquery"], function (require, exports, require, MSG, LOG, UTIL, COMM, WRAP, GUISTATE_C, PROGRAM, PROG_C, PROGRUN_C, IMPORT_C, Blockly, CodeFlask, $) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.clickSourceCodeEditor = exports.resetScroll = exports.setCodeLanguage = exports.init = void 0;
     var flask;

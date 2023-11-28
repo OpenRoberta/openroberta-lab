@@ -1,4 +1,4 @@
-define(["require", "exports", "blockly", "jquery", "jquery-scrollto", "enjoyHint"], function (require, exports, Blockly, $) {
+define(["require", "exports", "comm", "message", "log", "blockly", "jquery", "jquery-scrollto", "enjoyHint"], function (require, exports, COMM, MSG, LOG, Blockly, $) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.getInstance = exports.start = void 0;
     var enjoyhint_instance;

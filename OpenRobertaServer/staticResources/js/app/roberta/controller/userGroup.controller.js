@@ -1,4 +1,4 @@
-define(["require", "exports", "message", "util", "userGroup.model", "guiState.controller", "language.controller", "jquery", "blockly", "bootstrap-table", "bootstrap-tagsinput"], function (require, exports, MSG, UTIL, USERGROUP, GUISTATE_C, LANG, $, Blockly) {
+define(["require", "exports", "message", "util.roberta", "userGroup.model", "guiState.controller", "language.controller", "jquery", "blockly", "bootstrap-table", "bootstrap-tagsinput"], function (require, exports, MSG, UTIL, USERGROUP, GUISTATE_C, LANG, $, Blockly) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.init = exports.showPanel = void 0;
     var $userGroupTable;

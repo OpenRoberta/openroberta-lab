@@ -1,4 +1,4 @@
-define(["require", "exports", "util", "confList.model", "blockly", "jquery", "bootstrap-table"], function (require, exports, UTIL, CONFLIST, Blockly, $) {
+define(["require", "exports", "require", "log", "util.roberta", "comm", "confList.model", "configuration.model", "blockly", "jquery", "bootstrap-table"], function (require, exports, require, LOG, UTIL, COMM, CONFLIST, CONFIGURATION, Blockly, $) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.init = void 0;
     /**
