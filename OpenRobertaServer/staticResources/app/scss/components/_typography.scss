@@ -1,0 +1,253 @@
+/*************************************
+***** Font Sizes ***** 
+*************************************/
+
+.font-size--xs {
+    font-size: rem(14px);
+    line-height: rem(20px);
+}
+
+.font-size--s {
+	font-size: rem(16px);
+	line-height: rem(24px);
+}
+
+.font-size--md {
+	font-size: rem(20px);
+	line-height: rem(30px);
+}
+
+.font-size--lg {
+	font-size: rem(30px);
+	line-height: rem(40px);
+}
+
+$sans-serif: 'Roboto', sans-serif;
+$bold: 700;
+
+/*************************************
+***** Headlines ***** 
+*************************************/
+
+h1, h2, h3, h4, h5 {
+	font-weight: $bold;
+}
+
+h1 {
+	@extend .font-size--lg;
+	margin-bottom: rem(30px);
+}
+
+h2 {
+	@extend .font-size--lg;
+	margin-bottom: rem(20px);
+}
+
+h3 {
+	@extend .font-size--lg;
+	margin-bottom: rem(30px);
+}
+
+h4 {
+	@extend .font-size--md;
+}
+
+h5 {
+	@extend .font-size--md;
+}
+
+.tint {
+    display: inline-block;
+    padding: rem(10px 20px);
+    margin: rem(0 -10px 0 -10px);
+    mix-blend-mode: multiply;
+    color: $white;
+    &--primary {
+        background: $primary;
+        transform: rotate(1deg);
+        position: relative;
+        top: rem(5px);
+    }
+    &--secondary {
+        background: $secondary;
+        transform: rotate(-1deg);
+    }
+    &--tertiary {
+        background: $tertiary;
+        transform: rotate(-2deg);
+    }
+    &--quaternary {
+        background: $quaternary;
+        transform: rotate(1deg);
+		position: relative;
+        top: rem(-8px);
+    }
+
+}
+
+/*************************************
+***** Paragraph & Lists ***** 
+*************************************/
+
+p {
+	@extend .font-size--s;
+    margin-bottom: rem(15px);
+    &:last-child {
+        margin-bottom: 0;
+    }
+    &.teaser {
+		@extend .font-size--md;
+		&:last-child {
+			margin-bottom: rem(15px);
+		}
+		&+ .button {
+			margin-top: rem(20px);
+		}
+    }
+}
+
+/*************************************
+***** Links ***** 
+*************************************/
+
+a {
+	color: $primary;
+	text-decoration: underline;
+    @media (hover: hover) {
+        &:hover {
+            cursor: pointer;
+			text-decoration: none;
+        }
+    }
+}
+
+/*************************************
+***** Buttons ***** 
+*************************************/
+
+.button {
+	display: inline-block;
+	border-radius: $border-radius--standard;
+	text-decoration: none;
+	font-weight: 700;
+	padding: rem(15px);
+	@extend .transition;
+	&--light {
+		color: $primary;
+		background: $white;
+	}
+	&.show {
+		background: rgba($primary,1);
+		color: $white;
+	}
+	@media (hover: hover) {
+		&:hover {
+			background: rgba($primary,1);
+			color: $white;
+		}
+	}	
+}
+
+.button-big {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	padding: rem(20px 80px 20px 20px);
+	color: $black;
+	text-decoration: none;
+	border-radius: $border-radius--standard;
+	@extend .transition;
+	&--primary {
+		background: rgba($primary,.1);
+		border: rem(1px) solid rgba($primary,.5);
+		position: relative;
+		&::after {
+			@extend .button-big--arrow;
+			background-image: svg-icon-arrow($primary);
+		}
+		@media (hover: hover) {
+			&:hover {
+				background: rgba($primary,.2);
+				border: rem(1px) solid rgba($primary,1);
+			}
+		}	
+		&.icon {
+			background: rgba($primary,1);
+		}	
+	}
+	&--secondary {
+		background: rgba($secondary,.1);
+		border: rem(1px) solid rgba($secondary,.5);
+		position: relative;
+		&::after {
+			@extend .button-big--arrow;
+			background-image: svg-icon-arrow($secondary);
+		}
+		@media (hover: hover) {
+			&:hover {
+				background: rgba($secondary,.2);
+				border: rem(1px) solid rgba($secondary,1);
+			}
+		}
+		&.icon {
+			background: rgba($secondary,1);
+		}	
+	}
+	&--tertiary {
+		background: rgba($tertiary,.1);
+		border: rem(1px) solid rgba($tertiary,.5);
+		position: relative;
+		&::after {
+			@extend .button-big--arrow;
+			background-image: svg-icon-arrow($tertiary);
+		}
+		@media (hover: hover) {
+			&:hover {
+				background: rgba($tertiary,.2);
+				border: rem(1px) solid rgba($tertiary,1);
+			}
+		}
+		&.icon {
+			background: rgba($tertiary,1);
+		}	
+	}
+	&--quaternary {
+		background: rgba($quaternary,.1);
+		border: rem(1px) solid rgba($quaternary,.5);
+		position: relative;
+		&::after {
+			@extend .button-big--arrow;
+			background-image: svg-icon-arrow($quaternary);
+		}
+		@media (hover: hover) {
+			&:hover {
+				background: rgba($quaternary,.2);
+				border: rem(1px) solid rgba($quaternary,1);
+			}
+		}
+		&.icon {
+			background: rgba($quaternary,1);
+		}	
+	}
+	&.icon {
+		border: none;
+		color: $white;
+		padding: rem(40px 120px 40px 40px);
+		&::after {
+			@extend .button-big--arrow;
+			background-image: svg-icon-arrow($white);
+		}
+		@media (hover: hover) {
+			&:hover {
+				box-shadow: rem(0 20px 50px) rgba($black,.05);
+			}
+		}
+		svg {
+			fill: $white;
+			height: rem(25px);
+			width: auto;
+			margin-bottom: rem(20px);
+			align-self: flex-start;
+		}
+	}
+}

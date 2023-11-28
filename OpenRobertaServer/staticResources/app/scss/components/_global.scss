@@ -1,0 +1,84 @@
+/*************************************
+***** Overall Classes ***** 
+*************************************/
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+	font-family: $sans-serif;
+	color: black;
+	overflow-x: hidden;
+	word-wrap: break-word;
+}
+
+/*************************************
+***** Grid Adjustments ***** 
+*************************************/
+
+// .container-fluid {
+// 	padding-left: rem(60px);
+// 	padding-right: rem(60px);
+// }
+
+// main {
+// }
+
+section {
+	margin-bottom: rem(50px);
+	width: 100%;
+	// &:last-child {
+	// 	margin-bottom: 0;
+	// }
+}
+.section {
+	&--white {
+		background: $white;
+	}
+	&--light {
+		background: $gray-200;
+		padding-top: rem(30px);
+		padding-bottom: rem(30px);
+	}
+}
+
+/*************************************
+***** Media ***** 
+*************************************/
+
+img,
+video {
+	width: 100%;
+	height: auto;
+}
+
+/*************************************
+***** Banner ***** 
+*************************************/
+
+#banner {
+	background: $primary;
+	color: $white;
+	text-align: center;
+	padding: rem(20px);
+}
+
+.nepo {
+	display: inline-block;
+	&::before {
+		content: "";
+		display: inline-block;
+		width: rem(85px);
+		height: rem(20px);
+		background-image: url("img/nepo.svg");
+		background-position: left bottom;
+		background-repeat: no-repeat;
+		background-size: contain;
+		margin-right: rem(5px);
+	}
+}
+
+#start {
+	background: $white;
+}
