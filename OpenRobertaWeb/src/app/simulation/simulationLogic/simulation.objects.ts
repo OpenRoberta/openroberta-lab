@@ -1,6 +1,6 @@
 import { IDestroyable, ISelectable, SelectionListener } from 'robot.base';
 import * as $ from 'jquery';
-import * as UTIL from 'util';
+import * as UTIL from 'util.roberta';
 import { SimulationRoberta } from 'simulation.roberta';
 import { SimulationScene } from 'simulation.scene';
 import * as SIMATH from 'simulation.math';

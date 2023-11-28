@@ -6,7 +6,7 @@
  *
  * @author Beate Jost <beate.jost@smail.inf.h-brs.de>
  */
-import * as UTIL from 'util';
+import * as UTIL from 'util.roberta';
 import * as MSG from 'message';
 import * as GUISTATE_C from 'guiState.controller';
 import * as PROGLIST from 'progList.model';

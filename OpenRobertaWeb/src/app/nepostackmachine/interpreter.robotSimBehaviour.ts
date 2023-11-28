@@ -2,7 +2,7 @@ import { ARobotBehaviour } from './interpreter.aRobotBehaviour';
 import { State } from './interpreter.state';
 import * as C from './interpreter.constants';
 import * as U from './interpreter.util';
-import * as UTIL from 'util';
+import * as UTIL from 'util.roberta';
 
 declare global {
     var rob3rtaNumber: number;

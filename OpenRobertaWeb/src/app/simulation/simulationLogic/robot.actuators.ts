@@ -11,7 +11,7 @@ import {
     RectangleSimulationObject,
     TriangleSimulationObject,
 } from './simulation.objects';
-import * as UTIL from 'util';
+import * as UTIL from 'util.roberta';
 import * as $ from 'jquery';
 // @ts-ignore
 import * as Blockly from 'blockly';

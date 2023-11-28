@@ -2,7 +2,7 @@
  * @fileOverview Simulate a robot
  * @author Beate Jost <beate.jost@iais.fraunhofer.de>
  */
-define(["require", "exports", "interpreter.constants", "util", "interpreter.interpreter", "interpreter.robotSimBehaviour", "message", "jquery", "huebee", "blockly", "nn.controller", "simulation.scene", "robot.base", "./simulation.objects"], function (require, exports, C, UTIL, SIM_I, ROBOT_B, MSG, $, HUEBEE, Blockly, NN_CTRL, simulation_scene_1, robot_base_1, simulation_objects_1) {
+define(["require", "exports", "interpreter.constants", "util.roberta", "interpreter.interpreter", "interpreter.robotSimBehaviour", "message", "jquery", "huebee", "blockly", "nn.controller", "simulation.scene", "robot.base", "./simulation.objects"], function (require, exports, C, UTIL, SIM_I, ROBOT_B, MSG, $, HUEBEE, Blockly, NN_CTRL, simulation_scene_1, robot_base_1, simulation_objects_1) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.SimulationRoberta = void 0;
     var SimulationRoberta = /** @class */ (function () {

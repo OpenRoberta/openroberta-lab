@@ -3,7 +3,7 @@ import { ISensor, Timer } from 'robot.sensors';
 import * as $ from 'jquery';
 import { Interpreter } from 'interpreter.interpreter';
 import { RobotBaseMobile } from 'robot.base.mobile';
-import * as UTIL from 'util';
+import * as UTIL from 'util.roberta';
 // @ts-ignore
 import * as Blockly from 'blockly';
 import { MarkerSimulationObject } from 'simulation.objects';

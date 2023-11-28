@@ -1,4 +1,4 @@
-define(["require", "exports", "message", "util", "guiState.controller", "program.controller", "program.model", "blockly", "codeflask", "jquery"], function (require, exports, MSG, UTIL, GUISTATE_C, PROG_C, PROGRAM, Blockly, CodeFlask, $) {
+define(["require", "exports", "message", "util.roberta", "guiState.controller", "program.controller", "program.model", "blockly", "codeflask", "jquery"], function (require, exports, MSG, UTIL, GUISTATE_C, PROG_C, PROGRAM, Blockly, CodeFlask, $) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.setCodeLanguage = exports.setCode = exports.init = void 0;
     var INITIAL_WIDTH = 0.5;

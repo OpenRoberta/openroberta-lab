@@ -49,7 +49,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-define(["require", "exports", "message", "util", "guiState.controller", "tour.controller", "program.controller", "program.model", "program.model", "blockly", "jquery", "simulation.objects", "simulation.webots", "simulation.roberta", "simulation.constants", "progList.model", "jquery-validate"], function (require, exports, MSG, UTIL, GUISTATE_C, TOUR_C, PROG_C, PROGRAM, PROGRAM_M, Blockly, $, simulation_objects_1, simulation_webots_1, simulation_roberta_1, simulation_constants_1, PROGLIST) {
+define(["require", "exports", "message", "util.roberta", "guiState.controller", "tour.controller", "program.controller", "program.model", "program.model", "blockly", "jquery", "simulation.objects", "simulation.webots", "simulation.roberta", "simulation.constants", "progList.model", "jquery-validate"], function (require, exports, MSG, UTIL, GUISTATE_C, TOUR_C, PROG_C, PROGRAM, PROGRAM_M, Blockly, $, simulation_objects_1, simulation_webots_1, simulation_roberta_1, simulation_constants_1, PROGLIST) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.createProgSimMultiInstance = exports.createProgSimDebugInstance = exports.createProgSimInstance = void 0;
     var INITIAL_WIDTH = 0.5;

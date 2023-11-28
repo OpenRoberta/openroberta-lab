@@ -4,7 +4,7 @@
  */
 
 import * as C from 'interpreter.constants';
-import * as UTIL from 'util';
+import * as UTIL from 'util.roberta';
 import * as SIM_I from 'interpreter.interpreter';
 import { Interpreter } from 'interpreter.interpreter';
 import * as ROBOT_B from 'interpreter.robotSimBehaviour';

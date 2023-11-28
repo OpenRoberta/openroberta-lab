@@ -1,4 +1,4 @@
-define(["require", "exports", "./neuralnetwork.helper", "util"], function (require, exports, H, U) {
+define(["require", "exports", "./neuralnetwork.helper", "util.roberta"], function (require, exports, H, U) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Network = exports.Link = exports.Node = exports.NNumber = void 0;
     var NNumber = /** @class */ (function () {

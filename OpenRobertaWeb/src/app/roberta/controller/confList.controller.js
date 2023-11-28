@@ -1,7 +1,7 @@
 import * as require from 'require';
 
 import * as LOG from 'log';
-import * as UTIL from 'util';
+import * as UTIL from 'util.roberta';
 import * as COMM from 'comm';
 import * as CONFLIST from 'confList.model';
 import * as CONFIGURATION from 'configuration.model';

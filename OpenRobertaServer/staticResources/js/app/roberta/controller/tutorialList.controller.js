@@ -1,4 +1,4 @@
-define(["require", "exports", "util", "guiState.controller", "progTutorial.controller", "galleryList.controller", "jquery", "bootstrap-table", "bootstrap-tagsinput"], function (require, exports, UTIL, GUISTATE_C, TUTORIAL_C, GALLERYLIST_C, $) {
+define(["require", "exports", "util.roberta", "guiState.controller", "progTutorial.controller", "galleryList.controller", "jquery", "bootstrap-table", "bootstrap-tagsinput"], function (require, exports, UTIL, GUISTATE_C, TUTORIAL_C, GALLERYLIST_C, $) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.formatTags = exports.init = void 0;
     var BACKGROUND_COLORS = ['#33B8CA', '#EBC300', '#005A94', '#179C7D', '#F29400', '#E2001A', '#EB6A0A', '#8FA402', '#BACC1E', '#9085BA', '#FF69B4', '#DF01D7'];

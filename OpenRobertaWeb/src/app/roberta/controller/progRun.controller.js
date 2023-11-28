@@ -1,4 +1,4 @@
-import * as UTIL from 'util';
+import * as UTIL from 'util.roberta';
 import * as LOG from 'log';
 import * as MSG from 'message';
 import * as PROG_C from 'program.controller';
@@ -10,6 +10,7 @@ import * as WEBVIEW_C from 'webview.controller';
 import * as $ from 'jquery';
 import * as Blockly from 'blockly';
 import * as GUISTATE from 'guiState.model';
+import * as WEBUSB from 'webUsb.controller';
 
 var blocklyWorkspace;
 var interpreter;
@@ -201,73 +202,88 @@ function getConnectionTypeCallback() {
 function runForAutoConnection(result) {
     GUISTATE_C.setState(result);
     if (result.rc == 'ok') {
-        var filename = (result.programName || GUISTATE_C.getProgramName()) + '.' + GUISTATE_C.getBinaryFileExtension();
-        if (GUISTATE_C.getBinaryFileExtension() === 'bin' || GUISTATE_C.getBinaryFileExtension() === 'uf2') {
-            result.compiledCode = UTIL.base64decode(result.compiledCode);
-        }
-        if (GUISTATE_C.isProgramToDownload() || navigator.userAgent.toLowerCase().match(/iPad|iPhone|android/i) !== null) {
-            // either the user doesn't want to see the modal anymore or he uses a smartphone / tablet, where you cannot choose the download folder.
-            UTIL.download(filename, result.compiledCode);
-            setTimeout(function () {
-                GUISTATE_C.setConnectionState('wait');
-            }, 5000);
-            MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
-        } else if (GUISTATE_C.getConnection() == GUISTATE_C.getConnectionTypeEnum().LOCAL) {
-            setTimeout(function () {
-                GUISTATE_C.setConnectionState('wait');
-            }, 5000);
-            MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
-        } else {
-            createDownloadLink(filename, result.compiledCode);
-
-            var textH = $('#popupDownloadHeader').text();
-            $('#popupDownloadHeader').text(textH.replace('$', $.trim(GUISTATE_C.getRobotRealName())));
-            for (var i = 1; Blockly.Msg['POPUP_DOWNLOAD_STEP_' + i]; i++) {
-                var step = $('<li class="typcn typcn-roberta">');
-                var a =
-                    Blockly.Msg['POPUP_DOWNLOAD_STEP_' + i + '_' + GUISTATE_C.getRobotGroup().toUpperCase()] ||
-                    Blockly.Msg['POPUP_DOWNLOAD_STEP_' + i] ||
-                    'POPUP_DOWNLOAD_STEP_' + i;
-                step.html('<span class="download-message">' + a + '</span>');
-                step.css('opacity', '0');
-                $('#download-instructions').append(step);
+        WEBUSB.selectDevice(GUISTATE_C.getRobotName(), result.compiledCode).then(
+            (ok) => {
+                if (ok == 'done') {
+                    MSG.displayInformation(result, 'MESSAGE_EDIT_START', result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
+                }
+            },
+            (err) => {
+                MSG.displayInformation({ rc: 'error' }, null, err, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
             }
+        );
+        setTimeout(function () {
+            GUISTATE_C.setConnectionState('wait');
+            GUISTATE.robot.state = 'wait';
+        }, 1000);
 
-            var substituteName = GUISTATE_C.getRobotGroup().toUpperCase();
-            $('#download-instructions li').each(function (index) {
-                if (GUISTATE_C.getRobotGroup() === 'calliope') {
-                    substituteName = 'MINI';
-                }
-                $(this).html($(this).html().replace('$', substituteName));
-            });
-
-            $('#save-client-compiled-program').oneWrap('shown.bs.modal', function (e) {
-                $('#download-instructions li').each(function (index) {
-                    $(this)
-                        .delay(750 * index)
-                        .animate(
-                            {
-                                opacity: 1,
-                            },
-                            1000
-                        );
-                });
-            });
-
-            $('#save-client-compiled-program').oneWrap('hidden.bs.modal', function (e) {
-                var textH = $('#popupDownloadHeader').text();
-                $('#popupDownloadHeader').text(textH.replace($.trim(GUISTATE_C.getRobotRealName()), '$'));
-                if ($('#label-checkbox').is(':checked')) {
-                    GUISTATE_C.setProgramToDownload();
-                }
-                $('#programLink').remove();
-                $('#download-instructions').empty();
-                GUISTATE_C.setConnectionState('wait');
-                MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
-            });
-
-            $('#save-client-compiled-program').modal('show');
-        }
+        // var filename = (result.programName || GUISTATE_C.getProgramName()) + '.' + GUISTATE_C.getBinaryFileExtension();
+        // if (GUISTATE_C.getBinaryFileExtension() === 'bin' || GUISTATE_C.getBinaryFileExtension() === 'uf2') {
+        //     result.compiledCode = UTIL.base64decode(result.compiledCode);
+        // }
+        // if (GUISTATE_C.isProgramToDownload() || navigator.userAgent.toLowerCase().match(/iPad|iPhone|android/i) !== null) {
+        //     // either the user doesn't want to see the modal anymore or he uses a smartphone / tablet, where you cannot choose the download folder.
+        //     UTIL.download(filename, result.compiledCode);
+        //     setTimeout(function () {
+        //         GUISTATE_C.setConnectionState('wait');
+        //     }, 5000);
+        //     MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
+        // } else if (GUISTATE_C.getConnection() == GUISTATE_C.getConnectionTypeEnum().LOCAL) {
+        //     setTimeout(function () {
+        //         GUISTATE_C.setConnectionState('wait');
+        //     }, 5000);
+        //     MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
+        // } else {
+        //     createDownloadLink(filename, result.compiledCode);
+        //
+        //     var textH = $('#popupDownloadHeader').text();
+        //     $('#popupDownloadHeader').text(textH.replace('$', $.trim(GUISTATE_C.getRobotRealName())));
+        //     for (var i = 1; Blockly.Msg['POPUP_DOWNLOAD_STEP_' + i]; i++) {
+        //         var step = $('<li class="typcn typcn-roberta">');
+        //         var a =
+        //             Blockly.Msg['POPUP_DOWNLOAD_STEP_' + i + '_' + GUISTATE_C.getRobotGroup().toUpperCase()] ||
+        //             Blockly.Msg['POPUP_DOWNLOAD_STEP_' + i] ||
+        //             'POPUP_DOWNLOAD_STEP_' + i;
+        //         step.html('<span class="download-message">' + a + '</span>');
+        //         step.css('opacity', '0');
+        //         $('#download-instructions').append(step);
+        //     }
+        //
+        //     var substituteName = GUISTATE_C.getRobotGroup().toUpperCase();
+        //     $('#download-instructions li').each(function (index) {
+        //         if (GUISTATE_C.getRobotGroup() === 'calliope') {
+        //             substituteName = 'MINI';
+        //         }
+        //         $(this).html($(this).html().replace('$', substituteName));
+        //     });
+        //
+        //     $('#save-client-compiled-program').oneWrap('shown.bs.modal', function (e) {
+        //         $('#download-instructions li').each(function (index) {
+        //             $(this)
+        //                 .delay(750 * index)
+        //                 .animate(
+        //                     {
+        //                         opacity: 1,
+        //                     },
+        //                     1000
+        //                 );
+        //         });
+        //     });
+        //
+        //     $('#save-client-compiled-program').oneWrap('hidden.bs.modal', function (e) {
+        //         var textH = $('#popupDownloadHeader').text();
+        //         $('#popupDownloadHeader').text(textH.replace($.trim(GUISTATE_C.getRobotRealName()), '$'));
+        //         if ($('#label-checkbox').is(':checked')) {
+        //             GUISTATE_C.setProgramToDownload();
+        //         }
+        //         $('#programLink').remove();
+        //         $('#download-instructions').empty();
+        //         GUISTATE_C.setConnectionState('wait');
+        //         MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
+        //     });
+        //
+        //     $('#save-client-compiled-program').modal('show');
+        // }
     } else {
         GUISTATE_C.setConnectionState('wait');
         MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());

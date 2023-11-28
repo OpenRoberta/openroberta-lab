@@ -1,4 +1,4 @@
-define(["require", "exports", "message", "log", "guiState.controller", "program.controller", "robot.controller", "import.controller", "blockly", "util", "jquery"], function (require, exports, MSG, LOG, GUISTATE_C, PROG_C, ROBOT_C, IMPORT_C, Blockly, U, $) {
+define(["require", "exports", "message", "log", "guiState.controller", "program.controller", "robot.controller", "import.controller", "blockly", "util.roberta", "jquery"], function (require, exports, MSG, LOG, GUISTATE_C, PROG_C, ROBOT_C, IMPORT_C, Blockly, U, $) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.loadFromTutorial = exports.init = void 0;
     var INITIAL_WIDTH = 0.5;
