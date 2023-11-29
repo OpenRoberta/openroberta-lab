@@ -36,7 +36,7 @@ public class ArduinoCompilerWorker implements ICompilerWorker {
         String programName = project.getProgramName();
         String token = project.getToken();
         final String crosscompilerSource = project.getSourceCode().toString();
-        Util.storeGeneratedProgram(tempDir, crosscompilerSource, token, programName, "." + project.getSourceCodeFileExtension());
+        Util.storeGeneratedProgram(project, tempDir, crosscompilerSource, token, programName, "." + project.getSourceCodeFileExtension());
         String scriptName = Util.getOsSpecificAbsolutePath(compilerResourcesDir + "arduino-resources/build_project.sh");
 
         String boardVariant = "";
@@ -177,12 +177,9 @@ public class ArduinoCompilerWorker implements ICompilerWorker {
                 default:
                     throw new DbcException("Unsupported file extension: " + project.getRobot());
             }
-            project.setCompiledHex(base64EncodedHex);
-            if ( project.getCompiledHex() != null ) {
-                resultKey = Key.COMPILERWORKFLOW_SUCCESS;
-            } else {
-                resultKey = Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
-            }
+            if ( project.getRobot().equals("bob3") || project.getRobot().equals("rob3rta") ) {
+                Util.storeGeneratedProgram(project, tempDir, base64EncodedHex, token, programName, "." + project.getBinaryFileExtension());
+            }    
         }
         project.setResult(resultKey);
         project.addResultParam("MESSAGE", result.getSecond());

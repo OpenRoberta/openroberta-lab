@@ -1,10 +1,7 @@
 package de.fhg.iais.roberta.worker;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 
-import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,11 +20,11 @@ public class MbedResetFirmwareWorker implements IWorker {
 
         Key resultKey;
         String path = properties.getCompilerResourceDir() + "/" + project.getCompiledProgramPath() + "." + project.getBinaryFileExtension();
-        try {
-            project.setCompiledHex(FileUtils.readFileToString(new File(path), StandardCharsets.UTF_8));
+        if (new File(path).exists()){
+            project.setBinaryURLPath(path);
             resultKey = Key.FIRMWARE_RESET_SUCCESS;
-        } catch ( IOException e ) {
-            LOG.error("Reading default firmware from mbed failed", e);
+        } else {
+            LOG.error("Reading default firmware from mbed failed, file doesnt exist");
             resultKey = Key.FIRMWARE_RESET_ERROR;
         }
         project.setResult(resultKey);

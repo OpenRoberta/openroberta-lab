@@ -39,7 +39,7 @@ define(["require", "exports", "comm"], function (require, exports, COMM) {
         exports.gui.multipleSim = false;
         exports.gui.markerSim = false;
         exports.gui.nn = false;
-        exports.gui.nnActivations = {};
+        exports.gui.availableNNActivationFunctions = {};
         exports.gui.webotsSim = false;
         exports.gui.webotsUrl = '';
         exports.gui.fileExtension = '';

@@ -48,7 +48,7 @@ public class EdisonCompilerWorker implements ICompilerWorker {
         final String compilerResourcesDir = compilerWorkflowBean.getCompilerResourcesDir();
         final String tempDir = compilerWorkflowBean.getTempDir();
         final String crosscompilerSource = project.getSourceCode().toString();
-        Util.storeGeneratedProgram(tempDir, crosscompilerSource, project.getToken(), project.getProgramName(), "." + project.getSourceCodeFileExtension());
+        Util.storeGeneratedProgram(project, tempDir, crosscompilerSource, project.getToken(), project.getProgramName(), "." + project.getSourceCodeFileExtension());
         //get all directories
         String token = project.getToken();
         String pyFile = project.getProgramName();

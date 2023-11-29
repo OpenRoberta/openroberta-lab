@@ -45,7 +45,7 @@ public class NxtCompilerWorker implements ICompilerWorker {
         final String compilerResourcesDir = compilerWorkflowBean.getCompilerResourcesDir();
         final String tempDir = compilerWorkflowBean.getTempDir();
         final String crosscompilerSource = project.getSourceCode().toString();
-        Util.storeGeneratedProgram(tempDir, crosscompilerSource, project.getToken(), project.getProgramName(), "." + project.getSourceCodeFileExtension());
+        Util.storeGeneratedProgram(project, tempDir, crosscompilerSource, project.getToken(), project.getProgramName(), "." + project.getSourceCodeFileExtension());
 
         Path path = Paths.get(compilerResourcesDir);
         Path base = Paths.get("");

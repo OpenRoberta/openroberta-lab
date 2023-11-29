@@ -47,7 +47,7 @@ public class CalliopeCompilerWorker implements ICompilerWorker {
         final String compilerResourcesDir = compilerWorkflowBean.getCompilerResourcesDir();
         final String tempDir = compilerWorkflowBean.getTempDir();
         final String crosscompilerSource = project.getSourceCode().toString();
-        Util.storeGeneratedProgram(tempDir, crosscompilerSource, project.getToken(), project.getProgramName(), "." + project.getSourceCodeFileExtension());
+        Util.storeGeneratedProgram(project, tempDir, crosscompilerSource, project.getToken(), project.getProgramName(), "." + project.getSourceCodeFileExtension());
         String scriptName = compilerResourcesDir + "../compile." + (SystemUtils.IS_OS_WINDOWS ? "bat" : "sh");
         Boolean bluetooth = project.getRobot().equals("calliope2017");
         String bluetoothParam = bluetooth ? "-b" : "";
@@ -65,20 +65,7 @@ public class CalliopeCompilerWorker implements ICompilerWorker {
 
         Pair<Boolean, String> result = Util.runCrossCompiler(executableWithParameters, crosscompilerSource, project.isNativeEditorCode());
         Key resultKey = result.getFirst() ? Key.COMPILERWORKFLOW_SUCCESS : Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
-        if ( result.getFirst() ) {
-            try {
-                project
-                    .setCompiledHex(
-                        FileUtils
-                            .readFileToString(
-                                new File(pathToSrcFile + "/target/" + project.getProgramName() + "." + project.getBinaryFileExtension()),
-                                StandardCharsets.UTF_8));
-                resultKey = Key.COMPILERWORKFLOW_SUCCESS;
-            } catch ( IOException e ) {
-                LOG.error("compilation of Calliope program successful, but reading the binary failed", e);
-                resultKey = Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
-            }
-        }
+        
         return Pair.of(resultKey, result.getSecond());
     }
 }

@@ -55,11 +55,12 @@ public class RobotDownloadProgram {
 
             // TODO: as the number of supported robot system grows, we should think about a better solution here :-D <- definitely
             // TODO: inconsistent names: "ev3lejosv1" "lejos" ???
+            filePath = this.pathToCrosscompilerBaseDir + token + "/" + programName + "/target";
+
             switch ( state.getFirmwareName() ) {
                 case "ev3lejosv1":
                 case "lejos":
                     fileName = programName + ".jar";
-                    filePath = this.pathToCrosscompilerBaseDir + token + "/" + programName + "/target";
                     break;
                 case "Robotino":
                 case "Nao":
@@ -67,11 +68,9 @@ public class RobotDownloadProgram {
                 case "mbot2":
                 case "spike":
                     fileName = programName + ".py";
-                    filePath = this.pathToCrosscompilerBaseDir + token + "/" + programName + "/source";
                     break;
                 case "NXT":
                     fileName = programName + ".rxe";
-                    filePath = this.pathToCrosscompilerBaseDir + token + "/" + programName + "/target";
                     break;
                 case "ardu":
                 case "uno":
@@ -82,19 +81,16 @@ public class RobotDownloadProgram {
                 case "bob3":
                 case "rob3rta":
                     fileName = programName + ".hex";
-                    filePath = this.pathToCrosscompilerBaseDir + token + "/" + programName + "/target";
                     break;
                 case "festobionicflower":
                 case "festobionic":
                     fileName = programName + ".zip";
-                    filePath = this.pathToCrosscompilerBaseDir + token + "/" + programName + "/target";
                     break;
                 case "edison":
                     fileName = programName + ".wav";
                     break;
                 case "nano33ble":
                     fileName = programName + ".bin";
-                    filePath = this.pathToCrosscompilerBaseDir + token + "/" + programName + "/target";
                     break;
                 default:
                     LOG.error("unsupported firmware name " + state.getFirmwareName());

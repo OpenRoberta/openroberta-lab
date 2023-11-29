@@ -1,8 +1,16 @@
 package de.fhg.iais.roberta.javaServer.restServices.all.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.net.URLDecoder;
+
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -126,8 +134,8 @@ public class ProjectWorkflowRestController {
             response.setCmd("runPBack");
             response.setProgXML(project.getAnnotatedProgramAsXml());
             response.setConfAnnos(project.getConfAnnotationList());
-            response.setCompiledCode(project.getCompiledHex());
             response.setConfiguration(project.getConfigurationJSON());
+            response.setBinaryURL(project.getBinaryURL());
             // TODO auto connection robots return COMPILERWORKFLOW_SUCCESS or COMPILERWORKFLOW_PROGRAM_GENERATION_SUCCESS
             // TODO which is not mapped to anything in the frontend, ROBOT_PUSH_RUN is mapped to the message that was used before workflows
             if ( project.getResult() == Key.COMPILERWORKFLOW_SUCCESS || project.getResult() == Key.COMPILERWORKFLOW_PROGRAM_GENERATION_SUCCESS ) {
@@ -148,6 +156,22 @@ public class ProjectWorkflowRestController {
         }
     }
 
+    @GET
+    @Path("/getBinary/{path}")
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    public Response getBinaryFile(
+        @PathParam("path") String path
+    ) throws FileNotFoundException {
+        path = URLDecoder.decode(path);
+        File binaryFile = new File(path);
+        InputStream fileInputStream = new FileInputStream(binaryFile);
+        
+        return Response
+            .ok(fileInputStream)
+            .header("Content-Disposition", "attachment; filename=\"" + binaryFile.getName() + "\"")
+            .build();
+    }
+    
     @POST
     @Path("/stop")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -204,8 +228,8 @@ public class ProjectWorkflowRestController {
             ProjectService.executeWorkflow("compile", project);
             response.setCmd("compileP");
             response.setProgXML(project.getAnnotatedProgramAsXml());
-            response.setCompiledCode(project.getCompiledHex());
             addProjectResultToResponse(response, project);
+            response.setBinaryURL(project.getBinaryURL());
             final int programLength = StringUtils.countMatches(project.getAnnotatedProgramAsXml(), "<block ");
             Statistics.info("ProgramCompile", "LoggedIn", httpSessionState.isUserLoggedIn(), "success", project.hasSucceeded(), "programLength", programLength);
             return UtilForREST.responseWithFrontendInfo(response, httpSessionState, this.robotCommunicator);
@@ -232,7 +256,7 @@ public class ProjectWorkflowRestController {
             Project project = request2project(wfRequest, dbSession, httpSessionState, this.robotCommunicator, false, false);
             ProjectService.executeWorkflow("runnative", project);
             response.setCmd("runNative");
-            response.setCompiledCode(project.getCompiledHex());
+            response.setBinaryURL(project.getBinaryURL());
             addProjectResultToResponse(response, project);
             Statistics.info("ProgramRunNative", "LoggedIn", httpSessionState.isUserLoggedIn(), "success", project.hasSucceeded());
             return UtilForREST.responseWithFrontendInfo(response, httpSessionState, this.robotCommunicator);
@@ -259,7 +283,7 @@ public class ProjectWorkflowRestController {
             Project project = request2project(wfRequest, dbSession, httpSessionState, this.robotCommunicator, false, false);
             ProjectService.executeWorkflow("compilenative", project);
             response.setCmd("runNative");
-            response.setCompiledCode(project.getCompiledHex());
+            response.setBinaryURL(project.getBinaryURL());
             addProjectResultToResponse(response, project);
             Statistics.info("ProgramCompileNative", "LoggedIn", httpSessionState.isUserLoggedIn(), "success", project.hasSucceeded());
             return UtilForREST.responseWithFrontendInfo(response, httpSessionState, this.robotCommunicator);
@@ -293,7 +317,7 @@ public class ProjectWorkflowRestController {
             ProjectService.executeWorkflow("reset", project);
             response.setCmd("reset");
             response.setProgramName(project.getProgramName());
-            response.setCompiledCode(project.getCompiledHex());
+            response.setBinaryURL(project.getBinaryURL());
             addProjectResultToResponse(response, project);
             Statistics.info("ProgramReset", "LoggedIn", httpSessionState.isUserLoggedIn(), "success", project.hasSucceeded());
             return UtilForREST.responseWithFrontendInfo(response, httpSessionState, this.robotCommunicator);

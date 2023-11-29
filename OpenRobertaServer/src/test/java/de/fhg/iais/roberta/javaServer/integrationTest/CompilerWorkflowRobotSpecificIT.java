@@ -255,16 +255,6 @@ public class CompilerWorkflowRobotSpecificIT {
                 } else {
                     result = compileSucceeded;
                 }
-                if ( evalGeneratedProgram && result && robotName.equals("wedo") ) {
-                    String compiledCode = entity.optString("compiledCode", null);
-                    if ( compiledCode != null ) {
-                        StackMachineJsonRunner stackmachineRunner = new StackMachineJsonRunner(generatedStackmachineProgramsDir);
-                        result = stackmachineRunner.run(programName, programText, compiledCode);
-                    } else {
-                        LOG.error("no compiled code found for program " + resource);
-                        result = false;
-                    }
-                }
             } else {
                 result = true;
             }

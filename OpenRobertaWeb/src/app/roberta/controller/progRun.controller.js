@@ -202,12 +202,9 @@ function runForAutoConnection(result) {
     GUISTATE_C.setState(result);
     if (result.rc == 'ok') {
         var filename = (result.programName || GUISTATE_C.getProgramName()) + '.' + GUISTATE_C.getBinaryFileExtension();
-        if (GUISTATE_C.getBinaryFileExtension() === 'bin' || GUISTATE_C.getBinaryFileExtension() === 'uf2') {
-            result.compiledCode = UTIL.base64decode(result.compiledCode);
-        }
         if (GUISTATE_C.isProgramToDownload() || navigator.userAgent.toLowerCase().match(/iPad|iPhone|android/i) !== null) {
             // either the user doesn't want to see the modal anymore or he uses a smartphone / tablet, where you cannot choose the download folder.
-            UTIL.download(filename, result.compiledCode);
+            UTIL.downloadFromUrl(filename, window.location.origin + '/' + result.binaryURL);
             setTimeout(function () {
                 GUISTATE_C.setConnectionState('wait');
             }, 5000);
@@ -217,9 +214,8 @@ function runForAutoConnection(result) {
                 GUISTATE_C.setConnectionState('wait');
             }, 5000);
             MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
-        } else {
-            createDownloadLink(filename, result.compiledCode);
-
+        } else if (result.binaryURL) {
+            createDownloadLink(filename, window.location.origin + '/' + result.binaryURL);
             var textH = $('#popupDownloadHeader').text();
             $('#popupDownloadHeader').text(textH.replace('$', $.trim(GUISTATE_C.getRobotRealName())));
             for (var i = 1; Blockly.Msg['POPUP_DOWNLOAD_STEP_' + i]; i++) {
@@ -267,6 +263,9 @@ function runForAutoConnection(result) {
             });
 
             $('#save-client-compiled-program').modal('show');
+        } else {
+            GUISTATE_C.setConnectionState('wait');
+            MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
         }
     } else {
         GUISTATE_C.setConnectionState('wait');
@@ -291,24 +290,22 @@ function runForJSPlayConnection(result) {
         GUISTATE_C.setConnectionState('wait');
         MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
     } else {
-        var wavFileContent = UTIL.base64decode(result.compiledCode);
         var audio;
         $('#changedDownloadFolder').addClass('hidden');
-
         //This detects IE11 (and IE11 only), see: https://developer.mozilla.org/en-US/docs/Web/API/Window/crypto
         if (window.msCrypto) {
             //Internet Explorer (all ver.) does not support playing WAV files in the browser
             //If the user uses IE11 the file will not be played, but downloaded instead
             //See: https://caniuse.com/#feat=wav, https://www.w3schools.com/html/html5_audio.asp
-            createDownloadLink(GUISTATE_C.getProgramName() + '.wav', wavFileContent);
+            UTIL.downloadFromUrl(GUISTATE_C.getProgramName() + '.wav', window.location.origin + '/' + result.binaryURL);
         } else {
             //All non-IE browsers can play WAV files in the browser, see: https://www.w3schools.com/html/html5_audio.asp
             $('#OKButtonModalFooter').addClass('hidden');
-            var contentAsBlob = new Blob([wavFileContent], {
-                type: 'audio/wav',
+            getBlobFromURL(result.binaryURL).then((blob) => {
+                var audioBlob = new Blob([blob], { type: 'audio/wav' });
+                var audio = new Audio(URL.createObjectURL(audioBlob));
+                createPlayButton(audio);
             });
-            audio = new Audio(window.URL.createObjectURL(contentAsBlob));
-            createPlayButton(audio);
         }
 
         var textH = $('#popupDownloadHeader').text();
@@ -363,10 +360,13 @@ function runForAgentConnection(result) {
     $('#head-navi-icon-robot').addClass('busy');
     GUISTATE_C.setState(result);
     if (result.rc == 'ok') {
-        SOCKET_C.uploadProgram(result.compiledCode, GUISTATE_C.getRobotPort());
-        setTimeout(function () {
-            GUISTATE_C.setConnectionState('error');
-        }, 5000);
+        //TODO TEST THIS
+        getBinaryStringFromURL(result.binaryURL).then((compiledCode) => {
+            SOCKET_C.uploadProgram(compiledCode, GUISTATE_C.getRobotPort());
+            setTimeout(function () {
+                GUISTATE_C.setConnectionState('error');
+            }, 5000);
+        });
     } else {
         GUISTATE_C.setConnectionState('error');
     }
@@ -446,24 +446,56 @@ function stopProgram() {
 function runForWebviewConnection(result) {
     MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName());
     if (result.rc === 'ok') {
-        var programSrc = result.compiledCode;
-        var program = JSON.parse(programSrc);
-        interpreter = WEBVIEW_C.getInterpreter(program);
-        if (interpreter !== null) {
-            GUISTATE_C.setConnectionState('busy');
-            blocklyWorkspace.robControls.switchToStop();
-            try {
-                runStepInterpreter();
-            } catch (error) {
-                interpreter.terminate();
-                interpreter = null;
-                alert(error);
+        getBinaryStringFromURL(result.binaryURL).then((compiledCode) => {
+            var program = JSON.parse(compiledCode);
+            interpreter = WEBVIEW_C.getInterpreter(program);
+            if (interpreter !== null) {
+                GUISTATE_C.setConnectionState('busy');
+                blocklyWorkspace.robControls.switchToStop();
+                try {
+                    runStepInterpreter();
+                } catch (error) {
+                    interpreter.terminate();
+                    interpreter = null;
+                    alert(error);
+                }
             }
-        }
-        // TODO
+        });
     }
 }
-
+/**
+ * Fetches a Blob from a URL and returns it.
+ *
+ * @param {string} url - The URL to fetch the Blob from.
+ * @returns {Promise<Blob>} A promise that resolves to the fetched Blob.
+ **/
+async function getBlobFromURL(url) {
+    const response = await fetch(url, { method: 'GET' });
+    return await response.blob();
+}
+/**
+ * Fetches binaryFile from a URL and returns it as a string.
+ *
+ * @param {string} url - The URL to fetch data from.
+ * @returns {Promise<string>} A promise that resolves to the binary string.
+ *
+ * @example
+ * // Using .then:
+ * getBinaryStringFromURL('your_url_here')
+ *   .then(compiledCode => {
+ *     console.log(compiledCode); // Use the compiledCode here
+ *   });
+ *   */
+async function getBinaryStringFromURL(url) {
+    const blob = await getBlobFromURL(url);
+    return await new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = function () {
+            resolve(reader.result);
+        };
+        reader.readAsText(blob);
+    });
+}
 function runStepInterpreter() {
     if (!interpreter.isTerminated() && !reset) {
         var maxRunTime = new Date().getTime() + 100;
@@ -497,57 +529,36 @@ function timeout(callback, durationInMilliSec) {
 }
 
 /**
- * Creates a blob from the program content for file download and a
- * click-able html download link for the blob: <a download="PROGRAM_NAME"
- * href="CONTENT_AS_BLOB" style="font-size:36px">PROGRAM_NAME</a>
- *
- * This is needed f.e. for Calliope where the file has to be downloaded and
- * copied onto the brick manually
- *
+ * Creates a click-able html download link from the given URL.
  * @param fileName
  *            the file name (for PROGRAM_NAME)
- * @param content
- *            for the blob (for CONTENT_AS_BLOB)
+ * @param url
+ *            url directing to content path
  */
-function createDownloadLink(fileName, content) {
+function createDownloadLink(fileName, url) {
     if (!('msSaveOrOpenBlob' in navigator)) {
         $('#trA').removeClass('hidden');
     } else {
         $('#trA').addClass('hidden');
-        UTIL.download(fileName, content);
+        UTIL.downloadFromUrl(fileName, url);
         GUISTATE_C.setConnectionState('error');
     }
+
     var downloadLink;
-    if ('Blob' in window) {
-        var contentAsBlob = new Blob([content], {
-            type: 'application/octet-stream',
-        });
-        if ('msSaveOrOpenBlob' in navigator) {
-            navigator.msSaveOrOpenBlob(contentAsBlob, fileName);
-        } else {
-            downloadLink = document.createElement('a');
-            downloadLink.download = fileName;
-            downloadLink.innerHTML = fileName;
-            downloadLink.href = window.URL.createObjectURL(contentAsBlob);
-        }
-    } else {
-        downloadLink = document.createElement('a');
-        downloadLink.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(content));
-        downloadLink.setAttribute('download', fileName);
-        downloadLink.style.display = 'none';
-    }
+    downloadLink = document.createElement('a');
+    downloadLink.download = fileName;
+    downloadLink.innerHTML = fileName;
+    downloadLink.href = url;
 
     //create link with content
-    if (downloadLink && !('msSaveOrOpenBlob' in navigator)) {
-        var programLinkDiv = document.createElement('div');
-        programLinkDiv.setAttribute('id', 'programLink');
-        var linebreak = document.createElement('br');
-        programLinkDiv.setAttribute('style', 'text-align: center;');
-        programLinkDiv.appendChild(linebreak);
-        programLinkDiv.appendChild(downloadLink);
-        downloadLink.setAttribute('style', 'font-size:36px');
-        $('#downloadLink').append(programLinkDiv);
-    }
+    var programLinkDiv = document.createElement('div');
+    programLinkDiv.setAttribute('id', 'programLink');
+    var linebreak = document.createElement('br');
+    programLinkDiv.setAttribute('style', 'text-align: center;');
+    programLinkDiv.appendChild(linebreak);
+    programLinkDiv.appendChild(downloadLink);
+    downloadLink.setAttribute('style', 'font-size:36px');
+    $('#downloadLink').append(programLinkDiv);
 }
 
 /**

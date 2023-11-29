@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.components;
 
 import java.io.StringWriter;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -63,6 +64,7 @@ public final class Project {
     private ConfigurationAst configuration = null;
     private StringBuilder sourceCodeBuilder = new StringBuilder();
     private String compiledHex = "";
+    private String binaryURL = "";
     private Key result = Key.COMPILERWORKFLOW_PROJECT_BUILD_SUCCESS;
     private int errorCounter = 0;
     private JSONObject configurationJSON;
@@ -247,6 +249,14 @@ public final class Project {
     public String getCompiledHex() {
         return this.compiledHex;
     }
+    
+    public String getBinaryURL(){
+        return this.binaryURL;
+    }
+    public void setBinaryURLPath(String path){
+        this.binaryURL = "rest/projectWorkflow/getBinary/" + URLEncoder.encode(path);
+    }
+    
 
     public void setCompiledHex(String compiledHex) {
         this.compiledHex = compiledHex;

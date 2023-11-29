@@ -508,6 +508,35 @@ function download(fileName, content) {
     }
 }
 
+function downloadFromUrl(fileName, url) {
+    if ('msSaveOrOpenBlob' in navigator) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', url, true);
+        xhr.responseType = 'blob';
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                var blob = xhr.response;
+                navigator.msSaveOrOpenBlob(blob, fileName);
+            } else {
+                console.error('Request failed with status:', xhr.status);
+            }
+        };
+        xhr.send();
+    } else {
+        var downloadLink;
+        downloadLink = document.createElement('a');
+        downloadLink.download = fileName;
+        downloadLink.innerHTML = 'Download File';
+        downloadLink.href = url;
+        downloadLink.onclick = destroyClickedElement;
+        downloadLink.style.display = 'none';
+        document.body.appendChild(downloadLink);
+        setTimeout(function () {
+            downloadLink.click();
+        }, 0);
+    }
+}
+
 function getHashFrom(string) {
     var hash = 0;
     for (var i = 0; i < string.length; i++) {
@@ -1141,6 +1170,7 @@ export {
     sgn,
     getBasename,
     download,
+    downloadFromUrl,
     getHashFrom,
     countBlocks,
     isLocalStorageAvailable,

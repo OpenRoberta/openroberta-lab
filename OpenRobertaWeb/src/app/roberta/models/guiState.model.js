@@ -41,7 +41,7 @@ function init() {
     gui.multipleSim = false;
     gui.markerSim = false;
     gui.nn = false;
-    gui.nnActivations = {};
+    gui.availableNNActivationFunctions = {};
     gui.webotsSim = false;
     gui.webotsUrl = '';
     gui.fileExtension = '';
