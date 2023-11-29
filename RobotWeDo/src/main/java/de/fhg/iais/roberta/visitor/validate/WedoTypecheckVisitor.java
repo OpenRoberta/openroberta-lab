@@ -13,6 +13,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
+import de.fhg.iais.roberta.typecheck.Sig;
 import de.fhg.iais.roberta.visitor.IWeDoVisitor;
 
 public class WedoTypecheckVisitor extends TypecheckCommonLanguageVisitor implements IWeDoVisitor<BlocklyType> {
@@ -27,12 +28,13 @@ public class WedoTypecheckVisitor extends TypecheckCommonLanguageVisitor impleme
 
     @Override
     public BlocklyType visitShowTextAction(ShowTextAction showTextAction) {
-        return BlocklyType.VOID;
+        return Sig.of(BlocklyType.VOID, BlocklyType.ANY).typeCheckPhrases(showTextAction, this,
+            showTextAction.msg);
     }
 
     @Override
     public BlocklyType visitRgbLedOnAction(RgbLedOnAction rgbLedOnAction) {
-        return BlocklyType.VOID;
+        return Sig.of(BlocklyType.VOID, BlocklyType.COLOR).typeCheckPhrases(rgbLedOnAction, this, rgbLedOnAction.colour);
     }
 
     @Override
@@ -42,7 +44,8 @@ public class WedoTypecheckVisitor extends TypecheckCommonLanguageVisitor impleme
 
     @Override
     public BlocklyType visitMotorOnAction(MotorOnAction motorOnAction) {
-        return BlocklyType.VOID;
+        return Sig.of(BlocklyType.VOID, BlocklyType.NUMBER, BlocklyType.NUMBER).typeCheckPhrases(motorOnAction, this,
+            motorOnAction.param.getSpeed(), motorOnAction.param.getDuration().getValue());
     }
 
     @Override
@@ -52,7 +55,7 @@ public class WedoTypecheckVisitor extends TypecheckCommonLanguageVisitor impleme
 
     @Override
     public BlocklyType visitToneAction(ToneAction toneAction) {
-        return BlocklyType.VOID;
+        return Sig.of(BlocklyType.VOID, BlocklyType.NUMBER, BlocklyType.NUMBER).typeCheckPhrases(toneAction, this, toneAction.frequency, toneAction.duration);
     }
 
     @Override

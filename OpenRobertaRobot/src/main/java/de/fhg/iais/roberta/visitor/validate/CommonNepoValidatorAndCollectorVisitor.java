@@ -29,6 +29,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.NNGetWeight;
 import de.fhg.iais.roberta.syntax.lang.expr.NullConst;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
+import de.fhg.iais.roberta.syntax.lang.expr.StmtExprExprly;
 import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Unary;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
@@ -108,6 +109,16 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
         List<NepoInfo> infosOfSubAst = InfoCollector.collectInfos(evalExpr);
         if ( !infosOfSubAst.isEmpty() ) {
             addErrorToPhrase(evalExpr, "PROGRAM_ERROR_EXPRBLOCK_TYPECHECK");
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitStmtExprExprly(StmtExprExprly stmtEvalExpr) {
+        requiredComponentVisited(stmtEvalExpr, stmtEvalExpr.exprAsBlock);
+        List<NepoInfo> infosOfSubAst = InfoCollector.collectInfos(stmtEvalExpr);
+        if ( !infosOfSubAst.isEmpty() ) {
+            addErrorToPhrase(stmtEvalExpr, "PROGRAM_ERROR_EXPRBLOCK_TYPECHECK");
         }
         return null;
     }

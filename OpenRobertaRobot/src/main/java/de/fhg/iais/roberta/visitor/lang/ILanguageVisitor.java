@@ -23,6 +23,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.expr.SensorExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.StmtExpr;
+import de.fhg.iais.roberta.syntax.lang.expr.StmtExprExprly;
 import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Unary;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
@@ -88,6 +89,8 @@ public interface ILanguageVisitor<V> extends IVisitor<V> {
     V visitActionStmt(ActionStmt actionStmt);
 
     V visitEvalExpr(EvalExpr evalExpr);
+
+    V visitStmtExprExprly(StmtExprExprly stmtEvalExpr);
 
     V visitExprStmt(ExprStmt exprStmt);
 

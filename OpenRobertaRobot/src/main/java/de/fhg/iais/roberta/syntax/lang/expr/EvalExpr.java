@@ -77,7 +77,7 @@ public final class EvalExpr extends Expr {
 
     @Override
     public Block ast2xml() {
-        if ( true ) {
+        if ( false ) {
             String blocklyName = this.getBlocklyType().getBlocklyName();
             Block jaxbDestination = new Block();
             Mutation mutation = new Mutation();
@@ -105,10 +105,10 @@ public final class EvalExpr extends Expr {
         astOfExpr.setReadOnly();
 
         EvalExpr evalExpr = new EvalExpr(expr, astOfExpr, type, properties);
-        for ( NepoInfo nepoInfo : annotations ) {
-            evalExpr.addInfo(nepoInfo);
+        for ( NepoInfo info : annotations ) {
+            evalExpr.addNepoInfo(info);
         }
-        return (Phrase) evalExpr;
+        return evalExpr;
     }
 
     /**
@@ -146,13 +146,11 @@ public final class EvalExpr extends Expr {
     /**
      * retrieve typecheck errors from the AST sub-tree of this EvalExpr block.
      * They must be elevated to this block, because the EvalExpr block is explicitly designed to hide the sub-tree.
-     *
-     * @return the number of <b>errors</b> detected during this type check visit
      */
     public void elevateNepoInfos() {
         List<NepoInfo> infos = InfoCollector.collectInfos(this);
         for ( NepoInfo info : infos ) {
-            addInfo(info);
+            addNepoInfo(info);
         }
     }
 }

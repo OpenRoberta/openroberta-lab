@@ -73,7 +73,6 @@ public class TypecheckEvalExprTest extends AstTest {
         testEvalExpr(STRING, "sqrt_1_2", false);
 
         // LiteralExp:
-        // TODO: ConstStr error, must be solved! testEvalExpr(STRING, "Hello world!", true);
         testEvalExpr(COLOR, "#green", true);
         testEvalExpr(COLOR, "#none", true);
         testEvalExpr(COLOR, "#BLACK", false);
@@ -155,6 +154,7 @@ public class TypecheckEvalExprTest extends AstTest {
         // FNAME or Functions
         // math Trigonometric Functions
         testEvalExpr(NUMBER, "sin(n)", true);
+        testEvalExpr(NUMBER, "sin(n,n)", false);
         testEvalExpr(NUMBER, "cos(b)", false);
         testEvalExpr(NUMBER, "(sin(45)+cos(45))*tan(60)", true);
         testEvalExpr(BOOL, "Acos(45)", false);
@@ -168,6 +168,8 @@ public class TypecheckEvalExprTest extends AstTest {
         // random Functions
         testEvalExpr(NUMBER, "randInt(1,100)", true);
         testEvalExpr(NUMBER, "randFloat()", true);
+        testEvalExpr(NUMBER, "randFloat(12)", false);
+        testEvalExpr(NUMBER, "randFloat(true)", false);
         testEvalExpr(NUMBER, "randFloat", false);
 
         // round Functions
@@ -200,6 +202,7 @@ public class TypecheckEvalExprTest extends AstTest {
         testEvalExpr(NUMBER, "min(nl)", true);
         testEvalExpr(NUMBER, "max(nl)*avg(nl)", true);
         testEvalExpr(NUMBER, "sum(nl)", true);
+        testEvalExpr(NUMBER, "sum(n)", false);
         testEvalExpr(NUMBER, "median(cl)", false);
         testEvalExpr(NUMBER, "min([4,0,-2])", true);
         testEvalExpr(NUMBER, "median([80,10,10])", true);
@@ -258,7 +261,10 @@ public class TypecheckEvalExprTest extends AstTest {
         testEvalExpr(ARRAY_STRING, "subListFromEndToEnd([1,2,3,4,5,6],5,4)", false);
 
         // TextJoin Functions
-        testEvalExpr(STRING, "createTextWith(s,12,true,#black)", true);
+        testEvalExpr(STRING, "createTextWith(s,12,true,#red)", true);
+        testEvalExpr(STRING, "createTextWith(s)", true);
+        testEvalExpr(STRING, "createTextWith(#green,#red)", true);
+        testEvalExpr(STRING, "createTextWith(true,'true',12)", true);
         testEvalExpr(STRING, "createTextWith(True,#green)", false);
         testEvalExpr(BOOL, "createTextWith(s,nl,false)", false);
 
@@ -267,8 +273,11 @@ public class TypecheckEvalExprTest extends AstTest {
         testEvalExpr(STRING, "constrain(102,1,100)", false);
 
         // RGBColor Function:
-        testEvalExpr(COLOR, "getRGB(0,0,0)", true);
         testEvalExpr(COLOR, "getRGB(n,n,n)", true);
+        testEvalExpr(COLOR, "getRGB(1,2,3)", true);
+        testEvalExpr(COLOR, "getRGB(1,2,3,4)", true);
+        testEvalExpr(COLOR, "getRGB(1,2,3,4,5)", false);
+        testEvalExpr(COLOR, "getRGB(1)", false);
         testEvalExpr(COLOR, "getRGB(s,0,0)", false);
 
         // TODO: print test
@@ -282,10 +291,7 @@ public class TypecheckEvalExprTest extends AstTest {
      */
     public void testEvalExprForDebug() throws Exception {
         errorMessages = new ArrayList<>();
-        testEvalExpr(STRING, "createTextWith(1)", true);
-        testEvalExpr(STRING, "createTextWith(1,2,3,4)", true);
-        testEvalExpr(STRING, "createTextWith(1,2,3,4,5,6)", true);
-        testEvalExpr(STRING, "createTextWith(#black,12)", true);
+        testEvalExpr(BlocklyType.ARRAY_NUMBER, "[1,2,3,4,5]", true);
         showErrorsAndFailWithErrors();
     }
 

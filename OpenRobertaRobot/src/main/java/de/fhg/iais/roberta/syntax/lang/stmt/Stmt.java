@@ -10,7 +10,6 @@ import de.fhg.iais.roberta.util.ast.BlocklyProperties;
  * - {@link #getAs(Class)}<br>
  */
 public abstract class Stmt extends Phrase {
-
     public Stmt(BlocklyProperties properties) {
         super(properties);
         this.setBlocklyType(BlocklyType.VOID);

@@ -1,5 +1,5 @@
 grammar Exprly;
- 
+
 expression: expr EOF
          ;
 
@@ -24,8 +24,24 @@ expr     : NULL                                                      # NullConst
          | expr op=LET expr                                          # BinaryB
          | expr op=GEQ expr                                          # BinaryB
          | expr op=LEQ expr                                          # BinaryB
-         | expr '?' expr ':' expr									                   # IfElseOp
-         ; 
+         | expr '?' expr ':' expr									 # IfElseOp
+         ;
+
+statementList: (stmt';')*
+         ;
+
+stmt:    FNAMESTMT '(' ( expr (',' expr)* )? ')'                                                                                         # StmtFunc
+        | VAR op=SET  expr                                                                                                               # BinaryVarAssign
+        | IF '(' expr ')' '{' statementList '}' (ELSEIF '(' expr ')' '{' statementList '}')* (op=ELSE '{' statementList '}')?            # ConditionStatementBlock
+        | REPEATINF '{' statementList '}'                                                                                                # RepeatIndefinitely
+        | REPEATFOR VAR '=''(' expr ','expr ','expr')' '{' statementList '}'                                                            # RepeatFor
+        | op= (REPEATTIMES  | REPEATUNTIL | REPEATWHILE  )'(' expr ')' '{' statementList '}'                                             # RepeatStatement
+        | REPEATFOREACH '(' PRIMITIVETYPE  VAR ':' expr ')' '{' statementList '}'                                                        # RepeatForEach
+        | WAIT '(' expr ')' '{' statementList '}' (op=ORWAITFOR '(' expr ')' '{' statementList '}')*                                     # WaitStatement
+        | op= (BREAK | CONTINUE )                                                                                                        # FlowControl
+        | WAITMS'(' expr ')'                                                                                                             # WaitTimeStatement
+        ;
+
 
 literal  : COLOR                                                     # Col
          | INT                                                       # IntConst
@@ -38,99 +54,126 @@ literal  : COLOR                                                     # Col
 connExpr : 'connect' op0=(STR|VAR) ',' op1=(STR|VAR)                 # Conn
          ;
 
-funCall  : FNAME '(' ( expr (',' expr)* )? ')'                       # Func
-		     ;
-		
+funCall  : FNAME '(' ( expr (',' expr)* )? ')'                      # Func
+		 ;
+
 // LEXER RULES
-NEWLINE   :    '\r'? '\n'  -> skip;
+IF              :   'if';
+ELSEIF          :   'elseif';
+ELSE            :   'else';
 
-WS        :    (' '|'\t')+ -> skip;
+REPEATINF       :   'repeatInf';
+REPEATTIMES     :   'repeatTimes';
+REPEATUNTIL     :   'repeatUntil';
+REPEATWHILE     :   'repeatWhile';
+REPEATFOR       :   'repeatFor';
+REPEATFOREACH   :   'for';
+BREAK           :   'break';
+CONTINUE        :   'continue';
+WAIT            :   'waitUntil';
+ORWAITFOR       :   'orWaitFor';
+WAITMS          :   'waitMs';
 
-FNAME   :  'sin'
-        |  'cos'
-        |  'tan'
-        |  'asin'
-        |  'acos'
-        |  'atan'
-        |  'exp'
-        |  'square'
-        |  'sqrt'
-        |  'abs'
-        |  'log10'
-        |  'ln'
-        |  'randInt'
-        |  'randFloat' 
-        |  'randItem'
-        |  'roundDown'
-        |  'roundUp'
-        |  'round'
-        |  'isEven'
-        |  'isOdd'
-        |  'isPrime'
-        |  'isWhole'
-        |  'isEmpty'
-        |  'isPositive'
-        |  'isNegative'
-        |  'isDivisibleBy'
-        |  'sum'
-        |  'max'
-        |  'min'
-        |  'avg'
-        |  'median'
-        |  'sd'
-        |  'lengthOf'
-        |  'indexOfFirst'
-        |  'indexOfLast'
-        |  'setIndex'
-        |  'setIndexFromEnd'
-        |  'setIndexFirst'
-        |  'setIndexLast'
-        |  'insertIndex'
-        |  'insertIndexFromEnd'
-        |  'insertIndexFirst'
-        |  'insertIndexLast'
-        |  'getIndex'
-        |  'getIndexFromEnd'
-        |  'getIndexFirst'
-        |  'getIndexLast'
-        |  'getAndRemoveIndex'
-        |  'getAndRemoveIndexFromEnd'
-        |  'getAndRemoveIndexFirst'
-        |  'getAndRemoveIndexLast'
-        |  'removeIndex'
-        |  'removeIndexFromEnd'
-        |  'removeIndexFirst'
-        |  'removeIndexLast'
-        |  'repeatList'
-        |  'subList'
-        |  'subListFromIndexToLast'
-        |  'subListFromIndexToEnd'
-        |  'subListFromFirstToIndex'
-        |  'subListFromFirstToLast'
-        |  'subListFromFirstToEnd'
-        |  'subListFromEndToIndex'
-        |  'subListFromEndToEnd'
-        |  'subListFromEndToLast'
-        |  'print'
-        |  'createTextWith'
-        |  'constrain'
-        |  'getRGB'
+
+PRIMITIVETYPE   :   'number'
+                |    'boolean'
+                |    'string'
+                |    'color'
+                |    'connection'
+                ;
+
+NEWLINE : '\r'? '\n'  -> skip;
+
+WS      : (' '|'\t')+ -> skip;
+
+FNAME   : 'sin'
+        | 'cos'
+        | 'tan'
+        | 'asin'
+        | 'acos'
+        | 'atan'
+        | 'exp'
+        | 'square'
+        | 'sqrt'
+        | 'abs'
+        | 'log10'
+        | 'ln'
+        | 'randInt'
+        | 'randFloat'
+        | 'randItem'
+        | 'roundDown'
+        | 'roundUp'
+        | 'round'
+        | 'isEven'
+        | 'isOdd'
+        | 'isPrime'
+        | 'isWhole'
+        | 'isEmpty'
+        | 'isPositive'
+        | 'isNegative'
+        | 'isDivisibleBy'
+        | 'sum'
+        | 'max'
+        | 'min'
+        | 'avg'
+        | 'median'
+        | 'sd'
+        | 'lengthOf'
+        | 'indexOfFirst'
+        | 'indexOfLast'
+        | 'getIndex'
+        | 'getIndexFromEnd'
+        | 'getIndexFirst'
+        | 'getIndexLast'
+        | 'getAndRemoveIndex'
+        | 'getAndRemoveIndexFromEnd'
+        | 'getAndRemoveIndexFirst'
+        | 'getAndRemoveIndexLast'
+        | 'repeatList'
+        | 'subList'
+        | 'subListFromIndexToLast'
+        | 'subListFromIndexToEnd'
+        | 'subListFromFirstToIndex'
+        | 'subListFromFirstToLast'
+        | 'subListFromFirstToEnd'
+        | 'subListFromEndToIndex'
+        | 'subListFromEndToEnd'
+        | 'subListFromEndToLast'
+        | 'print'
+        | 'createTextWith'
+        | 'constrain'
+        | 'getRGB'
         ;
-        
-CONST   :  'phi'
-        |  'pi'
-        |  'e'
-        |  'sqrt2'
-        |  'sqrt_1_2'
-        |  'inf'
+
+FNAMESTMT: 'showText'
+        | 'setIndex'
+        | 'setIndexFromEnd'
+        | 'setIndexFirst'
+        | 'setIndexLast'
+        | 'insertIndex'
+        | 'insertIndexFromEnd'
+        | 'insertIndexFirst'
+        | 'insertIndexLast'
+        | 'removeIndex'
+        | 'removeIndexFromEnd'
+        | 'removeIndexFirst'
+        | 'removeIndexLast'
         ;
-        
+
+CONST   : 'phi'
+        | 'pi'
+        | 'e'
+        | 'sqrt2'
+        | 'sqrt_1_2'
+        | 'inf'
+        ;
+
 NULL    : 'null';
 
-INT     :    ('0'..'9')+;
+INT     : ('0'..'9')+;
 
-FLOAT   :    INT+ '.' INT*
-        |    '.' INT+
+FLOAT   : INT+ '.' INT*
+        | '.' INT+
         ;
 
 COLOR   : '#black'
@@ -144,24 +187,26 @@ COLOR   : '#black'
         | '#rgb(' HEX HEX HEX HEX HEX HEX ')'
         ;
 
-BOOL    :  'true' | 'false';
-HEX     :  ('A'..'F'|'0'..'9');
+BOOL    : 'true' | 'false';
+HEX     : ('A'..'F'|'0'..'9');
 
-VAR     :  ('a'..'z')('a'..'z'|'A'..'Z'|'0'..'9'|'_')*;
-STR     :  ('a'..'z'|'A'..'Z'|'0'..'9')+;
+VAR     : ('a'..'z')('a'..'z'|'A'..'Z'|'0'..'9'|'_')*;
+STR     : ('a'..'z'|'A'..'Z'|'0'..'9')+;
+SET     :'=';
+AND     : '&&';
+OR      : '||';
+NOT     : '!';
+EQUAL   : '==';
+NEQUAL  : '!=';
+GET     : '>';
+LET     : '<';
+GEQ     : '>=';
+LEQ     : '<=';
+MOD     : '%';
+POW     : '^';
+MUL     : '*';
+DIV     : '/';
+ADD     : '+';
+SUB     : '-';
 
-AND     :   '&&';
-OR      :   '||';
-NOT     :   '!';
-EQUAL   :   '=='; 
-NEQUAL  :   '!=';
-GET     :   '>';
-LET     :   '<';
-GEQ     :   '>=';
-LEQ     :   '<=';
-MOD     :   '%';
-POW     :   '^';
-MUL     :   '*';
-DIV     :   '/';
-ADD     :   '+';
-SUB     :   '-';
+

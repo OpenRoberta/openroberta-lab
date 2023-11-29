@@ -68,11 +68,16 @@ public enum FunctionNames {
     //IndexOfFunct:
     INDEXOF(Sig.of(BlocklyType.NUMBER, BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE_ARRAY_ITEM), "indexOfFirst", "indexOfLast"),
 
+    // ListSetIndex:
+    SETINDEX(Sig.of(BlocklyType.VOID, BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE_ARRAY_ITEM, BlocklyType.NUMBER), "setIndex", "setIndexFromEnd", "insertIndex", "insertIndexFromEnd"),
+    SETINDEXFIRSTORLAST(Sig.of(BlocklyType.VOID, BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE_ARRAY_ITEM), "setIndexFirst", "setIndexLast", "insertIndexFirst", "insertIndexLast"),
+
     // ListGetIndex:
     GETLISTELEMENT(Sig.of(BlocklyType.CAPTURED_TYPE_ARRAY_ITEM, BlocklyType.CAPTURED_TYPE, BlocklyType.NUMBER), "getIndex", "getIndexFromEnd", "getAndRemoveIndex", "getAndRemoveIndexFromEnd"),
     GETFIRST(Sig.of(BlocklyType.CAPTURED_TYPE_ARRAY_ITEM, BlocklyType.CAPTURED_TYPE), "getIndexFirst", "getAndRemoveIndexFirst"),
     GETLAST(Sig.of(BlocklyType.CAPTURED_TYPE_ARRAY_ITEM, BlocklyType.CAPTURED_TYPE), "getIndexLast", "getAndRemoveIndexLast"),
-
+    REMOVE(Sig.of(BlocklyType.VOID, BlocklyType.CAPTURED_TYPE, BlocklyType.NUMBER), "removeIndex", "removeIndexFromEnd"),
+    REMOVEFIRSTORLAST(Sig.of(BlocklyType.VOID, BlocklyType.CAPTURED_TYPE), "removeIndexFirst", "removeIndexLast"),
     //ListRepeat:
     LISTS_REPEAT(Sig.of(BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE_ARRAY_ITEM, BlocklyType.NUMBER), "repeatList"),
 
@@ -89,7 +94,7 @@ public enum FunctionNames {
     //  IsListEmptyFunct:
     LIST_IS_EMPTY(Sig.of(BlocklyType.BOOLEAN, BlocklyType.CAPTURED_TYPE), "isEmpty"),
     //RgbColor:
-    GETRGB(Sig.of(BlocklyType.COLOR, BlocklyType.NUMBER, BlocklyType.NUMBER, BlocklyType.NUMBER), "getRGB"),
+    GETRGB(Sig.of(BlocklyType.COLOR, BlocklyType.VARARGS, BlocklyType.NUMBER), "getRGB"),
     //MathPowerFunct:
     POWER(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER, BlocklyType.NUMBER), "^"),
 

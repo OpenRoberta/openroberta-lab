@@ -200,7 +200,8 @@ public final class UnitTestHelper {
     }
 
     public static Phrase getProgramAstFromExportXml(RobotFactory factory, String xml) {
-        Project.Builder builder = setupWithExportXML(factory, xml);
+        String configXml = Util.readResourceContent(xml);
+        Project.Builder builder = setupWithExportXML(factory, configXml);
         Project project = builder.build();
         return project.getProgramAst().getTree().get(0).get(1);
     }

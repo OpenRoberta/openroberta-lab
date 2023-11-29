@@ -10,6 +10,7 @@ import de.fhg.iais.roberta.util.ast.BlockDescriptor;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
+import de.fhg.iais.roberta.util.visitor.IInfoCollectable;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.TransformerVisitor;
 
@@ -23,7 +24,7 @@ import de.fhg.iais.roberta.visitor.TransformerVisitor;
  * <br>
  * The kind of the Phrase-object is described in the sub-object {@link #blockDescriptor}
  */
-abstract public class Phrase {
+abstract public class Phrase implements IInfoCollectable {
     private boolean readOnly = false;
     private final BlocklyProperties property;
     private final BlockDescriptor blockDescriptor;
@@ -130,11 +131,34 @@ abstract public class Phrase {
     }
 
     /**
-     * add an info (error, warning e.g.) to this phrase
+     * add an error to this phrase
+     */
+    public final void addError(String error) {
+        this.infos.addInfo(NepoInfo.error(error));
+    }
+
+    /**
+     * add a warning to this phrase
+     */
+    public final void addWarning(String warning) {
+        this.infos.addInfo(NepoInfo.warning(warning));
+    }
+
+    /**
+     * add an typecheck error to this phrase. Currently the real message is ignored and a standard message is added
+     *
+     * @param tc true: semantic error (typecheck); false: syntax error (parsing)
+     */
+    public final void addTcError(String error, boolean tc) {
+        this.infos.addInfo(tc ? NepoInfo.error("PROGRAM_ERROR_EXPRBLOCK_TYPECHECK") : NepoInfo.error("PROGRAM_ERROR_EXPRBLOCK_PARSE"));
+    }
+
+    /**
+     * add a NepoInfo object (error, warning e.g.) to this phrase
      *
      * @param info to be added
      */
-    public final void addInfo(NepoInfo info) {
+    public final void addNepoInfo(NepoInfo info) {
         this.infos.addInfo(info);
     }
 

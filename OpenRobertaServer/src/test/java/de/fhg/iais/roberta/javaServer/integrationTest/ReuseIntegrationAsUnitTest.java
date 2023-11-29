@@ -312,15 +312,15 @@ public class ReuseIntegrationAsUnitTest {
     @Test
     @Ignore
     public void testOneRobotSpecificProgramAsUnitTests() throws Exception {
-        String robotName = "edison";
-        String programName = "action";
+        String robotName = "microbitv2";
+        String programName = "messages";
         LOG.info("========= testing program " + programName + " for robot " + robotName);
         final String resourceDirectory = setupRobotFactoryAndGetResourceDirForRobotSpecificTests(robotName);
         runRegenerateAndCodeGenerationForOneRobotSpecificProgram(resourceDirectory, programName + ".xml", robotName, Collections.emptyList());
         checkAndShowTestResult();
     }
 
-    private void runRegenerateAndCodeGenerationForOneRobotSpecificProgram(
+    protected void runRegenerateAndCodeGenerationForOneRobotSpecificProgram(
         String resourceDirectoryWithPrograms, String fileNameWithRobotSpecificTestProgram,
         String robotName,
         List<String> excludedPrograms) //
@@ -586,7 +586,7 @@ public class ReuseIntegrationAsUnitTest {
         }
     }
 
-    private String setupRobotFactoryAndGetResourceDirForRobotSpecificTests(String robotName) {
+    protected String setupRobotFactoryAndGetResourceDirForRobotSpecificTests(String robotName) {
         setupRobotFactoryForRobot(robotName);
         JSONObject robot = robotsFromTestSpec.getJSONObject(robotName);
         final String robotDir = robot.getString("dir");

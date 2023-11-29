@@ -107,16 +107,16 @@ public enum BlocklyType {
     }
 
     public boolean hasAsSuperType(BlocklyType potentialSuperType) {
-        if ( this.equals(potentialSuperType) ) {
+        if ( this.equalAsTypes(potentialSuperType) ) {
             return true;
         } else if ( this.superTypes.length == 0 ) {
             return false;
         } else {
             for ( BlocklyType superType : this.superTypes ) {
-                if ( superType.equals(potentialSuperType) ) {
+                if ( superType.equalAsTypes(potentialSuperType) ) {
                     return true;
                 } else {
-                    if ( hasAsSuperType(superType) ) {
+                    if ( superType.hasAsSuperType(potentialSuperType) ) {
                         return true;
                     }
                 }
@@ -135,7 +135,7 @@ public enum BlocklyType {
                 return bt;
             }
         }
-        throw new DbcException("for element type " + this + " no matching array type");
+        return BlocklyType.VOID;
     }
 
     public BlocklyType getMatchingElementTypeForArrayType() {

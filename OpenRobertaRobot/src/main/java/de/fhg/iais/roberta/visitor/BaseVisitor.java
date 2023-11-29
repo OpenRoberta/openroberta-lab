@@ -11,6 +11,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.FunctionExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.MethodExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.SensorExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.StmtExpr;
+import de.fhg.iais.roberta.syntax.lang.expr.StmtExprExprly;
 import de.fhg.iais.roberta.syntax.lang.stmt.ActionStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.ExprStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.FunctionStmt;
@@ -109,6 +110,10 @@ public abstract class BaseVisitor<V> implements ILanguageVisitor<V> {
      */
     public V visitEvalExpr(EvalExpr evalExpr) {
         return evalExpr.exprAsBlock.accept(this);
+    }
+
+    public V visitStmtExprExprly(StmtExprExprly stmtEvalExpr) {
+        return stmtEvalExpr.exprAsBlock.accept(this);
     }
 
     /**

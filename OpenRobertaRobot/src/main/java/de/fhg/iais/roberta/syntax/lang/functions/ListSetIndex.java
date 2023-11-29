@@ -65,8 +65,8 @@ public final class ListSetIndex extends Function {
         String op = Jaxb2Ast.extractField(fields, BlocklyConstants.MODE);
 
         List<ExprParam> exprParams = new ArrayList<ExprParam>();
-        exprParams.add(new ExprParam(BlocklyConstants.LIST, BlocklyType.STRING));
-        exprParams.add(new ExprParam(BlocklyConstants.TO, BlocklyType.NUMBER_INT));
+        exprParams.add(new ExprParam(BlocklyConstants.LIST, BlocklyType.CAPTURED_TYPE));
+        exprParams.add(new ExprParam(BlocklyConstants.TO, BlocklyType.CAPTURED_TYPE_ARRAY_ITEM));
         if ( block.getMutation().isAt() ) {
             exprParams.add(new ExprParam(BlocklyConstants.AT, BlocklyType.NUMBER_INT));
         }
