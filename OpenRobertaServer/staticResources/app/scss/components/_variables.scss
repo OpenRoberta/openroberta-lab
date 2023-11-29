@@ -35,12 +35,12 @@ $border-radius--standard: rem(5px);
     background-repeat: no-repeat;
     background-size: contain;
     position: absolute;
-    bottom: rem(20px);
-    right: rem(30px);
+    bottom: rem(15px);
+    right: rem(20px);
     @extend .transition;
     @media (hover: hover) {
         &:hover {
-            right: rem(20px);
+            right: rem(15px);
         }
     }	
 }

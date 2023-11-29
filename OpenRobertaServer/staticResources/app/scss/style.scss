@@ -3,6 +3,7 @@
 *************************************/
 
 @import "libraries/rem"; //Maybe useful.
+@import "components/variables";
 
 // Bootstrap Components
 @import "libraries/bootstrap/functions";
@@ -63,7 +64,6 @@
 ***** Project Components ***** 
 *************************************/
 
-@import "components/variables";
 @import "components/typography";
 @import "components/global";
 @import "components/footer";

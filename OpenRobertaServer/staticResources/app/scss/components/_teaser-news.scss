@@ -1,15 +1,18 @@
 .teaser-news {
     display: flex;
     background: $gray-200;
-    padding: rem(40px);
+    padding: rem(15px);
+    @include media-breakpoint-up(lg) {
+        padding: rem(40px);
+    }
     border-radius: $border-radius--standard;
     &--image {
-        width: 30%;
+        // width: 30%;
         mix-blend-mode: multiply;
     }
-    &--wrapper {
-        width: 50%;
-    }
+    // &--wrapper {
+    //     width: 50%;
+    // }
     &--header {
         font-weight: $bold;
         @extend .font-size--md;

@@ -152,7 +152,13 @@ a {
 	display: flex;
 	flex-direction: column;
 	height: 100%;
-	padding: rem(20px 80px 20px 20px);
+	padding: rem(10px 80px 10px 15px);
+	@include media-breakpoint-up(md) {
+		padding: rem(15px 15px 50px 15px);
+	}
+	@include media-breakpoint-up(lg) {
+		padding: rem(15px 80px 15px 20px);
+	}
 	color: $black;
 	text-decoration: none;
 	border-radius: $border-radius--standard;
@@ -232,7 +238,10 @@ a {
 	&.icon {
 		border: none;
 		color: $white;
-		padding: rem(40px 120px 40px 40px);
+		padding: rem(15px 80px 10px 15px);
+		@include media-breakpoint-up(lg) {
+			padding: rem(40px 80px 40px 40px);
+		}
 		&::after {
 			@extend .button-big--arrow;
 			background-image: svg-icon-arrow($white);
@@ -251,3 +260,4 @@ a {
 		}
 	}
 }
+

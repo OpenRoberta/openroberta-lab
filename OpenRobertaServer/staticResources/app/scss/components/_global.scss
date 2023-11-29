@@ -26,10 +26,16 @@ body {
 // }
 
 section {
-	margin-bottom: rem(50px);
+	// margin-bottom: rem(15px);
 	width: 100%;
 	// &:last-child {
 	// 	margin-bottom: 0;
+	// }
+	// @include media-breakpoint-up(md) {
+	// 	margin-bottom: rem(30px);
+	// }
+	// @include media-breakpoint-up(lg) {
+	// 	margin-bottom: rem(50px);
 	// }
 }
 .section {
@@ -38,8 +44,8 @@ section {
 	}
 	&--light {
 		background: $gray-200;
-		padding-top: rem(30px);
-		padding-bottom: rem(30px);
+		// padding-top: rem(30px);
+		// padding-bottom: rem(30px);
 	}
 }
 

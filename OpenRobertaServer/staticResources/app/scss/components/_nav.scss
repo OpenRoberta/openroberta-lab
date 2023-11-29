@@ -1,38 +1,38 @@
-/*************************************
-***** Main Navigation ***** 
-*************************************/
+// /*************************************
+// ***** Main Navigation ***** 
+// *************************************/
 
-.navbar-brand {
-    margin-left: rem(30px);
-    img {
-        max-width: rem(150px);
-    }
-}
+// .navbar-brand {
+//     margin-left: rem(30px);
+//     img {
+//         max-width: rem(150px);
+//     }
+// }
 
-/*************************************
-***** Nav Tab ***** 
-*************************************/
+// /*************************************
+// ***** Nav Tab ***** 
+// *************************************/
 
-.nav-tabs {
-    border: none;
-    margin-bottom: rem(20px);
-    .nav-link {
-        background: none;
-        border: none;    
-        padding: rem(0 0 10px 0);
-        margin-right: rem(20px);
-        color: rgba($black,.5);
-        @media (hover: hover) {
-            &:hover {
-                color: $primary;
-            }
-        }    
-    }
-    .nav-item.show .nav-link,
-    .nav-link.active {
-        border-bottom: rem(3px) solid $primary;
-        color: $primary;
-        font-weight: 700;
-        background: none;
-    }
-}
+// .nav-tabs {
+//     border: none;
+//     margin-bottom: rem(20px);
+//     .nav-link {
+//         background: none;
+//         border: none;    
+//         padding: rem(0 0 10px 0);
+//         margin-right: rem(20px);
+//         color: rgba($black,.5);
+//         @media (hover: hover) {
+//             &:hover {
+//                 color: $primary;
+//             }
+//         }    
+//     }
+//     .nav-item.show .nav-link,
+//     .nav-link.active {
+//         border-bottom: rem(3px) solid $primary;
+//         color: $primary;
+//         font-weight: 700;
+//         background: none;
+//     }
+// }
