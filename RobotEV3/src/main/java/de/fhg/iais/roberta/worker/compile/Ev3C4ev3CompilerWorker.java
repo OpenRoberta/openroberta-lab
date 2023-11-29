@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.worker.compile;
 
 import java.io.IOException;
+import java.util.Base64;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,6 +58,8 @@ public class Ev3C4ev3CompilerWorker implements ICompilerWorker {
             try {
                 Uf2FileContainer uf2 = uf2Builder.createUf2File(programName, binaryFileName);
                 project.setCompiledHex(uf2.toBase64());
+                String decodeduf2 = new String(Base64.getDecoder().decode(uf2.toBase64()));
+                Util.storeGeneratedProgram(project, tempDir, decodeduf2, token, programName, "." + project.getBinaryFileExtension());
                 resultKey = Key.COMPILERWORKFLOW_SUCCESS;
             } catch ( IOException e ) {
                 LOG.error("Could not create uf2", e);
