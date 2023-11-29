@@ -21,6 +21,7 @@ import com.google.common.collect.MutableClassToInstanceMap;
 
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.NNBean;
+import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.blockly.generated.Instance;
 import de.fhg.iais.roberta.factory.RobotFactory;
@@ -97,7 +98,10 @@ public final class Project {
                     instance.setX(((Location) phrase).x);
                     instance.setY(((Location) phrase).y);
                 }
-                instance.getBlock().add(phrase.ast2xml());
+                List<Block> blockList = phrase.ast2xml();
+                if ( blockList != null ) {
+                    instance.getBlock().addAll(phrase.ast2xml());
+                }
             }
         }
         return blockSet;
@@ -116,7 +120,7 @@ public final class Project {
             blockSet.getInstance().add(instance);
             instance.setX(String.valueOf(configComp.x));
             instance.setY(String.valueOf(configComp.y));
-            instance.getBlock().add(configComp.ast2xml());
+            instance.getBlock().addAll(configComp.ast2xml());
         }
         return blockSet;
     }

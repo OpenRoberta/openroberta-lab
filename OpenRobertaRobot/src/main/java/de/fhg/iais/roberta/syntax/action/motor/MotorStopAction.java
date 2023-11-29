@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.syntax.action.motor;
 
+import java.util.Collections;
 import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
@@ -49,7 +50,7 @@ public final class MotorStopAction extends MoveAction {
     }
 
     @Override
-    public Block ast2xml() {
+    public List<Block> ast2xml() {
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
 
@@ -58,6 +59,6 @@ public final class MotorStopAction extends MoveAction {
             Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.MODE, this.mode.toString());
         }
 
-        return jaxbDestination;
+        return Collections.singletonList(jaxbDestination);
     }
 }

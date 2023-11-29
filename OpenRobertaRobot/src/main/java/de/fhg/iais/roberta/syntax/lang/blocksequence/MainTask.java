@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.syntax.lang.blocksequence;
 
+import java.util.Collections;
 import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
@@ -65,7 +66,7 @@ public final class MainTask extends Task {
     }
 
     @Override
-    public Block ast2xml() {
+    public List<Block> ast2xml() {
         boolean declare = !this.variables.get().isEmpty();
 
         Block jaxbDestination = new Block();
@@ -78,7 +79,7 @@ public final class MainTask extends Task {
             Ast2Jaxb.addField(jaxbDestination, "DEBUG", this.debug);
         }
         Ast2Jaxb.addStatement(jaxbDestination, BlocklyConstants.ST, this.variables);
-        return jaxbDestination;
+        return Collections.singletonList(jaxbDestination);
     }
 
 }

@@ -46,7 +46,6 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
-import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.util.basic.C;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
@@ -108,7 +107,6 @@ public class NxtStackMachineVisitor extends AbstractStackMachineVisitor implemen
                 color = "NONE";
                 break;
             default:
-                colorConst.addInfo(NepoInfo.error("SIM_BLOCK_NOT_SUPPORTED"));
                 throw new DbcException("Invalid color constant: " + colorConst.getHexValueAsString());
         }
         JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.COLOR_CONST).put(C.VALUE, color);

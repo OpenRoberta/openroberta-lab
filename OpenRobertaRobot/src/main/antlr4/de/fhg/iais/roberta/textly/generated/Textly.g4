@@ -1,6 +1,6 @@
 grammar Textly;
 
-expr	:	(ADD | SUB) expr                                 # Unary
+expr	:	(ADD | SUB) expr                             # Unary
         |   expr (MUL | DIV ) expr                       # Binary
         |   expr (ADD | SUB) expr                        # Binary
         |   expr EQUAL expr                              # Binary

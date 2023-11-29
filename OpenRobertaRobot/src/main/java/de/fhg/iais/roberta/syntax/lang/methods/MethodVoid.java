@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.syntax.lang.methods;
 
+import java.util.Collections;
 import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
@@ -50,7 +51,7 @@ public final class MethodVoid extends Method {
     }
 
     @Override
-    public Block ast2xml() {
+    public List<Block> ast2xml() {
         boolean declare = !this.parameters.get().isEmpty();
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
@@ -60,7 +61,7 @@ public final class MethodVoid extends Method {
         Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.NAME, this.methodName);
         Ast2Jaxb.addStatement(jaxbDestination, BlocklyConstants.ST, this.parameters);
         Ast2Jaxb.addStatement(jaxbDestination, BlocklyConstants.STACK, this.body);
-        return jaxbDestination;
+        return Collections.singletonList(jaxbDestination);
     }
 
 }

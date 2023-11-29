@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.syntax.sensor;
 
+import java.util.Collections;
 import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
@@ -70,7 +71,7 @@ public abstract class ExternalSensor extends Sensor implements WithUserDefinedPo
     }
 
     @Override
-    public Block ast2xml() {
+    public List<Block> ast2xml() {
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
         if ( !this.getMode().equals(BlocklyConstants.DEFAULT) ) {
@@ -93,6 +94,6 @@ public abstract class ExternalSensor extends Sensor implements WithUserDefinedPo
             slotValue = "";
         }
         Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.SLOT, slotValue);
-        return jaxbDestination;
+        return Collections.singletonList(jaxbDestination);
     }
 }

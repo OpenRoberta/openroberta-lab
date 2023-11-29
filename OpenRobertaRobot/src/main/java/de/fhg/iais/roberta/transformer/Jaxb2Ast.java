@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.transformer;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Nonnull;
@@ -309,6 +310,18 @@ public class Jaxb2Ast {
             expr = (Expr) p;
         }
         return expr;
+    }
+
+    public static List<Block> mkEvalBlockOutOfPhrase(Phrase phrase, String exprAsString) {
+        String blocklyName = phrase.getBlocklyType().getBlocklyName();
+        Block jaxbDestination = new Block();
+        Mutation mutation = new Mutation();
+        mutation.setType(blocklyName);
+        Ast2Jaxb.setBasicProperties(phrase, jaxbDestination);
+        Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.TYPE, blocklyName);
+        Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.EXPRESSION, exprAsString);
+        jaxbDestination.setMutation(mutation);
+        return Collections.singletonList(jaxbDestination);
     }
 
     /**

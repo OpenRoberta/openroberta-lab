@@ -1,8 +1,11 @@
 package de.fhg.iais.roberta.syntax;
 
+import java.util.List;
+
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.transformer.AnnotationHelper;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
+import de.fhg.iais.roberta.typecheck.InfoCollector;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.typecheck.NepoInfos;
 import de.fhg.iais.roberta.util.ast.AstFactory;
@@ -10,6 +13,7 @@ import de.fhg.iais.roberta.util.ast.BlockDescriptor;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
+import de.fhg.iais.roberta.util.visitor.IInfoCollectable;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.TransformerVisitor;
 
@@ -23,7 +27,7 @@ import de.fhg.iais.roberta.visitor.TransformerVisitor;
  * <br>
  * The kind of the Phrase-object is described in the sub-object {@link #blockDescriptor}
  */
-abstract public class Phrase {
+abstract public class Phrase implements IInfoCollectable {
     private boolean readOnly = false;
     private final BlocklyProperties property;
     private final BlockDescriptor blockDescriptor;
@@ -118,6 +122,10 @@ abstract public class Phrase {
         throw new DbcException("blocklyTypes inconsistent. Was: " + this.blocklyType + ", should be set to: " + blocklyType);
     }
 
+    public void setBlocklyTypeVar(BlocklyType blocklyType) {
+        this.blocklyType = blocklyType;
+    }
+
     /**
      * @return true if name of this phrase (as found in its block descriptor) is equals to one of the names given as parameter
      */
@@ -130,11 +138,48 @@ abstract public class Phrase {
     }
 
     /**
-     * add an info (error, warning e.g.) to this phrase
+     * add an error to this phrase
+     */
+    public final void addError(String error) {
+        this.infos.addInfo(NepoInfo.error(error));
+    }
+
+    /**
+     * add a warning to this phrase
+     */
+    public final void addWarning(String warning) {
+        this.infos.addInfo(NepoInfo.warning(warning));
+    }
+
+    /**
+     * add an typecheck error to this phrase. Currently the real message is ignored and a standard message is added
+     *
+     * @param tc true: semantic error (typecheck); false: syntax error (parsing)
+     */
+    public final void addTcError(String error, boolean tc) {
+        this.infos.addInfo(tc ? NepoInfo.error("PROGRAM_ERROR_EXPRBLOCK_TYPECHECK") : NepoInfo.error("PROGRAM_ERROR_EXPRBLOCK_PARSE"));
+    }
+
+    /**
+     * retrieve typecheck errors from the AST sub-tree of an eval block.
+     * They must be elevated to this block, because the EvalExpr block is explicitly designed to hide the sub-tree.
+     */
+    public boolean elevateNepoInfosAndCheckForCorrectness() {
+        boolean errorFree = true;
+        List<NepoInfo> infos = InfoCollector.collectInfos(this);
+        for ( NepoInfo info : infos ) {
+            addNepoInfo(info);
+            errorFree = false;
+        }
+        return errorFree;
+    }
+
+    /**
+     * add a NepoInfo object (error, warning e.g.) to this phrase
      *
      * @param info to be added
      */
-    public final void addInfo(NepoInfo info) {
+    public final void addNepoInfo(NepoInfo info) {
         this.infos.addInfo(info);
     }
 
@@ -173,7 +218,7 @@ abstract public class Phrase {
      *
      * @return the XML representation, usable by blockly
      */
-    public Block ast2xml() {
+    public List<Block> ast2xml() {
         return AnnotationHelper.ast2xml(this);
     }
 

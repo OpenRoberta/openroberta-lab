@@ -1,5 +1,7 @@
 package de.fhg.iais.roberta.syntax.lang.blocksequence;
 
+import java.util.List;
+
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
@@ -41,7 +43,7 @@ public final class Location extends Task {
     }
 
     @Override
-    public Block ast2xml() {
+    public List<Block> ast2xml() {
         return null;
     }
 

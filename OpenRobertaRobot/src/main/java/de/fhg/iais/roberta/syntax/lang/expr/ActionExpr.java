@@ -1,5 +1,7 @@
 package de.fhg.iais.roberta.syntax.lang.expr;
 
+import java.util.List;
+
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
@@ -37,7 +39,7 @@ public final class ActionExpr extends Expr {
     }
 
     @Override
-    public Block ast2xml() {
+    public List<Block> ast2xml() {
         return this.action.ast2xml();
     }
 }

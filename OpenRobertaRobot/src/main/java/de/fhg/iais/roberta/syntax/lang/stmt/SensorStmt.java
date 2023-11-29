@@ -1,5 +1,7 @@
 package de.fhg.iais.roberta.syntax.lang.stmt;
 
+import java.util.List;
+
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.syntax.sensor.Sensor;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
@@ -25,7 +27,7 @@ public final class SensorStmt extends Stmt {
     }
 
     @Override
-    public Block ast2xml() {
+    public List<Block> ast2xml() {
         return this.sensor.ast2xml();
     }
 

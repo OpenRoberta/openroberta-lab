@@ -38,6 +38,16 @@ public class TypecheckTest extends AstTest {
     }
 
     @Test
+    public void testSig() throws Exception {
+        TypecheckCommonLanguageVisitor astVisitor = new TestTypecheckCommonLanguageVisitor(usedHardwareBean);
+        Phrase astForAdd = UnitTestHelper.getGenericAstOfFirstBlock(testFactory, "/ast/expressions/expr_typecorrect0.xml");
+        BlocklyType actual = Sig.of(BlocklyType.NUMBER).typeCheckPhrases(astForAdd, astVisitor);
+        Assert.assertEquals(BlocklyType.NUMBER, actual);
+        actual = Sig.of(BlocklyType.BOOLEAN).typeCheckPhrases(astForAdd, astVisitor);
+        Assert.assertEquals(BlocklyType.BOOLEAN, actual);
+    }
+
+    @Test
     public void testAssignOk() throws Exception {
         Phrase ast = UnitTestHelper.getGenericAstOfFirstBlock(testFactory, "/ast/expressions/expr_assign_ok.xml");
         List<NepoInfo> infos = typecheckAndReturnTypecheckResults(ast);

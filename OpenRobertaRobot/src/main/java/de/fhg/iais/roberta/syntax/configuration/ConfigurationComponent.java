@@ -150,12 +150,12 @@ public class ConfigurationComponent extends Phrase {
     }
 
     @Override
-    public Block ast2xml() {
+    public List<Block> ast2xml() {
         Block destination = new Block();
         Ast2Jaxb.setBasicProperties(this, destination);
         Ast2Jaxb.addField(destination, "NAME", this.userDefinedPortName);
         this.componentProperties.forEach((key, value) -> Ast2Jaxb.addField(destination, key, value));
-        return destination;
+        return Collections.singletonList(destination);
     }
 
 }

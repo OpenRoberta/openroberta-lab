@@ -1,13 +1,14 @@
 package de.fhg.iais.roberta.util.syntax;
 
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
+import de.fhg.iais.roberta.util.visitor.IInfoCollectable;
 
 /**
  * This class is a parameter class used to set the speed of a motor and the mode of movement the motor {@link MotorDuration.Mode}.
  */
-public class MotionParam {
-    private final Expr speed;
-    private final MotorDuration duration;
+public class MotionParam implements IInfoCollectable {
+    public final Expr speed;
+    public final MotorDuration duration;
 
     private MotionParam(Builder mpb) {
         this.speed = mpb.speed;

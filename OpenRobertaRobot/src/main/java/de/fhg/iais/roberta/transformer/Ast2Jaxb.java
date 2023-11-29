@@ -8,7 +8,6 @@ import de.fhg.iais.roberta.blockly.generated.Data;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.blockly.generated.Repetitions;
-import de.fhg.iais.roberta.blockly.generated.Shadow;
 import de.fhg.iais.roberta.blockly.generated.Statement;
 import de.fhg.iais.roberta.blockly.generated.Value;
 import de.fhg.iais.roberta.blockly.generated.Warning;
@@ -93,7 +92,7 @@ public final class Ast2Jaxb {
         Statement statement = new Statement();
         statement.setName(name);
         for ( ConfigurationComponent component : values ) {
-            statement.getBlock().add(component.ast2xml());
+            statement.getBlock().addAll(component.ast2xml());
         }
         block.getStatement().add(statement);
     }
@@ -181,7 +180,7 @@ public final class Ast2Jaxb {
         if ( !value.getKind().hasName("EMPTY_EXPR") ) {
             Value blockValue = new Value();
             blockValue.setName(name);
-            blockValue.setBlock(value.ast2xml());
+            blockValue.setBlock(getSingleBlock(value.ast2xml()));
             block.getValue().add(blockValue);
         }
     }
@@ -204,7 +203,7 @@ public final class Ast2Jaxb {
         if ( !value.getKind().hasName("EMPTY_EXPR") ) {
             Value blockValue = new Value();
             blockValue.setName(name);
-            blockValue.setBlock(value.ast2xml());
+            blockValue.setBlock(getSingleBlock(value.ast2xml()));
             repetitions.getValueAndStatement().add(blockValue);
         }
     }
@@ -263,21 +262,12 @@ public final class Ast2Jaxb {
         block.setMutation(value);
     }
 
-    private static Shadow block2shadow(Block block) {
-        Shadow shadow = new Shadow();
-        shadow.setId(block.getId());
-        shadow.setType(block.getType());
-        shadow.setIntask(block.isIntask());
-        shadow.setField(block.getField().get(0));
-        return shadow;
-    }
-
-    private static List<Block> extractStmtList(Phrase phrase) {
+    public static List<Block> extractStmtList(Phrase phrase) {
         List<Block> result = new ArrayList<Block>();
         Assert.isTrue(phrase.getKind().hasName("STMT_LIST"), "Phrase is not StmtList!");
         StmtList stmtList = (StmtList) phrase;
         for ( Stmt stmt : stmtList.get() ) {
-            result.add(stmt.ast2xml());
+            result.add(getSingleBlock(stmt.ast2xml()));
         }
         return result;
     }
@@ -287,9 +277,14 @@ public final class Ast2Jaxb {
         Assert.isTrue(phrase.getKind().hasName("EXPR_LIST"), "Phrase is not ExprList!");
         ExprList exprList = (ExprList) phrase;
         for ( Expr expr : exprList.get() ) {
-            result.add(expr.ast2xml());
+            result.add(getSingleBlock(expr.ast2xml()));
         }
         return result;
+    }
+
+    private static Block getSingleBlock(List<Block> blocks) {
+        Assert.isTrue(blocks != null & blocks.size() == 1);
+        return blocks.get(0);
     }
 
     private static void setProperties(Phrase astSource, Block block, String type) {

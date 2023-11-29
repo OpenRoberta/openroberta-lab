@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.syntax.lang.stmt;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
@@ -71,7 +72,7 @@ public final class WaitStmt extends Stmt {
     }
 
     @Override
-    public Block ast2xml() {
+    public List<Block> ast2xml() {
         Block jaxbDestination = new Block();
         Mutation mutation;
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
@@ -86,7 +87,7 @@ public final class WaitStmt extends Stmt {
             }
             Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.WAIT + "0", generatedRepeatStmt.expr);
             Ast2Jaxb.addStatement(jaxbDestination, BlocklyConstants.DO + "0", generatedRepeatStmt.list);
-            return jaxbDestination;
+            return Collections.singletonList(jaxbDestination);
         }
         mutation = new Mutation();
         mutation.setWait(BigInteger.valueOf(numOfWait - 1L));
@@ -102,6 +103,6 @@ public final class WaitStmt extends Stmt {
             Ast2Jaxb.addStatement(repetitions, BlocklyConstants.DO + i, generatedRepeatStmt.list);
         }
         jaxbDestination.setRepetitions(repetitions);
-        return jaxbDestination;
+        return Collections.singletonList(jaxbDestination);
     }
 }

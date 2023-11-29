@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.syntax.lang.expr;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -84,7 +85,7 @@ public final class Binary extends Expr {
         GTE(90, Assoc.LEFT, Sig.of(BlocklyType.BOOLEAN, BlocklyType.NUMBER, BlocklyType.NUMBER), ">="),
         AND(70, Assoc.LEFT, Sig.of(BlocklyType.BOOLEAN, BlocklyType.BOOLEAN, BlocklyType.BOOLEAN), "&&", "and"),
         OR(60, Assoc.LEFT, Sig.of(BlocklyType.BOOLEAN, BlocklyType.BOOLEAN, BlocklyType.BOOLEAN), "||", "or"),
-        IN(1, Assoc.LEFT, Sig.of(BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE), ":", "in"),
+        IN(1, Assoc.LEFT, Sig.of(BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE_ARRAY_ITEM, BlocklyType.CAPTURED_TYPE), ":", "in"),
         ASSIGNMENT(1, Assoc.RIGHT, Sig.of(BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE), "="),
         ADD_ASSIGNMENT(1, Assoc.RIGHT, Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER, BlocklyType.NUMBER), "+="),
         MINUS_ASSIGNMENT(1, Assoc.RIGHT, Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER, BlocklyType.NUMBER), "-="),
@@ -181,7 +182,7 @@ public final class Binary extends Expr {
     }
 
     @Override
-    public Block ast2xml() {
+    public List<Block> ast2xml() {
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
         if ( !this.operationRange.equals("") ) {
@@ -194,7 +195,7 @@ public final class Binary extends Expr {
                 Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.OP, this.op.name());
                 Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.A, this.left);
                 Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.B, getRight());
-                return jaxbDestination;
+                return Collections.singletonList(jaxbDestination);
         }
     }
 }

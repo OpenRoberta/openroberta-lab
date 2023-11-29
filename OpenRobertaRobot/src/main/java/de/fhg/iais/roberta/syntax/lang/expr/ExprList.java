@@ -33,6 +33,14 @@ public final class ExprList extends Expr {
     }
 
     /**
+     * Delete expression to the list.
+     */
+    public final void delExpr(Expr expr, int i) {
+        Assert.isTrue(expr != null);
+        this.el.remove(i);
+    }
+
+    /**
      * @return the expression list
      */
     public final List<Expr> get() {
@@ -66,7 +74,7 @@ public final class ExprList extends Expr {
     }
 
     @Override
-    public Block ast2xml() {
+    public List<Block> ast2xml() {
         return null;
     }
 

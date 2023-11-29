@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.syntax.lang.stmt;
 
 import java.math.BigInteger;
+import java.util.Collections;
 import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
@@ -69,7 +70,7 @@ public final class IfStmt extends Stmt {
     }
 
     @Override
-    public Block ast2xml() {
+    public List<Block> ast2xml() {
         Mutation mutation;
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
@@ -79,7 +80,7 @@ public final class IfStmt extends Stmt {
             Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.IF, this.expr.get(0));
             Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.THEN, this.thenList.get(0).get().get(0));
             Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.ELSE, this.elseList.get().get(0));
-            return jaxbDestination;
+            return Collections.singletonList(jaxbDestination);
         }
         int _else = this._else;
         int _elseIf = this._elseIf;
@@ -106,7 +107,7 @@ public final class IfStmt extends Stmt {
                 Ast2Jaxb.addStatement(repetitions, BlocklyConstants.ELSE, this.elseList);
             }
             jaxbDestination.setRepetitions(repetitions);
-            return jaxbDestination;
+            return Collections.singletonList(jaxbDestination);
         }
 
         Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.IF + "0", this.expr.get(0));
@@ -115,7 +116,7 @@ public final class IfStmt extends Stmt {
             Ast2Jaxb.addStatement(jaxbDestination, BlocklyConstants.ELSE, this.elseList);
         }
 
-        return jaxbDestination;
+        return Collections.singletonList(jaxbDestination);
     }
 
 }

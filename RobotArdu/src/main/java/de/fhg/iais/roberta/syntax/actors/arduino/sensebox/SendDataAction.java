@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.syntax.actors.arduino.sensebox;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
@@ -16,8 +17,8 @@ import de.fhg.iais.roberta.transformer.Jaxb2Ast;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.util.basic.Pair;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
+import de.fhg.iais.roberta.util.basic.Pair;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
 @NepoBasic(name = "DATA_SEND_ACTION", category = "ACTOR", blocklyNames = {"robActions_sendData"})
@@ -50,7 +51,7 @@ public final class SendDataAction extends Action {
     }
 
     @Override
-    public Block ast2xml() {
+    public List<Block> ast2xml() {
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
         int numOfStrings = this.id2Phenomena.size();
@@ -64,6 +65,6 @@ public final class SendDataAction extends Action {
             Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.ADD + i, kv.getSecond());
             i++;
         }
-        return jaxbDestination;
+        return Collections.singletonList(jaxbDestination);
     }
 }

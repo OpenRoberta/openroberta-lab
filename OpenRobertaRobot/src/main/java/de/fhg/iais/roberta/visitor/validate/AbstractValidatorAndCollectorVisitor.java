@@ -22,7 +22,6 @@ import de.fhg.iais.roberta.syntax.lang.expr.StmtExpr;
 import de.fhg.iais.roberta.syntax.lang.stmt.ExprStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.Stmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
-import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.BaseVisitor;
@@ -144,19 +143,18 @@ public abstract class AbstractValidatorAndCollectorVisitor extends BaseVisitor<V
      * public for tests :-<
      */
     public final void addErrorToPhrase(final Phrase phrase, final String message) {
-        NepoInfo info = NepoInfo.error(message);
         if ( phrase instanceof SensorExpr ) {
-            ((SensorExpr) phrase).sensor.addInfo(info);
+            ((SensorExpr) phrase).sensor.addError(message);
         } else if ( phrase instanceof ActionExpr ) {
-            ((ActionExpr) phrase).action.addInfo(info);
+            ((ActionExpr) phrase).action.addError(message);
         } else if ( phrase instanceof MethodExpr ) {
-            ((MethodExpr) phrase).method.addInfo(info);
+            ((MethodExpr) phrase).method.addError(message);
         } else if ( phrase instanceof FunctionExpr ) {
-            ((FunctionExpr) phrase).function.addInfo(info);
+            ((FunctionExpr) phrase).function.addError(message);
         } else if ( phrase instanceof StmtExpr ) {
-            ((StmtExpr) phrase).stmt.addInfo(info);
+            ((StmtExpr) phrase).stmt.addError(message);
         } else {
-            phrase.addInfo(info);
+            phrase.addError(message);
         }
         errorAndWarningBuilder.addError(message);
     }
@@ -166,19 +164,18 @@ public abstract class AbstractValidatorAndCollectorVisitor extends BaseVisitor<V
      * public for tests :-<
      */
     public final void addWarningToPhrase(final Phrase phrase, final String message) {
-        NepoInfo info = NepoInfo.warning(message);
         if ( phrase instanceof SensorExpr ) {
-            ((SensorExpr) phrase).sensor.addInfo(info);
+            ((SensorExpr) phrase).sensor.addWarning(message);
         } else if ( phrase instanceof ActionExpr ) {
-            ((ActionExpr) phrase).action.addInfo(info);
+            ((ActionExpr) phrase).action.addWarning(message);
         } else if ( phrase instanceof MethodExpr ) {
-            ((MethodExpr) phrase).method.addInfo(info);
+            ((MethodExpr) phrase).method.addWarning(message);
         } else if ( phrase instanceof FunctionExpr ) {
-            ((FunctionExpr) phrase).function.addInfo(info);
+            ((FunctionExpr) phrase).function.addWarning(message);
         } else if ( phrase instanceof StmtExpr ) {
-            ((StmtExpr) phrase).stmt.addInfo(info);
+            ((StmtExpr) phrase).stmt.addWarning(message);
         } else {
-            phrase.addInfo(info);
+            phrase.addWarning(message);
         }
         errorAndWarningBuilder.addWarning(message);
     }

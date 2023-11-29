@@ -632,7 +632,7 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
 
     @Override
     public Void visitGetSubFunct(GetSubFunct getSubFunct) {
-        if ( getSubFunct.functName == FunctionNames.GET_SUBLIST ) {
+        if ( getSubFunct.functName == FunctionNames.GET_SUBLIST  ) {
             getSubFunct.param.get(0).accept(this);
             this.src.add("[");
             switch ( (IndexLocation) getSubFunct.strParam.get(0) ) {

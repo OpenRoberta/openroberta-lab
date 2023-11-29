@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.syntax.lang.functions;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
@@ -62,11 +63,12 @@ public final class GetSubFunct extends Function {
             exprParams.add(new ExprParam(BlocklyConstants.AT2, BlocklyType.NUMBER_INT));
         }
         List<Expr> params = helper.extractExprParameters(block, exprParams);
+
         return new GetSubFunct(FunctionNames.GET_SUBLIST, strParams, params, Jaxb2Ast.extractBlocklyProperties(block));
     }
 
     @Override
-    public Block ast2xml() {
+    public List<Block> ast2xml() {
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
         Mutation mutation = new Mutation();
@@ -75,7 +77,7 @@ public final class GetSubFunct extends Function {
         mutation.setAt2(false);
         Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.WHERE1, this.strParam.get(0).toString());
         Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.WHERE2, this.strParam.get(1).toString());
-        if ( this.functName == FunctionNames.GET_SUBLIST ) {
+        if ( this.functName == FunctionNames.GET_SUBLIST  ) {
             Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.LIST, this.param.get(0));
         } else {
             Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.STRING, this.param.get(0));
@@ -89,6 +91,6 @@ public final class GetSubFunct extends Function {
             Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.AT2, this.param.get(this.param.size() - 1));
         }
         jaxbDestination.setMutation(mutation);
-        return jaxbDestination;
+        return Collections.singletonList(jaxbDestination);
     }
 }

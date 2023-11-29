@@ -44,7 +44,6 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.VoltageSensor;
-import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.util.basic.C;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.MotorDuration;
@@ -331,30 +330,30 @@ public class MbotStackMachineVisitor extends AbstractStackMachineVisitor impleme
 
     @Override
     public Void visitLEDMatrixSetBrightnessAction(LEDMatrixSetBrightnessAction ledMatrixSetBrightnessAction) {
-        ledMatrixSetBrightnessAction.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
+        ledMatrixSetBrightnessAction.addWarning("SIM_BLOCK_NOT_SUPPORTED");
         return null;
     }
 
     @Override
     public Void visitSendIRAction(SendIRAction sendIRAction) {
-        sendIRAction.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
+        sendIRAction.addWarning("SIM_BLOCK_NOT_SUPPORTED");
         return null;
     }
 
     @Override
     public Void visitReceiveIRAction(ReceiveIRAction receiveIRAction) {
-        receiveIRAction.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
+        receiveIRAction.addWarning("SIM_BLOCK_NOT_SUPPORTED");
         return null;
     }
 
     @Override
     public Void visitSerialWriteAction(SerialWriteAction serialWriteAction) {
-        serialWriteAction.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
+        serialWriteAction.addWarning("SIM_BLOCK_NOT_SUPPORTED");
         return null;
     }
 
     public Void visitVoltageSensor(VoltageSensor voltageSensor) {
-        voltageSensor.addInfo(NepoInfo.warning("SIM_BLOCK_NOT_SUPPORTED"));
+        voltageSensor.addWarning("SIM_BLOCK_NOT_SUPPORTED");
         return null;
     }
 

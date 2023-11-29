@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.syntax.lang.expr;
 
 import java.math.BigInteger;
+import java.util.Collections;
 import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
@@ -56,7 +57,7 @@ public final class ListCreate extends Expr {
     }
 
     @Override
-    public Block ast2xml() {
+    public List<Block> ast2xml() {
         String blocklyName = this.getBlocklyType().getBlocklyName();
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
@@ -71,6 +72,6 @@ public final class ListCreate extends Expr {
         for ( int i = 0; i < numOfItems; i++ ) {
             Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.ADD + i, exprList.get().get(i));
         }
-        return jaxbDestination;
+        return Collections.singletonList(jaxbDestination);
     }
 }

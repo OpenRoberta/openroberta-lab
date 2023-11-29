@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.syntax.action.motor.differential;
 
+import java.util.Collections;
 import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
@@ -82,7 +83,7 @@ public final class TurnAction extends Action {
     }
 
     @Override
-    public Block ast2xml() {
+    public List<Block> ast2xml() {
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
 
@@ -97,6 +98,6 @@ public final class TurnAction extends Action {
         if ( this.hide != null ) {
             jaxbDestination.getHide().add(hide);
         }
-        return jaxbDestination;
+        return Collections.singletonList(jaxbDestination);
     }
 }

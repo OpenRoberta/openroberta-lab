@@ -21,6 +21,7 @@ public final class StmtList extends Stmt {
         super(BlocklyProperties.make("STMT_LIST", "1", null));
     }
 
+
     /**
      * Add new element to the list.
      *
@@ -49,7 +50,28 @@ public final class StmtList extends Stmt {
     }
 
     @Override
-    public Block ast2xml() {
-        return null;
+    public List<Block> ast2xml() {
+        List<Block> stmtListAsBlocks = new ArrayList<>();
+        for ( Stmt stmt : this.sl ) {
+            stmtListAsBlocks.addAll(stmt.ast2xml());
+        }
+        return stmtListAsBlocks;
+    }
+
+    /**
+     * Transforms an object of type StmtList to a List<StmtList>.
+     *
+     * @param stmtList The StmtList object to transform.
+     * @return A List containing the StmtList object.
+     */
+    public static List<StmtList> transformToList(StmtList stmtList) {
+        List<StmtList> resultList = new ArrayList<>();
+        for ( Stmt stmt : stmtList.sl ) {
+            StmtList newStmtList = new StmtList();
+            newStmtList.addStmt(stmt);
+            resultList.add(newStmtList);
+        }
+
+        return resultList;
     }
 }

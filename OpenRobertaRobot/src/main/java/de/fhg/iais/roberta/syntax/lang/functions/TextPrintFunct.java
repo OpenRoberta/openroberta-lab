@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.syntax.lang.functions;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
@@ -56,11 +57,11 @@ public final class TextPrintFunct extends Function {
     }
 
     @Override
-    public Block ast2xml() {
+    public List<Block> ast2xml() {
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
         Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.TEXT, this.param.get(0));
-        return jaxbDestination;
+        return Collections.singletonList(jaxbDestination);
     }
 
 }

@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.syntax.configuration;
 
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,12 +33,12 @@ public final class ConfigurationComponentNode extends ConfigurationComponent {
     }
 
     @Override
-    public Block ast2xml() {
+    public List<Block> ast2xml() {
         Block destination = new Block();
         Ast2Jaxb.setBasicProperties(this, destination);
         Ast2Jaxb.addField(destination, "NAME", this.userDefinedPortName);
         subComponents.forEach((statement, subComponents) -> Ast2Jaxb.addConfigurationComponents(destination, statement, subComponents));
         getComponentProperties().forEach((key, value) -> Ast2Jaxb.addField(destination, key, value));
-        return destination;
+        return Collections.singletonList(destination);
     }
 }

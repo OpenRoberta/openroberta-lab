@@ -61,6 +61,7 @@ import de.fhg.iais.roberta.syntax.lang.methods.MethodVoid;
 import de.fhg.iais.roberta.syntax.lang.stmt.AssertStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.AssignStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
+import de.fhg.iais.roberta.syntax.lang.stmt.EvalStmts;
 import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.MathChangeStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.MethodStmt;
@@ -108,6 +109,16 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
         List<NepoInfo> infosOfSubAst = InfoCollector.collectInfos(evalExpr);
         if ( !infosOfSubAst.isEmpty() ) {
             addErrorToPhrase(evalExpr, "PROGRAM_ERROR_EXPRBLOCK_TYPECHECK");
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitEvalStmts(EvalStmts stmtEvalExpr) {
+        requiredComponentVisited(stmtEvalExpr, stmtEvalExpr.stmtsAsBlock);
+        List<NepoInfo> infosOfSubAst = InfoCollector.collectInfos(stmtEvalExpr);
+        if ( !infosOfSubAst.isEmpty() ) {
+            addErrorToPhrase(stmtEvalExpr, "PROGRAM_ERROR_EXPRBLOCK_TYPECHECK");
         }
         return null;
     }

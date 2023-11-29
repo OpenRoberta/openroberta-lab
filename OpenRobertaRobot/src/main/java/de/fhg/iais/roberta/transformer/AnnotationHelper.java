@@ -7,6 +7,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -187,7 +188,7 @@ public class AnnotationHelper {
      *
      * @return the JAXB (~~XML) representation
      */
-    public static Block ast2xml(Phrase phrase) {
+    public static List<Block> ast2xml(Phrase phrase) {
         Class<?> clazz = phrase.getClass();
         if ( isExternalSensorSubClass(clazz) ) {
             return phrase.ast2xml();
@@ -216,7 +217,7 @@ public class AnnotationHelper {
                     }
                 }
             }
-            return jaxbDestination;
+            return Collections.singletonList(jaxbDestination);
         }
     }
 

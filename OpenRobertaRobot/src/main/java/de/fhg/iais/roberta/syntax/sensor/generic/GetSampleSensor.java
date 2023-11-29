@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.syntax.sensor.generic;
 
+import java.util.Collections;
 import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
@@ -76,7 +77,7 @@ public final class GetSampleSensor extends Sensor {
     }
 
     @Override
-    public Block ast2xml() {
+    public List<Block> ast2xml() {
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this.sensor, jaxbDestination);
         if ( this.mutation != null ) {
@@ -89,7 +90,7 @@ public final class GetSampleSensor extends Sensor {
         Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.SENSORPORT, this.sensorPort);
         Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.SLOT, this.slot);
 
-        return jaxbDestination;
+        return Collections.singletonList(jaxbDestination);
     }
 
 }

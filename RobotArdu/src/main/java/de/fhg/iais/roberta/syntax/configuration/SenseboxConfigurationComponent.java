@@ -1,6 +1,8 @@
 package de.fhg.iais.roberta.syntax.configuration;
 
 import java.math.BigInteger;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
@@ -27,7 +29,7 @@ public final class SenseboxConfigurationComponent extends ConfigurationComponent
     }
 
     @Override
-    public Block ast2xml() {
+    public List<Block> ast2xml() {
         Block destination = new Block();
         Ast2Jaxb.setBasicProperties(this, destination);
         Mutation mutation = new Mutation();
@@ -35,6 +37,6 @@ public final class SenseboxConfigurationComponent extends ConfigurationComponent
         destination.setMutation(mutation);
         Ast2Jaxb.addField(destination, "BOX_ID", this.userDefinedPortName);
         this.getComponentProperties().forEach((key, value) -> Ast2Jaxb.addField(destination, key, value));
-        return destination;
+        return Collections.singletonList(destination);
     }
 }

@@ -23,7 +23,8 @@ public abstract class AbstractTypecheckWorker implements IWorker {
         for ( List<Phrase> listOfPhrases : project.getProgramAst().getTree() ) {
             for ( Phrase phrase : listOfPhrases ) {
                 phrase.accept(visitor);
-                errors += InfoCollector.collectInfos(phrase).size();
+                int errorsOfThisPhrase = InfoCollector.collectInfos(phrase).size();
+                errors += errorsOfThisPhrase;
             }
         }
         if ( errors > 0 ) {

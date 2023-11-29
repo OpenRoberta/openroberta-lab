@@ -1,5 +1,7 @@
 package de.fhg.iais.roberta.syntax.lang.stmt;
 
+import java.util.List;
+
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
@@ -28,7 +30,7 @@ public final class ExprStmt extends Stmt {
     }
 
     @Override
-    public Block ast2xml() {
+    public List<Block> ast2xml() {
         return this.expr.ast2xml();
     }
 }

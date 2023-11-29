@@ -1,5 +1,7 @@
 package de.fhg.iais.roberta.syntax.lang.expr;
 
+import java.util.List;
+
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.functions.Function;
@@ -44,7 +46,7 @@ public final class FunctionExpr extends Expr {
     }
 
     @Override
-    public Block ast2xml() {
+    public List<Block> ast2xml() {
         Phrase p = this.getFunction();
         return p.ast2xml();
     }

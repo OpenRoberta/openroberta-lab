@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.syntax.expr.mbed;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
@@ -66,7 +67,7 @@ public final class Image extends Expr {
     }
 
     @Override
-    public Block ast2xml() {
+    public List<Block> ast2xml() {
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
         for ( int i = 0; i < 5; i++ ) {
@@ -74,6 +75,6 @@ public final class Image extends Expr {
                 Ast2Jaxb.addField(jaxbDestination, "P" + j + i, this.image[i][j]);
             }
         }
-        return jaxbDestination;
+        return Collections.singletonList(jaxbDestination);
     }
 }

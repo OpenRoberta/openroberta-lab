@@ -11,9 +11,12 @@ import java.util.Set;
 import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedImport;
 import de.fhg.iais.roberta.components.UsedSensor;
+import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.lang.methods.Method;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
+import de.fhg.iais.roberta.typecheck.Sig;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.ast.AstFactory;
 
 /**
@@ -62,6 +65,30 @@ public class UsedHardwareBean implements IProjectBean {
     public BlocklyType getTypeOfDeclaredVariable(String variableName) {
         BlocklyType type = this.declaredVariables.get(variableName);
         return type == null ? BlocklyType.NOTHING : type;
+    }
+
+    public Sig getSignatureOfMethod(String methodName) {
+        Method method = null;
+        for ( Method m : this.userDefinedMethods ) {
+            if ( m.getMethodName().equals(methodName) ) {
+                method = m;
+                break;
+            }
+        }
+        if ( method == null ) {
+            return Sig.of(BlocklyType.NOTHING);
+        } else {
+            List<BlocklyType> parameterTypes = new ArrayList<>();
+            for ( Expr e : method.getParameters().el ) {
+                if ( e instanceof VarDeclaration ) {
+                    VarDeclaration decl = (VarDeclaration) e;
+                    parameterTypes.add(decl.getBlocklyType());
+                } else {
+                    throw new DbcException("invalid declaration of method " + methodName);
+                }
+            }
+            return Sig.ofParamList(method.getReturnType(), parameterTypes);
+        }
     }
 
     public boolean isProgramEmpty() {

@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.syntax.lang.stmt;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -144,7 +145,7 @@ public final class RepeatStmt extends Stmt {
     }
 
     @Override
-    public Block ast2xml() {
+    public List<Block> ast2xml() {
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
         NepoInfos infos = this.expr.getInfos();
@@ -198,7 +199,7 @@ public final class RepeatStmt extends Stmt {
         }
         Ast2Jaxb.addStatement(jaxbDestination, BlocklyConstants.DO, this.list);
 
-        return jaxbDestination;
+        return Collections.singletonList(jaxbDestination);
     }
 
     /**

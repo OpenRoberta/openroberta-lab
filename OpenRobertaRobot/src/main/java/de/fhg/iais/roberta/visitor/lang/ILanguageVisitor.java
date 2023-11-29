@@ -56,6 +56,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.ActionStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.AssertStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.AssignStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.DebugAction;
+import de.fhg.iais.roberta.syntax.lang.stmt.EvalStmts;
 import de.fhg.iais.roberta.syntax.lang.stmt.ExprStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.FunctionStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.IfStmt;
@@ -88,6 +89,8 @@ public interface ILanguageVisitor<V> extends IVisitor<V> {
     V visitActionStmt(ActionStmt actionStmt);
 
     V visitEvalExpr(EvalExpr evalExpr);
+
+    V visitEvalStmts(EvalStmts stmtEvalExpr);
 
     V visitExprStmt(ExprStmt exprStmt);
 

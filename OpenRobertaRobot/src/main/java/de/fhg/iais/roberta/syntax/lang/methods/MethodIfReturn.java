@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.syntax.lang.methods;
 
 import java.math.BigInteger;
+import java.util.Collections;
 import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
@@ -68,7 +69,7 @@ public final class MethodIfReturn extends Method {
     }
 
     @Override
-    public Block ast2xml() {
+    public List<Block> ast2xml() {
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
         Mutation mutation = new Mutation();
@@ -80,6 +81,6 @@ public final class MethodIfReturn extends Method {
         Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.CONDITION, this.oraCondition);
         Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.VALUE, this.oraReturnValue);
 
-        return jaxbDestination;
+        return Collections.singletonList(jaxbDestination);
     }
 }

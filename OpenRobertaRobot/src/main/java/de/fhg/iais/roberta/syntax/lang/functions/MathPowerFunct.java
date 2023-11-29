@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.syntax.lang.functions;
 
+import java.util.Collections;
 import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
@@ -42,13 +43,13 @@ public final class MathPowerFunct extends Expr {
     }
 
     @Override
-    public Block ast2xml() {
+    public List<Block> ast2xml() {
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
 
         Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.OP, this.functName.name());
         Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.A, this.param.get(0));
         Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.B, this.param.get(1));
-        return jaxbDestination;
+        return Collections.singletonList(jaxbDestination);
     }
 }

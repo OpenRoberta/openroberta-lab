@@ -1,5 +1,7 @@
 package de.fhg.iais.roberta.syntax.lang.stmt;
 
+import java.util.List;
+
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.syntax.lang.methods.Method;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
@@ -22,7 +24,7 @@ public final class MethodStmt extends Stmt {
     }
 
     @Override
-    public Block ast2xml() {
+    public List<Block> ast2xml() {
         return this.method.ast2xml();
     }
 }

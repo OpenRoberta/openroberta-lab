@@ -1,6 +1,8 @@
 package de.fhg.iais.roberta.syntax.lang.functions;
 
 import java.math.BigInteger;
+import java.util.Collections;
+import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
@@ -54,7 +56,7 @@ public final class TextJoinFunct extends Function {
     }
 
     @Override
-    public Block ast2xml() {
+    public List<Block> ast2xml() {
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
 
@@ -65,6 +67,6 @@ public final class TextJoinFunct extends Function {
         for ( int i = 0; i < numOfStrings; i++ ) {
             Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.ADD + i, this.param.get().get(i));
         }
-        return jaxbDestination;
+        return Collections.singletonList(jaxbDestination);
     }
 }

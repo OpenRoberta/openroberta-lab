@@ -68,6 +68,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.syntax.FunctionNames;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.AbstractLanguageVisitor;
@@ -278,6 +279,8 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
                     break;
             }
             this.src.add(")");
+        } else {
+            throw new DbcException("Function name is invalid");
         }
         return null;
     }

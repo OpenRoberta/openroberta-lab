@@ -1,5 +1,7 @@
 package de.fhg.iais.roberta.syntax.lang.expr;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
@@ -127,7 +129,7 @@ public final class Unary extends Expr {
     }
 
     @Override
-    public Block ast2xml() {
+    public List<Block> ast2xml() {
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
         BlocklyProperties blocklyProperties = getProperty();
@@ -137,7 +139,7 @@ public final class Unary extends Expr {
         } else {
             Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.BOOL, this.expr);
         }
-        return jaxbDestination;
+        return Collections.singletonList(jaxbDestination);
     }
 
 }

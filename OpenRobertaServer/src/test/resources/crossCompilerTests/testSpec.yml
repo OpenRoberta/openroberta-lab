@@ -209,6 +209,7 @@ progs:
       nxt: "no extendable lists"
       bob3: "no lists"
       rob3rta: "no lists"
+      wedo: "no lists"
       edison: "Edisons lists are not extendable"
       thymio: "Thmio lists are not extendable"
     remark: "basic list operations"

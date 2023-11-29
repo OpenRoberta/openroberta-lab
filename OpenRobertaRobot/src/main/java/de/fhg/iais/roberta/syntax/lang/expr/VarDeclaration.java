@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.syntax.lang.expr;
 
+import java.util.Collections;
 import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
@@ -79,7 +80,7 @@ public final class VarDeclaration extends Expr {
     }
 
     @Override
-    public Block ast2xml() {
+    public List<Block> ast2xml() {
         String blocklyName = this.getBlocklyType().getBlocklyName();
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
@@ -90,8 +91,7 @@ public final class VarDeclaration extends Expr {
         Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.VAR, this.name);
         Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.TYPE, blocklyName);
         Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.VALUE, this.value);
-
-        return jaxbDestination;
+        return Collections.singletonList(jaxbDestination);
     }
 
 }

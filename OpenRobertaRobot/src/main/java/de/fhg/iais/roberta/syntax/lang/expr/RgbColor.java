@@ -30,4 +30,7 @@ public final class RgbColor extends Expr {
         setReadOnly();
     }
 
+    public Expr[] getParameters() {
+        return new Expr[] {R, G, B, A};
+    }
 }

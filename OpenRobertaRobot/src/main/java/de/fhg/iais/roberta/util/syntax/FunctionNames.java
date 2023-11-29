@@ -30,9 +30,9 @@ public enum FunctionNames {
     EXP(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER), "exp"),
     ROOT(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER), "sqrt"),
     ABS(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER), "abs"),
-    LN(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER), "ln"),
+    LN(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER), "log"),
     LOG10(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER), "log10"),
-    SQUARE(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER), "square"),
+    SQUARE(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER), "pow"),
     POW10(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER), "pow10"),
 
     //MathSingleFunct Round:
@@ -41,8 +41,8 @@ public enum FunctionNames {
     ROUNDDOWN(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER), "floor"),
 
     // MathRandomIntFunct and MathRandomFloatFunct:
-    RANDOMINT(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER, BlocklyType.NUMBER), "randInt"),
-    RANDOM_DOUBLE(Sig.of(BlocklyType.NUMBER), "randFloat"),
+    RANDOMINT(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER, BlocklyType.NUMBER), "randomInt"),
+    RANDOM_DOUBLE(Sig.of(BlocklyType.NUMBER), "randomFloat"),
 
     //MathNumPropFunct:
     EVEN(Sig.of(BlocklyType.BOOLEAN, BlocklyType.NUMBER), "isEven"),
@@ -54,27 +54,32 @@ public enum FunctionNames {
     DIVISIBLE_BY(Sig.of(BlocklyType.BOOLEAN, BlocklyType.NUMBER, BlocklyType.NUMBER), "isDivisibleBy"),
 
     //MathOnListFunct:
-    AVERAGE(Sig.of(BlocklyType.NUMBER, BlocklyType.ARRAY_NUMBER), "avg"),
-    STD_DEV(Sig.of(BlocklyType.NUMBER, BlocklyType.ARRAY_NUMBER), "sd"),
-    RANDOM(Sig.of(BlocklyType.CAPTURED_TYPE_ARRAY_ITEM, BlocklyType.CAPTURED_TYPE), "randItem"),
+    AVERAGE(Sig.of(BlocklyType.NUMBER, BlocklyType.ARRAY_NUMBER), "average"),
+    STD_DEV(Sig.of(BlocklyType.NUMBER, BlocklyType.ARRAY_NUMBER), "stddev"),
+    RANDOM(Sig.of(BlocklyType.CAPTURED_TYPE_ARRAY_ITEM, BlocklyType.CAPTURED_TYPE), "randomItem"),
     MIN(Sig.of(BlocklyType.NUMBER, BlocklyType.ARRAY_NUMBER), "min"),
     MAX(Sig.of(BlocklyType.NUMBER, BlocklyType.ARRAY_NUMBER), "max"),
     SUM(Sig.of(BlocklyType.NUMBER, BlocklyType.ARRAY_NUMBER), "sum"),
     MEDIAN(Sig.of(BlocklyType.NUMBER, BlocklyType.ARRAY_NUMBER), "median"),
 
     //LengthOfListFunct:
-    LIST_LENGTH(Sig.of(BlocklyType.NUMBER, BlocklyType.CAPTURED_TYPE), "lengthOf"),
+    LIST_LENGTH(Sig.of(BlocklyType.NUMBER, BlocklyType.CAPTURED_TYPE), "size"),
 
     //IndexOfFunct:
     INDEXOF(Sig.of(BlocklyType.NUMBER, BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE_ARRAY_ITEM), "indexOfFirst", "indexOfLast"),
 
-    // ListGetIndex:
-    GETLISTELEMENT(Sig.of(BlocklyType.CAPTURED_TYPE_ARRAY_ITEM, BlocklyType.CAPTURED_TYPE, BlocklyType.NUMBER), "getIndex", "getIndexFromEnd", "getAndRemoveIndex", "getAndRemoveIndexFromEnd"),
-    GETFIRST(Sig.of(BlocklyType.CAPTURED_TYPE_ARRAY_ITEM, BlocklyType.CAPTURED_TYPE), "getIndexFirst", "getAndRemoveIndexFirst"),
-    GETLAST(Sig.of(BlocklyType.CAPTURED_TYPE_ARRAY_ITEM, BlocklyType.CAPTURED_TYPE), "getIndexLast", "getAndRemoveIndexLast"),
+    // ListSetIndex:
+    SETINDEX(Sig.of(BlocklyType.VOID, BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE_ARRAY_ITEM, BlocklyType.NUMBER), "set", "setFromEnd", "insert", "insertFromEnd"),
+    SETINDEXFIRSTORLAST(Sig.of(BlocklyType.VOID, BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE_ARRAY_ITEM), "setFirst", "setLast", "insertFirst", "insertLast"),
 
+    // ListGetIndex:
+    GETLISTELEMENT(Sig.of(BlocklyType.CAPTURED_TYPE_ARRAY_ITEM, BlocklyType.CAPTURED_TYPE, BlocklyType.NUMBER), "get", "getFromEnd", "getAndRemove", "getAndRemoveFromEnd"),
+    GETFIRST(Sig.of(BlocklyType.CAPTURED_TYPE_ARRAY_ITEM, BlocklyType.CAPTURED_TYPE), "getFirst", "getAndRemoveFirst"),
+    GETLAST(Sig.of(BlocklyType.CAPTURED_TYPE_ARRAY_ITEM, BlocklyType.CAPTURED_TYPE), "getLast", "getAndRemoveLast"),
+    REMOVE(Sig.of(BlocklyType.VOID, BlocklyType.CAPTURED_TYPE, BlocklyType.NUMBER), "remove", "removeFromEnd"),
+    REMOVEFIRSTORLAST(Sig.of(BlocklyType.VOID, BlocklyType.CAPTURED_TYPE), "removeFirst", "removeLast"),
     //ListRepeat:
-    LISTS_REPEAT(Sig.of(BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE_ARRAY_ITEM, BlocklyType.NUMBER), "repeatList"),
+    LISTS_REPEAT(Sig.of(BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE_ARRAY_ITEM, BlocklyType.NUMBER), "createListWith"),
 
     //GetSubFunct:
     GET_SUBLIST(Sig.of(BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE, BlocklyType.NUMBER, BlocklyType.NUMBER), "subList", "subListFromIndexToEnd", "subListFromEndToIndex", "subListFromEndToEnd"),
@@ -89,7 +94,7 @@ public enum FunctionNames {
     //  IsListEmptyFunct:
     LIST_IS_EMPTY(Sig.of(BlocklyType.BOOLEAN, BlocklyType.CAPTURED_TYPE), "isEmpty"),
     //RgbColor:
-    GETRGB(Sig.of(BlocklyType.COLOR, BlocklyType.NUMBER, BlocklyType.NUMBER, BlocklyType.NUMBER), "getRGB"),
+    GETRGB(Sig.of(BlocklyType.COLOR, BlocklyType.VARARGS, BlocklyType.NUMBER), "getRGB"),
     //MathPowerFunct:
     POWER(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER, BlocklyType.NUMBER), "^"),
 
@@ -143,7 +148,6 @@ public enum FunctionNames {
         }
         throw new DbcException("Invalid function name: " + s);
     }
-
 }
 
 

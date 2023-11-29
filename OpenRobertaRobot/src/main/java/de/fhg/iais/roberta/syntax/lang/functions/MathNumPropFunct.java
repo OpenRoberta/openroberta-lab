@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.syntax.lang.functions;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
@@ -57,7 +58,7 @@ public final class MathNumPropFunct extends Function {
     }
 
     @Override
-    public Block ast2xml() {
+    public List<Block> ast2xml() {
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
 
@@ -70,6 +71,6 @@ public final class MathNumPropFunct extends Function {
             mutation.setDivisorInput(true);
         }
         jaxbDestination.setMutation(mutation);
-        return jaxbDestination;
+        return Collections.singletonList(jaxbDestination);
     }
 }

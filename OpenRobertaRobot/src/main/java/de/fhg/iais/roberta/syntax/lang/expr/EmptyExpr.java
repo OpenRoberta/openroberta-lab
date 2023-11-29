@@ -1,5 +1,7 @@
 package de.fhg.iais.roberta.syntax.lang.expr;
 
+import java.util.List;
+
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
@@ -46,7 +48,7 @@ public final class EmptyExpr extends Expr {
     }
 
     @Override
-    public Block ast2xml() {
+    public List<Block> ast2xml() {
         return null;
     }
 }

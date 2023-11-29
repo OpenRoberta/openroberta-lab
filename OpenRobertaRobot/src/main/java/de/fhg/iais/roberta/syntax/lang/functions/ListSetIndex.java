@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.syntax.lang.functions;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
@@ -65,8 +66,8 @@ public final class ListSetIndex extends Function {
         String op = Jaxb2Ast.extractField(fields, BlocklyConstants.MODE);
 
         List<ExprParam> exprParams = new ArrayList<ExprParam>();
-        exprParams.add(new ExprParam(BlocklyConstants.LIST, BlocklyType.STRING));
-        exprParams.add(new ExprParam(BlocklyConstants.TO, BlocklyType.NUMBER_INT));
+        exprParams.add(new ExprParam(BlocklyConstants.LIST, BlocklyType.CAPTURED_TYPE));
+        exprParams.add(new ExprParam(BlocklyConstants.TO, BlocklyType.CAPTURED_TYPE_ARRAY_ITEM));
         if ( block.getMutation().isAt() ) {
             exprParams.add(new ExprParam(BlocklyConstants.AT, BlocklyType.NUMBER_INT));
         }
@@ -75,7 +76,7 @@ public final class ListSetIndex extends Function {
     }
 
     @Override
-    public Block ast2xml() {
+    public List<Block> ast2xml() {
         Block jaxbDestination = new Block();
         Ast2Jaxb.setBasicProperties(this, jaxbDestination);
 
@@ -92,7 +93,7 @@ public final class ListSetIndex extends Function {
             Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.TO, this.param.get(1));
         }
         jaxbDestination.setMutation(mutation);
-        return jaxbDestination;
+        return Collections.singletonList(jaxbDestination);
     }
 
 }
