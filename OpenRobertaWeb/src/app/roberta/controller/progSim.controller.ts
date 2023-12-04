@@ -14,7 +14,6 @@ import WebotsSimulation from 'simulation.webots';
 import { SimulationRoberta } from 'simulation.roberta';
 import CONST from 'simulation.constants';
 import * as PROGLIST from 'progList.model';
-import { getPluginSim } from 'guiState.controller';
 
 const INITIAL_WIDTH = 0.5;
 
@@ -394,6 +393,15 @@ class ProgSimDebugController extends ProgSimController {
 
     override initEvents() {
         let C = this;
+        let observer = new MutationObserver(function (mutations) {
+            mutations.forEach(function (mutation) {
+                if (!$('#simDebugButton').hasClass('rightActive')) {
+                    SimulationRoberta.Instance.endDebugging();
+                }
+            });
+        });
+        observer.observe($('#simDebugButton')[0], { attributes: true, attributeFilter: ['class'] });
+
         $('#simDebugButton').off();
         $('#simDebugButton').onWrap(
             'click touchend',
