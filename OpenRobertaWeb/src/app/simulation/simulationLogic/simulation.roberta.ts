@@ -822,8 +822,9 @@ export class SimulationRoberta implements Simulation {
 
                         let observer = new MutationObserver(function (mutations) {
                             mutations.forEach(function (mutation) {
-                                if ($(block.svgGroup_).hasClass('blocklyDisabled')) {
+                                if ($(block.svgGroup_).hasClass('blocklyDisabled') || $(block.svgGroup_).hasClass('blocklyDragging')) {
                                     sim.removeBreakPoint(block);
+                                    $(block.svgGroup_).removeClass('blocklySelected');
                                     $(block.svgPath_).removeClass('breakpoint').removeClass('selectedBreakpoint');
                                 } else {
                                     if ($(block.svgGroup_).hasClass('blocklySelected')) {
@@ -837,6 +838,7 @@ export class SimulationRoberta implements Simulation {
                                             sim._breakpoints.push(block.id);
                                             $(block.svgPath_).addClass('breakpoint');
                                         }
+                                        $(block.svgGroup_).removeClass('blocklySelected');
                                     }
                                 }
                             });
@@ -852,7 +854,8 @@ export class SimulationRoberta implements Simulation {
                     if (sim.observers.hasOwnProperty(block.id)) {
                         sim.observers[block.id].disconnect();
                     }
-                    $(block.svgPath_).removeClass('breakpoint');
+                    $(block.svgPath_).removeClass('breakpoint').animate({ 'fill-opacity': '1' }, 0);
+                    sim.removeBreakPoint(block);
                 }, sim);
         }
     }
