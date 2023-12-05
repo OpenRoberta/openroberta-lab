@@ -241,7 +241,7 @@ export function loadFromListing(conf: any[]): void {
             });
             $('#tabConfiguration').tabWrapShow();
         }
-        MSG.displayInformation(result, '', result.message, null, null);
+        MSG.displayInformation(result, '', result.message, '', null);
     });
 }
 
