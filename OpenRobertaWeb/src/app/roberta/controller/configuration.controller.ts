@@ -6,7 +6,7 @@ import * as GUISTATE_C from 'guiState.controller';
 import * as Blockly from 'blockly';
 import * as CONFIGURATION from 'configuration.model';
 import * as CV from 'confVisualization';
-import $ from 'jquery';
+import * as $ from 'jquery';
 import 'jquery-validate';
 
 let $formSingleModal: JQuery<HTMLElement>;
@@ -74,7 +74,6 @@ function initView(): void {
 }
 
 function initEvents(): void {
-    console.log('pllllllllllll');
     $('#tabConfiguration').onWrap('show.bs.tab', function (): void {
         GUISTATE_C.setView('tabConfiguration');
     });
@@ -232,7 +231,7 @@ export function saveAsToServer(): void {
 /**
  * Load the configuration that was selected in configurations list
  */
-export function loadFromListing(conf): void {
+export function loadFromListing(conf: any[]): void {
     LOG.info('loadFromList ' + conf[0]);
     CONFIGURATION.loadConfigurationFromListing(conf[0], conf[1], function (result: ConfResult): void {
         if (result.rc === 'ok') {

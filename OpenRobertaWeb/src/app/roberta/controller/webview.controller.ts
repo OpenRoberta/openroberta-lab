@@ -32,7 +32,7 @@ export function init(language: string): JQuery.Promise<string, string, string> {
     return ready.promise();
 }
 
-export function appToJsInterface(jsonData): void {
+export function appToJsInterface(jsonData: string): void {
     try {
         let data = JSON.parse(jsonData);
         if (!data.target || !data.type) {
@@ -103,7 +103,7 @@ function callbackOnTermination(): void {
     GUISTATE_C.getBlocklyWorkspace().robControls.switchToStart();
 }
 
-export function getInterpreter(program) {
+export function getInterpreter(program): INTERPRETER.Interpreter {
     interpreter = new INTERPRETER.Interpreter(program, theRobotBehaviour, callbackOnTermination, [], null, null);
     return interpreter;
 }
@@ -122,7 +122,19 @@ export function setRobotBehaviour(): void {
     }
 }
 
-export function jsToAppInterface(jsonData): void {
+export function jsToAppInterface(jsonData: {
+    target: string;
+    type: string;
+    actuator: string;
+    brickid: string;
+    frequency?: number;
+    duration?: number;
+    direction?: number;
+    color?: number;
+    id?: number;
+    action?: string;
+    power?: string;
+}): void {
     try {
         if (webViewType === 'Android') {
             // @ts-ignore
@@ -138,7 +150,7 @@ export function jsToAppInterface(jsonData): void {
     }
 }
 
-function tryAndroid(data): boolean {
+function tryAndroid(data: { target: string; type: string }): boolean {
     try {
         // @ts-ignore
         OpenRoberta.jsToAppInterface(JSON.stringify(data));
@@ -148,7 +160,7 @@ function tryAndroid(data): boolean {
     }
 }
 
-function tryIOS(data): boolean {
+function tryIOS(data: { target: string; type: string }): boolean {
     try {
         // @ts-ignore
         window.webkit.messageHandlers.OpenRoberta.postMessage(JSON.stringify(data));
@@ -158,7 +170,7 @@ function tryIOS(data): boolean {
     }
 }
 
-export function jsToDisplay(action): void {
+export function jsToDisplay(action: { show?: string; clear?: boolean }): void {
     if (action.show !== undefined) {
         $('#showDisplayText').append('<div>' + action.show + '</div>');
         if (!$('#showDisplayText').is(':visible')) {
