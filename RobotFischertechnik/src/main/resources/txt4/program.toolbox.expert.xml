@@ -1,7 +1,20 @@
 <toolbox_set id="toolbox" style="display: none">
     <category name='TOOLBOX_ACTION' svg='true'>
         <category name='TOOLBOX_MOVE' svg='true'>
-            <block type='actions_motor_on_txt'></block>
+            <block type='actions_motor_on_txt'>
+                <value name="POWER">
+                    <block type="math_number" id="653">
+                        <field name="NUM">30</field>
+                    </block>
+                </value>
+            </block>
+            <block type="actions_motorOmni_on_txt">
+                <value name="POWER">
+                    <block type="math_number" id="653">
+                        <field name="NUM">30</field>
+                    </block>
+                </value>
+            </block>
         </category>
     </category>
     <category name='TOOLBOX_SENSOR' svg='true'>
@@ -54,7 +67,6 @@
                 <value name='WAIT0'>
                     <block type='logic_compare'>
                         <value name='A'>
-                            <block type='robSensors_getSample'></block>
                         </value>
                         <value name='B'>
                             <block type='logic_boolean'></block>

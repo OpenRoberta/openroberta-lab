@@ -9,7 +9,9 @@ import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.components.ConfigurationAst;
+import de.fhg.iais.roberta.constants.FischertechnikConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.action.MotorOmniOnAction;
 import de.fhg.iais.roberta.syntax.action.MotorOnAction;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
@@ -31,7 +33,10 @@ import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractPythonVisitor;
 public final class Txt4PythonVisitor extends AbstractPythonVisitor implements ITxt4Visitor<Void> {
 
     private final ConfigurationAst configurationAst;
-    private String rightMotorPort;
+    private String frontLeftMotor;
+    private String frontRightMotor;
+    private String rearLeftMotor;
+    private String rearRightMotor;
 
     /**
      * initialize the Python code generator visitor.
@@ -42,6 +47,32 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
         List<List<Phrase>> programPhrases, ClassToInstanceMap<IProjectBean> beans, ConfigurationAst configurationAst) {
         super(programPhrases, beans);
         this.configurationAst = configurationAst;
+        setMotorPorts();
+    }
+
+    private void setMotorPorts() {
+        ConfigurationComponent omniDrive = getOmniDrive();
+        if ( omniDrive != null ) {
+            frontLeftMotor = omniDrive.getOptProperty("MOTOR_FL");
+            frontRightMotor = omniDrive.getOptProperty("MOTOR_FR");
+            rearLeftMotor = omniDrive.getOptProperty("MOTOR_RL");
+            rearRightMotor = omniDrive.getOptProperty("MOTOR_RR");
+        } else {
+            frontLeftMotor = "M1";
+            frontRightMotor = "M2";
+            rearLeftMotor = "M3";
+            rearRightMotor = "M4";
+
+        }
+    }
+
+    private ConfigurationComponent getOmniDrive() {
+        for ( ConfigurationComponent component : this.configurationAst.getConfigurationComponents().values() ) {
+            if ( component.componentType.equals(FischertechnikConstants.OMNIDRIVE) ) {
+                return component;
+            }
+        }
+        return null;
     }
 
     @Override
@@ -83,6 +114,50 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
         this.src.add("),Motor.CCW)");
         nlIndent();
         this.src.add("TXT_M_", motorPort, "_encodermotor.start()");
+        return null;
+    }
+
+    @Override
+    public Void visitMotorOmniOnAction(MotorOmniOnAction motorOmniOnAction) {
+
+        //TODO maybe make this global?
+        String motorFL = "TXT_M_" + this.frontLeftMotor + "_encodermotor";
+        String motorFR = "TXT_M_" + this.frontRightMotor + "_encodermotor";
+        String motorRL = "TXT_M_" + this.rearLeftMotor + "_encodermotor";
+        String motorRR = "TXT_M_" + this.rearRightMotor + "_encodermotor";
+
+        String speedMultiplier = "";
+        //replace with forward, backward, left, right, forward left, backward right, forward right, backward left,
+        switch ( motorOmniOnAction.direction ) {
+            case "HEART_SMALL": //backward
+                speedMultiplier = "-";
+            case "HEART": //forward
+                this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(Txt4Methods.OMNIDRIVEVERTICAL));
+                break;
+            case "SMILE": //right
+                speedMultiplier = "-";
+            case "HAPPY": //left
+                this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(Txt4Methods.OMNIDRIVEHORIZONTAL));
+                break;
+            case "SUPRISED": //backward right
+                speedMultiplier = "-";
+            case "CONFUSED": //forward left
+                this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(Txt4Methods.OMNIDRIVEDIAGONALTL));
+                break;
+            case "ANGRY": //backward left
+                speedMultiplier = "-";
+            case "ASLEEP": //forward right
+                this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(Txt4Methods.OMNIDRIVEDIAGONALTR));
+                break;
+            default:
+                break;
+        }
+        this.src.add("(", motorFL, ", ", motorFR, ", ", motorRL, ", ", motorRR, ", ");
+        this.src.add(speedMultiplier);
+        motorOmniOnAction.power.accept(this);
+        this.src.add(")");
+
+
         return null;
     }
 
@@ -168,7 +243,7 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
 
     @Override
     public Void visitWaitTimeStmt(WaitTimeStmt waitTimeStmt) {
-        this.src.add("wait_for_seconds(");
+        this.src.add("time.sleep(");
         waitTimeStmt.time.accept(this);
         this.src.add("/1000)");
         return null;
@@ -181,6 +256,7 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
         }
         UsedHardwareBean usedHardwareBean = this.getBean(UsedHardwareBean.class);
         this.src.add("import math").nlI();
+        this.src.add("import time").nlI();
         if ( usedHardwareBean.isActorUsed(C.RANDOM) || usedHardwareBean.isActorUsed(C.RANDOM_DOUBLE) ) {
             this.src.add("import random").nlI();
         }

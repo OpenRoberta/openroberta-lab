@@ -1,8 +1,38 @@
 <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="txt4" xmlversion="" description="" tags="">
-    <instance x="143" y="251">
-        <block type="robConf_encoder" id="`CW3f_/xL#;Z!)*[EZz@" intask="true">
-            <field name="NAME">MA</field>
+
+    <instance x="70" y="103">
+        <block type="robConf_omnidrive" id="AM=n{?7R#nO#1~?a3j~u" intask="true">
+            <field name="NAME">_O</field>
+            <field name="BRICK_WHEEL_DIAMETER">5.6</field>
+            <field name="BRICK_TRACK_WIDTH">11.5</field>
+            <field name="MOTOR_FL">M1</field>
+            <field name="MOTOR_FR">M2</field>
+            <field name="MOTOR_RL">M3</field>
+            <field name="MOTOR_RR">M4</field>
+        </block>
+    </instance>
+    <instance x="350" y="103">
+        <block type="robConf_encoder" id="`M1" intask="true">
+            <field name="NAME">TL</field>
             <field name="PORT">M1</field>
+        </block>
+    </instance>
+    <instance x="600" y="103">
+        <block type="robConf_encoder" id="`M2" intask="true">
+            <field name="NAME">TR</field>
+            <field name="PORT">M2</field>
+        </block>
+    </instance>
+    <instance x="350" y="160">
+        <block type="robConf_encoder" id="`M3" intask="true">
+            <field name="NAME">RL</field>
+            <field name="PORT">M3</field>
+        </block>
+    </instance>
+    <instance x="600" y="160">
+        <block type="robConf_encoder" id="`M4" intask="true">
+            <field name="NAME">RR</field>
+            <field name="PORT">M4</field>
         </block>
     </instance>
 </block_set>

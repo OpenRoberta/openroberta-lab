@@ -1,9 +1,13 @@
 package de.fhg.iais.roberta.worker;
 
+import java.util.Collections;
+import java.util.List;
+
 import com.google.common.collect.ClassToInstanceMap;
 
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.components.Project;
+import de.fhg.iais.roberta.visitor.Txt4Methods;
 import de.fhg.iais.roberta.visitor.Txt4ValidatorAndCollectorVisitor;
 import de.fhg.iais.roberta.visitor.validate.CommonNepoValidatorAndCollectorVisitor;
 
@@ -15,8 +19,9 @@ public class Txt4ValidatorAndCollectorWorker extends AbstractValidatorAndCollect
         return new Txt4ValidatorAndCollectorVisitor(project.getConfigurationAst(), beanBuilders);
     }
 
-    /*@Override
+    @Override
     protected List<Class<? extends Enum<?>>> getAdditionalMethodEnums() {
-        return Collections.singletonList(SpikeMethods.class);
-    }*/
+        return Collections.singletonList(Txt4Methods.class);
+    }
+
 }

@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2023-11-27 16:34:15.531199",
+		"lastupdated": "2023-12-05 21:29:02.187686",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -501,6 +501,8 @@
 	"MOTOR_DRIVE_TO": "drive to",
 	"MOTOR_RIGHT": "right",
 	"MOTOR_LEFT": "left",
+	"MOTOR_REAR_LEFT": "rear left",
+	"MOTOR_REAR_RIGHT": "rear right",
 	"MOTOR_TURN": "turn",
 	"MOTOR_PORT": "motor port",
 	"MOTOR_PORT_ARDUINO": "motor 28BYJ-48 port",

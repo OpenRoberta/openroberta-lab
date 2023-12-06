@@ -1,3 +1,39 @@
 include: "classpath:/common.methods.yml"
 
 ## FunctionNames
+
+MOTORSTART:
+  PYTHON: |
+    def motorStart(motor, speed):
+        motor.set_speed(speed, Motor.CCW)
+        motor.start_sync()
+
+OMNIDRIVEVERTICAL:
+  PYTHON: |
+    def omnidriveVertical(motorTL, motorTR, motorRL, motorRR, speed):
+        motorStart(motorTL, speed)
+        motorStart(motorTR, speed)
+        motorStart(motorRL, speed)
+        motorStart(motorRR, speed)
+
+OMNIDRIVEHORIZONTAL:
+  PYTHON: |
+    def omnidriveHorizontal(motorTL, motorTR, motorRL, motorRR, speed):
+        motorStart(motorTL, -speed)
+        motorStart(motorTR, speed)
+        motorStart(motorRL, speed)
+        motorStart(motorRR, -speed)
+
+OMNIDRIVEDIAGONALTL:
+  PYTHON: |
+    def omnidriveDiagonalTL(motorTL, motorTR, motorRL, motorRR, speed):
+        motorTL.stop_sync(motorRR)
+        motorStart(motorTR, speed)
+        motorStart(motorRL, speed)
+
+OMNIDRIVEDIAGONALTR:
+  PYTHON: |
+    def omnidriveDiagonalTR(motorTL, motorTR, motorRL, motorRR, speed):
+        motorTR.stop_sync(motorRL)
+        motorStart(motorTL, speed)
+        motorStart(motorRR, speed)

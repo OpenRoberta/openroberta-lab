@@ -11,6 +11,7 @@ import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.action.MotorOmniOnAction;
 import de.fhg.iais.roberta.syntax.action.MotorOnAction;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
@@ -42,6 +43,33 @@ public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
         if ( checkActorPort(motorOnAction) ) {
             ConfigurationComponent motor = getMotorFromPort(motorOnAction.port);
             usedHardwareBuilder.addUsedActor(new UsedActor(motor.getOptProperty("PORT"), SC.ENCODER));
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitMotorOmniOnAction(MotorOmniOnAction motorOmniOnAction) {
+        usedMethodBuilder.addUsedMethod(Txt4Methods.MOTORSTART);
+        //replace with forward, backward, left, right, forward left, backward right, forward right, backward left,
+        switch ( motorOmniOnAction.direction ) {
+            case "HEART": //forward
+            case "HEART_SMALL": //backward
+                usedMethodBuilder.addUsedMethod(Txt4Methods.OMNIDRIVEVERTICAL);
+                break;
+            case "HAPPY": //left
+            case "SMILE": //right
+                usedMethodBuilder.addUsedMethod(Txt4Methods.OMNIDRIVEHORIZONTAL);
+                break;
+            case "CONFUSED": //forward left
+            case "SUPRISED": //backward right
+                usedMethodBuilder.addUsedMethod(Txt4Methods.OMNIDRIVEDIAGONALTL);
+                break;
+            case "ASLEEP": //forward right
+            case "ANGRY": //backward left
+                usedMethodBuilder.addUsedMethod(Txt4Methods.OMNIDRIVEDIAGONALTR);
+                break;
+            default:
+                break;
         }
         return null;
     }
