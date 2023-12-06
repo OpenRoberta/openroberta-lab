@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.syntax.action.spike;
 
 import de.fhg.iais.roberta.blockly.generated.Hide;
+import de.fhg.iais.roberta.syntax.action.ActionWithoutUserChosenName;
 import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
 import de.fhg.iais.roberta.transformer.forField.NepoField;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
