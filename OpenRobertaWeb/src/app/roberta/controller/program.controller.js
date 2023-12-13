@@ -1,6 +1,6 @@
 import * as MSG from 'message';
 import * as LOG from 'log';
-import * as UTIL from 'util';
+import * as UTIL from 'util.roberta';
 import * as GUISTATE_C from 'guiState.controller';
 import * as ROBOT_C from 'robot.controller';
 import * as NN_C from 'nn.controller';

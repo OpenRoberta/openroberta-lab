@@ -55,8 +55,7 @@ limitations under the License.
     <nav class='navbar navbar-default navbar-fixed-top' role='navigation' id='tutorial-navigation'>
         <div class='container-fluid'>
             <div>
-                <ul class='nav navbar-nav' id='tutorial-list'>
-                </ul>
+                <ul class='nav navbar-nav' id='tutorial-list'></ul>
                 <h2 id='tutorial-header'></h2>
                 <a id='tutorialEnd' href='#' class='typcn typcn-delete'></a>
             </div>
@@ -75,168 +74,320 @@ limitations under the License.
             <div class='collapse navbar-collapse' id='navbarCollapse'>
                 <ul class='nav navbar-nav' id='mainNavigationBar'>
                     <!-- Menu Program -->
-                    <li class='dropdown' id='head-navigation-program-edit'><a href='#' data-toggle='dropdown' class='dropdown-toggle'
-                        id='head-navi-tooltip-program' lkey='Blockly.Msg.MENU_EDIT_TOOLTIP' rel='tooltip' data-original-title='' title=''> <span
-                        id='head-navi-icon-program' class='head-navi-icons typcn typcn-document-text'></span><span
-                        class='head-navi-title hidden-sm hidden-md hidden-lg' lkey='Blockly.Msg.MENU_EDIT'></span>
-                    </a>
+                    <li class='dropdown' id='head-navigation-program-edit'>
+                        <a href='#' data-toggle='dropdown' class='dropdown-toggle' id='head-navi-tooltip-program' lkey='Blockly.Msg.MENU_EDIT_TOOLTIP' rel='tooltip'
+                            data-original-title='' title=''>
+                            <span id='head-navi-icon-program' class='head-navi-icons typcn typcn-document-text'></span>
+                            <span class='head-navi-title hidden-sm hidden-md hidden-lg' lkey='Blockly.Msg.MENU_EDIT'></span>
+                        </a>
                         <ul class='dropdown-menu'>
-                            <li class='menuRunProg'><a href='#'><span id='menuRunProg' class='typcn typcn-media-play'
-                                lkey='Blockly.Msg.MENU_START_BRICK'>run on brick</span><span class='kbd text-muted'>Ctrl&#8239;+&#8201;R</span></a></li>
-                            <li><a href='#' id='menuRunSim' class='typcn typcn-simulation' lkey='Blockly.Msg.MENU_START_SIM'>run in simulation</a></li>
-                            <li id='robotDefaultFirmware' class='hidden menuRunProg'><a href='#' id='menuDefaultFirmware' class='typcn typcn-arrow-sync'
-                                lkey='Blockly.Msg.MENU_RESET_FIRMWARE'>reset to the factory defaults</a></li>
-                            <li><a href='#' id='menuNewProg' class='typcn typcn-document-add' lkey='Blockly.Msg.MENU_NEW'>neu ...</a></li>
-                            <li class='login'><a href='#'><span id='menuListProg' class='typcn typcn-th-list' lkey='Blockly.Msg.MENU_LIST_PROG'>Liste
-                                        ...</span><span class='kbd text-muted'>Ctrl&#8239;+&#8201;M</span></a></li>
-                            <li><a href='#' id='menuRunMulipleSim' class='typcn typcn-open' lkey='Blockly.Msg.MENU_RUN_MULT_SIM'>run
-                                multiple robot simulation</a></li>
-                            <li><a href='#' id='menuListExamples' class='typcn typcn-th-list' lkey='Blockly.Msg.MENU_LIST_PROG_EXAMPLES'>Beispielprogramme
-                                ...</a></li>
-                            <li class='login'><a href='#'><span id='menuSaveProg' class='typcn typcn-cloud-storage' lkey='Blockly.Msg.MENU_SAVE'>speichern</span><span
-                                class='kbd text-muted'>Ctrl/Cmd&#8239;+&#8201;S</span></a></li>
-                            <li class='login'><a href='#'><span id='menuSaveAsProg' class='typcn typcn-cloud-storage' lkey='Blockly.Msg.MENU_SAVE_AS'>speichern
-                                        unter ...</span><span class='kbd text-muted'>Ctrl/Cmd&#8239;+&#8201;Shift&#8239;+&#8201;S</span></a></li>
-                            <li class=''><a href='#' id='menuShowCode' class='typcn typcn-code' lkey='Blockly.Msg.MENU_SHOW_CODE'>show code </a></li>
-                            <li class=''><a href='#' id='menuSourceCodeEditor' class='typcn typcn-edit' lkey='Blockly.Msg.MENU_SOURCE_CODE_EDITOR'>open
-                                source code editor</a></li>
-                            <li class=''><a href='#' id='menuLinkProg' class='typcn typcn-link' lkey='Blockly.Msg.MENU_CREATE_LINK'>erstelle
-                                Programmlink ...</a></li>
-                            <li class=''><a href='#'><span id='menuExportProg' class='typcn typcn-download' lkey='Blockly.Msg.MENU_EXPORT_PROG'>export
-                                        program</span><span class='kbd text-muted'>Ctrl/Cmd&#8239;+&#8201;E</span></a></li>
-                            <li class='login'><a href='#'><span id='menuExportAllProgs' class='typcn typcn-download' lkey='Blockly.Msg.MENU_EXPORT_ALL_PROGS'>
-                                        export all my programs</span></a></li>
-                            <li class=''><a href='#'><span id='menuImportProg' class='typcn typcn-upload' lkey='Blockly.Msg.MENU_IMPORT_PROG'>import
-                                        program ...</span><span class='kbd text-muted'>Ctrl/Cmd&#8239;+&#8201;I</span></a></li>
-                            <li class='hidden'><a href='#' id='menuAttachProg' class='' lkey='Blockly.Msg.MENU_ATTACH'>anhängen ...</a></li>
-                            <li class='hidden'><a href='#' id='menuPropertiesProg' class='' lkey='Blockly.Msg.MENU_PROPERTIES'>Eigenschaften</a></li>
+                            <li class='menuRunProg'>
+                                <a href='#'>
+                                    <span id='menuRunProg' class='typcn typcn-media-play' lkey='Blockly.Msg.MENU_START_BRICK'>run on brick</span>
+                                    <span class='kbd text-muted'>Ctrl&#8239;+&#8201;R</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href='#' id='menuRunSim' class='typcn typcn-simulation' lkey='Blockly.Msg.MENU_START_SIM'>run in simulation</a>
+                            </li>
+                            <li id='robotDefaultFirmware' class='hidden menuRunProg'>
+                                <a href='#' id='menuDefaultFirmware' class='typcn typcn-arrow-sync'
+                                    lkey='Blockly.Msg.MENU_RESET_FIRMWARE'>reset to the factory defaults
+                                </a>
+                            </li>
+                            <li>
+                                <a href='#' id='menuNewProg' class='typcn typcn-document-add' lkey='Blockly.Msg.MENU_NEW'>neu ...</a>
+                            </li>
+                            <li class='login'>
+                                <a href='#'><span id='menuListProg' class='typcn typcn-th-list' lkey='Blockly.Msg.MENU_LIST_PROG'>Liste
+                                        ...</span>
+                                    <span class='kbd text-muted'>Ctrl&#8239;+&#8201;M</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href='#' id='menuRunMulipleSim' class='typcn typcn-open' lkey='Blockly.Msg.MENU_RUN_MULT_SIM'>run multiple robot simulation</a>
+                            </li>
+                            <li>
+                                <a href='#' id='menuListExamples' class='typcn typcn-th-list' lkey='Blockly.Msg.MENU_LIST_PROG_EXAMPLES'>Beispielprogramme ...</a>
+                            </li>
+                            <li class='login'>
+                                <a href='#'>
+                                    <span id='menuSaveProg' class='typcn typcn-cloud-storage' lkey='Blockly.Msg.MENU_SAVE'>speichern</span>
+                                    <span class='kbd text-muted'>Ctrl/Cmd&#8239;+&#8201;S</span>
+                                </a>
+                            </li>
+                            <li class='login'>
+                                <a href='#'><span id='menuSaveAsProg' class='typcn typcn-cloud-storage' lkey='Blockly.Msg.MENU_SAVE_AS'>speichern
+                                        unter ...</span>
+                                    <span class='kbd text-muted'>Ctrl/Cmd&#8239;+&#8201;Shift&#8239;+&#8201;S</span>
+                                </a>
+                            </li>
+                            <li class=''>
+                                <a href='#' id='menuShowCode' class='typcn typcn-code' lkey='Blockly.Msg.MENU_SHOW_CODE'>show code</a>
+                            </li>
+                            <li class=''>
+                                <a href='#' id='menuSourceCodeEditor' class='typcn typcn-edit' lkey='Blockly.Msg.MENU_SOURCE_CODE_EDITOR'>open source code editor</a>
+                            </li>
+                            <li class=''>
+                                <a href='#' id='menuLinkProg' class='typcn typcn-link' lkey='Blockly.Msg.MENU_CREATE_LINK'>erstelle Programmlink ...</a>
+                            </li>
+                            <li class=''>
+                                <a href='#'><span id='menuExportProg' class='typcn typcn-download' lkey='Blockly.Msg.MENU_EXPORT_PROG'>export
+                                        program</span>
+                                    <span class='kbd text-muted'>Ctrl/Cmd&#8239;+&#8201;E</span>
+                                </a>
+                            </li>
+                            <li class='login'>
+                                <a href='#'><span id='menuExportAllProgs' class='typcn typcn-download' lkey='Blockly.Msg.MENU_EXPORT_ALL_PROGS'>
+                                        export all my programs</span>
+                                </a>
+                            </li>
+                            <li class=''>
+                                <a href='#'><span id='menuImportProg' class='typcn typcn-upload' lkey='Blockly.Msg.MENU_IMPORT_PROG'>import
+                                        program ...</span>
+                                    <span class='kbd text-muted'>Ctrl/Cmd&#8239;+&#8201;I</span>
+                                </a>
+                            </li>
+                            <li class='hidden'>
+                                <a href='#' id='menuAttachProg' class='' lkey='Blockly.Msg.MENU_ATTACH'>anhängen ...</a>
+                            </li>
+                            <li class='hidden'>
+                                <a href='#' id='menuPropertiesProg' class='' lkey='Blockly.Msg.MENU_PROPERTIES'>Eigenschaften</a>
+                            </li>
                             <li class='divider'></li>
-                            <li class='disabled level beginner'><a href='#' id='menuToolboxBeginner' class='typcn typcn-media-stop-outline'
-                                lkey='Blockly.Msg.MENU_TOOLBOX_BEGINNER'>Toolbox Anfänger</a></li>
-                            <li class='level expert'><a href='#' id='menuToolboxExpert' class='typcn typcn-star-outline'
-                                lkey='Blockly.Msg.MENU_TOOLBOX_EXPERT'>Toolbox Experte</a></li>
+                            <li class='disabled level beginner'>
+                                <a href='#' id='menuToolboxBeginner' class='typcn typcn-media-stop-outline' lkey='Blockly.Msg.MENU_TOOLBOX_BEGINNER'>Toolbox Anfänger
+                                </a>
+                            </li>
+                            <li class='level expert'>
+                                <a href='#' id='menuToolboxExpert' class='typcn typcn-star-outline' lkey='Blockly.Msg.MENU_TOOLBOX_EXPERT'>Toolbox Experte</a>
+                            </li>
                         </ul>
                     </li>
                     <!-- Menu Configuration -->
-                    <li class='dropdown' id='head-navigation-configuration-edit'><a href='#' data-toggle='dropdown' class='dropdown-toggle'
-                        id='head-navi-tooltip-configuration' lkey='Blockly.Msg.MENU_EDIT_TOOLTIP' rel='tooltip' data-original-title='' title=''> <span
-                        id='head-navi-icon-configuration' class='head-navi-icons typcn typcn-document-text'></span><span
-                        class='head-navi-title hidden-sm hidden-md hidden-lg' lkey='Blockly.Msg.MENU_EDIT'></span>
-                    </a>
+                    <li class='dropdown' id='head-navigation-configuration-edit'>
+                        <a href='#' data-toggle='dropdown' class='dropdown-toggle' id='head-navi-tooltip-configuration' lkey='Blockly.Msg.MENU_EDIT_TOOLTIP'
+                            rel='tooltip' data-original-title='' title=''> <span id='head-navi-icon-configuration'
+                            class='head-navi-icons typcn typcn-document-text'></span>
+                            <span class='head-navi-title hidden-sm hidden-md hidden-lg' lkey='Blockly.Msg.MENU_EDIT'></span>
+                        </a>
                         <ul class='dropdown-menu'>
-                            <li class='hidden'><a href='#' id='menuCheckConfig' class='typcn typcn-tick' lkey='Blockly.Msg.MENU_CHECK'>checken</a></li>
-                            <li><a href='#' id='menuNewConfig' class='typcn typcn-document-add' lkey='Blockly.Msg.MENU_NEW'>neu ...</a></li>
-                            <li class='login'><a href='#' id='menuListConfig' class='typcn typcn-th-list' lkey='Blockly.Msg.MENU_LIST_CONF'>Liste ... </a></li>
-                            <li class='login'><a href='#' id='menuSaveConfig' class='typcn typcn-cloud-storage' lkey='Blockly.Msg.MENU_SAVE'>speichern</a></li>
-                            <li class='login'><a href='#' id='menuSaveAsConfig' class='typcn typcn-cloud-storage' lkey='Blockly.Msg.MENU_SAVE_AS'>speichern
-                                unter ...</a></li>
-                            <li class='hidden'><a href='#' id='menuPropertiesConfig' class='' lkey='Blockly.Msg.MENU_PROPERTIES'>Eigenschaften ...</a></li>
+                            <li class='hidden'>
+                                <a href='#' id='menuCheckConfig' class='typcn typcn-tick' lkey='Blockly.Msg.MENU_CHECK'>checken</a>
+                            </li>
+                            <li>
+                                <a href='#' id='menuNewConfig' class='typcn typcn-document-add' lkey='Blockly.Msg.MENU_NEW'>neu ...</a>
+                            </li>
+                            <li class='login'>
+                                <a href='#' id='menuListConfig' class='typcn typcn-th-list' lkey='Blockly.Msg.MENU_LIST_CONF'>Liste ...</a>
+                            </li>
+                            <li class='login'>
+                                <a href='#' id='menuSaveConfig' class='typcn typcn-cloud-storage' lkey='Blockly.Msg.MENU_SAVE'>speichern</a>
+                            </li>
+                            <li class='login'>
+                                <a href='#' id='menuSaveAsConfig' class='typcn typcn-cloud-storage' lkey='Blockly.Msg.MENU_SAVE_AS'>speichern unter ...</a>
+                            </li>
+                            <li class='hidden'>
+                                <a href='#' id='menuPropertiesConfig' class='' lkey='Blockly.Msg.MENU_PROPERTIES'>Eigenschaften ...</a>
+                            </li>
                         </ul>
                     </li>
                     <!--   Menu Robot -->
-                    <li class='dropdown' id='head-navigation-robot'><a href='#' data-toggle='dropdown' class='dropdown-toggle' id='head-navi-tooltip-robot'
-                        lkey='Blockly.Msg.MENU_ROBOT_TOOLTIP' rel='tooltip' data-original-title='' title=''> <span id='head-navi-icon-robot'
-                        class='head-navi-icons typcn typcn-open'></span><span class='head-navi-title hidden-sm hidden-md hidden-lg'
-                        lkey='Blockly.Msg.MENU_ROBOT'></span>
-                    </a>
+                    <li class='dropdown' id='head-navigation-robot'>
+                        <a href='#' data-toggle='dropdown' class='dropdown-toggle' id='head-navi-tooltip-robot' lkey='Blockly.Msg.MENU_ROBOT_TOOLTIP' rel='tooltip'
+                            data-original-title='' title=''>
+                            <span id='head-navi-icon-robot' class='head-navi-icons typcn typcn-open'></span>
+                            <span class='head-navi-title hidden-sm hidden-md hidden-lg' lkey='Blockly.Msg.MENU_ROBOT'></span>
+                        </a>
                         <ul id='navigation-robot' class='dropdown-menu'>
-                            <li id='robotConnect'><a href='#' id='menuConnect' class='typcn typcn-wi-fi' lkey='Blockly.Msg.MENU_CONNECT'>verbinden ...</a></li>
-                            <li><a href='#' id='menuRobotInfo' class='typcn typcn-input-checked' lkey='Blockly.Msg.MENU_ROBOT_STATE_INFO'>Roboterinformationen</a></li>
-                            <li id='robotWlan' class='hidden'><a href='#' id='menuWlan' class='typcn typcn-wi-fi' lkey='Blockly.Msg.MENU_ROBOT_WLAN'>WLAN
-                                Zugangsdaten ...</a></li>
+                            <li id='robotConnect'>
+                                <a href='#' id='menuConnect' class='typcn typcn-wi-fi' lkey='Blockly.Msg.MENU_CONNECT'>verbinden ...</a>
+                            </li>
+                            <li>
+                                <a href='#' id='menuRobotInfo' class='typcn typcn-input-checked' lkey='Blockly.Msg.MENU_ROBOT_STATE_INFO'>Roboterinformationen</a>
+                            </li>
+                            <li id='robotWlan' class='hidden'>
+                                <a href='#' id='menuWlan' class='typcn typcn-wi-fi' lkey='Blockly.Msg.MENU_ROBOT_WLAN'>WLAN Zugangsdaten ...</a>
+                            </li>
                             <li class='divider'></li>
-                            <li class='robotType'><a href='#' class='typcn menu-robot'></a></li>
+                            <li class='robotType'>
+                                <a href='#' class='typcn menu-robot'></a>
+                            </li>
                             <li class='hidden anchor'></li>
                         </ul>
                     </li>
                     <!-- Menu Help -->
-                    <li class='dropdown' id='head-navigation-help'><a href='#' data-toggle='dropdown' class='dropdown-toggle' id='head-navi-tooltip-help'
-                        lkey='Blockly.Msg.MENU_HELP_TOOLTIP' rel='tooltip' data-original-title='' title=''> <span id='head-navi-icon-help'
-                        class='head-navi-icons typcn typcn-lightbulb'></span><span class='head-navi-title hidden-sm hidden-md hidden-lg'
-                        lkey='Blockly.Msg.MENU_HELP'></span>
-                    </a>
+                    <li class='dropdown' id='head-navigation-help'>
+                        <a href='#' data-toggle='dropdown' class='dropdown-toggle' id='head-navi-tooltip-help' lkey='Blockly.Msg.MENU_HELP_TOOLTIP' rel='tooltip'
+                            data-original-title='' title=''>
+                            <span id='head-navi-icon-help' class='head-navi-icons typcn typcn-lightbulb'></span>
+                            <span class='head-navi-title hidden-sm hidden-md hidden-lg' lkey='Blockly.Msg.MENU_HELP'></span>
+                        </a>
                         <ul class='dropdown-menu'>
-                            <li><a href='#' id='menuGeneral' class='menuGeneral typcn typcn-lightbulb' lkey='Blockly.Msg.MENU_GENERAL'>Allgemeine Hilfe</a></li>
-                            <li><a href='#' id='menuFaq' class='menuFAQ typcn typcn-lightbulb' lkey='Blockly.Msg.MENU_FAQ'>FAQ</a></li>
-                            <li><a href='#' id='menuAbout' class='typcn typcn-info-large' lkey='Blockly.Msg.MENU_ABOUT'>Über das Open Roberta Lab</a></li>
-                            <li><a href='#' id='menuAboutProject' class='menuAboutProject typcn typcn-info-large' lkey='Blockly.Msg.MENU_ABOUT_PROJECT'>Über
-                                das Open Roberta Projekt</a></li>
-                            <li><a href='#' id='menuShowStart' class='typcn typcn-refresh' lkey='Blockly.Msg.MENU_SHOW_AGAIN'>Starthinweis anzeigen</a></li>
-                            <li><a href='#' id='menuLogging' class='typcn typcn-spanner' lkey='Blockly.Msg.MENU_LOGGING'>Logging</a></li>
-                            <li><a href='https://www.roberta-home.de/index.php?id=137' target='_blank' class='typcn typcn-info-large DE'>Datenschutzerklärung</a>
+                            <li>
+                                <a href='#' id='menuGeneral' class='menuGeneral typcn typcn-lightbulb' lkey='Blockly.Msg.MENU_GENERAL'>Allgemeine Hilfe</a>
+                            </li>
+                            <li>
+                                <a href='#' id='menuFaq' class='menuFAQ typcn typcn-lightbulb' lkey='Blockly.Msg.MENU_FAQ'>FAQ</a>
+                            </li>
+                            <li>
+                                <a href='#' id='menuAbout' class='typcn typcn-info-large' lkey='Blockly.Msg.MENU_ABOUT'>Über das Open Roberta Lab</a>
+                            </li>
+                            <li>
+                                <a href='#' id='menuAboutProject' class='menuAboutProject typcn typcn-info-large'
+                                    lkey='Blockly.Msg.MENU_ABOUT_PROJECT'>Über das Open Roberta Projekt
+                                </a>
+                            </li>
+                            <li>
+                                <a href='#' id='menuShowStart' class='typcn typcn-refresh' lkey='Blockly.Msg.MENU_SHOW_AGAIN'>Starthinweis anzeigen</a>
+                            </li>
+                            <li>
+                                <a href='#' id='menuLogging' class='typcn typcn-spanner' lkey='Blockly.Msg.MENU_LOGGING'>Logging</a>
+                            </li>
+                            <li>
+                                <a href='https://www.roberta-home.de/index.php?id=137' target='_blank' class='typcn typcn-info-large DE'>Datenschutzerklärung</a>
                                 <a href='https://www.roberta-home.de/index.php?id=137&L=1' target='_blank' class='typcn typcn-info-large EN'>privacy policy</a>
                             </li>
-                            <li><a href='https://www.roberta-home.de/impressum' target='_blank' class='typcn typcn-info-large DE'>Impressum</a> <a
-                                href='https://www.roberta-home.de/impressum/?L=1' target='_blank' class='typcn typcn-info-large EN'>publishing notes</a></li>
-                            <li><a href='#' data-toggle='modal' class='typcn typcn-info-large' lkey='Blockly.Msg.MENU_SHORTCUT' data-target='#shortcut'>Keyboard
-                                Shortcuts</a></li>
+                            <li>
+                                <a href='https://www.roberta-home.de/impressum' target='_blank' class='typcn typcn-info-large DE'>Impressum</a>
+                                <a href='https://www.roberta-home.de/impressum/?L=1' target='_blank' class='typcn typcn-info-large EN'>publishing notes</a>
+                            </li>
+                            <li>
+                                <a href='#' data-toggle='modal' class='typcn typcn-info-large' lkey='Blockly.Msg.MENU_SHORTCUT'
+                                    data-target='#shortcut'>Keyboard Shortcuts
+                                </a>
+                            </li>
                         </ul>
                     </li>
                     <!--   Menu User -->
-                    <li class='dropdown' id='head-navigation-user'><a href='#' data-toggle='dropdown' class='dropdown-toggle' id='head-navi-tooltip-user'
-                        lkey='Blockly.Msg.MENU_USER_TOOLTIP' rel='tooltip' data-original-title='' title=''> <span id='head-navi-icon-user'
-                        class='head-navi-icons  typcn typcn-user'></span><span class='head-navi-title hidden-sm hidden-md hidden-lg'
-                        lkey='Blockly.Msg.MENU_USER'></span>
-                    </a>
+                    <li class='dropdown' id='head-navigation-user'>
+                        <a href='#' data-toggle='dropdown' class='dropdown-toggle' id='head-navi-tooltip-user' lkey='Blockly.Msg.MENU_USER_TOOLTIP' rel='tooltip'
+                            data-original-title='' title=''>
+                            <span id='head-navi-icon-user' class='head-navi-icons  typcn typcn-user'></span>
+                            <span class='head-navi-title hidden-sm hidden-md hidden-lg' lkey='Blockly.Msg.MENU_USER'></span>
+                        </a>
                         <ul class='dropdown-menu' id='head-navigation-user-dropdown'>
-                            <li class='logout'><a href='#' id='menuLogin' class='typcn typcn-user' lkey='Blockly.Msg.MENU_LOG_IN'>anmelden ...</a></li>
-                            <li class='logout'><a href='#' id='menuUserGroupLogin' class='typcn typcn-group-outline'
-                                lkey='Blockly.Msg.MENU_USERGROUP_LOG_IN'>bei Gruppe anmelden...</a></li>
-                            <li class='login'><a href='#' id='menuLogout' class='typcn typcn-user-outline' lkey='Blockly.Msg.MENU_LOG_OUT'>abmelden</a></li>
-                            <li class='login'><a href='#' id='menuGroupPanel' class='typcn typcn-group' lkey='Blockly.Msg.MENU_MANAGE_USERGROUPS'>Gruppen
-                                verwalten</a></li>
+                            <li class='logout'>
+                                <a href='#' id='menuLogin' class='typcn typcn-user' lkey='Blockly.Msg.MENU_LOG_IN'>anmelden ...</a>
+                            </li>
+                            <li class='logout'>
+                                <a href='#' id='menuUserGroupLogin' class='typcn typcn-group-outline' lkey='Blockly.Msg.MENU_USERGROUP_LOG_IN'>bei Gruppe anmelden...
+                                </a>
+                            </li>
+                            <li class='login'>
+                                <a href='#' id='menuLogout' class='typcn typcn-user-outline' lkey='Blockly.Msg.MENU_LOG_OUT'>abmelden</a>
+                            </li>
+                            <li class='login'>
+                                <a href='#' id='menuGroupPanel' class='typcn typcn-group' lkey='Blockly.Msg.MENU_MANAGE_USERGROUPS'>Gruppen verwalten</a>
+                            </li>
                             <!-- <li><a href="#" id="menuNewUser" class="typcn typcn-user-add" lkey="Blockly.Msg.MENU_NEW">neu ...</a></li> -->
-                            <li class='login'><a href='#' id='menuChangeUser' class='typcn typcn-lock-closed' lkey='Blockly.Msg.MENU_CHANGE'>ändern ...</a></li>
-                            <li class='login'><a href='#' id='menuDeleteUser' class='typcn typcn-user-delete' lkey='Blockly.Msg.MENU_DELETE_USER'>Benutzer
-                                löschen ...</a></li>
-                            <li><a href='#' id='menuStateInfo' class='typcn typcn-input-checked' lkey='Blockly.Msg.MENU_STATE_INFO'>Statusinformationen</a></li>
-                            <li class='hidden' id='menuNotificationWrap'><a href='#' id='menuNotification' class='typcn typcn-edit'>Add or mody
-                                notifications</a></li>
+                            <li class='login'>
+                                <a href='#' id='menuChangeUser' class='typcn typcn-lock-closed' lkey='Blockly.Msg.MENU_CHANGE'>ändern ...</a>
+                            </li>
+                            <li class='login'>
+                                <a href='#' id='menuDeleteUser' class='typcn typcn-user-delete' lkey='Blockly.Msg.MENU_DELETE_USER'>Benutzer löschen ...</a>
+                            </li>
+                            <li>
+                                <a href='#' id='menuStateInfo' class='typcn typcn-input-checked' lkey='Blockly.Msg.MENU_STATE_INFO'>Statusinformationen</a>
+                            </li>
+                            <li class='hidden' id='menuNotificationWrap'>
+                                <a href='#' id='menuNotification' class='typcn typcn-edit'>Add or mody notifications</a>
+                            </li>
                         </ul>
                     </li>
-                    <li id='head-navigation-tutorial' class='hidden-xs'><a href='#' id='head-navi-tooltip-tutorials'
-                        lkey='Blockly.Msg.MENU_TUTORIAL_TOOLTIP' rel='tooltip' data-original-title='' title=''> <span id='head-navi-icon-tutorial'
-                        class='head-navi-icons typcn typcn-mortar-board'></span><span class='head-navi-title hidden-sm hidden-md hidden-lg'
-                        lkey='Blockly.Msg.MENU_TUTORIAL'>tutorial</span>
-                    </a></li>
-                    <li id='head-navigation-gallery'><a href='#' id='head-navi-tooltip-gallery' lkey='Blockly.Msg.MENU_GALLERY_TOOLTIP' rel='tooltip'
-                        data-original-title='' title=''> <span id='head-navi-icon-gallery' class='head-navi-icons typcn typcn-th-large-outline'></span><span
-                        class='head-navi-title hidden-sm hidden-md hidden-lg' lkey='Blockly.Msg.MENU_GALLERY'>gallery</span>
-                    </a></li>
+                    <li id='head-navigation-tutorial' class='hidden-xs'>
+                        <a href='#' id='head-navi-tooltip-tutorials' lkey='Blockly.Msg.MENU_TUTORIAL_TOOLTIP' rel='tooltip' data-original-title='' title=''> <span
+                            id='head-navi-icon-tutorial' class='head-navi-icons typcn typcn-mortar-board'></span>
+                            <span class='head-navi-title hidden-sm hidden-md hidden-lg' lkey='Blockly.Msg.MENU_TUTORIAL'>tutorial</span>
+                        </a>
+                    </li>
+                    <li id='head-navigation-gallery'>
+                        <a href='#' id='head-navi-tooltip-gallery' lkey='Blockly.Msg.MENU_GALLERY_TOOLTIP' rel='tooltip' data-original-title='' title=''>
+                            <span id='head-navi-icon-gallery' class='head-navi-icons typcn typcn-th-large-outline'></span>
+                            <span class='head-navi-title hidden-sm hidden-md hidden-lg' lkey='Blockly.Msg.MENU_GALLERY'>gallery</span>
+                        </a>
+                    </li>
                     <!-- Menu Languages -->
-                    <li class='dropdown' id='head-navigation-language'><a href='#' data-toggle='dropdown' class='dropdown-toggle'
-                        id='head-navi-tooltip-program' lkey='Blockly.Msg.MENU_LANGUAGE_TOOLTIP' rel='tooltip' data-original-title='' title=''> <span
-                        id='head-navi-icon-program' class='head-navi-icons typcn typcn-world'></span><span
-                        class='head-navi-title hidden-sm hidden-md hidden-lg' lkey='Blockly.Msg.MENU_LANGUAGE'></span>
-                    </a>
+                    <li class='dropdown' id='head-navigation-language'>
+                        <a href='#' data-toggle='dropdown' class='dropdown-toggle' id='head-navi-tooltip-program' lkey='Blockly.Msg.MENU_LANGUAGE_TOOLTIP'
+                            rel='tooltip' data-original-title='' title=''>
+                            <span id='head-navi-icon-program' class='head-navi-icons typcn typcn-world'></span>
+                            <span class='head-navi-title hidden-sm hidden-md hidden-lg' lkey='Blockly.Msg.MENU_LANGUAGE'></span>
+                        </a>
                         <ul id='language' class='dropdown-menu' role='menu' aria-labelledby='chosenLanguage'>
-                            <li><a role='menuitem' href='#' class='lang-lbl' lang='de'></a></li>
-                            <li><a role='menuitem' href='#' class='lang-lbl' lang='en'></a></li>
-                            <li><a role='menuitem' href='#' class='lang-lbl' lang='sv'></a></li>
-                            <li><a role='menuitem' href='#' class='lang-lbl' lang='es'></a></li>
-                            <li><a role='menuitem' href='#' class='lang-lbl' lang='pt'></a></li>
-                            <li><a role='menuitem' href='#' class='lang-lbl' lang='it'></a></li>
-                            <li><a role='menuitem' href='#' class='lang-lbl' lang='fr'></a></li>
-                            <li><a role='menuitem' href='#' class='lang-lbl' lang='ca'></a></li>
-                            <li><a role='menuitem' href='#' class='lang-lbl' lang='ru'></a></li>
-                            <li><a role='menuitem' href='#' class='lang-lbl' lang='be'></a></li>
-                            <li><a role='menuitem' href='#' class='lang-lbl' lang='cs'></a></li>
-                            <li><a role='menuitem' href='#' class='lang-lbl' lang='pl'></a></li>
-                            <li><a role='menuitem' href='#' class='lang-lbl' lang='tr'></a></li>
-                            <li><a role='menuitem' href='#' class='lang-lbl' lang='nl'></a></li>
-                            <li><a role='menuitem' href='#' class='lang-lbl' lang='fi'></a></li>
-                            <li><a role='menuitem' href='#' class='lang-lbl' lang='da'></a></li>
-                            <li><a role='menuitem' href='#' class='lang-lbl' lang='zh-hans'></a></li>
-                            <li><a role='menuitem' href='#' class='lang-lbl' lang='zh-hant'></a></li>
-                            <li><a role='menuitem' href='#' class='lang-lbl' lang='ro'></a></li>
-                            <li><a role='menuitem' href='#' class='lang-lbl' lang='eu'></a></li>
-                            <li><a role='menuitem' href='#' class='lang-lbl' lang='uk'></a></li>
+                            <li>
+                                <a role='menuitem' href='#' class='lang-lbl' lang='de'></a>
+                            </li>
+                            <li>
+                                <a role='menuitem' href='#' class='lang-lbl' lang='en'></a>
+                            </li>
+                            <li>
+                                <a role='menuitem' href='#' class='lang-lbl' lang='sv'></a>
+                            </li>
+                            <li>
+                                <a role='menuitem' href='#' class='lang-lbl' lang='es'></a>
+                            </li>
+                            <li>
+                                <a role='menuitem' href='#' class='lang-lbl' lang='pt'></a>
+                            </li>
+                            <li>
+                                <a role='menuitem' href='#' class='lang-lbl' lang='it'></a>
+                            </li>
+                            <li>
+                                <a role='menuitem' href='#' class='lang-lbl' lang='fr'></a>
+                            </li>
+                            <li>
+                                <a role='menuitem' href='#' class='lang-lbl' lang='ca'></a>
+                            </li>
+                            <li>
+                                <a role='menuitem' href='#' class='lang-lbl' lang='ru'></a>
+                            </li>
+                            <li>
+                                <a role='menuitem' href='#' class='lang-lbl' lang='be'></a>
+                            </li>
+                            <li>
+                                <a role='menuitem' href='#' class='lang-lbl' lang='cs'></a>
+                            </li>
+                            <li>
+                                <a role='menuitem' href='#' class='lang-lbl' lang='pl'></a>
+                            </li>
+                            <li>
+                                <a role='menuitem' href='#' class='lang-lbl' lang='tr'></a>
+                            </li>
+                            <li>
+                                <a role='menuitem' href='#' class='lang-lbl' lang='nl'></a>
+                            </li>
+                            <li>
+                                <a role='menuitem' href='#' class='lang-lbl' lang='fi'></a>
+                            </li>
+                            <li>
+                                <a role='menuitem' href='#' class='lang-lbl' lang='da'></a>
+                            </li>
+                            <li>
+                                <a role='menuitem' href='#' class='lang-lbl' lang='zh-hans'></a>
+                            </li>
+                            <li>
+                                <a role='menuitem' href='#' class='lang-lbl' lang='zh-hant'></a>
+                            </li>
+                            <li>
+                                <a role='menuitem' href='#' class='lang-lbl' lang='ro'></a>
+                            </li>
+                            <li>
+                                <a role='menuitem' href='#' class='lang-lbl' lang='eu'></a>
+                            </li>
+                            <li>
+                                <a role='menuitem' href='#' class='lang-lbl' lang='uk'></a>
+                            </li>
                         </ul>
                     </li>
                     <!-- Menu Navigation -->
                     <li class='divider visible-xs'></li>
-                    <li><a href='#' class='visible-xs' id='menuTabProgram' lkey='Blockly.Msg.TAB_PROGRAM'>Program</a></li>
-                    <li><a href='#' class='visible-xs' id='menuTabConfiguration' lkey='Blockly.Msg.TAB_CONFIGURATION'>Configuration</a></li>
+                    <li>
+                        <a href='#' class='visible-xs' id='menuTabProgram' lkey='Blockly.Msg.TAB_PROGRAM'>Program</a>
+                    </li>
+                    <li>
+                        <a href='#' class='visible-xs' id='menuTabConfiguration' lkey='Blockly.Msg.TAB_CONFIGURATION'>Configuration</a>
+                    </li>
                     <li id='menuTabNNctxt' style='display: none;'>
                         <a href='#' class='visible-xs' id='menuTabNN' lkey='Blockly.Msg.TAB_NN + Blockly.Msg.TAB_NN_DEFINE'> </a>
                     </li>
@@ -278,14 +429,30 @@ limitations under the License.
                         <span lkey='Blockly.Msg.TAB_NN_LEARN'>Learn</span>
                     </a>
                 </li>
-                <li class='hidden'><a data-toggle='tab' id='tabProgList' href='#progList'>Listing of programs</a></li>
-                <li class='hidden'><a data-toggle='tab' id='tabConfList' href='#confList'>Listing of configurations</a></li>
-                <li class='hidden'><a data-toggle='tab' id='tabLogList' href='#logList'>Logging</a></li>
-                <li class='hidden'><a data-toggle='tab' id='tabSourceCodeEditor' href='#sourceCodeEditorPane'>Source code editor</a></li>
-                <li class='hidden'><a data-toggle='tab' id='tabGalleryList' href='#galleryList'>Galery</a></li>
-                <li class='hidden'><a data-toggle='tab' id='tabTutorialList' href='#tutorialList'>Tutorial</a></li>
-                <li class='hidden'><a data-toggle='tab' id='tabUserGroupList' href='#userGroupList'>UserGroup List</a></li>
-                <li class='hidden'><a data-toggle='tab' id='tabUserGroupMemberList' href='#userGroupMemberList'>UserGroup Member List</a></li>
+                <li class='hidden'>
+                    <a data-toggle='tab' id='tabProgList' href='#progList'>Listing of programs</a>
+                </li>
+                <li class='hidden'>
+                    <a data-toggle='tab' id='tabConfList' href='#confList'>Listing of configurations</a>
+                </li>
+                <li class='hidden'>
+                    <a data-toggle='tab' id='tabLogList' href='#logList'>Logging</a>
+                </li>
+                <li class='hidden'>
+                    <a data-toggle='tab' id='tabSourceCodeEditor' href='#sourceCodeEditorPane'>Source code editor</a>
+                </li>
+                <li class='hidden'>
+                    <a data-toggle='tab' id='tabGalleryList' href='#galleryList'>Galery</a>
+                </li>
+                <li class='hidden'>
+                    <a data-toggle='tab' id='tabTutorialList' href='#tutorialList'>Tutorial</a>
+                </li>
+                <li class='hidden'>
+                    <a data-toggle='tab' id='tabUserGroupList' href='#userGroupList'>UserGroup List</a>
+                </li>
+                <li class='hidden'>
+                    <a data-toggle='tab' id='tabUserGroupMemberList' href='#userGroupMemberList'>UserGroup Member List</a>
+                </li>
             </ul>
         </div>
     </nav>
@@ -301,8 +468,8 @@ limitations under the License.
                         rel='tooltip' data-original-title='' title=''>
                         <span class='tutorialButton typcn typcn-mortar-board'></span>
                     </div>
-                    <div href='#' id='legalButton' class='rightMenuButton legal' lkey='Blockly.Msg.MENU_RIGHT_LEGAL_TOOLTIP' rel='tooltip'
-                        data-original-title='' title=''>
+                    <div href='#' id='legalButton' class='rightMenuButton legal' lkey='Blockly.Msg.MENU_RIGHT_LEGAL_TOOLTIP' rel='tooltip' data-original-title=''
+                        title=''>
                         <span class='legalButton typcn typcn-section'></span>
                     </div>
                     <div href='#' id='helpButton' class='rightMenuButton help' lkey='Blockly.Msg.MENU_RIGHT_HELP_TOOLTIP' rel='tooltip' data-original-title=''
@@ -320,8 +487,8 @@ limitations under the License.
                     <div href='#' id='simButton' class='rightMenuButton' lkey='Blockly.Msg.MENU_RIGHT_SIM_TOOLTIP' rel='tooltip' data-original-title='' title=''>
                         <span class='simButton typcn typcn-simulation'></span>
                     </div>
-                    <div href='#' id='simDebugButton' class='rightMenuButton' lkey='Blockly.Msg.MENU_RIGHT_SIM_DEBUG_TOOLTIP' rel='tooltip'
-                        data-original-title='' title=''>
+                    <div href='#' id='simDebugButton' class='rightMenuButton' lkey='Blockly.Msg.MENU_RIGHT_SIM_DEBUG_TOOLTIP' rel='tooltip' data-original-title=''
+                        title=''>
                         <span class='simDebugButton typcn typcn-debug'></span>
                     </div>
                 </div>
@@ -346,43 +513,101 @@ limitations under the License.
                     <button id='simUploadConfig' class='blbtn typcn typcn-upload-outline' lkey='Blockly.Msg.MENU_SIM_CONFIG_IMPORT' rel='tooltip'
                         data-original-title='' title=''></button>
                     <div class='btn-group'>
-                        <button id='simMarkerObject' type='button' class='blbtn typcn typcn-0 dropdown-toggle' data-toggle='dropdown'
-                            aria-expanded='true' lkey='Blockly.Msg.MENU_SIM_ADD_MARKER_OBJECT_TOOLTIP' rel='tooltip' data-original-title=''></button>
+                        <button id='simMarkerObject' type='button' class='blbtn typcn typcn-0 dropdown-toggle' data-toggle='dropdown' aria-expanded='true'
+                            lkey='Blockly.Msg.MENU_SIM_ADD_MARKER_OBJECT_TOOLTIP' rel='tooltip' data-original-title=''></button>
                         <ul class='dropdown-menu' style='width:60px'>
-                            <li><a id='simMarker10' data-marker='10' class='simAddMarker typcn typcn-10'><span>10</span></a></li>
-                            <li><a id='simMarker20' data-marker='20' class='simAddMarker typcn typcn-20'><span>20</span></a></li>
-                            <li><a id='simMarker30' data-marker='30' class='simAddMarker typcn typcn-30'><span>30</span></a></li>
-                            <li><a id='simMarker40' data-marker='40' class='simAddMarker typcn typcn-40'><span>40</span></a></li>
-                            <li><a id='simMarker50' data-marker='50' class='simAddMarker typcn typcn-50'><span>50</span></a></li>
-                            <li><a id='simMarker60' data-marker='60' class='simAddMarker typcn typcn-60'><span>60</span></a></li>
-                            <li><a id='simMarker70' data-marker='70' class='simAddMarker typcn typcn-70'><span>70</span></a></li>
-                            <li><a id='simMarker80' data-marker='80' class='simAddMarker typcn typcn-80'><span>80</span></a></li>
-                            <li><a id='simMarker90' data-marker='90' class='simAddMarker typcn typcn-90'><span>90</span></a></li>
-                            <li><a id='simMarker99' data-marker='99' class='simAddMarker typcn typcn-99'><span>99</span></a></li>
+                            <li>
+                                <a id='simMarker10' data-marker='10' class='simAddMarker typcn typcn-10'>
+                                    <span>10</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a id='simMarker20' data-marker='20' class='simAddMarker typcn typcn-20'>
+                                    <span>20</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a id='simMarker30' data-marker='30' class='simAddMarker typcn typcn-30'>
+                                    <span>30</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a id='simMarker40' data-marker='40' class='simAddMarker typcn typcn-40'>
+                                    <span>40</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a id='simMarker50' data-marker='50' class='simAddMarker typcn typcn-50'>
+                                    <span>50</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a id='simMarker60' data-marker='60' class='simAddMarker typcn typcn-60'>
+                                    <span>60</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a id='simMarker70' data-marker='70' class='simAddMarker typcn typcn-70'>
+                                    <span>70</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a id='simMarker80' data-marker='80' class='simAddMarker typcn typcn-80'>
+                                    <span>80</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a id='simMarker90' data-marker='90' class='simAddMarker typcn typcn-90'>
+                                    <span>90</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a id='simMarker99' data-marker='99' class='simAddMarker typcn typcn-99'>
+                                    <span>99</span>
+                                </a>
+                            </li>
                             <hr style='margin:0; border-top: 1px solid #333;'>
-                            <li><a id='simMarkerDeleteAll' class='typcn typcn-delete'></a></li>
+                            <li>
+                                <a id='simMarkerDeleteAll' class='typcn typcn-delete'></a>
+                            </li>
                         </ul>
                     </div>
                     <div class='btn-group'>
                         <button id='simCustomObstacle' type='button' class='blbtn typcn typcn-box dropdown-toggle' data-toggle='dropdown' aria-expanded='true'
                             lkey='Blockly.Msg.MENU_SIM_ADD_OBSTACLE_TOOLTIP' rel='tooltip' data-original-title=''></button>
                         <ul class='dropdown-menu'>
-                            <li><a id='simAddObstacleRectangle' class='typcn typcn-media-stop-outline'></a></li>
-                            <li><a id='simAddObstacleTriangle' class='typcn typcn-media-play-outline rotated'></a></li>
-                            <li><a id='simAddObstacleCircle' class='typcn typcn-media-record-outline'></a></li>
+                            <li>
+                                <a id='simAddObstacleRectangle' class='typcn typcn-media-stop-outline'></a>
+                            </li>
+                            <li>
+                                <a id='simAddObstacleTriangle' class='typcn typcn-media-play-outline rotated'></a>
+                            </li>
+                            <li>
+                                <a id='simAddObstacleCircle' class='typcn typcn-media-record-outline'></a>
+                            </li>
                             <hr style='margin:0; border-top: 1px solid #333;'>
-                            <li><a id='simObstacleDeleteAll' class='typcn typcn-delete-outline'></a></li>
+                            <li>
+                                <a id='simObstacleDeleteAll' class='typcn typcn-delete-outline'></a>
+                            </li>
                         </ul>
                     </div>
                     <div class='btn-group'>
                         <button id='simCustomColorObject' type='button' class='blbtn typcn typcn-media-stop dropdown-toggle' data-toggle='dropdown'
                             aria-expanded='true' lkey='Blockly.Msg.MENU_SIM_ADD_COLOR_OBJECT_TOOLTIP' rel='tooltip' data-original-title=''></button>
                         <ul class='dropdown-menu'>
-                            <li><a id='simAddAreaRectangle' class='typcn typcn-media-stop'></a></li>
-                            <li><a id='simAddAreaTriangle' class='typcn typcn-arrow-sorted-up'></a></li>
-                            <li><a id='simAddAreaCircle' class='typcn typcn-media-record'></a></li>
+                            <li>
+                                <a id='simAddAreaRectangle' class='typcn typcn-media-stop'></a>
+                            </li>
+                            <li>
+                                <a id='simAddAreaTriangle' class='typcn typcn-arrow-sorted-up'></a>
+                            </li>
+                            <li>
+                                <a id='simAddAreaCircle' class='typcn typcn-media-record'></a>
+                            </li>
                             <hr style='margin:0; border-top: 1px solid #333;'>
-                            <li><a id='simAreaDeleteAll' class='typcn typcn-delete'></a></li>
+                            <li>
+                                <a id='simAreaDeleteAll' class='typcn typcn-delete'></a>
+                            </li>
                         </ul>
                     </div>
                     <div class='btn-group'>
@@ -396,17 +621,16 @@ limitations under the License.
                 <div id='simButtons'>
                     <button id='simControl' type='button' class='blbtn typcn typcn-media-play-outline' lkey='Blockly.Msg.MENU_SIM_START_TOOLTIP' rel='tooltip'
                         data-original-title='' title=''></button>
-                    <button id='simControlStepOver' class='blbtn typcn typcn-arrow-forward-outline debug' lkey='Blockly.Msg.MENU_DEBUG_STEP_OVER_TOOLTIP'
-                        rel='tooltip' data-original-title='' title=''></button>
-                    <button id='simControlStepInto' class='blbtn typcn typcn-arrow-down-outline debug' lkey='Blockly.Msg.MENU_DEBUG_STEP_INTO_TOOLTIP'
-                        rel='tooltip' data-original-title='' title=''></button>
-                    <button id='simRobot' type='button' class='simNotWebots blbtn typcn' lkey='Blockly.Msg.MENU_SIM_ROBOT_TOOLTIP' rel='tooltip'
+                    <button id='simControlStepOver' class='blbtn typcn typcn-arrow-forward-outline debug' lkey='Blockly.Msg.MENU_DEBUG_STEP_OVER_TOOLTIP' rel='tooltip'
                         data-original-title='' title=''></button>
+                    <button id='simControlStepInto' class='blbtn typcn typcn-arrow-down-outline debug' lkey='Blockly.Msg.MENU_DEBUG_STEP_INTO_TOOLTIP' rel='tooltip'
+                        data-original-title='' title=''></button>
+                    <button id='simRobot' type='button' class='simNotWebots blbtn typcn' lkey='Blockly.Msg.MENU_SIM_ROBOT_TOOLTIP' rel='tooltip' data-original-title=''
+                        title=''></button>
                     <button id='simValues' type='button' class='simValues simNotWebots blbtn typcn typcn-sensor' lkey='Blockly.Msg.MENU_SIM_VALUES_TOOLTIP'
-                        rel='tooltip'
-                        data-original-title='' title=''></button>
-                    <button id='simResetPose' type='button' class='simMobile blbtn typcn typcn-location-outline' lkey='Blockly.Msg.MENU_SIM_POSE_TOOLTIP'
                         rel='tooltip' data-original-title='' title=''></button>
+                    <button id='simResetPose' type='button' class='simMobile blbtn typcn typcn-location-outline' lkey='Blockly.Msg.MENU_SIM_POSE_TOOLTIP' rel='tooltip'
+                        data-original-title='' title=''></button>
                     <button id='simStop' type='button' class='blbtn typcn typcn-media-stop debug' lkey='Blockly.Msg.MENU_SIM_STOP_TOOLTIP' rel='tooltip'
                         data-original-title='' title=''></button>
                 </div>
@@ -418,10 +642,18 @@ limitations under the License.
             <div id='helpDiv' class='fromRight'></div>
             <div id='legalDiv' class='fromRight'>
                 <div id='legalDivHeader'>
-                    <a href='#' data-href='#legalDivImprint'> <span class='DE'>Impressum</span> <span class='EN'>Imprint</span>
-                    </a> <a href='#' data-href='#legalDivPrivacyPolicy'> <span class='DE'>Datenschutzerklärung</span> <span class='EN'>Privacy Policy</span>
-                </a> <a href='#' data-href='#legalDivTermsOfUse'> <span class='DE'>Nutzungsbedingungen</span> <span class='EN'>Terms of Use</span>
-                </a>
+                    <a href='#' data-href='#legalDivImprint'>
+                        <span class='DE'>Impressum</span>
+                        <span class='EN'>Imprint</span>
+                    </a>
+                    <a href='#' data-href='#legalDivPrivacyPolicy'>
+                        <span class='DE'>Datenschutzerklärung</span>
+                        <span class='EN'>Privacy Policy</span>
+                    </a>
+                    <a href='#' data-href='#legalDivTermsOfUse'>
+                        <span class='DE'>Nutzungsbedingungen</span>
+                        <span class='EN'>Terms of Use</span>
+                    </a>
                 </div>
                 <section id='legalDivImprint'></section>
                 <hr />
@@ -435,9 +667,15 @@ limitations under the License.
                         <a class='btn editor btn-default dropdown-toggle' data-toggle='dropdown' title='Font Size'><i class='editor fa fa-text-height'></i>&nbsp;<b
                             class='editor fa fa-sort-desc'></b></a>
                         <ul class='dropdown-menu'>
-                            <li><a data-edit='fontSize 5' class='fs-Five'>Huge</a></li>
-                            <li><a data-edit='fontSize 3' class='fs-Three'>Normal</a></li>
-                            <li><a data-edit='fontSize 1' class='fs-One'>Small</a></li>
+                            <li>
+                                <a data-edit='fontSize 5' class='fs-Five'>Huge</a>
+                            </li>
+                            <li>
+                                <a data-edit='fontSize 3' class='fs-Three'>Normal</a>
+                            </li>
+                            <li>
+                                <a data-edit='fontSize 1' class='fs-One'>Small</a>
+                            </li>
                         </ul>
                     </div>
                     <div class='btn-group'>
@@ -445,35 +683,49 @@ limitations under the License.
                             class='editor fa fa-sort-desc'></b></a>
                         <ul class='dropdown-menu'>
                             <p>&nbsp;&nbsp;&nbsp;Font Color:</p>
-                            <li><a data-edit='foreColor #000000'>Black</a></li>
-                            <li><a data-edit='foreColor #0000FF'>Blue</a></li>
-                            <li><a data-edit='foreColor #30AD23'>Green</a></li>
-                            <li><a data-edit='foreColor #FF7F00'>Orange</a></li>
-                            <li><a data-edit='foreColor #FF0000'>Red</a></li>
-                            <li><a data-edit='foreColor #FFFF00'>Yellow</a></li>
+                            <li>
+                                <a data-edit='foreColor #000000'>Black</a>
+                            </li>
+                            <li>
+                                <a data-edit='foreColor #0000FF'>Blue</a>
+                            </li>
+                            <li>
+                                <a data-edit='foreColor #30AD23'>Green</a>
+                            </li>
+                            <li>
+                                <a data-edit='foreColor #FF7F00'>Orange</a>
+                            </li>
+                            <li>
+                                <a data-edit='foreColor #FF0000'>Red</a>
+                            </li>
+                            <li>
+                                <a data-edit='foreColor #FFFF00'>Yellow</a>
+                            </li>
                         </ul>
                     </div>
                     <div class='btn-group'>
-                        <a class='btn editor btn-default' data-edit='bold' title='Bold (Ctrl/Cmd&#8239;+&#8201;B)'><i class='editor fa fa-bold'></i></a> <a
-                        class='btn editor btn-default' data-edit='italic' title='Italic (Ctrl/Cmd&#8239;+&#8201;I)'><i class='editor fa fa-italic'></i></a> <a
-                        class='btn editor btn-default' data-edit='strikethrough' title='Strikethrough'><i class='editor fa fa-strikethrough'></i></a> <a
-                        class='btn editor btn-default' data-edit='underline' title='Underline (Ctrl/Cmd&#8239;+&#8201;U)'><i class='editor fa fa-underline'></i></a>
+                        <a class='btn editor btn-default' data-edit='bold' title='Bold (Ctrl/Cmd&#8239;+&#8201;B)'><i class='editor fa fa-bold'></i></a>
+                        <a class='btn editor btn-default' data-edit='italic' title='Italic (Ctrl/Cmd&#8239;+&#8201;I)'><i class='editor fa fa-italic'></i></a>
+                        <a class='btn editor btn-default' data-edit='strikethrough' title='Strikethrough'><i class='editor fa fa-strikethrough'></i></a>
+                        <a class='btn editor btn-default' data-edit='underline' title='Underline (Ctrl/Cmd&#8239;+&#8201;U)'><i class='editor fa fa-underline'></i></a>
                     </div>
                     <div class='btn-group'>
-                        <a class='btn editor btn-default' data-edit='justifyleft' title='Align Left (Ctrl/Cmd&#8239;+&#8201;L)'><i class='editor fa fa-align-left'></i></a>
-                        <a
-                            class='btn editor btn-default' data-edit='justifycenter' title='Center (Ctrl/Cmd&#8239;+&#8201;E)'><i
-                            class='editor fa fa-align-center'></i></a> <a
-                        class='btn editor btn-default' data-edit='justifyright' title='Align Right (Ctrl&#8239;+&#8201;R)'><i class='editor fa fa-align-right'></i></a>
-                        <a class='btn editor btn-default' data-edit='justifyfull' title='Justify (Ctrl/Cmd&#8239;+&#8201;J)'><i class='editor fa fa-align-justify'></i></a>
+                        <a class='btn editor btn-default' data-edit='justifyleft' title='Align Left (Ctrl/Cmd&#8239;+&#8201;L)'><i class='editor fa fa-align-left'></i>
+                        </a>
+                        <a class='btn editor btn-default' data-edit='justifycenter' title='Center (Ctrl/Cmd&#8239;+&#8201;E)'><i class='editor fa fa-align-center'></i>
+                        </a>
+                        <a class='btn editor btn-default' data-edit='justifyright' title='Align Right (Ctrl&#8239;+&#8201;R)'><i class='editor fa fa-align-right'></i>
+                        </a>
+                        <a class='btn editor btn-default' data-edit='justifyfull' title='Justify (Ctrl/Cmd&#8239;+&#8201;J)'><i class='editor fa fa-align-justify'></i>
+                        </a>
                     </div>
                     <div class='btn-group'>
-                        <a class='btn editor btn-default' data-edit='insertunorderedlist' title='Bullet list'><i class='editor fa fa-list-ul'></i></a> <a
-                        class='btn editor btn-default' data-edit='insertorderedlist' title='Number list'><i class='editor fa fa-list-ol'></i></a>
+                        <a class='btn editor btn-default' data-edit='insertunorderedlist' title='Bullet list'><i class='editor fa fa-list-ul'></i></a>
+                        <a class='btn editor btn-default' data-edit='insertorderedlist' title='Number list'><i class='editor fa fa-list-ol'></i></a>
                     </div>
                     <div class='btn-group'>
-                        <a class='btn editor btn-default' data-edit='undo' title='Undo (Ctrl/Cmd&#8239;+&#8201;Z)'><i class='editor fa fa-undo'></i></a> <a
-                        class='btn editor btn-default' data-edit='redo' title='Redo (Ctrl/Cmd&#8239;+&#8201;Y)'><i class='editor fa fa-repeat'></i></a>
+                        <a class='btn editor btn-default' data-edit='undo' title='Undo (Ctrl/Cmd&#8239;+&#8201;Z)'><i class='editor fa fa-undo'></i></a>
+                        <a class='btn editor btn-default' data-edit='redo' title='Redo (Ctrl/Cmd&#8239;+&#8201;Y)'><i class='editor fa fa-repeat'></i></a>
                     </div>
                 </div>
                 <div id='infoContainer'>
@@ -486,18 +738,17 @@ limitations under the License.
                     <div id='codeContent'></div>
                 </div>
                 <div id='codeButtons' class='code'>
-                    <button id='codeDownload' type='button' class='codeDownload blbtn typcn typcn-download' lkey='Blockly.Msg.MENU_CODE_DOWNLOAD_TOOLTIP'
-                        rel='tooltip' data-original-title='' title=''></button>
-                    <button id='codeRefresh' type='button' class='codeRefresh blbtn typcn typcn-refresh' lkey='Blockly.Msg.MENU_CODE_REFRESH_TOOLTIP'
-                        rel='tooltip' data-original-title='' title=''></button>
+                    <button id='codeDownload' type='button' class='codeDownload blbtn typcn typcn-download' lkey='Blockly.Msg.MENU_CODE_DOWNLOAD_TOOLTIP' rel='tooltip'
+                        data-original-title='' title=''></button>
+                    <button id='codeRefresh' type='button' class='codeRefresh blbtn typcn typcn-refresh' lkey='Blockly.Msg.MENU_CODE_REFRESH_TOOLTIP' rel='tooltip'
+                        data-original-title='' title=''></button>
                 </div>
             </div>
         </div>
         <div id='progList' class='tab-pane fade'>
             <div id='progListToolbar'>
                 <div class='bars pull-left'>
-                    <button id='backProgList' class='btn backList' lkey='Blockly.Msg.LIST_BACK_TOOLTIP' rel='tooltip'
-                        data-original-title='Back to previous view.'>
+                    <button id='backProgList' class='btn backList' lkey='Blockly.Msg.LIST_BACK_TOOLTIP' rel='tooltip' data-original-title='Back to previous view.'>
                         <i class='typcn typcn-arrow-left'></i>
                     </button>
                     <select id='progListScopeSelect' class='form-control'>
@@ -506,8 +757,7 @@ limitations under the License.
                     </select>
                 </div>
             </div>
-            <table id='programNameTable'>
-            </table>
+            <table id='programNameTable'></table>
         </div>
         <div id='confList' class='tab-pane fade'>
             <!-- <h2 lkey="Blockly.Msg.DATATABLE_CONFIGURATIONS">Konfigurationen</h2> -->
@@ -516,8 +766,7 @@ limitations under the License.
                     <i class='typcn typcn-arrow-left'></i>
                 </button>
             </div>
-            <table id='confNameTable'>
-            </table>
+            <table id='confNameTable'></table>
         </div>
         <div id='logList' class='tab-pane fade'>
             <!-- <h2 lkey="Blockly.Msg.DATATABLE_PROGRAMS">Programme</h2>-->
@@ -526,8 +775,7 @@ limitations under the License.
                     <i class='typcn typcn-arrow-left'></i>
                 </button>
             </div>
-            <table id='logTable'>
-            </table>
+            <table id='logTable'></table>
         </div>
         <div id='sourceCodeEditorPane' class='tab-pane fade bootstrap-table'>
             <div id='sourceCodeEditorToolbar' class='fixed-table-toolbar'>
@@ -538,14 +786,14 @@ limitations under the License.
                     </button>
                 </div>
                 <div class='bars pull-right'>
-                    <button id='runSourceCodeEditor' class='btn sourceEditor typcn typcn-media-play' lkey='Blockly.Msg.SOURCE_CODE_EDITOR_RUN_TOOLTIP'
-                        rel='tooltip' data-original-title='Run on the robot'></button>
-                    <button id='buildSourceCodeEditor' class='btn sourceEditor typcn typcn-spanner' lkey='Blockly.Msg.SOURCE_CODE_EDITOR_BUILD_TOOLTIP'
-                        rel='tooltip' data-original-title='Build the source code'></button>
+                    <button id='runSourceCodeEditor' class='btn sourceEditor typcn typcn-media-play' lkey='Blockly.Msg.SOURCE_CODE_EDITOR_RUN_TOOLTIP' rel='tooltip'
+                        data-original-title='Run on the robot'></button>
+                    <button id='buildSourceCodeEditor' class='btn sourceEditor typcn typcn-spanner' lkey='Blockly.Msg.SOURCE_CODE_EDITOR_BUILD_TOOLTIP' rel='tooltip'
+                        data-original-title='Build the source code'></button>
                     <button id='downloadSourceCodeEditor' class='btn sourceEditor typcn typcn-arrow-down-outline' lkey='Blockly.Msg.MENU_CODE_DOWNLOAD_TOOLTIP'
                         rel='tooltip' data-original-title='Download the source code of your program on the computer'></button>
-                    <button id='uploadSourceCodeEditor' class='btn sourceEditor typcn typcn-arrow-up-outline'
-                        lkey='Blockly.Msg.SOURCE_CODE_EDITOR_UPLOAD_TOOLTIP' rel='tooltip' data-original-title='Upload the source code'></button>
+                    <button id='uploadSourceCodeEditor' class='btn sourceEditor typcn typcn-arrow-up-outline' lkey='Blockly.Msg.SOURCE_CODE_EDITOR_UPLOAD_TOOLTIP'
+                        rel='tooltip' data-original-title='Upload the source code'></button>
                     <button id='importSourceCodeEditor' name='rightMostButton' class='btn sourceEditor typcn typcn-arrow-loop-outline'
                         lkey='Blockly.Msg.SOURCE_CODE_EDITOR_IMPORT_TOOLTIP' rel='tooltip' data-original-title='Import current NEPO program'></button>
                 </div>
@@ -560,8 +808,7 @@ limitations under the License.
                     <i class='typcn typcn-arrow-left'></i>
                 </button>
                 <div class='filters search form-inline'>
-                    <select id='filterRobot' class='form-control'></select> <input id='galleryListSearch' placeholder='Search' name='search'
-                    class='form-control'>
+                    <select id='filterRobot' class='form-control'></select> <input id='galleryListSearch' placeholder='Search' name='search' class='form-control'>
                     <div class='form-group'>
                         <label>Order by:</label> <select id='fieldOrderBy' class='form-control'>
                         <option value='4:desc' selected>Newest</option>
@@ -577,8 +824,7 @@ limitations under the License.
                 </div>
 
             </div>
-            <table id='galleryTable' class='galleryTable'>
-            </table>
+            <table id='galleryTable' class='galleryTable'></table>
         </div>
         <div id='tutorialList' class='tab-pane fade'>
             <div id='tutorialListToolbar'>
@@ -586,24 +832,25 @@ limitations under the License.
                     <i class='typcn typcn-arrow-left'></i>
                 </button>
             </div>
-            <table id='tutorialTable' class='galleryTable'>
-            </table>
+            <table id='tutorialTable' class='galleryTable'></table>
         </div>
         <div id='userGroupList' class='tab-pane fade'>
             <div id='userGroupListToolbar'>
                 <div class='bars pull-left'>
-                    <button id='backUserGroupList' class='btn backList typcn typcn-arrow-left' lkey='Blockly.Msg.LIST_BACK_TOOLTIP'
-                        data-translation-targets='title' data-toggle='tooltip' data-container='body' data-placement='right' title='Back to previous view.'></button>
+                    <button id='backUserGroupList' class='btn backList typcn typcn-arrow-left' lkey='Blockly.Msg.LIST_BACK_TOOLTIP' data-translation-targets='title'
+                        data-toggle='tooltip' data-container='body' data-placement='right' title='Back to previous view.'></button>
                 </div>
                 <div class='bars pull-right'>
-                    <button id='showCreateUserGroupPopup' class='btn typcn typcn-plus' lkey='Blockly.Msg.USERGROUP_CREATE_TOOLTIP'
-                        data-translation-targets='title' data-toggle='tooltip' data-container='body' data-placement='top' title='Create new user group'></button>
+                    <button id='showCreateUserGroupPopup' class='btn typcn typcn-plus' lkey='Blockly.Msg.USERGROUP_CREATE_TOOLTIP' data-translation-targets='title'
+                        data-toggle='tooltip' data-container='body' data-placement='top' title='Create new user group'></button>
                 </div>
             </div>
             <table id='userGroupTable'>
                 <tr class='action-items-template'>
-                    <td><a href='#' class='delete typcn typcn-delete' lkey='Blockly.Msg.USERGROUP_LIST_DELETE_TOOLTIP'
-                        data-translation-targets='data-original-title title' data-original-title='' title=''></a></td>
+                    <td>
+                        <a href='#' class='delete typcn typcn-delete' lkey='Blockly.Msg.USERGROUP_LIST_DELETE_TOOLTIP'
+                            data-translation-targets='data-original-title title' data-original-title='' title=''></a>
+                    </td>
                 </tr>
             </table>
         </div>
@@ -612,8 +859,7 @@ limitations under the License.
                 <div class='bars pull-left'>
                     <button id='backUserGroupMemberList' class='btn backList typcn typcn-arrow-left' lkey='Blockly.Msg.LIST_BACK_TOOLTIP'
                         data-translation-targets='title' data-toggle='tooltip' data-container='body' data-placement='top' title='Back to previous view.'></button>
-                    <span> <strong class='menuTab' lkey='Blockly.Msg.DATATABLE_USERGROUP_NAME'>Name der Gruppe</strong> <span
-                        id='userGroupMemberListHeader'></span>
+                    <span> <strong class='menuTab' lkey='Blockly.Msg.DATATABLE_USERGROUP_NAME'>Name der Gruppe</strong> <span id='userGroupMemberListHeader'></span>
                     </span>
                 </div>
                 <div class='bars pull-right'>
@@ -624,18 +870,22 @@ limitations under the License.
             </div>
             <table id='userGroupMemberTable'>
                 <tr class='action-items-template'>
-                    <td><a href='#' class='delete typcn typcn-delete' lkey='Blockly.Msg.USERGROUP_MEMBER_LIST_DELETE_TOOLTIP'
-                        data-translation-targets='title' data-toggle='tooltip' data-container='body' data-placement='top' title=''></a> <a href='#'
-                        class='reset-password typcn typcn-refresh' lkey='Blockly.Msg.USERGROUP_MEMBER_LIST_RESET_PASSWORD_TOOLTIP'
-                        data-translation-targets='title' data-toggle='tooltip' data-container='body' data-placement='top'
-                        title='Resets the password to the default value.'></a></td>
+                    <td>
+                        <a href='#' class='delete typcn typcn-delete' lkey='Blockly.Msg.USERGROUP_MEMBER_LIST_DELETE_TOOLTIP' data-translation-targets='title'
+                            data-toggle='tooltip' data-container='body' data-placement='top' title=''></a>
+                        <a href='#' class='reset-password typcn typcn-refresh' lkey='Blockly.Msg.USERGROUP_MEMBER_LIST_RESET_PASSWORD_TOOLTIP'
+                            data-translation-targets='title' data-toggle='tooltip' data-container='body' data-placement='top'
+                            title='Resets the password to the default value.'></a>
+                    </td>
                 </tr>
                 <tr class='action-items-header-template'>
-                    <td><a href='#' class='deleteSome typcn typcn-delete disabled' lkey='Blockly.Msg.USERGROUP_MEMBER_LIST_DELETE_ALL_TOOLTIP'
-                        data-translation-targets='title' data-toggle='tooltip' data-container='body' data-placement='top' title='Delete all selected members.'></a>
+                    <td>
+                        <a href='#' class='deleteSome typcn typcn-delete disabled' lkey='Blockly.Msg.USERGROUP_MEMBER_LIST_DELETE_ALL_TOOLTIP'
+                            data-translation-targets='title' data-toggle='tooltip' data-container='body' data-placement='top' title='Delete all selected members.'></a>
                         <a href='#' class='resetPasswords typcn typcn-refresh disabled' lkey='USERGROUP_MEMBER_LIST_RESET_ALL_PASSWORDS_TOOLTIP'
                             data-translation-targets='title' data-toggle='tooltip' data-container='body' data-placement='top'
-                            title='Resets the password to the default value for all selected members.'></a></td>
+                            title='Resets the password to the default value for all selected members.'></a>
+                    </td>
                 </tr>
                 <tr class='edit-member-template'>
                     <td>
@@ -739,7 +989,8 @@ limitations under the License.
                 </div>
                 <div class='nn-control'>
                     <div class='nn-num-layers-group nn-bold'>
-                        <span id='num-layers'></span> <span id='layers-label'></span>
+                        <span id='num-layers'></span>
+                        <span id='layers-label'></span>
                     </div>
                     <button class='nn-btn' id='nn-add-layers'>
                         <span class='typcn typcn-plus'></span>
@@ -751,8 +1002,7 @@ limitations under the License.
                 <div class='nn-control'>
                     <span id='nn-activation-label' class='nn-bold'></span>
                     <div class='select'>
-                        <select class='nn-selection' id='nn-activations'>
-                        </select>
+                        <select class='nn-selection' id='nn-activations'> </select>
                     </div>
                 </div>
                 <div class='nn-control'>
@@ -990,8 +1240,7 @@ limitations under the License.
     <!-- ################## POPUPS ################## -->
 
     <!-- Popup for WLAN credentials begin -->
-    <div class='modal fade' id='menu-wlan' tabindex='-1' role='dialog' data-backdrop='static' data-keyboard='false' aria-labelledby='myModalLabel'
-        aria-hidden='true'>
+    <div class='modal fade' id='menu-wlan' tabindex='-1' role='dialog' data-backdrop='static' data-keyboard='false' aria-labelledby='myModalLabel' aria-hidden='true'>
         <div class='modal-dialog modal-sm'>
             <div class='modal-content'>
                 <div class='modal-header'>
@@ -1004,15 +1253,15 @@ limitations under the License.
                             <div class='form-group'>
                                 <label for='wlanSsid' lkey='Blockly.Msg.POPUP_WLAN_SSID'></label>
                                 <div class='input-group'>
-                                    <span class='input-group-addon typcn input-typcn typcn-user'></span> <input type='text' class='form-control' id='wlanSsid'
-                                    name='wlanSsid' autofocus />
+                                    <span class='input-group-addon typcn input-typcn typcn-user'></span>
+                                    <input type='text' class='form-control' id='wlanSsid' name='wlanSsid' autofocus />
                                 </div>
                             </div>
                             <div class='form-group'>
                                 <label for='wlanPassword' lkey='Blockly.Msg.POPUP_PASSWORD'></label>
                                 <div class='input-group'>
-                                    <span class='input-group-addon typcn input-typcn typcn-lock-closed'></span> <input type='password' class='form-control'
-                                    id='wlanPassword' name='wlanPassword' />
+                                    <span class='input-group-addon typcn input-typcn typcn-lock-closed'></span>
+                                    <input type='password' class='form-control' id='wlanPassword' name='wlanPassword' />
                                 </div>
                             </div>
                         </div>
@@ -1029,8 +1278,7 @@ limitations under the License.
 
 
     <!-- Popup login -->
-    <div class='modal fade' id='login-user' tabindex='-1' role='dialog' data-backdrop='static' data-keyboard='false' aria-labelledby='myModalLabel'
-        aria-hidden='true'>
+    <div class='modal fade' id='login-user' tabindex='-1' role='dialog' data-backdrop='static' data-keyboard='false' aria-labelledby='myModalLabel' aria-hidden='true'>
         <div class='modal-dialog modal-sm'>
             <div class='modal-content'>
                 <div class='modal-header'>
@@ -1046,15 +1294,15 @@ limitations under the License.
                             <div class='form-group'>
                                 <label for='loginAccountName' lkey='Blockly.Msg.POPUP_USERNAME'></label>
                                 <div class='input-group'>
-                                    <span class='input-group-addon typcn input-typcn typcn-user'></span> <input type='text' class='form-control'
-                                    id='loginAccountName' name='loginAccountName' autofocus />
+                                    <span class='input-group-addon typcn input-typcn typcn-user'></span>
+                                    <input type='text' class='form-control' id='loginAccountName' name='loginAccountName' autofocus />
                                 </div>
                             </div>
                             <div class='form-group'>
                                 <label for='loginPassword' lkey='Blockly.Msg.POPUP_PASSWORD'></label>
                                 <div class='input-group'>
-                                    <span class='input-group-addon typcn input-typcn typcn-lock-closed'></span> <input type='password' class='form-control'
-                                    id='loginPassword' name='loginPassword' />
+                                    <span class='input-group-addon typcn input-typcn typcn-lock-closed'></span>
+                                    <input type='password' class='form-control' id='loginPassword' name='loginPassword' />
                                 </div>
                             </div>
                         </div>
@@ -1072,51 +1320,51 @@ limitations under the License.
                             <div class='form-group'>
                                 <label for='registerAccountName' lkey='Blockly.Msg.POPUP_USERNAME'>Username</label>
                                 <div class='input-group'>
-                                    <span class='input-group-addon typcn input-typcn typcn-user'></span> <input type='text' class='form-control'
-                                    id='registerAccountName' name='registerAccountName' />
+                                    <span class='input-group-addon typcn input-typcn typcn-user'></span>
+                                    <input type='text' class='form-control' id='registerAccountName' name='registerAccountName' />
                                 </div>
                                 <div class='hint' style='display: none' lkey='Blockly.Msg.HINT_USER_ACCOUNT'>HINT_USER_ACCOUNT</div>
                             </div>
                             <div class='form-group' id='fgRegisterPass'>
                                 <label for='registerPass' lkey='Blockly.Msg.POPUP_PASSWORD'>Password</label>
                                 <div class='input-group'>
-                                    <span class='input-group-addon typcn input-typcn typcn-lock-closed'></span> <input type='password' class='form-control'
-                                    id='registerPass' name='registerPass' />
+                                    <span class='input-group-addon typcn input-typcn typcn-lock-closed'></span>
+                                    <input type='password' class='form-control' id='registerPass' name='registerPass' />
                                 </div>
                                 <div class='hint' style='display: none' lkey='Blockly.Msg.HINT_USER_PASSWORT'>HINT_USER_PASSWORT</div>
                             </div>
                             <div class='form-group' id='fgRegisterPassConfirm'>
                                 <label for='registerPassConfirm' lkey='Blockly.Msg.POPUP_REPEAT_PASSWORD'>Repeat password</label>
                                 <div class='input-group'>
-                                    <span class='input-group-addon typcn input-typcn typcn-lock-closed'></span> <input type='password' class='form-control'
-                                    id='registerPassConfirm' name='registerPassConfirm' />
+                                    <span class='input-group-addon typcn input-typcn typcn-lock-closed'></span>
+                                    <input type='password' class='form-control' id='registerPassConfirm' name='registerPassConfirm' />
                                 </div>
                                 <div class='hint' style='display: none' lkey='Blockly.Msg.HINT_USER_PASSWORT_CONFIRM'>HINT_USER_PASSWORT_CONFIRM</div>
                             </div>
                             <div class='form-group'>
                                 <label for='registerUserName' lkey='Blockly.Msg.POPUP_NAME'>Name</label>
                                 <div class='input-group'>
-                                    <span class='input-group-addon typcn input-typcn typcn-user-outline'></span> <input type='text' class='form-control'
-                                    id='registerUserName' name='registerUserName' />
+                                    <span class='input-group-addon typcn input-typcn typcn-user-outline'></span>
+                                    <input type='text' class='form-control' id='registerUserName' name='registerUserName' />
                                 </div>
                                 <div class='hint' style='display: none' lkey='Blockly.Msg.HINT_USER_NAME'>HINT_USER_NAME</div>
                             </div>
                             <div class='form-group'>
                                 <label for='registerUserEmail' lkey='Blockly.Msg.POPUP_EMAIL'>E-Mail</label>
                                 <div class='input-group'>
-                                    <span class='input-group-addon typcn input-typcn typcn-at'></span> <input type='email' class='form-control'
-                                    id='registerUserEmail' name='registerUserEmail' />
+                                    <span class='input-group-addon typcn input-typcn typcn-at'></span>
+                                    <input type='email' class='form-control' id='registerUserEmail' name='registerUserEmail' />
                                 </div>
                                 <div class='hint' style='display: none' lkey='Blockly.Msg.HINT_USER_EMAIL'>HINT_USER_EMAIL</div>
                             </div>
                             <div class='form-group' id='fgUserAge' style='display: none'>
                                 <label for='registerUserAge' lkey='Blockly.Msg.POPUP_AGE'>Age</label>
                                 <div class='input-group'>
-                                    <span class='input-group-addon typcn input-typcn typcn-at'></span> <select class='form-control' id='registerUserAge'
-                                    name='registerUserAge'>
-                                    <option value='1' lkey='Blockly.Msg.YOUNGER_THEN_14'>B</option>
-                                    <option value='2' lkey='Blockly.Msg.OLDER_THEN_14'>C</option>
-                                </select>
+                                    <span class='input-group-addon typcn input-typcn typcn-at'></span>
+                                    <select class='form-control' id='registerUserAge' name='registerUserAge'>
+                                        <option value='1' lkey='Blockly.Msg.YOUNGER_THEN_14'>B</option>
+                                        <option value='2' lkey='Blockly.Msg.OLDER_THEN_14'>C</option>
+                                    </select>
                                 </div>
                                 <div class='hint' style='display: none' lkey='Blockly.Msg.HINT_USER_AGE'>HINT_USER_AGE</div>
                             </div>
@@ -1138,8 +1386,8 @@ limitations under the License.
                             <div class='form-group'>
                                 <label for='lost_email' lkey='Blockly.Msg.POPUP_EMAIL'>E-mail</label>
                                 <div class='input-group'>
-                                    <span class='input-group-addon typcn input-typcn typcn-mail'></span> <input type='email' id='lost_email'
-                                    class='form-control' name='lost_email' />
+                                    <span class='input-group-addon typcn input-typcn typcn-mail'></span>
+                                    <input type='email' id='lost_email' class='form-control' name='lost_email' />
                                 </div>
                             </div>
                         </div>
@@ -1172,22 +1420,23 @@ limitations under the License.
                         <div id='grOldPassword' class='form-group'>
                             <label for='passOld' lkey='Blockly.Msg.POPUP_OLD_PASSWORD'>Old Password</label>
                             <div class='input-group'>
-                                <span class='input-group-addon typcn input-typcn typcn-lock-closed'></span> <input type='password' class='form-control'
-                                id='passOld' name='passOld' autofocus /> <input type='hidden' class='form-control' id='resetPassLink' name='resetPassLink' />
+                                <span class='input-group-addon typcn input-typcn typcn-lock-closed'></span>
+                                <input type='password' class='form-control' id='passOld' name='passOld' autofocus /> <input type='hidden' class='form-control'
+                                id='resetPassLink' name='resetPassLink' />
                             </div>
                         </div>
                         <div class='form-group'>
                             <label for='passNew' lkey='Blockly.Msg.POPUP_NEW_PASSWORD'>New Password</label>
                             <div class='input-group'>
-                                <span class='input-group-addon typcn input-typcn typcn-lock-closed'></span> <input type='password' class='form-control'
-                                id='passNew' name='passNew' />
+                                <span class='input-group-addon typcn input-typcn typcn-lock-closed'></span>
+                                <input type='password' class='form-control' id='passNew' name='passNew' />
                             </div>
                         </div>
                         <div class='form-group'>
                             <label for='passNewRepeat' lkey='Blockly.Msg.POPUP_REPEAT_PASSWORD'>Repeat Password</label>
                             <div class='input-group'>
-                                <span class='input-group-addon typcn input-typcn typcn-lock-closed'></span> <input type='password' class='form-control'
-                                id='passNewRepeat' name='passNewRepeat' />
+                                <span class='input-group-addon typcn input-typcn typcn-lock-closed'></span>
+                                <input type='password' class='form-control' id='passNewRepeat' name='passNewRepeat' />
                             </div>
                         </div>
                     </div>
@@ -1215,8 +1464,8 @@ limitations under the License.
                             <div class='form-group'>
                                 <label for='usergroupLoginOwner' lkey='Blockly.Msg.DATATABLE_USERGROUP_OWNER'>Name des Gruppeneigentümers</label>
                                 <div class='input-group'>
-                                    <span class='input-group-addon typcn input-typcn typcn-mortar-board'></span> <input type='text' class='form-control'
-                                    id='usergroupLoginOwner' name='userGroupOwner' autofocus />
+                                    <span class='input-group-addon typcn input-typcn typcn-mortar-board'></span>
+                                    <input type='text' class='form-control' id='usergroupLoginOwner' name='userGroupOwner' autofocus />
                                 </div>
                                 <div class='hint' style='display: none' lkey='Blockly.Msg.HINT_USERGROUP_OWNER'>
                                     Hier kommt <strong>nicht</strong> der echten Name von dem/der Gruppen-Eigentümer*in hin, sondern der <strong>Benutzername</strong>.
@@ -1225,49 +1474,47 @@ limitations under the License.
                             <div class='form-group'>
                                 <label for='usergroupLoginUserGroup' lkey='Blockly.Msg.DATATABLE_USERGROUP_NAME'>Name der Gruppe</label>
                                 <div class='input-group'>
-                                    <span class='input-group-addon typcn input-typcn typcn-group'></span> <input type='text' class='form-control'
-                                    id='usergroupLoginUserGroup' name='userGroupName' />
+                                    <span class='input-group-addon typcn input-typcn typcn-group'></span>
+                                    <input type='text' class='form-control' id='usergroupLoginUserGroup' name='userGroupName' />
                                 </div>
-                                <div class='hint' style='display: none' lkey='Blockly.Msg.USERGROUP_NAME_HINT'>Die Gruppe bei der du dich anmeldest hat
-                                    einen Namen. Dieser Name kommt hier hin.
+                                <div class='hint' style='display: none'
+                                    lkey='Blockly.Msg.USERGROUP_NAME_HINT'>Die Gruppe bei der du dich anmeldest hat einen Namen. Dieser Name kommt hier hin.
                                 </div>
                             </div>
                             <div class='form-group'>
                                 <label for='usergroupLoginAccount' lkey='Blockly.Msg.POPUP_USERNAME'></label>
                                 <div class='input-group'>
-                                    <span class='input-group-addon typcn input-typcn typcn-user'></span> <input type='text' class='form-control'
-                                    id='usergroupLoginAccount' name='accountName' />
+                                    <span class='input-group-addon typcn input-typcn typcn-user'></span>
+                                    <input type='text' class='form-control' id='usergroupLoginAccount' name='accountName' />
                                 </div>
-                                <div class='hint' style='display: none' lkey='Blockly.Msg.HINT_USERGROUP_MEMBER'>Hier kommt die Kennung für deinen eigenen
-                                    Benutzer hin. Dabei handelt es sich in der Regel um eine zweistellige Nummer.
+                                <div class='hint' style='display: none'
+                                    lkey='Blockly.Msg.HINT_USERGROUP_MEMBER'>Hier kommt die Kennung für deinen eigenen Benutzer hin. Dabei handelt es sich in der Regel um eine zweistellige Nummer.
                                 </div>
                             </div>
                             <div class='form-group'>
                                 <label for='usergroupLoginPassword' lkey='Blockly.Msg.POPUP_PASSWORD'></label>
                                 <div class='input-group'>
-                                    <span class='input-group-addon typcn input-typcn typcn-lock-closed'></span> <input type='password' class='form-control'
-                                    id='usergroupLoginPassword' name='password' />
+                                    <span class='input-group-addon typcn input-typcn typcn-lock-closed'></span>
+                                    <input type='password' class='form-control' id='usergroupLoginPassword' name='password' />
                                 </div>
                             </div>
                         </div>
                         <div class='modal-footer'>
                             <button type='submit' class='btn btn-primary' id='loginUsergroupLoginSubmit'>OK</button>
                             <div>
-                                <button type='button' id='lostPasswordUsergroupLogin' class='btn-link' lkey='Blockly.Msg.POPUP_PASSWORD_RECOVERY'>Lost
-                                    Password?
+                                <button type='button' id='lostPasswordUsergroupLogin' class='btn-link' lkey='Blockly.Msg.POPUP_PASSWORD_RECOVERY'>Lost Password?
                                 </button>
                             </div>
                         </div>
                     </form>
                     <!-- Begin | Lost Password Form -->
                     <article id='lostPasswordUsergroupLoginArticle'>
-                        <p class='modal-body' lkey='Blockly.Msg.USERGROUP_LOGIN_LOST_PASSWORD_HINT'>Wenn du dein Passwort vergessen hast, kannst du den/die
-                            Eigentümer*in der Gruppe bitten, dein Passwort auf das Passwort zurückzusetzen, das vor dem ersten Login eingestellt war.</p>
+                        <p class='modal-body'
+                            lkey='Blockly.Msg.USERGROUP_LOGIN_LOST_PASSWORD_HINT'>Wenn du dein Passwort vergessen hast, kannst du den/die Eigentümer*in der Gruppe bitten, dein Passwort auf das Passwort zurückzusetzen, das vor dem ersten Login eingestellt war.</p>
                         <hr />
                         <div class='modal-footer'>
                             <div>
-                                <button type='button' id='loginUsergroupLogin' class='btn-link' lkey='Blockly.Msg.MENU_USERGROUP_LOG_IN'>bei Gruppe
-                                    anmelden ...
+                                <button type='button' id='loginUsergroupLogin' class='btn-link' lkey='Blockly.Msg.MENU_USERGROUP_LOG_IN'>bei Gruppe anmelden ...
                                 </button>
                             </div>
                         </div>
@@ -1289,15 +1536,16 @@ limitations under the License.
                         <h4>Upload</h4>
                         <div id='notification-modal-alert' class='alert' role='alert' style='display: none'></div>
 
-                        <label class='btn btn-default' for='notificationFileUpload'> <span class='typcn typcn-upload'></span> <input type='file'
-                            class='hidden' id='notificationFileUpload' />
-                        </label>
+                        <label class='btn btn-default' for='notificationFileUpload'>
+                            <span class='typcn typcn-upload'></span>
+                            <input type='file' class='hidden' id='notificationFileUpload' /> </label>
 
                         <button type='submit' class='btn btn-default'>Send</button>
 
                         <hr>
                         <h4>Download</h4>
-                        <a id='notificationFileDownload' href='' download='notifications.json' class='btn btn-default'> <span class='typcn typcn-download'></span>
+                        <a id='notificationFileDownload' href='' download='notifications.json' class='btn btn-default'>
+                            <span class='typcn typcn-download'></span>
                         </a>
                     </form>
                 </div>
@@ -1314,7 +1562,8 @@ limitations under the License.
                 </div>
                 <div class='model-body'>
                     <h3 id='modal-statustext-text'>
-                        <span id='modal-statustext-text-en' class='EN'></span> <span id='modal-statustext-text-de' class='DE'></span>
+                        <span id='modal-statustext-text-en' class='EN'></span>
+                        <span id='modal-statustext-text-de' class='DE'></span>
                     </h3>
                 </div>
                 <div class='modal-footer'>
@@ -1336,8 +1585,8 @@ limitations under the License.
                         <div class='form-group'>
                             <label for='singleModalInput'>Single Input</label>
                             <div class='input-group'>
-                                <span class='input-group-addon typcn input-typcn typcn-pencil'></span> <input type='text' class='form-control'
-                                id='singleModalInput' name='singleModalInput' />
+                                <span class='input-group-addon typcn input-typcn typcn-pencil'></span>
+                                <input type='text' class='form-control' id='singleModalInput' name='singleModalInput' />
                             </div>
                             <div align='right'>
                                 <a href='#' target='_blank' style='display: inline;'></a>
@@ -1365,9 +1614,8 @@ limitations under the License.
                         <div class='form-group'>
                             <label for='singleModalListInput'>Please, choose a robot</label>
                             <div class='input-group'>
-                                <span class='input-group-addon typcn input-typcn typcn-pencil'></span> <select class='form-control' id='singleModalListInput'
-                                name='singleModalListInput'>
-                            </select>
+                                <span class='input-group-addon typcn input-typcn typcn-pencil'></span>
+                                <select class='form-control' id='singleModalListInput' name='singleModalListInput'> </select>
                             </div>
                             <div align='right'>
                                 <a href='#' target='_blank' style='display: inline;'></a>
@@ -1391,8 +1639,7 @@ limitations under the License.
                     <h3 id='#headConnections' class='modal-title' lkey='Blockly.Msg.POPUP_SCANNED_ROBOTS'>Gefundene Roboter</h3>
                 </div>
                 <div class='modal-body' style='height: 158px;'>
-                    <table id='connectionsTable'>
-                    </table>
+                    <table id='connectionsTable'></table>
                 </div>
                 <div class='modal-footer'>
                     <input type='button' class='btn backButton' data-dismiss='modal' lkey='Blockly.Msg.POPUP_CANCEL'></input>
@@ -1442,9 +1689,9 @@ limitations under the License.
                     <div class='NRWMinLogo imgFloatLeft'></div>
                     <span lkey='Blockly.Msg.POPUP_ABOUT_TEXT_NRW'>Im Rahmen des Projekts »KI-Algorithmen im Informatikunterricht« ...</span>
                     <div style='overflow: auto; width: 100%'></div>
-                    <br /> <a href='https://www.roberta-home.de/impressum'
-                    target='_blank' class='DE'>Impressum</a> <a href='https://www.roberta-home.de/impressum/?L=1' target='_blank' class='EN'>Publishing
-                    notes</a>
+                    <br />
+                    <a href='https://www.roberta-home.de/impressum' target='_blank' class='DE'>Impressum</a>
+                    <a href='https://www.roberta-home.de/impressum/?L=1' target='_blank' class='EN'>Publishing notes</a>
                     <br /><br />
                     <div>
                         <span id='version'>Version beta 1.1.0</span>
@@ -1452,8 +1699,7 @@ limitations under the License.
                 </div>
                 <div class='modal-footer'>
                     <button type='button' class='btn' data-dismiss='modal'>Cool</button>
-                    <a class='btn' id='about-join' href='https://github.com/OpenRoberta/' target='_blank' lkey='Blockly.Msg.POPUP_ABOUT_JOIN'>Ich möchte
-                        mithelfen</a>
+                    <a class='btn' id='about-join' href='https://github.com/OpenRoberta/' target='_blank' lkey='Blockly.Msg.POPUP_ABOUT_JOIN'>Ich möchte mithelfen</a>
                 </div>
             </div>
         </div>
@@ -1497,10 +1743,20 @@ limitations under the License.
                     <h3 class='modal-title' lkey='Blockly.Msg.MENU_STATE_INFO'>User state</h3>
                 </div>
                 <div class='modal-body left-inner-addon'>
-                    <span id='popup_username' lkey='Blockly.Msg.POPUP_USERNAME'>User</span><span id='loggedIn'></span> <br /> <span
-                    lkey='Blockly.Msg.TAB_PROGRAM'>Program</span> <span>:&nbsp;</span> <span id='programName'>???</span> <br /> <span
-                    lkey='Blockly.Msg.TAB_CONFIGURATION'>Configuration</span> <span>:&nbsp;</span> <span id='configurationName'>???</span> <br /> <span
-                    lkey='Blockly.Msg.MENU_TOOLBOX'>Toolbox</span> <span>:&nbsp;</span> <span id='toolbox'>???</span>
+                    <span id='popup_username' lkey='Blockly.Msg.POPUP_USERNAME'>User</span>
+                    <span id='loggedIn'></span>
+                    <br />
+                    <span lkey='Blockly.Msg.TAB_PROGRAM'>Program</span>
+                    <span>:&nbsp;</span>
+                    <span id='programName'>???</span>
+                    <br />
+                    <span lkey='Blockly.Msg.TAB_CONFIGURATION'>Configuration</span>
+                    <span>:&nbsp;</span>
+                    <span id='configurationName'>???</span>
+                    <br />
+                    <span lkey='Blockly.Msg.MENU_TOOLBOX'>Toolbox</span>
+                    <span>:&nbsp;</span>
+                    <span id='toolbox'>???</span>
                 </div>
                 <div class='modal-footer'>
                     <button type='button' class='btn' data-dismiss='modal'>OK</button>
@@ -1517,13 +1773,23 @@ limitations under the License.
                     <h3 class='modal-title' lkey='Blockly.Msg.MENU_ROBOT_STATE_INFO'>Robot state</h3>
                 </div>
                 <div class='modal-body left-inner-addon'>
-                    <span lkey='Blockly.Msg.POPUP_ROBOT_NAME'>Name</span>:&nbsp;<span id='robotName'></span> <br /> <span
-                    lkey='Blockly.Msg.POPUP_ROBOT_SYSTEM'>System</span>:&nbsp;<span
-                    id='robotSystem'></span> <br /> <span lkey='Blockly.Msg.POPUP_ROBOT_STATE'>Status</span>:&nbsp;<span id='robotStateWait'
-                    lkey='Blockly.Msg.POPUP_ROBOT_STATE_WAIT'></span><span id='robotStateDisconnected' lkey='Blockly.Msg.POPUP_ROBOT_STATE_DISCONNECTED'></span>
-                    <span id='robotStateBusy' lkey='Blockly.Msg.POPUP_ROBOT_STATE_BUSY'></span> <br /> <span
-                    lkey='Blockly.Msg.POPUP_ROBOT_BATTERY'>Batteriespannung</span>:&nbsp;<span
-                    id='robotBattery'></span> <br /> <span lkey='Blockly.Msg.POPUP_ROBOT_WAIT'>Wartezeit</span>:&nbsp; <span id='robotWait'></span>
+                    <span lkey='Blockly.Msg.POPUP_ROBOT_NAME'>Name</span>
+                    :&nbsp;<span id='robotName'></span>
+                    <br />
+                    <span lkey='Blockly.Msg.POPUP_ROBOT_SYSTEM'>System</span>
+                    :&nbsp;<span id='robotSystem'></span>
+                    <br />
+                    <span lkey='Blockly.Msg.POPUP_ROBOT_STATE'>Status</span>
+                    :&nbsp;<span id='robotStateWait' lkey='Blockly.Msg.POPUP_ROBOT_STATE_WAIT'></span>
+                    <span id='robotStateDisconnected' lkey='Blockly.Msg.POPUP_ROBOT_STATE_DISCONNECTED'></span>
+                    <span id='robotStateBusy' lkey='Blockly.Msg.POPUP_ROBOT_STATE_BUSY'></span>
+                    <br />
+                    <span lkey='Blockly.Msg.POPUP_ROBOT_BATTERY'>Batteriespannung</span>
+                    :&nbsp;<span id='robotBattery'></span>
+                    <br />
+                    <span lkey='Blockly.Msg.POPUP_ROBOT_WAIT'>Wartezeit</span>
+                    :&nbsp;
+                    <span id='robotWait'></span>
                 </div>
                 <div class='modal-footer'>
                     <button type='button' class='btn' data-dismiss='modal'>OK</button>
@@ -1591,12 +1857,15 @@ limitations under the License.
     <div id='show-startup-message' class='modal fade' data-keyboard='false' data-backdrop='static'>
         <div class='modal-dialog modal-lg'>
             <div class='modal-content' style='padding-top: 10px;'>
-                <a href='https://github.com/OpenRoberta/openroberta-lab/releases' class='modal-body' target='_blank'>Release <span id='startupVersion'
-                    style='font-size: 18px;'>
-                    2.0.0 </span></a> <a href='https://www.roberta-home.de/impressum' target='_blank' class='DE modal-body' style='float: right;'>Impressum</a> <a
-                href='https://www.roberta-home.de/impressum/?L=1' target='_blank' class='EN modal-body' style='float: right;'>Publishing notes</a> <br /> <a
-                href='https://www.roberta-home.de/index.php?id=137' target='_blank' class='modal-body DE' style='float: right;'>Datenschutzerklärung</a> <a
-                href='https://www.roberta-home.de/index.php?id=137&L=1' target='_blank' class='modal-body EN' style='float: right;'>privacy policy</a>
+                <a href='https://github.com/OpenRoberta/openroberta-lab/releases' class='modal-body' target='_blank'>Release
+                    <span id='startupVersion' style='font-size: 18px;'>
+                    2.0.0 </span>
+                </a>
+                <a href='https://www.roberta-home.de/impressum' target='_blank' class='DE modal-body' style='float: right;'>Impressum</a>
+                <a href='https://www.roberta-home.de/impressum/?L=1' target='_blank' class='EN modal-body' style='float: right;'>Publishing notes</a>
+                <br />
+                <a href='https://www.roberta-home.de/index.php?id=137' target='_blank' class='modal-body DE' style='float: right;'>Datenschutzerklärung</a>
+                <a href='https://www.roberta-home.de/index.php?id=137&L=1' target='_blank' class='modal-body EN' style='float: right;'>privacy policy</a>
                 <div class='modal-header' style='text-align: center; font-size: 18px;'>
                     <h4 lkey='Blockly.Msg.POPUP_STARTUP_START'>Choose your system!</h4>
                 </div>
@@ -1604,19 +1873,21 @@ limitations under the License.
                     <div id='popup-robot-container' class='modal-body' style='text-align: center;'>
                         <div id='popup-robot-main'>
                             <div id='popup-sim' class='popup-robot robot-container'>
-                                <span href='#' class='typcn typcn-open robot-icon'></span><a href='#' target='_blank' style='display: inline;'> <span
-                                class='robot-info typcn typcn-info-large'></span>
-                            </a><span class='robot-label'>Open Roberta Sim</span>
-                                <img class='img-beta'
-                                    src='/css/img/beta.png' alt='beta' /> <img class='img-deprecated'
-                                src='/css/img/deprecated.png' alt='deprecated' />
+                                <span href='#' class='typcn typcn-open robot-icon'></span>
+                                <a href='#' target='_blank' style='display: inline;'>
+                                    <span class='robot-info typcn typcn-info-large'></span>
+                                </a>
+                                <span class='robot-label'>Open Roberta Sim</span>
+                                <img class='img-beta' src='/css/img/beta.png' alt='beta' /> <img class='img-deprecated' src='/css/img/deprecated.png'
+                                alt='deprecated' />
                             </div>
                         </div>
                         <div id='popup-robot-subgroup'></div>
                     </div>
                 </div>
                 <div class='modal-body'>
-                    <a href='#' class='hidden' style='display: inline;' id='startPopupBack'> <span class='typcn typcn-arrow-back-outline'></span>
+                    <a href='#' class='hidden' style='display: inline;' id='startPopupBack'>
+                        <span class='typcn typcn-arrow-back-outline'></span>
                     </a>
                 </div>
                 <div class='container-fluid'>
@@ -1625,8 +1896,8 @@ limitations under the License.
                             <h4 lkey='Blockly.Msg.POPUP_STARTUP_HELP'>Do you need help?</h4>
                         </div>
                         <div class='clearer'></div>
-                        <div class='col-md-3 hidden-xs' lkey='Blockly.Msg.POPUP_STARTUP_TOUR_TEXT'>Möchtest du gleich loslegen, weißt aber nicht genau
-                            wie? Wir zeigen dir die ersten Schritte in einer interaktiven Anleitung.
+                        <div class='col-md-3 hidden-xs'
+                            lkey='Blockly.Msg.POPUP_STARTUP_TOUR_TEXT'>Möchtest du gleich loslegen, weißt aber nicht genau wie? Wir zeigen dir die ersten Schritte in einer interaktiven Anleitung.
                         </div>
                         <div class='col-md-3 hidden-xs'>
                             <!-- <h4 lkey="Blockly.Msg.POPUP_STARTUP_HELP">Do you need help?</h4> -->
@@ -1638,8 +1909,8 @@ limitations under the License.
                                 </div>
                             </div>
                         </div>
-                        <div class='col-md-3 hidden-xs' lkey='Blockly.Msg.POPUP_STARTUP_HELP_TEXT'>In unserer ausführlichen Hilfe erklären wir dir alles
-                            ganz genau, von der Bauanleitung bis zu häufig gestellten Fragen.
+                        <div class='col-md-3 hidden-xs'
+                            lkey='Blockly.Msg.POPUP_STARTUP_HELP_TEXT'>In unserer ausführlichen Hilfe erklären wir dir alles ganz genau, von der Bauanleitung bis zu häufig gestellten Fragen.
                         </div>
                         <div class='col-md-3'>
                             <!-- <h4 lkey="Blockly.Msg.POPUP_STARTUP_HELP">Do you need help?</h4> -->
@@ -1672,8 +1943,7 @@ limitations under the License.
                 </div>
                 <!-- <form id="share-program-form"> -->
                 <div class='modal-body'>
-                    <table id='relationsTable'>
-                    </table>
+                    <table id='relationsTable'></table>
                 </div>
                 <div class='modal-footer'>
                     <button type='button' class='btn btn-primary' id='shareProgram'>OK</button>
@@ -1692,8 +1962,7 @@ limitations under the License.
                 </div>
                 <!-- <form id="share-program-form"> -->
                 <div class='modal-body'>
-                    <table id='galleryPreview' class='galleryTable'>
-                    </table>
+                    <table id='galleryPreview' class='galleryTable'></table>
                     <span id='textShareGallery'></span>
                 </div>
                 <div class='modal-footer'>
@@ -1755,48 +2024,48 @@ limitations under the License.
                         <div class='panel-heading' role='tab' id='headingOne'>
                             <h3 class='panel-title'>
                                 <a class='collapsed' data-toggle='collapse' href='#collapse1st' aria-expanded='false' aria-controls='collapse1st'
-                                    lkey='Blockly.Msg.SIM_VALUES_SYSTEM'>System Values</a>
+                                    lkey='Blockly.Msg.SIM_VALUES_SYSTEM'>System Values
+                                </a>
                             </h3>
                         </div>
                         <div id='collapse1st' class='panel-collapse collapse' role='tabpanel' aria-labelledby='headingOne'>
-                            <div id='systemValuesView' class='panel-body'>
-                            </div>
+                            <div id='systemValuesView' class='panel-body'></div>
                         </div>
                     </div>
                     <div class='panel'>
                         <div class='panel-heading' role='tab' id='headingTwo'>
                             <h3 class='panel-title'>
-                                <a class='collapsed' data-toggle='collapse' href='#collapse2nd' aria-expanded='false'
-                                    aria-controls='collapse2nd' lkey='Blockly.Msg.SIM_VALUES_TIMER'>Timer Values</a>
+                                <a class='collapsed' data-toggle='collapse' href='#collapse2nd' aria-expanded='false' aria-controls='collapse2nd'
+                                    lkey='Blockly.Msg.SIM_VALUES_TIMER'>Timer Values
+                                </a>
                             </h3>
                         </div>
                         <div id='collapse2nd' class='panel-collapse collapse' role='tabpanel' aria-labelledby='headingTwo' aria-expanded='true'>
-                            <div id='timerValuesView' class='panel-body'>
-                            </div>
+                            <div id='timerValuesView' class='panel-body'></div>
                         </div>
                     </div>
                     <div class='panel'>
                         <div class='panel-heading' role='tab' id='headingThree'>
                             <h3 class='panel-title'>
-                                <a class='' data-toggle='collapse' href='#collapse3rd' aria-expanded='true'
-                                    aria-controls='collapse3rd' lkey='Blockly.Msg.SIM_VALUES_SENSOR'>Sensor Values</a>
+                                <a class='' data-toggle='collapse' href='#collapse3rd' aria-expanded='true' aria-controls='collapse3rd'
+                                    lkey='Blockly.Msg.SIM_VALUES_SENSOR'>Sensor Values
+                                </a>
                             </h3>
                         </div>
                         <div id='collapse3rd' class='panel-collapse collapse in' role='tabpanel' aria-labelledby='headingThree'>
-                            <div id='sensorValuesView' class='panel-body'>
-                            </div>
+                            <div id='sensorValuesView' class='panel-body'></div>
                         </div>
                     </div>
                     <div class='panel'>
                         <div class='panel-heading' role='tab' id='headingFour'>
                             <h3 class='panel-title'>
-                                <a class='collapsed' data-toggle='collapse' href='#collapse4th' aria-expanded='false'
-                                    aria-controls='collapse1st' lkey='Blockly.Msg.SIM_VALUES_VARIABLE'>Variable Values</a>
+                                <a class='collapsed' data-toggle='collapse' href='#collapse4th' aria-expanded='false' aria-controls='collapse1st'
+                                    lkey='Blockly.Msg.SIM_VALUES_VARIABLE'>Variable Values
+                                </a>
                             </h3>
                         </div>
                         <div id='collapse4th' class='panel-collapse collapse' role='tabpanel' aria-labelledby='headingFour'>
-                            <div id='variableValuesView' class='panel-body'>
-                            </div>
+                            <div id='variableValuesView' class='panel-body'></div>
                         </div>
                     </div>
                 </div>
@@ -1813,15 +2082,27 @@ limitations under the License.
                     <h3 id='popupDownloadHeader' class='modal-title' lkey='Blockly.Msg.POPUP_DOWNLOAD'>Download your program</h3>
                 </div>
                 <div class='modal-body'>
-                    <ul id='download-instructions'>
-                    </ul>
+                    <ul id='download-instructions'></ul>
+                    <div id='downloadType' class='hidden'>
+                        <button class='downloadType' href='#' id='webUsb' lkey='Blockly.Msg.OPTION_WEBUSB'>
+                            Connect your micro:bit device to the computer<br><small>select it in the next popup and click »Connect«.</small>
+                        </button>
+                        <button href='#' id='fileDownload' class='downloadType' lkey='Blockly.Msg.OPTION_FILE_DOWNLOAD'>
+                            Download your program as a file
+                        </button>
+                        <br>
+                    </div>
+                    <div id='status' class='hidden'>
+                        <div id='transfer'>0%</div>
+                        <div id='progressBar'></div>
+                        <br>
+                    </div>
                     <div id='downloadLink'></div>
                     <div id='programHint' class='download-checkbox'>
                         <br>
                         <div id='changedDownloadFolder'>
                             <input type='checkbox' name='checkbox' id='label-checkbox' value='value' /><label for='label-checkbox'
-                            lkey='Blockly.Msg.POPUP_DOWNLOAD_CHECK'>Okay, I changed the download folder of my browser permanently. Don't show this
-                            popup again and download my programs directly.</label>
+                            lkey='Blockly.Msg.POPUP_DOWNLOAD_CHECK'>Okay, I changed the download folder of my browser permanently. Don't show this popup again and download my programs directly.</label>
                         </div>
                     </div>
                     <div id='OKButtonModalFooter' class='modal-footer'>
@@ -1845,18 +2126,17 @@ limitations under the License.
                             <div class='form-group'>
                                 <label for='createAccountName' lkey='Blockly.Msg.DATATABLE_USERGROUP_NAME'>Group name</label>
                                 <div class='input-group'>
-                                    <span class='input-group-addon typcn input-typcn typcn-tag'></span> <input type='text' class='form-control'
-                                    id='userGroupNameInput' name='name' lkey='Blockly.Msg.DATATABLE_USERGROUP_NAME_CREATE_HINT'
-                                    data-translation-targets='title' />
+                                    <span class='input-group-addon typcn input-typcn typcn-tag'></span>
+                                    <input type='text' class='form-control' id='userGroupNameInput' name='name' lkey='Blockly.Msg.DATATABLE_USERGROUP_NAME_CREATE_HINT'
+                                        data-translation-targets='title' />
                                 </div>
                                 <div class='hint' style='display: none'></div>
                             </div>
                             <div class='form-group'>
                                 <label for='initialMembersInput' lkey='Blockly.Msg.USERGROUP_GENERATED_MEMBERS'>Automatically generated members</label>
                                 <div class='input-group'>
-                                    <span class='input-group-addon typcn input-typcn typcn-user-add'></span> <input type='number' value='0'
-                                    class='form-control'
-                                    id='initialMembersInput' name='initialMembers' />
+                                    <span class='input-group-addon typcn input-typcn typcn-user-add'></span>
+                                    <input type='number' value='0' class='form-control' id='initialMembersInput' name='initialMembers' />
                                 </div>
                                 <div class='hint' lkey='Blockly.Msg.USERGROUP_GENERATED_MEMBERS_TOOLTIP' data-translation-targets='html'></div>
                             </div>
@@ -1884,8 +2164,8 @@ limitations under the License.
                             <div class='form-group'>
                                 <label for='additionalMembersInput' lkey='Blockly.Msg.USERGROUP_GENERATED_MEMBERS'>Automatically generated members</label>
                                 <div class='input-group'>
-                                    <span class='input-group-addon typcn input-typcn typcn-user-add'></span> <input type='number' value='' class='form-control'
-                                    id='additionalMembersInput' name='additionalMembers' />
+                                    <span class='input-group-addon typcn input-typcn typcn-user-add'></span>
+                                    <input type='number' value='' class='form-control' id='additionalMembersInput' name='additionalMembers' />
                                 </div>
                                 <div class='hint' lkey='Blockly.Msg.USERGROUP_GENERATED_MEMBERS_TOOLTIP' data-translation-targets='html'></div>
                             </div>
@@ -1908,8 +2188,7 @@ limitations under the License.
                     <h3 id='#headShare' class='modal-title'>Share</h3>
                 </div>
                 <div class='modal-body'>
-                    <table id='relationsTable'>
-                    </table>
+                    <table id='relationsTable'></table>
                 </div>
                 <div class='modal-footer'>
                     <button type='button' class='btn btn-primary' id='shareProgram'>OK</button>

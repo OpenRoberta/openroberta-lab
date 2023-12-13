@@ -1,6 +1,6 @@
 import * as STATE from './neuralnetwork.uistate';
 import * as H from './neuralnetwork.helper';
-import * as U from 'util';
+import * as U from 'util.roberta';
 
 export class NNumber {
     private static commaGlobal = /,/g;

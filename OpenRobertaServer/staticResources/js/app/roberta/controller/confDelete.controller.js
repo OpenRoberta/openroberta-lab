@@ -1,4 +1,4 @@
-define(["require", "exports", "log", "util", "message", "configuration.model", "jquery", "bootstrap-table"], function (require, exports, LOG, UTIL, MSG, CONFIGURATION, $) {
+define(["require", "exports", "log", "util.roberta", "message", "configuration.model", "jquery", "bootstrap-table"], function (require, exports, LOG, UTIL, MSG, CONFIGURATION, $) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.init = void 0;
     function init() {

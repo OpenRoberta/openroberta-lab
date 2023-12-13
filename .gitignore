@@ -19,6 +19,7 @@ OpenRobertaServer/db-*
 **/*.pyc
 **/*.py~
 **/*.csv
+++/*.map
 dbIptoCountry/
 **/notifications.json
 **/data/test/output/*

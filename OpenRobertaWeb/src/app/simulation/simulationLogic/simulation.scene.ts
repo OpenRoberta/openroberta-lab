@@ -2,7 +2,7 @@
  * @fileOverview Scene for a robot simulation
  * @author Beate Jost <beate.jost@iais.fraunhofer.de>
  */
-import * as UTIL from 'util';
+import * as UTIL from 'util.roberta';
 import * as $ from 'jquery';
 import {
     BaseSimulationObject,

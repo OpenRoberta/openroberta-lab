@@ -1,4 +1,4 @@
-import * as UTIL from 'util';
+import * as UTIL from 'util.roberta';
 import * as MSG from 'message';
 import * as GUISTATE from 'guiState.model';
 import * as HELP_C from 'progHelp.controller';
@@ -10,6 +10,7 @@ import * as $ from 'jquery';
 import * as Blockly from 'blockly';
 import * as THYMIO_C from 'thymioSocket.controller';
 import * as NOTIFICATION_C from 'notification.controller';
+import * as WEBUSB_C from 'webUsb.controller';
 
 var LONG = 300000; // Ping time 5min
 var SHORT = 3000; // Ping time 3sec
@@ -43,6 +44,7 @@ function init(language, opt_data) {
         GUISTATE.robot.robotPort = '';
         GUISTATE.robot.socket = null;
         GUISTATE.gui.isAgent = true;
+        GUISTATE.gui.isWebUsbSelected = false;
 
         //GUISTATE.socket.portNames = [];
         //GUISTATE.socket.vendorIds = [];
@@ -330,6 +332,10 @@ function setRobot(robot, result, opt_init) {
         case GUISTATE.gui.connectionType.AUTO:
         case GUISTATE.gui.connectionType.JSPLAY:
             SOCKET_C.listRobotStop();
+            if (WEBUSB_C.isConnected()) {
+                WEBUSB_C.removeDevice();
+            }
+            WEBUSB_C.setIsWebUsbSelected(false);
             $('#head-navi-icon-robot').removeClass('error');
             $('#head-navi-icon-robot').removeClass('busy');
             $('#head-navi-icon-robot').addClass('wait');
@@ -1455,4 +1461,6 @@ export {
     updateMenuStatus,
     updateTutorialMenu,
     getLegalTextsMap,
+    isWebUsbSelected,
+    setIsWebUsbSelected,
 };

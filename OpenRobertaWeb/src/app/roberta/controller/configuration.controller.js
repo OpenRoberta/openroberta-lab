@@ -1,5 +1,5 @@
 import * as LOG from 'log';
-import * as UTIL from 'util';
+import * as UTIL from 'util.roberta';
 import * as MSG from 'message';
 import * as GUISTATE_C from 'guiState.controller';
 import * as Blockly from 'blockly';

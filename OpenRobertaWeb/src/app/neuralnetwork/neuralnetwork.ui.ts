@@ -10,7 +10,7 @@ import { State } from './neuralnetwork.uistate';
 import * as LOG from 'log';
 import * as NN_MSG from './neuralnetwork.msg';
 import * as _D3 from 'd3';
-import * as UTIL from 'util';
+import * as UTIL from 'util.roberta';
 import { AppendingLineChart } from 'neuralnetwork.linechart';
 import * as MSG from 'message';
 import * as $ from 'jquery';
@@ -1143,12 +1143,7 @@ function drawTheNetwork(tabType: TabType, tabSuffix: string, options: object) {
 
     function drawLink(
         link: Link,
-        node2coord: {
-            [id: string]: {
-                cx: number;
-                cy: number;
-            };
-        },
+        node2coord: { [id: string]: { cx: number; cy: number } },
         network: Node[][],
         container: D3Selection,
         isFirst: boolean,
