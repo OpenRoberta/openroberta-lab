@@ -28,7 +28,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     function verb(n) { return function (v) { return step([n, v]); }; }
     function step(op) {
         if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
+        while (g && (g = 0, op[0] && (_ = 0)), _) try {
             if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
             if (y = 0, t) op = [op[0] & 2, t.value];
             switch (op[0]) {
@@ -49,7 +49,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-define(["require", "exports", "message", "util", "guiState.controller", "tour.controller", "program.controller", "program.model", "program.model", "blockly", "jquery", "simulation.objects", "simulation.webots", "simulation.roberta", "simulation.constants", "progList.model", "jquery-validate"], function (require, exports, MSG, UTIL, GUISTATE_C, TOUR_C, PROG_C, PROGRAM, PROGRAM_M, Blockly, $, simulation_objects_1, simulation_webots_1, simulation_roberta_1, simulation_constants_1, PROGLIST) {
+define(["require", "exports", "message", "util.roberta", "guiState.controller", "tour.controller", "program.controller", "program.model", "program.model", "blockly", "jquery", "simulation.objects", "simulation.webots", "simulation.roberta", "simulation.constants", "progList.model", "jquery-validate"], function (require, exports, MSG, UTIL, GUISTATE_C, TOUR_C, PROG_C, PROGRAM, PROGRAM_M, Blockly, $, simulation_objects_1, simulation_webots_1, simulation_roberta_1, simulation_constants_1, PROGLIST) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.createProgSimMultiInstance = exports.createProgSimDebugInstance = exports.createProgSimInstance = void 0;
     var INITIAL_WIDTH = 0.5;

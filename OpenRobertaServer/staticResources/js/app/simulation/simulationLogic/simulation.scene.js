@@ -7,7 +7,7 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     }
     return to.concat(ar || Array.prototype.slice.call(from));
 };
-define(["require", "exports", "util", "jquery", "simulation.objects", "robot.base", "robot.base.mobile"], function (require, exports, UTIL, $, simulation_objects_1, robot_base_1, robot_base_mobile_1) {
+define(["require", "exports", "util.roberta", "jquery", "simulation.objects", "robot.base", "robot.base.mobile"], function (require, exports, UTIL, $, simulation_objects_1, robot_base_1, robot_base_mobile_1) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.SimulationScene = void 0;
     /**

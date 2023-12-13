@@ -11,6 +11,7 @@
       "./node_modules/@types"
     ],
     "module": "amd",
+    "moduleResolution": "node",
     "noUnusedLocals": false,
     "noUnusedParameters": false,
     "allowJs": true,
@@ -148,6 +149,9 @@
       "sourceCodeEditor.controller": [
         "app/roberta/controller/sourceCodeEditor.controller"
       ],
+      "webUsb.controller": [
+        "app/roberta/controller/webUsb.controller"
+      ],
       "simulation.constants": [
         "app/simulation/simulationLogic/constants"
       ],
@@ -166,7 +170,7 @@
       "robot.roberta": [
         "app/simulation/simulationLogic/robot.roberta"
       ],
-      "simulation.robot.ev3": [
+      "robot.ev3": [
         "app/simulation/simulationLogic/robot.ev3"
       ],
       "robot.nxt": [
@@ -205,7 +209,7 @@
       "robot.sensors": [
         "app/simulation/simulationLogic/robot.sensors"
       ],
-      "simulation.actuators": [
+      "robot.actuators": [
         "app/simulation/simulationLogic/robot.actuators"
       ],
       "simulation.objects": [
@@ -220,7 +224,7 @@
       "message": [
         "helper/msg"
       ],
-      "util": [
+      "util.roberta": [
         "helper/util"
       ],
       "wrap": [

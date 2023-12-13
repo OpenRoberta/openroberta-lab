@@ -1,6 +1,6 @@
 define(["require", "exports", "message", "log", "jquery", "blockly", "interpreter.util", "jquery-validate", "bootstrap"], function (require, exports, MSG, LOG, $, Blockly, U) {
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.toFixedPrecision = exports.closeSimRobotWindow = exports.openSimRobotWindow = exports.removeLinks = exports.annotateBlocks = exports.clearAnnotations = exports.clearTabAlert = exports.alertTab = exports.isLocalStorageAvailable = exports.countBlocks = exports.getHashFrom = exports.download = exports.getBasename = exports.sgn = exports.roundUltraSound = exports.round = exports.response = exports.showMsgOnTop = exports.showSingleListModal = exports.showSingleModal = exports.setFocusOnElement = exports.checkVisibility = exports.calcDataTableHeight = exports.formatResultLog = exports.parseDate = exports.formatDate = exports.setObjectProperty = exports.getPropertyFromObject = exports.isEmpty = exports.clone = exports.base64decode = exports.renameNeuron = exports.getAllBlocks = exports.getTheStartBlock = exports.RGBAToHexA = exports.addVariableValue = exports.extendMouseEvent = exports.getWebAudio = exports.initMicrophone = exports.isEdge = exports.isIE = exports.checkInCircle = exports.getLinesFromRectangle = void 0;
+    exports.toFixedPrecision = exports.closeSimRobotWindow = exports.openSimRobotWindow = exports.removeLinks = exports.annotateBlocks = exports.clearAnnotations = exports.clearTabAlert = exports.alertTab = exports.isLocalStorageAvailable = exports.countBlocks = exports.getHashFrom = exports.download = exports.getBasename = exports.sgn = exports.roundUltraSound = exports.round = exports.response = exports.showMsgOnTop = exports.showSingleListModal = exports.showSingleModal = exports.setFocusOnElement = exports.checkVisibility = exports.calcDataTableHeight = exports.formatResultLog = exports.parseDate = exports.formatDate = exports.setObjectProperty = exports.getPropertyFromObject = exports.isEmpty = exports.clone = exports.base64decode = exports.renameNeuron = exports.getAllBlocks = exports.getTheStartBlock = exports.RGBAToHexA = exports.addVariableValue = exports.extendMouseEvent = exports.getWebAudio = exports.initMicrophone = exports.isWebUsbSupported = exports.isEdge = exports.isIE = exports.checkInCircle = exports.getLinesFromRectangle = void 0;
     var ANIMATION_DURATION = 750;
     function getLinesFromRectangle(myObj) {
         return [
@@ -935,6 +935,20 @@ define(["require", "exports", "message", "log", "jquery", "blockly", "interprete
         return edge > -1;
     }
     exports.isEdge = isEdge;
+    function isChromium() {
+        var ua = window.navigator.userAgent;
+        var chrome = ua.indexOf('Chrome');
+        return chrome > -1;
+    }
+    function isIOS() {
+        return navigator.userAgent.toLowerCase().match(/iPad|iPhone/i) !== null;
+    }
+    function isWebUsbSupported() {
+        //webUSB is currently only supported by chromium browsers like google chrome, Edge, Microsoft Edge, etc.
+        //webUSB is currently not supported on any IOS device
+        return isChromium() && !isIOS();
+    }
+    exports.isWebUsbSupported = isWebUsbSupported;
     function initMicrophone(robot) {
         // TODO if (navigator.mediaDevices === undefined) {
         //navigator.mediaDevices = {};

@@ -22,7 +22,7 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     }
     return to.concat(ar || Array.prototype.slice.call(from));
 };
-define(["require", "exports", "jquery", "util", "simulation.roberta", "simulation.math"], function (require, exports, $, UTIL, simulation_roberta_1, SIMATH) {
+define(["require", "exports", "jquery", "util.roberta", "simulation.roberta", "simulation.math"], function (require, exports, $, UTIL, simulation_roberta_1, SIMATH) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Ground = exports.TriangleSimulationObject = exports.CircleSimulationObject = exports.MarkerSimulationObject = exports.RectangleSimulationObject = exports.SimObjectShape = exports.SimObjectType = exports.SimObjectFactory = exports.BaseSimulationObject = void 0;
     var BaseSimulationObject = /** @class */ (function () {

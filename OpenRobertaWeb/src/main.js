@@ -22,6 +22,7 @@ require.config({
         glm: 'libs/webots/glm-js.min',
         'webots.enum': 'libs/webots/enum',
         'webots.wren': 'libs/webots/wrenjs',
+        dapjs: 'libs/dapjs/dap.umd',
 
         'confDelete.controller': 'app/roberta/controller/confDelete.controller',
         'configuration.controller': 'app/roberta/controller/configuration.controller',
@@ -66,6 +67,7 @@ require.config({
         'webview.controller': 'app/roberta/controller/webview.controller',
         'sourceCodeEditor.controller': 'app/roberta/controller/sourceCodeEditor.controller',
         'thymioSocket.controller': 'app/roberta/controller/thymioSocket.controller',
+        'webUsb.controller': 'app/roberta/controller/webUsb.controller',
 
         'simulation.constants': 'app/simulation/simulationLogic/constants',
         'simulation.math': 'app/simulation/simulationLogic/math',
@@ -96,7 +98,7 @@ require.config({
         comm: 'helper/comm',
         log: 'helper/log',
         message: 'helper/msg',
-        util: 'helper/util',
+        'util.roberta': 'helper/util',
         wrap: 'helper/wrap',
 
         'interpreter.constants': 'app/nepostackmachine/interpreter.constants',
@@ -214,6 +216,7 @@ require([
     'codeflask',
     'confVisualization',
     'robotBlock',
+    'webUsb.controller',
 ], function (require) {
     $ = require('jquery');
     WRAP = require('wrap');
@@ -253,6 +256,7 @@ require([
     codeflask = require('codeflask');
     confVisualization = require('confVisualization');
     robotBlock = require('robotBlock');
+    webUsbController = require('webUsb.controller');
 
     $(document).ready(WRAP.wrapTotal(init, 'page init'));
 });
@@ -300,6 +304,7 @@ function init() {
             notificationController.init();
             nnController.init();
             menuController.init();
+            webUsbController.init();
 
             $('.cover').fadeOut(100, function () {
                 if (guiStateController.getStartWithoutPopup()) {

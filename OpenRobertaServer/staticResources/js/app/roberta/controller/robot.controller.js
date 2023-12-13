@@ -1,4 +1,4 @@
-define(["require", "exports", "util", "log", "message", "guiState.controller", "robot.model", "program.controller", "configuration.controller", "webview.controller", "sourceCodeEditor.controller", "progCode.controller", "jquery", "blockly", "jquery-validate"], function (require, exports, UTIL, LOG, MSG, GUISTATE_C, ROBOT, PROGRAM_C, CONFIGURATION_C, WEBVIEW_C, CODEEDITOR_C, PROGCODE_C, $, Blockly) {
+define(["require", "exports", "util.roberta", "log", "message", "guiState.controller", "robot.model", "program.controller", "configuration.controller", "webview.controller", "sourceCodeEditor.controller", "progCode.controller", "jquery", "blockly", "jquery-validate"], function (require, exports, UTIL, LOG, MSG, GUISTATE_C, ROBOT, PROGRAM_C, CONFIGURATION_C, WEBVIEW_C, CODEEDITOR_C, PROGCODE_C, $, Blockly) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.switchRobot = exports.updateFirmware = exports.handleFirmwareConflict = exports.showWlanForm = exports.showRobotInfo = exports.showListModal = exports.showScanModal = exports.showSetTokenModal = exports.getPort = exports.setPort = exports.init = void 0;
     var $formSingleModal;

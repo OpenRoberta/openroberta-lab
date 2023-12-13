@@ -994,6 +994,23 @@ export function isEdge() {
     var edge = ua.indexOf('Edge');
     return edge > -1;
 }
+
+function isChromium() {
+    var ua = window.navigator.userAgent;
+    var chrome = ua.indexOf('Chrome');
+    return chrome > -1;
+}
+
+function isIOS() {
+    return navigator.userAgent.toLowerCase().match(/iPad|iPhone/i) !== null;
+}
+
+export function isWebUsbSupported() {
+    //webUSB is currently only supported by chromium browsers like google chrome, Edge, Microsoft Edge, etc.
+    //webUSB is currently not supported on any IOS device
+    return isChromium() && !isIOS();
+}
+
 export function initMicrophone(robot) {
     // TODO if (navigator.mediaDevices === undefined) {
     //navigator.mediaDevices = {};

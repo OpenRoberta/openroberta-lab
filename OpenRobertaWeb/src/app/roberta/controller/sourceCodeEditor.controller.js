@@ -2,7 +2,7 @@ import * as require from 'require';
 
 import * as MSG from 'message';
 import * as LOG from 'log';
-import * as UTIL from 'util';
+import * as UTIL from 'util.roberta';
 import * as COMM from 'comm';
 import * as WRAP from 'wrap';
 import * as GUISTATE_C from 'guiState.controller';

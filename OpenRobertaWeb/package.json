@@ -20,6 +20,7 @@
     "@types/jquery": "^3.5.5",
     "@types/lodash.isequal": "^4.5.6",
     "d3": "^3.5.16",
+    "dapjs": "^2.3.0",
     "isomorphic-ws": "^5.0.0",
     "lodash.isequal": "^4.5.0"
   },

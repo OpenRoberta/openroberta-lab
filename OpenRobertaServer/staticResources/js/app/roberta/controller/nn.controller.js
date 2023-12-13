@@ -1,4 +1,4 @@
-define(["require", "exports", "guiState.controller", "neuralnetwork.ui", "jquery", "util", "jquery-validate"], function (require, exports, GUISTATE_C, NN_UI, $, UTIL) {
+define(["require", "exports", "guiState.controller", "neuralnetwork.ui", "jquery", "util.roberta", "jquery-validate"], function (require, exports, GUISTATE_C, NN_UI, $, UTIL) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.mkNNfromNNStepDataAndRunNNEditor = exports.mkNNfromProgramStartBlock = exports.saveNN2Blockly = exports.programWasReplaced = exports.init = void 0;
     /**

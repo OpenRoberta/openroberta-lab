@@ -3361,3 +3361,31 @@ input::-webkit-inner-spin-button {
 input[type="number"] {
     -moz-appearance: textfield;
 }
+
+#downloadType {
+    padding: 8px 20px 20px;
+    text-align: center;
+}
+
+.downloadType {
+    font-size: 18px;
+    text-align: center;
+    text-decoration: none;
+    padding: 12px;
+    margin: 12px;
+    border: 1px solid #BACC1E;
+    border-radius: 2px;
+    cursor: pointer;
+    width: 100%;
+}
+
+#progressBar {
+    background-color: #BACC1E;
+    height: 10px;
+    width: 0%;
+
+}
+
+.downloadType:hover {
+    background-color: #BACC1E;
+}

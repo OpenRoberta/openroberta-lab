@@ -11,7 +11,7 @@ import * as LOG from 'log';
 import * as MSG from './neuralnetwork.msg';
 
 import * as _D3 from 'd3';
-import * as UTIL from 'util';
+import * as UTIL from 'util.roberta';
 
 enum NodeType {
     INPUT,

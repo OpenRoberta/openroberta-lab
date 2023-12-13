@@ -1,4 +1,4 @@
-define(["require", "exports", "log", "jquery", "blockly"], function (require, exports, LOG, $, Blockly) {
+define(["require", "exports", "exports", "log", "jquery", "blockly"], function (require, exports, exports, LOG, $, Blockly) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.displayInformation = exports.displayMessage = exports.displayToastMessages = exports.displayPopupMessage = void 0;
     var toastMessages = [];
