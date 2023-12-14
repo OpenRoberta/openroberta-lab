@@ -6,40 +6,26 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import com.google.common.collect.ClassToInstanceMap;
-
-import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
-import de.fhg.iais.roberta.visitor.SpikeMethods;
-import de.fhg.iais.roberta.visitor.SpikeValidatorAndCollectorVisitor;
-import de.fhg.iais.roberta.visitor.validate.CommonNepoValidatorAndCollectorVisitor;
 
-public class SpikeValidatorAndCollectorWorker extends AbstractValidatorAndCollectorWorker {
+/**
+ * Abstract CollectorWorker, keeps shared methods for Lego and Pybricks
+ */
+public abstract class AbstractSpikeValidatorAndCollectorWorker extends AbstractValidatorAndCollectorWorker {
 
     private static final List<String> NON_BLOCKING_PROPERTIES = Collections.unmodifiableList(Arrays.asList("MOTOR_L", "MOTOR_R", "BRICK_WHEEL_DIAMETER", "BRICK_TRACK_WIDTH"));
 
     @Override
-    public void execute(Project project) {
+    final public void execute(Project project) {
         validateConfig(project);
         super.execute(project);
     }
 
-    @Override
-    protected CommonNepoValidatorAndCollectorVisitor getVisitor(
-        Project project, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
-        return new SpikeValidatorAndCollectorVisitor(project.getConfigurationAst(), beanBuilders);
-    }
-
-    @Override
-    protected List<Class<? extends Enum<?>>> getAdditionalMethodEnums() {
-        return Collections.singletonList(SpikeMethods.class);
-    }
-
-    private void validateConfig(Project project) {
+    final void validateConfig(Project project) {
         List<String> takenPins = new ArrayList<>();
         project.getConfigurationAst().getConfigurationComponents().forEach((k, v) -> checkIfPortTaken(project, v, takenPins));
         Map<String, ConfigurationComponent> diffDrives = project.getConfigurationAst().getAllConfigurationComponentByType("DIFFERENTIALDRIVE");
@@ -82,7 +68,7 @@ public class SpikeValidatorAndCollectorWorker extends AbstractValidatorAndCollec
         });
     }
 
-    private void checkIfPortTaken(Project project, ConfigurationComponent configurationComponent, List<String> takenPins) {
+    final void checkIfPortTaken(Project project, ConfigurationComponent configurationComponent, List<String> takenPins) {
         Map<String, String> componentProperties = configurationComponent.getComponentProperties();
         for ( Map.Entry<String, String> property : componentProperties.entrySet() ) {
             if ( NON_BLOCKING_PROPERTIES.contains(property.getKey()) ) {

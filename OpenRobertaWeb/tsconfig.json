@@ -152,6 +152,9 @@
       "webUsb.controller": [
         "app/roberta/controller/webUsb.controller"
       ],
+      "webBLE.controller": [
+        "app/roberta/controller/webBLE.controller"
+      ],
       "simulation.constants": [
         "app/simulation/simulationLogic/constants"
       ],
@@ -294,7 +297,8 @@
     "@cor3ntin/flexbuffers-wasm"
   ],
   "include": [
-    "src/**/*"
+    "src/**/*",
+    "../node_modules/@types/web-bluetooth/index.d.ts"
   ],
   "exclude": [
     "**/node_modules/",

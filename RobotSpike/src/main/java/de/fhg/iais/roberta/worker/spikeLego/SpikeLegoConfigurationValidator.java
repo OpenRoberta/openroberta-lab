@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.worker;
+package de.fhg.iais.roberta.worker.spikeLego;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -14,12 +14,12 @@ import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 
-public class SpikeConfigurationValidator {
+public class SpikeLegoConfigurationValidator {
     private static final Set<String> OVERLAPPING_PINS = Stream.of("A", "B", "C", "D", "E", "F").collect(Collectors.toCollection(HashSet::new));
 
     private final Project project;
 
-    public SpikeConfigurationValidator(Project project) {
+    public SpikeLegoConfigurationValidator(Project project) {
         this.project = project;
     }
 

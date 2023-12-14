@@ -139,4 +139,8 @@ public interface SC {
 
     String OLEDSSD1306I2C = "OLEDSSD1306I2C";
 
+    String COlOR_CONST = "COLOR_CONST";
+    String SQRT = "SQRT";
+    String WAIT = "WAIT";
+    String PORT = "PORT";
 }

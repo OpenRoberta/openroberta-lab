@@ -7,7 +7,6 @@ import de.fhg.iais.roberta.transformer.forClass.NepoPhrase;
 import de.fhg.iais.roberta.transformer.forField.NepoField;
 import de.fhg.iais.roberta.transformer.forField.NepoMutation;
 import de.fhg.iais.roberta.transformer.forField.NepoValue;
-import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 
@@ -17,7 +16,7 @@ public final class DisplayImageAction extends ActionWithoutUserChosenName {
     public final Mutation mutation;
     @NepoField(name = "TYPE")
     public final String displayImageMode;
-    @NepoValue(name = "VALUE", type = BlocklyType.STRING)
+    @NepoValue(name = "VALUE")
     public final Expr valuesToDisplay;
 
     public DisplayImageAction(BlocklyProperties properties, Mutation mutation, String displayImageMode, Expr valuesToDisplay, Hide hide) {

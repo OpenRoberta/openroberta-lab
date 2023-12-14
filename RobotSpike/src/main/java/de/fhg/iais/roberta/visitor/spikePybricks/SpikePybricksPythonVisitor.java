@@ -1,0 +1,835 @@
+package de.fhg.iais.roberta.visitor.spikePybricks;
+
+import java.util.List;
+
+import com.google.common.collect.ClassToInstanceMap;
+
+import de.fhg.iais.roberta.bean.IProjectBean;
+import de.fhg.iais.roberta.bean.UsedHardwareBean;
+import de.fhg.iais.roberta.components.ConfigurationAst;
+import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOffHiddenAction;
+import de.fhg.iais.roberta.syntax.action.light.RgbLedOnHiddenAction;
+import de.fhg.iais.roberta.syntax.action.spike.DisplayClearAction;
+import de.fhg.iais.roberta.syntax.action.spike.DisplayImageAction;
+import de.fhg.iais.roberta.syntax.action.spike.DisplayTextAction;
+import de.fhg.iais.roberta.syntax.action.spike.MotorDiffCurveAction;
+import de.fhg.iais.roberta.syntax.action.spike.MotorDiffCurveForAction;
+import de.fhg.iais.roberta.syntax.action.spike.MotorDiffOnAction;
+import de.fhg.iais.roberta.syntax.action.spike.MotorDiffOnForAction;
+import de.fhg.iais.roberta.syntax.action.spike.MotorDiffStopAction;
+import de.fhg.iais.roberta.syntax.action.spike.MotorDiffTurnAction;
+import de.fhg.iais.roberta.syntax.action.spike.MotorDiffTurnForAction;
+import de.fhg.iais.roberta.syntax.action.spike.MotorOnAction;
+import de.fhg.iais.roberta.syntax.action.spike.MotorOnForAction;
+import de.fhg.iais.roberta.syntax.action.spike.MotorStopAction;
+import de.fhg.iais.roberta.syntax.action.spike.PlayNoteAction;
+import de.fhg.iais.roberta.syntax.action.spike.PlayToneAction;
+import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
+import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
+import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
+import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
+import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
+import de.fhg.iais.roberta.syntax.spike.Image;
+import de.fhg.iais.roberta.syntax.spike.PredefinedImage;
+import de.fhg.iais.roberta.util.dbc.DbcException;
+import de.fhg.iais.roberta.util.syntax.SC;
+import de.fhg.iais.roberta.visitor.AbstractSpikePythonVisitor;
+
+/**
+ * This class is extending {@link AbstractSpikePythonVisitor}. <br>All methods are implemented and they append a human-readable Python code representation of a phrase to a
+ * StringBuilder. <b>This representation is correct Python code.</b> <br>
+ */
+public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor {
+
+    /**
+     * initialize the Python code generator visitor.
+     *
+     * @param programPhrases to generate the code from
+     */
+    public SpikePybricksPythonVisitor(
+        List<List<Phrase>> programPhrases, ClassToInstanceMap<IProjectBean> beans, ConfigurationAst configurationAst) {
+        super(programPhrases, beans, configurationAst);
+    }
+
+    @Override
+    public Void visitWaitTimeStmt(WaitTimeStmt waitTimeStmt) {
+        src.add("wait(");
+        waitTimeStmt.time.accept(this);
+        src.add(")");
+        return null;
+    }
+
+    @Override
+    public Void visitMotorDiffOnForAction(MotorDiffOnForAction motorDiffOnForAction) {
+        String speedMethodName = getSpeedMethodName(false);
+
+        src.add("drive_base.settings(straight_speed = ").add(speedMethodName).add("(");
+        motorDiffOnForAction.power.accept(this);
+        src.add("))").nlI();
+
+        //angabe in cm also 10 * mm
+        src.add("drive_base.straight(10 * ");
+
+        switch ( motorDiffOnForAction.direction ) {
+            case "BACKWARD":
+                src.add("-(");
+                motorDiffOnForAction.distance.accept(this);
+                src.add(")");
+                break;
+            case "FORWARD":
+                motorDiffOnForAction.distance.accept(this);
+                break;
+            default:
+                throw new DbcException("Invalid direction: " + motorDiffOnForAction.direction);
+        }
+
+        src.add(")");
+        return null;
+    }
+
+    @Override
+    public Void visitMotorDiffTurnForAction(MotorDiffTurnForAction motorDiffTurnForAction) {
+        src.add("drive_base.turn(");
+
+        switch ( motorDiffTurnForAction.direction ) {
+            case "RIGHT":
+                src.add("-(");
+                motorDiffTurnForAction.degrees.accept(this);
+                src.add(")");
+                break;
+            case "LEFT":
+                motorDiffTurnForAction.degrees.accept(this);
+                break;
+            default:
+                throw new DbcException("Invalid turn direction: " + motorDiffTurnForAction.direction);
+        }
+
+        src.add(")");
+        return null;
+    }
+
+    @Override
+    public Void visitMotorDiffOnAction(MotorDiffOnAction motorDiffOnAction) {
+        String speedMethodName = getSpeedMethodName(motorDiffOnAction.regulation);
+
+        src.add("drive_base.drive(");
+
+        switch ( motorDiffOnAction.direction ) {
+            case "BACKWARD":
+                src.add("-(").add(speedMethodName).add("(");
+                motorDiffOnAction.power.accept(this);
+                src.add("))");
+                break;
+            case "FORWARD":
+                src.add(speedMethodName).add("(");
+                motorDiffOnAction.power.accept(this);
+                src.add(")");
+                break;
+            default:
+                throw new DbcException("Invalid direction: " + motorDiffOnAction.direction);
+        }
+
+        src.add(" , 0)");
+        return null;
+    }
+
+    @Override
+    public Void visitMotorDiffTurnAction(MotorDiffTurnAction motorDiffTurnAction) {
+        String speedMethodName = getSpeedMethodName(motorDiffTurnAction.regulation);
+
+        src.add("drive_base.drive(0,");
+
+        switch ( motorDiffTurnAction.direction ) {
+            case "RIGHT":
+                src.add("-(").add(speedMethodName).add("(");
+                motorDiffTurnAction.power.accept(this);
+                src.add("))");
+                break;
+            case "LEFT":
+                src.add(speedMethodName).add("(");
+                motorDiffTurnAction.power.accept(this);
+                src.add(")");
+                break;
+            default:
+                throw new DbcException("Invalid turn direction: " + motorDiffTurnAction.direction);
+        }
+
+        src.add(")");
+        return null;
+    }
+
+    @Override
+    public Void visitMotorDiffCurveForAction(MotorDiffCurveForAction motorDiffCurveForAction) {
+        String speedMethodName = getSpeedMethodName(false);
+        src.add("tank_drive_dist(");
+
+        switch ( motorDiffCurveForAction.direction ) {
+            case "BACKWARD":
+                src.add("-(");
+                motorDiffCurveForAction.distance.accept(this);
+                src.add(")");
+                break;
+            case "FORWARD":
+                motorDiffCurveForAction.distance.accept(this);
+                break;
+            default:
+                throw new DbcException("Invalid curve direction: " + motorDiffCurveForAction.direction);
+        }
+
+        src.add(", ").add(speedMethodName).add("(");
+        motorDiffCurveForAction.powerLeft.accept(this);
+        src.add("), ").add(speedMethodName).add("(");
+        motorDiffCurveForAction.powerRight.accept(this);
+        src.add("))");
+        return null;
+    }
+
+    @Override
+    public Void visitUltrasonicSensor(UltrasonicSensor ultrasonicSensor) {
+        String sensorPort = ultrasonicSensor.getUserDefinedPort();
+        src.add("ultrasonic_sensor_").add(sensorPort).add(".distance()");
+        return null;
+    }
+
+    @Override
+    public Void visitColorSensor(ColorSensor colorSensor) {
+        String sensorPort = colorSensor.getUserDefinedPort();
+        switch ( colorSensor.getMode() ) {
+            case "LIGHT":
+                src.add("color_sensor_").add(sensorPort).add(".reflection()");
+                break;
+            case "AMBIENTLIGHT":
+                src.add("color_sensor_").add(sensorPort).add(".ambient()");
+                break;
+            case "COLOUR":
+                src.add("color_sensor_").add(sensorPort).add(".color()");
+                break;
+            case "REDCHANNEL":
+                src.add("hsv2rgb(");
+                src.add("color_sensor_").add(sensorPort).add(".hsv()");
+                src.add(")[0]");
+                break;
+            case "GREENCHANNEL":
+                src.add("hsv2rgb(");
+                src.add("color_sensor_").add(sensorPort).add(".hsv()");
+                src.add(")[1]");
+                break;
+            case "BLUECHANNEL":
+                src.add("hsv2rgb(");
+                src.add("color_sensor_").add(sensorPort).add(".hsv()");
+                src.add(")[2]");
+                break;
+            default:
+                throw new DbcException("Invalid color sensor mode: " + colorSensor.getMode());
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitTouchSensor(TouchSensor touchSensor) {
+        String sensorPort = touchSensor.getUserDefinedPort();
+        src.add("touch_sensor_").add(sensorPort);
+        switch ( touchSensor.getMode() ) {
+            case "PRESSED":
+                src.add(".pressed()");
+                break;
+            case "FORCE":
+                src.add(".force()");
+                break;
+            default:
+                throw new DbcException("Invalid touch sensor mode: " + touchSensor.getMode());
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitGyroSensor(GyroSensor gyroSensor) {
+        switch ( gyroSensor.getSlot() ) {
+            case "X":
+                src.add("hub.imu.rotation(vector(1, 0, 0))");
+                break;
+            case "Y":
+                src.add("hub.imu.rotation(vector(0, 1, 0))");
+                break;
+            case "Z":
+                src.add("hub.imu.rotation(vector(0, 0, 1))");
+                break;
+            default:
+                throw new DbcException("Invalid gyro sensor slot: " + gyroSensor.getSlot());
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitGestureSensor(GestureSensor gestureSensor) {
+        switch ( gestureSensor.getMode() ) {
+            case "FRONT":
+                src.add("(hub.imu.up() == Side.FRONT)");
+                break;
+            case "BACK":
+                src.add("(hub.imu.up() == Side.BACK)");
+                break;
+            case "UP":
+                src.add("(hub.imu.up() == Side.TOP)");
+                break;
+            case "DOWN":
+                src.add("(hub.imu.up() == Side.BOTTOM)");
+                break;
+            case "LEFT":
+                src.add("(hub.imu.up() == Side.LEFT)");
+                break;
+            case "RIGHT":
+                src.add("(hub.imu.up() == Side.RIGHT)");
+                break;
+            case "TAPPED":
+                src.add("is_tapped()");
+                break;
+            case "SHAKE":
+                src.add("is_shaken()");
+                break;
+            case "FREEFALL":
+                src.add("is_free_fall()");
+                break;
+            default:
+                throw new DbcException("Invalid gyro sensor mode: " + gestureSensor.getMode());
+        }
+        return null;
+    }
+
+
+    @Override
+    public Void visitKeysSensor(KeysSensor keysSensor) {
+        String portName = keysSensor.getUserDefinedPort();
+        ConfigurationComponent configurationComponent = this.configurationAst.getConfigurationComponent(portName);
+        String port = configurationComponent.getProperty("PIN1");
+
+        switch ( port ) {
+            case "RIGHT":
+                src.add("(Button.RIGHT in hub.buttons.pressed())");
+                break;
+            case "LEFT":
+                src.add("(Button.LEFT in hub.buttons.pressed())");
+                break;
+            default:
+                throw new DbcException("Invalid key sensor port: " + port);
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitMotorDiffCurveAction(MotorDiffCurveAction motorDiffCurveAction) {
+        String speedMethodName = getSpeedMethodName(motorDiffCurveAction.regulation);
+
+        src.add("tank_drive(");
+
+        switch ( motorDiffCurveAction.direction ) {
+            case "BACKWARD":
+                src.add("-(").add(speedMethodName).add("(");
+                motorDiffCurveAction.powerLeft.accept(this);
+                src.add(")), -(").add(speedMethodName).add("(");
+                motorDiffCurveAction.powerRight.accept(this);
+                src.add("))");
+                break;
+            case "FORWARD":
+                src.add(speedMethodName).add("(");
+                motorDiffCurveAction.powerLeft.accept(this);
+                src.add("), ").add(speedMethodName).add("(");
+                motorDiffCurveAction.powerRight.accept(this);
+                src.add(")");
+                break;
+            default:
+                throw new DbcException("Invalid curve direction: " + motorDiffCurveAction.direction);
+        }
+        src.add(")");
+        return null;
+    }
+
+    //TODO BAKE DOESNT EXIST FOR DIFF DRIVE
+    @Override
+    public Void visitMotorDiffStopAction(MotorDiffStopAction motorDiffStopAction) {
+        src.add("drive_base");
+        switch ( motorDiffStopAction.control ) {
+            case "BRAKE":
+                //TODO brake is not implemented for differential drive
+                src.add(".stop()");//.brake()");
+                break;
+            case "COAST":
+                src.add(".stop()");
+                break;
+            default:
+                throw new DbcException("Invalid stop control: " + motorDiffStopAction.control);
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitMotorOnForAction(MotorOnForAction motorOnForAction) {
+        String speedMethodName = getSpeedMethodName(false);
+        String motorPort = getPortFromConfig(motorOnForAction.port);
+
+        src.add("motor").add(motorPort).add(".");
+        switch ( motorOnForAction.unit ) {
+            case "DEGREES":
+                src.add("run_angle(rotation_angle = ");
+                break;
+            case "ROTATIONS":
+                src.add("run_angle(rotation_angle = 360 * ");
+                break;
+            default:
+                throw new DbcException("Invalid motor unit: " + motorOnForAction.unit);
+
+        }
+
+        motorOnForAction.value.accept(this);
+        src.add(", speed = ").add(speedMethodName).add("(");
+        motorOnForAction.power.accept(this);
+        src.add("))");
+
+        return null;
+    }
+
+    public Void visitMotorOnAction(MotorOnAction motorOnAction) {
+        String speedMethodName = getSpeedMethodName(motorOnAction.regulation);
+        String motorPort = getPortFromConfig(motorOnAction.port);
+
+        src.add("motor").add(motorPort).add(".run(");
+        src.add(speedMethodName).add("(");
+        motorOnAction.power.accept(this);
+        src.add("))");
+
+        return null;
+    }
+
+    @Override
+    public Void visitMotorStopAction(MotorStopAction motorStopAction) {
+        String motorPort = getPortFromConfig(motorStopAction.port);
+
+        src.add("motor").add(motorPort);
+
+        switch ( motorStopAction.control ) {
+            case "BRAKE":
+                src.add(".brake()");
+                break;
+            case "COAST":
+                src.add(".stop()");
+                break;
+            default:
+                throw new DbcException("Invalid stop control: " + motorStopAction.control);
+        }
+
+        return null;
+    }
+
+    @Override
+    public Void visitTimerReset(TimerReset timerReset) {
+        src.add("stopWatch.reset()");
+        return null;
+    }
+
+    @Override
+    public Void visitTimerSensor(TimerSensor timerSensor) {
+        src.add("stopWatch.time()");
+        return null;
+    }
+
+    @Override
+    public Void visitPlayNoteAction(PlayNoteAction playNoteAction) {
+        int midi = (int) Math.round(69 + (Math.log(Double.parseDouble(playNoteAction.frequency) / 440) / Math.log(2.0)) * 12);
+        double duration = Double.parseDouble(playNoteAction.duration);
+        src.add("hub.speaker.beep(").add(String.valueOf(midi)).add(", ").add(String.valueOf(duration)).add(");");
+        return null;
+    }
+
+    @Override
+    public Void visitPlayToneAction(PlayToneAction playToneAction) {
+        src.add("hub.speaker.beep(");
+        playToneAction.frequency.accept(this);
+        src.add(", ");
+        playToneAction.duration.accept(this);
+        src.add(")");
+        return null;
+    }
+
+    @Override
+    public Void visitRgbLedOnHiddenAction(RgbLedOnHiddenAction rgbLedOnHiddenAction) {
+        src.add("hub.light.on(");
+        rgbLedOnHiddenAction.colour.accept(this);
+        src.add(")");
+        return null;
+    }
+
+    @Override
+    public Void visitRgbLedOffHiddenAction(RgbLedOffHiddenAction rgbLedOffHiddenAction) {
+        src.add("hub.light.off()");
+        return null;
+    }
+
+    //TODO UPDATED BUT MASSIVE PROBLEM WITH ANIMATION
+    @Override
+    public Void visitDisplayImageAction(DisplayImageAction displayImageAction) {
+        switch ( displayImageAction.displayImageMode ) {
+            //TODO this should probably work once the bug with animations is fixed <- maybe add []
+            case "ANIMATION":
+                src.add("hub.display.animate(list(");
+                displayImageAction.valuesToDisplay.accept(this);
+                src.add("), 500)");
+                break;
+            case "IMAGE":
+                src.add("hub.display.icon(");
+                displayImageAction.valuesToDisplay.accept(this);
+                src.add(")");
+                break;
+            default:
+                throw new DbcException("Invalid display mode: " + displayImageAction.displayImageMode);
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitDisplayTextAction(DisplayTextAction displayTextAction) {
+        switch ( displayTextAction.displayTextMode ) {
+            case "CHARACTER":
+                src.add("hub.display.char(str(");
+                displayTextAction.textToDisplay.accept(this);
+                src.add("))");
+                break;
+            case "TEXT":
+                src.add("hub.display.text(str(");
+                displayTextAction.textToDisplay.accept(this);
+                src.add("))");
+                break;
+            default:
+                throw new DbcException("Invalid display mode: " + displayTextAction.displayTextMode);
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitDisplayClearAction(DisplayClearAction displayClearAction) {
+        src.add("hub.display.off()");
+        return null;
+    }
+
+    @Override
+    public Void visitImage(Image image) {
+        src.add("Matrix([");
+
+        for ( int i = 0; i < 5; i++ ) {
+            src.add("[");
+            for ( int j = 0; j < 5; j++ ) {
+                String pixel = image.image[i][j].trim();
+                if ( pixel.equals("#") ) {
+                    pixel = "100";
+                } else if ( pixel.equals("") ) {
+                    pixel = "0";
+                }
+                src.add(Integer.parseInt(pixel));
+                if ( j != 4 )
+                    src.add(", ");
+            }
+            src.add("]");
+            if ( i != 4 )
+                src.add(", ");
+        }
+
+        src.add("])");
+        return null;
+    }
+
+    @Override
+    public Void visitPredefinedImage(PredefinedImage predefinedImage) {
+        src.add(predefinedImage.getImageName().getMatrixString());
+        return null;
+    }
+
+    @Override
+    public Void visitColorConst(ColorConst colorConst) {
+        String color = "";
+        switch ( colorConst.getHexValueAsString().toUpperCase() ) {
+            case "#E701A7":
+                color = "Color.MAGENTA";
+                break;
+            case "#571CC1":
+                color = "Color.VIOLET";
+                break;
+            case "#3590F5":
+                color = "Color.BLUE";
+                break;
+            //pybricks has more limited colors (no azure)
+            case "#77E7FF":
+                color = "Color.CYAN";
+                break;
+            case "#0FCB54":
+                color = "Color.CYAN";
+                break;
+            case "#0BA845":
+                color = "Color.GREEN";
+                break;
+            case "#F7F700":
+                color = "Color.YELLOW";
+                break;
+            case "#FAAC01":
+                color = "Color.ORANGE";
+                break;
+            case "#FA010C":
+                color = "Color.RED";
+                break;
+            case "#000000":
+                color = "Color.BLACK";
+                break;
+            case "#FFFFFF":
+                color = "Color.WHITE";
+                break;
+            case "#EBC300":
+                color = "Color.NONE";
+                break;
+            default:
+                throw new DbcException("Invalid color constant: " + colorConst.getHexValueAsString());
+        }
+        src.add(color);
+        return null;
+    }
+
+    @Override
+    protected void generateProgramPrefix(boolean withWrapping) {
+        if ( !withWrapping ) {
+            return;
+        }
+
+        UsedHardwareBean usedHardwareBean = this.getBean(UsedHardwareBean.class);
+
+        src.add("from pybricks.hubs import PrimeHub").nlI();
+        importPubDevices(usedHardwareBean);
+        importParameter(usedHardwareBean);
+        importTools(usedHardwareBean);
+        importMathFunctions(usedHardwareBean);
+        importRobotics(usedHardwareBean);
+        instantiateComponents(usedHardwareBean);
+        src.add("hub = PrimeHub()").nlI();
+        prepareComponents(usedHardwareBean);
+
+        generateNNStuff("python");
+    }
+
+    /**
+     * generate and add pub device imports to source code
+     * these are sensor and motor classes, basically pybricks device classes
+     *
+     * @param usedHardwareBean forward usedHardwareBean
+     */
+    public void importPubDevices(UsedHardwareBean usedHardwareBean) {
+        String pubDevicesImportString = "";
+
+        if ( !(usedHardwareBean.isActorUsed(SC.MOTOR) ||
+            usedHardwareBean.isActorUsed(SC.DIFFERENTIALDRIVE) ||
+            usedHardwareBean.isSensorUsed(SC.COLOR) ||
+            usedHardwareBean.isSensorUsed(SC.ULTRASONIC) ||
+            usedHardwareBean.isSensorUsed(SC.TOUCH))
+        ) {
+            return;
+        }
+
+        if ( usedHardwareBean.isActorUsed(SC.MOTOR) || usedHardwareBean.isActorUsed(SC.DIFFERENTIALDRIVE) )
+            pubDevicesImportString += ", Motor";
+
+        if ( usedHardwareBean.isSensorUsed(SC.COLOR) )
+            pubDevicesImportString += ", ColorSensor";
+
+        if ( usedHardwareBean.isSensorUsed(SC.ULTRASONIC) )
+            pubDevicesImportString += ", UltrasonicSensor";
+
+        if ( usedHardwareBean.isSensorUsed(SC.TOUCH) )
+            pubDevicesImportString += ", ForceSensor";
+
+        //substring to remove first ","
+        pubDevicesImportString = "from pybricks.pupdevices import" + pubDevicesImportString.substring(1);
+
+        src.add(pubDevicesImportString);
+        src.nlI();
+    }
+
+    /**
+     * generate and add parameter imports to source code
+     * generic parameter and enum imports needed in pybricks context
+     *
+     * @param usedHardwareBean forward usedHardwareBean
+     */
+    private void importParameter(UsedHardwareBean usedHardwareBean) {
+        //PARAMETER IMPORTS
+        String parameterImportString = "";
+        if ( !((usedHardwareBean.isImportUsed(SC.PORT) ||
+            usedHardwareBean.isImportUsed(SC.COlOR_CONST) ||
+            usedHardwareBean.isSensorUsed(SC.BUTTON) ||
+            usedHardwareBean.isActorUsed(SC.MOTOR)) ||
+            usedHardwareBean.isActorUsed(SC.DIFFERENTIALDRIVE) ||
+            usedHardwareBean.isSensorUsed(SC.GYRO))
+        ) {
+            return;
+        }
+
+        if ( usedHardwareBean.isImportUsed(SC.PORT) )
+            parameterImportString += ", Port";
+
+        if ( usedHardwareBean.isImportUsed(SC.COlOR_CONST) )
+            parameterImportString += ", Color";
+
+        if ( usedHardwareBean.isSensorUsed(SC.BUTTON) )
+            parameterImportString += ", Button";
+
+        if ( usedHardwareBean.isActorUsed(SC.MOTOR) || usedHardwareBean.isActorUsed(SC.DIFFERENTIALDRIVE) )
+            parameterImportString += ", Direction";
+
+        if ( usedHardwareBean.isSensorUsed(SC.GYRO) )
+            parameterImportString += ", Side";
+
+        //substring to remove first ","
+        parameterImportString = "from pybricks.parameters import" + parameterImportString.substring(1);
+        src.add(parameterImportString);
+        src.nlI();
+    }
+
+
+    /**
+     * generate and add tools imports to source code
+     * these are helper and tool functions needed to work with other
+     * pybricks classes
+     *
+     * @param usedHardwareBean forward usedHardwareBean
+     */
+    private void importTools(UsedHardwareBean usedHardwareBean) {
+        String toolsImportString = "";
+
+        if ( !(usedHardwareBean.isImportUsed(SC.WAIT) ||
+            usedHardwareBean.isSensorUsed(SC.TIMER) ||
+            usedHardwareBean.isSensorUsed(SC.GYRO) ||
+            usedHardwareBean.isActorUsed(SC.DISPLAY))
+        ) {
+            return;
+        }
+
+        if ( usedHardwareBean.isImportUsed(SC.WAIT) )
+            toolsImportString += ", wait";
+
+        if ( usedHardwareBean.isSensorUsed(SC.TIMER) )
+            toolsImportString += ", StopWatch";
+
+        if ( usedHardwareBean.isSensorUsed(SC.GYRO) )
+            toolsImportString += ", vector";
+
+        if ( usedHardwareBean.isActorUsed(SC.DISPLAY) )
+            toolsImportString += ", Matrix";
+
+        //substring to remove first ","
+        toolsImportString = "from pybricks.tools import" + toolsImportString.substring(1);
+        src.add(toolsImportString);
+        src.nlI();
+    }
+
+    /**
+     * generate and add robotics imports to source code
+     * so far only DriveBase is used
+     * this might be removed in favor of a self-made differential drive
+     *
+     * @param usedHardwareBean forward usedHardwareBean
+     */
+    private void importRobotics(UsedHardwareBean usedHardwareBean) {
+        if ( usedHardwareBean.isActorUsed(SC.DIFFERENTIALDRIVE) )
+            src.add("from pybricks.robotics import DriveBase").nlI();
+    }
+
+    /**
+     * generate and add umath function imports to source code
+     * these are pybricks specific math functions
+     * python math import doesn't exist in pybricks context
+     *
+     * @param usedHardwareBean forward usedHardwareBean
+     */
+    private void importMathFunctions(UsedHardwareBean usedHardwareBean) {
+        if ( usedHardwareBean.isImportUsed(SC.SQRT) )
+            src.add("from umath import sqrt").nlI();
+    }
+
+    private void instantiateComponents(UsedHardwareBean usedHardwareBean) {
+        nlIndent();
+
+        if ( usedHardwareBean.isActorUsed(SC.DIFFERENTIALDRIVE) ) {
+            ConfigurationComponent diffDrive = this.configurationAst.optConfigurationComponentByType("DIFFERENTIALDRIVE");
+            String leftPort = diffDrive.getComponentProperties().get("MOTOR_L"); //Port
+            String rightPort = diffDrive.getComponentProperties().get("MOTOR_R"); // Port
+
+            src.add("left_motor = Motor(Port." + leftPort + ", Direction.COUNTERCLOCKWISE)").nlI();
+            src.add("right_motor = Motor(Port." + rightPort + ")").nlI();
+
+            src.add("TRACKWIDTH = ").add(diffDrive.getComponentProperties().get("BRICK_TRACK_WIDTH")).add(" * 10").nlI();
+            src.add("WHEEL_DIAMETER = 56").nlI();
+            src.add("drive_base = DriveBase(left_motor, right_motor, wheel_diameter=WHEEL_DIAMETER, axle_track=TRACKWIDTH)").nlI();
+        }
+
+        if ( usedHardwareBean.isActorUsed(SC.MOTOR) ) {
+            usedHardwareBean.getUsedActors().stream().filter(usedActor -> usedActor.getType().equals("MOTOR")).forEach(motor -> {
+                nlIndent();
+                src.add("motor").add(motor.getPort()).add(" = Motor(Port.").add(motor.getPort()).add(")");
+            });
+        }
+        if ( usedHardwareBean.isSensorUsed(SC.TOUCH) ) {
+            usedHardwareBean.getUsedSensors().stream().filter(usedActor -> usedActor.getType().equals("TOUCH")).forEach(sensor -> {
+                if ( configurationAst.optConfigurationComponent(sensor.getPort()) != null ) {
+                    nlIndent();
+                    src.add("touch_sensor_").add(sensor.getPort()).add(" = ForceSensor(Port.").add(getPortFromConfig(sensor.getPort())).add(")");
+                }
+            });
+        }
+        if ( usedHardwareBean.isSensorUsed(SC.ULTRASONIC) ) {
+            usedHardwareBean.getUsedSensors().stream().filter(usedActor -> usedActor.getType().equals("ULTRASONIC")).forEach(sensor -> {
+                if ( configurationAst.optConfigurationComponent(sensor.getPort()) != null ) {
+                    nlIndent();
+                    src.add("ultrasonic_sensor_").add(sensor.getPort()).add(" = UltrasonicSensor(Port.").add(getPortFromConfig(sensor.getPort())).add(")");
+                }
+            });
+        }
+        if ( usedHardwareBean.isSensorUsed(SC.COLOR) ) {
+            usedHardwareBean.getUsedSensors().stream().filter(usedActor -> usedActor.getType().equals("COLOR")).forEach(sensor -> {
+                if ( configurationAst.optConfigurationComponent(sensor.getPort()) != null ) {
+                    nlIndent();
+                    src.add("color_sensor_").add(sensor.getPort()).add(" = ColorSensor(Port.").add(getPortFromConfig(sensor.getPort())).add(")");
+                }
+            });
+        }
+
+        if ( usedHardwareBean.isSensorUsed(SC.TIMER) ) {
+            nlIndent();
+            src.add("stopWatch = StopWatch()");
+        }
+
+        nlIndent();
+    }
+
+    public void prepareComponents(UsedHardwareBean usedHardwareBean) {
+        if ( usedHardwareBean.isSensorUsed(SC.GYRO) ) {
+            src.add("hub.imu.reset_heading(0)").nlI();
+        }
+    }
+
+    /**
+     * method name selection for motor speed
+     *
+     * @param regulation is motor regulation used
+     * @return spikePybricks method name without parenthesis
+     */
+    private String getSpeedMethodName(boolean regulation) {
+        String speedMethodName = "";
+        if ( regulation ) {
+            speedMethodName = "get_speed_from_percent";
+        } else {
+            speedMethodName = "get_speed_from_power_percent";
+        }
+        return speedMethodName;
+    }
+}

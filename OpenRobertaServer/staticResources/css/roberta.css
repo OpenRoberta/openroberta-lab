@@ -1540,6 +1540,14 @@ table [data-toggle="collapse"].collapsed:after {
     background-size: contain;
 }
 
+.robotSpecial span.img-spikeLego {
+    background-image: url("/css/img/spikeLego.png");
+}
+
+.robotSpecial span.img-spikePybricks {
+    background-image: url("/css/img/spikePybricks.png");
+}
+
 .robotSpecial span.img-ev3lejosV0 {
     background-image: url("/css/img/ev3lejosV0.png");
 }

@@ -14,9 +14,12 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/web-bluetooth": "^0.0.20",
     "prettier": "^2.4.1"
   },
   "dependencies": {
-    "@types/jquery.validation": "^1.16.7"
+    "@types/jquery.validation": "^1.16.7",
+    "navigator": "^1.0.1",
+    "web-bluetooth": "^0.1.2"
   }
 }

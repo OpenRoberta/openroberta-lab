@@ -1,0 +1,96 @@
+include: "classpath:/common.methods.yml"
+
+HSVTORGB:
+  PYTHON: |
+    def hsv2rgb(color):
+        h = float(color.h)
+        s = float(color.s / 100.0)
+        v = float(color.v / 100.0)
+    
+        c = v * s
+        x = c * (1 - abs(((h/60.0) % 2) - 1))
+        m = v - c
+
+        if 0.0 <= h < 60:
+            rgb = (c, x, 0)
+        elif 0.0 <= h < 120:
+            rgb = (x, c, 0)
+        elif 0.0 <= h < 180:
+            rgb = (0, c, x)
+        elif 0.0 <= h < 240:
+            rgb = (0, x, c)
+        elif 0.0 <= h < 300:
+            rgb = (x, 0, c)
+        elif 0.0 <= h < 360:
+            rgb = (c, 0, x)
+    
+        return list(map(lambda n: (n + m) * 255, rgb))  
+
+#TODO placeholder function,
+TANKDRIVE_DIST:
+  PYTHON: |
+    def circle_circumference(diameter):
+        return 3.1415926535 * (diameter)
+    
+    def tank_drive_dist(dist, left_speed, right_speed):
+        sign = dist/abs(dist)
+        dist = abs(dist)
+        left_seconds_per_mm =  (left_speed/360) * circle_circumference(WHEEL_DIAMETER)
+        right_seconds_per_mm = (right_speed/360) * circle_circumference(WHEEL_DIAMETER)
+        wait_time = (dist*10)/((left_seconds_per_mm + right_seconds_per_mm)/2)
+        tank_drive(sign * left_speed, sign * right_speed)
+        wait(wait_time*1000)
+
+TANKDRIVE:
+  PYTHON: |
+    def tank_drive(left_speed, right_speed):
+        left_motor.run(left_speed)
+        right_motor.run(right_speed)
+
+#get power from percent function was created with quadratic regression
+SPEED_FROM_PERCENT:
+  PYTHON: |
+    def get_speed_from_percent(percent):
+        max_deg_s = 810.0
+        return int(max_deg_s * (percent/100.0))
+
+    def get_speed_from_power_percent(percent):
+        if percent == 0: return 0
+        sign = percent/abs(percent)
+        percent = abs(percent)
+        return sign * (554817600 + (6.766832 - 554817600)/(1 + (percent/2859.588)**4.011089))
+
+GESTURES:
+  PYTHON: |
+    def get_acceleration():
+        return sqrt((abs(hub.imu.acceleration()[0])**2) + (abs(hub.imu.acceleration()[1])**2) + (abs(hub.imu.acceleration()[2])**2))
+
+    def is_free_fall():
+        threshold = 350
+        stopWatch.time()
+        start = stopWatch.time()
+        while start - stopWatch.time() < 333:
+            if(get_acceleration() < threshold): 
+                return True;
+        return False
+
+    def is_tapped():
+        threshold = 3500
+        val = 0.0
+        prev_val = get_acceleration()
+        start = stopWatch.time()
+        while start - stopWatch.time() < 333:
+            val = get_acceleration()
+            if abs(val - prev_val) > threshold:
+                return True
+        return False
+
+    def is_shaken():
+        count_tapped = 0
+        while is_tapped():
+            if is_tapped():
+                count_tapped += 1
+                wait(200)
+            if count_tapped >= 3:
+                return True
+        return False

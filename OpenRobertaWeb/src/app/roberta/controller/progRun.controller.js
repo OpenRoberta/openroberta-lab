@@ -11,6 +11,7 @@ import * as $ from 'jquery';
 import * as Blockly from 'blockly';
 import * as GUISTATE from 'guiState.model';
 import * as WEBUSB_C from 'webUsb.controller';
+import * as WEBBLE from 'webBLE.controller';
 
 var blocklyWorkspace;
 var interpreter;
