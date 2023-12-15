@@ -60,7 +60,7 @@ public final class SpikeLegoPythonVisitor extends AbstractSpikePythonVisitor {
     }
 
     @Override
-    protected String showSad() {
+    protected String exceptionSadFace() {
         return "hub.light_matrix.show_image('SAD')";
     }
 

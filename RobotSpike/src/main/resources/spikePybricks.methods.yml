@@ -26,7 +26,6 @@ HSVTORGB:
     
         return list(map(lambda n: (n + m) * 255, rgb))  
 
-#TODO placeholder function,
 TANKDRIVE_DIST:
   PYTHON: |
     def circle_circumference(diameter):
@@ -37,28 +36,25 @@ TANKDRIVE_DIST:
         dist = abs(dist)
         left_seconds_per_mm =  (left_speed/360) * circle_circumference(WHEEL_DIAMETER)
         right_seconds_per_mm = (right_speed/360) * circle_circumference(WHEEL_DIAMETER)
-        wait_time = (dist*10)/((left_seconds_per_mm + right_seconds_per_mm)/2)
-        tank_drive(sign * left_speed, sign * right_speed)
+        wait_time = dist/((left_seconds_per_mm + right_seconds_per_mm)/2)
+        diff_drive(sign * left_speed, sign * right_speed, True)
         wait(wait_time*1000)
 
-TANKDRIVE:
+DIFFDRIVE:
   PYTHON: |
-    def tank_drive(left_speed, right_speed):
-        left_motor.run(left_speed)
-        right_motor.run(right_speed)
+    def diff_drive(left_speed, right_speed, regulated):
+        if(regulated):
+            left_motor.run(get_speed_from_percent(left_speed))
+            right_motor.run(get_speed_from_percent(right_speed))
+        else:
+            left_motor.dc(left_speed)
+            right_motor.dc(right_speed)
 
-#get power from percent function was created with quadratic regression
 SPEED_FROM_PERCENT:
   PYTHON: |
     def get_speed_from_percent(percent):
         max_deg_s = 810.0
         return int(max_deg_s * (percent/100.0))
-
-    def get_speed_from_power_percent(percent):
-        if percent == 0: return 0
-        sign = percent/abs(percent)
-        percent = abs(percent)
-        return sign * (554817600 + (6.766832 - 554817600)/(1 + (percent/2859.588)**4.011089))
 
 GESTURES:
   PYTHON: |

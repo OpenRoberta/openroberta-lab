@@ -59,7 +59,7 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
     }
 
     @Override
-    protected String showSad() {
+    protected String exceptionSadFace() {
         return "hub.display.icon(Matrix([[0, 0, 0, 0, 0], [0, 100, 0, 100, 0], [0, 0, 0, 0, 0], [0, 100, 100, 100, 0], [100, 0, 0, 0, 100]]))";
     }
 
@@ -73,9 +73,8 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
 
     @Override
     public Void visitMotorDiffOnForAction(MotorDiffOnForAction motorDiffOnForAction) {
-        String speedMethodName = getSpeedMethodName(false);
 
-        src.add("drive_base.settings(straight_speed = ").add(speedMethodName).add("(");
+        src.add("drive_base.settings(straight_speed = get_speed_from_percent(");
         motorDiffOnForAction.power.accept(this);
         src.add("))").nlI();
 
@@ -122,57 +121,91 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
 
     @Override
     public Void visitMotorDiffOnAction(MotorDiffOnAction motorDiffOnAction) {
-        String speedMethodName = getSpeedMethodName(motorDiffOnAction.regulation);
+        if(motorDiffOnAction.regulation) {
+            src.add("drive_base.drive(");
+            switch ( motorDiffOnAction.direction ) {
+                case "BACKWARD":
+                    src.add("-(").add("get_speed_from_percent").add("(");
+                    motorDiffOnAction.power.accept(this);
+                    src.add("))");
+                    break;
+                case "FORWARD":
+                    src.add("get_speed_from_percent").add("(");
+                    motorDiffOnAction.power.accept(this);
+                    src.add(")");
+                    break;
+                default:
+                    throw new DbcException("Invalid direction: " + motorDiffOnAction.direction);
+            }
+            src.add(" , 0)");
+        }else{
+            src.add("diff_drive(");
+            switch ( motorDiffOnAction.direction ) {
+                case "BACKWARD":
+                    src.add("-(");
+                    motorDiffOnAction.power.accept(this);
+                    src.add("),-(");
+                    motorDiffOnAction.power.accept(this);
+                    src.add(")");
+                    break;
+                case "FORWARD":
+                    motorDiffOnAction.power.accept(this);
+                    src.add(", ");
+                    motorDiffOnAction.power.accept(this);
+                    break;
+                default:
+                    throw new DbcException("Invalid direction: " + motorDiffOnAction.direction);
+            }
+            src.add(", False)");
 
-        src.add("drive_base.drive(");
-
-        switch ( motorDiffOnAction.direction ) {
-            case "BACKWARD":
-                src.add("-(").add(speedMethodName).add("(");
-                motorDiffOnAction.power.accept(this);
-                src.add("))");
-                break;
-            case "FORWARD":
-                src.add(speedMethodName).add("(");
-                motorDiffOnAction.power.accept(this);
-                src.add(")");
-                break;
-            default:
-                throw new DbcException("Invalid direction: " + motorDiffOnAction.direction);
         }
-
-        src.add(" , 0)");
         return null;
     }
 
     @Override
     public Void visitMotorDiffTurnAction(MotorDiffTurnAction motorDiffTurnAction) {
-        String speedMethodName = getSpeedMethodName(motorDiffTurnAction.regulation);
-
-        src.add("drive_base.drive(0,");
-
-        switch ( motorDiffTurnAction.direction ) {
-            case "RIGHT":
-                src.add("-(").add(speedMethodName).add("(");
-                motorDiffTurnAction.power.accept(this);
-                src.add("))");
-                break;
-            case "LEFT":
-                src.add(speedMethodName).add("(");
-                motorDiffTurnAction.power.accept(this);
-                src.add(")");
-                break;
-            default:
-                throw new DbcException("Invalid turn direction: " + motorDiffTurnAction.direction);
+        if(motorDiffTurnAction.regulation) {
+            src.add("drive_base.drive(0,");
+            switch ( motorDiffTurnAction.direction ) {
+                case "RIGHT":
+                    src.add("get_speed_from_percent").add("(");
+                    motorDiffTurnAction.power.accept(this);
+                    src.add(")");
+                    break;
+                case "LEFT":
+                    src.add("-( get_speed_from_percent").add("(");
+                    motorDiffTurnAction.power.accept(this);
+                    src.add(") )");
+                    break;
+                default:
+                    throw new DbcException("Invalid turn direction: " + motorDiffTurnAction.direction);
+            }
+            src.add(")");
+        }else{
+            src.add("diff_drive(");
+            switch ( motorDiffTurnAction.direction ) {
+                case "RIGHT":
+                    motorDiffTurnAction.power.accept(this);
+                    src.add(", -(");
+                    motorDiffTurnAction.power.accept(this);
+                    src.add(")");
+                    break;
+                case "LEFT":
+                    src.add("-(");
+                    motorDiffTurnAction.power.accept(this);
+                    src.add("), ");
+                    motorDiffTurnAction.power.accept(this);
+                    break;
+                default:
+                    throw new DbcException("Invalid turn direction: " + motorDiffTurnAction.direction);
+            }
+            src.add(", False)");
         }
-
-        src.add(")");
         return null;
     }
 
     @Override
     public Void visitMotorDiffCurveForAction(MotorDiffCurveForAction motorDiffCurveForAction) {
-        String speedMethodName = getSpeedMethodName(false);
         src.add("tank_drive_dist(");
 
         switch ( motorDiffCurveForAction.direction ) {
@@ -188,11 +221,11 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
                 throw new DbcException("Invalid curve direction: " + motorDiffCurveForAction.direction);
         }
 
-        src.add(", ").add(speedMethodName).add("(");
+        src.add(", ");
         motorDiffCurveForAction.powerLeft.accept(this);
-        src.add("), ").add(speedMethodName).add("(");
+        src.add(", ");
         motorDiffCurveForAction.powerRight.accept(this);
-        src.add("))");
+        src.add(")");
         return null;
     }
 
@@ -330,42 +363,42 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
 
     @Override
     public Void visitMotorDiffCurveAction(MotorDiffCurveAction motorDiffCurveAction) {
-        String speedMethodName = getSpeedMethodName(motorDiffCurveAction.regulation);
+        String regulated = motorDiffCurveAction.regulation.toString().substring(0, 1).toUpperCase() + motorDiffCurveAction.regulation.toString().substring(1);
 
-        src.add("tank_drive(");
+        src.add("diff_Drive(");
 
         switch ( motorDiffCurveAction.direction ) {
             case "BACKWARD":
-                src.add("-(").add(speedMethodName).add("(");
+                src.add("-((");
                 motorDiffCurveAction.powerLeft.accept(this);
-                src.add(")), -(").add(speedMethodName).add("(");
+                src.add(")), -((");
                 motorDiffCurveAction.powerRight.accept(this);
                 src.add("))");
                 break;
             case "FORWARD":
-                src.add(speedMethodName).add("(");
+                src.add("(");
                 motorDiffCurveAction.powerLeft.accept(this);
-                src.add("), ").add(speedMethodName).add("(");
+                src.add("), (");
                 motorDiffCurveAction.powerRight.accept(this);
                 src.add(")");
                 break;
             default:
                 throw new DbcException("Invalid curve direction: " + motorDiffCurveAction.direction);
         }
-        src.add(")");
+        src.add(",").add(regulated).add(")");
         return null;
     }
 
-    //TODO BAKE DOESNT EXIST FOR DIFF DRIVE
     @Override
     public Void visitMotorDiffStopAction(MotorDiffStopAction motorDiffStopAction) {
         src.add("drive_base");
         switch ( motorDiffStopAction.control ) {
             case "BRAKE":
-                //TODO brake is not implemented for differential drive
-                src.add(".stop()");//.brake()");
+                //make the motor drive at speed 0
+                src.add(".drive(0,0)");
                 break;
             case "COAST":
+                //default option stop is coast
                 src.add(".stop()");
                 break;
             default:
@@ -376,7 +409,6 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
 
     @Override
     public Void visitMotorOnForAction(MotorOnForAction motorOnForAction) {
-        String speedMethodName = getSpeedMethodName(false);
         String motorPort = getPortFromConfig(motorOnForAction.port);
 
         src.add("motor").add(motorPort).add(".");
@@ -393,7 +425,7 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
         }
 
         motorOnForAction.value.accept(this);
-        src.add(", speed = ").add(speedMethodName).add("(");
+        src.add(", speed = get_speed_from_percent(");
         motorOnForAction.power.accept(this);
         src.add("))");
 
@@ -401,14 +433,18 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
     }
 
     public Void visitMotorOnAction(MotorOnAction motorOnAction) {
-        String speedMethodName = getSpeedMethodName(motorOnAction.regulation);
         String motorPort = getPortFromConfig(motorOnAction.port);
 
-        src.add("motor").add(motorPort).add(".run(");
-        src.add(speedMethodName).add("(");
-        motorOnAction.power.accept(this);
-        src.add("))");
-
+        src.add("motor").add(motorPort);
+        if(motorOnAction.regulation) {
+            src.add(".run(get_speed_from_percent(");
+            motorOnAction.power.accept(this);
+            src.add("))");
+        }else{
+            src.add(".dc(");
+            motorOnAction.power.accept(this);
+            src.add(")");
+        }
         return null;
     }
 
@@ -711,14 +747,6 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
     private void importTools(UsedHardwareBean usedHardwareBean) {
         String toolsImportString = "";
 
-        if ( !(usedHardwareBean.isImportUsed(SC.WAIT) ||
-            usedHardwareBean.isSensorUsed(SC.TIMER) ||
-            usedHardwareBean.isSensorUsed(SC.GYRO) ||
-            usedHardwareBean.isActorUsed(SC.DISPLAY))
-        ) {
-            return;
-        }
-
         if ( usedHardwareBean.isImportUsed(SC.WAIT) )
             toolsImportString += ", wait";
 
@@ -728,11 +756,8 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
         if ( usedHardwareBean.isSensorUsed(SC.GYRO) )
             toolsImportString += ", vector";
 
-        if ( usedHardwareBean.isActorUsed(SC.DISPLAY) )
-            toolsImportString += ", Matrix";
-
-        //substring to remove first ","
-        toolsImportString = "from pybricks.tools import" + toolsImportString.substring(1);
+        //Matrix always has to be imported
+        toolsImportString = "from pybricks.tools import Matrix" + toolsImportString;
         src.add(toolsImportString);
         src.nlI();
     }
@@ -820,21 +845,5 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
         if ( usedHardwareBean.isSensorUsed(SC.GYRO) ) {
             src.add("hub.imu.reset_heading(0)").nlI();
         }
-    }
-
-    /**
-     * method name selection for motor speed
-     *
-     * @param regulation is motor regulation used
-     * @return spikePybricks method name without parenthesis
-     */
-    private String getSpeedMethodName(boolean regulation) {
-        String speedMethodName = "";
-        if ( regulation ) {
-            speedMethodName = "get_speed_from_percent";
-        } else {
-            speedMethodName = "get_speed_from_power_percent";
-        }
-        return speedMethodName;
     }
 }

@@ -88,23 +88,23 @@ const get_hub_capabilities_ble = async (device: BluetoothDevice) => {
  * @param programString generated program string representation
  *
  */
-export const download_program = async (programString: string) => {
+export const downloadProgram = async (programString: string) => {
     if ((device === null || !device.gatt.connected)) {
         if (!await connectBleDevice()) {
             return;
         }
     }
 
-    await download_user_program_ble(programString);
+    await downloadUserProgramBle(programString);
 };
 
 /**
  * transfer program over ble
  * @param programString generated program string representation
  */
-const download_user_program_ble = async (programString: string) => {
-    const program = blob_from_program_array_string(programString);
-    const payload_size = maxWriteSize - 5;
+const downloadUserProgramBle = async (programString: string) => {
+    const program = blobFromProgramArrayString(programString);
+    const payloadSize = maxWriteSize - 5;
 
     //TODO MAKE THIS AN ERROR MESSAGE
     if (program.size > maxProgramSize) {
@@ -112,10 +112,10 @@ const download_user_program_ble = async (programString: string) => {
         return;
     }
 
-    await write_gatt(device, SERVICE_UUIDS.PYBRICKS_COMMAND_EVENT_UUID, new Uint8Array([COMMANDS.STOP_USER_PROGRAM]));
+    await writeGatt(device, SERVICE_UUIDS.PYBRICKS_COMMAND_EVENT_UUID, new Uint8Array([COMMANDS.STOP_USER_PROGRAM]));
 
     //invalidate old program data
-    await write_gatt(
+    await writeGatt(
         device,
         SERVICE_UUIDS.PYBRICKS_COMMAND_EVENT_UUID,
         createWriteUserProgramMetaCommand(0)
@@ -123,8 +123,8 @@ const download_user_program_ble = async (programString: string) => {
 
     //send program chunks to brick
     let chunkSize: number;
-    if (program.size > payload_size) {
-        chunkSize = payload_size;
+    if (program.size > payloadSize) {
+        chunkSize = payloadSize;
     } else {
         chunkSize = program.size;
     }
@@ -132,7 +132,7 @@ const download_user_program_ble = async (programString: string) => {
     for (let i = 0; i < program.size; i += chunkSize) {
         const data = await program.slice(i, i + chunkSize).arrayBuffer();
 
-        await write_gatt(
+        await writeGatt(
             device,
             SERVICE_UUIDS.PYBRICKS_COMMAND_EVENT_UUID,
             createWriteUserRamCommand(i, data)
@@ -143,22 +143,22 @@ const download_user_program_ble = async (programString: string) => {
     }
 
     //update program size
-    await write_gatt(
+    await writeGatt(
         device,
         SERVICE_UUIDS.PYBRICKS_COMMAND_EVENT_UUID,
         createWriteUserProgramMetaCommand(program.size)
     );
 
-    await write_gatt(device, SERVICE_UUIDS.PYBRICKS_COMMAND_EVENT_UUID, new Uint8Array([COMMANDS.START_USER_PROGRAM]));
+    await writeGatt(device, SERVICE_UUIDS.PYBRICKS_COMMAND_EVENT_UUID, new Uint8Array([COMMANDS.START_USER_PROGRAM]));
 };
 
 /**
  * connect to gatt service and write data
  * @param device SpikePrime BLE Device
- * @param service_uuid Service to write to
- * @param data_or_command program data or command, wrap command into buffer source (preferably Uint8Array)
+ * @param serviceUuid Service to write to
+ * @param dataOrCommand program data or command, wrap command into buffer source (preferably Uint8Array)
  */
-const write_gatt = async (device: BluetoothDevice, service_uuid: SERVICE_UUIDS, data_or_command: BufferSource) => {
+const writeGatt = async (device: BluetoothDevice, serviceUuid: SERVICE_UUIDS, dataOrCommand: BufferSource) => {
 
     let server: BluetoothRemoteGATTServer;
     let service: BluetoothRemoteGATTService;
@@ -169,9 +169,9 @@ const write_gatt = async (device: BluetoothDevice, service_uuid: SERVICE_UUIDS, 
         server = value;
         await server.getPrimaryService(SERVICE_UUIDS.PYBRICKS_SERVICE_UUID).then(async value => {
             service = value;
-            await service.getCharacteristic(service_uuid).then(async value => {
+            await service.getCharacteristic(serviceUuid).then(async value => {
                 characteristic = value;
-                await characteristic.writeValueWithResponse(data_or_command);
+                await characteristic.writeValueWithResponse(dataOrCommand);
             }).catch(
                 reason => console.log(reason)
             );
@@ -194,23 +194,23 @@ function cString(str: string): Uint8Array {
     return new TextEncoder().encode(str + '\x00');
 }
 
-function blob_from_program_array_string(program_string: string) {
+function blobFromProgramArrayString(programString: string) {
     //prepare string_array, python adds parenthesis which have to be removed (substring)
-    let string_array = program_string.substring(1, program_string.length - 1).split(', ');
-    let mpy = new Uint8Array(string_array.length);
+    let stringArray = programString.substring(1, programString.length - 1).split(', ');
+    let mpy = new Uint8Array(stringArray.length);
 
     //take python return string and format to Uint8Array
-    for (let i = 0; i < string_array.length; i++) {
-        mpy[i] = Number(string_array[i]);
+    for (let i = 0; i < stringArray.length; i++) {
+        mpy[i] = Number(stringArray[i]);
     }
 
-    const blob_parts: BlobPart[] = [];
+    const blobParts: BlobPart[] = [];
     // each file is encoded as the size, module name, and mpy binary
-    blob_parts.push(encodeUInt32LE(mpy.length));
-    blob_parts.push(cString('__main__'));
-    blob_parts.push(mpy);
+    blobParts.push(encodeUInt32LE(mpy.length));
+    blobParts.push(cString('__main__'));
+    blobParts.push(mpy);
 
-    return new Blob(blob_parts);
+    return new Blob(blobParts);
 }
 
 /**

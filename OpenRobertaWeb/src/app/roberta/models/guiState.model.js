@@ -46,6 +46,7 @@ function init() {
     gui.webotsUrl = '';
     gui.fileExtension = '';
     gui.connectionType = {
+        SPIKEPYBRICKS: 'spikePybricks',
         TOKEN: 'token',
         AUTO: 'autoConnection',
         AGENTORTOKEN: 'arduinoAgentOrToken',

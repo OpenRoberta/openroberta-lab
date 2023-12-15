@@ -11,6 +11,7 @@ import * as Blockly from 'blockly';
 import * as THYMIO_C from 'thymioSocket.controller';
 import * as NOTIFICATION_C from 'notification.controller';
 import * as WEBUSB_C from 'webUsb.controller';
+import { program } from 'guiState.model';
 
 var LONG = 300000; // Ping time 5min
 var SHORT = 3000; // Ping time 3sec
@@ -328,6 +329,7 @@ function setRobot(robot, result, opt_init) {
             $('#menuConnect').parent().removeClass('disabled');
             setPingTime(SHORT);
             break;
+        case GUISTATE.gui.connectionType.SPIKEPYBRICKS:
         case GUISTATE.gui.connectionType.LOCAL:
         case GUISTATE.gui.connectionType.AUTO:
         case GUISTATE.gui.connectionType.JSPLAY:
@@ -615,7 +617,7 @@ function isRobotConnected() {
     if (GUISTATE.robot.time > 0) {
         return true;
     }
-    if (
+    if (GUISTATE.gui.connection === GUISTATE.gui.connectionType.SPIKEPYBRICKS ||
         GUISTATE.gui.connection === GUISTATE.gui.connectionType.AUTO ||
         GUISTATE.gui.connection === GUISTATE.gui.connectionType.LOCAL ||
         GUISTATE.gui.connectionType.JSPLAY

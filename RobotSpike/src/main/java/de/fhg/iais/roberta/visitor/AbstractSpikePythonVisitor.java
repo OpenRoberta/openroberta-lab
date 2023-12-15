@@ -39,22 +39,7 @@ public abstract class AbstractSpikePythonVisitor extends AbstractPythonVisitor i
         super(programPhrases, beans);
         this.configurationAst = configurationAst;
     }
-/*
-    //TODO EXCEPTION HANDLING
-    @Override
-    protected final void generateProgramSuffix(boolean withWrapping) {
-        if ( !withWrapping ) {
-            return;
-        }
 
-        decrIndentation();
-        nlIndent();
-        nlIndent();
-        nlIndent();
-
-        this.src.add("run()");
-    }
-*/
 @Override
 protected final void generateProgramSuffix(boolean withWrapping) {
     if ( !withWrapping ) {
@@ -75,7 +60,7 @@ protected final void generateProgramSuffix(boolean withWrapping) {
     this.src.add("except Exception as e:");
     incrIndentation();
     nlIndent();
-    this.src.add(showSad());
+    this.src.add(exceptionSadFace());
     decrIndentation();
     //TODO finally close open ports
     decrIndentation();
@@ -87,7 +72,7 @@ protected final void generateProgramSuffix(boolean withWrapping) {
     /**
      * @return command to show sad face
      */
-    protected abstract String showSad();
+    protected abstract String exceptionSadFace();
 
     @Override
     public Void visitMainTask(MainTask mainTask) {

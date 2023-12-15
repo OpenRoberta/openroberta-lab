@@ -130,6 +130,11 @@ function getConnectionTypeCallbackForEditor() {
             runForAutoConnection(result);
         };
     }
+    if(GUISTATE_C.getConnection() === connectionType.SPIKEPYBRICKS){
+        return function (result){
+            runForPybricksBle(result);
+        }
+    }
     if (GUISTATE_C.getConnection() === connectionType.AGENT || (GUISTATE_C.getConnection() === connectionType.AGENTORTOKEN && GUISTATE_C.getIsAgent())) {
         return function (result) {
             runForAgentConnection(result);
@@ -164,9 +169,9 @@ function getConnectionTypeCallback() {
             GUISTATE_C.setPing(true);
         };
     }
-    if (GUISTATE_C.getConnection() === connectionType.AGENT || (GUISTATE_C.getConnection() === connectionType.AGENTORTOKEN && GUISTATE_C.getIsAgent())) {
+    if (GUISTATE_C.getConnection() === connectionType.SPIKEPYBRICKS) {
         return function (result) {
-            runForAgentConnection(result);
+            runForPybricksBle(result);
             PROG_C.reloadProgram(result);
             GUISTATE_C.setPing(true);
         };
@@ -198,6 +203,12 @@ function getConnectionTypeCallback() {
         PROG_C.reloadProgram(result);
         GUISTATE_C.setPing(true);
     };
+}
+
+function runForPybricksBle(result){
+    GUISTATE_C.setState(result);
+    WEBBLE.downloadProgram(result.compiledCode);
+    GUISTATE_C.setConnectionState('wait');
 }
 
 function runForAutoConnection(result) {

@@ -37,7 +37,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 define(["require", "exports"], function (require, exports) {
     var _this = this;
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.download_program = void 0;
+    exports.downloadProgram = void 0;
     /**
      * Bluetooth-Detection and Bluetooth-Service UUIIDs associated with Pybricks BLE
      */
@@ -158,7 +158,7 @@ define(["require", "exports"], function (require, exports) {
      * @param programString generated program string representation
      *
      */
-    var download_program = function (programString) { return __awaiter(_this, void 0, void 0, function () {
+    var downloadProgram = function (programString) { return __awaiter(_this, void 0, void 0, function () {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -169,40 +169,40 @@ define(["require", "exports"], function (require, exports) {
                         return [2 /*return*/];
                     }
                     _a.label = 2;
-                case 2: return [4 /*yield*/, download_user_program_ble(programString)];
+                case 2: return [4 /*yield*/, downloadUserProgramBle(programString)];
                 case 3:
                     _a.sent();
                     return [2 /*return*/];
             }
         });
     }); };
-    exports.download_program = download_program;
+    exports.downloadProgram = downloadProgram;
     /**
      * transfer program over ble
      * @param programString generated program string representation
      */
-    var download_user_program_ble = function (programString) { return __awaiter(_this, void 0, void 0, function () {
-        var program, payload_size, chunkSize, i, data;
+    var downloadUserProgramBle = function (programString) { return __awaiter(_this, void 0, void 0, function () {
+        var program, payloadSize, chunkSize, i, data;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    program = blob_from_program_array_string(programString);
-                    payload_size = maxWriteSize - 5;
+                    program = blobFromProgramArrayString(programString);
+                    payloadSize = maxWriteSize - 5;
                     //TODO MAKE THIS AN ERROR MESSAGE
                     if (program.size > maxProgramSize) {
                         console.log('MAX PROGRAM SIZE REACHED');
                         return [2 /*return*/];
                     }
-                    return [4 /*yield*/, write_gatt(device, SERVICE_UUIDS.PYBRICKS_COMMAND_EVENT_UUID, new Uint8Array([COMMANDS.STOP_USER_PROGRAM]))];
+                    return [4 /*yield*/, writeGatt(device, SERVICE_UUIDS.PYBRICKS_COMMAND_EVENT_UUID, new Uint8Array([COMMANDS.STOP_USER_PROGRAM]))];
                 case 1:
                     _a.sent();
                     //invalidate old program data
-                    return [4 /*yield*/, write_gatt(device, SERVICE_UUIDS.PYBRICKS_COMMAND_EVENT_UUID, createWriteUserProgramMetaCommand(0))];
+                    return [4 /*yield*/, writeGatt(device, SERVICE_UUIDS.PYBRICKS_COMMAND_EVENT_UUID, createWriteUserProgramMetaCommand(0))];
                 case 2:
                     //invalidate old program data
                     _a.sent();
-                    if (program.size > payload_size) {
-                        chunkSize = payload_size;
+                    if (program.size > payloadSize) {
+                        chunkSize = payloadSize;
                     }
                     else {
                         chunkSize = program.size;
@@ -214,7 +214,7 @@ define(["require", "exports"], function (require, exports) {
                     return [4 /*yield*/, program.slice(i, i + chunkSize).arrayBuffer()];
                 case 4:
                     data = _a.sent();
-                    return [4 /*yield*/, write_gatt(device, SERVICE_UUIDS.PYBRICKS_COMMAND_EVENT_UUID, createWriteUserRamCommand(i, data))];
+                    return [4 /*yield*/, writeGatt(device, SERVICE_UUIDS.PYBRICKS_COMMAND_EVENT_UUID, createWriteUserRamCommand(i, data))];
                 case 5:
                     _a.sent();
                     //TODO FORWARD THIS TO PROGRESSBAR
@@ -225,11 +225,11 @@ define(["require", "exports"], function (require, exports) {
                     return [3 /*break*/, 3];
                 case 7: 
                 //update program size
-                return [4 /*yield*/, write_gatt(device, SERVICE_UUIDS.PYBRICKS_COMMAND_EVENT_UUID, createWriteUserProgramMetaCommand(program.size))];
+                return [4 /*yield*/, writeGatt(device, SERVICE_UUIDS.PYBRICKS_COMMAND_EVENT_UUID, createWriteUserProgramMetaCommand(program.size))];
                 case 8:
                     //update program size
                     _a.sent();
-                    return [4 /*yield*/, write_gatt(device, SERVICE_UUIDS.PYBRICKS_COMMAND_EVENT_UUID, new Uint8Array([COMMANDS.START_USER_PROGRAM]))];
+                    return [4 /*yield*/, writeGatt(device, SERVICE_UUIDS.PYBRICKS_COMMAND_EVENT_UUID, new Uint8Array([COMMANDS.START_USER_PROGRAM]))];
                 case 9:
                     _a.sent();
                     return [2 /*return*/];
@@ -239,10 +239,10 @@ define(["require", "exports"], function (require, exports) {
     /**
      * connect to gatt service and write data
      * @param device SpikePrime BLE Device
-     * @param service_uuid Service to write to
-     * @param data_or_command program data or command, wrap command into buffer source (preferably Uint8Array)
+     * @param serviceUuid Service to write to
+     * @param dataOrCommand program data or command, wrap command into buffer source (preferably Uint8Array)
      */
-    var write_gatt = function (device, service_uuid, data_or_command) { return __awaiter(_this, void 0, void 0, function () {
+    var writeGatt = function (device, serviceUuid, dataOrCommand) { return __awaiter(_this, void 0, void 0, function () {
         var server, service, characteristic;
         var _this = this;
         var _a;
@@ -262,12 +262,12 @@ define(["require", "exports"], function (require, exports) {
                                                 switch (_a.label) {
                                                     case 0:
                                                         service = value;
-                                                        return [4 /*yield*/, service.getCharacteristic(service_uuid).then(function (value) { return __awaiter(_this, void 0, void 0, function () {
+                                                        return [4 /*yield*/, service.getCharacteristic(serviceUuid).then(function (value) { return __awaiter(_this, void 0, void 0, function () {
                                                                 return __generator(this, function (_a) {
                                                                     switch (_a.label) {
                                                                         case 0:
                                                                             characteristic = value;
-                                                                            return [4 /*yield*/, characteristic.writeValueWithResponse(data_or_command)];
+                                                                            return [4 /*yield*/, characteristic.writeValueWithResponse(dataOrCommand)];
                                                                         case 1:
                                                                             _a.sent();
                                                                             return [2 /*return*/];
@@ -302,20 +302,20 @@ define(["require", "exports"], function (require, exports) {
     function cString(str) {
         return new TextEncoder().encode(str + '\x00');
     }
-    function blob_from_program_array_string(program_string) {
+    function blobFromProgramArrayString(programString) {
         //prepare string_array, python adds parenthesis which have to be removed (substring)
-        var string_array = program_string.substring(1, program_string.length - 1).split(', ');
-        var mpy = new Uint8Array(string_array.length);
+        var stringArray = programString.substring(1, programString.length - 1).split(', ');
+        var mpy = new Uint8Array(stringArray.length);
         //take python return string and format to Uint8Array
-        for (var i = 0; i < string_array.length; i++) {
-            mpy[i] = Number(string_array[i]);
+        for (var i = 0; i < stringArray.length; i++) {
+            mpy[i] = Number(stringArray[i]);
         }
-        var blob_parts = [];
+        var blobParts = [];
         // each file is encoded as the size, module name, and mpy binary
-        blob_parts.push(encodeUInt32LE(mpy.length));
-        blob_parts.push(cString('__main__'));
-        blob_parts.push(mpy);
-        return new Blob(blob_parts);
+        blobParts.push(encodeUInt32LE(mpy.length));
+        blobParts.push(cString('__main__'));
+        blobParts.push(mpy);
+        return new Blob(blobParts);
     }
     /**
      * data frame for ble transfer, see pybricks project

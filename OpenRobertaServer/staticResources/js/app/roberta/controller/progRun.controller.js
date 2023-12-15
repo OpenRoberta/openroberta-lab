@@ -1,4 +1,4 @@
-define(["require", "exports", "util.roberta", "log", "message", "program.controller", "program.model", "socket.controller", "thymioSocket.controller", "guiState.controller", "webview.controller", "jquery", "blockly", "guiState.model", "webUsb.controller"], function (require, exports, UTIL, LOG, MSG, PROG_C, PROGRAM, SOCKET_C, THYMIO_C, GUISTATE_C, WEBVIEW_C, $, Blockly, GUISTATE, WEBUSB_C) {
+define(["require", "exports", "util.roberta", "log", "message", "program.controller", "program.model", "socket.controller", "thymioSocket.controller", "guiState.controller", "webview.controller", "jquery", "blockly", "guiState.model", "webUsb.controller", "webBLE.controller"], function (require, exports, UTIL, LOG, MSG, PROG_C, PROGRAM, SOCKET_C, THYMIO_C, GUISTATE_C, WEBVIEW_C, $, Blockly, GUISTATE, WEBUSB_C, WEBBLE) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.reset2DefaultFirmware = exports.runOnBrick = exports.runNative = exports.init = void 0;
     var blocklyWorkspace;
@@ -98,6 +98,11 @@ define(["require", "exports", "util.roberta", "log", "message", "program.control
                 runForAutoConnection(result);
             };
         }
+        if (GUISTATE_C.getConnection() === connectionType.SPIKEPYBRICKS) {
+            return function (result) {
+                runForPybricksBle(result);
+            };
+        }
         if (GUISTATE_C.getConnection() === connectionType.AGENT || (GUISTATE_C.getConnection() === connectionType.AGENTORTOKEN && GUISTATE_C.getIsAgent())) {
             return function (result) {
                 runForAgentConnection(result);
@@ -131,9 +136,9 @@ define(["require", "exports", "util.roberta", "log", "message", "program.control
                 GUISTATE_C.setPing(true);
             };
         }
-        if (GUISTATE_C.getConnection() === connectionType.AGENT || (GUISTATE_C.getConnection() === connectionType.AGENTORTOKEN && GUISTATE_C.getIsAgent())) {
+        if (GUISTATE_C.getConnection() === connectionType.SPIKEPYBRICKS) {
             return function (result) {
-                runForAgentConnection(result);
+                runForPybricksBle(result);
                 PROG_C.reloadProgram(result);
                 GUISTATE_C.setPing(true);
             };
@@ -164,6 +169,11 @@ define(["require", "exports", "util.roberta", "log", "message", "program.control
             PROG_C.reloadProgram(result);
             GUISTATE_C.setPing(true);
         };
+    }
+    function runForPybricksBle(result) {
+        GUISTATE_C.setState(result);
+        WEBBLE.downloadProgram(result.compiledCode);
+        GUISTATE_C.setConnectionState('wait');
     }
     function runForAutoConnection(result) {
         GUISTATE_C.setState(result);

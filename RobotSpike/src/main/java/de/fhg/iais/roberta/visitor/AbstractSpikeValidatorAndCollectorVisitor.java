@@ -55,7 +55,7 @@ import de.fhg.iais.roberta.visitor.validate.CommonNepoValidatorAndCollectorVisit
  * when extending from this class, make sure to execute super.[extended-method] since all basic
  * configuration checks are located in this class
  */
-public class AbstractSpikeValidatorAndCollectorVisitor extends CommonNepoValidatorAndCollectorVisitor implements ISpikeVisitor<Void> {
+public abstract class AbstractSpikeValidatorAndCollectorVisitor extends CommonNepoValidatorAndCollectorVisitor implements ISpikeVisitor<Void> {
 
     private static final Map<String, String> SENSOR_COMPONENT_TYPE_MAP = Collections.unmodifiableMap(new HashMap<String, String>() {{
         put("ULTRASONIC_SENSING", SC.ULTRASONIC);
@@ -135,7 +135,7 @@ public class AbstractSpikeValidatorAndCollectorVisitor extends CommonNepoValidat
     }
 
     @Override
-    final public Void visitMotorDiffOnAction(MotorDiffOnAction motorDiffOnAction) {
+    public Void visitMotorDiffOnAction(MotorDiffOnAction motorDiffOnAction) {
         requiredComponentVisited(motorDiffOnAction, motorDiffOnAction.power);
         checkActorPort(motorDiffOnAction);
         checkDiffDrive(motorDiffOnAction);
@@ -143,7 +143,7 @@ public class AbstractSpikeValidatorAndCollectorVisitor extends CommonNepoValidat
     }
 
     @Override
-    final public Void visitMotorDiffOnForAction(MotorDiffOnForAction motorDiffOnForAction) {
+    public Void visitMotorDiffOnForAction(MotorDiffOnForAction motorDiffOnForAction) {
         requiredComponentVisited(motorDiffOnForAction, motorDiffOnForAction.distance, motorDiffOnForAction.power);
         checkActorPort(motorDiffOnForAction);
         checkDiffDrive(motorDiffOnForAction);
@@ -158,7 +158,7 @@ public class AbstractSpikeValidatorAndCollectorVisitor extends CommonNepoValidat
     }
 
     @Override
-    final public Void visitMotorDiffTurnAction(MotorDiffTurnAction motorDiffTurnAction) {
+    public Void visitMotorDiffTurnAction(MotorDiffTurnAction motorDiffTurnAction) {
         requiredComponentVisited(motorDiffTurnAction, motorDiffTurnAction.power);
         checkActorPort(motorDiffTurnAction);
         checkDiffDrive(motorDiffTurnAction);

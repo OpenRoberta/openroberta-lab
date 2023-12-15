@@ -316,6 +316,7 @@ define(["require", "exports", "util.roberta", "message", "guiState.model", "prog
                 $('#menuConnect').parent().removeClass('disabled');
                 setPingTime(SHORT);
                 break;
+            case GUISTATE.gui.connectionType.SPIKEPYBRICKS:
             case GUISTATE.gui.connectionType.LOCAL:
             case GUISTATE.gui.connectionType.AUTO:
             case GUISTATE.gui.connectionType.JSPLAY:
@@ -602,7 +603,8 @@ define(["require", "exports", "util.roberta", "message", "guiState.model", "prog
         if (GUISTATE.robot.time > 0) {
             return true;
         }
-        if (GUISTATE.gui.connection === GUISTATE.gui.connectionType.AUTO ||
+        if (GUISTATE.gui.connection === GUISTATE.gui.connectionType.SPIKEPYBRICKS ||
+            GUISTATE.gui.connection === GUISTATE.gui.connectionType.AUTO ||
             GUISTATE.gui.connection === GUISTATE.gui.connectionType.LOCAL ||
             GUISTATE.gui.connectionType.JSPLAY) {
             return true;

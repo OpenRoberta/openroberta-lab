@@ -44,6 +44,7 @@ define(["require", "exports", "comm"], function (require, exports, COMM) {
         exports.gui.webotsUrl = '';
         exports.gui.fileExtension = '';
         exports.gui.connectionType = {
+            SPIKEPYBRICKS: 'spikePybricks',
             TOKEN: 'token',
             AUTO: 'autoConnection',
             AGENTORTOKEN: 'arduinoAgentOrToken',
