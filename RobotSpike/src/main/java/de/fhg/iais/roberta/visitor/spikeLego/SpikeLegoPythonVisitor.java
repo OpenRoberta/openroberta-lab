@@ -59,13 +59,9 @@ public final class SpikeLegoPythonVisitor extends AbstractSpikePythonVisitor {
         super(programPhrases, beans, configurationAst);
     }
 
-
     @Override
-    public Void visitWaitTimeStmt(WaitTimeStmt waitTimeStmt) {
-        this.src.add("wait_for_seconds(");
-        waitTimeStmt.time.accept(this);
-        this.src.add("/1000)");
-        return null;
+    protected String showSad() {
+        return "hub.light_matrix.show_image('SAD')";
     }
 
     @Override
@@ -409,6 +405,7 @@ public final class SpikeLegoPythonVisitor extends AbstractSpikePythonVisitor {
             default:
                 throw new DbcException("Invalid stop control: " + motorStopAction.control);
         }
+        ;
         this.src.add("')").nlI();
         this.src.add(myMotor).add(".stop()");
         return null;
@@ -574,6 +571,14 @@ public final class SpikeLegoPythonVisitor extends AbstractSpikePythonVisitor {
                 throw new DbcException("Invalid color constant: " + colorConst.getHexValueAsString());
         }
         this.src.add(color);
+        return null;
+    }
+
+    @Override
+    public Void visitWaitTimeStmt(WaitTimeStmt waitTimeStmt) {
+        this.src.add("wait_for_seconds(");
+        waitTimeStmt.time.accept(this);
+        this.src.add("/1000)");
         return null;
     }
 

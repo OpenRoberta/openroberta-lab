@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.syntax.action.spike;
 
+import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.blockly.generated.Hide;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
@@ -16,7 +17,7 @@ public final class DisplayImageAction extends ActionWithoutUserChosenName {
     public final Mutation mutation;
     @NepoField(name = "TYPE")
     public final String displayImageMode;
-    @NepoValue(name = "VALUE")
+    @NepoValue(name = "VALUE", type = BlocklyType.STRING)
     public final Expr valuesToDisplay;
 
     public DisplayImageAction(BlocklyProperties properties, Mutation mutation, String displayImageMode, Expr valuesToDisplay, Hide hide) {

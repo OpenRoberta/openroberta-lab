@@ -39,7 +39,7 @@ public abstract class AbstractSpikePythonVisitor extends AbstractPythonVisitor i
         super(programPhrases, beans);
         this.configurationAst = configurationAst;
     }
-
+/*
     //TODO EXCEPTION HANDLING
     @Override
     protected final void generateProgramSuffix(boolean withWrapping) {
@@ -54,41 +54,43 @@ public abstract class AbstractSpikePythonVisitor extends AbstractPythonVisitor i
 
         this.src.add("run()");
     }
-
-    /*
-        @Override
-    protected void generateProgramSuffix(boolean withWrapping) {
-        if ( !withWrapping ) {
-            return;
-        }
-        decrIndentation(); // everything is still indented from main program
-        nlIndent();
-        nlIndent();
-        this.src.add("def main():");
-        incrIndentation();
-        nlIndent();
-        this.src.add("try:");
-        incrIndentation();
-        nlIndent();
-        this.src.add("run()");
-        decrIndentation();
-        nlIndent();
-        this.src.add("except Exception as e:");
-        incrIndentation();
-        nlIndent();
-        this.src.add("hub.light_matrix.show_image('SAD')");
-        decrIndentation();
-        //TODO finally close open ports
-        decrIndentation();
-        nlIndent();
-        nlIndent();
-
-        this.src.add("main()");
+*/
+@Override
+protected final void generateProgramSuffix(boolean withWrapping) {
+    if ( !withWrapping ) {
+        return;
     }
+    decrIndentation(); // everything is still indented from main program
+    nlIndent();
+    nlIndent();
+    this.src.add("def main():");
+    incrIndentation();
+    nlIndent();
+    this.src.add("try:");
+    incrIndentation();
+    nlIndent();
+    this.src.add("run()");
+    decrIndentation();
+    nlIndent();
+    this.src.add("except Exception as e:");
+    incrIndentation();
+    nlIndent();
+    this.src.add(showSad());
+    decrIndentation();
+    //TODO finally close open ports
+    decrIndentation();
+    nlIndent();
+    nlIndent();
+
+    this.src.add("main()");
+}
+    /**
+     * @return command to show sad face
      */
+    protected abstract String showSad();
 
     @Override
-    public final Void visitMainTask(MainTask mainTask) {
+    public Void visitMainTask(MainTask mainTask) {
         StmtList variables = mainTask.variables;
         if ( !variables.get().isEmpty() ) {
             variables.accept(this);
@@ -141,7 +143,7 @@ public abstract class AbstractSpikePythonVisitor extends AbstractPythonVisitor i
         return null;
     }
 
-    protected String getPortFromConfig(String name) {
+    protected final String getPortFromConfig(String name) {
         ConfigurationComponent block = configurationAst.getConfigurationComponent(name);
         return block.getComponentProperties().get("PORT");
     }

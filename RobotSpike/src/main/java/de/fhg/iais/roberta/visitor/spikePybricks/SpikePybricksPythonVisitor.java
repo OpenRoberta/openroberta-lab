@@ -59,6 +59,11 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
     }
 
     @Override
+    protected String showSad() {
+        return "continue";
+    }
+
+    @Override
     public Void visitWaitTimeStmt(WaitTimeStmt waitTimeStmt) {
         src.add("wait(");
         waitTimeStmt.time.accept(this);

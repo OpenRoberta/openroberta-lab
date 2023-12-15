@@ -15,6 +15,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
@@ -84,6 +85,7 @@ public class SpikePybricksValidatorAndCollectorVisitor extends AbstractSpikeVali
     @Override
     final public Void visitGestureSensor(GestureSensor gestureSensor) {
         super.visitGestureSensor(gestureSensor);
+        usedHardwareBuilder.addUsedSensor(new UsedSensor("GYRO", SC.GYRO, SC.DEFAULT));
         usedHardwareBuilder.addUsedImport(new UsedImport(SC.SQRT));
         usedHardwareBuilder.addUsedImport(new UsedImport(SC.WAIT));
         //Port is a place-holder there is no Port that the Timer is connected to pybricks only has one Timer
@@ -119,6 +121,13 @@ public class SpikePybricksValidatorAndCollectorVisitor extends AbstractSpikeVali
         super.visitColorSensor(colorSensor);
         usedMethodBuilder.addUsedMethod(SpikePybricksMethods.HSVTORGB);
         usedHardwareBuilder.addUsedImport(new UsedImport(SC.PORT));
+        return null;
+    }
+
+    @Override
+    final public Void visitGyroSensor(GyroSensor gyroSensor) {
+        super.visitGyroSensor(gyroSensor);
+        usedHardwareBuilder.addUsedSensor(new UsedSensor("GYRO", SC.GYRO, SC.DEFAULT));
         return null;
     }
 

@@ -97,18 +97,6 @@ public class AbstractSpikeValidatorAndCollectorVisitor extends CommonNepoValidat
     }
 
     @Override
-    public Void visitGestureSensor(GestureSensor gestureSensor) {
-        usedHardwareBuilder.addUsedSensor(new UsedSensor("GYRO", SC.GYRO, SC.DEFAULT));
-        return null;
-    }
-
-    @Override
-    final public Void visitGyroSensor(GyroSensor gyroSensor) {
-        usedHardwareBuilder.addUsedSensor(new UsedSensor("GYRO", SC.GYRO, SC.DEFAULT));
-        return null;
-    }
-
-    @Override
     final public Void visitImage(Image image) {
         return null;
     }
@@ -232,12 +220,12 @@ public class AbstractSpikeValidatorAndCollectorVisitor extends CommonNepoValidat
         return null;
     }
 
-    final public Void visitTimerReset(TimerReset timerReset) {
+    public Void visitTimerReset(TimerReset timerReset) {
         usedHardwareBuilder.addUsedSensor(new UsedSensor(timerReset.sensorPort, SC.TIMER, SC.DEFAULT));
         return null;
     }
 
-    final public Void visitTimerSensor(TimerSensor timerSensor) {
+    public Void visitTimerSensor(TimerSensor timerSensor) {
         usedHardwareBuilder.addUsedSensor(new UsedSensor(timerSensor.getUserDefinedPort(), SC.TIMER, timerSensor.getMode()));
         return null;
     }
@@ -247,6 +235,16 @@ public class AbstractSpikeValidatorAndCollectorVisitor extends CommonNepoValidat
     public Void visitTouchSensor(TouchSensor touchSensor) {
         checkSensorPort(touchSensor);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(touchSensor.getUserDefinedPort(), SC.TOUCH, touchSensor.getMode()));
+        return null;
+    }
+
+    @Override
+    public Void visitGyroSensor(GyroSensor gyroSensor) {
+        return null;
+    }
+
+    @Override
+    public Void visitGestureSensor(GestureSensor gestureSensor) {
         return null;
     }
 
@@ -330,4 +328,6 @@ public class AbstractSpikeValidatorAndCollectorVisitor extends CommonNepoValidat
         }
         return true;
     }
+
+
 }
