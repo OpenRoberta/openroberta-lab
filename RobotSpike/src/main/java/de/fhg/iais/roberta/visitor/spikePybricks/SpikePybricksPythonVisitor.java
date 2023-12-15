@@ -60,7 +60,7 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
 
     @Override
     protected String showSad() {
-        return "continue";
+        return "hub.display.icon(Matrix([[0, 0, 0, 0, 0], [0, 100, 0, 100, 0], [0, 0, 0, 0, 0], [0, 100, 100, 100, 0], [100, 0, 0, 0, 100]]))";
     }
 
     @Override
