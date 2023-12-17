@@ -5,7 +5,7 @@ include: "classpath:/common.methods.yml"
 MOTORSTART:
   PYTHON: |
     def motorStart(motor, speed):
-        motor.set_speed(speed, Motor.CCW)
+        motor.set_speed(int((speed / 100) * 512), Motor.CCW)
         motor.start_sync()
 
 OMNIDRIVEVERTICAL:

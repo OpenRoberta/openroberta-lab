@@ -10,6 +10,7 @@ import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
+import de.fhg.iais.roberta.constants.FischertechnikConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.MotorOmniOnAction;
 import de.fhg.iais.roberta.syntax.action.MotorOnAction;
@@ -42,13 +43,17 @@ public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
         requiredComponentVisited(motorOnAction, motorOnAction.power);
         if ( checkActorPort(motorOnAction) ) {
             ConfigurationComponent motor = getMotorFromPort(motorOnAction.port);
-            usedHardwareBuilder.addUsedActor(new UsedActor(motor.getOptProperty("PORT"), SC.ENCODER));
+            usedHardwareBuilder.addUsedActor(new UsedActor(motor.getOptProperty("PORT"), SC.MOTOR));
         }
         return null;
     }
 
     @Override
     public Void visitMotorOmniOnAction(MotorOmniOnAction motorOmniOnAction) {
+        usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniOnAction.getUserDefinedPort(), SC.MOTOR));
+        usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniOnAction.getUserDefinedPort(), FischertechnikConstants.OMNIDRIVE));
+
+
         usedMethodBuilder.addUsedMethod(Txt4Methods.MOTORSTART);
         //replace with forward, backward, left, right, forward left, backward right, forward right, backward left,
         switch ( motorOmniOnAction.direction ) {

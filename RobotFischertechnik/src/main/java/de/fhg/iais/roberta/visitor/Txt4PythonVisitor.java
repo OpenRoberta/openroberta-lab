@@ -24,6 +24,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.util.basic.C;
 import de.fhg.iais.roberta.util.dbc.DbcException;
+import de.fhg.iais.roberta.util.syntax.SC;
 import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractPythonVisitor;
 
 /**
@@ -139,7 +140,7 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
             case "HAPPY": //left
                 this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(Txt4Methods.OMNIDRIVEHORIZONTAL));
                 break;
-            case "SUPRISED": //backward right
+            case "SURPRISED": //backward right
                 speedMultiplier = "-";
             case "CONFUSED": //forward left
                 this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(Txt4Methods.OMNIDRIVEDIAGONALTL));
@@ -255,17 +256,56 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
             return;
         }
         UsedHardwareBean usedHardwareBean = this.getBean(UsedHardwareBean.class);
-        this.src.add("import math").nlI();
-        this.src.add("import time").nlI();
+        this.src.add("import fischertechnik.factories as txt_factory").nlI();
+        this.src.add("from lib.controller import *").nlI();
+
+        //only motor
+        if ( usedHardwareBean.isActorUsed(SC.MOTOR) || usedHardwareBean.isActorUsed(SC.ENCODER) ) {
+            this.src.add("from fischertechnik.controller.Motor import Motor").nlI();
+        }
         if ( usedHardwareBean.isActorUsed(C.RANDOM) || usedHardwareBean.isActorUsed(C.RANDOM_DOUBLE) ) {
             this.src.add("import random").nlI();
         }
+        this.src.add("import math").nlI();
+        this.src.add("import time").nlI().nlI();
+
+
+        this.src.add("txt_factory.init()").nlI();
+        if ( usedHardwareBean.isActorUsed(SC.MOTOR) || usedHardwareBean.isActorUsed(SC.ENCODER) ) {
+            this.src.add("txt_factory.init_motor_factory()").nlI();
+        }
+        if ( usedHardwareBean.isActorUsed(SC.SERVOMOTOR) ) {
+            this.src.add("txt_factory.init_servomotor_factory()").nlI();
+        }
+        this.src.add("TXT_M = txt_factory.controller_factory.create_graphical_controller()").nlI();
+
         if ( !usedHardwareBean.getUsedActors().isEmpty() && !usedHardwareBean.getUsedSensors().isEmpty() ) {
             nlIndent();
         }
 
+        initMotors();
+
+        this.src.add("txt_factory.initialized()");
+
     }
 
+    private void initMotors() {
+        for ( ConfigurationComponent component : this.configurationAst.getConfigurationComponents().values() ) {
+            if ( component.componentType.equals(SC.MOTOR) ) {
+                String port = component.getOptProperty("PORT");
+                port = port.substring(1);
+                this.src.add("TXT_M_M", port, "_motor = txt_factory.motor_factory.create_motor(TXT_M, ", port, ")").nlI();
+            } else if ( component.componentType.equals(SC.ENCODER) ) {
+                String port = component.getOptProperty("PORT");
+                port = port.substring(1);
+                this.src.add("TXT_M_M", port, "_encodermotor = txt_factory.motor_factory.create_encodermotor(TXT_M, ", port, ")").nlI();
+            } else if ( component.componentType.equals(SC.SERVOMOTOR) ) {
+                String port = component.getOptProperty("PORT");
+                port = port.substring(1);
+                this.src.add("TXT_M_S", port, "_servomotor = txt_factory.motor_factory.create_servomotor(TXT_M, ", port, ")").nlI();
+            }
+        }
+    }
     @Override
     protected void generateProgramSuffix(boolean withWrapping) {
         if ( !withWrapping ) {
