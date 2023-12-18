@@ -1,5 +1,6 @@
 /**
  * Bluetooth-Detection and Bluetooth-Service UUIIDs associated with Pybricks BLE
+ * not all of these UUIDs are Pybricks specific, maybe remove these
  */
 enum SERVICE_UUIDS {
     //Bluetooth-Detection Service UUIDs
@@ -32,7 +33,7 @@ let maxProgramSize = 4096;
 
 /**
  * Connect SpikePrime, with Pybricks-Firmware and load hub capabilities (max write-/program-size)
- *
+ * doesn't check for correct spike prime firmware version
  * @return is device now connected, there are no checks for correct firmware version
  */
 async function connectBleDevice(): Promise<boolean> {
@@ -84,9 +85,8 @@ const get_hub_capabilities_ble = async (device: BluetoothDevice) => {
 };
 
 /**
- * transfer program, check for already open gatt connection
+ * transfer program, checks for already open gatt connection
  * @param programString generated program string representation
- *
  */
 export const downloadProgram = async (programString: string) => {
     if ((device === null || !device.gatt.connected)) {
@@ -99,8 +99,8 @@ export const downloadProgram = async (programString: string) => {
 };
 
 /**
- * transfer program over ble
- * @param programString generated program string representation
+ * transfer program over ble, gatt service uses max-write size to cut program into max-sized chunks
+ * @param programString generated program string representation (python code)
  */
 const downloadUserProgramBle = async (programString: string) => {
     const program = blobFromProgramArrayString(programString);
@@ -153,7 +153,7 @@ const downloadUserProgramBle = async (programString: string) => {
 };
 
 /**
- * connect to gatt service and write data
+ * connect to gatt service and write data, doesn't check for already occupied service
  * @param device SpikePrime BLE Device
  * @param serviceUuid Service to write to
  * @param dataOrCommand program data or command, wrap command into buffer source (preferably Uint8Array)
@@ -183,6 +183,10 @@ const writeGatt = async (device: BluetoothDevice, serviceUuid: SERVICE_UUIDS, da
     );
 };
 
+/**
+ * encode unsigned 32bit (4byte) integer as little endian
+ * @param value to encode
+ */
 function encodeUInt32LE(value: number): ArrayBuffer {
     const buf = new ArrayBuffer(4);
     const view = new DataView(buf);
@@ -190,10 +194,19 @@ function encodeUInt32LE(value: number): ArrayBuffer {
     return buf;
 }
 
+/**
+ * adds NULL-Terminator to indicate program name ends here
+ * @param str to terminate
+ */
 function cString(str: string): Uint8Array {
     return new TextEncoder().encode(str + '\x00');
 }
 
+/**
+ * packs program into a blob for transfer, <br>
+ * since program has to be packed into blob or a similar data structure
+ * @param programString generated program string representation (python code)
+ */
 function blobFromProgramArrayString(programString: string) {
     //prepare string_array, python adds parenthesis which have to be removed (substring)
     let stringArray = programString.substring(1, programString.length - 1).split(', ');
