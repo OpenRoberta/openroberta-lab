@@ -13,6 +13,8 @@ import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.constants.FischertechnikConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.MotorOmniOnAction;
+import de.fhg.iais.roberta.syntax.action.MotorOmniTurnAction;
+import de.fhg.iais.roberta.syntax.action.MotorOmniTurnForAction;
 import de.fhg.iais.roberta.syntax.action.MotorOnAction;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
@@ -76,6 +78,24 @@ public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
             default:
                 break;
         }
+        return null;
+    }
+
+    @Override
+    public Void visitMotorOmniTurnAction(MotorOmniTurnAction motorOmniTurnAction) {
+        usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniTurnAction.getUserDefinedPort(), SC.MOTOR));
+        usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniTurnAction.getUserDefinedPort(), FischertechnikConstants.OMNIDRIVE));
+        usedMethodBuilder.addUsedMethod(Txt4Methods.OMNIDRIVETURN);
+        usedMethodBuilder.addUsedMethod(Txt4Methods.MOTORSTART);
+
+        return null;
+    }
+
+    @Override
+    public Void visitMotorOmniTurnForAction(MotorOmniTurnForAction motorOmniTurnForAction) {
+        usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniTurnForAction.getUserDefinedPort(), SC.MOTOR));
+        usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniTurnForAction.getUserDefinedPort(), FischertechnikConstants.OMNIDRIVE));
+        usedMethodBuilder.addUsedMethod(Txt4Methods.MOTORSTART);
         return null;
     }
 

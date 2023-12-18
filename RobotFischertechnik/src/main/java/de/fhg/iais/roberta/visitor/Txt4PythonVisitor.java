@@ -12,6 +12,8 @@ import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.constants.FischertechnikConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.MotorOmniOnAction;
+import de.fhg.iais.roberta.syntax.action.MotorOmniTurnAction;
+import de.fhg.iais.roberta.syntax.action.MotorOmniTurnForAction;
 import de.fhg.iais.roberta.syntax.action.MotorOnAction;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
@@ -54,15 +56,15 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
     private void setMotorPorts() {
         ConfigurationComponent omniDrive = getOmniDrive();
         if ( omniDrive != null ) {
-            frontLeftMotor = omniDrive.getOptProperty("MOTOR_FL");
-            frontRightMotor = omniDrive.getOptProperty("MOTOR_FR");
-            rearLeftMotor = omniDrive.getOptProperty("MOTOR_RL");
-            rearRightMotor = omniDrive.getOptProperty("MOTOR_RR");
+            this.frontLeftMotor = "TXT_M_" + omniDrive.getOptProperty("MOTOR_FL") + "_encodermotor";
+            this.frontRightMotor = "TXT_M_" + omniDrive.getOptProperty("MOTOR_FR") + "_encodermotor";
+            this.rearLeftMotor = "TXT_M_" + omniDrive.getOptProperty("MOTOR_RL") + "_encodermotor";
+            this.rearRightMotor = "TXT_M_" + omniDrive.getOptProperty("MOTOR_RR") + "_encodermotor";
         } else {
-            frontLeftMotor = "M1";
-            frontRightMotor = "M2";
-            rearLeftMotor = "M3";
-            rearRightMotor = "M4";
+            this.frontLeftMotor = "TXT_M_M1_encodermotor";
+            this.frontRightMotor = "TXT_M_M2_encodermotor";
+            this.rearLeftMotor = "TXT_M_M3_encodermotor";
+            this.rearRightMotor = "TXT_M_M4_encodermotor";
 
         }
     }
@@ -120,13 +122,6 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
 
     @Override
     public Void visitMotorOmniOnAction(MotorOmniOnAction motorOmniOnAction) {
-
-        //TODO maybe make this global?
-        String motorFL = "TXT_M_" + this.frontLeftMotor + "_encodermotor";
-        String motorFR = "TXT_M_" + this.frontRightMotor + "_encodermotor";
-        String motorRL = "TXT_M_" + this.rearLeftMotor + "_encodermotor";
-        String motorRR = "TXT_M_" + this.rearRightMotor + "_encodermotor";
-
         String speedMultiplier = "";
         //replace with forward, backward, left, right, forward left, backward right, forward right, backward left,
         switch ( motorOmniOnAction.direction ) {
@@ -153,12 +148,29 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
             default:
                 break;
         }
-        this.src.add("(", motorFL, ", ", motorFR, ", ", motorRL, ", ", motorRR, ", ");
+        this.src.add("(", this.frontLeftMotor, ", ", this.frontRightMotor, ", ", this.rearLeftMotor, ", ", this.rearRightMotor, ", ");
         this.src.add(speedMultiplier);
         motorOmniOnAction.power.accept(this);
         this.src.add(")");
 
 
+        return null;
+    }
+
+    @Override
+    public Void visitMotorOmniTurnAction(MotorOmniTurnAction motorOmniTurnAction) {
+        this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(Txt4Methods.OMNIDRIVETURN));
+        this.src.add("(", this.frontLeftMotor, ", ", this.frontRightMotor, ", ", this.rearLeftMotor, ", ", this.rearRightMotor, ", ");
+        if ( motorOmniTurnAction.direction.equals("LEFT") ) {
+            this.src.add("-");
+        }
+        motorOmniTurnAction.power.accept(this);
+        this.src.add(")");
+        return null;
+    }
+
+    @Override
+    public Void visitMotorOmniTurnForAction(MotorOmniTurnForAction motorOmniTurnForAction) {
         return null;
     }
 

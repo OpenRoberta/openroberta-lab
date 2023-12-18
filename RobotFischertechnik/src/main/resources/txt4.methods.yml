@@ -10,30 +10,38 @@ MOTORSTART:
 
 OMNIDRIVEVERTICAL:
   PYTHON: |
-    def omnidriveVertical(motorTL, motorTR, motorRL, motorRR, speed):
-        motorStart(motorTL, speed)
-        motorStart(motorTR, speed)
+    def omnidriveVertical(motorFL, motorFR, motorRL, motorRR, speed):
+        motorStart(motorFL, speed)
+        motorStart(motorFR, speed)
         motorStart(motorRL, speed)
         motorStart(motorRR, speed)
 
 OMNIDRIVEHORIZONTAL:
   PYTHON: |
-    def omnidriveHorizontal(motorTL, motorTR, motorRL, motorRR, speed):
-        motorStart(motorTL, -speed)
-        motorStart(motorTR, speed)
+    def omnidriveHorizontal(motorFL, motorFR, motorRL, motorRR, speed):
+        motorStart(motorFL, -speed)
+        motorStart(motorFR, speed)
         motorStart(motorRL, speed)
         motorStart(motorRR, -speed)
 
 OMNIDRIVEDIAGONALTL:
   PYTHON: |
-    def omnidriveDiagonalTL(motorTL, motorTR, motorRL, motorRR, speed):
-        motorTL.stop_sync(motorRR)
-        motorStart(motorTR, speed)
+    def omnidriveDiagonalTL(motorFL, motorFR, motorRL, motorRR, speed):
+        motorFL.stop_sync(motorRR)
+        motorStart(motorFR, speed)
         motorStart(motorRL, speed)
 
 OMNIDRIVEDIAGONALTR:
   PYTHON: |
-    def omnidriveDiagonalTR(motorTL, motorTR, motorRL, motorRR, speed):
-        motorTR.stop_sync(motorRL)
-        motorStart(motorTL, speed)
+    def omnidriveDiagonalTR(motorFL, motorFR, motorRL, motorRR, speed):
+        motorFR.stop_sync(motorRL)
+        motorStart(motorFL, speed)
         motorStart(motorRR, speed)
+
+OMNIDRIVETURN:
+  PYTHON: |
+    def omnidriveTurn(motorFL, motorFR, motorRL, motorRR, speed):
+        motorStart(motorFL, speed)
+        motorStart(motorFR, -speed)
+        motorStart(motorRL, speed)
+        motorStart(motorRR, -speed)
