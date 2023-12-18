@@ -50,7 +50,7 @@ async function connectBleDevice(): Promise<boolean> {
         return false;
     }
 
-    await get_hub_capabilities_ble(device);
+    await getHubCapabilitiesBle(device);
     return true;
 }
 
@@ -58,7 +58,7 @@ async function connectBleDevice(): Promise<boolean> {
  * read and set variables for max program-size and max write-size from brick
  * @param device BLE-Device(SpikePrime Brick)
  */
-const get_hub_capabilities_ble = async (device: BluetoothDevice) => {
+const getHubCapabilitiesBle = async (device: BluetoothDevice) => {
     let hubCapabilitiesValue: DataView;
     let server: BluetoothRemoteGATTServer;
     let service: BluetoothRemoteGATTService;
@@ -208,7 +208,7 @@ function cString(str: string): Uint8Array {
  * @param programString generated program string representation (python code)
  */
 function blobFromProgramArrayString(programString: string) {
-    //prepare string_array, python adds parenthesis which have to be removed (substring)
+    //prepare stringArray, python adds parenthesis which have to be removed (substring)
     let stringArray = programString.substring(1, programString.length - 1).split(', ');
     let mpy = new Uint8Array(stringArray.length);
 

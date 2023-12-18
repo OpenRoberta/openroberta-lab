@@ -3,8 +3,12 @@ package de.fhg.iais.roberta.worker;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
@@ -18,6 +22,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 public abstract class AbstractSpikeValidatorAndCollectorWorker extends AbstractValidatorAndCollectorWorker {
 
     private static final List<String> NON_BLOCKING_PROPERTIES = Collections.unmodifiableList(Arrays.asList("MOTOR_L", "MOTOR_R", "BRICK_WHEEL_DIAMETER", "BRICK_TRACK_WIDTH"));
+    private static final Set<String> OVERLAPPING_PINS = Stream.of("A", "B", "C", "D", "E", "F").collect(Collectors.toCollection(HashSet::new));
 
     @Override
     final public void execute(Project project) {
@@ -27,8 +32,13 @@ public abstract class AbstractSpikeValidatorAndCollectorWorker extends AbstractV
 
     final void validateConfig(Project project) {
         List<String> takenPins = new ArrayList<>();
+        List<String> freePins = project.getRobotFactory().getFreePins();
+        List<String> currentFreePins = new ArrayList<>(freePins);
+
         project.getConfigurationAst().getConfigurationComponents().forEach((k, v) -> checkIfPortTaken(project, v, takenPins));
+        project.getConfigurationAst().getConfigurationComponents().forEach((k, v) -> checkPinOverlap(project, v, currentFreePins, freePins));
         Map<String, ConfigurationComponent> diffDrives = project.getConfigurationAst().getAllConfigurationComponentByType("DIFFERENTIALDRIVE");
+
         boolean diffDriveCompUnique = diffDrives.size() == 1;
         diffDrives.forEach((a, diffDrive) -> {
             boolean rightMotorMissing = true;
@@ -85,4 +95,35 @@ public abstract class AbstractSpikeValidatorAndCollectorWorker extends AbstractV
             takenPins.add(property.getValue());
         }
     }
+
+    //TODO check if this is even needed
+    public void checkPinOverlap(Project project,ConfigurationComponent configurationComponent, List<String> currentFreePins, List<String> availablePins) {
+        Map<String, String> componentProperties = configurationComponent.getComponentProperties();
+        List<String> blockPins = new ArrayList<>();
+        componentProperties.forEach((k, v) -> {
+            if ( OVERLAPPING_PINS.contains(k) ) {
+                if ( currentFreePins.contains(v) ) {
+                    blockPins.add(v);
+                } else {
+                    project.addToErrorCounter(1, null);
+                    project.setResult(Key.PROGRAM_INVALID_STATEMETNS);
+                    BlocklyProperties blocklyProperties = configurationComponent.getProperty();
+                    String blockId = blocklyProperties.blocklyId;
+                    if ( !availablePins.contains(v) ) {
+                        project.addToConfAnnotationList(blockId, NepoInfo.error("CONFIGURATION_ERROR_MISSING_PIN"));
+                    } else {
+                        project.addToConfAnnotationList(blockId, NepoInfo.error("CONFIGURATION_ERROR_OVERLAPPING_PORTS"));
+                    }
+                }
+            }
+        });
+        if ( blockPins.stream().distinct().count() != blockPins.size() ) {
+            project.addToErrorCounter(1, null);
+            project.setResult(Key.PROGRAM_INVALID_STATEMETNS);
+            BlocklyProperties blocklyProperties = configurationComponent.getProperty();
+            String blockId = blocklyProperties.blocklyId;
+            project.addToConfAnnotationList(blockId, NepoInfo.error("CONFIGURATION_ERROR_OVERLAPPING_PORTS"));
+        }
+    }
+
 }

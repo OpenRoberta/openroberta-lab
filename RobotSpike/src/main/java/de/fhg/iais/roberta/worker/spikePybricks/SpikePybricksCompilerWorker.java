@@ -22,27 +22,17 @@ public class SpikePybricksCompilerWorker implements ICompilerWorker {
 
     private Key runBuild(Project project) {
         CompilerSetupBean compilerWorkflowBean = project.getWorkerResult(CompilerSetupBean.class);
-        String compilerBinDir = compilerWorkflowBean.getCompilerBinDir();
         String compilerResourcesDir = compilerWorkflowBean.getCompilerResourcesDir();
         String sourceCode = project.getSourceCode().toString();
-
-        String scriptName = compilerResourcesDir + "compile.py";
-
-        System.out.println(compilerResourcesDir);
 
         String[] executableWithParameters =
             {
                 "python",
-                scriptName,
-                //TODO
-                //this doesnt get used yet
+                compilerResourcesDir + "compile.py",
                 sourceCode
             };
 
         project.setCompiledHex(this.getBinaryFromCrossCompiler(executableWithParameters));
-
-
-        System.out.println(project.getCompiledHex());
 
         if ( project.getCompiledHex() != null ) {
             return Key.COMPILERWORKFLOW_SUCCESS;

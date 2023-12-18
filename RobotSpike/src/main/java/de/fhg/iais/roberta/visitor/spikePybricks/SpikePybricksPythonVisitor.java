@@ -107,12 +107,12 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
 
         switch ( motorDiffTurnForAction.direction ) {
             case "RIGHT":
+                motorDiffTurnForAction.degrees.accept(this);
+                break;
+            case "LEFT":
                 src.add("-(");
                 motorDiffTurnForAction.degrees.accept(this);
                 src.add(")");
-                break;
-            case "LEFT":
-                motorDiffTurnForAction.degrees.accept(this);
                 break;
             default:
                 throw new DbcException("Invalid turn direction: " + motorDiffTurnForAction.direction);
