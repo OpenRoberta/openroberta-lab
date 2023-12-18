@@ -59,8 +59,8 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
     }
 
     @Override
-    protected String exceptionSadFace() {
-        return "hub.display.icon(Matrix([[0, 0, 0, 0, 0], [0, 100, 0, 100, 0], [0, 0, 0, 0, 0], [0, 100, 100, 100, 0], [100, 0, 0, 0, 100]]))";
+    protected void addExceptionSadFaceToCode() {
+        src.add("hub.display.icon(Matrix([[0, 0, 0, 0, 0], [0, 100, 0, 100, 0], [0, 0, 0, 0, 0], [0, 100, 100, 100, 0], [100, 0, 0, 0, 100]]))");
     }
 
     @Override
@@ -643,7 +643,6 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
         }
 
         UsedHardwareBean usedHardwareBean = this.getBean(UsedHardwareBean.class);
-
         src.add("from pybricks.hubs import PrimeHub").nlI();
         importPubDevices(usedHardwareBean);
         importParameter(usedHardwareBean);
@@ -651,6 +650,7 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
         importMathFunctions(usedHardwareBean);
         importRobotics(usedHardwareBean);
         instantiateComponents(usedHardwareBean);
+        src.add("machine.reset()").nlI();
         src.add("hub = PrimeHub()").nlI();
         prepareComponents(usedHardwareBean);
 

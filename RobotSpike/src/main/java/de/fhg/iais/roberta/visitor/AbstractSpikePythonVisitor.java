@@ -60,7 +60,7 @@ protected final void generateProgramSuffix(boolean withWrapping) {
     this.src.add("except Exception as e:");
     incrIndentation();
     nlIndent();
-    this.src.add(exceptionSadFace());
+    addExceptionSadFaceToCode();
     decrIndentation();
     //TODO finally close open ports
     decrIndentation();
@@ -72,7 +72,7 @@ protected final void generateProgramSuffix(boolean withWrapping) {
     /**
      * @return command to show sad face
      */
-    protected abstract String exceptionSadFace();
+    protected abstract void addExceptionSadFaceToCode();
 
     @Override
     public Void visitMainTask(MainTask mainTask) {
