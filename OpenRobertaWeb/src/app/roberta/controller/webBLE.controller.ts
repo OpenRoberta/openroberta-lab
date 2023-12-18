@@ -195,7 +195,7 @@ function encodeUInt32LE(value: number): ArrayBuffer {
 }
 
 /**
- * adds NULL-Terminator to indicate program name ends here
+ * adds NULL-Terminator to string
  * @param str to terminate
  */
 function cString(str: string): Uint8Array {
@@ -220,6 +220,7 @@ function blobFromProgramArrayString(programString: string) {
     const blobParts: BlobPart[] = [];
     // each file is encoded as the size, module name, and mpy binary
     blobParts.push(encodeUInt32LE(mpy.length));
+    // indicate program name ends here
     blobParts.push(cString('__main__'));
     blobParts.push(mpy);
 
