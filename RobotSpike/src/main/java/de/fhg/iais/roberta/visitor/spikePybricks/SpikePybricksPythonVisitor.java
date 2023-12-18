@@ -512,11 +512,9 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
         return null;
     }
 
-    //TODO UPDATED BUT MASSIVE PROBLEM WITH ANIMATION
     @Override
     public Void visitDisplayImageAction(DisplayImageAction displayImageAction) {
         switch ( displayImageAction.displayImageMode ) {
-            //TODO this should probably work once the bug with animations is fixed <- maybe add []
             case "ANIMATION":
                 src.add("hub.display.animate(list(");
                 displayImageAction.valuesToDisplay.accept(this);
