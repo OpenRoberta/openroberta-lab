@@ -385,7 +385,7 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
             default:
                 throw new DbcException("Invalid curve direction: " + motorDiffCurveAction.direction);
         }
-        src.add(",").add(regulated).add(")");
+            src.add(", ").add(regulated).add(")");
         return null;
     }
 
