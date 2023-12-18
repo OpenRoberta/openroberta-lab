@@ -207,8 +207,6 @@ function getConnectionTypeCallback() {
 }
 
 function runForPybricksBle(result){
-    console.log(result);
-    console.log(result.compiledCode)
     GUISTATE_C.setState(result);
     WEBBLE.downloadProgram(result.compiledCode);
     GUISTATE_C.setConnectionState('wait');

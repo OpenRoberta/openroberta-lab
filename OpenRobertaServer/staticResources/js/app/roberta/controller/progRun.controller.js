@@ -171,8 +171,6 @@ define(["require", "exports", "util.roberta", "log", "message", "program.control
         };
     }
     function runForPybricksBle(result) {
-        console.log(result);
-        console.log(result.compiledCode);
         GUISTATE_C.setState(result);
         WEBBLE.downloadProgram(result.compiledCode);
         GUISTATE_C.setConnectionState('wait');
