@@ -365,7 +365,7 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
     public Void visitMotorDiffCurveAction(MotorDiffCurveAction motorDiffCurveAction) {
         String regulated = motorDiffCurveAction.regulation.toString().substring(0, 1).toUpperCase() + motorDiffCurveAction.regulation.toString().substring(1);
 
-        src.add("diff_Drive(");
+        src.add("diff_drive(");
 
         switch ( motorDiffCurveAction.direction ) {
             case "BACKWARD":
