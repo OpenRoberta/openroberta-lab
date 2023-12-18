@@ -60,7 +60,10 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
 
     @Override
     protected void addExceptionSadFaceToCode() {
+        src.add("while True:").nlI();
+        indent();
         src.add("hub.display.icon(Matrix([[0, 0, 0, 0, 0], [0, 100, 0, 100, 0], [0, 0, 0, 0, 0], [0, 100, 100, 100, 0], [100, 0, 0, 0, 100]]))");
+        decrIndentation();
     }
 
     @Override
