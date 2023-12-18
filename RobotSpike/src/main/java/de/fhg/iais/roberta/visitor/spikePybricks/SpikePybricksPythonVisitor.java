@@ -650,7 +650,6 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
         importMathFunctions(usedHardwareBean);
         importRobotics(usedHardwareBean);
         instantiateComponents(usedHardwareBean);
-        src.add("machine.reset()").nlI();
         src.add("hub = PrimeHub()").nlI();
         prepareComponents(usedHardwareBean);
 
