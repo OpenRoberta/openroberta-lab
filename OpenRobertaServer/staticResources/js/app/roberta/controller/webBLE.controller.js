@@ -40,6 +40,7 @@ define(["require", "exports"], function (require, exports) {
     exports.downloadProgram = void 0;
     /**
      * Bluetooth-Detection and Bluetooth-Service UUIIDs associated with Pybricks BLE
+     * not all of these UUIDs are Pybricks specific, maybe remove these
      */
     var SERVICE_UUIDS;
     (function (SERVICE_UUIDS) {
@@ -71,7 +72,7 @@ define(["require", "exports"], function (require, exports) {
     var maxProgramSize = 4096;
     /**
      * Connect SpikePrime, with Pybricks-Firmware and load hub capabilities (max write-/program-size)
-     *
+     * doesn't check for correct spike prime firmware version
      * @return is device now connected, there are no checks for correct firmware version
      */
     function connectBleDevice() {
@@ -154,9 +155,8 @@ define(["require", "exports"], function (require, exports) {
         });
     }); };
     /**
-     * transfer program, check for already open gatt connection
+     * transfer program, checks for already open gatt connection
      * @param programString generated program string representation
-     *
      */
     var downloadProgram = function (programString) { return __awaiter(_this, void 0, void 0, function () {
         return __generator(this, function (_a) {
@@ -178,8 +178,8 @@ define(["require", "exports"], function (require, exports) {
     }); };
     exports.downloadProgram = downloadProgram;
     /**
-     * transfer program over ble
-     * @param programString generated program string representation
+     * transfer program over ble, gatt service uses max-write size to cut program into max-sized chunks
+     * @param programString generated program string representation (python code)
      */
     var downloadUserProgramBle = function (programString) { return __awaiter(_this, void 0, void 0, function () {
         var program, payloadSize, chunkSize, i, data;
@@ -237,7 +237,7 @@ define(["require", "exports"], function (require, exports) {
         });
     }); };
     /**
-     * connect to gatt service and write data
+     * connect to gatt service and write data, doesn't check for already occupied service
      * @param device SpikePrime BLE Device
      * @param serviceUuid Service to write to
      * @param dataOrCommand program data or command, wrap command into buffer source (preferably Uint8Array)
@@ -293,15 +293,28 @@ define(["require", "exports"], function (require, exports) {
             }
         });
     }); };
+    /**
+     * encode unsigned 32bit (4byte) integer as little endian
+     * @param value to encode
+     */
     function encodeUInt32LE(value) {
         var buf = new ArrayBuffer(4);
         var view = new DataView(buf);
         view.setUint32(0, value, true);
         return buf;
     }
+    /**
+     * adds NULL-Terminator to string
+     * @param str to terminate
+     */
     function cString(str) {
         return new TextEncoder().encode(str + '\x00');
     }
+    /**
+     * packs program into a blob for transfer, <br>
+     * since program has to be packed into blob or a similar data structure
+     * @param programString generated program string representation (python code)
+     */
     function blobFromProgramArrayString(programString) {
         //prepare string_array, python adds parenthesis which have to be removed (substring)
         var stringArray = programString.substring(1, programString.length - 1).split(', ');
@@ -313,6 +326,7 @@ define(["require", "exports"], function (require, exports) {
         var blobParts = [];
         // each file is encoded as the size, module name, and mpy binary
         blobParts.push(encodeUInt32LE(mpy.length));
+        // indicate program name ends here
         blobParts.push(cString('__main__'));
         blobParts.push(mpy);
         return new Blob(blobParts);

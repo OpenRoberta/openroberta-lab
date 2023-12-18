@@ -1,4 +1,4 @@
-define(["require", "exports", "util.roberta", "log", "message", "program.controller", "program.model", "socket.controller", "thymioSocket.controller", "guiState.controller", "webview.controller", "jquery", "blockly", "guiState.model", "webUsb.controller", "webBLE.controller"], function (require, exports, UTIL, LOG, MSG, PROG_C, PROGRAM, SOCKET_C, THYMIO_C, GUISTATE_C, WEBVIEW_C, $, Blockly, GUISTATE, WEBUSB_C, WEBBLE) {
+define(["require", "exports", "util.roberta", "log", "message", "program.controller", "program.model", "socket.controller", "thymioSocket.controller", "guiState.controller", "webview.controller", "jquery", "blockly", "guiState.model", "webUsb.controller", "webBLE.controller", "lodash.isequal"], function (require, exports, UTIL, LOG, MSG, PROG_C, PROGRAM, SOCKET_C, THYMIO_C, GUISTATE_C, WEBVIEW_C, $, Blockly, GUISTATE, WEBUSB_C, WEBBLE, lodash_isequal_1) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.reset2DefaultFirmware = exports.runOnBrick = exports.runNative = exports.init = void 0;
     var blocklyWorkspace;
@@ -171,6 +171,8 @@ define(["require", "exports", "util.roberta", "log", "message", "program.control
         };
     }
     function runForPybricksBle(result) {
+        console.log(result);
+        console.log(result.compiledCode);
         GUISTATE_C.setState(result);
         WEBBLE.downloadProgram(result.compiledCode);
         GUISTATE_C.setConnectionState('wait');
@@ -446,9 +448,9 @@ define(["require", "exports", "util.roberta", "log", "message", "program.control
     function stopProgram() {
         if (GUISTATE_C.getConnection() == GUISTATE_C.getConnectionTypeEnum().TOKEN) {
             PROGRAM.stopProgram(function () {
-                GUISTATE_C.setState(result);
-                MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
-                if (result.rc != 'ok') {
+                GUISTATE_C.setState(lodash_isequal_1.result);
+                MSG.displayInformation(lodash_isequal_1.result, lodash_isequal_1.result.message, lodash_isequal_1.result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
+                if (lodash_isequal_1.result.rc != 'ok') {
                     GUISTATE_C.setConnectionState('error');
                 }
             });
@@ -457,7 +459,7 @@ define(["require", "exports", "util.roberta", "log", "message", "program.control
             if (GUISTATE_C.getRobotGroup() == 'thymio') {
                 THYMIO_C.stopProgram().then(function (ok) {
                     if (ok == 'done') {
-                        MSG.displayInformation(result, 'MESSAGE_EDIT_START', result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
+                        MSG.displayInformation(lodash_isequal_1.result, 'MESSAGE_EDIT_START', lodash_isequal_1.result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
                     }
                 }, function (err) {
                     MSG.displayInformation({ rc: 'error' }, null, err, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());

@@ -12,6 +12,7 @@ import * as Blockly from 'blockly';
 import * as GUISTATE from 'guiState.model';
 import * as WEBUSB_C from 'webUsb.controller';
 import * as WEBBLE from 'webBLE.controller';
+import { result } from 'lodash.isequal';
 
 var blocklyWorkspace;
 var interpreter;
@@ -206,6 +207,8 @@ function getConnectionTypeCallback() {
 }
 
 function runForPybricksBle(result){
+    console.log(result);
+    console.log(result.compiledCode)
     GUISTATE_C.setState(result);
     WEBBLE.downloadProgram(result.compiledCode);
     GUISTATE_C.setConnectionState('wait');
