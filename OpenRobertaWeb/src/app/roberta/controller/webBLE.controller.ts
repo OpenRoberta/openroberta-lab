@@ -135,7 +135,7 @@ const getHubCapabilitiesBle = async () : Promise<boolean> => {
 /**
  * transfer program over ble, gatt service uses max-write size to cut program into max-sized chunks
  * @param programString generated program string representation (python code)
- * @param progessBarFunction either null/left empty or function with one argument (float 0 - 1.0 as progress in percent)
+ * @param progressBarFunction either null/left empty or function with one argument (float 0 - 1.0 as progress in percent)
  */
 export const downloadUserProgramBle = async (programString: string, progressBarFunction: (progress: number) => void | null)=> {
     const program = blobFromProgramArrayString(programString);
