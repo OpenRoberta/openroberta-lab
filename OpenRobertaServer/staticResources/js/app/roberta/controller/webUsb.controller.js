@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 define(["require", "exports", "dapjs", "message", "jquery", "guiState.controller"], function (require, exports, dapjs_1, MSG, $, GUISTATE_C) {
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.setIsWebUsbSelected = exports.isWebUsbSelected = exports.isConnected = exports.removeDevice = exports.connect = exports.init = void 0;
+    exports.setIsWebUsbSelected = exports.isWebUsbSelected = exports.isConnected = exports.removeDevice = exports.setTransfer = exports.connect = exports.init = void 0;
     var device;
     var target;
     var isSelected;
@@ -121,6 +121,7 @@ define(["require", "exports", "dapjs", "message", "jquery", "guiState.controller
         $('#progressBar').width("".concat(progress * 100, "%"));
         $('#transfer').text("".concat(Math.ceil(progress * 100), "%"));
     }
+    exports.setTransfer = setTransfer;
     function stringToArrayBuffer(generatedcode) {
         var enc = new TextEncoder();
         return enc.encode(generatedcode);

@@ -56,7 +56,7 @@ async function upload(generatedCode: string): Promise<any> {
     return 'done';
 }
 
-function setTransfer(progress?: number) {
+export function setTransfer(progress?: number) {
     $('#progressBar').width(`${progress * 100}%`);
     $('#transfer').text(`${Math.ceil(progress * 100)}%`);
 }

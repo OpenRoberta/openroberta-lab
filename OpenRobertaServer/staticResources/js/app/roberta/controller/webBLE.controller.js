@@ -34,10 +34,10 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-define(["require", "exports"], function (require, exports) {
+define(["require", "exports", "message", "guiState.controller"], function (require, exports, MSG, GUISTATE_C) {
     var _this = this;
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.downloadProgram = void 0;
+    exports.downloadUserProgramBle = exports.disconnectBleDevice = exports.connectBleDevice = void 0;
     /**
      * Bluetooth-Detection and Bluetooth-Service UUIIDs associated with Pybricks BLE
      * not all of these UUIDs are Pybricks specific, maybe remove these
@@ -68,6 +68,7 @@ define(["require", "exports"], function (require, exports) {
     })(COMMANDS || (COMMANDS = {}));
     //these are placeholder values and should always be overwritten
     var device = null;
+    var server;
     var maxWriteSize = 64;
     var maxProgramSize = 4096;
     /**
@@ -77,67 +78,93 @@ define(["require", "exports"], function (require, exports) {
      */
     function connectBleDevice() {
         return __awaiter(this, void 0, void 0, function () {
+            var e_1, e_2;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, navigator.bluetooth.requestDevice(({
-                            filters: [{ services: [SERVICE_UUIDS.PYBRICKS_SERVICE_UUID] }],
-                            optionalServices: [
-                                SERVICE_UUIDS.PYBRICKS_SERVICE_UUID,
-                                SERVICE_UUIDS.DEVICE_INFORMATION_SERVICE_UUID,
-                                SERVICE_UUIDS.NORDIC_UART_SERVICE_UUID
-                            ]
-                        }))];
+                    case 0:
+                        if (deviceConnected())
+                            return [2 /*return*/, true];
+                        _a.label = 1;
                     case 1:
-                        device = _a.sent();
-                        if (device === null) {
-                            return [2 /*return*/, false];
-                        }
-                        return [4 /*yield*/, get_hub_capabilities_ble(device)];
+                        _a.trys.push([1, 3, , 4]);
+                        return [4 /*yield*/, navigator.bluetooth.requestDevice(({
+                                filters: [{ services: [SERVICE_UUIDS.PYBRICKS_SERVICE_UUID] }],
+                                optionalServices: [
+                                    SERVICE_UUIDS.PYBRICKS_SERVICE_UUID,
+                                    SERVICE_UUIDS.DEVICE_INFORMATION_SERVICE_UUID,
+                                    SERVICE_UUIDS.NORDIC_UART_SERVICE_UUID
+                                ]
+                            }))];
                     case 2:
+                        device = _a.sent();
+                        return [3 /*break*/, 4];
+                    case 3:
+                        e_1 = _a.sent();
+                        console.log(e_1);
+                        MSG.displayInformation({ rc: 'error' }, null, "no device selected", GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
+                        return [2 /*return*/, false];
+                    case 4:
+                        _a.trys.push([4, 6, , 7]);
+                        return [4 /*yield*/, device.gatt.connect().then(function (gattServer) { return server = gattServer; })];
+                    case 5:
                         _a.sent();
-                        return [2 /*return*/, true];
+                        return [3 /*break*/, 7];
+                    case 6:
+                        e_2 = _a.sent();
+                        MSG.displayInformation({ rc: 'error' }, null, "device busy or wrong firmware version", GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
+                        console.log(e_2);
+                        return [2 /*return*/, false];
+                    case 7: return [4 /*yield*/, getHubCapabilitiesBle()];
+                    case 8:
+                        _a.sent();
+                        return [2 /*return*/, deviceConnected()];
                 }
             });
         });
     }
+    exports.connectBleDevice = connectBleDevice;
+    function disconnectBleDevice() {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                if (device != null)
+                    device.gatt.disconnect();
+                device = null;
+                server = null;
+                return [2 /*return*/];
+            });
+        });
+    }
+    exports.disconnectBleDevice = disconnectBleDevice;
+    function deviceConnected() {
+        if (device == null || server == null) {
+            return false;
+        }
+        return device.gatt.connected;
+    }
     /**
      * read and set variables for max program-size and max write-size from brick
-     * @param device BLE-Device(SpikePrime Brick)
      */
-    var get_hub_capabilities_ble = function (device) { return __awaiter(_this, void 0, void 0, function () {
-        var hubCapabilitiesValue, server, service, characteristic;
+    var getHubCapabilitiesBle = function () { return __awaiter(_this, void 0, void 0, function () {
+        var hubCapabilitiesValue, service, characteristic;
         var _this = this;
-        var _a;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
-                case 0: return [4 /*yield*/, ((_a = device.gatt) === null || _a === void 0 ? void 0 : _a.connect().then(function (value) { return __awaiter(_this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, server.getPrimaryService(SERVICE_UUIDS.PYBRICKS_SERVICE_UUID).then(function (value) { return __awaiter(_this, void 0, void 0, function () {
                         var _this = this;
                         return __generator(this, function (_a) {
                             switch (_a.label) {
                                 case 0:
-                                    server = value;
-                                    return [4 /*yield*/, server.getPrimaryService(SERVICE_UUIDS.PYBRICKS_SERVICE_UUID).then(function (value) { return __awaiter(_this, void 0, void 0, function () {
-                                            var _this = this;
+                                    service = value;
+                                    return [4 /*yield*/, service.getCharacteristic(SERVICE_UUIDS.PYBRICKS_HUB_CAPABILITIES_CHARACTERISTIC_UUID).then(function (value) { return __awaiter(_this, void 0, void 0, function () {
                                             return __generator(this, function (_a) {
                                                 switch (_a.label) {
                                                     case 0:
-                                                        service = value;
-                                                        return [4 /*yield*/, service.getCharacteristic(SERVICE_UUIDS.PYBRICKS_HUB_CAPABILITIES_CHARACTERISTIC_UUID).then(function (value) { return __awaiter(_this, void 0, void 0, function () {
-                                                                return __generator(this, function (_a) {
-                                                                    switch (_a.label) {
-                                                                        case 0:
-                                                                            characteristic = value;
-                                                                            return [4 /*yield*/, characteristic.readValue()];
-                                                                        case 1:
-                                                                            hubCapabilitiesValue = _a.sent();
-                                                                            maxWriteSize = hubCapabilitiesValue.getUint16(0, true);
-                                                                            maxProgramSize = hubCapabilitiesValue.getUint32(6, true);
-                                                                            return [2 /*return*/];
-                                                                    }
-                                                                });
-                                                            }); }).catch(function (reason) { return console.log(reason); })];
+                                                        characteristic = value;
+                                                        return [4 /*yield*/, characteristic.readValue()];
                                                     case 1:
-                                                        _a.sent();
+                                                        hubCapabilitiesValue = _a.sent();
+                                                        maxWriteSize = hubCapabilitiesValue.getUint16(0, true);
+                                                        maxProgramSize = hubCapabilitiesValue.getUint32(6, true);
                                                         return [2 /*return*/];
                                                 }
                                             });
@@ -147,36 +174,13 @@ define(["require", "exports"], function (require, exports) {
                                     return [2 /*return*/];
                             }
                         });
-                    }); }).catch(function (reason) { return console.log(reason); }))];
+                    }); }).catch(function (reason) { return console.log(reason); })];
                 case 1:
-                    _b.sent();
-                    return [2 /*return*/];
-            }
-        });
-    }); };
-    /**
-     * transfer program, checks for already open gatt connection
-     * @param programString generated program string representation
-     */
-    var downloadProgram = function (programString) { return __awaiter(_this, void 0, void 0, function () {
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    if (!(device === null || !device.gatt.connected)) return [3 /*break*/, 2];
-                    return [4 /*yield*/, connectBleDevice()];
-                case 1:
-                    if (!(_a.sent())) {
-                        return [2 /*return*/];
-                    }
-                    _a.label = 2;
-                case 2: return [4 /*yield*/, downloadUserProgramBle(programString)];
-                case 3:
                     _a.sent();
                     return [2 /*return*/];
             }
         });
     }); };
-    exports.downloadProgram = downloadProgram;
     /**
      * transfer program over ble, gatt service uses max-write size to cut program into max-sized chunks
      * @param programString generated program string representation (python code)
@@ -188,16 +192,15 @@ define(["require", "exports"], function (require, exports) {
                 case 0:
                     program = blobFromProgramArrayString(programString);
                     payloadSize = maxWriteSize - 5;
-                    //TODO MAKE THIS AN ERROR MESSAGE
                     if (program.size > maxProgramSize) {
-                        console.log('MAX PROGRAM SIZE REACHED');
-                        return [2 /*return*/];
+                        MSG.displayInformation({ rc: 'error' }, null, "max-program-size reached", GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
+                        return [2 /*return*/, false];
                     }
-                    return [4 /*yield*/, writeGatt(device, SERVICE_UUIDS.PYBRICKS_COMMAND_EVENT_UUID, new Uint8Array([COMMANDS.STOP_USER_PROGRAM]))];
+                    return [4 /*yield*/, writeGatt(SERVICE_UUIDS.PYBRICKS_COMMAND_EVENT_UUID, new Uint8Array([COMMANDS.STOP_USER_PROGRAM]))];
                 case 1:
                     _a.sent();
                     //invalidate old program data
-                    return [4 /*yield*/, writeGatt(device, SERVICE_UUIDS.PYBRICKS_COMMAND_EVENT_UUID, createWriteUserProgramMetaCommand(0))];
+                    return [4 /*yield*/, writeGatt(SERVICE_UUIDS.PYBRICKS_COMMAND_EVENT_UUID, createWriteUserProgramMetaCommand(0))];
                 case 2:
                     //invalidate old program data
                     _a.sent();
@@ -214,66 +217,51 @@ define(["require", "exports"], function (require, exports) {
                     return [4 /*yield*/, program.slice(i, i + chunkSize).arrayBuffer()];
                 case 4:
                     data = _a.sent();
-                    return [4 /*yield*/, writeGatt(device, SERVICE_UUIDS.PYBRICKS_COMMAND_EVENT_UUID, createWriteUserRamCommand(i, data))];
+                    return [4 /*yield*/, writeGatt(SERVICE_UUIDS.PYBRICKS_COMMAND_EVENT_UUID, createWriteUserRamCommand(i, data))];
                 case 5:
                     _a.sent();
-                    //TODO FORWARD THIS TO PROGRESSBAR
-                    console.log((i + data.byteLength) / program.size);
                     _a.label = 6;
                 case 6:
                     i += chunkSize;
                     return [3 /*break*/, 3];
                 case 7: 
                 //update program size
-                return [4 /*yield*/, writeGatt(device, SERVICE_UUIDS.PYBRICKS_COMMAND_EVENT_UUID, createWriteUserProgramMetaCommand(program.size))];
+                return [4 /*yield*/, writeGatt(SERVICE_UUIDS.PYBRICKS_COMMAND_EVENT_UUID, createWriteUserProgramMetaCommand(program.size))];
                 case 8:
                     //update program size
                     _a.sent();
-                    return [4 /*yield*/, writeGatt(device, SERVICE_UUIDS.PYBRICKS_COMMAND_EVENT_UUID, new Uint8Array([COMMANDS.START_USER_PROGRAM]))];
+                    return [4 /*yield*/, writeGatt(SERVICE_UUIDS.PYBRICKS_COMMAND_EVENT_UUID, new Uint8Array([COMMANDS.START_USER_PROGRAM]))];
                 case 9:
                     _a.sent();
                     return [2 /*return*/];
             }
         });
     }); };
+    exports.downloadUserProgramBle = downloadUserProgramBle;
     /**
      * connect to gatt service and write data, doesn't check for already occupied service
-     * @param device SpikePrime BLE Device
      * @param serviceUuid Service to write to
      * @param dataOrCommand program data or command, wrap command into buffer source (preferably Uint8Array)
      */
-    var writeGatt = function (device, serviceUuid, dataOrCommand) { return __awaiter(_this, void 0, void 0, function () {
-        var server, service, characteristic;
+    var writeGatt = function (serviceUuid, dataOrCommand) { return __awaiter(_this, void 0, void 0, function () {
+        var service, characteristic;
         var _this = this;
-        var _a;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
                 case 0: 
                 //open gatt connection and write to selected service
-                return [4 /*yield*/, ((_a = device.gatt) === null || _a === void 0 ? void 0 : _a.connect().then(function (value) { return __awaiter(_this, void 0, void 0, function () {
+                return [4 /*yield*/, server.getPrimaryService(SERVICE_UUIDS.PYBRICKS_SERVICE_UUID).then(function (value) { return __awaiter(_this, void 0, void 0, function () {
                         var _this = this;
                         return __generator(this, function (_a) {
                             switch (_a.label) {
                                 case 0:
-                                    server = value;
-                                    return [4 /*yield*/, server.getPrimaryService(SERVICE_UUIDS.PYBRICKS_SERVICE_UUID).then(function (value) { return __awaiter(_this, void 0, void 0, function () {
-                                            var _this = this;
+                                    service = value;
+                                    return [4 /*yield*/, service.getCharacteristic(serviceUuid).then(function (value) { return __awaiter(_this, void 0, void 0, function () {
                                             return __generator(this, function (_a) {
                                                 switch (_a.label) {
                                                     case 0:
-                                                        service = value;
-                                                        return [4 /*yield*/, service.getCharacteristic(serviceUuid).then(function (value) { return __awaiter(_this, void 0, void 0, function () {
-                                                                return __generator(this, function (_a) {
-                                                                    switch (_a.label) {
-                                                                        case 0:
-                                                                            characteristic = value;
-                                                                            return [4 /*yield*/, characteristic.writeValueWithResponse(dataOrCommand)];
-                                                                        case 1:
-                                                                            _a.sent();
-                                                                            return [2 /*return*/];
-                                                                    }
-                                                                });
-                                                            }); }).catch(function (reason) { return console.log(reason); })];
+                                                        characteristic = value;
+                                                        return [4 /*yield*/, characteristic.writeValueWithResponse(dataOrCommand)];
                                                     case 1:
                                                         _a.sent();
                                                         return [2 /*return*/];
@@ -285,10 +273,10 @@ define(["require", "exports"], function (require, exports) {
                                     return [2 /*return*/];
                             }
                         });
-                    }); }).catch(function (reason) { return console.log(reason); }))];
+                    }); }).catch(function (reason) { return console.log(reason); })];
                 case 1:
                     //open gatt connection and write to selected service
-                    _b.sent();
+                    _a.sent();
                     return [2 /*return*/];
             }
         });
@@ -316,7 +304,7 @@ define(["require", "exports"], function (require, exports) {
      * @param programString generated program string representation (python code)
      */
     function blobFromProgramArrayString(programString) {
-        //prepare string_array, python adds parenthesis which have to be removed (substring)
+        //prepare stringArray, python adds parenthesis which have to be removed (substring)
         var stringArray = programString.substring(1, programString.length - 1).split(', ');
         var mpy = new Uint8Array(stringArray.length);
         //take python return string and format to Uint8Array

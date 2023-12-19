@@ -172,7 +172,11 @@ define(["require", "exports", "util.roberta", "log", "message", "program.control
     }
     function runForPybricksBle(result) {
         GUISTATE_C.setState(result);
-        WEBBLE.downloadProgram(result.compiledCode);
+        WEBBLE.connectBleDevice().then(function (connected) {
+            if (connected) {
+                WEBBLE.downloadUserProgramBle(result.compiledCode);
+            }
+        });
         GUISTATE_C.setConnectionState('wait');
     }
     function runForAutoConnection(result) {

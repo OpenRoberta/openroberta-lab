@@ -1,3 +1,7 @@
+import * as MSG from 'message';
+import * as GUISTATE_C from 'guiState.controller';
+import * as WEBUSB from 'webUsb.controller';
+
 /**
  * Bluetooth-Detection and Bluetooth-Service UUIIDs associated with Pybricks BLE
  * not all of these UUIDs are Pybricks specific, maybe remove these
@@ -28,6 +32,7 @@ enum COMMANDS {
 
 //these are placeholder values and should always be overwritten
 let device: BluetoothDevice = null;
+let server: BluetoothRemoteGATTServer;
 let maxWriteSize = 64;
 let maxProgramSize = 4096;
 
@@ -36,46 +41,64 @@ let maxProgramSize = 4096;
  * doesn't check for correct spike prime firmware version
  * @return is device now connected, there are no checks for correct firmware version
  */
-async function connectBleDevice(): Promise<boolean> {
-    device = await navigator.bluetooth.requestDevice(({
-        filters: [{ services: [SERVICE_UUIDS.PYBRICKS_SERVICE_UUID] }],
-        optionalServices: [
-            SERVICE_UUIDS.PYBRICKS_SERVICE_UUID,
-            SERVICE_UUIDS.DEVICE_INFORMATION_SERVICE_UUID,
-            SERVICE_UUIDS.NORDIC_UART_SERVICE_UUID
-        ]
-    }));
+export async function connectBleDevice(): Promise<boolean> {
+    if(deviceConnected()) return true;
 
-    if (device === null) {
+    try{
+        device = await navigator.bluetooth.requestDevice(({
+            filters: [{ services: [SERVICE_UUIDS.PYBRICKS_SERVICE_UUID] }],
+            optionalServices: [
+                SERVICE_UUIDS.PYBRICKS_SERVICE_UUID,
+                SERVICE_UUIDS.DEVICE_INFORMATION_SERVICE_UUID,
+                SERVICE_UUIDS.NORDIC_UART_SERVICE_UUID
+            ]
+        }));
+    }catch (e) {
+        console.log(e);
+        MSG.displayInformation({ rc: 'error' }, null, "no device selected", GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
         return false;
     }
 
-    await getHubCapabilitiesBle(device);
-    return true;
+    try {
+        await device.gatt.connect().then(gattServer => server = gattServer);
+    }catch (e){
+        MSG.displayInformation({ rc: 'error' }, null, "device busy or wrong firmware version", GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
+        console.log(e);
+        return false;
+    }
+
+    await getHubCapabilitiesBle();
+    return deviceConnected();
 }
 
+export async function disconnectBleDevice() {
+    if(device != null) device.gatt.disconnect();
+    device = null;
+    server = null;
+}
+
+function deviceConnected(){
+    if (device == null || server == null) {
+        return false;
+    }
+
+    return device.gatt.connected;
+}
 /**
  * read and set variables for max program-size and max write-size from brick
- * @param device BLE-Device(SpikePrime Brick)
  */
-const getHubCapabilitiesBle = async (device: BluetoothDevice) => {
+const getHubCapabilitiesBle = async () => {
     let hubCapabilitiesValue: DataView;
-    let server: BluetoothRemoteGATTServer;
     let service: BluetoothRemoteGATTService;
     let characteristic: BluetoothRemoteGATTCharacteristic;
 
-    await device.gatt?.connect().then(async value => {
-        server = value;
-        await server.getPrimaryService(SERVICE_UUIDS.PYBRICKS_SERVICE_UUID).then(async value => {
-            service = value;
-            await service.getCharacteristic(SERVICE_UUIDS.PYBRICKS_HUB_CAPABILITIES_CHARACTERISTIC_UUID).then(async value => {
-                characteristic = value;
-                hubCapabilitiesValue = await characteristic.readValue();
-                maxWriteSize = hubCapabilitiesValue.getUint16(0, true);
-                maxProgramSize = hubCapabilitiesValue.getUint32(6, true);
-            }).catch(
-                reason => console.log(reason)
-            );
+    await server.getPrimaryService(SERVICE_UUIDS.PYBRICKS_SERVICE_UUID).then(async value => {
+        service = value;
+        await service.getCharacteristic(SERVICE_UUIDS.PYBRICKS_HUB_CAPABILITIES_CHARACTERISTIC_UUID).then(async value => {
+            characteristic = value;
+            hubCapabilitiesValue = await characteristic.readValue();
+            maxWriteSize = hubCapabilitiesValue.getUint16(0, true);
+            maxProgramSize = hubCapabilitiesValue.getUint32(6, true);
         }).catch(
             reason => console.log(reason)
         );
@@ -85,38 +108,22 @@ const getHubCapabilitiesBle = async (device: BluetoothDevice) => {
 };
 
 /**
- * transfer program, checks for already open gatt connection
- * @param programString generated program string representation
- */
-export const downloadProgram = async (programString: string) => {
-    if ((device === null || !device.gatt.connected)) {
-        if (!await connectBleDevice()) {
-            return;
-        }
-    }
-
-    await downloadUserProgramBle(programString);
-};
-
-/**
  * transfer program over ble, gatt service uses max-write size to cut program into max-sized chunks
  * @param programString generated program string representation (python code)
  */
-const downloadUserProgramBle = async (programString: string) => {
+export const downloadUserProgramBle = async (programString: string) => {
     const program = blobFromProgramArrayString(programString);
     const payloadSize = maxWriteSize - 5;
 
-    //TODO MAKE THIS AN ERROR MESSAGE
     if (program.size > maxProgramSize) {
-        console.log('MAX PROGRAM SIZE REACHED');
-        return;
+        MSG.displayInformation({ rc: 'error' }, null, "max-program-size reached", GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
+        return false;
     }
 
-    await writeGatt(device, SERVICE_UUIDS.PYBRICKS_COMMAND_EVENT_UUID, new Uint8Array([COMMANDS.STOP_USER_PROGRAM]));
+    await writeGatt(SERVICE_UUIDS.PYBRICKS_COMMAND_EVENT_UUID, new Uint8Array([COMMANDS.STOP_USER_PROGRAM]));
 
     //invalidate old program data
     await writeGatt(
-        device,
         SERVICE_UUIDS.PYBRICKS_COMMAND_EVENT_UUID,
         createWriteUserProgramMetaCommand(0)
     );
@@ -133,48 +140,37 @@ const downloadUserProgramBle = async (programString: string) => {
         const data = await program.slice(i, i + chunkSize).arrayBuffer();
 
         await writeGatt(
-            device,
             SERVICE_UUIDS.PYBRICKS_COMMAND_EVENT_UUID,
             createWriteUserRamCommand(i, data)
         );
 
-        //TODO FORWARD THIS TO PROGRESSBAR
-        console.log((i + data.byteLength) / program.size);
+        //WEBUSB.setTransfer((i + data.byteLength) / program.size);
     }
 
     //update program size
     await writeGatt(
-        device,
         SERVICE_UUIDS.PYBRICKS_COMMAND_EVENT_UUID,
         createWriteUserProgramMetaCommand(program.size)
     );
 
-    await writeGatt(device, SERVICE_UUIDS.PYBRICKS_COMMAND_EVENT_UUID, new Uint8Array([COMMANDS.START_USER_PROGRAM]));
+    await writeGatt(SERVICE_UUIDS.PYBRICKS_COMMAND_EVENT_UUID, new Uint8Array([COMMANDS.START_USER_PROGRAM]));
 };
 
 /**
  * connect to gatt service and write data, doesn't check for already occupied service
- * @param device SpikePrime BLE Device
  * @param serviceUuid Service to write to
  * @param dataOrCommand program data or command, wrap command into buffer source (preferably Uint8Array)
  */
-const writeGatt = async (device: BluetoothDevice, serviceUuid: SERVICE_UUIDS, dataOrCommand: BufferSource) => {
-
-    let server: BluetoothRemoteGATTServer;
+const writeGatt = async (serviceUuid: SERVICE_UUIDS, dataOrCommand: BufferSource) => {
     let service: BluetoothRemoteGATTService;
     let characteristic: BluetoothRemoteGATTCharacteristic;
 
     //open gatt connection and write to selected service
-    await device.gatt?.connect().then(async value => {
-        server = value;
-        await server.getPrimaryService(SERVICE_UUIDS.PYBRICKS_SERVICE_UUID).then(async value => {
-            service = value;
-            await service.getCharacteristic(serviceUuid).then(async value => {
-                characteristic = value;
-                await characteristic.writeValueWithResponse(dataOrCommand);
-            }).catch(
-                reason => console.log(reason)
-            );
+    await server.getPrimaryService(SERVICE_UUIDS.PYBRICKS_SERVICE_UUID).then(async value => {
+        service = value;
+        await service.getCharacteristic(serviceUuid).then(async value => {
+            characteristic = value;
+            await characteristic.writeValueWithResponse(dataOrCommand);
         }).catch(
             reason => console.log(reason)
         );
