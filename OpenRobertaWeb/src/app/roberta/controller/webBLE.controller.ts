@@ -1,5 +1,3 @@
-import * as MSG from 'message';
-import * as GUISTATE_C from 'guiState.controller';
 import * as WEBUSB from 'webUsb.controller';
 
 /**
@@ -30,6 +28,24 @@ enum COMMANDS {
     WRITE_STDIN = 6
 }
 
+class bleError {
+    private readonly error : Error;
+    private readonly bleErrorMessage : string = "";
+
+    constructor(error: Error, bleErrorMessage: string) {
+        this.error = error;
+        this.bleErrorMessage = bleErrorMessage;
+    }
+
+    public getError() { return this.error }
+    public getBleErrorMessage() { return this.bleErrorMessage }
+
+    public toString(): string {
+        if ( this.error == null) return "message: " + this.bleErrorMessage;
+        return "message: \n"  + this.bleErrorMessage  + "\nerror: \n" + this.error.message;
+    }
+}
+
 //these are placeholder values and should always be overwritten
 let device: BluetoothDevice = null;
 let server: BluetoothRemoteGATTServer;
@@ -42,7 +58,7 @@ let maxProgramSize = 4096;
  * @return is device now connected, there are no checks for correct firmware version
  */
 export async function connectBleDevice(): Promise<boolean> {
-    if(deviceConnected()) return true;
+    if ( deviceConnected() ) return true;
 
     try{
         device = await navigator.bluetooth.requestDevice(({
@@ -53,21 +69,22 @@ export async function connectBleDevice(): Promise<boolean> {
                 SERVICE_UUIDS.NORDIC_UART_SERVICE_UUID
             ]
         }));
-    }catch (e) {
-        console.log(e);
-        MSG.displayInformation({ rc: 'error' }, null, "no device selected", GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
-        return false;
+    } catch (error) {
+        throw new bleError(error, "no device selected");
     }
 
     try {
         await device.gatt.connect().then(gattServer => server = gattServer);
-    }catch (e){
-        console.log(e);
-        MSG.displayInformation({ rc: 'error' }, null, "device busy or wrong firmware version", GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
-        return false;
+    } catch (error) {
+        throw new bleError(error, "device busy (try to restart the device) or wrong firmware version");
     }
 
-    await getHubCapabilitiesBle();
+    try {
+        await getHubCapabilitiesBle()
+    } catch (error){
+        throw new bleError(error, "unable to get hub capabilities, maybe wrong firmware version\nreason : ");
+    }
+
     return deviceConnected();
 }
 
@@ -87,38 +104,46 @@ function deviceConnected(){
 /**
  * read and set variables for max program-size and max write-size from brick
  */
-const getHubCapabilitiesBle = async () => {
+const getHubCapabilitiesBle = async () : Promise<boolean> => {
     let hubCapabilitiesValue: DataView;
     let service: BluetoothRemoteGATTService;
     let characteristic: BluetoothRemoteGATTCharacteristic;
+    let serviceUuid = SERVICE_UUIDS.PYBRICKS_SERVICE_UUID;
+    let characteristicsUuid = SERVICE_UUIDS.PYBRICKS_HUB_CAPABILITIES_CHARACTERISTIC_UUID;
 
-    await server.getPrimaryService(SERVICE_UUIDS.PYBRICKS_SERVICE_UUID).then(async value => {
+    await server.getPrimaryService(serviceUuid).then(async value => {
         service = value;
-        await service.getCharacteristic(SERVICE_UUIDS.PYBRICKS_HUB_CAPABILITIES_CHARACTERISTIC_UUID).then(async value => {
+        await service.getCharacteristic(characteristicsUuid).then(async value => {
             characteristic = value;
-            hubCapabilitiesValue = await characteristic.readValue();
+            hubCapabilitiesValue = await characteristic.readValue().catch(reason => {
+                    throw new bleError(reason, "unable to read hub capabilities");
+                }
+            );
             maxWriteSize = hubCapabilitiesValue.getUint16(0, true);
             maxProgramSize = hubCapabilitiesValue.getUint32(6, true);
         }).catch(
-            reason => console.log(reason)
-        );
+        reason => {
+            throw new bleError(reason, "unable to get device characteristics at: " + characteristicsUuid);
+        });
     }).catch(
-        reason => console.log(reason)
-    );
+        reason => {
+            throw new bleError(reason, "unable to get primary service at: " + serviceUuid);
+        });
+    return true;
 };
 
 /**
  * transfer program over ble, gatt service uses max-write size to cut program into max-sized chunks
  * @param programString generated program string representation (python code)
  */
-export const downloadUserProgramBle = async (programString: string) : Promise<boolean>  => {
+export const downloadUserProgramBle = async (programString: string)=> {
     const program = blobFromProgramArrayString(programString);
     const payloadSize = maxWriteSize - 5;
 
     if (program.size > maxProgramSize) {
-        MSG.displayInformation({ rc: 'error' }, null, "max-program-size reached", GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
-        return false;
+        throw new bleError(null, "max program size reached");
     }
+
     try {
         await writeGatt(SERVICE_UUIDS.PYBRICKS_COMMAND_EVENT_UUID, new Uint8Array([COMMANDS.STOP_USER_PROGRAM]));
 
@@ -143,7 +168,7 @@ export const downloadUserProgramBle = async (programString: string) : Promise<bo
                 SERVICE_UUIDS.PYBRICKS_COMMAND_EVENT_UUID,
                 createWriteUserRamCommand(i, data)
             );
-
+            //TODO add status bar
             //WEBUSB.setTransfer((i + data.byteLength) / program.size);
         }
 
@@ -154,34 +179,37 @@ export const downloadUserProgramBle = async (programString: string) : Promise<bo
         );
 
         await writeGatt(SERVICE_UUIDS.PYBRICKS_COMMAND_EVENT_UUID, new Uint8Array([COMMANDS.START_USER_PROGRAM]));
-    }catch (e){
-        console.log(e);
-        MSG.displayInformation({ rc: 'error' }, null, "ble communication error", GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
-        return false;
+    }catch (error){
+        throw new bleError(error,"ble communication error" );
     }
-    return true;
 };
 
 /**
  * connect to gatt service and write data, doesn't check for already occupied service
- * @param serviceUuid Service to write to
+ * @param characteristicUuid Service to write to
  * @param dataOrCommand program data or command, wrap command into buffer source (preferably Uint8Array)
  */
-const writeGatt = async (serviceUuid: SERVICE_UUIDS, dataOrCommand: BufferSource) => {
+const writeGatt = async (characteristicUuid: SERVICE_UUIDS, dataOrCommand: BufferSource) => {
     let service: BluetoothRemoteGATTService;
     let characteristic: BluetoothRemoteGATTCharacteristic;
+    let serviceUuid = SERVICE_UUIDS.PYBRICKS_SERVICE_UUID;
 
-    //open gatt connection and write to selected service
-    await server.getPrimaryService(SERVICE_UUIDS.PYBRICKS_SERVICE_UUID).then(async value => {
+    await server.getPrimaryService(serviceUuid).then(async value => {
         service = value;
-        await service.getCharacteristic(serviceUuid).then(async value => {
+        await service.getCharacteristic(characteristicUuid).then(async value => {
             characteristic = value;
-            await characteristic.writeValueWithResponse(dataOrCommand);
+            await characteristic.writeValueWithResponse(dataOrCommand).catch(reason => {
+                throw new bleError(reason, "unable to write command/data");
+            });
         }).catch(
-            reason => console.log(reason)
+            reason => {
+                throw new bleError(reason, "unable to get device characteristics at: " + characteristicUuid);
+            }
         );
     }).catch(
-        reason => console.log(reason)
+        reason => {
+            throw new bleError(reason, "unable to get primary service at: " + serviceUuid);
+        }
     );
 };
 

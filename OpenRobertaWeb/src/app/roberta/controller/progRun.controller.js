@@ -14,6 +14,7 @@ import * as WEBUSB_C from 'webUsb.controller';
 import * as WEBBLE from 'webBLE.controller';
 import { result } from 'lodash.isequal';
 import { downloadProgram } from 'webBLE.controller';
+import { error } from 'log';
 
 var blocklyWorkspace;
 var interpreter;
@@ -207,13 +208,22 @@ function getConnectionTypeCallback() {
     };
 }
 
-function runForPybricksBle(result){
+function runForPybricksBle(result) {
     GUISTATE_C.setState(result);
-    WEBBLE.connectBleDevice().then(connected =>{
-        if (connected){
-            WEBBLE.downloadUserProgramBle(result.compiledCode);
-        }
-    });
+
+    if (result.rc == 'ok') {
+        WEBBLE.connectBleDevice().then(() => {
+            WEBBLE.downloadUserProgramBle(result.compiledCode).catch( e => {
+                MSG.displayInformation({ rc: 'error' }, null, e.toString() , GUISTATE_C.getProgramName(), GUISTATE_C.getRobot())
+            })
+        }).catch( e =>  {
+            MSG.displayInformation({ rc: 'error' }, null, e.toString() , GUISTATE_C.getProgramName(), GUISTATE_C.getRobot())
+        });
+
+    }else{
+        MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
+    }
+
     GUISTATE_C.setConnectionState('wait');
 }
 

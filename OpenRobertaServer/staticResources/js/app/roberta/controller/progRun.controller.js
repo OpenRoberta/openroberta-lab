@@ -172,11 +172,18 @@ define(["require", "exports", "util.roberta", "log", "message", "program.control
     }
     function runForPybricksBle(result) {
         GUISTATE_C.setState(result);
-        WEBBLE.connectBleDevice().then(function (connected) {
-            if (connected) {
-                WEBBLE.downloadUserProgramBle(result.compiledCode);
-            }
-        });
+        if (result.rc == 'ok') {
+            WEBBLE.connectBleDevice().then(function () {
+                WEBBLE.downloadUserProgramBle(result.compiledCode).catch(function (e) {
+                    MSG.displayInformation({ rc: 'error' }, null, e.toString(), GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
+                });
+            }).catch(function (e) {
+                MSG.displayInformation({ rc: 'error' }, null, e.toString(), GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
+            });
+        }
+        else {
+            MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
+        }
         GUISTATE_C.setConnectionState('wait');
     }
     function runForAutoConnection(result) {

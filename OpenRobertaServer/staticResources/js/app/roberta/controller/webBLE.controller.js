@@ -34,7 +34,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-define(["require", "exports", "message", "guiState.controller"], function (require, exports, MSG, GUISTATE_C) {
+define(["require", "exports"], function (require, exports) {
     var _this = this;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.downloadUserProgramBle = exports.disconnectBleDevice = exports.connectBleDevice = void 0;
@@ -66,6 +66,21 @@ define(["require", "exports", "message", "guiState.controller"], function (requi
         COMMANDS[COMMANDS["PBIO_PYBRICKS_COMMAND_REBOOT_TO_UPDATE_MODE"] = 5] = "PBIO_PYBRICKS_COMMAND_REBOOT_TO_UPDATE_MODE";
         COMMANDS[COMMANDS["WRITE_STDIN"] = 6] = "WRITE_STDIN";
     })(COMMANDS || (COMMANDS = {}));
+    var bleError = /** @class */ (function () {
+        function bleError(error, bleErrorMessage) {
+            this.bleErrorMessage = "";
+            this.error = error;
+            this.bleErrorMessage = bleErrorMessage;
+        }
+        bleError.prototype.getError = function () { return this.error; };
+        bleError.prototype.getBleErrorMessage = function () { return this.bleErrorMessage; };
+        bleError.prototype.toString = function () {
+            if (this.error == null)
+                return "message: " + this.bleErrorMessage;
+            return "message: \n" + this.bleErrorMessage + "\nerror: \n" + this.error.message;
+        };
+        return bleError;
+    }());
     //these are placeholder values and should always be overwritten
     var device = null;
     var server;
@@ -78,7 +93,7 @@ define(["require", "exports", "message", "guiState.controller"], function (requi
      */
     function connectBleDevice() {
         return __awaiter(this, void 0, void 0, function () {
-            var e_1, e_2;
+            var error_1, error_2, error_3;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -99,10 +114,8 @@ define(["require", "exports", "message", "guiState.controller"], function (requi
                         device = _a.sent();
                         return [3 /*break*/, 4];
                     case 3:
-                        e_1 = _a.sent();
-                        console.log(e_1);
-                        MSG.displayInformation({ rc: 'error' }, null, "no device selected", GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
-                        return [2 /*return*/, false];
+                        error_1 = _a.sent();
+                        throw new bleError(error_1, "no device selected");
                     case 4:
                         _a.trys.push([4, 6, , 7]);
                         return [4 /*yield*/, device.gatt.connect().then(function (gattServer) { return server = gattServer; })];
@@ -110,14 +123,18 @@ define(["require", "exports", "message", "guiState.controller"], function (requi
                         _a.sent();
                         return [3 /*break*/, 7];
                     case 6:
-                        e_2 = _a.sent();
-                        console.log(e_2);
-                        MSG.displayInformation({ rc: 'error' }, null, "device busy or wrong firmware version", GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
-                        return [2 /*return*/, false];
-                    case 7: return [4 /*yield*/, getHubCapabilitiesBle()];
+                        error_2 = _a.sent();
+                        throw new bleError(error_2, "device busy (try to restart the device) or wrong firmware version");
+                    case 7:
+                        _a.trys.push([7, 9, , 10]);
+                        return [4 /*yield*/, getHubCapabilitiesBle()];
                     case 8:
                         _a.sent();
-                        return [2 /*return*/, deviceConnected()];
+                        return [3 /*break*/, 10];
+                    case 9:
+                        error_3 = _a.sent();
+                        throw new bleError(error_3, "unable to get hub capabilities, maybe wrong firmware version\nreason : ");
+                    case 10: return [2 /*return*/, deviceConnected()];
                 }
             });
         });
@@ -145,39 +162,48 @@ define(["require", "exports", "message", "guiState.controller"], function (requi
      * read and set variables for max program-size and max write-size from brick
      */
     var getHubCapabilitiesBle = function () { return __awaiter(_this, void 0, void 0, function () {
-        var hubCapabilitiesValue, service, characteristic;
+        var hubCapabilitiesValue, service, characteristic, serviceUuid, characteristicsUuid;
         var _this = this;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, server.getPrimaryService(SERVICE_UUIDS.PYBRICKS_SERVICE_UUID).then(function (value) { return __awaiter(_this, void 0, void 0, function () {
-                        var _this = this;
-                        return __generator(this, function (_a) {
-                            switch (_a.label) {
-                                case 0:
-                                    service = value;
-                                    return [4 /*yield*/, service.getCharacteristic(SERVICE_UUIDS.PYBRICKS_HUB_CAPABILITIES_CHARACTERISTIC_UUID).then(function (value) { return __awaiter(_this, void 0, void 0, function () {
-                                            return __generator(this, function (_a) {
-                                                switch (_a.label) {
-                                                    case 0:
-                                                        characteristic = value;
-                                                        return [4 /*yield*/, characteristic.readValue()];
-                                                    case 1:
-                                                        hubCapabilitiesValue = _a.sent();
-                                                        maxWriteSize = hubCapabilitiesValue.getUint16(0, true);
-                                                        maxProgramSize = hubCapabilitiesValue.getUint32(6, true);
-                                                        return [2 /*return*/];
-                                                }
-                                            });
-                                        }); }).catch(function (reason) { return console.log(reason); })];
-                                case 1:
-                                    _a.sent();
-                                    return [2 /*return*/];
-                            }
-                        });
-                    }); }).catch(function (reason) { return console.log(reason); })];
+                case 0:
+                    serviceUuid = SERVICE_UUIDS.PYBRICKS_SERVICE_UUID;
+                    characteristicsUuid = SERVICE_UUIDS.PYBRICKS_HUB_CAPABILITIES_CHARACTERISTIC_UUID;
+                    return [4 /*yield*/, server.getPrimaryService(serviceUuid).then(function (value) { return __awaiter(_this, void 0, void 0, function () {
+                            var _this = this;
+                            return __generator(this, function (_a) {
+                                switch (_a.label) {
+                                    case 0:
+                                        service = value;
+                                        return [4 /*yield*/, service.getCharacteristic(characteristicsUuid).then(function (value) { return __awaiter(_this, void 0, void 0, function () {
+                                                return __generator(this, function (_a) {
+                                                    switch (_a.label) {
+                                                        case 0:
+                                                            characteristic = value;
+                                                            return [4 /*yield*/, characteristic.readValue().catch(function (reason) {
+                                                                    throw new bleError(reason, "unable to read hub capabilities");
+                                                                })];
+                                                        case 1:
+                                                            hubCapabilitiesValue = _a.sent();
+                                                            maxWriteSize = hubCapabilitiesValue.getUint16(0, true);
+                                                            maxProgramSize = hubCapabilitiesValue.getUint32(6, true);
+                                                            return [2 /*return*/];
+                                                    }
+                                                });
+                                            }); }).catch(function (reason) {
+                                                throw new bleError(reason, "unable to get device characteristics at: " + characteristicsUuid);
+                                            })];
+                                    case 1:
+                                        _a.sent();
+                                        return [2 /*return*/];
+                                }
+                            });
+                        }); }).catch(function (reason) {
+                            throw new bleError(reason, "unable to get primary service at: " + serviceUuid);
+                        })];
                 case 1:
                     _a.sent();
-                    return [2 /*return*/];
+                    return [2 /*return*/, true];
             }
         });
     }); };
@@ -186,15 +212,14 @@ define(["require", "exports", "message", "guiState.controller"], function (requi
      * @param programString generated program string representation (python code)
      */
     var downloadUserProgramBle = function (programString) { return __awaiter(_this, void 0, void 0, function () {
-        var program, payloadSize, chunkSize, i, data, e_3;
+        var program, payloadSize, chunkSize, i, data, error_4;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     program = blobFromProgramArrayString(programString);
                     payloadSize = maxWriteSize - 5;
                     if (program.size > maxProgramSize) {
-                        MSG.displayInformation({ rc: 'error' }, null, "max-program-size reached", GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
-                        return [2 /*return*/, false];
+                        throw new bleError(null, "max program size reached");
                     }
                     _a.label = 1;
                 case 1:
@@ -239,53 +264,56 @@ define(["require", "exports", "message", "guiState.controller"], function (requi
                     _a.sent();
                     return [3 /*break*/, 12];
                 case 11:
-                    e_3 = _a.sent();
-                    console.log(e_3);
-                    MSG.displayInformation({ rc: 'error' }, null, "ble communication error", GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
-                    return [2 /*return*/, false];
-                case 12: return [2 /*return*/, true];
+                    error_4 = _a.sent();
+                    throw new bleError(error_4, "ble communication error");
+                case 12: return [2 /*return*/];
             }
         });
     }); };
     exports.downloadUserProgramBle = downloadUserProgramBle;
     /**
      * connect to gatt service and write data, doesn't check for already occupied service
-     * @param serviceUuid Service to write to
+     * @param characteristicUuid Service to write to
      * @param dataOrCommand program data or command, wrap command into buffer source (preferably Uint8Array)
      */
-    var writeGatt = function (serviceUuid, dataOrCommand) { return __awaiter(_this, void 0, void 0, function () {
-        var service, characteristic;
+    var writeGatt = function (characteristicUuid, dataOrCommand) { return __awaiter(_this, void 0, void 0, function () {
+        var service, characteristic, serviceUuid;
         var _this = this;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: 
-                //open gatt connection and write to selected service
-                return [4 /*yield*/, server.getPrimaryService(SERVICE_UUIDS.PYBRICKS_SERVICE_UUID).then(function (value) { return __awaiter(_this, void 0, void 0, function () {
-                        var _this = this;
-                        return __generator(this, function (_a) {
-                            switch (_a.label) {
-                                case 0:
-                                    service = value;
-                                    return [4 /*yield*/, service.getCharacteristic(serviceUuid).then(function (value) { return __awaiter(_this, void 0, void 0, function () {
-                                            return __generator(this, function (_a) {
-                                                switch (_a.label) {
-                                                    case 0:
-                                                        characteristic = value;
-                                                        return [4 /*yield*/, characteristic.writeValueWithResponse(dataOrCommand)];
-                                                    case 1:
-                                                        _a.sent();
-                                                        return [2 /*return*/];
-                                                }
-                                            });
-                                        }); }).catch(function (reason) { return console.log(reason); })];
-                                case 1:
-                                    _a.sent();
-                                    return [2 /*return*/];
-                            }
-                        });
-                    }); }).catch(function (reason) { return console.log(reason); })];
+                case 0:
+                    serviceUuid = SERVICE_UUIDS.PYBRICKS_SERVICE_UUID;
+                    return [4 /*yield*/, server.getPrimaryService(serviceUuid).then(function (value) { return __awaiter(_this, void 0, void 0, function () {
+                            var _this = this;
+                            return __generator(this, function (_a) {
+                                switch (_a.label) {
+                                    case 0:
+                                        service = value;
+                                        return [4 /*yield*/, service.getCharacteristic(characteristicUuid).then(function (value) { return __awaiter(_this, void 0, void 0, function () {
+                                                return __generator(this, function (_a) {
+                                                    switch (_a.label) {
+                                                        case 0:
+                                                            characteristic = value;
+                                                            return [4 /*yield*/, characteristic.writeValueWithResponse(dataOrCommand).catch(function (reason) {
+                                                                    throw new bleError(reason, "unable to write command/data");
+                                                                })];
+                                                        case 1:
+                                                            _a.sent();
+                                                            return [2 /*return*/];
+                                                    }
+                                                });
+                                            }); }).catch(function (reason) {
+                                                throw new bleError(reason, "unable to get device characteristics at: " + characteristicUuid);
+                                            })];
+                                    case 1:
+                                        _a.sent();
+                                        return [2 /*return*/];
+                                }
+                            });
+                        }); }).catch(function (reason) {
+                            throw new bleError(reason, "unable to get primary service at: " + serviceUuid);
+                        })];
                 case 1:
-                    //open gatt connection and write to selected service
                     _a.sent();
                     return [2 /*return*/];
             }
