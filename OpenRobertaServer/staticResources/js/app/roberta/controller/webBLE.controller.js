@@ -210,6 +210,7 @@ define(["require", "exports"], function (require, exports) {
     /**
      * transfer program over ble, gatt service uses max-write size to cut program into max-sized chunks
      * @param programString generated program string representation (python code)
+     * @param progessBarFunction either null/left empty or function with one argument (float 0 - 1.0 as progress in percent)
      */
     var downloadUserProgramBle = function (programString, progressBarFunction) { return __awaiter(_this, void 0, void 0, function () {
         var program, payloadSize, chunkSize, i, data, error_4;
