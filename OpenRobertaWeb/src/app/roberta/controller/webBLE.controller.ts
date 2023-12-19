@@ -171,7 +171,7 @@ export const downloadUserProgramBle = async (programString: string, progressBarF
             );
 
             if(progressBarFunction != null){
-                progressBarFunction((i + data.byteLength) / program.size);
+                progressBarFunction((i + data.byteLength) / program.size );
             }
         }
 

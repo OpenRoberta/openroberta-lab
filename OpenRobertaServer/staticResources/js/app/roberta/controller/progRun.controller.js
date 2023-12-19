@@ -174,11 +174,20 @@ define(["require", "exports", "util.roberta", "log", "message", "program.control
         GUISTATE_C.setState(result);
         if (result.rc == 'ok') {
             WEBBLE.connectBleDevice().then(function () {
-                //TODO progess function magic here
-                var progess = function (n) {
-                    console.log(n);
-                };
-                WEBBLE.downloadUserProgramBle(result.compiledCode, progess).catch(function (e) {
+                //TODO MOVE THIS AND WEBUSB_C.setTransfer into shared class
+                var textH = $('#popupDownloadHeader').text();
+                $('#popupDownloadHeader').text(textH.replace('$', $.trim(GUISTATE_C.getRobotRealName())));
+                $('#downloadType').addClass('hidden');
+                $('#status').removeClass('hidden');
+                $('#programHint').addClass('hidden');
+                $('#changedDownloadFolder').addClass('hidden');
+                $('#OKButtonModalFooter').addClass('hidden');
+                $('#save-client-compiled-program').modal('show');
+                WEBBLE.downloadUserProgramBle(result.compiledCode, WEBUSB_C.setTransfer).then(function () {
+                    setTimeout(function () {
+                        $('#save-client-compiled-program').modal('hide');
+                    }, 500);
+                }).catch(function (e) {
                     MSG.displayInformation({ rc: 'error' }, null, e.toString(), GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
                 });
             }).catch(function (e) {

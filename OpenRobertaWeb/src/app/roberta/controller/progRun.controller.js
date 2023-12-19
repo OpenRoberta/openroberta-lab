@@ -213,11 +213,22 @@ function runForPybricksBle(result) {
 
     if (result.rc == 'ok') {
         WEBBLE.connectBleDevice().then(() => {
-            //TODO progess function magic here
-            let progess = (n) => {
-                console.log(n);
-            };
-            WEBBLE.downloadUserProgramBle(result.compiledCode , progess).catch( e => {
+
+            //TODO MOVE THIS AND WEBUSB_C.setTransfer into shared class
+            var textH = $('#popupDownloadHeader').text();
+            $('#popupDownloadHeader').text(textH.replace('$', $.trim(GUISTATE_C.getRobotRealName())));
+            $('#downloadType').addClass('hidden');
+            $('#status').removeClass('hidden');
+            $('#programHint').addClass('hidden');
+            $('#changedDownloadFolder').addClass('hidden');
+            $('#OKButtonModalFooter').addClass('hidden');
+            $('#save-client-compiled-program').modal('show');
+
+            WEBBLE.downloadUserProgramBle(result.compiledCode , WEBUSB_C.setTransfer).then(() => {
+                setTimeout( () => {
+                    $('#save-client-compiled-program').modal('hide');
+                }, 500);
+            }).catch( e => {
                 MSG.displayInformation({ rc: 'error' }, null, e.toString() , GUISTATE_C.getProgramName(), GUISTATE_C.getRobot())
             })
         }).catch( e =>  {
