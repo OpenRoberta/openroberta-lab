@@ -213,7 +213,11 @@ function runForPybricksBle(result) {
 
     if (result.rc == 'ok') {
         WEBBLE.connectBleDevice().then(() => {
-            WEBBLE.downloadUserProgramBle(result.compiledCode).catch( e => {
+            //TODO progess function magic here
+            let progess = (n) => {
+                console.log(n);
+            };
+            WEBBLE.downloadUserProgramBle(result.compiledCode , progess).catch( e => {
                 MSG.displayInformation({ rc: 'error' }, null, e.toString() , GUISTATE_C.getProgramName(), GUISTATE_C.getRobot())
             })
         }).catch( e =>  {

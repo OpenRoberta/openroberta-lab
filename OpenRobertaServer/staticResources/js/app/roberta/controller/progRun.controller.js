@@ -174,7 +174,11 @@ define(["require", "exports", "util.roberta", "log", "message", "program.control
         GUISTATE_C.setState(result);
         if (result.rc == 'ok') {
             WEBBLE.connectBleDevice().then(function () {
-                WEBBLE.downloadUserProgramBle(result.compiledCode).catch(function (e) {
+                //TODO progess function magic here
+                var progess = function (n) {
+                    console.log(n);
+                };
+                WEBBLE.downloadUserProgramBle(result.compiledCode, progess).catch(function (e) {
                     MSG.displayInformation({ rc: 'error' }, null, e.toString(), GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
                 });
             }).catch(function (e) {

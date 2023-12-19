@@ -211,7 +211,7 @@ define(["require", "exports"], function (require, exports) {
      * transfer program over ble, gatt service uses max-write size to cut program into max-sized chunks
      * @param programString generated program string representation (python code)
      */
-    var downloadUserProgramBle = function (programString) { return __awaiter(_this, void 0, void 0, function () {
+    var downloadUserProgramBle = function (programString, progressBarFunction) { return __awaiter(_this, void 0, void 0, function () {
         var program, payloadSize, chunkSize, i, data, error_4;
         return __generator(this, function (_a) {
             switch (_a.label) {
@@ -249,6 +249,9 @@ define(["require", "exports"], function (require, exports) {
                     return [4 /*yield*/, writeGatt(SERVICE_UUIDS.PYBRICKS_COMMAND_EVENT_UUID, createWriteUserRamCommand(i, data))];
                 case 6:
                     _a.sent();
+                    if (progressBarFunction != null) {
+                        progressBarFunction((i + data.byteLength) / program.size);
+                    }
                     _a.label = 7;
                 case 7:
                     i += chunkSize;

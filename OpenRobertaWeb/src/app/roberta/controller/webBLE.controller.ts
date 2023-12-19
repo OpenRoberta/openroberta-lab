@@ -136,7 +136,7 @@ const getHubCapabilitiesBle = async () : Promise<boolean> => {
  * transfer program over ble, gatt service uses max-write size to cut program into max-sized chunks
  * @param programString generated program string representation (python code)
  */
-export const downloadUserProgramBle = async (programString: string)=> {
+export const downloadUserProgramBle = async (programString: string, progressBarFunction: null | Function)=> {
     const program = blobFromProgramArrayString(programString);
     const payloadSize = maxWriteSize - 5;
 
@@ -168,8 +168,10 @@ export const downloadUserProgramBle = async (programString: string)=> {
                 SERVICE_UUIDS.PYBRICKS_COMMAND_EVENT_UUID,
                 createWriteUserRamCommand(i, data)
             );
-            //TODO add status bar
-            //WEBUSB.setTransfer((i + data.byteLength) / program.size);
+
+            if(progressBarFunction != null){
+                progressBarFunction((i + data.byteLength) / program.size);
+            }
         }
 
         //update program size
