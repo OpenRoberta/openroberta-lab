@@ -82,7 +82,7 @@ export async function connectBleDevice(): Promise<boolean> {
     try {
         await getHubCapabilitiesBle()
     } catch (error){
-        throw new bleError(error, "unable to get hub capabilities, maybe wrong firmware version\nreason : ");
+        throw new bleError(error, "unable to get hub capabilities, maybe wrong firmware version");
     }
 
     return deviceConnected();
