@@ -62,8 +62,8 @@ export async function connectBleDevice(): Promise<boolean> {
     try {
         await device.gatt.connect().then(gattServer => server = gattServer);
     }catch (e){
-        MSG.displayInformation({ rc: 'error' }, null, "device busy or wrong firmware version", GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
         console.log(e);
+        MSG.displayInformation({ rc: 'error' }, null, "device busy or wrong firmware version", GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
         return false;
     }
 
@@ -111,7 +111,7 @@ const getHubCapabilitiesBle = async () => {
  * transfer program over ble, gatt service uses max-write size to cut program into max-sized chunks
  * @param programString generated program string representation (python code)
  */
-export const downloadUserProgramBle = async (programString: string) => {
+export const downloadUserProgramBle = async (programString: string) : Promise<boolean>  => {
     const program = blobFromProgramArrayString(programString);
     const payloadSize = maxWriteSize - 5;
 
@@ -119,41 +119,47 @@ export const downloadUserProgramBle = async (programString: string) => {
         MSG.displayInformation({ rc: 'error' }, null, "max-program-size reached", GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
         return false;
     }
+    try {
+        await writeGatt(SERVICE_UUIDS.PYBRICKS_COMMAND_EVENT_UUID, new Uint8Array([COMMANDS.STOP_USER_PROGRAM]));
 
-    await writeGatt(SERVICE_UUIDS.PYBRICKS_COMMAND_EVENT_UUID, new Uint8Array([COMMANDS.STOP_USER_PROGRAM]));
-
-    //invalidate old program data
-    await writeGatt(
-        SERVICE_UUIDS.PYBRICKS_COMMAND_EVENT_UUID,
-        createWriteUserProgramMetaCommand(0)
-    );
-
-    //send program chunks to brick
-    let chunkSize: number;
-    if (program.size > payloadSize) {
-        chunkSize = payloadSize;
-    } else {
-        chunkSize = program.size;
-    }
-
-    for (let i = 0; i < program.size; i += chunkSize) {
-        const data = await program.slice(i, i + chunkSize).arrayBuffer();
-
+        //invalidate old program data
         await writeGatt(
             SERVICE_UUIDS.PYBRICKS_COMMAND_EVENT_UUID,
-            createWriteUserRamCommand(i, data)
+            createWriteUserProgramMetaCommand(0)
         );
 
-        //WEBUSB.setTransfer((i + data.byteLength) / program.size);
+        //send program chunks to brick
+        let chunkSize: number;
+        if (program.size > payloadSize) {
+            chunkSize = payloadSize;
+        } else {
+            chunkSize = program.size;
+        }
+
+        for (let i = 0; i < program.size; i += chunkSize) {
+            const data = await program.slice(i, i + chunkSize).arrayBuffer();
+
+            await writeGatt(
+                SERVICE_UUIDS.PYBRICKS_COMMAND_EVENT_UUID,
+                createWriteUserRamCommand(i, data)
+            );
+
+            //WEBUSB.setTransfer((i + data.byteLength) / program.size);
+        }
+
+        //update program size
+        await writeGatt(
+            SERVICE_UUIDS.PYBRICKS_COMMAND_EVENT_UUID,
+            createWriteUserProgramMetaCommand(program.size)
+        );
+
+        await writeGatt(SERVICE_UUIDS.PYBRICKS_COMMAND_EVENT_UUID, new Uint8Array([COMMANDS.START_USER_PROGRAM]));
+    }catch (e){
+        console.log(e);
+        MSG.displayInformation({ rc: 'error' }, null, "ble communication error", GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
+        return false;
     }
-
-    //update program size
-    await writeGatt(
-        SERVICE_UUIDS.PYBRICKS_COMMAND_EVENT_UUID,
-        createWriteUserProgramMetaCommand(program.size)
-    );
-
-    await writeGatt(SERVICE_UUIDS.PYBRICKS_COMMAND_EVENT_UUID, new Uint8Array([COMMANDS.START_USER_PROGRAM]));
+    return true;
 };
 
 /**

@@ -111,8 +111,8 @@ define(["require", "exports", "message", "guiState.controller"], function (requi
                         return [3 /*break*/, 7];
                     case 6:
                         e_2 = _a.sent();
-                        MSG.displayInformation({ rc: 'error' }, null, "device busy or wrong firmware version", GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
                         console.log(e_2);
+                        MSG.displayInformation({ rc: 'error' }, null, "device busy or wrong firmware version", GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
                         return [2 /*return*/, false];
                     case 7: return [4 /*yield*/, getHubCapabilitiesBle()];
                     case 8:
@@ -186,7 +186,7 @@ define(["require", "exports", "message", "guiState.controller"], function (requi
      * @param programString generated program string representation (python code)
      */
     var downloadUserProgramBle = function (programString) { return __awaiter(_this, void 0, void 0, function () {
-        var program, payloadSize, chunkSize, i, data;
+        var program, payloadSize, chunkSize, i, data, e_3;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -196,14 +196,18 @@ define(["require", "exports", "message", "guiState.controller"], function (requi
                         MSG.displayInformation({ rc: 'error' }, null, "max-program-size reached", GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
                         return [2 /*return*/, false];
                     }
-                    return [4 /*yield*/, writeGatt(SERVICE_UUIDS.PYBRICKS_COMMAND_EVENT_UUID, new Uint8Array([COMMANDS.STOP_USER_PROGRAM]))];
+                    _a.label = 1;
                 case 1:
+                    _a.trys.push([1, 11, , 12]);
+                    return [4 /*yield*/, writeGatt(SERVICE_UUIDS.PYBRICKS_COMMAND_EVENT_UUID, new Uint8Array([COMMANDS.STOP_USER_PROGRAM]))];
+                case 2:
                     _a.sent();
                     //invalidate old program data
                     return [4 /*yield*/, writeGatt(SERVICE_UUIDS.PYBRICKS_COMMAND_EVENT_UUID, createWriteUserProgramMetaCommand(0))];
-                case 2:
+                case 3:
                     //invalidate old program data
                     _a.sent();
+                    chunkSize = void 0;
                     if (program.size > payloadSize) {
                         chunkSize = payloadSize;
                     }
@@ -211,29 +215,35 @@ define(["require", "exports", "message", "guiState.controller"], function (requi
                         chunkSize = program.size;
                     }
                     i = 0;
-                    _a.label = 3;
-                case 3:
-                    if (!(i < program.size)) return [3 /*break*/, 7];
-                    return [4 /*yield*/, program.slice(i, i + chunkSize).arrayBuffer()];
+                    _a.label = 4;
                 case 4:
+                    if (!(i < program.size)) return [3 /*break*/, 8];
+                    return [4 /*yield*/, program.slice(i, i + chunkSize).arrayBuffer()];
+                case 5:
                     data = _a.sent();
                     return [4 /*yield*/, writeGatt(SERVICE_UUIDS.PYBRICKS_COMMAND_EVENT_UUID, createWriteUserRamCommand(i, data))];
-                case 5:
-                    _a.sent();
-                    _a.label = 6;
                 case 6:
+                    _a.sent();
+                    _a.label = 7;
+                case 7:
                     i += chunkSize;
-                    return [3 /*break*/, 3];
-                case 7: 
+                    return [3 /*break*/, 4];
+                case 8: 
                 //update program size
                 return [4 /*yield*/, writeGatt(SERVICE_UUIDS.PYBRICKS_COMMAND_EVENT_UUID, createWriteUserProgramMetaCommand(program.size))];
-                case 8:
+                case 9:
                     //update program size
                     _a.sent();
                     return [4 /*yield*/, writeGatt(SERVICE_UUIDS.PYBRICKS_COMMAND_EVENT_UUID, new Uint8Array([COMMANDS.START_USER_PROGRAM]))];
-                case 9:
+                case 10:
                     _a.sent();
-                    return [2 /*return*/];
+                    return [3 /*break*/, 12];
+                case 11:
+                    e_3 = _a.sent();
+                    console.log(e_3);
+                    MSG.displayInformation({ rc: 'error' }, null, "ble communication error", GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
+                    return [2 /*return*/, false];
+                case 12: return [2 /*return*/, true];
             }
         });
     }); };
