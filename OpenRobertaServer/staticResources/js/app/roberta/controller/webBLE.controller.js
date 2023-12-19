@@ -76,8 +76,8 @@ define(["require", "exports"], function (require, exports) {
         bleError.prototype.getBleErrorMessage = function () { return this.bleErrorMessage; };
         bleError.prototype.toString = function () {
             if (this.error == null)
-                return "message: " + this.bleErrorMessage;
-            return "message: \n" + this.bleErrorMessage + "\nerror: \n" + this.error.message;
+                return "MESSAGE: " + this.bleErrorMessage;
+            return "MESSAGE : " + this.bleErrorMessage + " ERROR: " + this.error.message;
         };
         return bleError;
     }());
@@ -133,7 +133,7 @@ define(["require", "exports"], function (require, exports) {
                         return [3 /*break*/, 10];
                     case 9:
                         error_3 = _a.sent();
-                        throw new bleError(error_3, "unable to get hub capabilities, maybe wrong firmware version\nreason : ");
+                        throw new bleError(error_3, "unable to get hub capabilities, maybe wrong firmware version");
                     case 10: return [2 /*return*/, deviceConnected()];
                 }
             });

@@ -41,8 +41,8 @@ class bleError {
     public getBleErrorMessage() { return this.bleErrorMessage }
 
     public toString(): string {
-        if ( this.error == null) return "message: " + this.bleErrorMessage;
-        return "message: \n"  + this.bleErrorMessage  + "\nerror: \n" + this.error.message;
+        if ( this.error == null) return "MESSAGE: " + this.bleErrorMessage;
+        return "MESSAGE : "  + this.bleErrorMessage  + " ERROR: " + this.error.message;
     }
 }
 

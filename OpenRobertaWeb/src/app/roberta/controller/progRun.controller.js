@@ -219,8 +219,7 @@ function runForPybricksBle(result) {
         }).catch( e =>  {
             MSG.displayInformation({ rc: 'error' }, null, e.toString() , GUISTATE_C.getProgramName(), GUISTATE_C.getRobot())
         });
-
-    }else{
+    } else {
         MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
     }
 
