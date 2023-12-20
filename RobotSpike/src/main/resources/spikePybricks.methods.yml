@@ -83,8 +83,9 @@ GESTURES:
 
     def is_shaken():
         count_tapped = 0
-        while is_tapped():
-            if is_tapped():
+        tapped = True
+        while tapped := is_tapped():
+            if tapped:
                 count_tapped += 1
                 wait(200)
             if count_tapped >= 3:

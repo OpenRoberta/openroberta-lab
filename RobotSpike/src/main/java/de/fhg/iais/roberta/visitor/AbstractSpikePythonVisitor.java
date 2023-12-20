@@ -70,7 +70,7 @@ protected final void generateProgramSuffix(boolean withWrapping) {
     this.src.add("main()");
 }
     /**
-     * @return command to show sad face
+     * add command to show sad face to code
      */
     protected abstract void addExceptionSadFaceToCode();
 

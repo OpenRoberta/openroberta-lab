@@ -125,5 +125,4 @@ public abstract class AbstractSpikeValidatorAndCollectorWorker extends AbstractV
             project.addToConfAnnotationList(blockId, NepoInfo.error("CONFIGURATION_ERROR_OVERLAPPING_PORTS"));
         }
     }
-
 }
