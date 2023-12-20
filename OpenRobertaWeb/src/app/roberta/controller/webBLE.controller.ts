@@ -143,10 +143,10 @@ const getHubCapabilitiesBle = async () : Promise<boolean> => {
  * @param progressBarFunction either null/left empty or function with one argument (float 0 - 1.0 as progress in percent)
  */
 export const downloadUserProgramBle = async (programString: string, progressBarFunction: (progress: number) => void | null)=> {
-    const program = createBlobFromProgramString(programString);
+    const programBlob = createBlobFromProgramString(programString);
     const payloadSize = maxWriteSize - 5;
 
-    if (program.size > maxProgramSize) {
+    if (programBlob.size > maxProgramSize) {
         throw new bleError(null, "max program size reached");
     }
 
@@ -161,30 +161,30 @@ export const downloadUserProgramBle = async (programString: string, progressBarF
 
         //send program chunks to brick
         let chunkSize: number;
-        if (program.size > payloadSize) {
+        if (programBlob.size > payloadSize) {
             chunkSize = payloadSize;
         } else {
-            chunkSize = program.size;
+            chunkSize = programBlob.size;
         }
 
-        for (let i = 0; i < program.size; i += chunkSize) {
-            const data = await program.slice(i, i + chunkSize).arrayBuffer();
+        for (let i = 0; i < programBlob.size; i += chunkSize) {
+            const dataSlice = await programBlob.slice(i, i + chunkSize).arrayBuffer();
 
             await writeGatt(
                 SERVICE_UUIDS.PYBRICKS_COMMAND_EVENT_UUID,
-                createWriteUserRamCommand(i, data)
+                createWriteUserRamCommand(i, dataSlice)
             );
 
             //progressbar function does not have to be passed
             if(progressBarFunction != null){
-                progressBarFunction((i + data.byteLength) / program.size );
+                progressBarFunction((i + dataSlice.byteLength) / programBlob.size );
             }
         }
 
         //update program size
         await writeGatt(
             SERVICE_UUIDS.PYBRICKS_COMMAND_EVENT_UUID,
-            createWriteUserProgramMetaCommand(program.size)
+            createWriteUserProgramMetaCommand(programBlob.size)
         );
 
         await writeGatt(SERVICE_UUIDS.PYBRICKS_COMMAND_EVENT_UUID, new Uint8Array([COMMANDS.START_USER_PROGRAM]));
@@ -252,18 +252,18 @@ function encodeProgramName(programName: string): Uint8Array {
 function createBlobFromProgramString(programString: string) {
     //prepare stringArray, python adds parenthesis which have to be removed (substring)
     let programStringArray = programString.substring(1, programString.length - 1).split(', ');
-    let microPythonProgram = new Uint8Array(programStringArray.length);
+    let encodedProgram = new Uint8Array(programStringArray.length);
 
     //take python return string and format to Uint8Array
     for (let i = 0; i < programStringArray.length; i++) {
-        microPythonProgram[i] = Number(programStringArray[i]);
+        encodedProgram[i] = Number(programStringArray[i]);
     }
 
     const programParts: BlobPart[] = [];
     // each file is encoded as the size, module name, and mpy binary
-    programParts.push(encodeProgramLength(microPythonProgram.length));
+    programParts.push(encodeProgramLength(encodedProgram.length));
     programParts.push(encodeProgramName('__main__'));
-    programParts.push(microPythonProgram);
+    programParts.push(encodedProgram);
 
     return new Blob(programParts);
 }
