@@ -1,3 +1,18 @@
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        if (typeof b !== "function" && b !== null)
+            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -66,28 +81,26 @@ define(["require", "exports"], function (require, exports) {
         COMMANDS[COMMANDS["PBIO_PYBRICKS_COMMAND_REBOOT_TO_UPDATE_MODE"] = 5] = "PBIO_PYBRICKS_COMMAND_REBOOT_TO_UPDATE_MODE";
         COMMANDS[COMMANDS["WRITE_STDIN"] = 6] = "WRITE_STDIN";
     })(COMMANDS || (COMMANDS = {}));
-    //TODO add errorId or something silimar to display blockly text in alert
+    //TODO add errorId or something silimar to display blockly text in alert, replace with bleError extends error and make error code a field to display appropriate error message
     /**
      * bleError class, contains bluetooth error (might be null)
      * and bleErrorMessage
      */
-    var bleError = /** @class */ (function () {
-        function bleError(error, bleErrorMessage) {
-            this.bleErrorMessage = "";
-            this.error = error;
-            this.bleErrorMessage = bleErrorMessage;
+    var bleError = /** @class */ (function (_super) {
+        __extends(bleError, _super);
+        function bleError(error, bleErrorMessage, blocklyMessageCode) {
+            var _this = _super.call(this, bleErrorMessage + ", " + error.message) || this;
+            _this.blocklyMessageCode = -1;
+            if (typeof blocklyMessageCode === "number") {
+                //TODO use this code to get blockly error message or store blockly error message here
+                _this.blocklyMessageCode = blocklyMessageCode;
+            }
+            return _this;
         }
-        bleError.prototype.getError = function () { return this.error; };
-        bleError.prototype.getBleErrorMessage = function () { return this.bleErrorMessage; };
-        bleError.prototype.toString = function () {
-            if (this.error == null)
-                return "MESSAGE: " + this.bleErrorMessage;
-            return "MESSAGE : " + this.bleErrorMessage + " ERROR: " + this.error;
-        };
         return bleError;
-    }());
+    }(Error));
     //these are placeholder values and should always be overwritten
-    var spikeGattServer = null;
+    var gattServer = null;
     var maxWriteSize = 64;
     var maxProgramSize = 4096;
     /**
@@ -97,13 +110,13 @@ define(["require", "exports"], function (require, exports) {
      */
     function connectBleDevice() {
         return __awaiter(this, void 0, void 0, function () {
-            var spikeBleDevice, error_1, error_2, error_3;
+            var bleDevice, error_1, error_2, error_3;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         if (deviceConnected())
                             return [2 /*return*/, true];
-                        spikeBleDevice = null;
+                        bleDevice = null;
                         _a.label = 1;
                     case 1:
                         _a.trys.push([1, 3, , 4]);
@@ -116,14 +129,14 @@ define(["require", "exports"], function (require, exports) {
                                 ]
                             }))];
                     case 2:
-                        spikeBleDevice = _a.sent();
+                        bleDevice = _a.sent();
                         return [3 /*break*/, 4];
                     case 3:
                         error_1 = _a.sent();
                         throw new bleError(error_1, "no device selected");
                     case 4:
                         _a.trys.push([4, 6, , 7]);
-                        return [4 /*yield*/, spikeBleDevice.gatt.connect().then(function (returnedGattServer) { return spikeGattServer = returnedGattServer; })];
+                        return [4 /*yield*/, bleDevice.gatt.connect().then(function (returnedGattServer) { return gattServer = returnedGattServer; })];
                     case 5:
                         _a.sent();
                         return [3 /*break*/, 7];
@@ -148,55 +161,55 @@ define(["require", "exports"], function (require, exports) {
     function disconnectBleDevice() {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                if (spikeGattServer != null)
-                    spikeGattServer.disconnect();
-                spikeGattServer = null;
+                if (gattServer != null)
+                    gattServer.disconnect();
+                gattServer = null;
                 return [2 /*return*/];
             });
         });
     }
     exports.disconnectBleDevice = disconnectBleDevice;
     function deviceConnected() {
-        if (spikeGattServer == null)
+        if (gattServer == null)
             return false;
-        return spikeGattServer.connected;
+        return gattServer.connected;
     }
     /**
      * read and set variables for max program-size and max write-size from brick
      */
     var getHubCapabilitiesBle = function () { return __awaiter(_this, void 0, void 0, function () {
-        var hubCapabilitiesValue, gattService, gattCharacteristic, serviceUuid, characteristicsUuid;
+        var hubCapabilitiesDataView, gattService, gattCharacteristic, gattServiceUuid, gattCharacteristicUuid;
         var _this = this;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    serviceUuid = SERVICE_UUIDS.PYBRICKS_SERVICE_UUID;
-                    characteristicsUuid = SERVICE_UUIDS.PYBRICKS_HUB_CAPABILITIES_CHARACTERISTIC_UUID;
-                    return [4 /*yield*/, spikeGattServer.getPrimaryService(serviceUuid).then(function (returnedService) { return __awaiter(_this, void 0, void 0, function () {
+                    gattServiceUuid = SERVICE_UUIDS.PYBRICKS_SERVICE_UUID;
+                    gattCharacteristicUuid = SERVICE_UUIDS.PYBRICKS_HUB_CAPABILITIES_CHARACTERISTIC_UUID;
+                    return [4 /*yield*/, gattServer.getPrimaryService(gattServiceUuid).then(function (returnedGattService) { return __awaiter(_this, void 0, void 0, function () {
                             var _this = this;
                             return __generator(this, function (_a) {
                                 switch (_a.label) {
                                     case 0:
-                                        gattService = returnedService;
-                                        return [4 /*yield*/, gattService.getCharacteristic(characteristicsUuid).then(function (returnedCharacteristic) { return __awaiter(_this, void 0, void 0, function () {
+                                        gattService = returnedGattService;
+                                        return [4 /*yield*/, gattService.getCharacteristic(gattCharacteristicUuid).then(function (returnedGattCharacteristic) { return __awaiter(_this, void 0, void 0, function () {
                                                 return __generator(this, function (_a) {
                                                     switch (_a.label) {
                                                         case 0:
-                                                            gattCharacteristic = returnedCharacteristic;
+                                                            gattCharacteristic = returnedGattCharacteristic;
                                                             return [4 /*yield*/, gattCharacteristic.readValue().catch(function (reason) {
                                                                     throw new bleError(reason, "unable to read hub capabilities");
                                                                 })];
                                                         case 1:
-                                                            hubCapabilitiesValue = _a.sent();
-                                                            maxWriteSize = hubCapabilitiesValue.getUint16(0, true);
-                                                            maxProgramSize = hubCapabilitiesValue.getUint32(6, true);
+                                                            hubCapabilitiesDataView = _a.sent();
+                                                            maxWriteSize = hubCapabilitiesDataView.getUint16(0, true);
+                                                            maxProgramSize = hubCapabilitiesDataView.getUint32(6, true);
                                                             return [2 /*return*/];
                                                     }
                                                 });
                                             }); }).catch(function (reason) {
                                                 if (reason instanceof bleError)
                                                     throw reason;
-                                                throw new bleError(reason, "unable to get device characteristics at: " + characteristicsUuid);
+                                                throw new bleError(reason, "unable to get device characteristics at: " + gattCharacteristicUuid);
                                             })];
                                     case 1:
                                         _a.sent();
@@ -206,11 +219,11 @@ define(["require", "exports"], function (require, exports) {
                         }); }).catch(function (reason) {
                             if (reason instanceof bleError)
                                 throw reason;
-                            throw new bleError(reason, "unable to get primary gattService at: " + serviceUuid);
+                            throw new bleError(reason, "unable to get primary gattService at: " + gattServiceUuid);
                         })];
                 case 1:
                     _a.sent();
-                    return [2 /*return*/, true];
+                    return [2 /*return*/];
             }
         });
     }); };
@@ -220,13 +233,13 @@ define(["require", "exports"], function (require, exports) {
      * @param progressBarFunction either null/left empty or function with one argument (float 0 - 1.0 as progress in percent)
      */
     var downloadUserProgramBle = function (programString, progressBarFunction) { return __awaiter(_this, void 0, void 0, function () {
-        var program, payloadSize, chunkSize, i, data, error_4;
+        var programBlob, payloadSize, chunkSize, i, dataSlice, error_4;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    program = createBlobFromProgramArrayString(programString);
+                    programBlob = createBlobFromProgramString(programString);
                     payloadSize = maxWriteSize - 5;
-                    if (program.size > maxProgramSize) {
+                    if (programBlob.size > maxProgramSize) {
                         throw new bleError(null, "max program size reached");
                     }
                     _a.label = 1;
@@ -241,25 +254,25 @@ define(["require", "exports"], function (require, exports) {
                     //invalidate old program data
                     _a.sent();
                     chunkSize = void 0;
-                    if (program.size > payloadSize) {
+                    if (programBlob.size > payloadSize) {
                         chunkSize = payloadSize;
                     }
                     else {
-                        chunkSize = program.size;
+                        chunkSize = programBlob.size;
                     }
                     i = 0;
                     _a.label = 4;
                 case 4:
-                    if (!(i < program.size)) return [3 /*break*/, 8];
-                    return [4 /*yield*/, program.slice(i, i + chunkSize).arrayBuffer()];
+                    if (!(i < programBlob.size)) return [3 /*break*/, 8];
+                    return [4 /*yield*/, programBlob.slice(i, i + chunkSize).arrayBuffer()];
                 case 5:
-                    data = _a.sent();
-                    return [4 /*yield*/, writeGatt(SERVICE_UUIDS.PYBRICKS_COMMAND_EVENT_UUID, createWriteUserRamCommand(i, data))];
+                    dataSlice = _a.sent();
+                    return [4 /*yield*/, writeGatt(SERVICE_UUIDS.PYBRICKS_COMMAND_EVENT_UUID, createWriteUserRamCommand(i, dataSlice))];
                 case 6:
                     _a.sent();
                     //progressbar function does not have to be passed
                     if (progressBarFunction != null) {
-                        progressBarFunction((i + data.byteLength) / program.size);
+                        progressBarFunction((i + dataSlice.byteLength) / programBlob.size);
                     }
                     _a.label = 7;
                 case 7:
@@ -267,7 +280,7 @@ define(["require", "exports"], function (require, exports) {
                     return [3 /*break*/, 4];
                 case 8: 
                 //update program size
-                return [4 /*yield*/, writeGatt(SERVICE_UUIDS.PYBRICKS_COMMAND_EVENT_UUID, createWriteUserProgramMetaCommand(program.size))];
+                return [4 /*yield*/, writeGatt(SERVICE_UUIDS.PYBRICKS_COMMAND_EVENT_UUID, createWriteUserProgramMetaCommand(programBlob.size))];
                 case 9:
                     //update program size
                     _a.sent();
@@ -289,23 +302,23 @@ define(["require", "exports"], function (require, exports) {
      * @param dataOrCommand program data or command, wrap command into buffer source (preferably Uint8Array)
      */
     var writeGatt = function (characteristicUuid, dataOrCommand) { return __awaiter(_this, void 0, void 0, function () {
-        var gattService, gattCharacteristic, serviceUuid;
+        var gattService, gattCharacteristic, gattServiceUuid;
         var _this = this;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    serviceUuid = SERVICE_UUIDS.PYBRICKS_SERVICE_UUID;
-                    return [4 /*yield*/, spikeGattServer.getPrimaryService(serviceUuid).then(function (returnedService) { return __awaiter(_this, void 0, void 0, function () {
+                    gattServiceUuid = SERVICE_UUIDS.PYBRICKS_SERVICE_UUID;
+                    return [4 /*yield*/, gattServer.getPrimaryService(gattServiceUuid).then(function (returnedGattService) { return __awaiter(_this, void 0, void 0, function () {
                             var _this = this;
                             return __generator(this, function (_a) {
                                 switch (_a.label) {
                                     case 0:
-                                        gattService = returnedService;
-                                        return [4 /*yield*/, gattService.getCharacteristic(characteristicUuid).then(function (returnedCharacteristic) { return __awaiter(_this, void 0, void 0, function () {
+                                        gattService = returnedGattService;
+                                        return [4 /*yield*/, gattService.getCharacteristic(characteristicUuid).then(function (returnedGattCharacteristic) { return __awaiter(_this, void 0, void 0, function () {
                                                 return __generator(this, function (_a) {
                                                     switch (_a.label) {
                                                         case 0:
-                                                            gattCharacteristic = returnedCharacteristic;
+                                                            gattCharacteristic = returnedGattCharacteristic;
                                                             return [4 /*yield*/, gattCharacteristic.writeValueWithResponse(dataOrCommand).catch(function (reason) {
                                                                     throw new bleError(reason, "unable to write command/data");
                                                                 })];
@@ -327,7 +340,7 @@ define(["require", "exports"], function (require, exports) {
                         }); }).catch(function (reason) {
                             if (reason instanceof bleError)
                                 throw reason;
-                            throw new bleError(reason, "unable to get primary gattService at: " + serviceUuid);
+                            throw new bleError(reason, "unable to get primary gattService at: " + gattServiceUuid);
                         })];
                 case 1:
                     _a.sent();
@@ -358,19 +371,19 @@ define(["require", "exports"], function (require, exports) {
      * since program has to be packed into blob or a similar data structure
      * @param programString generated program string representation (python code)
      */
-    function createBlobFromProgramArrayString(programString) {
+    function createBlobFromProgramString(programString) {
         //prepare stringArray, python adds parenthesis which have to be removed (substring)
         var programStringArray = programString.substring(1, programString.length - 1).split(', ');
-        var mpy = new Uint8Array(programStringArray.length);
+        var encodedProgram = new Uint8Array(programStringArray.length);
         //take python return string and format to Uint8Array
         for (var i = 0; i < programStringArray.length; i++) {
-            mpy[i] = Number(programStringArray[i]);
+            encodedProgram[i] = Number(programStringArray[i]);
         }
         var programParts = [];
         // each file is encoded as the size, module name, and mpy binary
-        programParts.push(encodeProgramLength(mpy.length));
+        programParts.push(encodeProgramLength(encodedProgram.length));
         programParts.push(encodeProgramName('__main__'));
-        programParts.push(mpy);
+        programParts.push(encodedProgram);
         return new Blob(programParts);
     }
     /**

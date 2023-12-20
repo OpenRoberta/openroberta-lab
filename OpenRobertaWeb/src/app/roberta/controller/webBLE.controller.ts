@@ -1,4 +1,5 @@
 import * as WEBUSB from 'webUsb.controller';
+import { errorNum } from 'comm';
 
 /**
  * Bluetooth-Detection and Bluetooth-gattService UUIIDs associated with Pybricks BLE
@@ -28,31 +29,25 @@ enum COMMANDS {
     WRITE_STDIN = 6
 }
 
-//TODO add errorId or something silimar to display blockly text in alert
+//TODO add errorId or something silimar to display blockly text in alert, replace with bleError extends error and make error code a field to display appropriate error message
 /**
  * bleError class, contains bluetooth error (might be null)
  * and bleErrorMessage
  */
-class bleError {
-    private readonly error : Error | bleError;
-    private readonly bleErrorMessage : string = "";
+class bleError extends Error {
+    blocklyMessageCode : number = -1;
 
-    constructor(error: Error | bleError, bleErrorMessage: string) {
-        this.error = error;
-        this.bleErrorMessage = bleErrorMessage;
-    }
-
-    public getError() { return this.error }
-    public getBleErrorMessage() { return this.bleErrorMessage }
-
-    public toString(): string {
-        if ( this.error == null) return "MESSAGE: " + this.bleErrorMessage;
-        return "MESSAGE : "  + this.bleErrorMessage  + " ERROR: " + this.error;
+    constructor(error: Error | bleError, bleErrorMessage: string, blocklyMessageCode : number | void) {
+        super(bleErrorMessage + ", " + error.message);
+        if (typeof blocklyMessageCode === "number") {
+            //TODO use this code to get blockly error message or store blockly error message here
+            this.blocklyMessageCode = blocklyMessageCode;
+        }
     }
 }
 
 //these are placeholder values and should always be overwritten
-let spikeGattServer: BluetoothRemoteGATTServer = null;
+let gattServer: BluetoothRemoteGATTServer = null;
 let maxWriteSize = 64;
 let maxProgramSize = 4096;
 
@@ -64,10 +59,10 @@ let maxProgramSize = 4096;
 export async function connectBleDevice(): Promise<boolean> {
     if ( deviceConnected() ) return true;
 
-    let spikeBleDevice: BluetoothDevice = null;
+    let bleDevice: BluetoothDevice = null;
 
     try{
-        spikeBleDevice = await navigator.bluetooth.requestDevice(({
+        bleDevice = await navigator.bluetooth.requestDevice(({
             filters: [{ services: [SERVICE_UUIDS.PYBRICKS_SERVICE_UUID] }],
             optionalServices: [
                 SERVICE_UUIDS.PYBRICKS_SERVICE_UUID,
@@ -80,7 +75,7 @@ export async function connectBleDevice(): Promise<boolean> {
     }
 
     try {
-        await spikeBleDevice.gatt.connect().then(returnedGattServer => spikeGattServer = returnedGattServer);
+        await bleDevice.gatt.connect().then(returnedGattServer => gattServer = returnedGattServer);
     } catch (error) {
         throw new bleError(error, "device busy (try to restart the device) or wrong firmware version");
     }
@@ -95,26 +90,26 @@ export async function connectBleDevice(): Promise<boolean> {
 }
 
 export async function disconnectBleDevice() {
-    if(spikeGattServer != null)  spikeGattServer.disconnect();
-    spikeGattServer = null;
+    if(gattServer != null)  gattServer.disconnect();
+    gattServer = null;
 }
 
 function deviceConnected(){
-    if (spikeGattServer == null) return false;
-    return spikeGattServer.connected;
+    if (gattServer == null) return false;
+    return gattServer.connected;
 }
 
 /**
  * read and set variables for max program-size and max write-size from brick
  */
-const getHubCapabilitiesBle = async () : Promise<boolean> => {
+const getHubCapabilitiesBle = async () => {
     let hubCapabilitiesDataView: DataView;
     let gattService: BluetoothRemoteGATTService;
     let gattCharacteristic: BluetoothRemoteGATTCharacteristic;
     let gattServiceUuid = SERVICE_UUIDS.PYBRICKS_SERVICE_UUID;
     let gattCharacteristicUuid = SERVICE_UUIDS.PYBRICKS_HUB_CAPABILITIES_CHARACTERISTIC_UUID;
 
-    await spikeGattServer.getPrimaryService(gattServiceUuid).then(async returnedGattService => {
+    await gattServer.getPrimaryService(gattServiceUuid).then(async returnedGattService => {
         gattService = returnedGattService;
         await gattService.getCharacteristic(gattCharacteristicUuid).then(async returnedGattCharacteristic => {
             gattCharacteristic = returnedGattCharacteristic;
@@ -134,7 +129,6 @@ const getHubCapabilitiesBle = async () : Promise<boolean> => {
             if (reason instanceof bleError) throw reason;
             throw new bleError(reason, "unable to get primary gattService at: " + gattServiceUuid);
         });
-    return true;
 };
 
 /**
@@ -203,7 +197,7 @@ const writeGatt = async (characteristicUuid: SERVICE_UUIDS, dataOrCommand: Buffe
     let gattCharacteristic: BluetoothRemoteGATTCharacteristic;
     let gattServiceUuid = SERVICE_UUIDS.PYBRICKS_SERVICE_UUID;
 
-    await spikeGattServer.getPrimaryService(gattServiceUuid).then(async returnedGattService => {
+    await gattServer.getPrimaryService(gattServiceUuid).then(async returnedGattService => {
         gattService = returnedGattService;
         await gattService.getCharacteristic(characteristicUuid).then(async returnedGattCharacteristic => {
             gattCharacteristic = returnedGattCharacteristic;
