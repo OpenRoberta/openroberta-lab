@@ -77,7 +77,7 @@ define(["require", "exports"], function (require, exports) {
         bleError.prototype.toString = function () {
             if (this.error == null)
                 return "MESSAGE: " + this.bleErrorMessage;
-            return "MESSAGE : " + this.bleErrorMessage + " ERROR: " + this.error.message;
+            return "MESSAGE : " + this.bleErrorMessage + " ERROR: " + this.error;
         };
         return bleError;
     }());
@@ -191,6 +191,8 @@ define(["require", "exports"], function (require, exports) {
                                                     }
                                                 });
                                             }); }).catch(function (reason) {
+                                                if (reason instanceof bleError)
+                                                    throw reason;
                                                 throw new bleError(reason, "unable to get device characteristics at: " + characteristicsUuid);
                                             })];
                                     case 1:
@@ -199,6 +201,8 @@ define(["require", "exports"], function (require, exports) {
                                 }
                             });
                         }); }).catch(function (reason) {
+                            if (reason instanceof bleError)
+                                throw reason;
                             throw new bleError(reason, "unable to get primary service at: " + serviceUuid);
                         })];
                 case 1:
@@ -307,6 +311,8 @@ define(["require", "exports"], function (require, exports) {
                                                     }
                                                 });
                                             }); }).catch(function (reason) {
+                                                if (reason instanceof bleError)
+                                                    throw reason;
                                                 throw new bleError(reason, "unable to get device characteristics at: " + characteristicUuid);
                                             })];
                                     case 1:
@@ -315,6 +321,8 @@ define(["require", "exports"], function (require, exports) {
                                 }
                             });
                         }); }).catch(function (reason) {
+                            if (reason instanceof bleError)
+                                throw reason;
                             throw new bleError(reason, "unable to get primary service at: " + serviceUuid);
                         })];
                 case 1:

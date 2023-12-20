@@ -29,10 +29,10 @@ enum COMMANDS {
 }
 
 class bleError {
-    private readonly error : Error;
+    private readonly error : Error | bleError;
     private readonly bleErrorMessage : string = "";
 
-    constructor(error: Error, bleErrorMessage: string) {
+    constructor(error: Error | bleError, bleErrorMessage: string) {
         this.error = error;
         this.bleErrorMessage = bleErrorMessage;
     }
@@ -42,7 +42,7 @@ class bleError {
 
     public toString(): string {
         if ( this.error == null) return "MESSAGE: " + this.bleErrorMessage;
-        return "MESSAGE : "  + this.bleErrorMessage  + " ERROR: " + this.error.message;
+        return "MESSAGE : "  + this.bleErrorMessage  + " ERROR: " + this.error;
     }
 }
 
@@ -123,10 +123,12 @@ const getHubCapabilitiesBle = async () : Promise<boolean> => {
             maxProgramSize = hubCapabilitiesValue.getUint32(6, true);
         }).catch(
         reason => {
+            if (reason instanceof bleError) throw reason;
             throw new bleError(reason, "unable to get device characteristics at: " + characteristicsUuid);
         });
     }).catch(
         reason => {
+            if (reason instanceof bleError) throw reason;
             throw new bleError(reason, "unable to get primary service at: " + serviceUuid);
         });
     return true;
@@ -206,11 +208,13 @@ const writeGatt = async (characteristicUuid: SERVICE_UUIDS, dataOrCommand: Buffe
             });
         }).catch(
             reason => {
+                if (reason instanceof bleError) throw reason;
                 throw new bleError(reason, "unable to get device characteristics at: " + characteristicUuid);
             }
         );
     }).catch(
         reason => {
+            if (reason instanceof bleError) throw reason;
             throw new bleError(reason, "unable to get primary service at: " + serviceUuid);
         }
     );
