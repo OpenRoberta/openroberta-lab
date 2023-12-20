@@ -28,6 +28,11 @@ enum COMMANDS {
     WRITE_STDIN = 6
 }
 
+//TODO add errorId or something silimar to display blockly text in alert
+/**
+ * bleError class, contains bluetooth error (might be null)
+ * and bleErrorMessage
+ */
 class bleError {
     private readonly error : Error | bleError;
     private readonly bleErrorMessage : string = "";
@@ -48,7 +53,7 @@ class bleError {
 
 //these are placeholder values and should always be overwritten
 let device: BluetoothDevice = null;
-let server: BluetoothRemoteGATTServer;
+let server: BluetoothRemoteGATTServer = null;
 let maxWriteSize = 64;
 let maxProgramSize = 4096;
 
@@ -111,10 +116,10 @@ const getHubCapabilitiesBle = async () : Promise<boolean> => {
     let serviceUuid = SERVICE_UUIDS.PYBRICKS_SERVICE_UUID;
     let characteristicsUuid = SERVICE_UUIDS.PYBRICKS_HUB_CAPABILITIES_CHARACTERISTIC_UUID;
 
-    await server.getPrimaryService(serviceUuid).then(async value => {
-        service = value;
-        await service.getCharacteristic(characteristicsUuid).then(async value => {
-            characteristic = value;
+    await server.getPrimaryService(serviceUuid).then(async returnedService => {
+        service = returnedService;
+        await service.getCharacteristic(characteristicsUuid).then(async returnedCharacteristic => {
+            characteristic = returnedCharacteristic;
             hubCapabilitiesValue = await characteristic.readValue().catch(reason => {
                     throw new bleError(reason, "unable to read hub capabilities");
                 }
@@ -140,7 +145,7 @@ const getHubCapabilitiesBle = async () : Promise<boolean> => {
  * @param progressBarFunction either null/left empty or function with one argument (float 0 - 1.0 as progress in percent)
  */
 export const downloadUserProgramBle = async (programString: string, progressBarFunction: (progress: number) => void | null)=> {
-    const program = blobFromProgramArrayString(programString);
+    const program = createBlobFromProgramArrayString(programString);
     const payloadSize = maxWriteSize - 5;
 
     if (program.size > maxProgramSize) {
@@ -172,6 +177,7 @@ export const downloadUserProgramBle = async (programString: string, progressBarF
                 createWriteUserRamCommand(i, data)
             );
 
+            //progressbar function does not have to be passed
             if(progressBarFunction != null){
                 progressBarFunction((i + data.byteLength) / program.size );
             }
@@ -199,10 +205,10 @@ const writeGatt = async (characteristicUuid: SERVICE_UUIDS, dataOrCommand: Buffe
     let characteristic: BluetoothRemoteGATTCharacteristic;
     let serviceUuid = SERVICE_UUIDS.PYBRICKS_SERVICE_UUID;
 
-    await server.getPrimaryService(serviceUuid).then(async value => {
-        service = value;
-        await service.getCharacteristic(characteristicUuid).then(async value => {
-            characteristic = value;
+    await server.getPrimaryService(serviceUuid).then(async returnedService => {
+        service = returnedService;
+        await service.getCharacteristic(characteristicUuid).then(async returnedCharacteristic => {
+            characteristic = returnedCharacteristic;
             await characteristic.writeValueWithResponse(dataOrCommand).catch(reason => {
                 throw new bleError(reason, "unable to write command/data");
             });
@@ -222,21 +228,22 @@ const writeGatt = async (characteristicUuid: SERVICE_UUIDS, dataOrCommand: Buffe
 
 /**
  * encode unsigned 32bit (4byte) integer as little endian
- * @param value to encode
+ * @param programLength to encode
  */
-function encodeUInt32LE(value: number): ArrayBuffer {
+function encodeProgramLength(programLength: number): ArrayBuffer {
     const buf = new ArrayBuffer(4);
     const view = new DataView(buf);
-    view.setUint32(0, value, true);
+    view.setUint32(0, programLength, true);
     return buf;
 }
 
 /**
- * adds NULL-Terminator to string
- * @param str to terminate
+ * encodes program name and adds NULL-Terminator
+ * @param programName to encode
  */
-function cString(str: string): Uint8Array {
-    return new TextEncoder().encode(str + '\x00');
+function encodeProgramName(programName: string): Uint8Array {
+    // \0x00 indicates program name ends here
+    return new TextEncoder().encode(programName + '\x00');
 }
 
 /**
@@ -244,24 +251,23 @@ function cString(str: string): Uint8Array {
  * since program has to be packed into blob or a similar data structure
  * @param programString generated program string representation (python code)
  */
-function blobFromProgramArrayString(programString: string) {
+function createBlobFromProgramArrayString(programString: string) {
     //prepare stringArray, python adds parenthesis which have to be removed (substring)
-    let stringArray = programString.substring(1, programString.length - 1).split(', ');
-    let mpy = new Uint8Array(stringArray.length);
+    let programStringArray = programString.substring(1, programString.length - 1).split(', ');
+    let mpy = new Uint8Array(programStringArray.length);
 
     //take python return string and format to Uint8Array
-    for (let i = 0; i < stringArray.length; i++) {
-        mpy[i] = Number(stringArray[i]);
+    for (let i = 0; i < programStringArray.length; i++) {
+        mpy[i] = Number(programStringArray[i]);
     }
 
-    const blobParts: BlobPart[] = [];
+    const programParts: BlobPart[] = [];
     // each file is encoded as the size, module name, and mpy binary
-    blobParts.push(encodeUInt32LE(mpy.length));
-    // indicate program name ends here
-    blobParts.push(cString('__main__'));
-    blobParts.push(mpy);
+    programParts.push(encodeProgramLength(mpy.length));
+    programParts.push(encodeProgramName('__main__'));
+    programParts.push(mpy);
 
-    return new Blob(blobParts);
+    return new Blob(programParts);
 }
 
 /**
