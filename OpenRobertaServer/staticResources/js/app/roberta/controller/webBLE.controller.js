@@ -39,15 +39,15 @@ define(["require", "exports"], function (require, exports) {
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.downloadUserProgramBle = exports.disconnectBleDevice = exports.connectBleDevice = void 0;
     /**
-     * Bluetooth-Detection and Bluetooth-Service UUIIDs associated with Pybricks BLE
+     * Bluetooth-Detection and Bluetooth-gattService UUIIDs associated with Pybricks BLE
      * not all of these UUIDs are Pybricks specific, maybe remove these
      */
     var SERVICE_UUIDS;
     (function (SERVICE_UUIDS) {
-        //Bluetooth-Detection Service UUIDs
+        //Bluetooth-Detection gattService UUIDs
         SERVICE_UUIDS[SERVICE_UUIDS["DEVICE_INFORMATION_SERVICE_UUID"] = 6154] = "DEVICE_INFORMATION_SERVICE_UUID";
         SERVICE_UUIDS["NORDIC_UART_SERVICE_UUID"] = "6e400001-b5a3-f393-e0a9-e50e24dcca9e";
-        //Bluetooth-Service UUIDs, SERVICE_UUID also Doubles as Detection UUID
+        //Bluetooth-gattService UUIDs, SERVICE_UUID also Doubles as Detection UUID
         SERVICE_UUIDS["PYBRICKS_SERVICE_UUID"] = "c5f50001-8280-46da-89f4-6d8051e4aeef";
         SERVICE_UUIDS["PYBRICKS_COMMAND_EVENT_UUID"] = "c5f50002-8280-46da-89f4-6d8051e4aeef";
         SERVICE_UUIDS["PYBRICKS_HUB_CAPABILITIES_CHARACTERISTIC_UUID"] = "c5f50003-8280-46da-89f4-6d8051e4aeef";
@@ -66,6 +66,11 @@ define(["require", "exports"], function (require, exports) {
         COMMANDS[COMMANDS["PBIO_PYBRICKS_COMMAND_REBOOT_TO_UPDATE_MODE"] = 5] = "PBIO_PYBRICKS_COMMAND_REBOOT_TO_UPDATE_MODE";
         COMMANDS[COMMANDS["WRITE_STDIN"] = 6] = "WRITE_STDIN";
     })(COMMANDS || (COMMANDS = {}));
+    //TODO add errorId or something silimar to display blockly text in alert
+    /**
+     * bleError class, contains bluetooth error (might be null)
+     * and bleErrorMessage
+     */
     var bleError = /** @class */ (function () {
         function bleError(error, bleErrorMessage) {
             this.bleErrorMessage = "";
@@ -82,8 +87,7 @@ define(["require", "exports"], function (require, exports) {
         return bleError;
     }());
     //these are placeholder values and should always be overwritten
-    var device = null;
-    var server;
+    var spikeGattServer = null;
     var maxWriteSize = 64;
     var maxProgramSize = 4096;
     /**
@@ -93,12 +97,13 @@ define(["require", "exports"], function (require, exports) {
      */
     function connectBleDevice() {
         return __awaiter(this, void 0, void 0, function () {
-            var error_1, error_2, error_3;
+            var spikeBleDevice, error_1, error_2, error_3;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         if (deviceConnected())
                             return [2 /*return*/, true];
+                        spikeBleDevice = null;
                         _a.label = 1;
                     case 1:
                         _a.trys.push([1, 3, , 4]);
@@ -111,14 +116,14 @@ define(["require", "exports"], function (require, exports) {
                                 ]
                             }))];
                     case 2:
-                        device = _a.sent();
+                        spikeBleDevice = _a.sent();
                         return [3 /*break*/, 4];
                     case 3:
                         error_1 = _a.sent();
                         throw new bleError(error_1, "no device selected");
                     case 4:
                         _a.trys.push([4, 6, , 7]);
-                        return [4 /*yield*/, device.gatt.connect().then(function (gattServer) { return server = gattServer; })];
+                        return [4 /*yield*/, spikeBleDevice.gatt.connect().then(function (returnedGattServer) { return spikeGattServer = returnedGattServer; })];
                     case 5:
                         _a.sent();
                         return [3 /*break*/, 7];
@@ -143,44 +148,42 @@ define(["require", "exports"], function (require, exports) {
     function disconnectBleDevice() {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                if (device != null)
-                    device.gatt.disconnect();
-                device = null;
-                server = null;
+                if (spikeGattServer != null)
+                    spikeGattServer.disconnect();
+                spikeGattServer = null;
                 return [2 /*return*/];
             });
         });
     }
     exports.disconnectBleDevice = disconnectBleDevice;
     function deviceConnected() {
-        if (device == null || server == null) {
+        if (spikeGattServer == null)
             return false;
-        }
-        return device.gatt.connected;
+        return spikeGattServer.connected;
     }
     /**
      * read and set variables for max program-size and max write-size from brick
      */
     var getHubCapabilitiesBle = function () { return __awaiter(_this, void 0, void 0, function () {
-        var hubCapabilitiesValue, service, characteristic, serviceUuid, characteristicsUuid;
+        var hubCapabilitiesValue, gattService, gattCharacteristic, serviceUuid, characteristicsUuid;
         var _this = this;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     serviceUuid = SERVICE_UUIDS.PYBRICKS_SERVICE_UUID;
                     characteristicsUuid = SERVICE_UUIDS.PYBRICKS_HUB_CAPABILITIES_CHARACTERISTIC_UUID;
-                    return [4 /*yield*/, server.getPrimaryService(serviceUuid).then(function (value) { return __awaiter(_this, void 0, void 0, function () {
+                    return [4 /*yield*/, spikeGattServer.getPrimaryService(serviceUuid).then(function (returnedService) { return __awaiter(_this, void 0, void 0, function () {
                             var _this = this;
                             return __generator(this, function (_a) {
                                 switch (_a.label) {
                                     case 0:
-                                        service = value;
-                                        return [4 /*yield*/, service.getCharacteristic(characteristicsUuid).then(function (value) { return __awaiter(_this, void 0, void 0, function () {
+                                        gattService = returnedService;
+                                        return [4 /*yield*/, gattService.getCharacteristic(characteristicsUuid).then(function (returnedCharacteristic) { return __awaiter(_this, void 0, void 0, function () {
                                                 return __generator(this, function (_a) {
                                                     switch (_a.label) {
                                                         case 0:
-                                                            characteristic = value;
-                                                            return [4 /*yield*/, characteristic.readValue().catch(function (reason) {
+                                                            gattCharacteristic = returnedCharacteristic;
+                                                            return [4 /*yield*/, gattCharacteristic.readValue().catch(function (reason) {
                                                                     throw new bleError(reason, "unable to read hub capabilities");
                                                                 })];
                                                         case 1:
@@ -203,7 +206,7 @@ define(["require", "exports"], function (require, exports) {
                         }); }).catch(function (reason) {
                             if (reason instanceof bleError)
                                 throw reason;
-                            throw new bleError(reason, "unable to get primary service at: " + serviceUuid);
+                            throw new bleError(reason, "unable to get primary gattService at: " + serviceUuid);
                         })];
                 case 1:
                     _a.sent();
@@ -212,7 +215,7 @@ define(["require", "exports"], function (require, exports) {
         });
     }); };
     /**
-     * transfer program over ble, gatt service uses max-write size to cut program into max-sized chunks
+     * transfer program over ble, gatt gattService uses max-write size to cut program into max-sized chunks
      * @param programString generated program string representation (python code)
      * @param progressBarFunction either null/left empty or function with one argument (float 0 - 1.0 as progress in percent)
      */
@@ -221,7 +224,7 @@ define(["require", "exports"], function (require, exports) {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    program = blobFromProgramArrayString(programString);
+                    program = createBlobFromProgramArrayString(programString);
                     payloadSize = maxWriteSize - 5;
                     if (program.size > maxProgramSize) {
                         throw new bleError(null, "max program size reached");
@@ -254,6 +257,7 @@ define(["require", "exports"], function (require, exports) {
                     return [4 /*yield*/, writeGatt(SERVICE_UUIDS.PYBRICKS_COMMAND_EVENT_UUID, createWriteUserRamCommand(i, data))];
                 case 6:
                     _a.sent();
+                    //progressbar function does not have to be passed
                     if (progressBarFunction != null) {
                         progressBarFunction((i + data.byteLength) / program.size);
                     }
@@ -280,29 +284,29 @@ define(["require", "exports"], function (require, exports) {
     }); };
     exports.downloadUserProgramBle = downloadUserProgramBle;
     /**
-     * connect to gatt service and write data, doesn't check for already occupied service
-     * @param characteristicUuid Service to write to
+     * connect to gatt gattService and write data, doesn't check for already occupied gattService
+     * @param characteristicUuid gattService to write to
      * @param dataOrCommand program data or command, wrap command into buffer source (preferably Uint8Array)
      */
     var writeGatt = function (characteristicUuid, dataOrCommand) { return __awaiter(_this, void 0, void 0, function () {
-        var service, characteristic, serviceUuid;
+        var gattService, gattCharacteristic, serviceUuid;
         var _this = this;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     serviceUuid = SERVICE_UUIDS.PYBRICKS_SERVICE_UUID;
-                    return [4 /*yield*/, server.getPrimaryService(serviceUuid).then(function (value) { return __awaiter(_this, void 0, void 0, function () {
+                    return [4 /*yield*/, spikeGattServer.getPrimaryService(serviceUuid).then(function (returnedService) { return __awaiter(_this, void 0, void 0, function () {
                             var _this = this;
                             return __generator(this, function (_a) {
                                 switch (_a.label) {
                                     case 0:
-                                        service = value;
-                                        return [4 /*yield*/, service.getCharacteristic(characteristicUuid).then(function (value) { return __awaiter(_this, void 0, void 0, function () {
+                                        gattService = returnedService;
+                                        return [4 /*yield*/, gattService.getCharacteristic(characteristicUuid).then(function (returnedCharacteristic) { return __awaiter(_this, void 0, void 0, function () {
                                                 return __generator(this, function (_a) {
                                                     switch (_a.label) {
                                                         case 0:
-                                                            characteristic = value;
-                                                            return [4 /*yield*/, characteristic.writeValueWithResponse(dataOrCommand).catch(function (reason) {
+                                                            gattCharacteristic = returnedCharacteristic;
+                                                            return [4 /*yield*/, gattCharacteristic.writeValueWithResponse(dataOrCommand).catch(function (reason) {
                                                                     throw new bleError(reason, "unable to write command/data");
                                                                 })];
                                                         case 1:
@@ -323,7 +327,7 @@ define(["require", "exports"], function (require, exports) {
                         }); }).catch(function (reason) {
                             if (reason instanceof bleError)
                                 throw reason;
-                            throw new bleError(reason, "unable to get primary service at: " + serviceUuid);
+                            throw new bleError(reason, "unable to get primary gattService at: " + serviceUuid);
                         })];
                 case 1:
                     _a.sent();
@@ -333,41 +337,41 @@ define(["require", "exports"], function (require, exports) {
     }); };
     /**
      * encode unsigned 32bit (4byte) integer as little endian
-     * @param value to encode
+     * @param programLength to encode
      */
-    function encodeUInt32LE(value) {
-        var buf = new ArrayBuffer(4);
-        var view = new DataView(buf);
-        view.setUint32(0, value, true);
-        return buf;
+    function encodeProgramLength(programLength) {
+        var buffer = new ArrayBuffer(4);
+        var dataView = new DataView(buffer);
+        dataView.setUint32(0, programLength, true);
+        return buffer;
     }
     /**
-     * adds NULL-Terminator to string
-     * @param str to terminate
+     * encodes program name and adds NULL-Terminator
+     * @param programName to encode
      */
-    function cString(str) {
-        return new TextEncoder().encode(str + '\x00');
+    function encodeProgramName(programName) {
+        // \0x00 indicates program name ends here
+        return new TextEncoder().encode(programName + '\x00');
     }
     /**
      * packs program into a blob for transfer, <br>
      * since program has to be packed into blob or a similar data structure
      * @param programString generated program string representation (python code)
      */
-    function blobFromProgramArrayString(programString) {
+    function createBlobFromProgramArrayString(programString) {
         //prepare stringArray, python adds parenthesis which have to be removed (substring)
-        var stringArray = programString.substring(1, programString.length - 1).split(', ');
-        var mpy = new Uint8Array(stringArray.length);
+        var programStringArray = programString.substring(1, programString.length - 1).split(', ');
+        var mpy = new Uint8Array(programStringArray.length);
         //take python return string and format to Uint8Array
-        for (var i = 0; i < stringArray.length; i++) {
-            mpy[i] = Number(stringArray[i]);
+        for (var i = 0; i < programStringArray.length; i++) {
+            mpy[i] = Number(programStringArray[i]);
         }
-        var blobParts = [];
+        var programParts = [];
         // each file is encoded as the size, module name, and mpy binary
-        blobParts.push(encodeUInt32LE(mpy.length));
-        // indicate program name ends here
-        blobParts.push(cString('__main__'));
-        blobParts.push(mpy);
-        return new Blob(blobParts);
+        programParts.push(encodeProgramLength(mpy.length));
+        programParts.push(encodeProgramName('__main__'));
+        programParts.push(mpy);
+        return new Blob(programParts);
     }
     /**
      * data frame for ble transfer, see pybricks project
@@ -375,22 +379,22 @@ define(["require", "exports"], function (require, exports) {
      * @param payload program or command
      */
     function createWriteUserRamCommand(offset, payload) {
-        var msg = new Uint8Array(5 + payload.byteLength);
-        var view = new DataView(msg.buffer);
-        view.setUint8(0, COMMANDS.COMMAND_WRITE_USER_RAM);
-        view.setUint32(1, offset, true);
-        msg.set(new Uint8Array(payload), 5);
-        return msg;
+        var messageFrame = new Uint8Array(5 + payload.byteLength);
+        var dataView = new DataView(messageFrame.buffer);
+        dataView.setUint8(0, COMMANDS.COMMAND_WRITE_USER_RAM);
+        dataView.setUint32(1, offset, true);
+        messageFrame.set(new Uint8Array(payload), 5);
+        return messageFrame;
     }
     /**
      * data frame for ble transfer, see pybricks project
      * @param size program size
      */
     function createWriteUserProgramMetaCommand(size) {
-        var msg = new Uint8Array(5);
-        var view = new DataView(msg.buffer);
-        view.setUint8(0, COMMANDS.WRITE_USER_PROGRAM_META);
-        view.setUint32(1, size, true);
-        return msg;
+        var messageFrame = new Uint8Array(5);
+        var dataView = new DataView(messageFrame.buffer);
+        dataView.setUint8(0, COMMANDS.WRITE_USER_PROGRAM_META);
+        dataView.setUint32(1, size, true);
+        return messageFrame;
     }
 });

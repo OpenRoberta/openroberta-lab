@@ -1,14 +1,14 @@
 import * as WEBUSB from 'webUsb.controller';
 
 /**
- * Bluetooth-Detection and Bluetooth-Service UUIIDs associated with Pybricks BLE
+ * Bluetooth-Detection and Bluetooth-gattService UUIIDs associated with Pybricks BLE
  * not all of these UUIDs are Pybricks specific, maybe remove these
  */
 enum SERVICE_UUIDS {
-    //Bluetooth-Detection Service UUIDs
+    //Bluetooth-Detection gattService UUIDs
     DEVICE_INFORMATION_SERVICE_UUID = 0x180a,
     NORDIC_UART_SERVICE_UUID = '6e400001-b5a3-f393-e0a9-e50e24dcca9e',
-    //Bluetooth-Service UUIDs, SERVICE_UUID also Doubles as Detection UUID
+    //Bluetooth-gattService UUIDs, SERVICE_UUID also Doubles as Detection UUID
     PYBRICKS_SERVICE_UUID = 'c5f50001-8280-46da-89f4-6d8051e4aeef',
     PYBRICKS_COMMAND_EVENT_UUID = 'c5f50002-8280-46da-89f4-6d8051e4aeef',
     PYBRICKS_HUB_CAPABILITIES_CHARACTERISTIC_UUID = 'c5f50003-8280-46da-89f4-6d8051e4aeef'
@@ -52,8 +52,7 @@ class bleError {
 }
 
 //these are placeholder values and should always be overwritten
-let device: BluetoothDevice = null;
-let server: BluetoothRemoteGATTServer = null;
+let spikeGattServer: BluetoothRemoteGATTServer = null;
 let maxWriteSize = 64;
 let maxProgramSize = 4096;
 
@@ -65,8 +64,10 @@ let maxProgramSize = 4096;
 export async function connectBleDevice(): Promise<boolean> {
     if ( deviceConnected() ) return true;
 
+    let spikeBleDevice: BluetoothDevice = null;
+
     try{
-        device = await navigator.bluetooth.requestDevice(({
+        spikeBleDevice = await navigator.bluetooth.requestDevice(({
             filters: [{ services: [SERVICE_UUIDS.PYBRICKS_SERVICE_UUID] }],
             optionalServices: [
                 SERVICE_UUIDS.PYBRICKS_SERVICE_UUID,
@@ -79,7 +80,7 @@ export async function connectBleDevice(): Promise<boolean> {
     }
 
     try {
-        await device.gatt.connect().then(gattServer => server = gattServer);
+        await spikeBleDevice.gatt.connect().then(returnedGattServer => spikeGattServer = returnedGattServer);
     } catch (error) {
         throw new bleError(error, "device busy (try to restart the device) or wrong firmware version");
     }
@@ -94,58 +95,55 @@ export async function connectBleDevice(): Promise<boolean> {
 }
 
 export async function disconnectBleDevice() {
-    if(device != null) device.gatt.disconnect();
-    device = null;
-    server = null;
+    if(spikeGattServer != null)  spikeGattServer.disconnect();
+    spikeGattServer = null;
 }
 
 function deviceConnected(){
-    if (device == null || server == null) {
-        return false;
-    }
-
-    return device.gatt.connected;
+    if (spikeGattServer == null) return false;
+    return spikeGattServer.connected;
 }
+
 /**
  * read and set variables for max program-size and max write-size from brick
  */
 const getHubCapabilitiesBle = async () : Promise<boolean> => {
-    let hubCapabilitiesValue: DataView;
-    let service: BluetoothRemoteGATTService;
-    let characteristic: BluetoothRemoteGATTCharacteristic;
-    let serviceUuid = SERVICE_UUIDS.PYBRICKS_SERVICE_UUID;
-    let characteristicsUuid = SERVICE_UUIDS.PYBRICKS_HUB_CAPABILITIES_CHARACTERISTIC_UUID;
+    let hubCapabilitiesDataView: DataView;
+    let gattService: BluetoothRemoteGATTService;
+    let gattCharacteristic: BluetoothRemoteGATTCharacteristic;
+    let gattServiceUuid = SERVICE_UUIDS.PYBRICKS_SERVICE_UUID;
+    let gattCharacteristicUuid = SERVICE_UUIDS.PYBRICKS_HUB_CAPABILITIES_CHARACTERISTIC_UUID;
 
-    await server.getPrimaryService(serviceUuid).then(async returnedService => {
-        service = returnedService;
-        await service.getCharacteristic(characteristicsUuid).then(async returnedCharacteristic => {
-            characteristic = returnedCharacteristic;
-            hubCapabilitiesValue = await characteristic.readValue().catch(reason => {
+    await spikeGattServer.getPrimaryService(gattServiceUuid).then(async returnedGattService => {
+        gattService = returnedGattService;
+        await gattService.getCharacteristic(gattCharacteristicUuid).then(async returnedGattCharacteristic => {
+            gattCharacteristic = returnedGattCharacteristic;
+            hubCapabilitiesDataView = await gattCharacteristic.readValue().catch(reason => {
                     throw new bleError(reason, "unable to read hub capabilities");
                 }
             );
-            maxWriteSize = hubCapabilitiesValue.getUint16(0, true);
-            maxProgramSize = hubCapabilitiesValue.getUint32(6, true);
+            maxWriteSize = hubCapabilitiesDataView.getUint16(0, true);
+            maxProgramSize = hubCapabilitiesDataView.getUint32(6, true);
         }).catch(
         reason => {
             if (reason instanceof bleError) throw reason;
-            throw new bleError(reason, "unable to get device characteristics at: " + characteristicsUuid);
+            throw new bleError(reason, "unable to get device characteristics at: " + gattCharacteristicUuid);
         });
     }).catch(
         reason => {
             if (reason instanceof bleError) throw reason;
-            throw new bleError(reason, "unable to get primary service at: " + serviceUuid);
+            throw new bleError(reason, "unable to get primary gattService at: " + gattServiceUuid);
         });
     return true;
 };
 
 /**
- * transfer program over ble, gatt service uses max-write size to cut program into max-sized chunks
+ * transfer program over ble, gatt gattService uses max-write size to cut program into max-sized chunks
  * @param programString generated program string representation (python code)
  * @param progressBarFunction either null/left empty or function with one argument (float 0 - 1.0 as progress in percent)
  */
 export const downloadUserProgramBle = async (programString: string, progressBarFunction: (progress: number) => void | null)=> {
-    const program = createBlobFromProgramArrayString(programString);
+    const program = createBlobFromProgramString(programString);
     const payloadSize = maxWriteSize - 5;
 
     if (program.size > maxProgramSize) {
@@ -196,20 +194,20 @@ export const downloadUserProgramBle = async (programString: string, progressBarF
 };
 
 /**
- * connect to gatt service and write data, doesn't check for already occupied service
- * @param characteristicUuid Service to write to
+ * connect to gatt gattService and write data, doesn't check for already occupied gattService
+ * @param characteristicUuid gattService to write to
  * @param dataOrCommand program data or command, wrap command into buffer source (preferably Uint8Array)
  */
 const writeGatt = async (characteristicUuid: SERVICE_UUIDS, dataOrCommand: BufferSource) => {
-    let service: BluetoothRemoteGATTService;
-    let characteristic: BluetoothRemoteGATTCharacteristic;
-    let serviceUuid = SERVICE_UUIDS.PYBRICKS_SERVICE_UUID;
+    let gattService: BluetoothRemoteGATTService;
+    let gattCharacteristic: BluetoothRemoteGATTCharacteristic;
+    let gattServiceUuid = SERVICE_UUIDS.PYBRICKS_SERVICE_UUID;
 
-    await server.getPrimaryService(serviceUuid).then(async returnedService => {
-        service = returnedService;
-        await service.getCharacteristic(characteristicUuid).then(async returnedCharacteristic => {
-            characteristic = returnedCharacteristic;
-            await characteristic.writeValueWithResponse(dataOrCommand).catch(reason => {
+    await spikeGattServer.getPrimaryService(gattServiceUuid).then(async returnedGattService => {
+        gattService = returnedGattService;
+        await gattService.getCharacteristic(characteristicUuid).then(async returnedGattCharacteristic => {
+            gattCharacteristic = returnedGattCharacteristic;
+            await gattCharacteristic.writeValueWithResponse(dataOrCommand).catch(reason => {
                 throw new bleError(reason, "unable to write command/data");
             });
         }).catch(
@@ -221,7 +219,7 @@ const writeGatt = async (characteristicUuid: SERVICE_UUIDS, dataOrCommand: Buffe
     }).catch(
         reason => {
             if (reason instanceof bleError) throw reason;
-            throw new bleError(reason, "unable to get primary service at: " + serviceUuid);
+            throw new bleError(reason, "unable to get primary gattService at: " + gattServiceUuid);
         }
     );
 };
@@ -231,10 +229,10 @@ const writeGatt = async (characteristicUuid: SERVICE_UUIDS, dataOrCommand: Buffe
  * @param programLength to encode
  */
 function encodeProgramLength(programLength: number): ArrayBuffer {
-    const buf = new ArrayBuffer(4);
-    const view = new DataView(buf);
-    view.setUint32(0, programLength, true);
-    return buf;
+    const buffer = new ArrayBuffer(4);
+    const dataView = new DataView(buffer);
+    dataView.setUint32(0, programLength, true);
+    return buffer;
 }
 
 /**
@@ -251,21 +249,21 @@ function encodeProgramName(programName: string): Uint8Array {
  * since program has to be packed into blob or a similar data structure
  * @param programString generated program string representation (python code)
  */
-function createBlobFromProgramArrayString(programString: string) {
+function createBlobFromProgramString(programString: string) {
     //prepare stringArray, python adds parenthesis which have to be removed (substring)
     let programStringArray = programString.substring(1, programString.length - 1).split(', ');
-    let mpy = new Uint8Array(programStringArray.length);
+    let microPythonProgram = new Uint8Array(programStringArray.length);
 
     //take python return string and format to Uint8Array
     for (let i = 0; i < programStringArray.length; i++) {
-        mpy[i] = Number(programStringArray[i]);
+        microPythonProgram[i] = Number(programStringArray[i]);
     }
 
     const programParts: BlobPart[] = [];
     // each file is encoded as the size, module name, and mpy binary
-    programParts.push(encodeProgramLength(mpy.length));
+    programParts.push(encodeProgramLength(microPythonProgram.length));
     programParts.push(encodeProgramName('__main__'));
-    programParts.push(mpy);
+    programParts.push(microPythonProgram);
 
     return new Blob(programParts);
 }
@@ -279,12 +277,12 @@ function createWriteUserRamCommand(
     offset: number,
     payload: ArrayBuffer
 ): Uint8Array {
-    const msg = new Uint8Array(5 + payload.byteLength);
-    const view = new DataView(msg.buffer);
-    view.setUint8(0, COMMANDS.COMMAND_WRITE_USER_RAM);
-    view.setUint32(1, offset, true);
-    msg.set(new Uint8Array(payload), 5);
-    return msg;
+    const messageFrame = new Uint8Array(5 + payload.byteLength);
+    const dataView = new DataView(messageFrame.buffer);
+    dataView.setUint8(0, COMMANDS.COMMAND_WRITE_USER_RAM);
+    dataView.setUint32(1, offset, true);
+    messageFrame.set(new Uint8Array(payload), 5);
+    return messageFrame;
 }
 
 /**
@@ -292,9 +290,9 @@ function createWriteUserRamCommand(
  * @param size program size
  */
 function createWriteUserProgramMetaCommand(size: number): Uint8Array {
-    const msg = new Uint8Array(5);
-    const view = new DataView(msg.buffer);
-    view.setUint8(0, COMMANDS.WRITE_USER_PROGRAM_META);
-    view.setUint32(1, size, true);
-    return msg;
+    const messageFrame = new Uint8Array(5);
+    const dataView = new DataView(messageFrame.buffer);
+    dataView.setUint8(0, COMMANDS.WRITE_USER_PROGRAM_META);
+    dataView.setUint32(1, size, true);
+    return messageFrame;
 }
