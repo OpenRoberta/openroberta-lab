@@ -150,10 +150,10 @@
         "app/roberta/controller/sourceCodeEditor.controller"
       ],
       "webUsb.controller": [
-        "app/roberta/controller/webUsb.controller"
+        "app/roberta/controller/webConnection/webUsb.controller"
       ],
       "webBLE.controller": [
-        "app/roberta/controller/webBLE.controller"
+        "app/roberta/controller/webConnection/webBLE.controller"
       ],
       "simulation.constants": [
         "app/simulation/simulationLogic/constants"

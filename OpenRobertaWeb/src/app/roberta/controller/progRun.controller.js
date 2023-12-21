@@ -13,9 +13,6 @@ import * as GUISTATE from 'guiState.model';
 import * as WEBUSB_C from 'webUsb.controller';
 import * as WEBBLE from 'webBLE.controller';
 import { result } from 'lodash.isequal';
-import { downloadProgram } from 'webBLE.controller';
-import { error } from 'log';
-import { reconstructNNIncludingUI } from 'neuralnetwork.ui';
 
 var blocklyWorkspace;
 var interpreter;
