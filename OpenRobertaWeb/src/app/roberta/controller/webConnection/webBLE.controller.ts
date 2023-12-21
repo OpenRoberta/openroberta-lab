@@ -1,5 +1,5 @@
-import * as WEBUSB from 'webUsb.controller';
-import { errorNum } from 'comm';
+import { mobsya } from 'thymio_generated';
+import ErrorType = mobsya.fb.ErrorType;
 
 /**
  * Bluetooth-Detection and Bluetooth-gattService UUIIDs associated with Pybricks BLE
@@ -29,20 +29,25 @@ enum COMMANDS {
     WRITE_STDIN = 6
 }
 
-//TODO add errorId or something silimar to display blockly text in alert, replace with bleError extends error and make error code a field to display appropriate error message
+enum BLE_ERROR_TYPE{
+    PASS,
+    INFORMATION,
+    ALTER,
+    CRITICAL
+}
+
 /**
- * bleError class, contains bluetooth error (might be null)
- * and bleErrorMessage
+ * adds functionality to store blockly message in error, for displaying alert
  */
 class bleError extends Error {
-    blocklyMessageCode : number = -1;
-
-    constructor(error: Error | bleError, bleErrorMessage: string, blocklyMessageCode : number | void) {
-        super(bleErrorMessage + ", " + error.message);
-        if (typeof blocklyMessageCode === "number") {
-            //TODO use this code to get blockly error message or store blockly error message here
-            this.blocklyMessageCode = blocklyMessageCode;
-        }
+    blocklyMessage : string | void = "";
+    errorType: BLE_ERROR_TYPE | void = BLE_ERROR_TYPE.PASS;
+    constructor(error: Error | bleError, bleErrorMessage: string, blocklyMessage : string | void, errorType : BLE_ERROR_TYPE | void) {
+        super(bleErrorMessage);
+        if(error != null) this.message += error.message;
+        //TODO CHECK FOR VOID
+        this.blocklyMessage = blocklyMessage;
+        this.errorType = errorType;
     }
 }
 
@@ -50,11 +55,12 @@ class bleError extends Error {
 let gattServer: BluetoothRemoteGATTServer = null;
 let maxWriteSize = 64;
 let maxProgramSize = 4096;
+let downloadInProgress = false;
 
 /**
  * Connect SpikePrime, with Pybricks-Firmware and load hub capabilities (max write-/program-size)
  * doesn't check for correct spike prime firmware version
- * @return is device now connected, there are no checks for correct firmware version
+ * @return is device now connected
  */
 export async function connectBleDevice(): Promise<boolean> {
     if ( deviceConnected() ) return true;
@@ -99,6 +105,7 @@ function deviceConnected(){
     return gattServer.connected;
 }
 
+
 /**
  * read and set variables for max program-size and max write-size from brick
  */
@@ -132,7 +139,7 @@ const getHubCapabilitiesBle = async () => {
 };
 
 /**
- * transfer program over ble, gatt gattService uses max-write size to cut program into max-sized chunks
+ * transfer program over bluetooth low energy gatt server
  * @param programString generated program string representation (python code)
  * @param progressBarFunction either null/left empty or function with one argument (float 0 - 1.0 as progress in percent)
  */
@@ -140,11 +147,16 @@ export const downloadUserProgramBle = async (programString: string, progressBarF
     const programBlob = createBlobFromProgramString(programString);
     const payloadSize = maxWriteSize - 5;
 
+    if(downloadInProgress){
+        throw new bleError(null, "download already in progress");
+    }
+
     if (programBlob.size > maxProgramSize) {
         throw new bleError(null, "max program size reached");
     }
 
     try {
+        downloadInProgress = true;
         await writeGatt(SERVICE_UUIDS.PYBRICKS_COMMAND_EVENT_UUID, new Uint8Array([COMMANDS.STOP_USER_PROGRAM]));
 
         //invalidate old program data
@@ -184,6 +196,9 @@ export const downloadUserProgramBle = async (programString: string, progressBarF
         await writeGatt(SERVICE_UUIDS.PYBRICKS_COMMAND_EVENT_UUID, new Uint8Array([COMMANDS.START_USER_PROGRAM]));
     }catch (error){
         throw new bleError(error,"ble communication error" );
+    }finally
+    {
+        downloadInProgress = false;
     }
 };
 

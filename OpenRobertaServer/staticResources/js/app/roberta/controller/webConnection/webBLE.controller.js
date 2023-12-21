@@ -52,7 +52,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 define(["require", "exports"], function (require, exports) {
     var _this = this;
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.downloadUserProgramBle = exports.downloadInProgess = exports.disconnectBleDevice = exports.connectBleDevice = void 0;
+    exports.downloadUserProgramBle = exports.disconnectBleDevice = exports.connectBleDevice = void 0;
     /**
      * Bluetooth-Detection and Bluetooth-gattService UUIIDs associated with Pybricks BLE
      * not all of these UUIDs are Pybricks specific, maybe remove these
@@ -81,20 +81,27 @@ define(["require", "exports"], function (require, exports) {
         COMMANDS[COMMANDS["PBIO_PYBRICKS_COMMAND_REBOOT_TO_UPDATE_MODE"] = 5] = "PBIO_PYBRICKS_COMMAND_REBOOT_TO_UPDATE_MODE";
         COMMANDS[COMMANDS["WRITE_STDIN"] = 6] = "WRITE_STDIN";
     })(COMMANDS || (COMMANDS = {}));
+    var BLE_ERROR_TYPE;
+    (function (BLE_ERROR_TYPE) {
+        BLE_ERROR_TYPE[BLE_ERROR_TYPE["PASS"] = 0] = "PASS";
+        BLE_ERROR_TYPE[BLE_ERROR_TYPE["INFORMATION"] = 1] = "INFORMATION";
+        BLE_ERROR_TYPE[BLE_ERROR_TYPE["ALTER"] = 2] = "ALTER";
+        BLE_ERROR_TYPE[BLE_ERROR_TYPE["CRITICAL"] = 3] = "CRITICAL";
+    })(BLE_ERROR_TYPE || (BLE_ERROR_TYPE = {}));
     /**
      * adds functionality to store blockly message in error, for displaying alert
      */
     var bleError = /** @class */ (function (_super) {
         __extends(bleError, _super);
-        function bleError(error, bleErrorMessage, blocklyMessageCode) {
+        function bleError(error, bleErrorMessage, blocklyMessage, errorType) {
             var _this = _super.call(this, bleErrorMessage) || this;
-            _this.blocklyMessageCode = -1;
+            _this.blocklyMessage = "";
+            _this.errorType = BLE_ERROR_TYPE.PASS;
             if (error != null)
                 _this.message += error.message;
-            if (typeof blocklyMessageCode === "number") {
-                //TODO use this code to get blockly error message or store blockly error message here
-                _this.blocklyMessageCode = blocklyMessageCode;
-            }
+            //TODO CHECK FOR VOID
+            _this.blocklyMessage = blocklyMessage;
+            _this.errorType = errorType;
             return _this;
         }
         return bleError;
@@ -103,7 +110,7 @@ define(["require", "exports"], function (require, exports) {
     var gattServer = null;
     var maxWriteSize = 64;
     var maxProgramSize = 4096;
-    var downloading = false;
+    var downloadInProgress = false;
     /**
      * Connect SpikePrime, with Pybricks-Firmware and load hub capabilities (max write-/program-size)
      * doesn't check for correct spike prime firmware version
@@ -175,10 +182,6 @@ define(["require", "exports"], function (require, exports) {
             return false;
         return gattServer.connected;
     }
-    function downloadInProgess() {
-        return downloading;
-    }
-    exports.downloadInProgess = downloadInProgess;
     /**
      * read and set variables for max program-size and max write-size from brick
      */
@@ -244,7 +247,7 @@ define(["require", "exports"], function (require, exports) {
                 case 0:
                     programBlob = createBlobFromProgramString(programString);
                     payloadSize = maxWriteSize - 5;
-                    if (downloading) {
+                    if (downloadInProgress) {
                         throw new bleError(null, "download already in progress");
                     }
                     if (programBlob.size > maxProgramSize) {
@@ -253,7 +256,7 @@ define(["require", "exports"], function (require, exports) {
                     _a.label = 1;
                 case 1:
                     _a.trys.push([1, 11, 12, 13]);
-                    downloading = true;
+                    downloadInProgress = true;
                     return [4 /*yield*/, writeGatt(SERVICE_UUIDS.PYBRICKS_COMMAND_EVENT_UUID, new Uint8Array([COMMANDS.STOP_USER_PROGRAM]))];
                 case 2:
                     _a.sent();
@@ -301,7 +304,7 @@ define(["require", "exports"], function (require, exports) {
                     error_4 = _a.sent();
                     throw new bleError(error_4, "ble communication error");
                 case 12:
-                    downloading = false;
+                    downloadInProgress = false;
                     return [7 /*endfinally*/];
                 case 13: return [2 /*return*/];
             }

@@ -15,6 +15,7 @@ import * as WEBBLE from 'webBLE.controller';
 import { result } from 'lodash.isequal';
 import { downloadProgram } from 'webBLE.controller';
 import { error } from 'log';
+import { reconstructNNIncludingUI } from 'neuralnetwork.ui';
 
 var blocklyWorkspace;
 var interpreter;
@@ -208,6 +209,7 @@ function getConnectionTypeCallback() {
     };
 }
 
+
 function runForPybricksBle(result) {
     GUISTATE_C.setState(result);
 
@@ -223,13 +225,12 @@ function runForPybricksBle(result) {
             $('#changedDownloadFolder').addClass('hidden');
             $('#OKButtonModalFooter').addClass('hidden');
             $('#save-client-compiled-program').modal('show');
-
-            WEBBLE.downloadUserProgramBle(result.compiledCode , WEBUSB_C.setTransfer).then(() => {
-                setTimeout( () => {
+           WEBBLE.downloadUserProgramBle(result.compiledCode, WEBUSB_C.setTransfer).then(() => {
+                setTimeout(() => {
                     $('#save-client-compiled-program').modal('hide');
                 }, 500);
-            }).catch( e => {
-                MSG.displayInformation({ rc: 'error' }, null, e.toString() , GUISTATE_C.getProgramName(), GUISTATE_C.getRobot())
+            }).catch(e => {
+                MSG.displayInformation({ rc: 'error' }, null, e.toString(), GUISTATE_C.getProgramName(), GUISTATE_C.getRobot())
             })
         }).catch( e =>  {
             MSG.displayInformation({ rc: 'error' }, null, e.toString() , GUISTATE_C.getProgramName(), GUISTATE_C.getRobot())
