@@ -95,7 +95,7 @@ public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
     public Void visitMotorOmniTurnForAction(MotorOmniTurnForAction motorOmniTurnForAction) {
         usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniTurnForAction.getUserDefinedPort(), SC.MOTOR));
         usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniTurnForAction.getUserDefinedPort(), FischertechnikConstants.OMNIDRIVE));
-        usedMethodBuilder.addUsedMethod(Txt4Methods.MOTORSTART);
+        usedMethodBuilder.addUsedMethod(Txt4Methods.OMNIDRIVETURNDEGREES);
         return null;
     }
 

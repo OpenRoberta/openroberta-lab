@@ -171,6 +171,17 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
 
     @Override
     public Void visitMotorOmniTurnForAction(MotorOmniTurnForAction motorOmniTurnForAction) {
+        this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(Txt4Methods.OMNIDRIVETURNDEGREES));
+        this.src.add("(", this.frontLeftMotor, ", ", this.frontRightMotor, ", ", this.rearLeftMotor, ", ", this.rearRightMotor, ", ");
+        if ( motorOmniTurnForAction.direction.equals("LEFT") ) {
+            this.src.add("-");
+        }
+        motorOmniTurnForAction.power.accept(this);
+        this.src.add(", ");
+        motorOmniTurnForAction.degrees.accept(this);
+        this.src.add(")");
+
+
         return null;
     }
 
@@ -340,7 +351,6 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
         nlIndent();
         this.src.add("pass");
         decrIndentation();
-        //TODO finally close open ports
         decrIndentation();
         nlIndent();
         nlIndent();

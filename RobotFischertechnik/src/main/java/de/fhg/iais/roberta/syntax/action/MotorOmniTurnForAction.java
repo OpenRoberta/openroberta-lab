@@ -15,19 +15,19 @@ public final class MotorOmniTurnForAction extends ActionWithoutUserChosenName {
     public final String direction;
     @NepoValue(name = BlocklyConstants.POWER, type = BlocklyType.NUMBER)
     public final Expr power;
-    @NepoValue(name = BlocklyConstants.DURATION, type = BlocklyType.NUMBER)
-    public final Expr duration;
+    @NepoValue(name = BlocklyConstants.DEGREES, type = BlocklyType.NUMBER)
+    public final Expr degrees;
 
     public MotorOmniTurnForAction(
         BlocklyProperties properties,
         String direction,
         Expr power,
-        Expr duration,
+        Expr degrees,
         Hide hide) {
         super(properties, hide);
         this.direction = direction;
         this.power = power;
-        this.duration = duration;
+        this.degrees = degrees;
         setReadOnly();
     }
 
