@@ -1617,6 +1617,7 @@ Blockly.Msg.SENSOR_KEY_PLAY = "Wiedergabe";
 Blockly.Msg.SENSOR_KEY_REC = "Aufnahme";
 Blockly.Msg.SENSOR_KEY_RIGHT = "Rechts";
 Blockly.Msg.SENSOR_KEY_STOP = "Stop";
+Blockly.Msg.SENSOR_KEY_TXT4 = "Mini-Taster";
 Blockly.Msg.SENSOR_KEY_UP = "Oben";
 Blockly.Msg.SENSOR_LIGHT = "Lichtsensor";
 Blockly.Msg.SENSOR_LIGHTVEML = "sichtbares/UV Licht Sensor";

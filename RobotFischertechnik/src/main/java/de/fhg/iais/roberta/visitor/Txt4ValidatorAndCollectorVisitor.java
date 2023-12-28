@@ -21,8 +21,11 @@ import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.util.basic.C;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
@@ -106,6 +109,22 @@ public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
         usedHardwareBuilder.addUsedActor(new UsedActor(motorOnForAction.getUserDefinedPort(), SC.MOTOR));
         usedMethodBuilder.addUsedMethod(Txt4Methods.MOTORSTARTFOR);
 
+        return null;
+    }
+
+    @Override
+    public Void visitEncoderSensor(EncoderSensor encoderSensor) {
+        return null;
+    }
+
+    @Override
+    public Void visitUltrasonicSensor(UltrasonicSensor ultrasonicSensor) {
+        return null;
+    }
+
+    @Override
+    public Void visitKeysSensor(KeysSensor keysSensor) {
+        usedHardwareBuilder.addUsedSensor(new UsedSensor(keysSensor.getUserDefinedPort(), SC.KEY, keysSensor.getMode()));
         return null;
     }
 

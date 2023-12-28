@@ -23,8 +23,11 @@ import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
+import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.util.basic.C;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.syntax.SC;
@@ -201,6 +204,23 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
     }
 
     @Override
+    public Void visitEncoderSensor(EncoderSensor encoderSensor) {
+        return null;
+    }
+
+    @Override
+    public Void visitUltrasonicSensor(UltrasonicSensor ultrasonicSensor) {
+        return null;
+    }
+
+    @Override
+    public Void visitKeysSensor(KeysSensor keysSensor) {
+        ConfigurationComponent block = configurationAst.getConfigurationComponent(keysSensor.getUserDefinedPort());
+        String pin = block.getComponentProperties().get("PIN1");
+        this.src.add("TXT_M_I", pin, "_mini_switch.get_state()");
+        return null;
+    }
+    @Override
     public Void visitRgbColor(RgbColor rgbColor) {
         this.src.add("(");
         rgbColor.R.accept(this);
@@ -309,6 +329,7 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
 
 
         this.src.add("txt_factory.init()").nlI();
+        this.src.add("txt_factory.init_input_factory()").nlI();
         if ( usedHardwareBean.isActorUsed(SC.MOTOR) || usedHardwareBean.isActorUsed(SC.ENCODER) ) {
             this.src.add("txt_factory.init_motor_factory()").nlI();
             this.src.add("STEPS_PER_ROTATION = 128").nlI();
@@ -322,13 +343,12 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
             nlIndent();
         }
 
-        initMotors();
-
+        initPeripherals();
         this.src.add("txt_factory.initialized()");
 
     }
 
-    private void initMotors() {
+    private void initPeripherals() {
         for ( ConfigurationComponent component : this.configurationAst.getConfigurationComponents().values() ) {
             if ( component.componentType.equals(SC.MOTOR) ) {
                 String port = component.getOptProperty("PORT");
@@ -342,6 +362,9 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
                 String port = component.getOptProperty("PORT");
                 port = port.substring(1);
                 this.src.add("TXT_M_S", port, "_servomotor = txt_factory.motor_factory.create_servomotor(TXT_M, ", port, ")").nlI();
+            } else if ( component.componentType.equals(SC.KEY) ) {
+                String port = component.getOptProperty("PIN1");
+                this.src.add("TXT_M_I", port, "_mini_switch = txt_factory.input_factory.create_mini_switch(TXT_M,", port, ")").nlI();
             }
         }
     }

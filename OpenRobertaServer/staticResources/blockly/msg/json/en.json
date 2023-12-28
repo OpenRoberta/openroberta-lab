@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2023-12-28 16:15:45.642786",
+		"lastupdated": "2023-12-28 18:23:10.862780",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -587,6 +587,7 @@
 	"SENSOR_KEY_RIGHT": "right",
 	"SENSOR_KEY_ESCAPE": "escape",
 	"SENSOR_KEY_ANY": "any",
+	"SENSOR_KEY_TXT4": "Mini-Switch",
 	"SENSOR_LINE": "bottom infrared sensor",
 	"SENSOR_LINE_JOYCAR": "line sensor",
 	"SENSOR_ANY": "anyplace",

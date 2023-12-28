@@ -1617,6 +1617,7 @@ Blockly.Msg.SENSOR_KEY_PLAY = "play";  // untranslated
 Blockly.Msg.SENSOR_KEY_REC = "record";  // untranslated
 Blockly.Msg.SENSOR_KEY_RIGHT = "вправо";
 Blockly.Msg.SENSOR_KEY_STOP = "stop";  // untranslated
+Blockly.Msg.SENSOR_KEY_TXT4 = "Mini-Switch";  // untranslated
 Blockly.Msg.SENSOR_KEY_UP = "вгору";
 Blockly.Msg.SENSOR_LIGHT = "датчик світла";
 Blockly.Msg.SENSOR_LIGHTVEML = "visible/UV light sensor";  // untranslated

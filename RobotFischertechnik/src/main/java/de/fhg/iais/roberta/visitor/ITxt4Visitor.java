@@ -6,6 +6,9 @@ import de.fhg.iais.roberta.syntax.action.MotorOmniTurnAction;
 import de.fhg.iais.roberta.syntax.action.MotorOmniTurnForAction;
 import de.fhg.iais.roberta.syntax.action.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.MotorOnForAction;
+import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 
 public interface ITxt4Visitor<V> extends IVisitor<V> {
 
@@ -18,5 +21,11 @@ public interface ITxt4Visitor<V> extends IVisitor<V> {
     V visitMotorOmniTurnForAction(MotorOmniTurnForAction motorOmniTurnForAction);
 
     V visitMotorOnForAction(MotorOnForAction motorOnForAction);
+
+    V visitEncoderSensor(EncoderSensor encoderSensor);
+
+    V visitUltrasonicSensor(UltrasonicSensor ultrasonicSensor);
+
+    V visitKeysSensor(KeysSensor keysSensor);
 
 }
