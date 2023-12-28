@@ -112,12 +112,11 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
     }
 
     public Void visitMotorOnAction(MotorOnAction motorOnAction) {
+        this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(Txt4Methods.MOTORSTART));
         String motorPort = getPortFromConfig(motorOnAction.port);
-        this.src.add("TXT_M_", motorPort, "_encodermotor.set_speed(int(");
+        this.src.add("(TXT_M_", motorPort, "_encodermotor, ");
         motorOnAction.power.accept(this);
-        this.src.add("),Motor.CCW)");
-        nlIndent();
-        this.src.add("TXT_M_", motorPort, "_encodermotor.start()");
+        this.src.add(")");
         return null;
     }
 

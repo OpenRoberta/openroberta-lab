@@ -48,6 +48,7 @@ public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
             ConfigurationComponent motor = getMotorFromPort(motorOnAction.port);
             usedHardwareBuilder.addUsedActor(new UsedActor(motor.getOptProperty("PORT"), SC.MOTOR));
         }
+        usedMethodBuilder.addUsedMethod(Txt4Methods.MOTORSTART);
         return null;
     }
 
