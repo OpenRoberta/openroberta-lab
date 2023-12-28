@@ -8,14 +8,19 @@
                     </block>
                 </value>
             </block>
-            <block type="actions_motorOmni_on_txt">
-                <value name="POWER">
-                    <block type="math_number" id="653">
-                        <field name="NUM">30</field>
+            <block type='actions_motor_on_for_txt'>
+                <value name='POWER'>
+                    <block type='math_number'>
+                        <field name='NUM'>30</field>
+                    </block>
+                </value>
+                <value name='VALUE'>
+                    <block type='math_number'>
+                        <field name='NUM'>5</field>
                     </block>
                 </value>
             </block>
-            <block type='actions_motorOmni_on_txt'>
+            <block type="actions_motorOmni_on_txt">
                 <value name="POWER">
                     <block type="math_number" id="653">
                         <field name="NUM">30</field>

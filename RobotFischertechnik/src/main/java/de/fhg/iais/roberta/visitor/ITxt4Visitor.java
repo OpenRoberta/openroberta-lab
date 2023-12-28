@@ -5,6 +5,7 @@ import de.fhg.iais.roberta.syntax.action.MotorOmniOnAction;
 import de.fhg.iais.roberta.syntax.action.MotorOmniTurnAction;
 import de.fhg.iais.roberta.syntax.action.MotorOmniTurnForAction;
 import de.fhg.iais.roberta.syntax.action.MotorOnAction;
+import de.fhg.iais.roberta.syntax.action.MotorOnForAction;
 
 public interface ITxt4Visitor<V> extends IVisitor<V> {
 
@@ -15,4 +16,7 @@ public interface ITxt4Visitor<V> extends IVisitor<V> {
     V visitMotorOmniTurnAction(MotorOmniTurnAction motorOmniTurnAction);
 
     V visitMotorOmniTurnForAction(MotorOmniTurnForAction motorOmniTurnForAction);
+
+    V visitMotorOnForAction(MotorOnForAction motorOnForAction);
+
 }

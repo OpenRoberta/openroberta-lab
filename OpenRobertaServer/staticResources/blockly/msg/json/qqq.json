@@ -546,6 +546,7 @@
 	"SENSOR_TIME": "",
 	"SENSOR_MS_TIMER": "",
 	"SENSOR_TIMER": "",
+	"SENSOR_COUNTER": "",
 	"SENSOR_PIN": "",
 	"SENSOR_GROVE": "",
 	"SENSOR_COLOUR": "",

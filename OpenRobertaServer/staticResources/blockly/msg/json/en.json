@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2023-12-18 00:38:07.144438",
+		"lastupdated": "2023-12-28 16:15:45.642786",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -552,6 +552,7 @@
 	"SENSOR_TIME": "time",
 	"SENSOR_MS_TIMER": "in ms",
 	"SENSOR_TIMER": "timer",
+	"SENSOR_COUNTER": "counter",
 	"SENSOR_PIN": "pin",
 	"SENSOR_GROVE": "Grove",
 	"SENSOR_COLOUR": "colour sensor",

@@ -1533,6 +1533,7 @@ Blockly.Msg.SENSOR_COLOURTCS3472 = "colour sensor TCS3472";
 Blockly.Msg.SENSOR_COLOUR_EDISON = "line tracker";
 Blockly.Msg.SENSOR_COMPASS = "compass sensor";
 Blockly.Msg.SENSOR_COMPASS_EV3 = "HT compass sensor";
+Blockly.Msg.SENSOR_COUNTER = "counter";
 Blockly.Msg.SENSOR_DATA_READY = "ready?";
 Blockly.Msg.SENSOR_DETECTFACE = "face detector";
 Blockly.Msg.SENSOR_DETECTFACE_GETSAMPLE_TOOLTIP = "Detect a face previously learned and saved.";

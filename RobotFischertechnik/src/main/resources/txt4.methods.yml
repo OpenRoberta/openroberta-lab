@@ -6,8 +6,20 @@ MOTORSTART:
   PYTHON: |
     def motorStart(motor, speed):
         motor.set_speed(int((speed / 100) * 512), Motor.CCW)
-        motor.start_sync()
+        motor.start()
 
+
+MOTORSTARTFOR:
+  PYTHON: |
+    def motorStartFor(motor, speed, degrees):
+        steps = int((degrees / 360) * STEPS_PER_ROTATION)
+        motor.set_speed(int((speed / 100) * 512), Motor.CCW)
+        motor.set_distance(steps)
+        while True:
+            if(not motor.is_running()):
+                break;
+            time.sleep(0.010)
+        motor.stop()
 OMNIDRIVEVERTICAL:
   PYTHON: |
     def omnidriveVertical(motorFL, motorFR, motorRL, motorRR, speed):

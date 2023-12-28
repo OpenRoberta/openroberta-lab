@@ -15,6 +15,7 @@ import de.fhg.iais.roberta.syntax.action.MotorOmniOnAction;
 import de.fhg.iais.roberta.syntax.action.MotorOmniTurnAction;
 import de.fhg.iais.roberta.syntax.action.MotorOmniTurnForAction;
 import de.fhg.iais.roberta.syntax.action.MotorOnAction;
+import de.fhg.iais.roberta.syntax.action.MotorOnForAction;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
@@ -186,6 +187,21 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
     }
 
     @Override
+    public Void visitMotorOnForAction(MotorOnForAction motorOnForAction) {
+        this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(Txt4Methods.MOTORSTARTFOR));
+        String motorPort = getPortFromConfig(motorOnForAction.port);
+        this.src.add("(TXT_M_", motorPort, "_encodermotor, ");
+        motorOnForAction.power.accept(this);
+        this.src.add(", ");
+        if ( motorOnForAction.unit.equals("ROTATIONS") ) {
+            this.src.add("360 * ");
+        }
+        motorOnForAction.value.accept(this);
+        this.src.add(")");
+        return null;
+    }
+
+    @Override
     public Void visitRgbColor(RgbColor rgbColor) {
         this.src.add("(");
         rgbColor.R.accept(this);
@@ -296,6 +312,7 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
         this.src.add("txt_factory.init()").nlI();
         if ( usedHardwareBean.isActorUsed(SC.MOTOR) || usedHardwareBean.isActorUsed(SC.ENCODER) ) {
             this.src.add("txt_factory.init_motor_factory()").nlI();
+            this.src.add("STEPS_PER_ROTATION = 128").nlI();
         }
         if ( usedHardwareBean.isActorUsed(SC.SERVOMOTOR) ) {
             this.src.add("txt_factory.init_servomotor_factory()").nlI();

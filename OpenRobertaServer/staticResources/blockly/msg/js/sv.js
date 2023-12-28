@@ -1533,6 +1533,7 @@ Blockly.Msg.SENSOR_COLOURTCS3472 = "colour sensor TCS3472";  // untranslated
 Blockly.Msg.SENSOR_COLOUR_EDISON = "line tracker";  // untranslated
 Blockly.Msg.SENSOR_COMPASS = "kompassensor";
 Blockly.Msg.SENSOR_COMPASS_EV3 = "HT kompass sensor";
+Blockly.Msg.SENSOR_COUNTER = "counter";  // untranslated
 Blockly.Msg.SENSOR_DATA_READY = "ready?";  // untranslated
 Blockly.Msg.SENSOR_DETECTFACE = "ansiktsdetektor";
 Blockly.Msg.SENSOR_DETECTFACE_GETSAMPLE_TOOLTIP = "Känn igen ett ansikte som tidigare lärts in och sparats.";

@@ -16,6 +16,7 @@ import de.fhg.iais.roberta.syntax.action.MotorOmniOnAction;
 import de.fhg.iais.roberta.syntax.action.MotorOmniTurnAction;
 import de.fhg.iais.roberta.syntax.action.MotorOmniTurnForAction;
 import de.fhg.iais.roberta.syntax.action.MotorOnAction;
+import de.fhg.iais.roberta.syntax.action.MotorOnForAction;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
@@ -96,6 +97,14 @@ public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
         usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniTurnForAction.getUserDefinedPort(), SC.MOTOR));
         usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniTurnForAction.getUserDefinedPort(), FischertechnikConstants.OMNIDRIVE));
         usedMethodBuilder.addUsedMethod(Txt4Methods.OMNIDRIVETURNDEGREES);
+        return null;
+    }
+
+    @Override
+    public Void visitMotorOnForAction(MotorOnForAction motorOnForAction) {
+        usedHardwareBuilder.addUsedActor(new UsedActor(motorOnForAction.getUserDefinedPort(), SC.MOTOR));
+        usedMethodBuilder.addUsedMethod(Txt4Methods.MOTORSTARTFOR);
+
         return null;
     }
 
