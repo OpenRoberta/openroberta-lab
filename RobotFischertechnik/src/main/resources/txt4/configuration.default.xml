@@ -13,13 +13,13 @@
     </instance>
     <instance x="350" y="103">
         <block type="robConf_encoder" id="`M1" intask="true">
-            <field name="NAME">TL</field>
+            <field name="NAME">FL</field>
             <field name="PORT">M1</field>
         </block>
     </instance>
     <instance x="600" y="103">
         <block type="robConf_encoder" id="`M2" intask="true">
-            <field name="NAME">TR</field>
+            <field name="NAME">FR</field>
             <field name="PORT">M2</field>
         </block>
     </instance>
