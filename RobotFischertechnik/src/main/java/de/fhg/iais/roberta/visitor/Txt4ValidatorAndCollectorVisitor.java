@@ -13,10 +13,12 @@ import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.constants.FischertechnikConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.MotorOmniOnAction;
+import de.fhg.iais.roberta.syntax.action.MotorOmniStopAction;
 import de.fhg.iais.roberta.syntax.action.MotorOmniTurnAction;
 import de.fhg.iais.roberta.syntax.action.MotorOmniTurnForAction;
 import de.fhg.iais.roberta.syntax.action.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.MotorOnForAction;
+import de.fhg.iais.roberta.syntax.action.MotorStopAction;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
@@ -125,6 +127,25 @@ public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
     @Override
     public Void visitKeysSensor(KeysSensor keysSensor) {
         usedHardwareBuilder.addUsedSensor(new UsedSensor(keysSensor.getUserDefinedPort(), SC.KEY, keysSensor.getMode()));
+        return null;
+    }
+
+    @Override
+    public Void visitMotorStopAction(MotorStopAction motorStopAction) {
+        if ( checkActorPort(motorStopAction) ) {
+            ConfigurationComponent motor = getMotorFromPort(motorStopAction.port);
+            usedHardwareBuilder.addUsedActor(new UsedActor(motor.getOptProperty("PORT"), SC.MOTOR));
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitMotorOmniStopAction(MotorOmniStopAction motorOmniStopAction) {
+        if ( checkActorPort(motorOmniStopAction) ) {
+            ConfigurationComponent motor = getMotorFromPort(motorOmniStopAction.getUserDefinedPort());
+            usedHardwareBuilder.addUsedActor(new UsedActor(motor.getOptProperty("PORT"), SC.MOTOR));
+        }
+        usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniStopAction.getUserDefinedPort(), FischertechnikConstants.OMNIDRIVE));
         return null;
     }
 

@@ -2,10 +2,12 @@ package de.fhg.iais.roberta.visitor;
 
 
 import de.fhg.iais.roberta.syntax.action.MotorOmniOnAction;
+import de.fhg.iais.roberta.syntax.action.MotorOmniStopAction;
 import de.fhg.iais.roberta.syntax.action.MotorOmniTurnAction;
 import de.fhg.iais.roberta.syntax.action.MotorOmniTurnForAction;
 import de.fhg.iais.roberta.syntax.action.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.MotorOnForAction;
+import de.fhg.iais.roberta.syntax.action.MotorStopAction;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
@@ -27,5 +29,9 @@ public interface ITxt4Visitor<V> extends IVisitor<V> {
     V visitUltrasonicSensor(UltrasonicSensor ultrasonicSensor);
 
     V visitKeysSensor(KeysSensor keysSensor);
+
+    V visitMotorStopAction(MotorStopAction motorStopAction);
+
+    V visitMotorOmniStopAction(MotorOmniStopAction motorOmniStopAction);
 
 }

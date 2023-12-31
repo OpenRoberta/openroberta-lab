@@ -12,10 +12,12 @@ import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.constants.FischertechnikConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.MotorOmniOnAction;
+import de.fhg.iais.roberta.syntax.action.MotorOmniStopAction;
 import de.fhg.iais.roberta.syntax.action.MotorOmniTurnAction;
 import de.fhg.iais.roberta.syntax.action.MotorOmniTurnForAction;
 import de.fhg.iais.roberta.syntax.action.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.MotorOnForAction;
+import de.fhg.iais.roberta.syntax.action.MotorStopAction;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
@@ -95,9 +97,16 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
     public Void visitMotorOnAction(MotorOnAction motorOnAction) {
         this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(Txt4Methods.MOTORSTART));
         String motorPort = getPortFromConfig(motorOnAction.port);
-        this.src.add("(TXT_M_", motorPort, "_encodermotor, ");
+        this.src.add("(TXT_M_", motorPort, "_motor, ");
         motorOnAction.power.accept(this);
         this.src.add(")");
+        return null;
+    }
+
+    @Override
+    public Void visitMotorStopAction(MotorStopAction motorStopAction) {
+        String motorPort = getPortFromConfig(motorStopAction.port);
+        this.src.add("TXT_M_", motorPort, "_motor.stop()");
         return null;
     }
 
@@ -138,6 +147,12 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
     }
 
     @Override
+    public Void visitMotorOmniStopAction(MotorOmniStopAction motorOmniStopAction) {
+        this.src.add("frontLeftMotor.stop_sync(frontRightMotor, rearLeftMotor, rearRightMotor)");
+        return null;
+    }
+
+    @Override
     public Void visitMotorOmniTurnAction(MotorOmniTurnAction motorOmniTurnAction) {
         this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(Txt4Methods.OMNIDRIVETURN));
         this.src.add("(");
@@ -169,7 +184,7 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
     public Void visitMotorOnForAction(MotorOnForAction motorOnForAction) {
         this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(Txt4Methods.MOTORSTARTFOR));
         String motorPort = getPortFromConfig(motorOnForAction.port);
-        this.src.add("(TXT_M_", motorPort, "_encodermotor, ");
+        this.src.add("(TXT_M_", motorPort, "_motor, ");
         motorOnForAction.power.accept(this);
         this.src.add(", ");
         if ( motorOnForAction.unit.equals("ROTATIONS") ) {
@@ -334,7 +349,7 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
             } else if ( component.componentType.equals(SC.ENCODER) ) {
                 String port = component.getOptProperty("PORT");
                 port = port.substring(1);
-                this.src.add("TXT_M_M", port, "_encodermotor = txt_factory.motor_factory.create_encodermotor(TXT_M, ", port, ")").nlI();
+                this.src.add("TXT_M_M", port, "_motor = txt_factory.motor_factory.create_encodermotor(TXT_M, ", port, ")").nlI();
             } else if ( component.componentType.equals(SC.SERVOMOTOR) ) {
                 String port = component.getOptProperty("PORT");
                 port = port.substring(1);
@@ -350,10 +365,10 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
         if ( usedHardwareBean.isActorUsed(FischertechnikConstants.OMNIDRIVE) ) {
             ConfigurationComponent omniDrive = getOmniDrive();
             this.src.add("#init omnidrive").nlI();
-            this.src.add("frontLeftMotor = ", "TXT_M_" + omniDrive.getOptProperty("MOTOR_FL") + "_encodermotor").nlI();
-            this.src.add("frontRightMotor = ", "TXT_M_" + omniDrive.getOptProperty("MOTOR_FR") + "_encodermotor").nlI();
-            this.src.add("rearLeftMotor = ", "TXT_M_" + omniDrive.getOptProperty("MOTOR_RL") + "_encodermotor").nlI();
-            this.src.add("rearRightMotor = ", "TXT_M_" + omniDrive.getOptProperty("MOTOR_RR") + "_encodermotor").nlI();
+            this.src.add("frontLeftMotor = ", "TXT_M_" + omniDrive.getOptProperty("MOTOR_FL") + "_motor").nlI();
+            this.src.add("frontRightMotor = ", "TXT_M_" + omniDrive.getOptProperty("MOTOR_FR") + "_motor").nlI();
+            this.src.add("rearLeftMotor = ", "TXT_M_" + omniDrive.getOptProperty("MOTOR_RL") + "_motor").nlI();
+            this.src.add("rearRightMotor = ", "TXT_M_" + omniDrive.getOptProperty("MOTOR_RR") + "_motor").nlI();
             this.src.add("WHEEL_DIAMETER = ", omniDrive.getOptProperty("BRICK_WHEEL_DIAMETER")).nlI();
             this.src.add("TRACK_WIDTH = ", omniDrive.getOptProperty("BRICK_TRACK_WIDTH")).nlI();
             this.src.add("WHEEL_BASE = ", omniDrive.getOptProperty("WHEEL_BASE")).nlI();

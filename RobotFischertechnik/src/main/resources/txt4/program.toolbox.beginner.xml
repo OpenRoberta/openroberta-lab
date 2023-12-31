@@ -8,6 +8,7 @@
                 </block>
             </value>
             </block>
+            <block type='actions_motor_stop_txt'></block>
         </category>
     </category>
     <category name='TOOLBOX_SENSOR' svg='true'>
