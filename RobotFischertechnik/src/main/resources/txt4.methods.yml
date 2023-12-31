@@ -62,11 +62,15 @@ OMNIDRIVETURNDEGREES:
   PYTHON: |
     def omnidriveTurnDegrees(speed, angle):
         speed =  int((speed / 100) * 512)
+        constant = (WHEEL_DIAMETER/2) / (4 * ((TRACK_WIDTH + WHEEL_BASE) / 2))
+        distancePerWheel = math.radians(angle) / constant / 4
+        stepsPerWheel = int(distancePerWheel / (2 * math.pi) * STEPS_PER_ROTATION)
+    
         frontLeftMotor.set_speed(speed, Motor.CCW)
         frontRightMotor.set_speed(speed, Motor.CW)
         rearLeftMotor.set_speed(speed, Motor.CCW)
         rearRightMotor.set_speed(speed, Motor.CW)
-        frontLeftMotor.set_distance(int(round(angle * 1.7)), frontRightMotor, rearLeftMotor, rearRightMotor)
+        frontLeftMotor.set_distance(stepsPerWheel, frontRightMotor, rearLeftMotor, rearRightMotor)
         while True:
             if(not frontLeftMotor.is_running() and not frontRightMotor.is_running() and not rearLeftMotor.is_running() and not rearRightMotor.is_running()):
                 break;
