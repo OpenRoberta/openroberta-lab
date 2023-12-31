@@ -2087,6 +2087,7 @@ Blockly.Msg.WAIT_TIME_TOOLTIP = "Väntar på en viss tid i millisekunder.";
 Blockly.Msg.WAIT_TOOLTIP = "Väntar på att ett tillstånd blir sant.";
 Blockly.Msg.WAIT_UNTIL = "vänta tills";
 Blockly.Msg.WEIGHT_KG = "weight kg";  // untranslated
+Blockly.Msg.WHEEL_BASE = "wheel base";  // untranslated
 Blockly.Msg.WIRELESS_TOOLTIP = "Represents a wireless connection.";  // untranslated
 Blockly.Msg.WRITE_TO_PIN_TOOLTIP = "Skickar värdet till valt stift.";
 Blockly.Msg.X = "x";  // untranslated

@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2023-12-28 18:23:10.862780",
+		"lastupdated": "2023-12-31 02:42:54.853945",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -478,6 +478,7 @@
 	"SET": "set",
 	"BRICK_WHEEL_DIAMETER": "wheel diameter",
 	"BRICK_TRACK_WIDTH": "track width",
+	"WHEEL_BASE": "wheel base",
 	"WEIGHT_KG": "weight kg",
 	"ACTION_MOTOR": "motor",
 	"MOTOR": "motor",

@@ -472,6 +472,7 @@
 	"SET": "",
 	"BRICK_WHEEL_DIAMETER": "",
 	"BRICK_TRACK_WIDTH": "",
+	"WHEEL_BASE": "",
 	"WEIGHT_KG": "",
 	"ACTION_MOTOR": "",
 	"MOTOR": "",

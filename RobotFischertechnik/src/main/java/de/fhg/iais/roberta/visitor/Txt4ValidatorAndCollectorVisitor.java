@@ -57,7 +57,7 @@ public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
 
     @Override
     public Void visitMotorOmniOnAction(MotorOmniOnAction motorOmniOnAction) {
-        usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniOnAction.getUserDefinedPort(), SC.MOTOR));
+        usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniOnAction.getUserDefinedPort(), SC.ENCODER));
         usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniOnAction.getUserDefinedPort(), FischertechnikConstants.OMNIDRIVE));
 
 
@@ -88,7 +88,7 @@ public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
 
     @Override
     public Void visitMotorOmniTurnAction(MotorOmniTurnAction motorOmniTurnAction) {
-        usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniTurnAction.getUserDefinedPort(), SC.MOTOR));
+        usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniTurnAction.getUserDefinedPort(), SC.ENCODER));
         usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniTurnAction.getUserDefinedPort(), FischertechnikConstants.OMNIDRIVE));
         usedMethodBuilder.addUsedMethod(Txt4Methods.OMNIDRIVETURN);
         usedMethodBuilder.addUsedMethod(Txt4Methods.MOTORSTART);
@@ -98,7 +98,7 @@ public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
 
     @Override
     public Void visitMotorOmniTurnForAction(MotorOmniTurnForAction motorOmniTurnForAction) {
-        usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniTurnForAction.getUserDefinedPort(), SC.MOTOR));
+        usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniTurnForAction.getUserDefinedPort(), SC.ENCODER));
         usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniTurnForAction.getUserDefinedPort(), FischertechnikConstants.OMNIDRIVE));
         usedMethodBuilder.addUsedMethod(Txt4Methods.OMNIDRIVETURNDEGREES);
         return null;
@@ -106,7 +106,7 @@ public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
 
     @Override
     public Void visitMotorOnForAction(MotorOnForAction motorOnForAction) {
-        usedHardwareBuilder.addUsedActor(new UsedActor(motorOnForAction.getUserDefinedPort(), SC.MOTOR));
+        usedHardwareBuilder.addUsedActor(new UsedActor(motorOnForAction.getUserDefinedPort(), SC.ENCODER));
         usedMethodBuilder.addUsedMethod(Txt4Methods.MOTORSTARTFOR);
 
         return null;

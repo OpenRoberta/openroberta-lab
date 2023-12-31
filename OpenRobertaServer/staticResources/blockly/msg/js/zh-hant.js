@@ -2087,6 +2087,7 @@ Blockly.Msg.WAIT_TIME_TOOLTIP = "等待特定時間 (以毫秒為單位)。";
 Blockly.Msg.WAIT_TOOLTIP = "等待條件變為 true。";
 Blockly.Msg.WAIT_UNTIL = "等到";
 Blockly.Msg.WEIGHT_KG = "weight kg";  // untranslated
+Blockly.Msg.WHEEL_BASE = "wheel base";  // untranslated
 Blockly.Msg.WIRELESS_TOOLTIP = "Represents a wireless connection.";  // untranslated
 Blockly.Msg.WRITE_TO_PIN_TOOLTIP = "將值發送到選定的引腳。";
 Blockly.Msg.X = "x";

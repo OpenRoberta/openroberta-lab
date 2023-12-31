@@ -2087,6 +2087,7 @@ Blockly.Msg.WAIT_TIME_TOOLTIP = "attende un certo tempo in millisecondi.";
 Blockly.Msg.WAIT_TOOLTIP = "attende una condizione diventare vera.";
 Blockly.Msg.WAIT_UNTIL = "aspetta finchè";
 Blockly.Msg.WEIGHT_KG = "weight kg";  // untranslated
+Blockly.Msg.WHEEL_BASE = "wheel base";  // untranslated
 Blockly.Msg.WIRELESS_TOOLTIP = "Represents a wireless connection.";  // untranslated
 Blockly.Msg.WRITE_TO_PIN_TOOLTIP = "invia il valore al pin scelto.";
 Blockly.Msg.X = "X";

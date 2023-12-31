@@ -2087,6 +2087,7 @@ Blockly.Msg.WAIT_TIME_TOOLTIP = "Denbora konkretu bat itxaroten du milisegunduta
 Blockly.Msg.WAIT_TOOLTIP = "Baldintza egiazkoa izan arte itxaroten du.";
 Blockly.Msg.WAIT_UNTIL = "itxaron baldintza";
 Blockly.Msg.WEIGHT_KG = "weight kg";  // untranslated
+Blockly.Msg.WHEEL_BASE = "wheel base";  // untranslated
 Blockly.Msg.WIRELESS_TOOLTIP = "Represents a wireless connection.";  // untranslated
 Blockly.Msg.WRITE_TO_PIN_TOOLTIP = "Balioa aukeraturako pin-era bidaltzen du.";
 Blockly.Msg.X = "x";

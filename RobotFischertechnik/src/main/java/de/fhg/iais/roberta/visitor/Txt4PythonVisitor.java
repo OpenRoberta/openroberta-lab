@@ -40,10 +40,6 @@ import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractPythonVisitor;
 public final class Txt4PythonVisitor extends AbstractPythonVisitor implements ITxt4Visitor<Void> {
 
     private final ConfigurationAst configurationAst;
-    private String frontLeftMotor;
-    private String frontRightMotor;
-    private String rearLeftMotor;
-    private String rearRightMotor;
 
     /**
      * initialize the Python code generator visitor.
@@ -54,25 +50,7 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
         List<List<Phrase>> programPhrases, ClassToInstanceMap<IProjectBean> beans, ConfigurationAst configurationAst) {
         super(programPhrases, beans);
         this.configurationAst = configurationAst;
-        setMotorPorts();
     }
-
-    private void setMotorPorts() {
-        ConfigurationComponent omniDrive = getOmniDrive();
-        if ( omniDrive != null ) {
-            this.frontLeftMotor = "TXT_M_" + omniDrive.getOptProperty("MOTOR_FL") + "_encodermotor";
-            this.frontRightMotor = "TXT_M_" + omniDrive.getOptProperty("MOTOR_FR") + "_encodermotor";
-            this.rearLeftMotor = "TXT_M_" + omniDrive.getOptProperty("MOTOR_RL") + "_encodermotor";
-            this.rearRightMotor = "TXT_M_" + omniDrive.getOptProperty("MOTOR_RR") + "_encodermotor";
-        } else {
-            this.frontLeftMotor = "TXT_M_M1_encodermotor";
-            this.frontRightMotor = "TXT_M_M2_encodermotor";
-            this.rearLeftMotor = "TXT_M_M3_encodermotor";
-            this.rearRightMotor = "TXT_M_M4_encodermotor";
-
-        }
-    }
-
     private ConfigurationComponent getOmniDrive() {
         for ( ConfigurationComponent component : this.configurationAst.getConfigurationComponents().values() ) {
             if ( component.componentType.equals(FischertechnikConstants.OMNIDRIVE) ) {
@@ -151,8 +129,7 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
             default:
                 break;
         }
-        this.src.add("(", this.frontLeftMotor, ", ", this.frontRightMotor, ", ", this.rearLeftMotor, ", ", this.rearRightMotor, ", ");
-        this.src.add(speedMultiplier);
+        this.src.add("(", speedMultiplier);
         motorOmniOnAction.power.accept(this);
         this.src.add(")");
 
@@ -163,7 +140,7 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
     @Override
     public Void visitMotorOmniTurnAction(MotorOmniTurnAction motorOmniTurnAction) {
         this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(Txt4Methods.OMNIDRIVETURN));
-        this.src.add("(", this.frontLeftMotor, ", ", this.frontRightMotor, ", ", this.rearLeftMotor, ", ", this.rearRightMotor, ", ");
+        this.src.add("(");
         if ( motorOmniTurnAction.direction.equals("LEFT") ) {
             this.src.add("-");
         }
@@ -175,7 +152,7 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
     @Override
     public Void visitMotorOmniTurnForAction(MotorOmniTurnForAction motorOmniTurnForAction) {
         this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(Txt4Methods.OMNIDRIVETURNDEGREES));
-        this.src.add("(", this.frontLeftMotor, ", ", this.frontRightMotor, ", ", this.rearLeftMotor, ", ", this.rearRightMotor, ", ");
+        this.src.add("(");
         if ( motorOmniTurnForAction.direction.equals("LEFT") ) {
             this.src.add("-");
         }
@@ -332,7 +309,6 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
         this.src.add("txt_factory.init_input_factory()").nlI();
         if ( usedHardwareBean.isActorUsed(SC.MOTOR) || usedHardwareBean.isActorUsed(SC.ENCODER) ) {
             this.src.add("txt_factory.init_motor_factory()").nlI();
-            this.src.add("STEPS_PER_ROTATION = 128").nlI();
         }
         if ( usedHardwareBean.isActorUsed(SC.SERVOMOTOR) ) {
             this.src.add("txt_factory.init_servomotor_factory()").nlI();
@@ -344,6 +320,7 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
         }
 
         initPeripherals();
+        generateVariables(usedHardwareBean);
         this.src.add("txt_factory.initialized()");
 
     }
@@ -366,6 +343,23 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
                 String port = component.getOptProperty("PIN1");
                 this.src.add("TXT_M_I", port, "_mini_switch = txt_factory.input_factory.create_mini_switch(TXT_M,", port, ")").nlI();
             }
+        }
+    }
+
+    private void generateVariables(UsedHardwareBean usedHardwareBean) {
+        if ( usedHardwareBean.isActorUsed(FischertechnikConstants.OMNIDRIVE) ) {
+            ConfigurationComponent omniDrive = getOmniDrive();
+            this.src.add("#init omnidrive").nlI();
+            this.src.add("frontLeftMotor = ", "TXT_M_" + omniDrive.getOptProperty("MOTOR_FL") + "_encodermotor").nlI();
+            this.src.add("frontRightMotor = ", "TXT_M_" + omniDrive.getOptProperty("MOTOR_FR") + "_encodermotor").nlI();
+            this.src.add("rearLeftMotor = ", "TXT_M_" + omniDrive.getOptProperty("MOTOR_RL") + "_encodermotor").nlI();
+            this.src.add("rearRightMotor = ", "TXT_M_" + omniDrive.getOptProperty("MOTOR_RR") + "_encodermotor").nlI();
+            this.src.add("WHEEL_DIAMETER = ", omniDrive.getOptProperty("BRICK_WHEEL_DIAMETER")).nlI();
+            this.src.add("TRACK_WIDTH = ", omniDrive.getOptProperty("BRICK_TRACK_WIDTH")).nlI();
+            this.src.add("WHEEL_BASE = ", omniDrive.getOptProperty("WHEEL_BASE")).nlI();
+        }
+        if ( usedHardwareBean.isActorUsed(SC.ENCODER) ) {
+            this.src.add("STEPS_PER_ROTATION = 128").nlI();
         }
     }
     @Override

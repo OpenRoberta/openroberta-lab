@@ -8,7 +8,6 @@ MOTORSTART:
         motor.set_speed(int((speed / 100) * 512), Motor.CCW)
         motor.start()
 
-
 MOTORSTARTFOR:
   PYTHON: |
     def motorStartFor(motor, speed, degrees):
@@ -20,56 +19,57 @@ MOTORSTARTFOR:
                 break;
             time.sleep(0.010)
         motor.stop()
+
 OMNIDRIVEVERTICAL:
   PYTHON: |
-    def omnidriveVertical(motorFL, motorFR, motorRL, motorRR, speed):
-        motorStart(motorFL, speed)
-        motorStart(motorFR, speed)
-        motorStart(motorRL, speed)
-        motorStart(motorRR, speed)
+    def omnidriveVertical(speed):
+        motorStart(frontLeftMotor, speed)
+        motorStart(frontRightMotor, speed)
+        motorStart(rearLeftMotor, speed)
+        motorStart(rearRightMotor, speed)
 
 OMNIDRIVEHORIZONTAL:
   PYTHON: |
-    def omnidriveHorizontal(motorFL, motorFR, motorRL, motorRR, speed):
-        motorStart(motorFL, -speed)
-        motorStart(motorFR, speed)
-        motorStart(motorRL, speed)
-        motorStart(motorRR, -speed)
+    def omnidriveHorizontal(speed):
+        motorStart(frontLeftMotor, -speed)
+        motorStart(frontRightMotor, speed)
+        motorStart(rearLeftMotor, speed)
+        motorStart(rearRightMotor, -speed)
 
 OMNIDRIVEDIAGONALTL:
   PYTHON: |
-    def omnidriveDiagonalTL(motorFL, motorFR, motorRL, motorRR, speed):
-        motorFL.stop_sync(motorRR)
-        motorStart(motorFR, speed)
-        motorStart(motorRL, speed)
+    def omnidriveDiagonalTL(speed):
+        frontLeftMotor.stop_sync(rearRightMotor)
+        motorStart(frontRightMotor, speed)
+        motorStart(rearLeftMotor, speed)
 
 OMNIDRIVEDIAGONALTR:
   PYTHON: |
-    def omnidriveDiagonalTR(motorFL, motorFR, motorRL, motorRR, speed):
-        motorFR.stop_sync(motorRL)
-        motorStart(motorFL, speed)
-        motorStart(motorRR, speed)
+    def omnidriveDiagonalTR(speed):
+        frontRightMotor.stop_sync(rearLeftMotor)
+        motorStart(frontLeftMotor, speed)
+        motorStart(rearRightMotor, speed)
 
 OMNIDRIVETURN:
   PYTHON: |
-    def omnidriveTurn(motorFL, motorFR, motorRL, motorRR, speed):
-        motorStart(motorFL, speed)
-        motorStart(motorFR, -speed)
-        motorStart(motorRL, speed)
-        motorStart(motorRR, -speed)
+    def omnidriveTurn(speed):
+        motorStart(frontLeftMotor, speed)
+        motorStart(frontRightMotor, -speed)
+        motorStart(rearLeftMotor, speed)
+        motorStart(rearRightMotor, -speed)
 
 OMNIDRIVETURNDEGREES:
   PYTHON: |
-    def omnidriveTurnDegrees(motorFL, motorFR, motorRL, motorRR, speed, angle):
+    def omnidriveTurnDegrees(speed, angle):
         speed =  int((speed / 100) * 512)
-        motorFL.set_speed(speed, Motor.CCW)
-        motorFR.set_speed(speed, Motor.CW)
-        motorRL.set_speed(speed, Motor.CCW)
-        motorRR.set_speed(speed, Motor.CW)
-        motorFL.set_distance(int(round(angle * 1.7)), motorFR, motorRL, motorRR)
+        frontLeftMotor.set_speed(speed, Motor.CCW)
+        frontRightMotor.set_speed(speed, Motor.CW)
+        rearLeftMotor.set_speed(speed, Motor.CCW)
+        rearRightMotor.set_speed(speed, Motor.CW)
+        frontLeftMotor.set_distance(int(round(angle * 1.7)), frontRightMotor, rearLeftMotor, rearRightMotor)
         while True:
-            if(not motorFL.is_running() and not motorFR.is_running() and not motorRL.is_running() and not motorRR.is_running()):
+            if(not frontLeftMotor.is_running() and not frontRightMotor.is_running() and not rearLeftMotor.is_running() and not rearRightMotor.is_running()):
                 break;
             time.sleep(0.010)
-        motorFL.stop_sync(motorFR, motorRL, motorRR)
+        frontLeftMotor.stop_sync(frontRightMotor, rearLeftMotor, rearRightMotor)
     

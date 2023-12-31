@@ -3,8 +3,9 @@
     <instance x="70" y="103">
         <block type="robConf_omnidrive" id="AM=n{?7R#nO#1~?a3j~u" intask="true">
             <field name="NAME">_O</field>
-            <field name="BRICK_WHEEL_DIAMETER">5.6</field>
-            <field name="BRICK_TRACK_WIDTH">11.5</field>
+            <field name="BRICK_WHEEL_DIAMETER">6</field>
+            <field name="BRICK_TRACK_WIDTH">15</field>
+            <field name="WHEEL_BASE">10.2</field>
             <field name="MOTOR_FL">M1</field>
             <field name="MOTOR_FR">M2</field>
             <field name="MOTOR_RL">M3</field>
