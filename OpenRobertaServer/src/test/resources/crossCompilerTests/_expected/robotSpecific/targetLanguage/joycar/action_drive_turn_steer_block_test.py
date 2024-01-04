@@ -15,9 +15,7 @@ timer1 = microbit.running_time()
 ___speed = 0
 def ____driveSpeedTest():
     global timer1, ___speed
-    # Robot should increase speed from 0 to 100% and decrease the speed again until it starts driving backwards with up
-                                too 100% of its speed
-
+    # Robot should increase speed from 0 to 100% and decrease the speed again until it starts driving backwards with up                                 too 100% of its speed
     while not (___speed > 90):
         microbit.display.scroll(str(___speed))
         drive(___speed, ___speed)
@@ -51,9 +49,7 @@ def ____driveSpeedTest():
 
 def ____turnLeftRightTest():
     global timer1, ___speed
-    # Turn left with speed -100% to +100%, so it should first spin right and then left when the speed value is
-                                positiv
-
+    # Turn left with speed -100% to +100%, so it should first spin right and then left when the speed value is                                 positiv
     ___speed = -100
     while not (___speed > 100):
         microbit.display.scroll(str(___speed))
@@ -61,9 +57,7 @@ def ____turnLeftRightTest():
         microbit.sleep(1000)
         drive(0, 0)
         ___speed = ___speed + 10
-    # Turn right with speed -100% to +100%, so it should first spin left and then right when the speed value is
-                                positiv
-
+    # Turn right with speed -100% to +100%, so it should first spin left and then right when the speed value is                                 positiv
     ___speed = -100
     while not (___speed > 100):
         microbit.display.scroll(str(___speed))
@@ -88,9 +82,7 @@ def ____turnLeftRightTest():
 
 def ____steerDriveTest():
     global timer1, ___speed
-    # Only the speed of one wheel changes, first the left wheel from -100% to +100%, after that the right wheel from
-                                -100% to +100%.
-
+    # Only the speed of one wheel changes, first the left wheel from -100% to +100%, after that the right wheel from                                 -100% to +100%.
     ___speed = -100
     while not (___speed > 100):
         microbit.display.scroll(str(___speed))
@@ -106,7 +98,6 @@ def ____steerDriveTest():
         drive(0, 0)
         ___speed = ___speed + 10
     # Same thing, just that the mode is set to backwards so the wheels should start turning into the other direction
-
     ___speed = -100
     while not (___speed > 100):
         microbit.display.scroll(str(___speed))

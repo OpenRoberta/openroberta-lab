@@ -15,9 +15,7 @@ ___leftInfraredTested = False
 ___rightInfraredTested = False
 def run():
     global timer1, ___leftInfraredTested, ___rightInfraredTested
-    # This program tests the infrared sensors on the left and right. Hold something in front of them to see the robot turning
-                        in the corresponding direction
-
+    # This program tests the infrared sensors on the left and right. Hold something in front of them to see the robot turning                         in the corresponding direction
     while True:
         if (not fetch_sensor_data(0x38)[5]):
             # Robot turns left
