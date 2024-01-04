@@ -444,12 +444,6 @@ public class MicrobitPythonVisitor extends AbstractPythonVisitor implements IMic
     }
 
     @Override
-    public Void visitStmtTextComment(StmtTextComment stmtTextComment) {
-        this.src.add("# ", stmtTextComment.textComment);
-        return null;
-    }
-
-    @Override
     public Void visitToneAction(ToneAction toneAction) {
         this.src.add("music.pitch(");
         toneAction.frequency.accept(this);

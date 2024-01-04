@@ -12,9 +12,7 @@ timer1 = microbit.running_time()
 def run():
     global timer1
     while True:
-        # shows ultrasonic distance on display and plays c tone if distance smaller 5cm and h" tone if distance larger than
-                                20cm
-
+        # shows ultrasonic distance on display and plays c tone if distance smaller 5cm and h" tone if distance larger than                                 20cm
         microbit.display.scroll(str(ultrasonic_get_distance(microbit.pin12, microbit.pin8)))
         if ultrasonic_get_distance(microbit.pin12, microbit.pin8) < 5:
             music.pitch(130, 250, microbit.pin16)
