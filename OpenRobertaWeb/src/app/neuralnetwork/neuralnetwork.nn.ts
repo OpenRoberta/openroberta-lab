@@ -332,7 +332,6 @@ export class Network {
      *     nodes in the network.
      */
     forwardProp(): void {
-        let inputLayer = this.network[0];
         for (let layerIdx = 1; layerIdx < this.network.length; layerIdx++) {
             let currentLayer = this.network[layerIdx];
             // Update all the nodes in this layer.

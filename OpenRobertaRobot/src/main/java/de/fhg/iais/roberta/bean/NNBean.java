@@ -119,6 +119,7 @@ public class NNBean implements IProjectBean {
     }
 
     public static class Builder implements IBuilder<NNBean> {
+        private final JSONArray EMPTY_JSON_ARRAY = new JSONArray();
         private JSONArray weights = null;
         private JSONArray bias = null;
         private List<String> inputNeurons = new ArrayList<>();
@@ -144,16 +145,16 @@ public class NNBean implements IProjectBean {
                 return null;
             } else {
                 JSONObject netStateDefinition = new JSONObject(data.getValue());
-                this.weights = netStateDefinition.getJSONArray("weights");
-                this.bias = netStateDefinition.getJSONArray("biases");
-                netStateDefinition.getJSONArray("inputs").forEach(i -> inputNeurons.add((String) i));
-                netStateDefinition.getJSONArray("hiddenNeurons").forEach(h -> {
+                this.weights = netStateDefinition.optJSONArray("weights", EMPTY_JSON_ARRAY);
+                this.bias = netStateDefinition.optJSONArray("biases", EMPTY_JSON_ARRAY);
+                netStateDefinition.optJSONArray("inputs", EMPTY_JSON_ARRAY).forEach(i -> inputNeurons.add((String) i));
+                netStateDefinition.optJSONArray("hiddenNeurons", EMPTY_JSON_ARRAY).forEach(h -> {
                     List<String> hiddenLayerNeurons = new ArrayList<>();
                     ((JSONArray) h).forEach(neuron -> hiddenLayerNeurons.add((String) neuron));
                     hiddenNeurons.add(hiddenLayerNeurons);
                 });
-                netStateDefinition.getJSONArray("outputs").forEach(o -> outputNeurons.add((String) o));
-                netStateDefinition.getJSONArray("networkShape").forEach(c -> networkShape.add((Integer) c));
+                netStateDefinition.optJSONArray("outputs", EMPTY_JSON_ARRAY).forEach(o -> outputNeurons.add((String) o));
+                netStateDefinition.optJSONArray("networkShape", EMPTY_JSON_ARRAY).forEach(c -> networkShape.add((Integer) c));
                 this.learningRate = netStateDefinition.getFloat("learningRate");
                 this.regularizationRate = netStateDefinition.getFloat("regularizationRate");
                 this.noise = netStateDefinition.getFloat("noise");
