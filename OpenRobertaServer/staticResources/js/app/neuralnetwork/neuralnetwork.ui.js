@@ -265,7 +265,7 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
                         activationDropdown = D3.select('#nn-activations').on('change', function () {
                             state.activationKey = this.value;
                             state.activation = H.activations[this.value];
-                            drawNetworkUIForTabDefine();
+                            reconstructNNIncludingUI();
                         });
                         activationDropdown.property('value', getKeyFromValue(H.activations, state.activation));
                         D3.select('#nn-show-precision').on('change', function () {

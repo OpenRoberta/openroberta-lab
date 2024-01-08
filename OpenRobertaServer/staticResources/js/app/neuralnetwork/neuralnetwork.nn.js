@@ -323,7 +323,6 @@ define(["require", "exports", "./neuralnetwork.helper", "util.roberta"], functio
          *     nodes in the network.
          */
         Network.prototype.forwardProp = function () {
-            var inputLayer = this.network[0];
             for (var layerIdx = 1; layerIdx < this.network.length; layerIdx++) {
                 var currentLayer = this.network[layerIdx];
                 // Update all the nodes in this layer.
