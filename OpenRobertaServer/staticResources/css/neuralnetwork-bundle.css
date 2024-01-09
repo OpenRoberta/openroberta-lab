@@ -464,7 +464,7 @@ button.nn-btn:hover {
 }
 
 #nn-learn-training-loss-linechart {
-    flex: 0 0 40%;
+    width: 60%;
     height: 100%;
     border: 1px solid #0009;
 }
