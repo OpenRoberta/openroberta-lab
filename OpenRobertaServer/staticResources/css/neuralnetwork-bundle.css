@@ -457,7 +457,7 @@ button.nn-btn:hover {
     height: 60px;
     margin-right: 10px;
     display: flex;
-    flex-basis: 25%;
+    flex-basis: 30%;
     flex-wrap: nowrap;
     align-content: center;
     justify-content: space-evenly;
@@ -471,6 +471,10 @@ button.nn-btn:hover {
 
 .nn-output-stats {
     padding: 10px;
+}
+
+#nn-epoch-num {
+    width: 80px;
 }
 
 #nn-random-values-from-to {

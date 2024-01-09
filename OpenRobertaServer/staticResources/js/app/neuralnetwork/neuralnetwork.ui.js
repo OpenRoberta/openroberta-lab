@@ -110,7 +110,7 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
     var userInputsForExploring = [];
     var currentInputRowForLearning = 0;
     var currentInputRowForExploring = 0;
-    var epochsToTrain = 100;
+    var epochsToTrain = 10000;
     var originalWeights = [];
     var originalBiases = [];
     var isLearning = false;
@@ -904,7 +904,8 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
         D3.select("#nn".concat(tabSuffix, "-main-part")).selectAll('div.nn-plus-minus-neurons').remove();
         var nnD3 = D3.select("#nn".concat(tabSuffix))[0][0];
         var topControlD3 = D3.select("#nn".concat(tabSuffix, "-top-controls"))[0][0];
-        var mainPartHeight = nnD3.clientHeight - topControlD3.clientHeight + (options['adjustMainPartHeight'] ? -50 : -75);
+        var _mainPartHeightTemp = nnD3.clientHeight - topControlD3.clientHeight + (options['adjustMainPartHeight'] ? -50 : -75);
+        var mainPartHeight = _mainPartHeightTemp <= 0 ? 30 : _mainPartHeightTemp;
         // set the width of the svg container.
         var mainPart = D3.select("#nn".concat(tabSuffix, "-main-part"))[0][0];
         mainPart.setAttribute('style', 'height:' + mainPartHeight + 'px');
@@ -917,7 +918,7 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
         var maxNumberOfNodesOfAllLayers = networkImpl.map(function (layer) { return layer.length; }).reduce(function (a, b) { return Math.max(a, b); }, 0);
         maxNumberOfNodesOfAllLayers = maxNumberOfNodesOfAllLayers < 1 ? 1 : maxNumberOfNodesOfAllLayers;
         var totalYBetweenTwoNodes = heightOfWholeNNDiv / maxNumberOfNodesOfAllLayers;
-        var nodeSize = (totalYBetweenTwoNodes < 100 ? totalYBetweenTwoNodes : 100) / 2;
+        var nodeSize = (totalYBetweenTwoNodes < 100 && totalYBetweenTwoNodes > 0 ? totalYBetweenTwoNodes : 100) / 2;
         var nodeDistanceFromTop = 10;
         var usedYBetweenTwoNodes = (heightOfWholeNNDiv - 2 * nodeSize) / maxNumberOfNodesOfAllLayers;
         var biasSize = 10;
@@ -929,7 +930,8 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
             return nodeIndex * usedYBetweenTwoNodes + nodeSize / 2;
         }
         function layerStartX(layerIdx) {
-            return startXFirstLayer + layerIdx * usedXBetweenTwoLayers - nodeSize / 2;
+            var lsx = startXFirstLayer + layerIdx * usedXBetweenTwoLayers - nodeSize / 2;
+            return lsx < 0 ? 0 : lsx;
         }
         var weightLineChart = $('#nn-learn-training-weight-linechart');
         var biasLineChart = $('#nn-learn-training-bias-linechart');

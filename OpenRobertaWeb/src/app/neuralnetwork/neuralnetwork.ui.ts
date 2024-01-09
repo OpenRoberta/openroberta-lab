@@ -82,7 +82,7 @@ let userInputsForLearning: number[][] = [];
 let userInputsForExploring: number[][] = [];
 let currentInputRowForLearning: number = 0;
 let currentInputRowForExploring: number = 0;
-let epochsToTrain: number = 100;
+let epochsToTrain: number = 10000;
 let originalWeights: string[][][] = [];
 let originalBiases: string[][] = [];
 let isLearning: boolean = false;
@@ -922,7 +922,8 @@ function drawTheNetwork(tabType: TabType, tabSuffix: string, options: object) {
 
     const nnD3 = D3.select(`#nn${tabSuffix}`)[0][0] as HTMLDivElement;
     const topControlD3 = D3.select(`#nn${tabSuffix}-top-controls`)[0][0] as HTMLDivElement;
-    const mainPartHeight = nnD3.clientHeight - topControlD3.clientHeight + (options['adjustMainPartHeight'] ? -50 : -75);
+    let _mainPartHeightTemp = nnD3.clientHeight - topControlD3.clientHeight + (options['adjustMainPartHeight'] ? -50 : -75);
+    const mainPartHeight = _mainPartHeightTemp <=  0 ? 30 : _mainPartHeightTemp;
 
     // set the width of the svg container.
     const mainPart = D3.select(`#nn${tabSuffix}-main-part`)[0][0] as HTMLDivElement;
@@ -940,7 +941,7 @@ function drawTheNetwork(tabType: TabType, tabSuffix: string, options: object) {
     let maxNumberOfNodesOfAllLayers = networkImpl.map((layer) => layer.length).reduce((a, b) => Math.max(a, b), 0);
     maxNumberOfNodesOfAllLayers = maxNumberOfNodesOfAllLayers < 1 ? 1 : maxNumberOfNodesOfAllLayers;
     const totalYBetweenTwoNodes = heightOfWholeNNDiv / maxNumberOfNodesOfAllLayers;
-    const nodeSize = (totalYBetweenTwoNodes < 100 ? totalYBetweenTwoNodes : 100) / 2;
+    const nodeSize = (totalYBetweenTwoNodes < 100 && totalYBetweenTwoNodes > 0 ? totalYBetweenTwoNodes : 100) / 2;
     const nodeDistanceFromTop = 10;
     const usedYBetweenTwoNodes = (heightOfWholeNNDiv - 2 * nodeSize) / maxNumberOfNodesOfAllLayers;
     const biasSize = 10;
@@ -953,7 +954,8 @@ function drawTheNetwork(tabType: TabType, tabSuffix: string, options: object) {
         return nodeIndex * usedYBetweenTwoNodes + nodeSize / 2;
     }
     function layerStartX(layerIdx: number): number {
-        return startXFirstLayer + layerIdx * usedXBetweenTwoLayers - nodeSize / 2;
+        const lsx = startXFirstLayer + layerIdx * usedXBetweenTwoLayers - nodeSize / 2;
+        return lsx < 0 ? 0 : lsx;
     }
 
     let weightLineChart = $('#nn-learn-training-weight-linechart');
