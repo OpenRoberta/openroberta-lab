@@ -13,6 +13,7 @@ import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.constants.FischertechnikConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.MotorOmniOnAction;
+import de.fhg.iais.roberta.syntax.action.MotorOmniOnForAction;
 import de.fhg.iais.roberta.syntax.action.MotorOmniStopAction;
 import de.fhg.iais.roberta.syntax.action.MotorOmniTurnAction;
 import de.fhg.iais.roberta.syntax.action.MotorOmniTurnForAction;
@@ -81,6 +82,35 @@ public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
             case "ASLEEP": //forward right
             case "ANGRY": //backward left
                 usedMethodBuilder.addUsedMethod(Txt4Methods.OMNIDRIVEDIAGONALTR);
+                break;
+            default:
+                break;
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitMotorOmniOnForAction(MotorOmniOnForAction motorOmniOnForAction) {
+        usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniOnForAction.getUserDefinedPort(), SC.ENCODER));
+        usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniOnForAction.getUserDefinedPort(), FischertechnikConstants.OMNIDRIVE));
+
+
+        usedMethodBuilder.addUsedMethod(Txt4Methods.MOTORSTART);
+        //replace with forward, backward, left, right, forward left, backward right, forward right, backward left,
+        switch ( motorOmniOnForAction.direction ) {
+            case "HEART": //forward
+            case "HEART_SMALL": //backward
+            case "HAPPY": //left
+            case "SMILE": //right
+                usedMethodBuilder.addUsedMethod(Txt4Methods.OMNIDRIVESTRAIGHTDISTANCE);
+                break;
+            case "CONFUSED": //forward left
+            case "SUPRISED": //backward right
+                usedMethodBuilder.addUsedMethod(Txt4Methods.OMNIDRIVEDIAGONALTLDISTANCE);
+                break;
+            case "ASLEEP": //forward right
+            case "ANGRY": //backward left
+                usedMethodBuilder.addUsedMethod(Txt4Methods.OMNIDRIVEDIAGONALTRDISTANCE);
                 break;
             default:
                 break;

@@ -36,6 +36,62 @@ OMNIDRIVEHORIZONTAL:
         motorStart(rearLeftMotor, speed)
         motorStart(rearRightMotor, -speed)
 
+OMNIDRIVESTRAIGHTDISTANCE:
+  PYTHON: |
+    def omnidriveStraightDistance(distance, speedFL, speedFR, speedRL, speedRR):
+        constant = WHEEL_DIAMETER / (2 * 4)
+        distancePerWheel = distance / constant / 4
+        stepsPerWheel = int(distancePerWheel / (2 * math.pi) * STEPS_PER_ROTATION)
+    
+        frontLeftMotor.set_speed(int((speedFL / 100) * 512), Motor.CCW)
+        frontRightMotor.set_speed(int((speedFR / 100) * 512), Motor.CCW)
+        rearLeftMotor.set_speed(int((speedRL / 100) * 512), Motor.CCW)
+        rearRightMotor.set_speed(int((speedRR / 100) * 512), Motor.CCW)
+        frontLeftMotor.set_distance(stepsPerWheel, frontRightMotor, rearLeftMotor, rearRightMotor)
+        while True:
+            if(not frontLeftMotor.is_running() and not frontRightMotor.is_running() and not rearLeftMotor.is_running() and not rearRightMotor.is_running()):
+                break;
+            time.sleep(0.010)
+        frontLeftMotor.stop_sync(frontRightMotor, rearLeftMotor, rearRightMotor)
+
+OMNIDRIVEDIAGONALTLDISTANCE:
+  PYTHON: |
+    def omnidriveDiagonalTLDistance(distance, speed):
+        speed =  int((speed / 100) * 512)
+        constant = WHEEL_DIAMETER / (2 * 4)
+        distancePerWheel = math.sqrt(1/2 * math.pow(distance,2)) / constant / 4
+        stepsPerWheel = int(distancePerWheel / (2 * math.pi) * STEPS_PER_ROTATION) * 2
+    
+        frontLeftMotor.stop_sync(rearRightMotor)
+
+        frontRightMotor.set_speed(speed, Motor.CCW)
+        rearLeftMotor.set_speed(speed, Motor.CCW)
+        frontRightMotor.set_distance(stepsPerWheel, rearLeftMotor)
+        while True:
+            if(not frontRightMotor.is_running() and not rearLeftMotor.is_running()):
+                break;
+            time.sleep(0.010)
+        frontLeftMotor.stop_sync(frontRightMotor, rearLeftMotor, rearRightMotor)
+
+OMNIDRIVEDIAGONALTRDISTANCE:
+  PYTHON: |
+    def omnidriveDiagonalTRDistance(distance, speed):
+        speed =  int((speed / 100) * 512)
+        constant = WHEEL_DIAMETER / (2 * 4)
+        distancePerWheel = math.sqrt(1/2 * math.pow(distance,2)) / constant / 4
+        stepsPerWheel = int(distancePerWheel / (2 * math.pi) * STEPS_PER_ROTATION) * 2
+    
+        frontRightMotor.stop_sync(rearLeftMotor)
+
+        frontLeftMotor.set_speed(speed, Motor.CCW)
+        rearRightMotor.set_speed(speed, Motor.CCW)
+        frontLeftMotor.set_distance(stepsPerWheel, rearRightMotor)
+        while True:
+            if(not frontLeftMotor.is_running() and not rearRightMotor.is_running()):
+                break;
+            time.sleep(0.010)
+        frontLeftMotor.stop_sync(frontRightMotor, rearLeftMotor, rearRightMotor)
+
 OMNIDRIVEDIAGONALTL:
   PYTHON: |
     def omnidriveDiagonalTL(speed):

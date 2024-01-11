@@ -28,6 +28,18 @@
                     </block>
                 </value>
             </block>
+            <block type='actions_motorOmni_on_for_txt'>
+                <value name='POWER'>
+                    <block type='math_number'>
+                        <field name='NUM'>30</field>
+                    </block>
+                </value>
+                <value name='DISTANCE'>
+                    <block type='math_number'>
+                        <field name='NUM'>10</field>
+                    </block>
+                </value>
+            </block>
             <block type='actions_motorOmni_stop_txt'></block>
             <block type='actions_motorOmni_turn_for_txt'>
                 <value name='POWER'>
