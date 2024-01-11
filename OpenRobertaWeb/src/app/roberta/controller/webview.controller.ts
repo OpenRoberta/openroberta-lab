@@ -10,7 +10,7 @@ let ready: JQuery.Deferred<string, string, string>;
 let aLanguage: string;
 let webViewType: string;
 let interpreter: INTERPRETER.Interpreter;
-let theRobotBehaviour;
+let theRobotBehaviour: WEDO_B.RobotWeDoBehaviour;
 
 /**
  * Init webview
@@ -18,9 +18,7 @@ let theRobotBehaviour;
 export function init(language: string): JQuery.Promise<string, string, string> {
     aLanguage = language;
     ready = $.Deferred();
-    let a: { target: string; type: string } = { target: null, type: null };
-    a.target = 'internal';
-    a.type = 'identify';
+    let a: { target: string; type: string } = { target: 'internal', type: 'identify' };
     if (tryAndroid(a)) {
         webViewType = 'Android';
     } else if (tryIOS(a)) {
@@ -34,7 +32,7 @@ export function init(language: string): JQuery.Promise<string, string, string> {
 
 export function appToJsInterface(jsonData: string): void {
     try {
-        let data = JSON.parse(jsonData);
+        let data: any = JSON.parse(jsonData); //Todo: exchange any
         if (!data.target || !data.type) {
             throw 'invalid arguments';
         }
@@ -55,15 +53,15 @@ export function appToJsInterface(jsonData: string): void {
                 $('#show-available-connections').trigger('connect', data);
                 theRobotBehaviour.update(data);
                 GUISTATE_C.setConnectionState('wait');
-                let bricklyWorkspace = GUISTATE_C.getBricklyWorkspace();
-                let blocks = bricklyWorkspace.getAllBlocks();
+                let bricklyWorkspace: Blockly.bricklyWorkspace = GUISTATE_C.getBricklyWorkspace();
+                let blocks: Blockly.block[] = bricklyWorkspace.getAllBlocks();
                 for (let i: number = 0; i < blocks.length; i++) {
                     if (blocks[i].type === 'robBrick_WeDo-Brick') {
-                        let field = blocks[i].getField('VAR');
+                        let field: Blockly.field = blocks[i].getField('VAR');
                         field.setValue(data.brickname.replace(/\s/g, ''));
                         blocks[i].render();
-                        let dom = Blockly.Xml.workspaceToDom(bricklyWorkspace);
-                        let xml = Blockly.Xml.domToText(dom);
+                        let dom: HTMLElement = Blockly.Xml.workspaceToDom(bricklyWorkspace);
+                        let xml: XMLDocument = Blockly.Xml.domToText(dom);
                         GUISTATE_C.setConfigurationXML(xml);
                         break;
                     }
@@ -73,15 +71,15 @@ export function appToJsInterface(jsonData: string): void {
                 if (interpreter != undefined) {
                     interpreter.terminate();
                 }
-                let bricklyWorkspace = GUISTATE_C.getBricklyWorkspace();
-                let blocks = bricklyWorkspace.getAllBlocks();
+                let bricklyWorkspace: Blockly.bricklyWorkspace = GUISTATE_C.getBricklyWorkspace();
+                let blocks: Blockly.block[] = bricklyWorkspace.getAllBlocks();
                 for (let i: number = 0; i < blocks.length; i++) {
                     if (blocks[i].type === 'robBrick_WeDo-Brick') {
-                        let field = blocks[i].getField('VAR');
+                        let field: Blockly.field = blocks[i].getField('VAR');
                         field.setValue(Blockly.Msg.ROBOT_DEFAULT_NAME_WEDO || Blockly.Msg.ROBOT_DEFAULT_NAME || 'Brick1');
                         blocks[i].render();
-                        let dom = Blockly.Xml.workspaceToDom(bricklyWorkspace);
-                        let xml = Blockly.Xml.domToText(dom);
+                        let dom: HTMLElement = Blockly.Xml.workspaceToDom(bricklyWorkspace);
+                        let xml: XMLDocument = Blockly.Xml.domToText(dom);
                         GUISTATE_C.setConfigurationXML(xml);
                         break;
                     }
@@ -103,7 +101,8 @@ function callbackOnTermination(): void {
     GUISTATE_C.getBlocklyWorkspace().robControls.switchToStart();
 }
 
-export function getInterpreter(program): INTERPRETER.Interpreter {
+export function getInterpreter(program: any): INTERPRETER.Interpreter {
+    //Todo: exchange any
     interpreter = new INTERPRETER.Interpreter(program, theRobotBehaviour, callbackOnTermination, [], null, null);
     return interpreter;
 }
