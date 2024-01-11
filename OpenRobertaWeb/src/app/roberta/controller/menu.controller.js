@@ -879,12 +879,6 @@ function initMenuEvents() {
         if (GUISTATE_C.getView() != 'tabProgram') {
             return;
         }
-        //Overriding the Ctrl + 1 for importing sourcecode
-        if ((e.metaKey || e.ctrlKey) && e.which == 49) {
-            e.preventDefault();
-            IMPORT_C.importSourceCodeToCompile();
-            return false;
-        }
         //Overriding the Ctrl + 2 for creating a debug block
         if ((e.metaKey || e.ctrlKey) && e.which == 50) {
             e.preventDefault();
@@ -895,7 +889,7 @@ function initMenuEvents() {
 
             return false;
         }
-        //Overriding the Ctrl + 3 for creating a assertion + compare block
+        //Overriding the Ctrl + 3 for creating an assertion block
         if ((e.metaKey || e.ctrlKey) && e.which == 51) {
             e.preventDefault();
             var assert = GUISTATE_C.getBlocklyWorkspace().newBlock('robActions_assert');
@@ -913,7 +907,7 @@ function initMenuEvents() {
             parentConnection.connect(childConnection);
             return false;
         }
-        //Overriding the Ctrl + 4 for creating evaluate-expression block
+        //Overriding the Ctrl + 4 for creating an evaluate expression block
         if ((e.metaKey || e.ctrlKey) && e.which == 52) {
             e.preventDefault();
             var expr = GUISTATE_C.getBlocklyWorkspace().newBlock('robActions_eval_expr');
@@ -922,10 +916,10 @@ function initMenuEvents() {
             expr.setInTask(false);
             return false;
         }
-        //Overriding the Ctrl + 5 for creating nnStep block
+        //Overriding the Ctrl + 5 for creating an evaluate statement block
         if ((e.metaKey || e.ctrlKey) && e.which == 53) {
             e.preventDefault();
-            var expr = GUISTATE_C.getBlocklyWorkspace().newBlock('robActions_nnstep');
+            var expr = GUISTATE_C.getBlocklyWorkspace().newBlock('robActions_eval_stmt');
             expr.initSvg();
             expr.render();
             expr.setInTask(false);
