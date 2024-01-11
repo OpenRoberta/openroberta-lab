@@ -882,9 +882,14 @@ define(["require", "exports", "./neuralnetwork.helper", "./neuralnetwork.nn", ".
         $('#nn-random-values-generator-label').text(NN_MSG.get('NN_RANDOM_WEIGHTS_BIASES'));
         $('#nn-random-values-from-span').text(NN_MSG.get('NN_GENERATE_VALUES_FROM'));
         $('#nn-random-values-to-span').text(NN_MSG.get('NN_GENERATE_VALUES_TO'));
-        var layerKey = state.numHiddenLayers === 1 ? 'NN_HIDDEN_LAYER' : 'NN_HIDDEN_LAYERS';
-        $('#layers-label').text(NN_MSG.get(layerKey));
-        $('#num-layers').text(state.numHiddenLayers);
+        if (state && state.hasOwnProperty('numHiddenLayers')) {
+            $('#layers-label').text(NN_MSG.get(state.numHiddenLayers === 1 ? 'NN_HIDDEN_LAYER' : 'NN_HIDDEN_LAYERS'));
+            $('#num-layers').text(state.numHiddenLayers);
+        }
+        else {
+            $('#layers-label').text(NN_MSG.get('NN_HIDDEN_LAYER'));
+            $('#num-layers').text(0);
+        }
         redrawNetwork &&
             drawTheNetwork(TabType.DEFINE, '', {
                 adjustMainPartHeight: false,
