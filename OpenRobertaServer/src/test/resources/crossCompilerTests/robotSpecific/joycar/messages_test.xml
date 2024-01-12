@@ -165,31 +165,31 @@
                     <statement name="BUS">
                         <block type="robConf_encoder" id="S(Xm/UHHH;N[4Km1TML1" intask="true" movable="false">
                             <field name="NAME">EL</field>
-                            <field name="PORT">SPEED_L</field>
+                            <field name="BRICK_PORT">SPEED_L</field>
                         </block>
                         <block type="robConf_encoder" id="S(Xm/UHHH;N[4Km1TML2" intask="true" movable="false">
                             <field name="NAME">ER</field>
-                            <field name="PORT">SPEED_R</field>
+                            <field name="BRICK_PORT">SPEED_R</field>
                         </block>
                         <block type="robConf_infrared" id="S(Xm/UHHH;N[4Km1TML6" intask="true" movable="false">
                             <field name="NAME">OL</field>
-                            <field name="PORT">OBSTCL_L</field>
+                            <field name="BRICK_PORT">OBSTCL_L</field>
                         </block>
                         <block type="robConf_infrared" id="S(Xm/UHHH;N[4Km1TML7" intask="true" movable="false">
                             <field name="NAME">OR</field>
-                            <field name="PORT">OBSTCL_R</field>
+                            <field name="BRICK_PORT">OBSTCL_R</field>
                         </block>
                         <block type="robConf_line" id="S(Xm/UHHH;N[4Km1TML3" intask="true" movable="false">
                             <field name="NAME">LL</field>
-                            <field name="PORT">LINE_TRK_L</field>
+                            <field name="BRICK_PORT">LINE_TRK_L</field>
                         </block>
                         <block type="robConf_line" id="S(Xm/UHHH;N[4Km1TML4" intask="true" movable="false">
                             <field name="NAME">LM</field>
-                            <field name="PORT">LINE_TRK_M</field>
+                            <field name="BRICK_PORT">LINE_TRK_M</field>
                         </block>
                         <block type="robConf_line" id="S(Xm/UHHH;N[4Km1TML5" intask="true" movable="false">
                             <field name="NAME">LR</field>
-                            <field name="PORT">LINE_TRK_R</field>
+                            <field name="BRICK_PORT">LINE_TRK_R</field>
                         </block>
                     </statement>
                 </block>
