@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2023-12-13 16:10:51.263478",
+		"lastupdated": "2024-01-12 07:21:51.969391",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -2084,5 +2084,13 @@
 	"TITLE_GOAL": "Learning objective",
 	"TITLE_PREVIOUS": "Previous knowledge",
 	"OPTION_WEBUSB": "Connect your micro:bit device to the computer<br><small>select it in the next popup and click »Connect«</small>",
-	"OPTION_FILE_DOWNLOAD": "Download your program as a file"
+	"OPTION_FILE_DOWNLOAD": "Download your program as a file",
+	"START_RESULTS": "results",
+	"START_OPTIONS": "More options",
+	"GALLERY_NEWEST": "Newest first",
+	"GALLERY_OLDEST": "Oldest first",
+	"GALLERY_PROGRAM_NAME": "Program name alph.",
+	"GALLERY_ROBOT": "Robot/System alph.",
+	"GALLERY_ALL_ROBOTS": "All robots/systems",
+	"GALLERY_SORT_BY": "Order by"
 }
