@@ -307,7 +307,7 @@ public class JoyCarPythonVisitor extends MicrobitV2PythonVisitor implements IJoy
         ConfigurationComponent bus = getI2CBusWithSensor(sensorName);
         ConfigurationComponent sensor = getBusSubComponent(bus, sensorName);
 
-        String port = sensor.getProperty("PORT");
+        String port = sensor.getProperty("BRICK_PORT");
         // Please do not change the order, it is the bit position of the sensor port
         String[] portMap = {"SPEED_L", "SPEED_R", "LINE_TRK_L", "LINE_TRK_M", "LINE_TRK_R", "OBSTCL_L", "OBSTCL_R"};
         port = Integer.toString(ArrayUtils.indexOf(portMap, port));
