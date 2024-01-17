@@ -186,24 +186,6 @@
         <block type='text_cast_char_toNumber'></block>
     </category>
     <category name='TOOLBOX_LIST' svg='true'>
-    <block type='robLists_create_with'>
-        <mutation items='0' list_type='Number'></mutation>
-    </block>
-    <block type='robLists_create_with'>
-        <mutation items='3' list_type='Number'></mutation>
-    </block>
-    <value name='ADD0'>
-        <block type='math_number'></block>
-    </value>
-    <value name='ADD1'>
-        <block type='math_number'></block>
-    </value>
-    <value name='ADD2'>
-        <block type='math_number'></block>
-    </value>
-    <category
-            name='TOOLBOX_LIST'
-            svg='true'>
         <block type='robLists_create_with'>
             <mutation
                     items='0'
@@ -225,32 +207,6 @@
         <block type='robLists_indexOf'></block>
         <block type='robLists_getIndex'></block>
         <block type='robLists_setIndex'></block>
-    </category>
-    <category name='TOOLBOX_IMAGE' svg='true'>
-        <block type='mbedImage_image'></block>
-        <block type='mbedImage_shift'>
-            <value name='B'>
-                <block type='math_number'>
-                    <field name='NUM'>1</field>
-                </block>
-            </value>
-        </block>
-        <block type='mbedImage_invert'></block>
-        <block type='mbedImage_get_image'>
-            <field name='IMAGE'>HEART</field>
-        </block>
-        <block type='mbedImage_get_image'>
-            <field name='IMAGE'>SMILE</field>
-        </block>
-        <block type='mbedImage_get_image'>
-            <field name='IMAGE'>STICKFIGURE</field>
-        </block>
-        <block type='mbedImage_get_image'>
-            <field name='IMAGE'>GIRAFFE</field>
-        </block>
-        <block type='mbedImage_get_image'>
-            <field name='IMAGE'>UMBRELLA</field>
-        </block>
     </category>
     <category name='TOOLBOX_COLOUR' svg='true'>
         <block type='robColour_picker'>
@@ -298,32 +254,7 @@
             </value>
         </block>
     </category>
-    <category
-            name='TOOLBOX_VARIABLE'
-            custom='VARIABLE'
-            svg='true'></category>
-    <category
-            name='TOOLBOX_PROCEDURE'
-            custom='PROCEDURE'
-            svg='true'></category>
-    <category
-            name='TOOLBOX_COMMUNICATION'
-            svg='true'>
-        <block type='mbedCommunication_sendBlock'>
-            <field name='POWER'>7</field>
-            <value name='sendData'>
-                <block type='text'>
-                    <field name='TEXT'>geheim</field>
-                </block>
-            </value>
-        </block>
-        <block type='mbedCommunication_receiveBlock'></block>
-        <block type='mbedCommunication_setChannel'>
-            <value name='CONNECTION'>
-                <block type='math_number'>
-                    <field name='NUM'>0</field>
-                </block>
-            </value>
-        </block>
+    <category name="TOOLBOX_VARIABLE" custom="VARIABLE" svg="true">
     </category>
+    <category name="TOOLBOX_PROCEDURE" custom="PROCEDURE" svg="true"/>
 </toolbox_set>

@@ -20,21 +20,13 @@ MOTORSTARTFOR:
             time.sleep(0.010)
         motor.stop()
 
-OMNIDRIVEVERTICAL:
+OMNIDRIVE:
   PYTHON: |
-    def omnidriveVertical(speed):
-        motorStart(frontLeftMotor, speed)
-        motorStart(frontRightMotor, speed)
-        motorStart(rearLeftMotor, speed)
-        motorStart(rearRightMotor, speed)
-
-OMNIDRIVEHORIZONTAL:
-  PYTHON: |
-    def omnidriveHorizontal(speed):
-        motorStart(frontLeftMotor, -speed)
-        motorStart(frontRightMotor, speed)
-        motorStart(rearLeftMotor, speed)
-        motorStart(rearRightMotor, -speed)
+    def omniDrive(speedFL, speedFR, speedRL, speedRR):
+        motorStart(frontLeftMotor, speedFL)
+        motorStart(frontRightMotor, speedFR)
+        motorStart(rearLeftMotor, speedRL)
+        motorStart(rearRightMotor, speedRR)
 
 OMNIDRIVESTRAIGHTDISTANCE:
   PYTHON: |
@@ -91,20 +83,6 @@ OMNIDRIVEDIAGONALTRDISTANCE:
                 break;
             time.sleep(0.010)
         frontLeftMotor.stop_sync(frontRightMotor, rearLeftMotor, rearRightMotor)
-
-OMNIDRIVEDIAGONALTL:
-  PYTHON: |
-    def omnidriveDiagonalTL(speed):
-        frontLeftMotor.stop_sync(rearRightMotor)
-        motorStart(frontRightMotor, speed)
-        motorStart(rearLeftMotor, speed)
-
-OMNIDRIVEDIAGONALTR:
-  PYTHON: |
-    def omnidriveDiagonalTR(speed):
-        frontRightMotor.stop_sync(rearLeftMotor)
-        motorStart(frontLeftMotor, speed)
-        motorStart(rearRightMotor, speed)
 
 OMNIDRIVETURN:
   PYTHON: |

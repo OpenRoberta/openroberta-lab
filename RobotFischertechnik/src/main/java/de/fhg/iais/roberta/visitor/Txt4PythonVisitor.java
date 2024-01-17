@@ -113,37 +113,78 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
 
     @Override
     public Void visitMotorOmniOnAction(MotorOmniOnAction motorOmniOnAction) {
-        String speedMultiplier = "";
         //replace with forward, backward, left, right, forward left, backward right, forward right, backward left,
+        this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(Txt4Methods.OMNIDRIVE));
+        this.src.add("(");
+
         switch ( motorOmniOnAction.direction ) {
             case "HEART_SMALL": //backward
-                speedMultiplier = "-";
+                this.src.add("-");
+                motorOmniOnAction.power.accept(this);
+                this.src.add(", -");
+                motorOmniOnAction.power.accept(this);
+                this.src.add(", -");
+                motorOmniOnAction.power.accept(this);
+                this.src.add(", -");
+                motorOmniOnAction.power.accept(this);
+                break;
             case "HEART": //forward
-                this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(Txt4Methods.OMNIDRIVEVERTICAL));
+                motorOmniOnAction.power.accept(this);
+                this.src.add(", ");
+                motorOmniOnAction.power.accept(this);
+                this.src.add(", ");
+                motorOmniOnAction.power.accept(this);
+                this.src.add(", ");
+                motorOmniOnAction.power.accept(this);
                 break;
             case "SMILE": //right
-                speedMultiplier = "-";
+                motorOmniOnAction.power.accept(this);
+                this.src.add(", -");
+                motorOmniOnAction.power.accept(this);
+                this.src.add(", -");
+                motorOmniOnAction.power.accept(this);
+                this.src.add(", ");
+                motorOmniOnAction.power.accept(this);
+                break;
             case "HAPPY": //left
-                this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(Txt4Methods.OMNIDRIVEHORIZONTAL));
+                this.src.add("-");
+                motorOmniOnAction.power.accept(this);
+                this.src.add(", ");
+                motorOmniOnAction.power.accept(this);
+                this.src.add(", ");
+                motorOmniOnAction.power.accept(this);
+                this.src.add(", -");
+                motorOmniOnAction.power.accept(this);
                 break;
             case "SURPRISED": //backward right
-                speedMultiplier = "-";
+                this.src.add("0, -");
+                motorOmniOnAction.power.accept(this);
+                this.src.add(", -");
+                motorOmniOnAction.power.accept(this);
+                this.src.add(", 0");
+                break;
             case "CONFUSED": //forward left
-                this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(Txt4Methods.OMNIDRIVEDIAGONALTL));
+                this.src.add("0, ");
+                motorOmniOnAction.power.accept(this);
+                this.src.add(", ");
+                motorOmniOnAction.power.accept(this);
+                this.src.add(", 0");
                 break;
             case "ANGRY": //backward left
-                speedMultiplier = "-";
+                this.src.add("-");
+                motorOmniOnAction.power.accept(this);
+                this.src.add(", 0, 0, -");
+                motorOmniOnAction.power.accept(this);
+                break;
             case "ASLEEP": //forward right
-                this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(Txt4Methods.OMNIDRIVEDIAGONALTR));
+                motorOmniOnAction.power.accept(this);
+                this.src.add(", 0, 0, ");
+                motorOmniOnAction.power.accept(this);
                 break;
             default:
                 break;
         }
-        this.src.add("(", speedMultiplier);
-        motorOmniOnAction.power.accept(this);
         this.src.add(")");
-
-
         return null;
     }
 
@@ -291,19 +332,27 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
 
     @Override
     public Void visitEncoderSensor(EncoderSensor encoderSensor) {
+        ConfigurationComponent configurationComponent = this.configurationAst.getConfigurationComponent(encoderSensor.getUserDefinedPort());
+        String port = configurationComponent.getProperty("SENSOR_COUNTER");
+        if ( encoderSensor.getMode().equals("ROTATION") ) {
+            this.src.add("int(TXT_M_", port, "_motor_step_counter.get_count() // STEPS_PER_ROTATION)");
+        } else {
+            this.src.add("int(TXT_M_", port, "_motor_step_counter.get_count() / STEPS_PER_ROTATION * 360)");
+        }
         return null;
     }
 
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor ultrasonicSensor) {
+        String port = getPortFromConfig(ultrasonicSensor.getUserDefinedPort());
+        this.src.add("TXT_M_", port, "_ultrasonic_distance_meter.get_distance()");
         return null;
     }
 
     @Override
     public Void visitKeysSensor(KeysSensor keysSensor) {
-        ConfigurationComponent block = configurationAst.getConfigurationComponent(keysSensor.getUserDefinedPort());
-        String pin = block.getComponentProperties().get("PIN1");
-        this.src.add("TXT_M_I", pin, "_mini_switch.get_state()");
+        String port = getPortFromConfig(keysSensor.getUserDefinedPort());
+        this.src.add("TXT_M_", port, "_mini_switch.get_state()");
         return null;
     }
     @Override
@@ -419,6 +468,9 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
         if ( usedHardwareBean.isActorUsed(SC.MOTOR) || usedHardwareBean.isActorUsed(SC.ENCODER) ) {
             this.src.add("txt_factory.init_motor_factory()").nlI();
         }
+        if ( usedHardwareBean.isActorUsed(SC.ENCODER) ) {
+            this.src.add("txt_factory.init_counter_factory()").nlI();
+        }
         if ( usedHardwareBean.isActorUsed(SC.SERVOMOTOR) ) {
             this.src.add("txt_factory.init_servomotor_factory()").nlI();
         }
@@ -427,30 +479,36 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
         if ( !usedHardwareBean.getUsedActors().isEmpty() && !usedHardwareBean.getUsedSensors().isEmpty() ) {
             nlIndent();
         }
-
-        initPeripherals();
+        initMotors();
+        initSensors();
         generateVariables(usedHardwareBean);
         this.src.add("txt_factory.initialized()");
 
     }
 
-    private void initPeripherals() {
+    private void initMotors() {
         for ( ConfigurationComponent component : this.configurationAst.getConfigurationComponents().values() ) {
             if ( component.componentType.equals(SC.MOTOR) ) {
-                String port = component.getOptProperty("PORT");
-                port = port.substring(1);
+                String port = component.getOptProperty("PORT").substring(1);
                 this.src.add("TXT_M_M", port, "_motor = txt_factory.motor_factory.create_motor(TXT_M, ", port, ")").nlI();
             } else if ( component.componentType.equals(SC.ENCODER) ) {
-                String port = component.getOptProperty("PORT");
-                port = port.substring(1);
+                String port = component.getOptProperty("PORT").substring(1);
                 this.src.add("TXT_M_M", port, "_motor = txt_factory.motor_factory.create_encodermotor(TXT_M, ", port, ")").nlI();
-            } else if ( component.componentType.equals(SC.SERVOMOTOR) ) {
-                String port = component.getOptProperty("PORT");
-                port = port.substring(1);
-                this.src.add("TXT_M_S", port, "_servomotor = txt_factory.motor_factory.create_servomotor(TXT_M, ", port, ")").nlI();
-            } else if ( component.componentType.equals(SC.KEY) ) {
-                String port = component.getOptProperty("PIN1");
-                this.src.add("TXT_M_I", port, "_mini_switch = txt_factory.input_factory.create_mini_switch(TXT_M,", port, ")").nlI();
+                String counterPort = component.getOptProperty("SENSOR_COUNTER").substring(1);
+                this.src.add("TXT_M_C", counterPort, "_motor_step_counter = txt_factory.counter_factory.create_encodermotor_counter(TXT_M, ", counterPort, ")").nlI();
+                this.src.add("TXT_M_C", counterPort, "_motor_step_counter.set_motor(TXT_M_M", port, "_motor)").nlI();
+            }
+        }
+    }
+
+    private void initSensors() {
+        for ( ConfigurationComponent component : this.configurationAst.getConfigurationComponents().values() ) {
+            if ( component.componentType.equals(SC.KEY) ) {
+                String port = component.getOptProperty("PORT").substring(1);
+                this.src.add("TXT_M_I", port, "_mini_switch = txt_factory.input_factory.create_mini_switch(TXT_M, ", port, ")").nlI();
+            } else if ( component.componentType.equals(SC.ULTRASONIC) ) {
+                String port = component.getOptProperty("PORT").substring(1);
+                this.src.add("TXT_M_I", port, "_ultrasonic_distance_meter = txt_factory.input_factory.create_ultrasonic_distance_meter(TXT_M, ", port, ")").nlI();
             }
         }
     }

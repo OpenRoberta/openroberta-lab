@@ -65,27 +65,7 @@ public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
 
 
         usedMethodBuilder.addUsedMethod(Txt4Methods.MOTORSTART);
-        //replace with forward, backward, left, right, forward left, backward right, forward right, backward left,
-        switch ( motorOmniOnAction.direction ) {
-            case "HEART": //forward
-            case "HEART_SMALL": //backward
-                usedMethodBuilder.addUsedMethod(Txt4Methods.OMNIDRIVEVERTICAL);
-                break;
-            case "HAPPY": //left
-            case "SMILE": //right
-                usedMethodBuilder.addUsedMethod(Txt4Methods.OMNIDRIVEHORIZONTAL);
-                break;
-            case "CONFUSED": //forward left
-            case "SUPRISED": //backward right
-                usedMethodBuilder.addUsedMethod(Txt4Methods.OMNIDRIVEDIAGONALTL);
-                break;
-            case "ASLEEP": //forward right
-            case "ANGRY": //backward left
-                usedMethodBuilder.addUsedMethod(Txt4Methods.OMNIDRIVEDIAGONALTR);
-                break;
-            default:
-                break;
-        }
+        usedMethodBuilder.addUsedMethod(Txt4Methods.OMNIDRIVE);
         return null;
     }
 
@@ -146,6 +126,7 @@ public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
 
     @Override
     public Void visitEncoderSensor(EncoderSensor encoderSensor) {
+        usedHardwareBuilder.addUsedActor(new UsedActor(encoderSensor.getUserDefinedPort(), SC.ENCODER));
         return null;
     }
 
