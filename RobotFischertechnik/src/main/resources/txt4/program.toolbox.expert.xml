@@ -66,6 +66,7 @@
         <block type='robSensors_encoder_getSample'></block>
         <block type='robSensors_key_getSample'></block>
         <block type='robSensors_ultrasonic_getSample'></block>
+        <block type='robSensors_line_getSample'></block>
     </category>
     <category name='TOOLBOX_CONTROL' svg='true'>
         <category name='TOOLBOX_DECISION' svg='true'>

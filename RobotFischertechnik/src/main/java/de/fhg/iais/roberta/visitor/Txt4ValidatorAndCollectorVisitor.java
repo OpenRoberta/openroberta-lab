@@ -25,6 +25,7 @@ import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.GetLineSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
@@ -52,7 +53,7 @@ public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
         requiredComponentVisited(motorOnAction, motorOnAction.power);
         if ( checkActorPort(motorOnAction) ) {
             ConfigurationComponent motor = getMotorFromPort(motorOnAction.port);
-            usedHardwareBuilder.addUsedActor(new UsedActor(motor.getOptProperty("PORT"), SC.MOTOR));
+            usedHardwareBuilder.addUsedActor(new UsedActor(motor.getOptProperty("PORT"), motor.componentType));
         }
         usedMethodBuilder.addUsedMethod(Txt4Methods.MOTORSTART);
         return null;
@@ -132,6 +133,7 @@ public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
 
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor ultrasonicSensor) {
+        usedHardwareBuilder.addUsedSensor(new UsedSensor(ultrasonicSensor.getUserDefinedPort(), SC.ULTRASONIC, ultrasonicSensor.getMode()));
         return null;
     }
 
@@ -145,18 +147,21 @@ public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
     public Void visitMotorStopAction(MotorStopAction motorStopAction) {
         if ( checkActorPort(motorStopAction) ) {
             ConfigurationComponent motor = getMotorFromPort(motorStopAction.port);
-            usedHardwareBuilder.addUsedActor(new UsedActor(motor.getOptProperty("PORT"), SC.MOTOR));
+            usedHardwareBuilder.addUsedActor(new UsedActor(motor.getOptProperty("PORT"), motor.componentType));
         }
         return null;
     }
 
     @Override
     public Void visitMotorOmniStopAction(MotorOmniStopAction motorOmniStopAction) {
-        if ( checkActorPort(motorOmniStopAction) ) {
-            ConfigurationComponent motor = getMotorFromPort(motorOmniStopAction.getUserDefinedPort());
-            usedHardwareBuilder.addUsedActor(new UsedActor(motor.getOptProperty("PORT"), SC.MOTOR));
-        }
+        usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniStopAction.getUserDefinedPort(), SC.ENCODER));
         usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniStopAction.getUserDefinedPort(), FischertechnikConstants.OMNIDRIVE));
+        return null;
+    }
+
+    @Override
+    public Void visitGetLineSensor(GetLineSensor getLineSensor) {
+        usedHardwareBuilder.addUsedSensor(new UsedSensor(getLineSensor.getUserDefinedPort(), SC.INFRARED, getLineSensor.getMode()));
         return null;
     }
 

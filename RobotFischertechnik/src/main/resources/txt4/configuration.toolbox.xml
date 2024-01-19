@@ -5,6 +5,7 @@
     <category name="TOOLBOX_SENSOR" svg="true">
         <block type='robConf_ultrasonic'></block>
         <block type='robConf_key'></block>
+        <block type='robConf_line'></block>
     </category>
 
     

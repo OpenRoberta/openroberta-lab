@@ -27,6 +27,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.GetLineSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
@@ -350,6 +351,19 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
     }
 
     @Override
+    public Void visitGetLineSensor(GetLineSensor getLineSensor) {
+        ConfigurationComponent configurationComponent = this.configurationAst.getConfigurationComponent(getLineSensor.getUserDefinedPort());
+        String port = "";
+        if ( getLineSensor.getSlot().equals(SC.LEFT) ) {
+            port = configurationComponent.getProperty("PORTL");
+        } else {
+            port = configurationComponent.getProperty("PORTR");
+        }
+        this.src.add("TXT_M_", port, "_trail_follower.get_state()");
+        return null;
+    }
+
+    @Override
     public Void visitKeysSensor(KeysSensor keysSensor) {
         String port = getPortFromConfig(keysSensor.getUserDefinedPort());
         this.src.add("TXT_M_", port, "_mini_switch.get_state()");
@@ -479,19 +493,19 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
         if ( !usedHardwareBean.getUsedActors().isEmpty() && !usedHardwareBean.getUsedSensors().isEmpty() ) {
             nlIndent();
         }
-        initMotors();
-        initSensors();
+        initMotors(usedHardwareBean);
+        initSensors(usedHardwareBean);
         generateVariables(usedHardwareBean);
         this.src.add("txt_factory.initialized()");
 
     }
 
-    private void initMotors() {
+    private void initMotors(UsedHardwareBean usedHardwareBean) {
         for ( ConfigurationComponent component : this.configurationAst.getConfigurationComponents().values() ) {
-            if ( component.componentType.equals(SC.MOTOR) ) {
+            if ( component.componentType.equals(SC.MOTOR) && usedHardwareBean.isActorUsed(SC.MOTOR) ) {
                 String port = component.getOptProperty("PORT").substring(1);
                 this.src.add("TXT_M_M", port, "_motor = txt_factory.motor_factory.create_motor(TXT_M, ", port, ")").nlI();
-            } else if ( component.componentType.equals(SC.ENCODER) ) {
+            } else if ( component.componentType.equals(SC.ENCODER) && usedHardwareBean.isActorUsed(SC.ENCODER) ) {
                 String port = component.getOptProperty("PORT").substring(1);
                 this.src.add("TXT_M_M", port, "_motor = txt_factory.motor_factory.create_encodermotor(TXT_M, ", port, ")").nlI();
                 String counterPort = component.getOptProperty("SENSOR_COUNTER").substring(1);
@@ -501,14 +515,19 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
         }
     }
 
-    private void initSensors() {
+    private void initSensors(UsedHardwareBean usedHardwareBean) {
         for ( ConfigurationComponent component : this.configurationAst.getConfigurationComponents().values() ) {
-            if ( component.componentType.equals(SC.KEY) ) {
+            if ( component.componentType.equals(SC.KEY) && usedHardwareBean.isSensorUsed(SC.KEY) ) {
                 String port = component.getOptProperty("PORT").substring(1);
                 this.src.add("TXT_M_I", port, "_mini_switch = txt_factory.input_factory.create_mini_switch(TXT_M, ", port, ")").nlI();
-            } else if ( component.componentType.equals(SC.ULTRASONIC) ) {
+            } else if ( component.componentType.equals(SC.ULTRASONIC) && usedHardwareBean.isSensorUsed(SC.ULTRASONIC) ) {
                 String port = component.getOptProperty("PORT").substring(1);
                 this.src.add("TXT_M_I", port, "_ultrasonic_distance_meter = txt_factory.input_factory.create_ultrasonic_distance_meter(TXT_M, ", port, ")").nlI();
+            } else if ( component.componentType.equals("LINE") && usedHardwareBean.isSensorUsed(SC.INFRARED) ) {
+                String portLeft = component.getOptProperty("PORTL").substring(1);
+                String portRight = component.getOptProperty("PORTR").substring(1);
+                this.src.add("TXT_M_I", portLeft, "_trail_follower = txt_factory.input_factory.create_trail_follower(TXT_M, ", portLeft, ")").nlI();
+                this.src.add("TXT_M_I", portRight, "_trail_follower = txt_factory.input_factory.create_trail_follower(TXT_M, ", portRight, ")").nlI();
             }
         }
     }
