@@ -320,6 +320,10 @@ public class GroupRestTest extends AbstractRestInterfaceTest {
             Key.USER_GET_ONE_SUCCESS);
         Assert.assertTrue(this.groupMember1.isUserLoggedIn() && this.groupMember2.isUserLoggedIn());
 
+
+        restClient.setRobot(mkFRR(this.groupMember1.getInitToken(), "{'cmd':'setRobot'; 'robot':'ev3lejosv1'}"));
+        restClient.setRobot(mkFRR(this.groupMember2.getInitToken(), "{'cmd':'setRobot'; 'robot':'ev3lejosv1'}"));
+        restClient.setRobot(mkFRR(this.sPid.getInitToken(), "{'cmd':'setRobot'; 'robot':'ev3lejosv1'}"));
         //Member1 saves ev3 Programs
         saveProgramAs(this.groupMember1, "PidsGroup:Member1", "PidsGroup:Member1", "gp1", ".1.PidsGroup:Member1", null, null, "ok", Key.PROGRAM_SAVE_SUCCESS);
         saveProgramAs(this.groupMember1, "PidsGroup:Member1", "PidsGroup:Member1", "gp2", ".1.PidsGroup:Member1", null, null, "ok", Key.PROGRAM_SAVE_SUCCESS);

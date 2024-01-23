@@ -21,6 +21,8 @@ public class ProgramRestTest extends AbstractRestInterfaceTest {
 
     @Test
     public void programWorkflowTest() throws Exception {
+        restClient.setRobot(mkFRR(this.sPid.getInitToken(), "{'cmd':'setRobot'; 'robot':'ev3lejosv1'}"));
+        restClient.setRobot(mkFRR(this.sMinscha.getInitToken(), "{'cmd':'setRobot'; 'robot':'ev3lejosv1'}"));
         pidCreatesAndUpdates4Programs();
         minschaCreates1ConfAnd2Programs();
         pidSharesProgramsMinschaCanAccessRW();

@@ -15,6 +15,7 @@ import org.junit.Test;
 
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.util.Key;
+
 import static org.junit.Assert.assertNull;
 
 public class ExportAllRestTest extends AbstractRestInterfaceTest {
@@ -76,15 +77,15 @@ public class ExportAllRestTest extends AbstractRestInterfaceTest {
 
         //check if xml text is correct
         Assert.assertEquals(
-            "<export xmlns=\"http://de.fhg.iais.roberta.blockly\"><program><block_set xmlns=\"http://de.fhg.iais.roberta.blockly\" " +
-                "robottype=\"ev3\" xmlversion=\"3.0\" description=\"\" tags=\"\"><instance x=\"512\" y=\"50\"><block type=\"robControls_start\" " +
-                "id=\"RDF[XZ?y7bn;Z{?V}Q)(\" intask=\"true\" deletable=\"false\"><mutation declare=\"false\"></mutation><field name=\"DEBUG\">FALSE</field><comment " +
-                "w=\"0\" h=\"0\" pinned=\"false\">progTextToExport</comment></block></instance></block_set></program><config><block_set xmlns=\"http://de.fhg.iais.roberta.blockly\" " +
-                "robottype=\"ev3\" xmlversion=\"3.0\" description=\"\" tags=\"\"><instance x=\"213\" y=\"213\"><block type=\"robBrick_EV3-Brick\" id=\"1\" " +
-                "intask=\"true\" deletable=\"false\"><comment w=\"0\" h=\"0\" pinned=\"false\">xmlTextToExport</comment><value name=\"S1\"><block type=\"robBrick_touch\" id=\"2\" " +
-                "intask=\"true\"></block></value></block></instance></block_set></config></export>"
-            ,
-            xmlText);
+                "<export xmlns=\"http://de.fhg.iais.roberta.blockly\"><program><block_set xmlns=\"http://de.fhg.iais.roberta.blockly\" " +
+                        "robottype=\"ev3\" xmlversion=\"3.0\" description=\"\" tags=\"\"><instance x=\"512\" y=\"50\"><block type=\"robControls_start\" " +
+                        "id=\"RDF[XZ?y7bn;Z{?V}Q)(\" intask=\"true\" deletable=\"false\"><mutation declare=\"false\"></mutation><field name=\"DEBUG\">FALSE</field><comment " +
+                        "w=\"0\" h=\"0\" pinned=\"false\">progTextToExport</comment></block></instance></block_set></program><config><block_set xmlns=\"http://de.fhg.iais.roberta.blockly\" " +
+                        "robottype=\"ev3\" xmlversion=\"3.0\" description=\"\" tags=\"\"><instance x=\"213\" y=\"213\"><block type=\"robBrick_EV3-Brick\" id=\"1\" " +
+                        "intask=\"true\" deletable=\"false\"><comment w=\"0\" h=\"0\" pinned=\"false\">xmlTextToExport</comment><value name=\"S1\"><block type=\"robBrick_touch\" id=\"2\" " +
+                        "intask=\"true\"></block></value></block></instance></block_set></config></export>"
+                ,
+                xmlText);
     }
 
     /**
@@ -125,7 +126,7 @@ public class ExportAllRestTest extends AbstractRestInterfaceTest {
         //['p5','gp4'] are his calliope Programs
         List<String> programNames = new ArrayList<>();
         ZipEntry ze;
-        while ( (ze = zin2.getNextEntry()) != null ) {
+        while ((ze = zin2.getNextEntry()) != null) {
             programNames.add(ze.getName());
         }
         //this has an order due to it not coming from a HashMap
@@ -166,7 +167,7 @@ public class ExportAllRestTest extends AbstractRestInterfaceTest {
 
         //check zip entries it should not create the MyGroups Folder
         ZipEntry ze;
-        while ( (ze = zin.getNextEntry()) != null ) {
+        while ((ze = zin.getNextEntry()) != null) {
             Assert.assertTrue(ze.getName().startsWith("PidsGroup/"));
         }
 
@@ -185,11 +186,11 @@ public class ExportAllRestTest extends AbstractRestInterfaceTest {
         //create temporary user without any programs
         HttpSessionState tempMember = HttpSessionState.initOnlyLegalForDebugging("tempMember", robotPlugins, this.serverProperties, 5);
         restUser(
-            tempMember,
-            "{'cmd':'createUser';'accountName':'tempMember';'userName':'temp';'password':'12';'userEmail':'';'role':'STUDENT',"
-                + " 'isYoungerThen14': true, 'language': 'de'}",
-            "ok",
-            Key.USER_CREATE_SUCCESS);
+                tempMember,
+                "{'cmd':'createUser';'accountName':'tempMember';'userName':'temp';'password':'12';'userEmail':'';'role':'STUDENT',"
+                        + " 'isYoungerThen14': true, 'language': 'de'}",
+                "ok",
+                Key.USER_CREATE_SUCCESS);
         restUser(tempMember, "{'cmd':'login';'accountName':'tempMember';'password':'12'}", "ok", Key.USER_GET_ONE_SUCCESS);
 
         ZipInputStream zin = exportAllProgramsAsZipInputStream(tempMember);
@@ -212,12 +213,14 @@ public class ExportAllRestTest extends AbstractRestInterfaceTest {
      * </ul>
      */
     private void pidAndMinschaCreateSomePrograms() throws Exception {
+        restClient.setRobot(mkFRR(this.sPid.getInitToken(), "{'cmd':'setRobot'; 'robot':'ev3lejosv1'}"));
         saveProgramAs(this.sPid, "pid", "pid", "p1", ".1.pid", null, null, "ok", Key.PROGRAM_SAVE_SUCCESS);
         saveProgramAs(this.sPid, "pid", "pid", "p2", ".2.pid", null, null, "ok", Key.PROGRAM_SAVE_SUCCESS);
         restClient.setRobot(mkFRR(this.sPid.getInitToken(), "{'cmd':'setRobot'; 'robot':'calliope2017'}"));
         saveProgramAs(this.sPid, "pid", "pid", "p5", ".1.pid", null, null, "ok", Key.PROGRAM_SAVE_SUCCESS);
         restClient.setRobot(mkFRR(this.sPid.getInitToken(), "{'cmd':'setRobot'; 'robot':'ev3lejosv1'}"));
         //Minscha changes config
+        restClient.setRobot(mkFRR(this.sMinscha.getInitToken(), "{'cmd':'setRobot'; 'robot':'ev3lejosv1'}"));
         saveProgramAs(this.sMinscha, "minscha", "minscha", "p1", "progTextToExport", null, CONF_PRE + "xmlTextToExport" + CONF_POST, "ok", Key.PROGRAM_SAVE_SUCCESS);
     }
 
@@ -226,17 +229,19 @@ public class ExportAllRestTest extends AbstractRestInterfaceTest {
         restGroups(this.sPid, "{'cmd':'createUserGroup';'groupName':'PidsGroup';'groupMemberNames':['Member1','Member2'] }", "ok", Key.GROUP_CREATE_SUCCESS);
 
         restUser(
-            this.groupMember1,
-            "{'cmd':'login';'accountName':'PidsGroup:Member1';'password':'PidsGroup:Member1';'userGroupOwner':'pid';'userGroupName':'PidsGroup' }",
-            "ok",
-            Key.USER_GET_ONE_SUCCESS);
+                this.groupMember1,
+                "{'cmd':'login';'accountName':'PidsGroup:Member1';'password':'PidsGroup:Member1';'userGroupOwner':'pid';'userGroupName':'PidsGroup' }",
+                "ok",
+                Key.USER_GET_ONE_SUCCESS);
 
         restUser(
-            this.groupMember2,
-            "{'cmd':'login';'accountName':'PidsGroup:Member2';'password':'PidsGroup:Member2';'userGroupOwner':'pid';'userGroupName':'PidsGroup' }",
-            "ok",
-            Key.USER_GET_ONE_SUCCESS);
+                this.groupMember2,
+                "{'cmd':'login';'accountName':'PidsGroup:Member2';'password':'PidsGroup:Member2';'userGroupOwner':'pid';'userGroupName':'PidsGroup' }",
+                "ok",
+                Key.USER_GET_ONE_SUCCESS);
 
+        restClient.setRobot(mkFRR(this.groupMember1.getInitToken(), "{'cmd':'setRobot'; 'robot':'ev3lejosv1'}"));
+        restClient.setRobot(mkFRR(this.groupMember2.getInitToken(), "{'cmd':'setRobot'; 'robot':'ev3lejosv1'}"));
         //they save some programs
         saveProgramAs(this.groupMember1, "PidsGroup:Member1", "PidsGroup:Member1", "gp1", ".1.PidsGroup:Member1", null, null, "ok", Key.PROGRAM_SAVE_SUCCESS);
         saveProgramAs(this.groupMember1, "PidsGroup:Member1", "PidsGroup:Member1", "gp2", ".1.PidsGroup:Member1", null, null, "ok", Key.PROGRAM_SAVE_SUCCESS);
@@ -249,7 +254,7 @@ public class ExportAllRestTest extends AbstractRestInterfaceTest {
 
     private String firstProgramOfZipToString(ZipInputStream uZis) throws IOException {
         ZipInputStream zis = uZis;
-        if ( zis == null ) {
+        if (zis == null) {
             return null;
         }
         StringBuilder resultString = new StringBuilder();
@@ -258,7 +263,7 @@ public class ExportAllRestTest extends AbstractRestInterfaceTest {
         //get the first program
         zis.getNextEntry();
         //read its contents
-        while ( (read = zis.read(buffer, 0, 1024)) >= 0 ) {
+        while ((read = zis.read(buffer, 0, 1024)) >= 0) {
             resultString.append(new String(buffer, 0, read));
         }
         return resultString.toString();
@@ -266,12 +271,12 @@ public class ExportAllRestTest extends AbstractRestInterfaceTest {
 
     private ZipInputStream exportAllProgramsAsZipInputStream(HttpSessionState user) throws Exception {
         Response reUser = restExportAll(user);
-        if ( reUser == null ) {
+        if (reUser == null) {
             return null;
         }
         //check if zip has contentType and name
         Assert.assertEquals("{Content-Type=[application/zip], Content-Disposition=[attachment; filename=\"NEPO_Programs.zip\"]}",
-            reUser.getMetadata().toString());
+                reUser.getMetadata().toString());
         ByteArrayInputStream stream1 = (ByteArrayInputStream) reUser.getEntity();
         return new ZipInputStream(stream1);
 
