@@ -426,7 +426,7 @@ class WebotsSimulationController implements Simulation {
         }
         window['Module']['locateFile'] = function (path, prefix) {
             // if it's a data file, use a custom dir
-            if (path.endsWith('.data')) return window.location.origin + '/js/libs/webots/' + path;
+            if (path.endsWith('.data')) return window.location.origin + '/libs/webots/' + path;
 
             // otherwise, use the default, the prefix (JS file's dir) + the path
             return prefix + path;
