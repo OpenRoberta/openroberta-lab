@@ -1089,8 +1089,8 @@ limitations under the License.
                     title=''>
                     <input accept='text/csv, text/plain' id='nn-test-data-upload' type='file' />
                 </button>
-                <button class='blbtn typcn typcn-th-large-outline' data-backdrop='false' data-bs-target='#nn-explore-popup-modal' data-original-title=''
-                    data-toggle='modal' id='nn-explore-upload-popup' lkey='Blockly.Msg.NN_LEARN_UPLOAD_POPUP' rel='tooltip' title=''></button>
+                <button class='blbtn typcn typcn-th-large-outline' data-bs-backdrop='false' data-bs-target='#nn-explore-popup-modal' data-original-title=''
+                    data-bs-toggle='modal' id='nn-explore-upload-popup' lkey='Blockly.Msg.NN_LEARN_UPLOAD_POPUP' rel='tooltip' title=''></button>
             </div>
             <div id='nn-top-controls'>
                 <div class='nn-control' id='nn-select-click'>
@@ -1325,7 +1325,7 @@ limitations under the License.
                         <svg id='nn-learn-svg'></svg>
                         <div id='nn-learn-training-bias-linechart'></div>
                         <div id='nn-learn-training-weight-linechart'></div>
-                        <div class='nn-popup-modal' id='nn-learn-popup-modal'>
+                        <div class='nn-popup-modal' id='nn-learn-popup-modal' data-bs-backdrop="false">
                             <div class='modal-dialog nn-modal-dialog'>
                                 <div class='modal-content nn-modal-content'>
                                     <div class='modal-header'>
@@ -1370,7 +1370,7 @@ limitations under the License.
     <!-- ################## POPUPS ################## -->
 
     <!-- Popup for WLAN credentials begin -->
-    <div aria-hidden='true' aria-labelledby='myModalLabel' class='modal fade' data-backdrop='static' data-keyboard='false' id='menu-wlan' role='dialog' tabindex='-1'>
+    <div aria-hidden='true' aria-labelledby='myModalLabel' class='modal fade' data-bs-backdrop='static' data-keyboard='false' id='menu-wlan' role='dialog' tabindex='-1'>
         <div class='modal-dialog modal-sm'>
             <div class='modal-content'>
                 <div class='modal-header'>
@@ -1408,7 +1408,7 @@ limitations under the License.
 
 
     <!-- Popup login -->
-    <div aria-hidden='true' aria-labelledby='myModalLabel' class='modal fade' data-backdrop='static' data-keyboard='false' id='login-user' role='dialog' tabindex='-1'>
+    <div aria-hidden='true' aria-labelledby='myModalLabel' class='modal fade' data-bs-backdrop='static' data-keyboard='false' id='login-user' role='dialog' tabindex='-1'>
         <div class='modal-dialog modal-sm'>
             <div class='modal-content'>
                 <div class='modal-header'>
@@ -1539,7 +1539,7 @@ limitations under the License.
         </div>
     </div>
     <!-- Popup change password -->
-    <div class='modal fade' data-backdrop='static' data-keyboard='false' id='change-user-password'>
+    <div class='modal fade' data-bs-backdrop='static' data-keyboard='false' id='change-user-password'>
         <div class='modal-dialog modal-sm'>
             <div class='modal-content'>
                 <div class='modal-header'>
@@ -1584,7 +1584,7 @@ limitations under the License.
         </div>
     </div>
     <!-- Popup group login -->
-    <div aria-hidden='true' aria-labelledby='myModalLabel' class='modal fade' data-backdrop='static' data-keyboard='false' id='usergroupLoginPopup' role='dialog'
+    <div aria-hidden='true' aria-labelledby='myModalLabel' class='modal fade' data-bs-backdrop='static' data-keyboard='false' id='usergroupLoginPopup' role='dialog'
         tabindex='-1'>
         <div class='modal-dialog modal-sm'>
             <div class='modal-content'>
@@ -1994,7 +1994,7 @@ limitations under the License.
         </div>
     </div>
     <!-- New popup 4 Startup -->
-    <!--<div class='modal fade' data-backdrop='static' data-keyboard='false' id='show-startup-message'>
+    <!--<div class='modal fade' data-bs-backdrop='static' data-keyboard='false' id='show-startup-message'>
         <div class='modal-dialog modal-lg'>
             <div class='modal-content' style='padding-top: 10px;'>
                 <a class='modal-body' href='https://github.com/OpenRoberta/openroberta-lab/releases' target='_blank'>Release
@@ -2133,7 +2133,7 @@ limitations under the License.
         </div>
     </div>
     <!-- Popup show message with cancel -->
-    <div class='modal fade' data-backdrop='static' data-keyboard='false' id='show-message-confirm'>
+    <div class='modal fade' data-bs-backdrop='static' data-keyboard='false' id='show-message-confirm'>
         <div class='modal-dialog modal-sm'>
             <div class='modal-content'>
                 <div class='modal-header'>
@@ -2158,7 +2158,7 @@ limitations under the License.
         <button aria-label='Close' class='btn-close close' data-bs-dismiss='modal' data-bs-target='#simRobotWindow' type='button'></button>
     </div>
     <!-- Popup for simulation sensor data -->
-    <div class='simWindow slide-in' data-backdrop='false' id='simValuesWindow'>
+    <div class='simWindow slide-in' data-bs-backdrop='false' id='simValuesWindow'>
         <button aria-label='Close' class='btn-close close' data-bs-dismiss='modal' type='button'></button>
         <div id='simValuesContent'>
             <div id='valuesContent'>
@@ -2342,7 +2342,7 @@ limitations under the License.
             </div>
         </div>
     </div>
-    <div class='modal fade' data-backdrop='static' data-keyboard='false' id='tutorialOverview'>
+    <div class='modal fade' data-bs-backdrop='static' data-keyboard='false' id='tutorialOverview'>
         <div class='modal-dialog modal-lg'>
             <div class='modal-content'>
                 <div class='modal-header'>
@@ -2375,7 +2375,7 @@ limitations under the License.
             </div>
         </div>
     </div>
-    <div class='modal fade' data-backdrop='static' id='feedbackModal'>
+    <div class='modal fade' data-bs-backdrop='static' id='feedbackModal'>
         <div class='modal-dialog'>
             <div class='modal-content'>
                 <div class='modal-header'>

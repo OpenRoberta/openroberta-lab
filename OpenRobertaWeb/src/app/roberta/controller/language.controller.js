@@ -118,7 +118,6 @@ function translate($domElement) {
         if (value == undefined) {
             console.log('UNDEFINED    key : value = ' + key + ' : ' + value);
         }
-        $(this).attr('data-bs-original-title', value);
         if (lkey === 'Blockly.Msg.SOURCE_CODE_EDITOR_PLACEHOLDER') {
             $('#sourceCodeEditorTextArea').attr('placeholder', value);
         } else if (lkey === 'Blockly.Msg.SOURCE_CODE_EDITOR_UPLOAD_TOOLTIP') {
@@ -233,29 +232,27 @@ function translate($domElement) {
         } else if (lkey == 'Blockly.Msg.OLDER_THEN_14' || lkey == 'Blockly.Msg.YOUNGER_THEN_14') {
             $(this).html(value);
         } else if (lkey == 'Blockly.Msg.NN_EXPLORE_RUN_FULL') {
-            $('#nn-explore-run-full').attr('data-original-title', value).tooltip({ placement: 'top' });
+            $('#nn-explore-run-full').attr('data-original-title', value).tooltip({ placement: 'top', trigger: 'hover' });
         } else if (lkey == 'Blockly.Msg.NN_EXPLORE_RUN_LAYER') {
-            $('#nn-explore-run-layer').attr('data-original-title', value).tooltip({ placement: 'top' });
+            $('#nn-explore-run-layer').attr('data-original-title', value).tooltip({ placement: 'top', trigger: 'hover' });
         } else if (lkey == 'Blockly.Msg.NN_EXPLORE_RUN_NEURON') {
-            $('#nn-explore-run-neuron').attr('data-original-title', value).tooltip({ placement: 'top' });
+            $('#nn-explore-run-neuron').attr('data-original-title', value).tooltip({ placement: 'top', trigger: 'hover' });
         } else if (lkey == 'Blockly.Msg.NN_EXPLORE_RESET_VALUES') {
-            $('#nn-explore-stop').attr('data-original-title', value).tooltip({ placement: 'top' });
+            $('#nn-explore-stop').attr('data-original-title', value).tooltip({ placement: 'top', trigger: 'hover' });
         } else if (lkey == 'Blockly.Msg.NN_LEARN_RUN') {
-            $('#nn-learn-run').attr('data-original-title', value).tooltip({ placement: 'top' });
+            $('#nn-learn-run').attr('data-original-title', value).tooltip({ placement: 'top', trigger: 'hover' });
         } else if (lkey == 'Blockly.Msg.NN_LEARN_EPOCH') {
-            $('#nn-learn-run-epoch').attr('data-original-title', value).tooltip({ placement: 'top' });
+            $('#nn-learn-run-epoch').attr('data-original-title', value).tooltip({ placement: 'top', trigger: 'hover' });
         } else if (lkey == 'Blockly.Msg.NN_LEARN_ONE_LINE') {
-            $('#nn-learn-run-one-line').attr('data-original-title', value).tooltip({ placement: 'top' });
+            $('#nn-learn-run-one-line').attr('data-original-title', value).tooltip({ placement: 'top', trigger: 'hover' });
         } else if (lkey == 'Blockly.Msg.NN_LEARN_RESET_VALUES') {
-            $('#nn-learn-reset').attr('data-original-title', value).tooltip({ placement: 'top' });
+            $('#nn-learn-reset').attr('data-original-title', value).tooltip({ placement: 'top', trigger: 'hover' });
         } else if (lkey == 'Blockly.Msg.NN_LEARN_UPLOAD') {
-            $('#nn-explore-upload').attr('data-original-title', value).tooltip({ placement: 'top' });
-            $('#nn-learn-upload').attr('data-original-title', value).tooltip({ placement: 'top' });
+            $('#nn-explore-upload').attr('data-original-title', value).tooltip({ placement: 'top', trigger: 'hover' });
+            $('#nn-learn-upload').attr('data-original-title', value).tooltip({ placement: 'top', trigger: 'hover' });
         } else if (lkey == 'Blockly.Msg.NN_LEARN_UPLOAD_POPUP') {
-            $('#nn-explore-upload-popup').attr('data-original-title', value).tooltip({ placement: 'top' });
-            $('#nn-learn-upload-popup').attr('data-original-title', value).tooltip({ placement: 'top' });
-            let searchPlaceholder = Blockly.Msg.START_FORMATSEARCH;
-            $('#start input.form-control.search-input').attr('placeholder', searchPlaceholder);
+            $('#nn-explore-upload-popup').attr('data-original-title', value).tooltip({ placement: 'top', trigger: 'hover' });
+            $('#nn-learn-upload-popup').attr('data-original-title', value).tooltip({ placement: 'top', trigger: 'hover' });
         } else if ($(this).data('translationTargets')) {
             var attributeTargets = $(this).data('translationTargets').split(' ');
             for (var key in attributeTargets) {
@@ -269,8 +266,9 @@ function translate($domElement) {
             $(this).html(value);
             $(this).attr('value', value);
         }
+        $(this).attr('data-bs-original-title', value);
     });
-    $('#start input.form-control.search-input').attr('placeholder', Blockly.Msg.START_FORMATSEARC);
+    $('#start input.form-control.search-input').attr('placeholder', Blockly.Msg.START_FORMATSEARCH);
 }
 export { init, translate };
 

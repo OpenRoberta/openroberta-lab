@@ -115,12 +115,12 @@ export async function runNNEditor(hasSim: boolean) {
     let tableDiv = $('#nn-explore-popup-modal');
     let tableEl = $('#nn-explore-table-user-input');
     tableDiv.draggable({
-        handle: '.modal-header'
+        handle: '.modal-header',
     });
     if (hasSim) {
         D3.select('#goto-sim').style('visibility', 'visible');
         D3.select('#goto-sim').on('click', () => {
-            $.when($('#tabProgram').trigger('click')).done(function() {
+            $.when($('#tabProgram').trigger('click')).done(function () {
                 $('#simButton').trigger('click');
             });
         });
@@ -128,7 +128,7 @@ export async function runNNEditor(hasSim: boolean) {
         D3.select('#goto-sim').style('visibility', 'hidden');
     }
 
-    D3.select('#nn-focus').on('change', function() {
+    D3.select('#nn-focus').on('change', function () {
         focusStyle = FocusStyle[(this as HTMLSelectElement).value];
         if (focusStyle === undefined || focusStyle === null) {
             focusStyle = FocusStyle.SHOW_ALL;
@@ -171,14 +171,14 @@ export async function runNNEditor(hasSim: boolean) {
         reconstructNNIncludingUI();
     });
 
-    let activationDropdown = D3.select('#nn-activations').on('change', function() {
+    let activationDropdown = D3.select('#nn-activations').on('change', function () {
         state.activationKey = this.value;
         state.activation = H.activations[this.value];
         reconstructNNIncludingUI();
     });
     activationDropdown.property('value', getKeyFromValue(H.activations, state.activation));
 
-    D3.select('#nn-show-precision').on('change', function() {
+    D3.select('#nn-show-precision').on('change', function () {
         state.precision = this.value;
         drawNetworkUIForTabDefine();
     });
@@ -401,7 +401,7 @@ export async function runNNEditor(hasSim: boolean) {
             } else {
                 createUserInputTableBs(tableDiv, tableEl, userInputsForExploring, inputTableNumRowsForExploring);
             }
-            tableDiv.on('shown.bs.modal', function() {
+            tableDiv.on('shown.bs.modal', function () {
                 tableEl.bootstrapTable('resetView');
             });
         }
@@ -441,7 +441,7 @@ export async function runNNEditorForTabLearn(hasSim: boolean) {
     let tableDiv = $('#nn-learn-popup-modal');
     let tableEl = $('#nn-learn-table-user-input');
     tableDiv.draggable({
-        handle: '.modal-header'
+        handle: '.modal-header',
     });
     if (trainingLossLineChart === null) trainingLossLineChart = new AppendingLineChart(D3.select('#nn-learn-training-loss-linechart'), '#AAA', true);
     if (trainingBiasLineChart === null) trainingBiasLineChart = new AppendingLineChart(D3.select('#nn-learn-training-bias-linechart'), '#AAA', false);
@@ -450,7 +450,7 @@ export async function runNNEditorForTabLearn(hasSim: boolean) {
     if (hasSim) {
         D3.select('#learn-goto-sim').style('visibility', 'visible');
         D3.select('#learn-goto-sim').on('click', () => {
-            $.when($('#tabProgram').trigger('click')).done(function() {
+            $.when($('#tabProgram').trigger('click')).done(function () {
                 $('#simButton').trigger('click');
             });
         });
@@ -458,7 +458,7 @@ export async function runNNEditorForTabLearn(hasSim: boolean) {
         D3.select('#learn-goto-sim').style('visibility', 'hidden');
     }
 
-    D3.select('#nn-learn-focus').on('change', function() {
+    D3.select('#nn-learn-focus').on('change', function () {
         focusStyle = FocusStyle[(this as HTMLSelectElement).value];
         if (focusStyle === undefined || focusStyle === null) {
             focusStyle = FocusStyle.SHOW_ALL;
@@ -491,9 +491,9 @@ export async function runNNEditorForTabLearn(hasSim: boolean) {
             return;
         }
         isLearning = !isLearning;
-        let runPauseIcon = document.querySelector('#nn-learn-run span');
-        runPauseIcon.classList.toggle('typcn-media-fast-forward-outline');
-        runPauseIcon.classList.toggle('typcn-media-pause-outline');
+        let $runPauseIcon = $('#nn-learn-run span');
+        $runPauseIcon.toggleClass('typcn-media-fast-forward-outline');
+        $runPauseIcon.toggleClass('typcn-media-pause-outline');
 
         let svgContainer = D3.select('#nn-learn-svg').select('g.core');
 
@@ -509,8 +509,8 @@ export async function runNNEditorForTabLearn(hasSim: boolean) {
                 }
                 network.forwardProp(); // used to display 'correct' node outputs
                 currentInputRowForLearning = 0;
-                runPauseIcon.classList.toggle('typcn-media-pause-outline');
-                runPauseIcon.classList.toggle('typcn-media-fast-forward-outline');
+                $runPauseIcon.toggleClass('typcn-media-pause-outline');
+                $runPauseIcon.toggleClass('typcn-media-fast-forward-outline');
                 isLearning = false;
                 hideAllCards();
                 $('.pace').fadeOut(300); // Hide loading icon
@@ -643,7 +643,7 @@ export async function runNNEditorForTabLearn(hasSim: boolean) {
             } else {
                 createUserInputTableBs(tableDiv, tableEl, userInputsForLearning, inputTableNumRowsForLearning);
             }
-            tableDiv.on('shown.bs.modal', function() {
+            tableDiv.on('shown.bs.modal', function () {
                 tableEl.bootstrapTable('resetView');
             });
         }
@@ -697,7 +697,7 @@ export async function runNNEditorForTabLearn(hasSim: boolean) {
     epoch = 0;
     $('#nn-learn-show-iteration-all').hide();
 
-    $('#nn-learn').mouseup(function(e) {
+    $('#nn-learn').mouseup(function (e) {
         let weightLineChart = $('#nn-learn-training-weight-linechart');
         let biasLineChart = $('#nn-learn-training-bias-linechart');
 
@@ -725,7 +725,7 @@ const processUserInputTable = (fileInputEl: JQuery<HTMLElement>, tableDiv: JQuer
         fileInputEl.val('');
         if (file) {
             let fileReader = new FileReader();
-            fileReader.onload = function() {
+            fileReader.onload = function () {
                 let data = fileReader.result;
                 let maxInputOutputArrayLength: number = state.inputs.length + state.outputs.length;
                 let inputData = UTIL.csvToArray(data);
@@ -792,15 +792,15 @@ const createUserInputTableBs = (tableDiv: JQuery<HTMLElement>, tableEl: JQuery<H
     }
 
     let updateTableCell = {
-        'change input': function(e, value, row, index) {
-            let attr = (this as HTMLInputElement).classList[1];
+        'change input': function (e, value, row, index) {
+            let attr = e.currentTarget.classList[1];
             tableEl.bootstrapTable('updateCell', {
                 index: index,
                 field: attr,
                 value: $(e.target).val(),
-                reinit: false
+                reinit: false,
             });
-        }
+        },
     };
 
     // populate table header with input and output neurons
@@ -813,7 +813,7 @@ const createUserInputTableBs = (tableDiv: JQuery<HTMLElement>, tableEl: JQuery<H
                 `'>${neuron}</span>`,
             align: 'center',
             formatter: formatCellsAsInputs,
-            events: updateTableCell
+            events: updateTableCell,
         };
         columnData.push(obj);
     });
@@ -845,7 +845,7 @@ const createUserInputTableBs = (tableDiv: JQuery<HTMLElement>, tableEl: JQuery<H
     tableEl.bootstrapTable('destroy').bootstrapTable({
         height: 235,
         columns: columnData,
-        data: rowData
+        data: rowData,
     });
 };
 
@@ -872,12 +872,12 @@ export function drawNetworkUIForTabLearn(redrawNetwork: boolean = true) {
     $('#nn-training-loss').text(NN_MSG.get('NN_LEARN_TRAINING_LOSS'));
 
     redrawNetwork &&
-    drawTheNetwork(TabType.LEARN, '-learn', {
-        adjustMainPartHeight: true,
-        moveSvgDown: true,
-        showAllWeightLinks: true,
-        weightsBiasesLinechartDisplay: true
-    });
+        drawTheNetwork(TabType.LEARN, '-learn', {
+            adjustMainPartHeight: true,
+            moveSvgDown: true,
+            showAllWeightLinks: true,
+            weightsBiasesLinechartDisplay: true,
+        });
 }
 
 export function drawNetworkUIForTabDefine(redrawNetwork: boolean = true): void {
@@ -899,20 +899,20 @@ export function drawNetworkUIForTabDefine(redrawNetwork: boolean = true): void {
     if (state && state.hasOwnProperty('numHiddenLayers')) {
         $('#layers-label').text(NN_MSG.get(state.numHiddenLayers === 1 ? 'NN_HIDDEN_LAYER' : 'NN_HIDDEN_LAYERS'));
         $('#num-layers').text(state.numHiddenLayers);
-    }  else {
+    } else {
         $('#layers-label').text(NN_MSG.get('NN_HIDDEN_LAYER'));
         $('#num-layers').text(0);
     }
 
     redrawNetwork &&
-    drawTheNetwork(TabType.DEFINE, '', {
-        adjustMainPartHeight: false,
-        moveSvgDown: true,
-        showAllWeightLinks: true,
-        weightsBiasesEditable: true,
-        neuronNamesEditable: true,
-        tabCallback: runNameCard
-    });
+        drawTheNetwork(TabType.DEFINE, '', {
+            adjustMainPartHeight: false,
+            moveSvgDown: true,
+            showAllWeightLinks: true,
+            weightsBiasesEditable: true,
+            neuronNamesEditable: true,
+            tabCallback: runNameCard,
+        });
 }
 
 function drawTheNetwork(tabType: TabType, tabSuffix: string, options: object) {
@@ -926,7 +926,7 @@ function drawTheNetwork(tabType: TabType, tabSuffix: string, options: object) {
     const nnD3 = D3.select(`#nn${tabSuffix}`)[0][0] as HTMLDivElement;
     const topControlD3 = D3.select(`#nn${tabSuffix}-top-controls`)[0][0] as HTMLDivElement;
     let _mainPartHeightTemp = nnD3.clientHeight - topControlD3.clientHeight + (options['adjustMainPartHeight'] ? -50 : -75);
-    const mainPartHeight = _mainPartHeightTemp <=  0 ? 30 : _mainPartHeightTemp;
+    const mainPartHeight = _mainPartHeightTemp <= 0 ? 30 : _mainPartHeightTemp;
 
     // set the width of the svg container.
     const mainPart = D3.select(`#nn${tabSuffix}-main-part`)[0][0] as HTMLDivElement;
@@ -1047,7 +1047,7 @@ function drawTheNetwork(tabType: TabType, tabSuffix: string, options: object) {
         let nodeGroup: D3Selection = container.append('g').attr({
             class: nodeClass,
             id: `${nodeId}`,
-            transform: `translate(${x},${y})`
+            transform: `translate(${x},${y})`,
         });
 
         let mainRectAngle = nodeGroup.append('rect').attr({
@@ -1055,18 +1055,18 @@ function drawTheNetwork(tabType: TabType, tabSuffix: string, options: object) {
             y: 0,
             width: nodeSize,
             height: nodeSize,
-            'marker-start': 'url(#markerArrow)'
+            'marker-start': 'url(#markerArrow)',
         });
         if (focusNode !== undefined && focusNode != null && focusNode.id === node.id) {
             mainRectAngle.attr('style', 'outline: medium solid #fbdc00;');
         }
         let theWholeNNSvgNode = D3.select(`#nn${tabSuffix}-svg`).node();
         nodeGroup
-            .on('dblclick', function() {
+            .on('dblclick', function () {
                 // works well in Chrome, not in Firefox...
                 options['tabCallback'] && options['tabCallback'](node, D3.mouse(theWholeNNSvgNode));
             })
-            .on('click', function() {
+            .on('click', function () {
                 if ((D3.event as any).shiftKey) {
                     options['tabCallback'] && options['tabCallback'](node, D3.mouse(theWholeNNSvgNode));
                 } else if (options['neuronNamesEditable'] && inputNeuronNameEditingMode && nodeType == NodeType.INPUT) {
@@ -1090,7 +1090,7 @@ function drawTheNetwork(tabType: TabType, tabSuffix: string, options: object) {
             x: 10,
             y: 0.66 * nodeSize,
             'text-anchor': 'start',
-            cursor: 'default'
+            cursor: 'default',
         });
         labelForId.append('tspan').text(nodeId);
         if (nodeType !== NodeType.INPUT) {
@@ -1136,12 +1136,12 @@ function drawTheNetwork(tabType: TabType, tabSuffix: string, options: object) {
             .insert('div', ':first-child')
             .attr({
                 id: `canvas-${nodeId}`,
-                class: 'canvas'
+                class: 'canvas',
             })
             .style({
                 position: 'absolute',
                 left: `${x + 3}px`,
-                top: `${y + 3}px`
+                top: `${y + 3}px`,
             });
     }
 
@@ -1162,19 +1162,19 @@ function drawTheNetwork(tabType: TabType, tabSuffix: string, options: object) {
         let datum = {
             source: {
                 y: source.cx + nodeSize / 2 + 2,
-                x: source.cy
+                x: source.cy,
             },
             target: {
                 y: dest.cx - nodeSize / 2,
-                x: dest.cy + ((index - (length - 1) / 2) / length) * (length - 1)
-            }
+                x: dest.cy + ((index - (length - 1) / 2) / length) * (length - 1),
+            },
         };
         let diagonal = D3.svg.diagonal().projection((d) => [d.y, d.x]);
         line.attr({
             'marker-start': 'url(#markerArrow)',
             class: 'link',
             id: link.source.id + '-' + link.dest.id,
-            d: diagonal(datum, 0)
+            d: diagonal(datum, 0),
         });
 
         const displayLineChart = (link: Link, coordinates: [number, number]) => {
@@ -1187,7 +1187,7 @@ function drawTheNetwork(tabType: TabType, tabSuffix: string, options: object) {
             weightLineChart.css({
                 left: `${xPos}px`,
                 top: `${yPos}px`,
-                display: 'block'
+                display: 'block',
             });
             trainingWeightLineChart.drawLineChart();
             trainingWeightLineChart.reset();
@@ -1220,7 +1220,7 @@ function drawTheNetwork(tabType: TabType, tabSuffix: string, options: object) {
                 .append('path')
                 .attr('d', diagonal(datum, 0))
                 .attr('class', cssForPath)
-                .on('click', function() {
+                .on('click', function () {
                     options['weightsBiasesEditable'] && runEditCard(link, D3.mouse(this));
                     options['weightsBiasesLinechartDisplay'] && displayLineChart(link, D3.mouse(this));
                 });
@@ -1246,7 +1246,7 @@ function drawTheNetwork(tabType: TabType, tabSuffix: string, options: object) {
             biasLineChart.css({
                 left: `${xPos}px`,
                 top: `${yPos}px`,
-                display: 'block'
+                display: 'block',
             });
             trainingBiasLineChart.drawLineChart();
             trainingBiasLineChart.reset();
@@ -1265,7 +1265,7 @@ function drawTheNetwork(tabType: TabType, tabSuffix: string, options: object) {
             );
             biasRect.attr('class', 'nn-bias-click');
             if (focusStyle !== FocusStyle.CLICK_NODE || focusNode === node) {
-                biasRect.on('click', function() {
+                biasRect.on('click', function () {
                     (D3.event as any).stopPropagation();
                     options['weightsBiasesEditable'] && runEditCard(node, D3.mouse(container.node()));
                     options['weightsBiasesLinechartDisplay'] && displayLineChart(node, D3.mouse(container.node()));
@@ -1277,11 +1277,11 @@ function drawTheNetwork(tabType: TabType, tabSuffix: string, options: object) {
                 x: -biasSize - 2,
                 y: nodeSize - biasSize + 3,
                 width: biasSize,
-                height: biasSize
+                height: biasSize,
             });
             biasRect.attr('class', 'nn-bias-click');
             if (focusStyle !== FocusStyle.CLICK_NODE || focusNode === node) {
-                biasRect.on('click', function() {
+                biasRect.on('click', function () {
                     (D3.event as any).stopPropagation();
                     options['weightsBiasesEditable'] && runEditCard(node, D3.mouse(container.node()));
                     options['weightsBiasesLinechartDisplay'] && displayLineChart(node, D3.mouse(container.node()));
@@ -1312,7 +1312,7 @@ function drawTheNetwork(tabType: TabType, tabSuffix: string, options: object) {
                 class: 'nn-showval',
                 id: 'val-' + id,
                 x: x,
-                y: y
+                y: y,
             })
             .text(valueToShow);
         drawValuesBox(text, valueForColor, forNodeOutput);
@@ -1555,7 +1555,7 @@ function runEditCard(nodeOrLink: Node | Link, coordinates: [number, number]) {
     editCard.style({
         left: `${xPos}px`,
         top: `${yPos}px`,
-        display: 'block'
+        display: 'block',
     });
     let name = nodeOrLink instanceof Link ? 'NN_WEIGHT' : 'NN_BIAS';
     editCard.select('.nn-type').text(NN_MSG.get(name));
@@ -1686,7 +1686,7 @@ function runNameCard(node: Node, coordinates: [number, number]) {
     nameCard.style({
         left: `${xPos}px`,
         top: `${yPos}px`,
-        display: 'block'
+        display: 'block',
     });
     let name = 'POPUP_NAME';
     nameCard.select('.nn-type').text(NN_MSG.get(name));
@@ -1707,7 +1707,7 @@ function updateUI(tabSuffix: string) {
             container.select(`#${baseName}`).style({
                 'stroke-dashoffset': 0,
                 'stroke-width': linkWidthScale(Math.abs(link.weight.get())),
-                stroke: colorScale(link.weight.get())
+                stroke: colorScale(link.weight.get()),
             });
             const val = container.select(`#val-${baseName}`);
             if (!val.empty()) {
@@ -1736,8 +1736,8 @@ function updateUI(tabSuffix: string) {
         } else if (exploreType == ExploreType.NEURON) {
             D3.select('#nn-show-math').html(
                 currentDebugNode.id +
-                ' = ' +
-                (state.inputs.includes(currentDebugNode.id) ? currentDebugNode.output : currentDebugNode.genMath(state.activationKey))
+                    ' = ' +
+                    (state.inputs.includes(currentDebugNode.id) ? currentDebugNode.output : currentDebugNode.genMath(state.activationKey))
             );
         } else {
             D3.select('#nn-show-math').html('');
@@ -1818,8 +1818,8 @@ function nodeOrLink2Value(nodeOrLink: Node | Link): string {
     return nodeOrLink instanceof Link
         ? nodeOrLink.weight.getWithPrecision('*', state.weightSuppressMultOp)
         : nodeOrLink instanceof Node
-            ? nodeOrLink.bias.getWithPrecision('*', state.weightSuppressMultOp)
-            : '';
+        ? nodeOrLink.bias.getWithPrecision('*', state.weightSuppressMultOp)
+        : '';
 }
 
 function value2NodeOrLink(nodeOrLink: Node | Link, value: string) {
