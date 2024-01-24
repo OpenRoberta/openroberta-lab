@@ -3696,7 +3696,7 @@ input[type="number"] {
 
 #nn-show-next-neuron, #nn-show-iteration, #nn-learn-show-iteration {
     color: rgba(0, 0, 0, 0.6);
-    background-color: #fafafagi;
+    background-color: #fafafa;
     font-weight: 300;
     text-align: center;
 }
