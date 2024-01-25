@@ -439,7 +439,7 @@ export class RobotSimBehaviour extends ARobotBehaviour {
     displayGetPixelBrightnessAction(s: State, x: number, y: number): void {
         U.debug('***** get pixel x="' + x + ', y=' + y + '" *****');
         const sensor = this.hardwareState.sensors[C.DISPLAY][C.PIXEL];
-        s.push(sensor[y][x]);
+        s.push(sensor[x][y]);
     }
 
     clearDisplay(): void {
