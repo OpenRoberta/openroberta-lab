@@ -767,6 +767,8 @@ export class SimulationScene {
 
     resetPoseAndDrawings() {
         this.robots.forEach((robot) => (robot as RobotBaseMobile).resetPose());
+        this.dCtx.canvas.width = this.dCtx.canvas.width;
+        this.udCtx.canvas.width = this.udCtx.canvas.width;
     }
 
     addMarker(markerId: number) {
