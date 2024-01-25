@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2024-01-18 15:49:59.207118",
+		"lastupdated": "2024-01-25 09:42:21.985273",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -726,7 +726,7 @@
 	"MENU_GENERAL": "general help",
 	"MBUILD_PORT_TOOLTIP": "Block for the mBuild Port. The order of the compatible mbuild sensor blocks should be identical to the real system.",
 	"I2CBUS_TOOLTIP": "Represents one byte of the I2C address space.",
-	"MENU_SHOW_AGAIN": "back to the start page",
+	"MENU_SHOW_AGAIN": "show welcome note again",
 	"MENU_ROBOT_STATE_INFO": "info",
 	"MENU_STATE_INFO": "state information",
 	"MENU_ABOUT": "about the Open Roberta Lab",
@@ -758,7 +758,7 @@
 	"POPUP_ABOUT_TEXT_DEV": "The Open Roberta Lab is an open-source programming platform developed by Fraunhofer IAIS within the initiative <a href='http://www.roberta-home.de/' target='_blank'>»Roberta – Learning with Robots«</a>",
 	"POPUP_ABOUT_TEXT_GOOG": "Open Roberta was initiated in collaboration with Google Germany to reduce the hurdles for students, teachers and schools programming educational robots.</a>",
 	"POPUP_ABOUT_TEXT_NRW": "As part of the project »AI Algorithms in Computer Science Education«, the Ministry for Schools and Education of the State of North Rhine-Westphalia is funding the integration of Artificial Neural Networks into the Open Roberta Lab as well as the development of suitable learning content and materials on Artificial Intelligence.",
-	"POPUP_STARTUP_START": "back to robot/system selection",
+	"POPUP_STARTUP_START": "Choose your system!",
 	"POPUP_ABOUT_JOIN": "I want to help",
 	"POPUP_USERNAME": "Username",
 	"POPUP_USERNAME_LOGOFF": "You are not logged in.",
@@ -2056,7 +2056,7 @@
 	"START_HEADLINE_PART_TWO": "your",
 	"START_HEADLINE_PART_THREE": "Robots &",
 	"START_HEADLINE_PART_FOUR": "Boards",
-	"START_TEASER": "Our open source platform »Open Roberta Lab« let you create your very own programs in no time at all using drag and drop.",
+	"START_TEASER": "Our open source platform »Open Roberta Lab« let you create your very own programs in no time at all using drag and drop. The graphical programming language <span class='nepo'>(NEPO)</span> will support you.",
 	"START_LOGIN_HEADLINE": "Sign in",
 	"START_LOGIN_TEXT": "Log in and have access to your saved programs and settings.",
 	"START_IMPORT_HEADLINE": "Import your NEPO program",
@@ -2092,8 +2092,5 @@
 	"GALLERY_PROGRAM_NAME": "Program name alph.",
 	"GALLERY_ROBOT": "Robot/System alph.",
 	"GALLERY_ALL_ROBOTS": "All robots/systems",
-	"GALLERY_SORT_BY": "Order by",
-	"START_FORMATSEARCH": "search robots/systems",
-	"START_BOOKMARK_TOOLTIP": "Create a bookmark directly to your favourite robot/system.",
-	"START_STARTUP_TITLE": "Welcome to Open Roberta Lab"
+	"GALLERY_SORT_BY": "Order by"
 }
