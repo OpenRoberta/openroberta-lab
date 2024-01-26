@@ -25,10 +25,7 @@ const numPopularRobots: number = 8;
 
 export function init(callback: Function) {
     mainCallback = callback;
-    if (!GUISTATE_C.getStartWithoutPopup()) {
-        // @ts-ignore
-        $('#tabStart').tabWrapShow();
-    }
+    let ready = $.Deferred();
     let r = GUISTATE_C.getRobots();
     robots = Object.keys(r).map(function (index) {
         let robot = r[index];
@@ -48,11 +45,30 @@ export function init(callback: Function) {
     robots.forEach(function (row, index) {
         row.rowNum = index;
     });
-    initView();
-    initRobotList();
-    initRobotToolbar();
-    initRobotListEvents();
-    fetchRSSFeed();
+
+    const preload = (src) =>
+        new Promise(function (resolve, reject) {
+            const img = new Image();
+            img.onload = function () {
+                resolve(img);
+            };
+            img.onerror = function () {
+                console.error('could not preload ' + src);
+                resolve(null);
+            };
+            img.src = src;
+        });
+
+    const preloadAll = (images) => Promise.all(images.map(preload));
+    let images = robots.map((robot) => '/css/img/system_preview/' + robot.name + '.jpg');
+    $.when(preloadAll(images)).then((images) => {
+        initRobotList();
+        initRobotToolbar();
+        initRobotListEvents();
+        fetchRSSFeed();
+        ready.resolve();
+    });
+    return ready.promise();
 }
 
 function initRobotToolbar() {
@@ -116,10 +132,12 @@ function initRobotList() {
                 title: '',
                 searchable: false,
                 formatter: function (announcement, row, index) {
-                    let html: string = '<a href="#" class="pick typcn typcn-star-outline bookmark"></a>';
-                    /*if (index === 5) {
-                        html += '<div class="new">' + Blockly.Msg.MENU_NEW + '</div>';
-                    }*/
+                    let html: string =
+                        '<a href="#" class="pick typcn typcn-star-outline bookmark" rel="tooltip" data-bs-placement="top" data-bs-original-title="' +
+                        Blockly.Msg.START_BOOKMARK_TOOLTIP +
+                        '" aria-label="' +
+                        Blockly.Msg.START_BOOKMARK_TOOLTIP +
+                        '"  lkey="Blockly.Msg.START_BOOKMARK_TOOLTIP" title=""></a>';
                     if (announcement && announcement === 'beta') {
                         return html + "<img class='img-beta' src='/css/img/beta.png' alt='beta' />";
                     } else if (announcement && announcement === 'deprecated') {
@@ -216,7 +234,6 @@ function initRobotList() {
                 },
             },
         ],
-        /*filterControl: true,*/
         locale: myLang,
         toolbar: '#robotListToolbar',
         cardView: 'true',
@@ -230,13 +247,13 @@ function initRobotList() {
             return {
                 popularRobots: {
                     html:
-                        '<button class="nav-link active start" data-bs-toggle="button" autocomplete="off" aria-pressed="true" data-original-title="" id="popularRobots" lkey="Blockly.Msg.START_POPULAR_ROBOTS">' +
+                        '<button class="nav-link active start" data-bs-toggle="button" autocomplete="off" aria-pressed="true" data-bs-original-title="" id="popularRobots" lkey="Blockly.Msg.START_POPULAR_ROBOTS">' +
                         Blockly.Msg.START_POPULAR_ROBOTS +
                         '</button>',
                 },
                 allRobots: {
                     html:
-                        '<button class="nav-link start" data-bs-toggle="button" autocomplete="off" aria-pressed="false" data-original-title="" id="allRobots" lkey="Blockly.Msg.START_ALL_ROBOTS">' +
+                        '<button class="nav-link start" data-bs-toggle="button" autocomplete="off" aria-pressed="false" data-bs-original-title="" id="allRobots" lkey="Blockly.Msg.START_ALL_ROBOTS">' +
                         Blockly.Msg.START_ALL_ROBOTS +
                         '</button><span id="results"></span>&nbsp;<span id="labelResults" lkey="Blockly.Msg.START_RESULTS">' +
                         Blockly.Msg.START_RESULTS +
@@ -249,27 +266,17 @@ function initRobotList() {
     };
     $('#robotTable').bootstrapTable(myOptions);
     $('#robotTable').bootstrapTable('load', startRobots);
+    $('.bookmark').tooltip({ trigger: 'hover' });
     $('#start input.form-control.search-input').attr('placeholder', Blockly.Msg.START_FORMATSEARCH);
     translate($('#robotTable'));
     $('#start .fixed-table-toolbar>.float-right').toggleClass('hidden');
     $('span#results').text(startRobots.length);
-
-    $('.bookmark')
-        .attr('title', '')
-        .attr('rel', 'tooltip')
-        .attr('data-placement', 'left')
-        .attr('lkey', 'Blockly.Msg.START_BOOKMARK_TOOLTIP')
-        .attr('data-bs-original-title', Blockly.Msg.START_BOOKMARK_TOOLTIP);
-    // @ts-ignore
-    $('.bookmark').tooltip('_fixTitle');
 }
 function initView() {
     $('#tabProgram, #tabConfiguration').parent().addClass('invisible');
     $('#tabNN, #tabNNLearn').parent().hide();
-    $('.notStart').toggleClass('disabled');
-    $('#header').toggleClass('shadow');
-    $('#main-section').toggleClass('mainPadding');
-    //$('#main-section').css({ 'padding-right': '' });
+    $('.notStart').addClass('disabled');
+    $('#header').removeClass('shadow');
     GUISTATE_C.resetRobot();
     GUISTATE_C.setView('tabStart');
 }
@@ -277,21 +284,26 @@ function initRobotListEvents() {
     $('#tabStart').onWrap('show.bs.tab', function (e) {
         initView();
     });
-    $('#popularRobots').onWrap('click', function (e) {
+    let popularRobots = function () {
         if (!$('#allRobots').hasClass('active')) {
             $(this).addClass('active');
             return false;
         }
+        $('#more').toggleClass('more');
+        $('#more').attr('lkey', 'Blockly.Msg.START_ALL_ROBOTS');
+        $('#more').text(Blockly.Msg.START_ALL_ROBOTS);
         $('#start .fixed-table-toolbar>.float-right').toggleClass('hidden');
         $('#allRobots').toggleClass('active');
         $('#allRobots').attr('aria-pressed', 'false');
-        let startRobots = robots.slice(0, numPopularRobots);
-        $('#robotTable').bootstrapTable('load', startRobots);
+        let myRobots = robots.slice(0, numPopularRobots);
+        $('#robotTable').bootstrapTable('load', myRobots);
         $('#robotTable').bootstrapTable('resetSearch', '');
         $('#robotTable').bootstrapTable('sortBy', { field: 'rowNum', sortOrder: 'asc' });
         $('#robotTable').bootstrapTable('filterBy', []);
-    });
-    $('#allRobots').onWrap('click', function () {
+        $('#start').animate({ scrollTop: $('.section--white').height() }, 500);
+    };
+    $('#popularRobots').onWrap('click', popularRobots);
+    let allRobots = function () {
         if (!$('#popularRobots').hasClass('active')) {
             $(this).addClass('active');
             return false;
@@ -299,16 +311,32 @@ function initRobotListEvents() {
         $('input.progLang, input.feature').each(function () {
             $(this).prop('checked', false);
         });
+        $('#more').toggleClass('more');
+        $('#more').attr('lkey', 'Blockly.Msg.START_POPULAR_ROBOTS');
+        $('#more').text(Blockly.Msg.START_POPULAR_ROBOTS);
         $('#start .fixed-table-toolbar>.float-right').toggleClass('hidden');
         $('#popularRobots').toggleClass('active');
         $('#popularRobots').attr('aria-pressed', 'false');
         $('#robotTable').bootstrapTable('load', robots);
         $('#robotTable').bootstrapTable('filterBy', []);
         $('#robotTable').bootstrapTable('sortBy', { field: 'realName', sortOrder: 'asc' });
+        $('#start').animate({ scrollTop: $('.section--white').height() }, 500);
         $('#start input.form-control.search-input').trigger('focus');
+    };
+    $('#allRobots').onWrap('click', allRobots);
+    $('#more').onWrap('click', function () {
+        var $this = $(this);
+        if ($this.hasClass('more')) {
+            $('#allRobots').trigger('click');
+            allRobots();
+        } else {
+            $('#popularRobots').trigger('click');
+            popularRobots();
+        }
     });
     $('#robotTable').on('post-body.bs.table', function (e, data) {
         $('span#results').text(data.length);
+        $('.bookmark').tooltip({ trigger: 'hover' });
     });
     $('#start .btn-group input').onWrap('change', function (e) {
         let myFilter: {} = {};
@@ -333,7 +361,7 @@ function initRobotListEvents() {
             e.stopPropagation();
             IMPORT_C.importXmlFromStart(mainCallback);
         },
-        'take a tour clicked'
+        'import clicked'
     );
     $('#takeATour').onWrap(
         'click',
@@ -352,8 +380,31 @@ function translate($element: JQuery<HTMLElement>): void {
     $element.find('[lkey]').each(function (index) {
         let lkey = $(this).attr('lkey');
         let key = lkey.replace('Blockly.Msg.', '');
-        $(this).html(Blockly.Msg[key]);
+        if ($(this).attr('rel') === 'tooltip') {
+            $(this).attr('data-bs-original-title', Blockly.Msg[key]);
+        } else {
+            $(this).html(Blockly.Msg[key]);
+        }
     });
+}
+
+function loadImages(names: string[]) {
+    let imgPath: string = '/css/img/system_preview/';
+    let i = 0;
+    let numLoading = names.length;
+    const onload = function () {
+        --numLoading === 0;
+    };
+    const images = {};
+    while (i < names.length) {
+        const img = (images[names[i]] = new Image());
+        img.onload = onload;
+        img.onerror = function (e) {
+            console.error(e);
+        };
+        img.src = imgPath + names[i++];
+    }
+    return images;
 }
 
 function fetchRSSFeed() {

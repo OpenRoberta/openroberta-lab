@@ -5,6 +5,7 @@ import * as Blockly from 'blockly';
 import 'jquery-validate';
 import 'bootstrap';
 import * as U from 'interpreter.util';
+import * as GUISTATE_C from 'guiState.controller';
 
 const ANIMATION_DURATION = 750;
 
@@ -1139,6 +1140,29 @@ export function cleanUri() {
     var uri = window.location.toString();
     var clean_uri = uri.substring(0, uri.lastIndexOf('/'));
     window.history.replaceState({}, document.title, clean_uri);
+}
+
+//TODO: Robot group names exists in plugin properties
+export function getRobotGroupsPrettyPrint(opt_robotGroup) {
+    var robots = GUISTATE_C.getRobots();
+    var groups = {};
+
+    var coerceName = function (name, group) {
+        if (group === 'arduino') return 'Nepo4Arduino';
+        if (group === 'ev3') return 'Ev3';
+        return GUISTATE_C.getMenuRobotRealName(name);
+    };
+    if (opt_robotGroup) {
+        return coerceName(opt_robotGroup, opt_robotGroup);
+    }
+    for (var propt in robots) {
+        var group = robots[propt].group;
+        var name = robots[propt].name;
+        if (group && !groups[group]) {
+            groups[group] = coerceName(name, group);
+        }
+    }
+    return groups;
 }
 
 export {

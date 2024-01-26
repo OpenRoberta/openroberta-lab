@@ -294,9 +294,6 @@ function init() {
         .then(function (language, opt_data) {
             return guiStateController.init(language, opt_data);
         })
-        /*.then(function () {
-            return robotController.init();
-        })*/
         .then(function () {
             return userController.init();
         })
@@ -309,10 +306,15 @@ function init() {
             tutorialController.init();
             userGroupController.init();
             notificationController.init();
+            return startViewController.init(initProgramming);
+        })
+        .then(function () {
             menuController.init(initProgramming);
-            startViewController.init(initProgramming);
-            $('.navbar-nav > li > ul > .login').addClass('disabled');
-            $('#head-navi-icon-user').addClass('error');
+            if (!guiStateController.getStartWithoutPopup()) {
+                $('#tabStart').tabWrapShow();
+                $('.navbar-nav > li > ul > .login').addClass('disabled');
+                $('#head-navi-icon-user').addClass('error');
+            }
             $('.cover').fadeOut(100);
             $('body>.pace').fadeOut(500);
         });
@@ -322,11 +324,10 @@ var mainCallbackCalled = false;
 function initProgramming(robot, opt_callback, opt_params) {
     if (!mainCallbackCalled) {
         mainCallbackCalled = true;
-        $.when(robotController.init(robot)).then(function () {
-            $('#tabProgram, #tabConfiguration').parent().toggleClass('invisible');
-            $('.notStart').toggleClass('disabled');
-            $('#header').toggleClass('shadow');
-            $('#main-section').toggleClass('mainPadding');
+        $.when(robotController.init(robot)).then(function (opt_callback, opt_params) {
+            $('#tabProgram, #tabConfiguration').parent().removeClass('invisible');
+            $('.notStart').removeClass('disabled');
+            $('#header').addClass('shadow');
             programController.init();
             configurationController.init();
             progHelpController.init();
@@ -350,11 +351,10 @@ function initProgramming(robot, opt_callback, opt_params) {
             $('#tabProgram').tabWrapShow();
         });
     } else {
-        robotController.switchRobot(robot, true, function () {
-            $('#tabProgram, #tabConfiguration').parent().toggleClass('invisible');
-            $('#header').toggleClass('shadow');
-            $('.notStart').toggleClass('disabled');
-            $('#main-section').toggleClass('mainPadding');
+        robotController.switchRobot(robot, true, function (opt_callback, opt_params) {
+            $('#tabProgram, #tabConfiguration').parent().removeClass('invisible');
+            $('#header').addClass('shadow');
+            $('.notStart').removeClass('disabled');
             $('#tabProgram').oneWrap('shown.bs.tab', function () {
                 opt_callback && typeof opt_callback === 'function' && opt_callback(...opt_params);
             });

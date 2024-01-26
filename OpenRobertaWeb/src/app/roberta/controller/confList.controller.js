@@ -81,6 +81,18 @@ function initConfList() {
             },
         ],
     });
+    $('#confList>.bootstrap-table')
+        .find('button[name="paginationSwitch"]')
+        .attr('title', '')
+        .attr('rel', 'tooltip')
+        .attr('data-bs-original-title', $('#confNameTable').bootstrapTable.locales[GUISTATE_C.getLanguage()].formatPaginationSwitch())
+        .tooltip({ trigger: 'hover' });
+    $('#confList>.bootstrap-table')
+        .find('button[name="refresh"]')
+        .attr('title', '')
+        .attr('rel', 'tooltip')
+        .attr('data-bs-original-title', $('#confNameTable').bootstrapTable.locales[GUISTATE_C.getLanguage()].formatRefresh())
+        .tooltip({ trigger: 'hover' });
     $('#confNameTable').bootstrapTable('togglePagination');
 }
 
@@ -112,9 +124,10 @@ function initConfListEvents() {
     );
 
     $confNameTable.onWrap(
-        'check-all.bs.table',
+        'check-all.bs.table check.bs.table',
         function () {
-            $('.deleteSomeConf').removeClass('disabled');
+            $('#deleteSomeConfHeader').removeClass('disabled');
+            $('#deleteSomeConfHeader').tooltip({ trigger: 'hover' });
             $('.delete').addClass('disabled');
             $('.load').addClass('disabled');
         },
@@ -122,19 +135,9 @@ function initConfListEvents() {
     );
 
     $confNameTable.onWrap(
-        'check.bs.table',
-        function () {
-            $('.deleteSomeConf').removeClass('disabled');
-            $('.delete').addClass('disabled');
-            $('.load').addClass('disabled');
-        },
-        'check one configuration'
-    );
-
-    $confNameTable.onWrap(
         'uncheck-all.bs.table',
         function ($element, rows) {
-            $('.deleteSomeConf').addClass('disabled');
+            $('#deleteSomeConfHeader').addClass('disabled');
             $('.delete').removeClass('disabled');
             $('.load').removeClass('disabled');
         },
@@ -146,7 +149,7 @@ function initConfListEvents() {
         function () {
             var selectedRows = $confNameTable.bootstrapTable('getSelections');
             if (selectedRows.length <= 0 || selectedRows == null) {
-                $('.deleteSomeConf').addClass('disabled');
+                $('#deleteSomeConfHeader').addClass('disabled');
                 $('.delete').removeClass('disabled');
                 $('.load').removeClass('disabled');
             }
@@ -244,5 +247,7 @@ var formatDeleteLoad = function (value, row) {
 };
 
 var titleActions =
-    '<a href="#" id="deleteSomeConf" class="deleteSomeConf disabled" rel="tooltip" lkey="Blockly.Msg.CONFLIST_DELETE_ALL_TOOLTIP" data-bs-original-title="" data-container="body" title="">' +
+    '<a href="#" id="deleteSomeConfHeader" class="deleteSomeConf disabled" rel="tooltip" lkey="Blockly.Msg.CONFLIST_DELETE_ALL_TOOLTIP" data-bs-original-title="' +
+    Blockly.Msg.CONFLIST_DELETE_ALL_TOOLTIP +
+    '" title="">' +
     '<span class="typcn typcn-delete"></span></a>';

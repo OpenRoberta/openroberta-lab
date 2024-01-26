@@ -18,6 +18,7 @@ function is_touch_device() {
 function start(tour) {
     function end() {
         $('#enjoyHintAnchor').remove();
+        $('#enjoyHintStart').remove();
         Blockly.mainWorkspace.clear();
         enjoyhint_instance = {};
         if ($('.rightMenuButton.rightActive')) {
@@ -45,6 +46,11 @@ function start(tour) {
                 id: 'enjoyHintAnchor',
             })
                 .css({ width: size, height: size, top: y, left: x, position: 'absolute' })
+                .appendTo('body');
+            $('<div>', {
+                id: 'enjoyHintStart',
+            })
+                .css({ width: 0, height: 0, top: 30, right: 31, position: 'absolute' })
                 .appendTo('body');
         },
         onSkip: function () {
@@ -115,14 +121,11 @@ export { start, getInstance };
 
 var offsetLeft = $('#blocklyDiv').width() * -0.15;
 var offsetTop = $('#blocklyDiv').height() * -0.1;
-var circleRadius = Math.min($(window).width() / 3, $(window).height() / 3);
-var circleOffset = $(window).height() / 4;
 var welcome = [
     {
         event_type: 'next',
-        selector: '#imgLogo',
+        selector: '#enjoyHintStart',
         description: 'Blockly.Msg.TOUR1_DESCRIPTION01',
-        top: 77,
         nextButton: {
             text: 'Blockly.Msg.TOUR1_DESCRIPTION00',
         },

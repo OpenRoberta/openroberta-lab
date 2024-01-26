@@ -66,7 +66,11 @@ function handleQuery() {
         $('.navbar-nav a[href="#tutorialList"]').tab('show');
     } else if (target[0] === '#loadSystem' && target.length >= 2) {
         GUISTATE_C.setStartWithoutPopup();
-        ROBOT_C.switchRobot(target[1], true);
+        if (mainCallback && mainCallback instanceof Function) {
+            mainCallback(loadSystem);
+        } else {
+            alert('Problem');
+        }
     }
 
     // new style queries

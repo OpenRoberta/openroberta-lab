@@ -8,11 +8,10 @@ import * as CONFIGURATION_C from 'configuration.controller';
 import * as PROGRAM_C from 'program.controller';
 import * as GUISTATE_C from 'guiState.controller';
 import * as $ from 'jquery';
-
+import 'bootstrap-table';
+import { CommonTable } from 'table';
 // @ts-ignore
 import * as Blockly from 'blockly';
-import 'bootstrap-table';
-import { CardView, CommonTable } from 'table';
 
 enum View {
     Examples = 'Examples',
@@ -189,9 +188,10 @@ function initProgListEvents() {
     );
 
     $programNameTable.onWrap(
-        'check-all.bs.table',
+        'check-all.bs.table check.bs.table',
         function () {
-            $('.deleteSomeProgHeader').removeClass('disabled');
+            $('#deleteSomeProgHeader').removeClass('disabled');
+            $('#deleteSomeProgHeader').tooltip({ trigger: 'hover' });
             $programNameTable.find('#shareSome').removeClass('disabled');
             $programNameTable.find('.delete, .share, .gallery, .load').addClass('disabled');
         },
@@ -199,19 +199,9 @@ function initProgListEvents() {
     );
 
     $programNameTable.onWrap(
-        'check.bs.table',
-        function () {
-            $('#deleteSomeProg').removeClass('disabled');
-            $programNameTable.find('#shareSome').removeClass('disabled');
-            $programNameTable.find('.delete, .share, .gallery, .load').addClass('disabled');
-        },
-        'check one program'
-    );
-
-    $programNameTable.onWrap(
         'uncheck-all.bs.table',
         function () {
-            $('.deleteSomeProgHeader').addClass('disabled');
+            $('#deleteSomeProgHeader').addClass('disabled');
             $programNameTable.find('#shareSome').addClass('disabled');
             $programNameTable.find('.delete, .share, .gallery, .load').filter(':not([data-status="disabled"])').removeClass('disabled');
         },
@@ -223,7 +213,7 @@ function initProgListEvents() {
         function () {
             var selectedRows = $programNameTable.bootstrapTable('getSelections');
             if (!selectedRows || selectedRows.length === 0) {
-                $programNameTable.find('.deleteSomeProg').addClass('disabled');
+                $('#deleteSomeProgHeader').addClass('disabled');
                 $programNameTable.find('#shareSome').addClass('disabled');
                 $programNameTable.find('.delete, .share, .gallery, .load').filter(':not([data-status="disabled"])').removeClass('disabled');
             }
@@ -235,7 +225,7 @@ function initProgListEvents() {
         $programNameTable.bootstrapTable('resetWidth');
     });
 
-    $('.deleteSomeProgHeader').onWrap('click', function () {
+    $('#deleteSomeProgHeader').onWrap('click', function () {
         var programs = $programNameTable.bootstrapTable('getSelections', {});
         var names = '<br>';
         for (var i = 0; i < programs.length; i++) {
@@ -298,6 +288,21 @@ function showViewExampleProgram() {
     PROGLIST.loadExampleList(updateExamplePrograms);
 }
 
+function updateTooltips() {
+    $('#progList>.bootstrap-table')
+        .find('button[name="paginationSwitch"]')
+        .attr('title', '')
+        .attr('rel', 'tooltip')
+        .attr('data-bs-original-title', $('#programNameTable').bootstrapTable['locales'][GUISTATE_C.getLanguage()].formatPaginationSwitch())
+        .tooltip({ trigger: 'hover' });
+    $('#progList>.bootstrap-table')
+        .find('button[name="refresh"]')
+        .attr('title', '')
+        .attr('rel', 'tooltip')
+        .attr('data-bs-original-title', $('#programNameTable').bootstrapTable['locales'][GUISTATE_C.getLanguage()].formatRefresh())
+        .tooltip({ trigger: 'hover' });
+    $programNameTable.find('[rel="tooltip"]').tooltip({ trigger: 'hover' });
+}
 function update(result) {
     UTIL.response(result);
     if (result.rc === 'ok') {
@@ -309,21 +314,8 @@ function update(result) {
         }
     }
     $programNameTable.bootstrapTable('hideLoading');
-    $('.deleteSomeProgHeader').attr('data-bs-original-title', Blockly.Msg.PROGLIST_DELETE_ALL_TOOLTIP || 'Click here to delete all selected programs.');
-    $programNameTable.find('.delete').attr('data-bs-original-title', Blockly.Msg.PROGLIST_DELETE_TOOLTIP || 'Click here to delete your program.');
-    $programNameTable.find('.share').attr('data-bs-original-title', Blockly.Msg.PROGLIST_SHARE_TOOLTIP || 'Click here to share your program with a friend.');
-    $programNameTable
-        .find('.gallery')
-        .attr(
-            'data-bs-original-title',
-            Blockly.Msg.PROGLIST_SHARE_WITH_GALLERY_TOOLTIP || 'Click here to upload your program to the gallery hence share it with all other users.'
-        );
-    $programNameTable
-        .find('.load')
-        .attr('data-bs-original-title', Blockly.Msg.PROGLIST_LOAD_TOOLTIP || 'Click here to load your program in the programming environment.');
-    $programNameTable.find('[rel="tooltip"]').tooltip({
-        trigger: 'hover',
-    });
+    $('#deleteSomeProgHeader').removeClass('invisible');
+    updateTooltips();
 }
 
 function updateExamplePrograms(result) {
@@ -336,12 +328,8 @@ function updateExamplePrograms(result) {
         }
     }
     $programNameTable.bootstrapTable('hideLoading');
-    $programNameTable
-        .find('.load')
-        .attr('data-bs-original-title', Blockly.Msg.PROGLIST_LOAD_TOOLTIP || 'Click here to load your program in the programming environment.');
-    $programNameTable.find('[rel="tooltip"]').tooltip({
-        trigger: 'hover',
-    });
+    $('#deleteSomeProgHeader').addClass('invisible');
+    updateTooltips();
 }
 
 var eventsRelations = {
@@ -471,7 +459,9 @@ var formatDeleteShareLoad = function (value, row) {
     if (view === View.Programs) {
         if (!GUISTATE_C.isUserMemberOfUserGroup() || GUISTATE_C.getUserUserGroupOwner() !== row[1]) {
             result +=
-                '<a href="#" class="delete" rel="tooltip" lkey="Blockly.Msg.PROGLIST_DELETE_TOOLTIP" data-bs-original-title="" title=""><span class="typcn typcn-delete"></span></a>';
+                '<a href="#" class="delete" rel="tooltip" lkey="Blockly.Msg.PROGLIST_DELETE_TOOLTIP" data-bs-original-title="' +
+                Blockly.Msg.PROGLIST_DELETE_TOOLTIP +
+                '" title=""><span class="typcn typcn-delete"></span></a>';
         } else {
             result += '<a href="#" class="delete disabled" data-status="disabled"><span class="typcn typcn-delete"></span></a>';
         }
@@ -482,15 +472,21 @@ var formatDeleteShareLoad = function (value, row) {
             }
         } else {
             result +=
-                '<a href="#" class="share" rel="tooltip" lkey="Blockly.Msg.PROGLIST_SHARE_TOOLTIP" data-bs-original-title="" title=""><span class="typcn typcn-flow-merge"></span></a>';
+                '<a href="#" class="share" rel="tooltip" lkey="Blockly.Msg.PROGLIST_SHARE_TOOLTIP" data-bs-original-title="' +
+                Blockly.Msg.PROGLIST_SHARE_TOOLTIP +
+                '" title=""><span class="typcn typcn-flow-merge"></span></a>';
             if (!GUISTATE_C.isUserMemberOfUserGroup()) {
                 result +=
-                    '<a href="#" class="gallery" rel="tooltip" lkey="Blockly.Msg.PROGLIST_SHARE_WITH_GALLERY_TOOLTIP" data-bs-original-title="" title=""><span class="typcn typcn-th-large-outline"></span></a>';
+                    '<a href="#" class="gallery" rel="tooltip" lkey="Blockly.Msg.PROGLIST_SHARE_WITH_GALLERY_TOOLTIP" data-bs-original-title="' +
+                    Blockly.Msg.PROGLIST_SHARE_WITH_GALLERY_TOOLTIP +
+                    '" title=""><span class="typcn typcn-th-large-outline"></span></a>';
             }
         }
     }
     result +=
-        '<a href="#" class="load" rel="tooltip" lkey="Blockly.Msg.PROGLIST_LOAD_TOOLTIP" data-bs-original-title="" title=""><span class="typcn typcn-document"></span></a>';
+        '<a href="#" class="load" rel="tooltip" lkey="Blockly.Msg.PROGLIST_LOAD_TOOLTIP" data-bs-original-title="' +
+        Blockly.Msg.PROGLIST_LOAD_TOOLTIP +
+        '" title=""><span class="typcn typcn-document"></span></a>';
     return result;
 };
 
@@ -524,8 +520,9 @@ var sortRelations = function (a, b) {
     return -1;
 };
 var titleActions =
-    '<a href="#" id="deleteSomeProg" class="deleteSomeProgHeader disabled" rel="tooltip" lkey="Blockly.Msg.PROGLIST_DELETE_ALL_TOOLTIP" data-bs-original-title="" data-container="body" title="">' +
-    '<span class="typcn typcn-delete"></span></a>';
+    '<a href="#" id="deleteSomeProgHeader" class="deleteSomeProg disabled" rel="tooltip" lkey="Blockly.Msg.PROGLIST_DELETE_ALL_TOOLTIP" data-bs-original-title="' +
+    Blockly.Msg.PROGLIST_DELETE_ALL_TOOLTIP +
+    '"title=""><span class="typcn typcn-delete"></span></a>';
 
 /**
  * Load the program and configuration that was selected in program list

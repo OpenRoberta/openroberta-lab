@@ -28,7 +28,7 @@ function showPanel() {
             $userGroupTable.bootstrapTable('resetView', {
                 height: UTIL.calcDataTableHeight(),
             });
-            $userGroupTable.find('[data-bs-toggle="tooltip"]').tooltip();
+            $userGroupTable.find('[data-bs-toggle="tooltip"]').tooltip({ trigger: 'hover' });
             $userGroupTable.bootstrapTable('hideLoading');
         }, 250);
     });
@@ -80,7 +80,7 @@ function initUserGroupListTable() {
             },
         },
         /* <div className='bars pull-right'>
-             <button className='btn typcn typcn-plus' data-bs-toggle='tooltip' data-container='body' data-placement='top' data-translation-targets='title'
+             <button className='btn typcn typcn-plus' data-bs-toggle='tooltip' data-container='body' data-bs-placement='top' data-translation-targets='title'
                  id='showCreateUserGroupPopup' lkey='Blockly.Msg.USERGROUP_CREATE_TOOLTIP' title='Create new user group'></button>
          </div>*/
         resizable: true,
@@ -114,7 +114,7 @@ function initUserGroupListTable() {
                 formatter: function (value, row, index) {
                     if (!value || !value.length) {
                         var $returnValue = $(
-                            '<div><span lkey="Blockly.Msg.SHARE_PROGRAMS_USERGROUP_HINT" data-translation-targets="title" data-bs-toggle="tooltip" data-container="body" data-placement="right" title="">-</span></div>'
+                            '<div><span lkey="Blockly.Msg.SHARE_PROGRAMS_USERGROUP_HINT" data-translation-targets="title" data-bs-toggle="tooltip" data-container="body" data-bs-placement="right" title="">-</span></div>'
                         );
                         LANG.translate($returnValue);
                         return $returnValue.html();
@@ -259,7 +259,7 @@ function initUserGroupListTable() {
         ],
     });
 
-    $('#userGroupList').find('[data-bs-toggle="tooltip"]').tooltip();
+    $('#userGroupList').find('[data-bs-toggle="tooltip"]').tooltip({ trigger: 'hover' });
     $userGroupTable.bootstrapTable('togglePagination');
     LANG.translate($('#userGroupList'));
 }
@@ -282,8 +282,8 @@ function initUserGroupEvents() {
         });
     });
 
-    $userGroupList.find('[data-bs-toggle="tooltip"]').tooltip();
-    $('#create-user-group').find('[data-bs-toggle="tooltip"]').tooltip();
+    $userGroupList.find('[data-bs-toggle="tooltip"]').tooltip({ trigger: 'hover' });
+    $('#create-user-group').find('[data-bs-toggle="tooltip"]').tooltip({ trigger: 'hover' });
 
     $userGroupList.find('button[name="refresh"]').onWrap(
         'click',
@@ -905,7 +905,7 @@ function initUserGroupMemberListTable() {
             },
         ],
     });
-    $('#userGroupMemberList').find('[data-bs-toggle="tooltip"]').tooltip();
+    $('#userGroupMemberList').find('[data-bs-toggle="tooltip"]').tooltip({ trigger: 'hover' });
     $userGroupMemberTable.bootstrapTable('togglePagination');
     LANG.translate($('#userGroupMemberList'));
 }

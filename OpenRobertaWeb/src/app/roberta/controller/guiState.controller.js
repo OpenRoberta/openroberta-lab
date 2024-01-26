@@ -14,6 +14,7 @@ import * as WEBUSB_C from 'webUsb.controller';
 import * as PROGRAM_C from 'program.controller';
 import * as CONFIGURATION_C from 'configuration.controller';
 import * as USER_C from 'user.controller';
+import * as NN_C from 'nn.controller';
 import { switchLanguage as PROGLIST_C_switchLanguage } from 'progList.controller';
 import { switchLanguage as CONFLIST_C_switchLanguage } from 'confList.controller';
 import { switchLanguage as GALLERYLIST_C_switchLanguage } from 'galleryList.controller';
@@ -1478,6 +1479,4 @@ export {
     updateMenuStatus,
     updateTutorialMenu,
     getLegalTextsMap,
-    isWebUsbSelected,
-    setIsWebUsbSelected,
 };

@@ -40,7 +40,7 @@ export function switchLanguage() {
 function initGalleryToolbar() {
     var $selectRobot = $('<select id="filterRobot" class="filter form-select"></select>');
     $('#galleryList .search').prepend($selectRobot);
-    var groups = getRobotGroups();
+    var groups = UTIL.getRobotGroupsPrettyPrint();
     var $filterField = $('#filterRobot');
     for (var group in groups) {
         $filterField.append(new Option(groups[group], group));
@@ -244,26 +244,6 @@ function showView() {
     initGalleryListEvents();
     $('#filterRobot').val(GUISTATE_C.getRobotGroup());
     loadTableData();
-}
-//TODO: Robot group names exists in plugin properties
-function getRobotGroups() {
-    var robots = GUISTATE_C.getRobots();
-    var groups = {};
-
-    var coerceName = function (name, group) {
-        if (group === 'arduino') return 'Nepo4Arduino';
-        if (group === 'ev3') return 'Ev3';
-        return GUISTATE_C.getMenuRobotRealName(name);
-    };
-
-    for (var propt in robots) {
-        var group = robots[propt].group;
-        var name = robots[propt].name;
-        if (group && !groups[group]) {
-            groups[group] = coerceName(name, group);
-        }
-    }
-    return groups;
 }
 
 export var eventsLike = {

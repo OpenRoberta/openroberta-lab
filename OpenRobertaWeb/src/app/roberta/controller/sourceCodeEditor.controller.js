@@ -177,7 +177,7 @@ function initEvents() {
         .find('button[name="rightMostButton"]')
         .attr('title', '')
         .attr('rel', 'tooltip')
-        .attr('data-placement', 'left')
+        .attr('data-bs-placement', 'left')
         .attr('lkey', 'Blockly.Msg.SOURCE_CODE_EDITOR_IMPORT_TOOLTIP')
         .attr('data-bs-original-title', Blockly.Msg.SOURCE_CODE_EDITOR_IMPORT_TOOLTIP)
         .tooltip('_fixTitle');

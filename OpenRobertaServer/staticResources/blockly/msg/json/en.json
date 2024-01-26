@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2024-01-25 09:42:21.985273",
+		"lastupdated": "2024-01-31 18:13:12.686306",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -726,7 +726,7 @@
 	"MENU_GENERAL": "general help",
 	"MBUILD_PORT_TOOLTIP": "Block for the mBuild Port. The order of the compatible mbuild sensor blocks should be identical to the real system.",
 	"I2CBUS_TOOLTIP": "Represents one byte of the I2C address space.",
-	"MENU_SHOW_AGAIN": "show welcome note again",
+	"MENU_SHOW_AGAIN": "back to the start page",
 	"MENU_ROBOT_STATE_INFO": "info",
 	"MENU_STATE_INFO": "state information",
 	"MENU_ABOUT": "about the Open Roberta Lab",
@@ -758,7 +758,7 @@
 	"POPUP_ABOUT_TEXT_DEV": "The Open Roberta Lab is an open-source programming platform developed by Fraunhofer IAIS within the initiative <a href='http://www.roberta-home.de/' target='_blank'>»Roberta – Learning with Robots«</a>",
 	"POPUP_ABOUT_TEXT_GOOG": "Open Roberta was initiated in collaboration with Google Germany to reduce the hurdles for students, teachers and schools programming educational robots.</a>",
 	"POPUP_ABOUT_TEXT_NRW": "As part of the project »AI Algorithms in Computer Science Education«, the Ministry for Schools and Education of the State of North Rhine-Westphalia is funding the integration of Artificial Neural Networks into the Open Roberta Lab as well as the development of suitable learning content and materials on Artificial Intelligence.",
-	"POPUP_STARTUP_START": "Choose your system!",
+	"POPUP_STARTUP_START": "back to robot/system selection",
 	"POPUP_ABOUT_JOIN": "I want to help",
 	"POPUP_USERNAME": "Username",
 	"POPUP_USERNAME_LOGOFF": "You are not logged in.",
@@ -1322,6 +1322,7 @@
 	"PROGLIST_DELETE_TOOLTIP": "Click here to delete your program.",
 	"PROGLIST_SHARE_TOOLTIP": "Click here to share your program with a friend.",
 	"PROGLIST_LOAD_TOOLTIP": "Click here to load your robot configuration in the configuration environment.",
+	"PROGLIST_SHARE_WITH_GALLERY_TOOLTIP": "Click here to upload your program to the gallery hence share it with all other users.",
 	"CONFLIST_DELETE_ALL_TOOLTIP": "Click here to delete all selected programs.",
 	"CONFLIST_DELETE_TOOLTIP": "Click here to delete your robot configuration.",
 	"CONFLIST_LOAD_TOOLTIP": "Click here to load your robot configuration in the configuration environment.",
@@ -1336,7 +1337,7 @@
 	"ORA_LIKE_SAVE_SUCCESS": "You like program »$« now!",
 	"ORA_LIKE_SAVE_ERROR_EXISTS": "You couldn't like program »$«. Maybe you have already liked it.",
 	"ORA_LIKE_DELETE_SUCCESS": "You do not like program »$« anymore!",
-	"PROGLIST_SHARE_WITH_GALLERY": "Do you really want to share your program with everybody? If you are not sure please check the question and answers <a href='https://www.roberta-home.de/index.php?id=138&L=1' target='_blank'>here</a>.",
+	"PROGLIST_SHARE_WITH_GALLERY": "Do you really want to upload your program to the gallery and share it with all other users? Take a close look at the preview above. This is exactly what everyone else will see in the gallery. The two lines below the name of the program are a preview of the program documentation. By publishing your program in the gallery, other users are allowed to use, modify and share your program. You also agree to the conditions for publishing a program in the Open Roberta Gallery. If you are not sure, take another look <a href='https://www.roberta-home.de/index.php?id=138&L=1' target='_blank'>here</a>!",
 	"GALLERY_SHARED_ALREADY": "You have already uploaded this program to the gallery. If you want to change it, look for the copy from the gallery and modify it. You can also remove it from the gallery while deleting the copy from the gallery.",
 	"MENU_CREATE_LINK": "create program link ...",
 	"POPUP_GET_LINK": "Here is the link to your actual program. Please don't change it, it probably won't work anymore. It's already copied to your clipboard!</br>$",
@@ -2056,7 +2057,7 @@
 	"START_HEADLINE_PART_TWO": "your",
 	"START_HEADLINE_PART_THREE": "Robots &",
 	"START_HEADLINE_PART_FOUR": "Boards",
-	"START_TEASER": "Our open source platform »Open Roberta Lab« let you create your very own programs in no time at all using drag and drop. The graphical programming language <span class='nepo'>(NEPO)</span> will support you.",
+	"START_TEASER": "Our open source platform »Open Roberta Lab« let you create your very own programs in no time at all using drag and drop.",
 	"START_LOGIN_HEADLINE": "Sign in",
 	"START_LOGIN_TEXT": "Log in and have access to your saved programs and settings.",
 	"START_IMPORT_HEADLINE": "Import your NEPO program",
@@ -2092,5 +2093,9 @@
 	"GALLERY_PROGRAM_NAME": "Program name alph.",
 	"GALLERY_ROBOT": "Robot/System alph.",
 	"GALLERY_ALL_ROBOTS": "All robots/systems",
-	"GALLERY_SORT_BY": "Order by"
+	"GALLERY_SORT_BY": "Order by",
+	"START_FORMATSEARCH": "search robots/systems",
+	"START_BOOKMARK_TOOLTIP": "Create a bookmark directly to your favourite robot/system.",
+	"START_STARTUP_TITLE": "Welcome to Open Roberta Lab",
+	"PROGRAM_IMPORT_ERROR_MISSING_ROBOT_TYPE": "You have tried to import a program that is suitable for »$«, a group of robots/systems.<br>Please first select the desired robot/system here on the start page."
 }

@@ -1434,6 +1434,7 @@ table [data-toggle="collapse"].collapsed:after {
 
 .modal-footer .btn + .btn {
     margin-left: 0;
+    margin-right: 0;
 }
 
 .btn-close {
@@ -1823,6 +1824,20 @@ button.btnFilter.start:hover, button.filter.start.show {
     position: relative;
     border-radius: 5px 0;
 }
+
+button#more.start {
+    display: inline-block;
+    padding: 10px 50px 10px 15px;
+    text-decoration: none;
+    background-color: #39378b;
+    color: #ffffff;
+    margin: 0 0 20px;
+    position: relative;
+    border-radius: 5px;
+    width: auto;
+    padding: 10px;
+}
+
 
 #start div.start.typcn {
     position: relative;

@@ -59,10 +59,15 @@ function initLogList() {
         .find('button[name="refresh"]')
         .attr('title', '')
         .attr('rel', 'tooltip')
-        .attr('data-placement', 'left')
         .attr('lkey', 'Blockly.Msg.BUTTON_EMPTY_LIST')
         .attr('data-bs-original-title', Blockly.Msg.BUTTON_EMPTY_LIST)
-        .tooltip('_fixTitle');
+        .tooltip({ trigger: 'hover' });
+    $('#logList>.bootstrap-table')
+        .find('button[name="paginationSwitch"]')
+        .attr('title', '')
+        .attr('rel', 'tooltip')
+        .attr('data-bs-original-title', $('#logTable').bootstrapTable.locales[GUISTATE_C.getLanguage()].formatPaginationSwitch())
+        .tooltip({ trigger: 'hover' });
 }
 
 function initLogListEvents() {

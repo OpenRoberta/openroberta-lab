@@ -54,19 +54,19 @@ function loadProgramFromXMLStart(name, xml, opt_callback) {
     var end = xml.indexOf('"', start);
     var robot = xml.substring(start, end);
     var robotType;
-    var robotRealNames = [];
+    //TODO: This is only a fix for calliope and missing information in XML. Should be removed asap.
+    if (robot.indexOf('calliope') >= 0) {
+        robotType = 'calliope2017NoBlue';
+    }
     for (const [key, value] of Object.entries(GUISTATE_C.getRobots())) {
         if (value['name'] === robot) {
             robotType = value['group'];
-        }
-        if (value['group'] === robot) {
-            robotRealNames.push(value['realName']);
         }
     }
     if (robotType) {
         opt_callback && typeof opt_callback === 'function' && opt_callback(robotType, loadProgramFromXML, name, xml);
     } else {
-        MSG.displayInformation({ rx: 'error' }, '', Blockly.Msg.PROGRAM_IMPORT_ERROR_MISSING_ROBOT_TYPE, robotRealNames.toString());
+        MSG.displayInformation({ rx: 'error' }, '', Blockly.Msg.PROGRAM_IMPORT_ERROR_MISSING_ROBOT_TYPE, UTIL.getRobotGroupsPrettyPrint(robot));
     }
 }
 
@@ -155,7 +155,7 @@ function importNepoCodeToCompile() {
     $('#fileSelector').attr('accept', '.xml');
     $('#fileSelector').clickWrap(); // opening dialog
 }
-export { init, importXml, importSourceCode, openProgramFromXML, loadProgramFromXML, importSourceCodeToCompile, importNepoCodeToCompile };
+export { init, importXml, importSourceCode, loadProgramFromXML, importSourceCodeToCompile, importNepoCodeToCompile };
 
 function compileFromNepoCode(name, source) {
     PROGRAM.compileP(name, source, GUISTATE_C.getLanguage(), function (result) {
