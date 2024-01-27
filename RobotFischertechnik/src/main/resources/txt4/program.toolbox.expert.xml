@@ -60,6 +60,13 @@
                     </block>
                 </value>
             </block>
+            <block type="robActions_servo_on_for_txt">
+                <value name="VALUE">
+                    <block type="math_number" id="Dy#ytr1sQ2WFyWrdDQ_!" intask="true">
+                        <field name="NUM">180</field>
+                    </block>
+                </value>
+            </block>
         </category>
         <category name='TOOLBOX_DISPLAY' svg='true'>
             <block type="robActions_serial_print">

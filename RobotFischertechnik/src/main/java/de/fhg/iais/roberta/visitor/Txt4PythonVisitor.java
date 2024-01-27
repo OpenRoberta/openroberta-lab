@@ -19,6 +19,7 @@ import de.fhg.iais.roberta.syntax.action.MotorOmniTurnForAction;
 import de.fhg.iais.roberta.syntax.action.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.MotorOnForAction;
 import de.fhg.iais.roberta.syntax.action.MotorStopAction;
+import de.fhg.iais.roberta.syntax.action.ServoOnForAction;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
@@ -353,6 +354,15 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
     }
 
     @Override
+    public Void visitServoOnForAction(ServoOnForAction servoOnForAction) {
+        String servoPort = getPortFromConfig(servoOnForAction.port);
+        this.src.add("TXT_M_", servoPort, "_servomotor.set_position(int((");
+        servoOnForAction.value.accept(this);
+        this.src.add(" / 180) * 512))");
+        return null;
+    }
+
+    @Override
     public Void visitUltrasonicSensor(UltrasonicSensor ultrasonicSensor) {
         String port = getPortFromConfig(ultrasonicSensor.getUserDefinedPort());
         this.src.add("TXT_M_", port, "_ultrasonic_distance_meter.get_distance()");
@@ -514,12 +524,17 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
             if ( component.componentType.equals(SC.MOTOR) && usedHardwareBean.isActorUsed(SC.MOTOR) ) {
                 String port = component.getOptProperty("PORT").substring(1);
                 this.src.add("TXT_M_M", port, "_motor = txt_factory.motor_factory.create_motor(TXT_M, ", port, ")").nlI();
-            } else if ( component.componentType.equals(SC.ENCODER) && usedHardwareBean.isActorUsed(SC.ENCODER) ) {
+            }
+            if ( component.componentType.equals(SC.ENCODER) && usedHardwareBean.isActorUsed(SC.ENCODER) ) {
                 String port = component.getOptProperty("PORT").substring(1);
                 this.src.add("TXT_M_M", port, "_motor = txt_factory.motor_factory.create_encodermotor(TXT_M, ", port, ")").nlI();
                 String counterPort = component.getOptProperty("SENSOR_COUNTER").substring(1);
                 this.src.add("TXT_M_C", counterPort, "_motor_step_counter = txt_factory.counter_factory.create_encodermotor_counter(TXT_M, ", counterPort, ")").nlI();
                 this.src.add("TXT_M_C", counterPort, "_motor_step_counter.set_motor(TXT_M_M", port, "_motor)").nlI();
+            }
+            if ( component.componentType.equals(SC.SERVOMOTOR) && usedHardwareBean.isActorUsed(SC.SERVOMOTOR) ) {
+                String port = component.getOptProperty("PORT").substring(1);
+                this.src.add("TXT_M_S", port, "_servomotor = txt_factory.servomotor_factory.create_servomotor(TXT_M, ", port, ")").nlI();
             }
         }
     }

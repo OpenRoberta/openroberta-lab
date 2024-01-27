@@ -20,6 +20,7 @@ import de.fhg.iais.roberta.syntax.action.MotorOmniTurnForAction;
 import de.fhg.iais.roberta.syntax.action.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.MotorOnForAction;
 import de.fhg.iais.roberta.syntax.action.MotorStopAction;
+import de.fhg.iais.roberta.syntax.action.ServoOnForAction;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
@@ -137,6 +138,12 @@ public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
     public Void visitEncoderReset(EncoderReset encoderReset) {
         usedHardwareBuilder.addUsedActor(new UsedActor(encoderReset.sensorPort, SC.ENCODER));
         usedHardwareBuilder.addUsedSensor(new UsedSensor(encoderReset.sensorPort, SC.ENCODER, SC.RESET));
+        return null;
+    }
+
+    @Override
+    public Void visitServoOnForAction(ServoOnForAction servoOnForAction) {
+        usedHardwareBuilder.addUsedActor(new UsedActor(servoOnForAction.getUserDefinedPort(), SC.SERVOMOTOR));
         return null;
     }
 
