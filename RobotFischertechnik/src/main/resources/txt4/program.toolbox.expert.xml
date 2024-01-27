@@ -61,9 +61,19 @@
                 </value>
             </block>
         </category>
+        <category name='TOOLBOX_DISPLAY' svg='true'>
+            <block type="robActions_serial_print">
+                <value name="OUT">
+                    <block type="text">
+                        <field name="TEXT">Hallo</field>
+                    </block>
+                </value>
+            </block>
+        </category>
     </category>
     <category name='TOOLBOX_SENSOR' svg='true'>
         <block type='robSensors_encoder_getSample'></block>
+        <block type='robSensors_encoder_reset_txt'></block>
         <block type='robSensors_key_getSample'></block>
         <block type='robSensors_ultrasonic_getSample'></block>
         <block type='robSensors_line_getSample'></block>

@@ -26,6 +26,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
+import de.fhg.iais.roberta.syntax.sensor.generic.EncoderReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetLineSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
@@ -340,6 +341,14 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
         } else {
             this.src.add("int(TXT_M_", port, "_motor_step_counter.get_count() / STEPS_PER_ROTATION * 360)");
         }
+        return null;
+    }
+
+    @Override
+    public Void visitEncoderReset(EncoderReset encoderReset) {
+        ConfigurationComponent configurationComponent = this.configurationAst.getConfigurationComponent(encoderReset.sensorPort);
+        String port = configurationComponent.getProperty("SENSOR_COUNTER");
+        this.src.add("TXT_M_", port, "_motor_step_counter.reset()");
         return null;
     }
 
