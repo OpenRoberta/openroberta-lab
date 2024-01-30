@@ -11,8 +11,8 @@ import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.constants.FischertechnikConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.action.MotorOmniOnAction;
-import de.fhg.iais.roberta.syntax.action.MotorOmniOnForAction;
+import de.fhg.iais.roberta.syntax.action.MotorOmniDiffOnAction;
+import de.fhg.iais.roberta.syntax.action.MotorOmniDiffOnForAction;
 import de.fhg.iais.roberta.syntax.action.MotorOmniStopAction;
 import de.fhg.iais.roberta.syntax.action.MotorOmniTurnAction;
 import de.fhg.iais.roberta.syntax.action.MotorOmniTurnForAction;
@@ -46,6 +46,7 @@ import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractPythonVisitor;
 public final class Txt4PythonVisitor extends AbstractPythonVisitor implements ITxt4Visitor<Void> {
 
     private final ConfigurationAst configurationAst;
+    private String drive;
 
     /**
      * initialize the Python code generator visitor.
@@ -60,6 +61,15 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
     private ConfigurationComponent getOmniDrive() {
         for ( ConfigurationComponent component : this.configurationAst.getConfigurationComponents().values() ) {
             if ( component.componentType.equals(FischertechnikConstants.OMNIDRIVE) ) {
+                return component;
+            }
+        }
+        return null;
+    }
+
+    private ConfigurationComponent getDifferentialDrive() {
+        for ( ConfigurationComponent component : this.configurationAst.getConfigurationComponents().values() ) {
+            if ( component.componentType.equals(SC.DIFFERENTIALDRIVE) ) {
                 return component;
             }
         }
@@ -115,173 +125,215 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
     }
 
     @Override
-    public Void visitMotorOmniOnAction(MotorOmniOnAction motorOmniOnAction) {
+    public Void visitMotorOmniDiffOnAction(MotorOmniDiffOnAction motorOmniDiffOnAction) {
         //replace with forward, backward, left, right, forward left, backward right, forward right, backward left,
-        this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(Txt4Methods.OMNIDRIVE));
-        this.src.add("(");
-
-        switch ( motorOmniOnAction.direction ) {
-            case "HEART_SMALL": //backward
+        if ( drive.equals(FischertechnikConstants.OMNIDRIVE) ) {
+            generateOmniDriveMethod(motorOmniDiffOnAction);
+        } else {
+            this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(Txt4Methods.DIFFERENTIALDRIVE));
+            this.src.add("(");
+            if ( motorOmniDiffOnAction.direction.equals("BACKWARD") ) {
                 this.src.add("-");
-                motorOmniOnAction.power.accept(this);
+                motorOmniDiffOnAction.power.accept(this);
                 this.src.add(", -");
-                motorOmniOnAction.power.accept(this);
-                this.src.add(", -");
-                motorOmniOnAction.power.accept(this);
-                this.src.add(", -");
-                motorOmniOnAction.power.accept(this);
-                break;
-            case "HEART": //forward
-                motorOmniOnAction.power.accept(this);
+                motorOmniDiffOnAction.power.accept(this);
+            } else {
+                motorOmniDiffOnAction.power.accept(this);
                 this.src.add(", ");
-                motorOmniOnAction.power.accept(this);
-                this.src.add(", ");
-                motorOmniOnAction.power.accept(this);
-                this.src.add(", ");
-                motorOmniOnAction.power.accept(this);
-                break;
-            case "SMILE": //right
-                motorOmniOnAction.power.accept(this);
-                this.src.add(", -");
-                motorOmniOnAction.power.accept(this);
-                this.src.add(", -");
-                motorOmniOnAction.power.accept(this);
-                this.src.add(", ");
-                motorOmniOnAction.power.accept(this);
-                break;
-            case "HAPPY": //left
-                this.src.add("-");
-                motorOmniOnAction.power.accept(this);
-                this.src.add(", ");
-                motorOmniOnAction.power.accept(this);
-                this.src.add(", ");
-                motorOmniOnAction.power.accept(this);
-                this.src.add(", -");
-                motorOmniOnAction.power.accept(this);
-                break;
-            case "SURPRISED": //backward right
-                this.src.add("0, -");
-                motorOmniOnAction.power.accept(this);
-                this.src.add(", -");
-                motorOmniOnAction.power.accept(this);
-                this.src.add(", 0");
-                break;
-            case "CONFUSED": //forward left
-                this.src.add("0, ");
-                motorOmniOnAction.power.accept(this);
-                this.src.add(", ");
-                motorOmniOnAction.power.accept(this);
-                this.src.add(", 0");
-                break;
-            case "ANGRY": //backward left
-                this.src.add("-");
-                motorOmniOnAction.power.accept(this);
-                this.src.add(", 0, 0, -");
-                motorOmniOnAction.power.accept(this);
-                break;
-            case "ASLEEP": //forward right
-                motorOmniOnAction.power.accept(this);
-                this.src.add(", 0, 0, ");
-                motorOmniOnAction.power.accept(this);
-                break;
-            default:
-                break;
+                motorOmniDiffOnAction.power.accept(this);
+            }
+            this.src.add(")");
         }
-        this.src.add(")");
         return null;
     }
 
-    @Override
-    public Void visitMotorOmniOnForAction(MotorOmniOnForAction motorOmniOnForAction) {
-        //replace with forward, backward, left, right, forward left, backward right, forward right, backward left,
-        switch ( motorOmniOnForAction.direction ) {
-            case "HEART_SMALL": //backward
-                this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(Txt4Methods.OMNIDRIVESTRAIGHTDISTANCE));
-                this.src.add("(");
-                motorOmniOnForAction.distance.accept(this);
+    private void generateOmniDriveMethod(MotorOmniDiffOnAction motorOmniDiffOnAction) {
+        this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(Txt4Methods.OMNIDRIVE));
+        this.src.add("(");
+
+        switch ( motorOmniDiffOnAction.direction ) {
+            case "BACKWARD": //backward
+                this.src.add("-");
+                motorOmniDiffOnAction.power.accept(this);
                 this.src.add(", -");
-                motorOmniOnForAction.power.accept(this);
+                motorOmniDiffOnAction.power.accept(this);
                 this.src.add(", -");
-                motorOmniOnForAction.power.accept(this);
+                motorOmniDiffOnAction.power.accept(this);
                 this.src.add(", -");
-                motorOmniOnForAction.power.accept(this);
-                this.src.add(", -");
-                motorOmniOnForAction.power.accept(this);
+                motorOmniDiffOnAction.power.accept(this);
                 break;
-            case "HEART": //forward
-                this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(Txt4Methods.OMNIDRIVESTRAIGHTDISTANCE));
-                this.src.add("(");
-                motorOmniOnForAction.distance.accept(this);
+            case "FORWARD": //forward
+                motorOmniDiffOnAction.power.accept(this);
                 this.src.add(", ");
-                motorOmniOnForAction.power.accept(this);
+                motorOmniDiffOnAction.power.accept(this);
                 this.src.add(", ");
-                motorOmniOnForAction.power.accept(this);
+                motorOmniDiffOnAction.power.accept(this);
                 this.src.add(", ");
-                motorOmniOnForAction.power.accept(this);
-                this.src.add(", ");
-                motorOmniOnForAction.power.accept(this);
+                motorOmniDiffOnAction.power.accept(this);
                 break;
-            case "SMILE": //right
-                this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(Txt4Methods.OMNIDRIVESTRAIGHTDISTANCE));
-                this.src.add("(");
-                motorOmniOnForAction.distance.accept(this);
-                this.src.add(", ");
-                motorOmniOnForAction.power.accept(this);
+            case "RIGHT": //right
+                motorOmniDiffOnAction.power.accept(this);
                 this.src.add(", -");
-                motorOmniOnForAction.power.accept(this);
+                motorOmniDiffOnAction.power.accept(this);
                 this.src.add(", -");
-                motorOmniOnForAction.power.accept(this);
+                motorOmniDiffOnAction.power.accept(this);
                 this.src.add(", ");
-                motorOmniOnForAction.power.accept(this);
+                motorOmniDiffOnAction.power.accept(this);
                 break;
-            case "HAPPY": //left
-                this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(Txt4Methods.OMNIDRIVESTRAIGHTDISTANCE));
-                this.src.add("(");
-                motorOmniOnForAction.distance.accept(this);
-                this.src.add(", -");
-                motorOmniOnForAction.power.accept(this);
+            case "LEFT": //left
+                this.src.add("-");
+                motorOmniDiffOnAction.power.accept(this);
                 this.src.add(", ");
-                motorOmniOnForAction.power.accept(this);
+                motorOmniDiffOnAction.power.accept(this);
                 this.src.add(", ");
-                motorOmniOnForAction.power.accept(this);
+                motorOmniDiffOnAction.power.accept(this);
                 this.src.add(", -");
-                motorOmniOnForAction.power.accept(this);
+                motorOmniDiffOnAction.power.accept(this);
                 break;
-            case "SURPRISED": //backward right
-                this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(Txt4Methods.OMNIDRIVEDIAGONALTLDISTANCE));
-                this.src.add("(");
-                motorOmniOnForAction.distance.accept(this);
+            case "BACKWARDRIGHT": //backward right
+                this.src.add("0, -");
+                motorOmniDiffOnAction.power.accept(this);
                 this.src.add(", -");
-                motorOmniOnForAction.power.accept(this);
+                motorOmniDiffOnAction.power.accept(this);
+                this.src.add(", 0");
                 break;
-            case "CONFUSED": //forward left
-                this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(Txt4Methods.OMNIDRIVEDIAGONALTLDISTANCE));
-                this.src.add("(");
-                motorOmniOnForAction.distance.accept(this);
+            case "FORWARDLEFT": //forward left
+                this.src.add("0, ");
+                motorOmniDiffOnAction.power.accept(this);
                 this.src.add(", ");
-                motorOmniOnForAction.power.accept(this);
+                motorOmniDiffOnAction.power.accept(this);
+                this.src.add(", 0");
                 break;
-            case "ANGRY": //backward left
-                this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(Txt4Methods.OMNIDRIVEDIAGONALTRDISTANCE));
-                this.src.add("(");
-                motorOmniOnForAction.distance.accept(this);
-                this.src.add(", -");
-                motorOmniOnForAction.power.accept(this);
+            case "BACKWARDLEFT": //backward left
+                this.src.add("-");
+                motorOmniDiffOnAction.power.accept(this);
+                this.src.add(", 0, 0, -");
+                motorOmniDiffOnAction.power.accept(this);
                 break;
-            case "ASLEEP": //forward right
-                this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(Txt4Methods.OMNIDRIVEDIAGONALTRDISTANCE));
-                this.src.add("(");
-                motorOmniOnForAction.distance.accept(this);
-                this.src.add(", ");
-                motorOmniOnForAction.power.accept(this);
+            case "FORWARDRIGHT": //forward right
+                motorOmniDiffOnAction.power.accept(this);
+                this.src.add(", 0, 0, ");
+                motorOmniDiffOnAction.power.accept(this);
                 break;
             default:
                 break;
         }
         this.src.add(")");
+    }
+
+    @Override
+    public Void visitMotorOmniDiffOnForAction(MotorOmniDiffOnForAction motorOmniDiffOnForAction) {
+        //replace with forward, backward, left, right, forward left, backward right, forward right, backward left,
+        if ( drive.equals(FischertechnikConstants.OMNIDRIVE) ) {
+            generateOmniDriveForMethod(motorOmniDiffOnForAction);
+        } else {
+            this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(Txt4Methods.DIFFERENTIALDRIVEDISTANCE));
+            this.src.add("(");
+            motorOmniDiffOnForAction.distance.accept(this);
+            this.src.add(", ");
+            if ( motorOmniDiffOnForAction.direction.equals("BACKWARD") ) {
+                this.src.add("-");
+                motorOmniDiffOnForAction.power.accept(this);
+                this.src.add(", -");
+                motorOmniDiffOnForAction.power.accept(this);
+            } else {
+                motorOmniDiffOnForAction.power.accept(this);
+                this.src.add(", ");
+                motorOmniDiffOnForAction.power.accept(this);
+            }
+            this.src.add(")");
+        }
 
 
         return null;
+    }
+
+    private void generateOmniDriveForMethod(MotorOmniDiffOnForAction motorOmniDiffOnForAction) {
+        switch ( motorOmniDiffOnForAction.direction ) {
+            case "BACKWARD": //backward
+                this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(Txt4Methods.OMNIDRIVESTRAIGHTDISTANCE));
+                this.src.add("(");
+                motorOmniDiffOnForAction.distance.accept(this);
+                this.src.add(", -");
+                motorOmniDiffOnForAction.power.accept(this);
+                this.src.add(", -");
+                motorOmniDiffOnForAction.power.accept(this);
+                this.src.add(", -");
+                motorOmniDiffOnForAction.power.accept(this);
+                this.src.add(", -");
+                motorOmniDiffOnForAction.power.accept(this);
+                break;
+            case "FORWARD": //forward
+                this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(Txt4Methods.OMNIDRIVESTRAIGHTDISTANCE));
+                this.src.add("(");
+                motorOmniDiffOnForAction.distance.accept(this);
+                this.src.add(", ");
+                motorOmniDiffOnForAction.power.accept(this);
+                this.src.add(", ");
+                motorOmniDiffOnForAction.power.accept(this);
+                this.src.add(", ");
+                motorOmniDiffOnForAction.power.accept(this);
+                this.src.add(", ");
+                motorOmniDiffOnForAction.power.accept(this);
+                break;
+            case "RIGHT": //right
+                this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(Txt4Methods.OMNIDRIVESTRAIGHTDISTANCE));
+                this.src.add("(");
+                motorOmniDiffOnForAction.distance.accept(this);
+                this.src.add(", ");
+                motorOmniDiffOnForAction.power.accept(this);
+                this.src.add(", -");
+                motorOmniDiffOnForAction.power.accept(this);
+                this.src.add(", -");
+                motorOmniDiffOnForAction.power.accept(this);
+                this.src.add(", ");
+                motorOmniDiffOnForAction.power.accept(this);
+                break;
+            case "LEFT": //left
+                this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(Txt4Methods.OMNIDRIVESTRAIGHTDISTANCE));
+                this.src.add("(");
+                motorOmniDiffOnForAction.distance.accept(this);
+                this.src.add(", -");
+                motorOmniDiffOnForAction.power.accept(this);
+                this.src.add(", ");
+                motorOmniDiffOnForAction.power.accept(this);
+                this.src.add(", ");
+                motorOmniDiffOnForAction.power.accept(this);
+                this.src.add(", -");
+                motorOmniDiffOnForAction.power.accept(this);
+                break;
+            case "BACKWARDRIGHT": //backward right
+                this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(Txt4Methods.OMNIDRIVEDIAGONALTLDISTANCE));
+                this.src.add("(");
+                motorOmniDiffOnForAction.distance.accept(this);
+                this.src.add(", -");
+                motorOmniDiffOnForAction.power.accept(this);
+                break;
+            case "FORWARDLEFT": //forward left
+                this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(Txt4Methods.OMNIDRIVEDIAGONALTLDISTANCE));
+                this.src.add("(");
+                motorOmniDiffOnForAction.distance.accept(this);
+                this.src.add(", ");
+                motorOmniDiffOnForAction.power.accept(this);
+                break;
+            case "BACKWARDLEFT": //backward left
+                this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(Txt4Methods.OMNIDRIVEDIAGONALTRDISTANCE));
+                this.src.add("(");
+                motorOmniDiffOnForAction.distance.accept(this);
+                this.src.add(", -");
+                motorOmniDiffOnForAction.power.accept(this);
+                break;
+            case "FORWARDRIGHT": //forward right
+                this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(Txt4Methods.OMNIDRIVEDIAGONALTRDISTANCE));
+                this.src.add("(");
+                motorOmniDiffOnForAction.distance.accept(this);
+                this.src.add(", ");
+                motorOmniDiffOnForAction.power.accept(this);
+                break;
+            default:
+                break;
+        }
+        this.src.add(")");
     }
 
     @Override
@@ -559,14 +611,27 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
     private void generateVariables(UsedHardwareBean usedHardwareBean) {
         if ( usedHardwareBean.isActorUsed(FischertechnikConstants.OMNIDRIVE) ) {
             ConfigurationComponent omniDrive = getOmniDrive();
-            this.src.add("#init omnidrive").nlI();
-            this.src.add("frontLeftMotor = ", "TXT_M_" + omniDrive.getOptProperty("MOTOR_FL") + "_motor").nlI();
-            this.src.add("frontRightMotor = ", "TXT_M_" + omniDrive.getOptProperty("MOTOR_FR") + "_motor").nlI();
-            this.src.add("rearLeftMotor = ", "TXT_M_" + omniDrive.getOptProperty("MOTOR_RL") + "_motor").nlI();
-            this.src.add("rearRightMotor = ", "TXT_M_" + omniDrive.getOptProperty("MOTOR_RR") + "_motor").nlI();
-            this.src.add("WHEEL_DIAMETER = ", omniDrive.getOptProperty("BRICK_WHEEL_DIAMETER")).nlI();
-            this.src.add("TRACK_WIDTH = ", omniDrive.getOptProperty("BRICK_TRACK_WIDTH")).nlI();
-            this.src.add("WHEEL_BASE = ", omniDrive.getOptProperty("WHEEL_BASE")).nlI();
+            if ( omniDrive != null ) {
+                this.src.add("#init omnidrive").nlI();
+                this.src.add("frontLeftMotor = ", "TXT_M_" + omniDrive.getOptProperty("MOTOR_FL") + "_motor").nlI();
+                this.src.add("frontRightMotor = ", "TXT_M_" + omniDrive.getOptProperty("MOTOR_FR") + "_motor").nlI();
+                this.src.add("rearLeftMotor = ", "TXT_M_" + omniDrive.getOptProperty("MOTOR_RL") + "_motor").nlI();
+                this.src.add("rearRightMotor = ", "TXT_M_" + omniDrive.getOptProperty("MOTOR_RR") + "_motor").nlI();
+                this.src.add("WHEEL_DIAMETER = ", omniDrive.getOptProperty("BRICK_WHEEL_DIAMETER")).nlI();
+                this.src.add("TRACK_WIDTH = ", omniDrive.getOptProperty("BRICK_TRACK_WIDTH")).nlI();
+                this.src.add("WHEEL_BASE = ", omniDrive.getOptProperty("WHEEL_BASE")).nlI();
+                this.drive = FischertechnikConstants.OMNIDRIVE;
+            }
+        } else if ( usedHardwareBean.isActorUsed(SC.DIFFERENTIALDRIVE) ) {
+            ConfigurationComponent diffDrive = getDifferentialDrive();
+            if ( diffDrive != null ) {
+                drive = SC.DIFFERENTIAL_DRIVE;
+                this.src.add("#init differentialDrive").nlI();
+                this.src.add("leftMotor = ", "TXT_M_" + diffDrive.getOptProperty("MOTOR_L") + "_motor").nlI();
+                this.src.add("rightMotor = ", "TXT_M_" + diffDrive.getOptProperty("MOTOR_R") + "_motor").nlI();
+                this.src.add("WHEEL_DIAMETER = ", diffDrive.getOptProperty("BRICK_WHEEL_DIAMETER")).nlI();
+                this.src.add("TRACK_WIDTH = ", diffDrive.getOptProperty("BRICK_TRACK_WIDTH")).nlI();
+            }
         }
         if ( usedHardwareBean.isActorUsed(SC.ENCODER) ) {
             this.src.add("STEPS_PER_ROTATION = 128").nlI();

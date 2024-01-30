@@ -12,8 +12,8 @@ import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.constants.FischertechnikConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.action.MotorOmniOnAction;
-import de.fhg.iais.roberta.syntax.action.MotorOmniOnForAction;
+import de.fhg.iais.roberta.syntax.action.MotorOmniDiffOnAction;
+import de.fhg.iais.roberta.syntax.action.MotorOmniDiffOnForAction;
 import de.fhg.iais.roberta.syntax.action.MotorOmniStopAction;
 import de.fhg.iais.roberta.syntax.action.MotorOmniTurnAction;
 import de.fhg.iais.roberta.syntax.action.MotorOmniTurnForAction;
@@ -62,25 +62,38 @@ public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
     }
 
     @Override
-    public Void visitMotorOmniOnAction(MotorOmniOnAction motorOmniOnAction) {
-        usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniOnAction.getUserDefinedPort(), SC.ENCODER));
-        usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniOnAction.getUserDefinedPort(), FischertechnikConstants.OMNIDRIVE));
-
-
+    public Void visitMotorOmniDiffOnAction(MotorOmniDiffOnAction motorOmniDiffOnAction) {
+        usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniDiffOnAction.getUserDefinedPort(), SC.ENCODER));
         usedMethodBuilder.addUsedMethod(Txt4Methods.MOTORSTART);
-        usedMethodBuilder.addUsedMethod(Txt4Methods.OMNIDRIVE);
+
+        if ( configHasOmnidrive() ) {
+            usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniDiffOnAction.getUserDefinedPort(), FischertechnikConstants.OMNIDRIVE));
+            usedMethodBuilder.addUsedMethod(Txt4Methods.OMNIDRIVE);
+        } else {
+            usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniDiffOnAction.getUserDefinedPort(), SC.DIFFERENTIALDRIVE));
+            usedMethodBuilder.addUsedMethod(Txt4Methods.DIFFERENTIALDRIVE);
+        }
+
         return null;
     }
 
     @Override
-    public Void visitMotorOmniOnForAction(MotorOmniOnForAction motorOmniOnForAction) {
-        usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniOnForAction.getUserDefinedPort(), SC.ENCODER));
-        usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniOnForAction.getUserDefinedPort(), FischertechnikConstants.OMNIDRIVE));
+    public Void visitMotorOmniDiffOnForAction(MotorOmniDiffOnForAction motorOmniDiffOnForAction) {
+        usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniDiffOnForAction.getUserDefinedPort(), SC.ENCODER));
 
+        if ( configHasOmnidrive() ) {
+            usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniDiffOnForAction.getUserDefinedPort(), FischertechnikConstants.OMNIDRIVE));
+            addOmnidriveDistanceMethods(motorOmniDiffOnForAction.direction);
+        } else {
+            usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniDiffOnForAction.getUserDefinedPort(), SC.DIFFERENTIALDRIVE));
+            usedMethodBuilder.addUsedMethod(Txt4Methods.DIFFERENTIALDRIVEDISTANCE);
+        }
 
-        usedMethodBuilder.addUsedMethod(Txt4Methods.MOTORSTART);
-        //replace with forward, backward, left, right, forward left, backward right, forward right, backward left,
-        switch ( motorOmniOnForAction.direction ) {
+        return null;
+    }
+
+    private void addOmnidriveDistanceMethods(String direction) {
+        switch ( direction ) {
             case "HEART": //forward
             case "HEART_SMALL": //backward
             case "HAPPY": //left
@@ -98,7 +111,6 @@ public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
             default:
                 break;
         }
-        return null;
     }
 
     @Override
@@ -253,6 +265,10 @@ public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
             }
         }
         return null;
+    }
+
+    private Boolean configHasOmnidrive() {
+        return this.robotConfiguration.optConfigurationComponentByType(FischertechnikConstants.OMNIDRIVE) != null;
     }
 
     private boolean checkActorPort(WithUserDefinedPort action) {

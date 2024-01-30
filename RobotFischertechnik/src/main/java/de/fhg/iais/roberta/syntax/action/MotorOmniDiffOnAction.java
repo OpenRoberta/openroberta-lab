@@ -9,24 +9,21 @@ import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-@NepoPhrase(category = "ACTOR", blocklyNames = {"actions_motorOmni_on_for_txt"}, name = "MOTOROMNI_ON_FOR_ACTION")
-public final class MotorOmniOnForAction extends ActionWithoutUserChosenName {
+@NepoPhrase(category = "ACTOR", blocklyNames = {"actions_motorOmniDiff_on_txt"}, name = "MOTOROMNIDIFF_ON_ACTION")
+public final class MotorOmniDiffOnAction extends ActionWithoutUserChosenName {
     @NepoField(name = BlocklyConstants.DIRECTION)
     public final String direction;
     @NepoValue(name = BlocklyConstants.POWER, type = BlocklyType.NUMBER)
     public final Expr power;
-    @NepoValue(name = "DISTANCE")
-    public final Expr distance;
 
-    public MotorOmniOnForAction(
+    public MotorOmniDiffOnAction(
         BlocklyProperties properties,
         String direction,
         Expr power,
-        Expr distance, Hide hide) {
+        Hide hide) {
         super(properties, hide);
         this.direction = direction;
         this.power = power;
-        this.distance = distance;
         setReadOnly();
     }
 
