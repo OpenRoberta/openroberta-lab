@@ -54,7 +54,6 @@ import de.fhg.iais.roberta.syntax.lang.functions.TextStringCastNumberFunct;
 import de.fhg.iais.roberta.syntax.lang.stmt.ExprStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.Stmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
-import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.DetectMarkSensor;
@@ -108,14 +107,9 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     }
 
     @Override
-    public Void visitWaitStmt(WaitStmt waitStmt) {
-        this.src.add("while True:");
-        incrIndentation();
-        visitStmtList(waitStmt.statements);
+    protected void addWaitStatementTimeout() {
         nlIndent();
         this.src.add("h.wait(15)");
-        decrIndentation();
-        return null;
     }
 
     @Override

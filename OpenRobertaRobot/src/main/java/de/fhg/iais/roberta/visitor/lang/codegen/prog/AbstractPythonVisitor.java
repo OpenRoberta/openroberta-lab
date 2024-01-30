@@ -72,6 +72,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
 import de.fhg.iais.roberta.syntax.lang.stmt.TernaryExpr;
 import de.fhg.iais.roberta.syntax.lang.stmt.TextAppendStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.syntax.FunctionNames;
@@ -1034,4 +1035,21 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
         this.src.add("main()");
         decrIndentation();
     }
+
+    /**
+     * Visits the Blockly wait-until-block ("robControls_wait_for")
+     *
+     * @param waitStmt to be visited
+     * @return null
+     */
+    public Void visitWaitStmt(WaitStmt waitStmt) {
+        this.src.add("while True:");
+        incrIndentation();
+        visitStmtList(waitStmt.statements);
+        addWaitStatementTimeout();
+        decrIndentation();
+        return null;
+    }
+   
+    protected abstract void addWaitStatementTimeout();
 }

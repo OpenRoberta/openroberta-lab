@@ -55,7 +55,6 @@ import de.fhg.iais.roberta.syntax.lang.stmt.ExprStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.Stmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
-import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.DetectMarkSensor;
@@ -103,14 +102,9 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
     }
 
     @Override
-    public Void visitWaitStmt(WaitStmt waitStmt) {
-        this.src.add("while robot.step(robot.timeStep) != -1:");
-        incrIndentation();
-        visitStmtList(waitStmt.statements);
+    protected void addWaitStatementTimeout() {
         nlIndent();
         this.src.add("wait(robot, 1)");
-        decrIndentation();
-        return null;
     }
 
     @Override

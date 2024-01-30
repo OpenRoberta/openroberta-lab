@@ -38,7 +38,6 @@ import de.fhg.iais.roberta.syntax.lang.functions.TextCharCastNumberFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextStringCastNumberFunct;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodIfReturn;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
-import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.IRSeekerSensor;
@@ -548,21 +547,9 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
         return null;
     }
 
-    /**
-     * Visits the Blockly wait-until-block ("robControls_wait_for")
-     *
-     * @param waitStmt to be visited
-     * @return null
-     */
-    @Override
-    public Void visitWaitStmt(WaitStmt waitStmt) {
-        this.src.add("while True:");
-        incrIndentation();
-        visitStmtList(waitStmt.statements);
+    protected void addWaitStatementTimeout() {
         nlIndent();
         this.src.add("pass");
-        decrIndentation();
-        return null;
     }
 
     @Override
