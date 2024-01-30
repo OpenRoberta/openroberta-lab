@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.visitor;
 
 import de.fhg.iais.roberta.syntax.action.MotorOmniDiffOnAction;
 import de.fhg.iais.roberta.syntax.action.MotorOmniDiffOnForAction;
-import de.fhg.iais.roberta.syntax.action.MotorOmniStopAction;
+import de.fhg.iais.roberta.syntax.action.MotorOmniDiffStopAction;
 import de.fhg.iais.roberta.syntax.action.MotorOmniTurnAction;
 import de.fhg.iais.roberta.syntax.action.MotorOmniTurnForAction;
 import de.fhg.iais.roberta.syntax.action.MotorOnAction;
@@ -42,7 +42,7 @@ public interface ITxt4Visitor<V> extends IVisitor<V> {
 
     V visitMotorStopAction(MotorStopAction motorStopAction);
 
-    V visitMotorOmniStopAction(MotorOmniStopAction motorOmniStopAction);
+    V visitMotorOmniDiffStopAction(MotorOmniDiffStopAction motorOmniDiffStopAction);
 
     V visitGetLineSensor(GetLineSensor getLineSensor);
 }

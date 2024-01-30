@@ -40,7 +40,7 @@
                     </block>
                 </value>
             </block>
-            <block type='actions_motorOmni_stop_txt'></block>
+            <block type='actions_motorOmniDiff_stop_txt'></block>
             <block type='actions_motorOmni_turn_for_txt'>
                 <value name='POWER'>
                     <block type='math_number'>

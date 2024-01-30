@@ -13,7 +13,7 @@ import de.fhg.iais.roberta.constants.FischertechnikConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.MotorOmniDiffOnAction;
 import de.fhg.iais.roberta.syntax.action.MotorOmniDiffOnForAction;
-import de.fhg.iais.roberta.syntax.action.MotorOmniStopAction;
+import de.fhg.iais.roberta.syntax.action.MotorOmniDiffStopAction;
 import de.fhg.iais.roberta.syntax.action.MotorOmniTurnAction;
 import de.fhg.iais.roberta.syntax.action.MotorOmniTurnForAction;
 import de.fhg.iais.roberta.syntax.action.MotorOnAction;
@@ -337,8 +337,12 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
     }
 
     @Override
-    public Void visitMotorOmniStopAction(MotorOmniStopAction motorOmniStopAction) {
-        this.src.add("frontLeftMotor.stop_sync(frontRightMotor, rearLeftMotor, rearRightMotor)");
+    public Void visitMotorOmniDiffStopAction(MotorOmniDiffStopAction motorOmniDiffStopAction) {
+        if ( drive.equals(FischertechnikConstants.OMNIDRIVE) ) {
+            this.src.add("frontLeftMotor.stop_sync(frontRightMotor, rearLeftMotor, rearRightMotor)");
+        } else {
+            this.src.add("leftMotor.stop_sync(rightMotor)");
+        }
         return null;
     }
 
