@@ -9,7 +9,7 @@ import * as GUISTATE_C from 'guiState.controller';
 
 const ANIMATION_DURATION = 750;
 
-export function getLinesFromRectangle(myObj) {
+export function getLinesFromRectangle(myObj): { x1: any; x2: any; y1: any; y2: any }[] {
     return [
         {
             x1: myObj.x,
@@ -42,7 +42,7 @@ export function getLinesFromRectangle(myObj) {
  * @return the (unique) start block from the program. Must exist.
  */
 function getTheStartBlock() {
-    var startBlock = null;
+    let startBlock = null;
     for (const block of Blockly.Workspace.getByContainer('blocklyDiv').getTopBlocks()) {
         if (!block.isDeletable()) {
             return block;

@@ -58,7 +58,7 @@ export function setErrorFn(newErrorFn: Function): void {
  * response. No init token! DEPRECATED. Only used in a test.
  */
 export function get(url: string, data: string, successFn: Function, message: string) {
-    return $.ajax({
+    return $.ajax(urlPrefix + url, {
         url: urlPrefix + url,
         type: 'GET',
         dataType: 'json',
@@ -71,14 +71,14 @@ export function get(url: string, data: string, successFn: Function, message: str
 /**
  * POST a JSON object as ENTITY and expect a JSON object as response.
  */
-export function json(url: string, data: string, successFn: Function, message: string) {
-    let log: any[] = LOG.reportToComm();
-    let load: {log: any[], data: string, initToken:} = {
+export function json(url: string, data: any, successFn: Function, message: string) {
+    let log: string[] = LOG.reportToComm();
+    let load: { log: any[]; data: any; initToken: string } = {
         log: log,
         data: data,
         initToken: initToken,
     };
-    function successFnWrapper(response: {message: string}) {
+    function successFnWrapper(response: { message: string }): void {
         if (response !== undefined && response.message !== undefined && response.message === 'ORA_INIT_FAIL_INVALID_INIT_TOKEN') {
             frontendSessionValid = false;
             showServerError('INIT_TOKEN');
@@ -86,7 +86,7 @@ export function json(url: string, data: string, successFn: Function, message: st
             successFn(response);
         }
     }
-    return $.ajax({
+    return $.ajax(urlPrefix + url, {
         url: urlPrefix + url,
         type: 'POST',
         contentType: 'application/json; charset=utf-8',
@@ -108,8 +108,8 @@ export function download(url: string): void {
 /**
  * POST a XML DOM object as ENTITY and expect a JSON object as response.
  */
-export function xml(url: string, xml, successFn, message) {
-    return $.ajax({
+export function xml(url: string, xml: string, successFn: Function, message: string) {
+    return $.ajax(urlPrefix + url, {
         url: urlPrefix + url,
         type: 'POST',
         contentType: 'text/plain; charset=utf-8',
@@ -124,11 +124,11 @@ export function xml(url: string, xml, successFn, message) {
  * check whether a server is available (... and send logging data!).<br>
  * SuccessFn is optional.
  */
-export function ping(successFn: Function) {
+export function ping(successFn?: Function) {
     if (!frontendSessionValid) {
         return;
     } else {
-        var successFnWrapper = function (result) {
+        let successFnWrapper = function (result: { rc: string; cause: string; initToken: string }): void {
             if (result !== undefined && result.rc === 'error' && result.cause === 'ORA_INIT_FAIL_PING_ERROR' && result.initToken === 'invalid-token') {
                 frontendSessionValid = false;
             }
@@ -139,14 +139,15 @@ export function ping(successFn: Function) {
                 }
             }
         };
-        return json('/ping', {}, successFnWrapper); // no message to reduce amount of logging data
+        return json('/ping', {}, successFnWrapper, ''); // no message to reduce amount of logging data
     }
 }
 
-export function listRobotsFromAgent(successFn: Function, completeFn: Function, onError) {
+export function listRobotsFromAgent(successFn: Function, completeFn: any, onError: any): JQuery.jqXHR {
+    //Todo change any to Function
     let URL: string = 'http://127.0.0.1:8991/listrobots';
-    let response: string  = '';
-    return $.ajax({
+    let response: string = '';
+    return $.ajax(URL, {
         type: 'GET',
         url: URL,
         //success : WRAP.wrapREST(successFn, "list success"),
@@ -155,10 +156,31 @@ export function listRobotsFromAgent(successFn: Function, completeFn: Function, o
     });
 }
 
-export function sendProgramHexToAgent(programHex, robotPort, programName, signature, commandLine, successFn) {
-    var URL = 'http://127.0.0.1:8991/upload';
-    var board = 'arduino:avr:uno';
-    var request = {
+export function sendProgramHexToAgent(
+    programHex: Uint8Array,
+    robotPort: string,
+    programName: string,
+    signature: string,
+    commandLine: string,
+    successFn: Function
+) {
+    let URL: string = 'http://127.0.0.1:8991/upload';
+    let board: string = 'arduino:avr:uno';
+    let request: {
+        board: string;
+        port: string;
+        commandline: string;
+        hex: Uint8Array;
+        signature: string;
+        filename: string;
+        extra: { auth: { password: string } };
+        wait_for_upload_port: boolean;
+        use_1200bps_touch: boolean;
+        network: boolean;
+        params_verbose: string;
+        params_quiet: string;
+        verbose: boolean;
+    } = {
         board: board,
         port: robotPort,
         commandline: commandLine,
@@ -196,7 +218,7 @@ export function sendProgramHexToAgent(programHex, robotPort, programName, signat
             403: WRAP.wrapErrorFn(errorFn),
             404: WRAP.wrapErrorFn(errorFn),
         },
-        error: function (jqXHR) {},
+        error: function (jqXHR: JQuery.jqXHR<any>): void {},
     });
 }
 

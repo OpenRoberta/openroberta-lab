@@ -28,6 +28,9 @@ class ConfResult {
     message: string;
     lastChanged: string;
     confXML: XMLDocument;
+    cmd: string;
+    initToken: string;
+    parameters: {};
 }
 
 export function init(): void {
@@ -326,6 +329,9 @@ export function newConfiguration(opt_further: boolean): void {
             message: null,
             cause: null,
             confXML: null,
+            parameters: null,
+            cmd: null,
+            initToken: null,
         };
         GUISTATE_C.setConfiguration(result);
         initConfigurationEnvironment();
