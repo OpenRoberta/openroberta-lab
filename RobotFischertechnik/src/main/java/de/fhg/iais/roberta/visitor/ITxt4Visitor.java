@@ -4,8 +4,8 @@ package de.fhg.iais.roberta.visitor;
 import de.fhg.iais.roberta.syntax.action.MotorOmniDiffOnAction;
 import de.fhg.iais.roberta.syntax.action.MotorOmniDiffOnForAction;
 import de.fhg.iais.roberta.syntax.action.MotorOmniDiffStopAction;
-import de.fhg.iais.roberta.syntax.action.MotorOmniTurnAction;
-import de.fhg.iais.roberta.syntax.action.MotorOmniTurnForAction;
+import de.fhg.iais.roberta.syntax.action.MotorOmniDiffTurnAction;
+import de.fhg.iais.roberta.syntax.action.MotorOmniDiffTurnForAction;
 import de.fhg.iais.roberta.syntax.action.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.MotorOnForAction;
 import de.fhg.iais.roberta.syntax.action.MotorStopAction;
@@ -24,9 +24,9 @@ public interface ITxt4Visitor<V> extends IVisitor<V> {
 
     V visitMotorOmniDiffOnForAction(MotorOmniDiffOnForAction motorOmniDiffOnForAction);
 
-    V visitMotorOmniTurnAction(MotorOmniTurnAction motorOmniTurnAction);
+    V visitMotorOmniDiffTurnAction(MotorOmniDiffTurnAction motorOmniDiffTurnAction);
 
-    V visitMotorOmniTurnForAction(MotorOmniTurnForAction motorOmniTurnForAction);
+    V visitMotorOmniDiffTurnForAction(MotorOmniDiffTurnForAction motorOmniDiffTurnForAction);
 
     V visitMotorOnForAction(MotorOnForAction motorOnForAction);
 

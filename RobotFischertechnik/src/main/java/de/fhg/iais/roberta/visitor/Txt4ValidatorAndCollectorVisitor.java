@@ -15,8 +15,8 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.MotorOmniDiffOnAction;
 import de.fhg.iais.roberta.syntax.action.MotorOmniDiffOnForAction;
 import de.fhg.iais.roberta.syntax.action.MotorOmniDiffStopAction;
-import de.fhg.iais.roberta.syntax.action.MotorOmniTurnAction;
-import de.fhg.iais.roberta.syntax.action.MotorOmniTurnForAction;
+import de.fhg.iais.roberta.syntax.action.MotorOmniDiffTurnAction;
+import de.fhg.iais.roberta.syntax.action.MotorOmniDiffTurnForAction;
 import de.fhg.iais.roberta.syntax.action.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.MotorOnForAction;
 import de.fhg.iais.roberta.syntax.action.MotorStopAction;
@@ -114,20 +114,29 @@ public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
     }
 
     @Override
-    public Void visitMotorOmniTurnAction(MotorOmniTurnAction motorOmniTurnAction) {
-        usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniTurnAction.getUserDefinedPort(), SC.ENCODER));
-        usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniTurnAction.getUserDefinedPort(), FischertechnikConstants.OMNIDRIVE));
-        usedMethodBuilder.addUsedMethod(Txt4Methods.OMNIDRIVETURN);
+    public Void visitMotorOmniDiffTurnAction(MotorOmniDiffTurnAction motorOmniDiffTurnAction) {
+        usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniDiffTurnAction.getUserDefinedPort(), SC.ENCODER));
         usedMethodBuilder.addUsedMethod(Txt4Methods.MOTORSTART);
-
+        if ( configHasOmnidrive() ) {
+            usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniDiffTurnAction.getUserDefinedPort(), FischertechnikConstants.OMNIDRIVE));
+            usedMethodBuilder.addUsedMethod(Txt4Methods.OMNIDRIVETURN);
+        } else {
+            usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniDiffTurnAction.getUserDefinedPort(), SC.DIFFERENTIALDRIVE));
+            usedMethodBuilder.addUsedMethod(Txt4Methods.DIFFDRIVETURN);
+        }
         return null;
     }
 
     @Override
-    public Void visitMotorOmniTurnForAction(MotorOmniTurnForAction motorOmniTurnForAction) {
-        usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniTurnForAction.getUserDefinedPort(), SC.ENCODER));
-        usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniTurnForAction.getUserDefinedPort(), FischertechnikConstants.OMNIDRIVE));
-        usedMethodBuilder.addUsedMethod(Txt4Methods.OMNIDRIVETURNDEGREES);
+    public Void visitMotorOmniDiffTurnForAction(MotorOmniDiffTurnForAction motorOmniDiffTurnForAction) {
+        usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniDiffTurnForAction.getUserDefinedPort(), SC.ENCODER));
+        if ( configHasOmnidrive() ) {
+            usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniDiffTurnForAction.getUserDefinedPort(), FischertechnikConstants.OMNIDRIVE));
+            usedMethodBuilder.addUsedMethod(Txt4Methods.OMNIDRIVETURNDEGREES);
+        } else {
+            usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniDiffTurnForAction.getUserDefinedPort(), SC.DIFFERENTIALDRIVE));
+            usedMethodBuilder.addUsedMethod(Txt4Methods.DIFFDRIVETURNDEGREES);
+        }
         return null;
     }
 

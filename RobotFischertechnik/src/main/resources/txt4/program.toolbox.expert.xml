@@ -41,7 +41,7 @@
                 </value>
             </block>
             <block type='actions_motorOmniDiff_stop_txt'></block>
-            <block type='actions_motorOmni_turn_for_txt'>
+            <block type='actions_motorOmniDiff_turn_for_txt'>
                 <value name='POWER'>
                     <block type='math_number'>
                         <field name='NUM'>30</field>
@@ -53,7 +53,7 @@
                     </block>
                 </value>
             </block>
-            <block type='actions_motorOmni_turn_txt'>
+            <block type='actions_motorOmniDiff_turn_txt'>
                 <value name='POWER'>
                     <block type='math_number'>
                         <field name='NUM'>30</field>

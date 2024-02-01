@@ -9,8 +9,8 @@ import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-@NepoPhrase(name = "OMNI_TURN_ACTION", category = "ACTOR", blocklyNames = {"actions_motorOmni_turn_for_txt"})
-public final class MotorOmniTurnForAction extends ActionWithoutUserChosenName {
+@NepoPhrase(name = "OMNIDIFF_TURN_ACTION", category = "ACTOR", blocklyNames = {"actions_motorOmniDiff_turn_for_txt"})
+public final class MotorOmniDiffTurnForAction extends ActionWithoutUserChosenName {
     @NepoField(name = BlocklyConstants.DIRECTION)
     public final String direction;
     @NepoValue(name = BlocklyConstants.POWER, type = BlocklyType.NUMBER)
@@ -18,7 +18,7 @@ public final class MotorOmniTurnForAction extends ActionWithoutUserChosenName {
     @NepoValue(name = BlocklyConstants.DEGREES, type = BlocklyType.NUMBER)
     public final Expr degrees;
 
-    public MotorOmniTurnForAction(
+    public MotorOmniDiffTurnForAction(
         BlocklyProperties properties,
         String direction,
         Expr power,

@@ -14,8 +14,8 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.MotorOmniDiffOnAction;
 import de.fhg.iais.roberta.syntax.action.MotorOmniDiffOnForAction;
 import de.fhg.iais.roberta.syntax.action.MotorOmniDiffStopAction;
-import de.fhg.iais.roberta.syntax.action.MotorOmniTurnAction;
-import de.fhg.iais.roberta.syntax.action.MotorOmniTurnForAction;
+import de.fhg.iais.roberta.syntax.action.MotorOmniDiffTurnAction;
+import de.fhg.iais.roberta.syntax.action.MotorOmniDiffTurnForAction;
 import de.fhg.iais.roberta.syntax.action.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.MotorOnForAction;
 import de.fhg.iais.roberta.syntax.action.MotorStopAction;
@@ -347,30 +347,36 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
     }
 
     @Override
-    public Void visitMotorOmniTurnAction(MotorOmniTurnAction motorOmniTurnAction) {
-        this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(Txt4Methods.OMNIDRIVETURN));
+    public Void visitMotorOmniDiffTurnAction(MotorOmniDiffTurnAction motorOmniDiffTurnAction) {
+        if ( drive.equals(FischertechnikConstants.OMNIDRIVE) ) {
+            this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(Txt4Methods.OMNIDRIVETURN));
+        } else {
+            this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(Txt4Methods.DIFFDRIVETURN));
+        }
         this.src.add("(");
-        if ( motorOmniTurnAction.direction.equals("LEFT") ) {
+        if ( motorOmniDiffTurnAction.direction.equals("LEFT") ) {
             this.src.add("-");
         }
-        motorOmniTurnAction.power.accept(this);
+        motorOmniDiffTurnAction.power.accept(this);
         this.src.add(")");
         return null;
     }
 
     @Override
-    public Void visitMotorOmniTurnForAction(MotorOmniTurnForAction motorOmniTurnForAction) {
-        this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(Txt4Methods.OMNIDRIVETURNDEGREES));
+    public Void visitMotorOmniDiffTurnForAction(MotorOmniDiffTurnForAction motorOmniDiffTurnForAction) {
+        if ( drive.equals(FischertechnikConstants.OMNIDRIVE) ) {
+            this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(Txt4Methods.OMNIDRIVETURNDEGREES));
+        } else {
+            this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(Txt4Methods.DIFFDRIVETURNDEGREES));
+        }
         this.src.add("(");
-        if ( motorOmniTurnForAction.direction.equals("LEFT") ) {
+        if ( motorOmniDiffTurnForAction.direction.equals("LEFT") ) {
             this.src.add("-");
         }
-        motorOmniTurnForAction.power.accept(this);
+        motorOmniDiffTurnForAction.power.accept(this);
         this.src.add(", ");
-        motorOmniTurnForAction.degrees.accept(this);
+        motorOmniDiffTurnForAction.degrees.accept(this);
         this.src.add(")");
-
-
         return null;
     }
 

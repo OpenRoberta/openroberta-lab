@@ -111,13 +111,19 @@ OMNIDRIVETURN:
         motorStart(rearLeftMotor, speed)
         motorStart(rearRightMotor, -speed)
 
+DIFFDRIVETURN:
+  PYTHON: |
+    def diffDriveTurn(speed):
+        motorStart(leftMotor, speed)
+        motorStart(rightMotor, -speed)
+
 OMNIDRIVETURNDEGREES:
   PYTHON: |
-    def omnidriveTurnDegrees(speed, angle):
+    def omnidriveTurnDegrees(speed, degrees):
         speed =  int((speed / 100) * 512)
-        constant = (WHEEL_DIAMETER/2) / (4 * ((TRACK_WIDTH + WHEEL_BASE) / 2))
-        distancePerWheel = math.radians(angle) / constant / 4
-        stepsPerWheel = int(distancePerWheel / (2 * math.pi) * STEPS_PER_ROTATION)
+        rotations = (WHEEL_DIAMETER * math.pi * degrees) / (360 * TRACK_WIDTH)
+        stepsPerWheel = int(rotations * STEPS_PER_ROTATION)
+    
     
         frontLeftMotor.set_speed(speed, Motor.CCW)
         frontRightMotor.set_speed(speed, Motor.CW)
@@ -129,4 +135,20 @@ OMNIDRIVETURNDEGREES:
                 break;
             time.sleep(0.010)
         frontLeftMotor.stop_sync(frontRightMotor, rearLeftMotor, rearRightMotor)
-    
+
+DIFFDRIVETURNDEGREES:
+  PYTHON: |
+    def diffDriveTurnDegrees(speed, degrees):
+        speed =  int((speed / 100) * 512)
+        arc_length = math.radians(degrees) * (TRACK_WIDTH / 2)
+        rotations = arc_length / (WHEEL_DIAMETER * math.pi)
+        stepsPerWheel = int(rotations * STEPS_PER_ROTATION)
+
+        leftMotor.set_speed(speed, Motor.CCW)
+        rightMotor.set_speed(speed, Motor.CW)
+        leftMotor.set_distance(stepsPerWheel, rightMotor)
+        while True:
+            if(not leftMotor.is_running() and not rightMotor.is_running()):
+                break;
+            time.sleep(0.010)
+        leftMotor.stop_sync(rightMotor)
