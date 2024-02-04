@@ -11,6 +11,8 @@ import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.constants.FischertechnikConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.action.MotorOmniDiffCurveAction;
+import de.fhg.iais.roberta.syntax.action.MotorOmniDiffCurveForAction;
 import de.fhg.iais.roberta.syntax.action.MotorOmniDiffOnAction;
 import de.fhg.iais.roberta.syntax.action.MotorOmniDiffOnForAction;
 import de.fhg.iais.roberta.syntax.action.MotorOmniDiffStopAction;
@@ -245,6 +247,61 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
         }
 
 
+        return null;
+    }
+
+    @Override
+    public Void visitMotorOmniDiffCurveAction(MotorOmniDiffCurveAction motorOmniDiffCurveAction) {
+        String prefix = "";
+        String suffix = "";
+
+        if ( motorOmniDiffCurveAction.direction.equals("BACKWARD") ) {
+            prefix = "-(";
+            suffix = ")";
+        }
+        if ( drive.equals(FischertechnikConstants.OMNIDRIVE) ) {
+            this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(Txt4Methods.OMNIDRIVE));
+            this.src.add("(" + prefix);
+            motorOmniDiffCurveAction.powerLeft.accept(this);
+            this.src.add(suffix + ", " + prefix);
+            motorOmniDiffCurveAction.powerRight.accept(this);
+            this.src.add(suffix + ", " + prefix);
+            motorOmniDiffCurveAction.powerLeft.accept(this);
+            this.src.add(suffix + ", " + prefix);
+            motorOmniDiffCurveAction.powerRight.accept(this);
+        } else {
+            this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(Txt4Methods.DIFFERENTIALDRIVE));
+            this.src.add("(" + prefix);
+            motorOmniDiffCurveAction.powerLeft.accept(this);
+            this.src.add(suffix + ", " + prefix);
+            motorOmniDiffCurveAction.powerRight.accept(this);
+        }
+
+        this.src.add(suffix + ")");
+        return null;
+    }
+
+    @Override
+    public Void visitMotorOmniDiffCurveForAction(MotorOmniDiffCurveForAction motorOmniDiffCurveForAction) {
+        String prefix = "";
+        String suffix = "";
+
+        if ( motorOmniDiffCurveForAction.direction.equals("BACKWARD") ) {
+            prefix = "-(";
+            suffix = ")";
+        }
+        if ( drive.equals(FischertechnikConstants.OMNIDRIVE) ) {
+        } else {
+            this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(Txt4Methods.DIFFERENTIALDRIVEDISTANCE));
+            this.src.add("(");
+            motorOmniDiffCurveForAction.distance.accept(this);
+            this.src.add(", " + prefix);
+            motorOmniDiffCurveForAction.powerLeft.accept(this);
+            this.src.add(suffix + ", " + prefix);
+            motorOmniDiffCurveForAction.powerRight.accept(this);
+        }
+
+        this.src.add(suffix + ")");
         return null;
     }
 

@@ -37,16 +37,17 @@ DIFFERENTIALDRIVE:
 DIFFERENTIALDRIVEDISTANCE:
   PYTHON: |
     def diffDriveDistance(distance, speedL, speedR):
+        diffDrive(speedL, speedR)
         wheelCircumference = WHEEL_DIAMETER * math.pi
-        stepsPerWheel = int((distance / wheelCircumference) * STEPS_PER_ROTATION)
-        leftMotor.set_speed(int((speedL / 100) * 512), Motor.CCW)
-        rightMotor.set_speed(int((speedR / 100) * 512), Motor.CCW)
-        leftMotor.set_distance(stepsPerWheel, rightMotor)
+        time.sleep(0.010)
         while True:
-            if(not leftMotor.is_running() and not rightMotor.is_running()):
+            distanceLeft = abs(wheelCircumference * leftMotor.get_distance() / STEPS_PER_ROTATION);
+            distanceRight = abs(wheelCircumference * rightMotor.get_distance() / STEPS_PER_ROTATION);
+            distanceTraveled = (distanceLeft + distanceRight) / 2
+            if (distanceTraveled >= distance):
+                leftMotor.stop_sync(rightMotor)
                 break;
             time.sleep(0.010)
-        leftMotor.stop_sync(rightMotor)
 
 OMNIDRIVESTRAIGHTDISTANCE:
   PYTHON: |

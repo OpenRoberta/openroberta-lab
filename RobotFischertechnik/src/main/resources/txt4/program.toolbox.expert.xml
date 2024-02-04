@@ -1,26 +1,6 @@
 <toolbox_set id="toolbox" style="display: none">
     <category name='TOOLBOX_ACTION' svg='true'>
-        <category name='TOOLBOX_MOVE' svg='true'>
-            <block type='actions_motor_on_txt'>
-                <value name="POWER">
-                    <block type="math_number" id="653">
-                        <field name="NUM">30</field>
-                    </block>
-                </value>
-            </block>
-            <block type='actions_motor_stop_txt'></block>
-            <block type='actions_motor_on_for_txt'>
-                <value name='POWER'>
-                    <block type='math_number'>
-                        <field name='NUM'>30</field>
-                    </block>
-                </value>
-                <value name='VALUE'>
-                    <block type='math_number'>
-                        <field name='NUM'>5</field>
-                    </block>
-                </value>
-            </block>
+        <category name="TOOLBOX_DRIVE" svg="true">
             <block type="actions_motorOmniDiff_on_txt">
                 <value name="POWER">
                     <block type="math_number" id="653">
@@ -36,6 +16,35 @@
                 </value>
                 <value name='DISTANCE'>
                     <block type='math_number'>
+                        <field name='NUM'>10</field>
+                    </block>
+                </value>
+            </block>
+            <block type='actions_motorOmniDiff_curve'>
+                <value name='POWER_LEFT'>
+                    <block type='math_integer'>
+                        <field name='NUM'>10</field>
+                    </block>
+                </value>
+                <value name='POWER_RIGHT'>
+                    <block type='math_integer'>
+                        <field name='NUM'>30</field>
+                    </block>
+                </value>
+            </block>
+            <block type='actions_motorOmniDiff_curve_for'>
+                <value name='POWER_LEFT'>
+                    <block type='math_integer'>
+                        <field name='NUM'>10</field>
+                    </block>
+                </value>
+                <value name='POWER_RIGHT'>
+                    <block type='math_integer'>
+                        <field name='NUM'>30</field>
+                    </block>
+                </value>
+                <value name='DISTANCE'>
+                    <block type='math_integer'>
                         <field name='NUM'>10</field>
                     </block>
                 </value>
@@ -60,6 +69,28 @@
                     </block>
                 </value>
             </block>
+        </category>
+        <category name='TOOLBOX_MOVE' svg='true'>
+            <block type='actions_motor_on_txt'>
+                <value name="POWER">
+                    <block type="math_number" id="653">
+                        <field name="NUM">30</field>
+                    </block>
+                </value>
+            </block>
+            <block type='actions_motor_stop_txt'></block>
+            <block type='actions_motor_on_for_txt'>
+                <value name='POWER'>
+                    <block type='math_number'>
+                        <field name='NUM'>30</field>
+                    </block>
+                </value>
+                <value name='VALUE'>
+                    <block type='math_number'>
+                        <field name='NUM'>5</field>
+                    </block>
+                </value>
+            </block>
             <block type="robActions_servo_on_for_txt">
                 <value name="VALUE">
                     <block type="math_number" id="Dy#ytr1sQ2WFyWrdDQ_!" intask="true">
@@ -68,6 +99,7 @@
                 </value>
             </block>
         </category>
+
         <category name='TOOLBOX_DISPLAY' svg='true'>
             <block type="robActions_serial_print">
                 <value name="OUT">

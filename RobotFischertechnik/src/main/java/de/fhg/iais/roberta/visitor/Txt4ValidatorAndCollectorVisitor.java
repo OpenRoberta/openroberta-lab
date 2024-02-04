@@ -12,6 +12,8 @@ import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.constants.FischertechnikConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.action.MotorOmniDiffCurveAction;
+import de.fhg.iais.roberta.syntax.action.MotorOmniDiffCurveForAction;
 import de.fhg.iais.roberta.syntax.action.MotorOmniDiffOnAction;
 import de.fhg.iais.roberta.syntax.action.MotorOmniDiffOnForAction;
 import de.fhg.iais.roberta.syntax.action.MotorOmniDiffStopAction;
@@ -80,15 +82,47 @@ public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
     @Override
     public Void visitMotorOmniDiffOnForAction(MotorOmniDiffOnForAction motorOmniDiffOnForAction) {
         usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniDiffOnForAction.getUserDefinedPort(), SC.ENCODER));
+        usedMethodBuilder.addUsedMethod(Txt4Methods.MOTORSTART);
 
         if ( configHasOmnidrive() ) {
             usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniDiffOnForAction.getUserDefinedPort(), FischertechnikConstants.OMNIDRIVE));
             addOmnidriveDistanceMethods(motorOmniDiffOnForAction.direction);
         } else {
             usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniDiffOnForAction.getUserDefinedPort(), SC.DIFFERENTIALDRIVE));
+            usedMethodBuilder.addUsedMethod(Txt4Methods.DIFFERENTIALDRIVE);
             usedMethodBuilder.addUsedMethod(Txt4Methods.DIFFERENTIALDRIVEDISTANCE);
         }
 
+        return null;
+    }
+
+    @Override
+    public Void visitMotorOmniDiffCurveAction(MotorOmniDiffCurveAction motorOmniDiffCurveAction) {
+        usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniDiffCurveAction.getUserDefinedPort(), SC.ENCODER));
+        usedMethodBuilder.addUsedMethod(Txt4Methods.MOTORSTART);
+
+        if ( configHasOmnidrive() ) {
+            usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniDiffCurveAction.getUserDefinedPort(), FischertechnikConstants.OMNIDRIVE));
+            usedMethodBuilder.addUsedMethod(Txt4Methods.OMNIDRIVE);
+        } else {
+            usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniDiffCurveAction.getUserDefinedPort(), SC.DIFFERENTIALDRIVE));
+            usedMethodBuilder.addUsedMethod(Txt4Methods.DIFFERENTIALDRIVE);
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitMotorOmniDiffCurveForAction(MotorOmniDiffCurveForAction motorOmniDiffCurveForAction) {
+        usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniDiffCurveForAction.getUserDefinedPort(), SC.ENCODER));
+        usedMethodBuilder.addUsedMethod(Txt4Methods.MOTORSTART);
+
+        if ( configHasOmnidrive() ) {
+            usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniDiffCurveForAction.getUserDefinedPort(), FischertechnikConstants.OMNIDRIVE));
+        } else {
+            usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniDiffCurveForAction.getUserDefinedPort(), SC.DIFFERENTIALDRIVE));
+            usedMethodBuilder.addUsedMethod(Txt4Methods.DIFFERENTIALDRIVE);
+            usedMethodBuilder.addUsedMethod(Txt4Methods.DIFFERENTIALDRIVEDISTANCE);
+        }
         return null;
     }
 

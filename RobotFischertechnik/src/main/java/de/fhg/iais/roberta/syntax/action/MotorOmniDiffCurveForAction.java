@@ -9,25 +9,29 @@ import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-@NepoPhrase(name = "OMNIDIFF_TURN_FOR_ACTION", category = "ACTOR", blocklyNames = {"actions_motorOmniDiff_turn_for_txt"})
-public final class MotorOmniDiffTurnForAction extends ActionWithoutUserChosenName {
+@NepoPhrase(name = "OMNIDIFF_CURVE_FOR_ACTION", category = "ACTOR", blocklyNames = {"actions_motorOmniDiff_curve_for"})
+public final class MotorOmniDiffCurveForAction extends ActionWithoutUserChosenName {
     @NepoField(name = BlocklyConstants.DIRECTION)
     public final String direction;
-    @NepoValue(name = BlocklyConstants.POWER, type = BlocklyType.NUMBER)
-    public final Expr power;
-    @NepoValue(name = BlocklyConstants.DEGREES, type = BlocklyType.NUMBER)
-    public final Expr degrees;
+    @NepoValue(name = BlocklyConstants.POWER_LEFT, type = BlocklyType.NUMBER)
+    public final Expr powerLeft;
+    @NepoValue(name = BlocklyConstants.POWER_RIGHT, type = BlocklyType.NUMBER)
+    public final Expr powerRight;
+    @NepoValue(name = "DISTANCE")
+    public final Expr distance;
 
-    public MotorOmniDiffTurnForAction(
+    public MotorOmniDiffCurveForAction(
         BlocklyProperties properties,
         String direction,
-        Expr power,
-        Expr degrees,
+        Expr powerLeft,
+        Expr powerRight,
+        Expr distance,
         Hide hide) {
         super(properties, hide);
         this.direction = direction;
-        this.power = power;
-        this.degrees = degrees;
+        this.powerLeft = powerLeft;
+        this.powerRight = powerRight;
+        this.distance = distance;
         setReadOnly();
     }
 
