@@ -224,9 +224,6 @@ public class Ev3ValidatorAndCollectorVisitor extends CommonNepoAndMotorValidator
     @Override
     public Void visitSayTextAction(SayTextAction sayTextAction) {
         requiredComponentVisited(sayTextAction, sayTextAction.msg);
-        if ( this.robotConfiguration.getRobotName().equals("ev3lejosv0") ) {
-            addWarningToPhrase(sayTextAction, "BLOCK_NOT_SUPPORTED");
-        }
         usedHardwareBuilder.addUsedActor(new UsedActor(BlocklyConstants.EMPTY_PORT, SC.VOICE));
         return null;
     }
@@ -236,9 +233,6 @@ public class Ev3ValidatorAndCollectorVisitor extends CommonNepoAndMotorValidator
         requiredComponentVisited(sayTextAction, sayTextAction.speed);
         requiredComponentVisited(sayTextAction, sayTextAction.pitch);
         requiredComponentVisited(sayTextAction, sayTextAction.msg);
-        if ( this.robotConfiguration.getRobotName().equals("ev3lejosv0") ) {
-            addWarningToPhrase(sayTextAction, "BLOCK_NOT_SUPPORTED");
-        }
         usedHardwareBuilder.addUsedActor(new UsedActor(BlocklyConstants.EMPTY_PORT, SC.VOICE));
         return null;
     }

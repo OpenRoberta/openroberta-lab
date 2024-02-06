@@ -26,7 +26,6 @@ public class HttpSessionStateTest {
 
         Map<String, RobotFactory> robotPluginMap = new HashMap<>();
         robotPluginMap.put("ev3lejosv1", new RobotFactory(new PluginProperties("ev3lejosv1", "", "", Util.loadPropertiesRecursively("classpath:/ev3lejosv1.properties"))));
-        robotPluginMap.put("ev3lejosv0", new RobotFactory(new PluginProperties("ev3lejosv0", "", "", Util.loadPropertiesRecursively("classpath:/ev3lejosv0.properties"))));
         robotPluginMap
             .put("calliope2017", new RobotFactory(new PluginProperties("calliope2017", "", "", Util.loadPropertiesRecursively("classpath:/calliope2017.properties"))));
         robotPluginMap

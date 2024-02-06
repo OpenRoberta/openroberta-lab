@@ -1,6 +1,0 @@
-Sensors: 
-[]
-Actors: 
-[UsedActor [- EMPTY_PORT -, DISPLAY]]
-Methods: 
-[]

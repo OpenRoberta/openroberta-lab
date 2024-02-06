@@ -102,7 +102,6 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
         this.src.add("Ed.ReadLineState()");
         nlIndent();
         this.src.add("Ed.TimeWait(250, Ed.TIME_MILLISECONDS)"); //möglicherweise überflüssig
-        nlIndent();
         generateNNStuff("python");
     }
 

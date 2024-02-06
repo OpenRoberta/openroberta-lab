@@ -224,10 +224,6 @@ public class RobotCommunicator {
         if ( robot.equals("botnroll") || robot.equals("arduino") ) {
             robot = "ardu";
         }
-        // the old ev3 robots (ev3lejosv0) use a deprecated robot name "lejos", the new ev3 robots (ev3lejosv1) use "ev3"
-        if ( robot.equals("ev3lejosv0") ) {
-            robot = "lejos";
-        }
         // until we remove the xNN plugin (this will happen, if sometimes in the future we implement a new start page), we have to treat the "robot" xNN as ev3
         if ( robot.equalsIgnoreCase("xNN") ) {
             robot = "ev3";

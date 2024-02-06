@@ -28,8 +28,8 @@ public class RobotModeFactoryTest {
 
     @BeforeClass
     public static void setup() {
-        Properties properties = Util.loadPropertiesRecursively("classpath:/ev3lejosv0.properties");
-        RobotFactory factory = new RobotFactory(new PluginProperties("ev3lejosv0", "", "", properties));
+        Properties properties = Util.loadPropertiesRecursively("classpath:/ev3lejosv1.properties");
+        RobotFactory factory = new RobotFactory(new PluginProperties("ev3lejosv1", "", "", properties));
         dropdownFactory = factory.getBlocklyDropdownFactory();
     }
 

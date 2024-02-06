@@ -1,6 +1,0 @@
-Sensors: 
-[UsedSensor [1, TOUCH, PRESSED], UsedSensor [4, ULTRASONIC, DISTANCE], UsedSensor [4, ULTRASONIC, PRESENCE], UsedSensor [3, COLOR, COLOUR], UsedSensor [3, COLOR, LIGHT], UsedSensor [3, COLOR, AMBIENTLIGHT], UsedSensor [3, COLOR, RGB], UsedSensor [2, GYRO, ANGLE], UsedSensor [2, GYRO, RATE], UsedSensor [1, TIMER, VALUE], UsedSensor [2, TIMER, VALUE], UsedSensor [3, TIMER, VALUE], UsedSensor [4, TIMER, VALUE], UsedSensor [5, TIMER, VALUE], UsedSensor [1, TIMER, DEFAULT], UsedSensor [2, TIMER, DEFAULT], UsedSensor [3, TIMER, DEFAULT], UsedSensor [4, TIMER, DEFAULT], UsedSensor [5, TIMER, DEFAULT]]
-Actors: 
-[UsedActor [- EMPTY_PORT -, DISPLAY], UsedActor [B, LARGE]]
-Methods: 
-[]

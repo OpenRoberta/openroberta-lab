@@ -236,47 +236,41 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
 
     @Override
     public Void visitSetLanguageAction(SetLanguageAction setLanguageAction) {
-        if ( !this.brickConfiguration.getRobotName().equals("ev3lejosv0") ) {
-            this.src.add("hal.setLanguage(\"");
-            this.src.add(TTSLanguageMapper.getLanguageString(setLanguageAction.language));
-            this.src.add("\");");
-        }
+        this.src.add("hal.setLanguage(\"");
+        this.src.add(TTSLanguageMapper.getLanguageString(setLanguageAction.language));
+        this.src.add("\");");
         return null;
     }
 
     @Override
     public Void visitSayTextAction(SayTextAction sayTextAction) {
-        if ( !this.brickConfiguration.getRobotName().equals("ev3lejosv0") ) {
-            this.src.add("hal.sayText(");
-            if ( !sayTextAction.msg.getKind().hasName("STRING_CONST") ) {
-                this.src.add("String.valueOf(");
-                sayTextAction.msg.accept(this);
-                this.src.add(")");
-            } else {
-                sayTextAction.msg.accept(this);
-            }
-            this.src.add(");");
+        this.src.add("hal.sayText(");
+        if ( !sayTextAction.msg.getKind().hasName("STRING_CONST") ) {
+            this.src.add("String.valueOf(");
+            sayTextAction.msg.accept(this);
+            this.src.add(")");
+        } else {
+            sayTextAction.msg.accept(this);
         }
+        this.src.add(");");
         return null;
     }
 
     @Override
     public Void visitSayTextWithSpeedAndPitchAction(SayTextWithSpeedAndPitchAction sayTextAction) {
-        if ( !this.brickConfiguration.getRobotName().equals("ev3lejosv0") ) {
-            this.src.add("hal.sayText(");
-            if ( !sayTextAction.msg.getKind().hasName("STRING_CONST") ) {
-                this.src.add("String.valueOf(");
-                sayTextAction.msg.accept(this);
-                this.src.add(")");
-            } else {
-                sayTextAction.msg.accept(this);
-            }
-            this.src.add(",");
-            sayTextAction.speed.accept(this);
-            this.src.add(",");
-            sayTextAction.pitch.accept(this);
-            this.src.add(");");
+        this.src.add("hal.sayText(");
+        if ( !sayTextAction.msg.getKind().hasName("STRING_CONST") ) {
+            this.src.add("String.valueOf(");
+            sayTextAction.msg.accept(this);
+            this.src.add(")");
+        } else {
+            sayTextAction.msg.accept(this);
         }
+        this.src.add(",");
+        sayTextAction.speed.accept(this);
+        this.src.add(",");
+        sayTextAction.pitch.accept(this);
+        this.src.add(");");
         return null;
     }
 
@@ -690,7 +684,7 @@ public final class Ev3JavaVisitor extends AbstractJavaVisitor implements IEv3Vis
             this.src.add("hal.startLogging();");
             this.isInDebugMode = true;
         }
-        if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.VOICE) && !this.brickConfiguration.getRobotName().equals("ev3lejosv0") ) {
+        if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.VOICE) ) {
             nlIndent();
             this.src.add("hal.setLanguage(\"");
             this.src.add(TTSLanguageMapper.getLanguageString(this.language));
