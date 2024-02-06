@@ -210,17 +210,10 @@ Furthermore, the project OpenRobertaServer contains in directory staticResources
     * javascript resources for [blockly](https://developers.google.com/blockly)
     * controller and models written in Javascript, which implement the GUI
 
-**The TypeScript and Javascript _sources_ can be found in `OpenRobertaWeb/`**  
-To work with the frontend (e.g. compiling the sources) we use the following npm scripts:
+**The TypeScript and Javascript _sources_ can be found in `OpenRobertaWeb/`**
 
-* `npm run build` - build the sources
-* `npm run build:sourceMap` - build the sources and generated source maps for debugging
-* `npm run watch` - build the sources on change
-* `npm run watch:sourceMap` - build the sources on change and generate source maps for debugging
-* `npm run format` - formats all javascript and typescript source files
-* `npm run format:check` - check if all javascript and typescript files are formatted
-
-**Attention:** Only check in those generated files build with `npm run build` or `npm run watch`!
+To work with the frontend (e.g. compiling the sources), please read the `README.md` of the
+directory `OpenRoertaWeb` and follow the instructions.
 
 #### Testing
 

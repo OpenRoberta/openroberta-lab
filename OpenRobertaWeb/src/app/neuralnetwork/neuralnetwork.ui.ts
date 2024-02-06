@@ -877,6 +877,8 @@ export function drawNetworkUIForTabLearn(redrawNetwork: boolean = true) {
             moveSvgDown: true,
             showAllWeightLinks: true,
             weightsBiasesLinechartDisplay: true,
+            weightsBiasesEditable: false,
+            neuronNamesEditable: false,
         });
 }
 
@@ -1221,8 +1223,9 @@ function drawTheNetwork(tabType: TabType, tabSuffix: string, options: object) {
                 .attr('d', diagonal(datum, 0))
                 .attr('class', cssForPath)
                 .on('click', function () {
+                    (D3.event as any).stopPropagation();
                     options['weightsBiasesEditable'] && runEditCard(link, D3.mouse(this));
-                    options['weightsBiasesLinechartDisplay'] && displayLineChart(link, D3.mouse(this));
+                    options['weightsBiasesLinechartDisplay'] && link.weightHistory.length > 0 && displayLineChart(link, D3.mouse(this));
                 });
         }
         return line;
@@ -1268,7 +1271,7 @@ function drawTheNetwork(tabType: TabType, tabSuffix: string, options: object) {
                 biasRect.on('click', function () {
                     (D3.event as any).stopPropagation();
                     options['weightsBiasesEditable'] && runEditCard(node, D3.mouse(container.node()));
-                    options['weightsBiasesLinechartDisplay'] && displayLineChart(node, D3.mouse(container.node()));
+                    options['weightsBiasesLinechartDisplay'] && node.biasHistory.length > 0 && displayLineChart(node, D3.mouse(container.node()));
                 });
             }
         } else {
@@ -1284,7 +1287,7 @@ function drawTheNetwork(tabType: TabType, tabSuffix: string, options: object) {
                 biasRect.on('click', function () {
                     (D3.event as any).stopPropagation();
                     options['weightsBiasesEditable'] && runEditCard(node, D3.mouse(container.node()));
-                    options['weightsBiasesLinechartDisplay'] && displayLineChart(node, D3.mouse(container.node()));
+                    options['weightsBiasesLinechartDisplay'] && node.biasHistory.length > 0 && displayLineChart(node, D3.mouse(container.node()));
                 });
             }
         }
