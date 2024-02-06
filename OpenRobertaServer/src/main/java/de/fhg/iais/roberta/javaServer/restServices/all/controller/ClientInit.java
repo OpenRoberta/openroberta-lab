@@ -78,7 +78,8 @@ public class ClientInit {
             AliveData.rememberClientCall();
             new ClientLogger().log(ClientInit.LOG, fullRequest.getLog());
             ClientInit.LOG.info("INIT command. Trying to build a new HttpSessionState");
-            httpSessionState = HttpSessionState.init(this.robotPluginMap, this.serverProperties, getCountryCode(httpRequest, this.ipToCountry));
+            String url = httpRequest.getRequestURL().toString().replace(httpRequest.getRequestURI(), "");
+            httpSessionState = HttpSessionState.init(this.robotPluginMap, this.serverProperties, getCountryCode(httpRequest, this.ipToCountry), url);
             MDC.put("sessionId", String.valueOf(httpSessionState.getSessionNumber()));
             MDC.put("userId", String.valueOf(httpSessionState.getUserId()));
             MDC.put("robotName", String.valueOf(httpSessionState.getRobotName()));

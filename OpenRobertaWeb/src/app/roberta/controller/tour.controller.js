@@ -16,6 +16,11 @@ function is_touch_device() {
 }
 
 function start(tour) {
+    if (!tour || (tour !== 'welcome' && tour !== 'overview')) {
+        end();
+        LOG.error('Tour not available: ' + tour);
+        return;
+    }
     function end() {
         $('#enjoyHintAnchor').remove();
         $('#enjoyHintStart').remove();
@@ -73,7 +78,7 @@ function start(tour) {
             }
             break;
         default:
-            return;
+            break;
     }
 
     // translation
@@ -112,6 +117,7 @@ function start(tour) {
     }
     enjoyhint_instance.set(enjoyhint_script_steps);
     enjoyhint_instance.run();
+    LOG.info('Tour ' + tour + ' started');
 }
 
 function getInstance() {
@@ -205,9 +211,8 @@ var welcome = [
 var overview = [
     {
         event_type: 'next',
-        selector: '.logo',
+        selector: '#enjoyHintStart',
         description: 'Blockly.Msg.TOUR1_DESCRIPTION01',
-        top: 77,
         nextButton: {
             text: 'Blockly.Msg.TOUR1_DESCRIPTION00',
         },
@@ -242,10 +247,10 @@ var overview = [
     },
     {
         event_type: 'next',
-        selector: '#bricklyDiv .blocklyBlockCanvas',
+        selector: '#bricklyDiv .blocklyBlockCanvas>.blocklyDraggable>.blocklyDraggable',
         description: 'Blockly.Msg.TOUR1_DESCRIPTION05',
         shape: 'circle',
-        radius: 100,
+        radius: 200,
         nextButton: {
             text: 'Blockly.Msg.TOUR1_DESCRIPTION00',
         },
@@ -354,12 +359,9 @@ var overview = [
     },
     {
         event_type: 'next',
-        selector: '#simDiv',
+        selector: '#enjoyHintAnchor',
         description: 'Blockly.Msg.TOUR1_DESCRIPTION15',
         shape: 'circle',
-        radius: $('#blocklyDiv').width() / 10 + $('#blocklyDiv').height() / 10,
-        top: offsetTop,
-        left: offsetLeft,
         nextButton: {
             text: 'Blockly.Msg.TOUR1_DESCRIPTION00',
         },
@@ -370,5 +372,16 @@ var overview = [
         selector: '#simButton',
         description: 'Blockly.Msg.TOUR1_DESCRIPTION16',
         showSkip: false,
+    },
+    {
+        event: 'mousedown touchstart',
+        selector: '#simButton',
+        timeout: 1000,
+        showSkip: false,
+        onBeforeStart: function () {
+            setTimeout(function () {
+                $('.enjoyhint_close_btn').trigger('click');
+            }, 1000);
+        },
     },
 ];

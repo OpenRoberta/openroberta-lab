@@ -366,7 +366,7 @@ public class ClientUser {
                 PendingEmailConfirmationsProcessor pendingConfirmationProcessor = new PendingEmailConfirmationsProcessor(dbSession, httpSessionState.getUserId());
                 String lang = request.getLanguage();
                 PendingEmailConfirmations confirmation = pendingConfirmationProcessor.createEmailConfirmation(newUser);
-                sendActivationMail(up, confirmation.getUrlPostfix(), account, email, lang, isYoungerThen14);
+                sendActivationMail(up, confirmation.getUrlPostfix(), account, email, lang, isYoungerThen14, httpSessionState.getUrl());
             }
             Statistics.info("UserCreate", "success", up.succeeded());
             UtilForREST.addResultInfo(response, up);
@@ -430,7 +430,7 @@ public class ClientUser {
                 up.updateUser(user, userName, role, email, null, isYoungerThen14, deactivateAccount);
                 if ( deactivateAccount && up.succeeded() ) {
                     PendingEmailConfirmations confirmation = pendingConfirmationProcessor.createEmailConfirmation(user);
-                    sendActivationMail(up, confirmation.getUrlPostfix(), account, email, request.getLanguage(), isYoungerThen14);
+                    sendActivationMail(up, confirmation.getUrlPostfix(), account, email, request.getLanguage(), isYoungerThen14, httpSessionState.getUrl());
                 }
                 UtilForREST.addResultInfo(response, up);
             }
@@ -513,7 +513,7 @@ public class ClientUser {
                         lostPassword.getUrlPostfix()
                     };
                 try {
-                    this.mailManagement.send(user.getEmail(), "reset", body, lang, false);
+                    this.mailManagement.send(user.getEmail(), "reset", body, lang, false, httpSessionState.getUrl());
                     up.setStatus(ProcessorStatus.SUCCEEDED, Key.USER_PASSWORD_RECOVERY_SENT_MAIL_SUCCESS, responseParameters);
                 } catch ( MessagingException e ) {
                     up.setStatus(ProcessorStatus.FAILED, Key.USER_PASSWORD_RECOVERY_SENT_MAIL_FAIL, responseParameters);
@@ -691,7 +691,7 @@ public class ClientUser {
                 if ( !email.equals("") ) {
                     PendingEmailConfirmations confirmation = pendingConfirmationProcessor.createEmailConfirmation(user);
                     // TODO ask here again for the age
-                    sendActivationMail(up, confirmation.getUrlPostfix(), account, email, lang, false);
+                    sendActivationMail(up, confirmation.getUrlPostfix(), account, email, lang, false, httpSessionState.getUrl());
                 }
             }
             UtilForREST.addResultInfo(response, up);
@@ -800,7 +800,14 @@ public class ClientUser {
         }
     }
 
-    private void sendActivationMail(UserProcessor up, String urlPostfix, String account, String email, String lang, boolean isYoungerThen14) throws Exception {
+    private void sendActivationMail(
+        UserProcessor up,
+        String urlPostfix,
+        String account,
+        String email,
+        String lang,
+        boolean isYoungerThen14,
+        String url) throws Exception {
         Map<String, String> responseParameters = new HashMap<>();
         String[] body =
             {
@@ -808,7 +815,7 @@ public class ClientUser {
                 urlPostfix
             };
         try {
-            this.mailManagement.send(email, "activate", body, lang, isYoungerThen14);
+            this.mailManagement.send(email, "activate", body, lang, isYoungerThen14, url);
             up.setStatus(ProcessorStatus.SUCCEEDED, Key.USER_ACTIVATION_SENT_MAIL_SUCCESS, responseParameters);
         } catch ( Exception e ) {
             up.setStatus(ProcessorStatus.FAILED, Key.USER_ACTIVATION_SENT_MAIL_FAIL, responseParameters);

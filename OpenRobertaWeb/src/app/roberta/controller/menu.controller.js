@@ -23,83 +23,179 @@ var n = 0;
 const QUERY_START = '?';
 const QUERY_DELIMITER = '&';
 const QUERY_ASSIGNMENT = '=';
-const LOAD_SYSTEM_CALL = 'loadSystem';
-const TUTORIAL = 'tutorial';
-const KIOSK = 'kiosk';
-const EXAMPLE_VIEW = 'exampleView';
+const Q_FORGOT_PASSWORD = 'forgotPassword';
+const Q_ACTIVATE_ACCOUNT = 'activateAccount';
+const Q_LOAD_SYSTEM = 'loadSystem';
+const Q_TUTORIAL = 'tutorial';
+const Q_GALLERY = 'gallery';
+const Q_TOUR = 'tour';
+const Q_KIOSK = 'kiosk';
+const Q_EXAMPLE_VIEW = 'exampleView';
+const Q_LOAD_PROGRAM = 'loadProgram';
 var mainCallback;
 
 // from https://stackoverflow.com/questions/19491336/get-url-parameter-jquery-or-how-to-get-query-string-values-in-js/21903119#21903119
 function getUrlParameter(sParam) {
-    var sPageURL = window.location.search.substring(1),
-        sURLVariables = sPageURL.split(QUERY_DELIMITER),
+    var url = decodeURIComponent(document.location.toString());
+    var queryStart = url.indexOf('?');
+    url = url.substring(queryStart + 1);
+    var sPageURL = url;
+    var xmlStart = sPageURL.indexOf('<');
+    var lastParam;
+    if (xmlStart >= 0) {
+        sPageURL = url.substring(0, xmlStart);
+        lastParam = url.substring(xmlStart);
+    }
+    var sURLVariables = sPageURL.split(QUERY_DELIMITER),
         sParameterName,
         i;
-
     for (i = 0; i < sURLVariables.length; i++) {
         sParameterName = sURLVariables[i].split(QUERY_ASSIGNMENT);
 
         if (sParameterName[0] === sParam) {
-            return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+            return sParameterName[1] === undefined ? true : sParameterName[0] === 'loadProgram' ? lastParam : sParameterName[1];
         }
     }
 }
 
 function handleQuery() {
-    // old style queries
-    var target = decodeURI(document.location.hash).split('&&');
-    if (target[0] === '#forgotPassword') {
-        USER_C.showResetPassword(target[1]);
-    } else if (target[0] === '#loadProgram' && target.length >= 4) {
-        GUISTATE_C.setStartWithoutPopup();
-        IMPORT_C.openProgramFromXML(target);
-    } else if (target[0] === '#activateAccount') {
-        USER_C.activateAccount(target[1]);
-    } else if (target[0] === '#overview') {
-        GUISTATE_C.setStartWithoutPopup();
-        TOUR_C.start('overview');
-    } else if (target[0] === '#gallery') {
-        GUISTATE_C.setStartWithoutPopup();
-        $('.navbahead-navigation-configuration-editr-nav a[href="#galleryList"]').tab('show');
-    } else if (target[0] === '#tutorial') {
-        GUISTATE_C.setStartWithoutPopup();
-        $('.navbar-nav a[href="#tutorialList"]').tab('show');
-    } else if (target[0] === '#loadSystem' && target.length >= 2) {
-        GUISTATE_C.setStartWithoutPopup();
-        if (mainCallback && mainCallback instanceof Function) {
-            mainCallback(loadSystem);
-        } else {
-            alert('Problem');
-        }
-    }
-
-    // new style queries
-    var loadSystem = getUrlParameter(LOAD_SYSTEM_CALL);
-    if (loadSystem) {
-        GUISTATE_C.setStartWithoutPopup();
-        if (mainCallback && mainCallback instanceof Function) {
-            mainCallback(loadSystem);
-        } else {
-            alert('Problem');
-        }
-    }
-    let tutorial = getUrlParameter(TUTORIAL);
-    if (tutorial) {
-        if (tutorial === 'true' || tutorial === true) {
+    let location = new URL(document.location);
+    let domain = location.protocol + '//' + location.host;
+    let oldStyle = (location.hash && location.toString().indexOf('#') <= domain.length + 1) || false;
+    let newStyle = location.search !== '' || false;
+    /* old style queries, start with # *** deprecated ***
+        e.g.
+        localhost:1999#overview
+        localhost:1999#loadSystem&&ev3lejosv1
+        localhost:1999#tutorial
+        localhost:1999#tutorial&&bionics4education1
+        localhost:1999#tutorial&&bionics4education1&&kiosk
+     */
+    if (oldStyle) {
+        let deprecated = true;
+        let newUrl;
+        var target = decodeURI(document.location.hash).split('&&');
+        if (target[0] === '#overview') {
             GUISTATE_C.setStartWithoutPopup();
-            $('.navbar-nav a[href="#tutorialList"]').tab('show');
-        } else {
-            let kiosk = getUrlParameter(KIOSK);
-            if (kiosk && kiosk === 'true') {
-                GUISTATE_C.setKioskMode(true);
+            mainCallback('ev3lejosv1', function () {
+                PROGRAM_C.newProgram(true);
+                TOUR_C.start('overview');
+            });
+            newUrl = domain + QUERY_START + 'tour' + QUERY_ASSIGNMENT + 'overview';
+        } else if (target[0] === '#loadProgram' && target.length >= 4) {
+            GUISTATE_C.setStartWithoutPopup();
+            mainCallback && mainCallback instanceof Function && mainCallback(target[1], IMPORT_C.loadProgramFromXML, [target[2], target[3]]);
+            newUrl = domain + QUERY_START + 'loadProgram' + QUERY_ASSIGNMENT + '_vC353v-LPr_';
+        } else if (target[0] === '#loadSystem' && target.length >= 2) {
+            GUISTATE_C.setStartWithoutPopup();
+            mainCallback && mainCallback instanceof Function && mainCallback(target[1]);
+            newUrl = domain + QUERY_START + 'loadSystem' + QUERY_ASSIGNMENT + target[1];
+        } else if (target[0] === '#gallery') {
+            deprecated = false;
+            newUrl = domain + QUERY_START + 'loadSystem' + QUERY_ASSIGNMENT + '<ROBOT_SYSTEM>' + QUERY_DELIMITER + Q_GALLERY;
+        } else if (target[0] === '#tutorial') {
+            deprecated = false;
+            newUrl = domain + QUERY_START + 'loadSystem' + QUERY_ASSIGNMENT + '<ROBOT_SYSTEM>' + QUERY_DELIMITER + Q_TUTORIAL;
+            if (target.length > 1) {
+                newUrl += QUERY_ASSIGNMENT + target[1];
+                if (target.length > 2) {
+                    newUrl += QUERY_DELIMITER + target[2];
+                }
             }
-            GUISTATE_C.setStartWithoutPopup();
-            TUTORIAL_C.loadFromTutorial(tutorial);
         }
+        let message;
+        let germanDeprecated =
+            'Die eingegebenen URL-Parameter sind in dieser Form veraltet und werden bald nicht mehr unterstützt.\nBitte verwende ab sofort nur noch folgende Schreibweise:\n';
+        let englishDeprecated =
+            'The URL parameters entered are outdated in this form and will soon no longer be supported.\n' +
+            'Please use only the following spelling from now on:';
+        let germanNotDeprecated =
+            'Die eingegebenen URL-Parameter sind in dieser Form veraltet und werden nicht mehr unterstützt.\nBitte verwende ab sofort nur noch folgende Schreibweise:\n';
+        let englishNotDeprecated =
+            'The URL parameters entered are outdated in this form and are no longer supported.\n' + 'Please use only the following spelling from now on:';
+        if (GUISTATE_C.getLanguage() === 'de' && deprecated) {
+            message = germanDeprecated;
+        } else if (GUISTATE_C.getLanguage() === 'en' && deprecated) {
+            message = englishDeprecated;
+        } else if (GUISTATE_C.getLanguage() === 'de' && !deprecated) {
+            message = germanNotDeprecated;
+        } else if (GUISTATE_C.getLanguage() === 'en' && !deprecated) {
+            message = englishNotDeprecated;
+        }
+        message += newUrl;
+        alert(message);
     }
-    let exampleView = getUrlParameter(EXAMPLE_VIEW);
-    if (exampleView) {
-        $('#menuListExamples').clickWrap();
+    /* new style queries, start with ?
+        e.g.
+        localhost:1999?forgotPassword=_vC353v-LPr_
+        localhost:1999?activateAccount=_vC353v-LPr_
+        localhost:1999?tour=overview
+        localhost:1999?tour=welcome
+        localhost:1999?loadSystem=ev3lejosv1
+        localhost:1999?loadSystem=ev3lejosv1&tutorial
+        localhost:1999?loadSystem=ev3lejosv1&tutorial=bionics4education1
+        localhost:1999?loadSystem=ev3lejosv1&tutorial=bionics4education1&kiosk
+        localhost:1999?loadSystem=ev3lejosv1&exampleView
+        localhost:1999?loadSystem=ev3lejosv1&loadProgram=<export> ... </export>
+     */
+    if (newStyle) {
+        var forgotPasswort = getUrlParameter(Q_FORGOT_PASSWORD);
+        if (forgotPasswort) {
+            USER_C.showResetPassword(forgotPasswort);
+        }
+        var activateAccount = getUrlParameter(Q_ACTIVATE_ACCOUNT);
+        if (activateAccount) {
+            USER_C.activateAccount(activateAccount);
+        }
+        var tour = getUrlParameter(Q_TOUR);
+        if (tour) {
+            GUISTATE_C.setStartWithoutPopup();
+            mainCallback('ev3lejosv1', function () {
+                PROGRAM_C.newProgram(true);
+                TOUR_C.start(tour);
+            });
+        }
+        var loadSystem = getUrlParameter(Q_LOAD_SYSTEM);
+        if (loadSystem) {
+            GUISTATE_C.setStartWithoutPopup();
+            let callback;
+            let parameter = [];
+            let tutorial = getUrlParameter(Q_TUTORIAL);
+            let loadProgram = getUrlParameter(Q_LOAD_PROGRAM);
+            let exampleView = getUrlParameter(Q_EXAMPLE_VIEW);
+            let gallery = getUrlParameter(Q_GALLERY);
+            if (tutorial) {
+                if (tutorial === 'true' || tutorial === true) {
+                    callback = function () {
+                        $('.navbar-nav a[href="#tutorialList"]').tab('show');
+                    };
+                } else {
+                    let kiosk = getUrlParameter(Q_KIOSK);
+                    if (kiosk && (kiosk === true || kiosk === 'true')) {
+                        GUISTATE_C.setKioskMode(true);
+                    }
+                    callback = function (tutorial) {
+                        TUTORIAL_C.loadFromTutorial(tutorial);
+                    };
+                    parameter.push(tutorial);
+                }
+            } else if (loadProgram) {
+                callback = IMPORT_C.loadProgramFromXML;
+                parameter.push('NEPOprog');
+                parameter.push(loadProgram);
+            } else if (exampleView) {
+                callback = function () {
+                    $('#menuListExamples').clickWrap();
+                };
+            } else if (gallery) {
+                callback = function () {
+                    $('#tabGalleryList').tabWrapShow();
+                };
+            }
+            if (mainCallback && mainCallback instanceof Function) {
+                mainCallback(loadSystem, callback, parameter);
+            }
+        }
     }
 }
 
@@ -585,7 +681,7 @@ function initMenuEvents() {
                         if ($('#checkbox_id').is(':checked')) {
                             UTIL.cleanUri(); // removes # which may potentially be added by other operations
                             var uri = window.location.toString();
-                            uri += QUERY_START + LOAD_SYSTEM_CALL + QUERY_ASSIGNMENT + choosenRobotType;
+                            uri += QUERY_START + Q_LOAD_SYSTEM + QUERY_ASSIGNMENT + choosenRobotType;
                             window.history.replaceState({}, document.title, uri);
 
                             $('#show-message').oneWrap('hidden.bs.modal', function (e) {

@@ -33,7 +33,7 @@ public class HttpSessionStateTest {
         robotPluginMap.put("mbot", new RobotFactory(new PluginProperties("mbot", "", "", Util.loadPropertiesRecursively("classpath:/mbot.properties"))));
         ServerProperties serverProperties = new ServerProperties(Util.loadAndMergeOpenRobertaServerProperties("classpath:/openRoberta.properties", serverDefines));
 
-        this.httpSessionState = HttpSessionState.init(robotPluginMap, serverProperties, "en");
+        this.httpSessionState = HttpSessionState.init(robotPluginMap, serverProperties, "en", "");
     }
 
     @Test

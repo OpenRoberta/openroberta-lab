@@ -24,12 +24,10 @@ public class MailManagement {
         @Named("mail.smtp.starttls.enable") String starttls,
         @Named("mail.smtp.host") String host,
         @Named("mail.smtp.port") String port,
-        @Named("reset.url") String resetUrl,
         @Named("reset.text.de") String resetTextDe,
         @Named("reset.text.en") String resetTextEn,
         @Named("reset.subject.de") String resetSubjectDe,
         @Named("reset.subject.en") String resetSubjectEn,
-        @Named("activate.url") String activateUrl,
         @Named("activate.text.young.de") String activateTextYoungDe,
         @Named("activate.text.young.en") String activateTextYoungEn,
         @Named("activate.text.old.de") String activateTextOldDe,
@@ -43,12 +41,10 @@ public class MailManagement {
         this.props.put("mail.smtp.host", host);
         this.props.put("mail.smtp.ssl.trust", host);
         this.props.put("mail.smtp.port", port);
-        this.props.put("reset.url", resetUrl);
         this.props.put("reset.text.de", resetTextDe);
         this.props.put("reset.text.en", resetTextEn);
         this.props.put("reset.subject.de", resetSubjectDe);
         this.props.put("reset.subject.en", resetSubjectEn);
-        this.props.put("activate.url", activateUrl);
         this.props.put("activate.text.old.de", activateTextOldDe);
         this.props.put("activate.text.old.en", activateTextOldEn);
         this.props.put("activate.text.young.de", activateTextYoungDe);
@@ -76,19 +72,16 @@ public class MailManagement {
      * @throws AddressException
      * @throws MessagingException
      */
-    public void send(String to, String subject, String[] body, String lang, boolean isYoungerThen14) throws AddressException, MessagingException {
+    public void send(String to, String subject, String[] body, String lang, boolean isYoungerThen14, String url) throws AddressException, MessagingException {
         String language = lang.toLowerCase().equals("de") ? "DE" : "en";
         String mailText = body[0];
         String mailSubject = "";
+        String mailUrl = url != null ? url : "https://lab.open-roberta.org/";
         if ( subject.equals("reset") ) {
             mailSubject = this.props.getProperty("reset.subject." + language.toLowerCase());
             mailText = this.props.getProperty("reset.text." + language.toLowerCase());
-            String url =
-                this.props.getProperty("reset.url") != null && !this.props.getProperty("reset.url").isEmpty()
-                    ? this.props.getProperty("reset.url")
-                    : "https://lab.open-roberta.org/";
             mailText = mailText.replace("$1", body[0]);
-            mailText = mailText.replace("$2", url);
+            mailText = mailText.replace("$2", mailUrl);
             mailText = mailText.replace("$3", body[1]);
         } else if ( subject.equals("activate") ) {
             mailSubject = this.props.getProperty("activate.subject." + language.toLowerCase());
@@ -97,12 +90,8 @@ public class MailManagement {
             } else {
                 mailText = this.props.getProperty("activate.text.old." + language.toLowerCase());
             }
-            String url =
-                this.props.getProperty("activate.url") != null && !this.props.getProperty("activate.url").isEmpty()
-                    ? this.props.getProperty("activate.url")
-                    : "https://lab.open-roberta.org/";
             mailText = mailText.replace("$1", body[0]);
-            mailText = mailText.replace("$2", url);
+            mailText = mailText.replace("$2", mailUrl);
             mailText = mailText.replace("$3", body[1]);
         }
         Message message = new MimeMessage(this.session);

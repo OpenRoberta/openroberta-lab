@@ -213,6 +213,6 @@ public class NotificationControllerTest {
     }
 
     private HttpSessionState createEmptyHttpSession() {
-        return HttpSessionState.init(Collections.emptyMap(), this.serverProperties, "");
+        return HttpSessionState.init(Collections.emptyMap(), this.serverProperties, "", "");
     }
 }

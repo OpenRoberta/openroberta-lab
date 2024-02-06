@@ -398,7 +398,7 @@ function newProgram(opt_further) {
         GUISTATE_C.setProgram(result);
         initProgramEnvironment();
         NN_C.programWasReplaced();
-        LOG.info('ProgramNew');
+        LOG.info('New program loaded');
     }
     if (further || GUISTATE_C.isProgramSaved()) {
         loadNewProgram();
@@ -432,11 +432,11 @@ function linkProgram() {
     var xml = Blockly.Xml.domToText(dom);
     //TODO this should be removed after the next release
     xml = '<export xmlns="http://de.fhg.iais.roberta.blockly"><program>' + xml + '</program><config>' + GUISTATE_C.getConfigurationXML() + '</config></export>';
-    var link = 'https://lab.open-roberta.org/#loadProgram';
-    link += '&&' + GUISTATE_C.getRobot();
-    link += '&&' + GUISTATE_C.getProgramName();
-    link += '&&' + xml;
+    var link = document.location + '?loadSystem=';
+    link += GUISTATE_C.getRobot();
+    link += '&loadProgram=' + xml;
     link = encodeURI(link);
+    console.log(link);
     var $temp = $('<input>');
     $('body').append($temp);
     $temp.val(link).select();

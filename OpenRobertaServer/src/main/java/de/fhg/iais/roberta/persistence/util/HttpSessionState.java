@@ -42,6 +42,7 @@ public class HttpSessionState implements Serializable {
     private final long sessionNumber;
     private final Map<String, RobotFactory> robotPluginMap;
     private final String countryCode;
+    private final String url;
 
     private final long initTime;
     private long lastAccessTime;
@@ -61,12 +62,12 @@ public class HttpSessionState implements Serializable {
         long sessionNumber,
         Map<String, RobotFactory> robotPluginMap,
         ServerProperties serverProperties,
-        String countryCode) //
-    {
+        String countryCode, String url) {
         this.initToken = initToken;
         this.sessionNumber = sessionNumber;
         this.robotPluginMap = robotPluginMap;
         this.countryCode = countryCode;
+        this.url = url;
         this.initTime = new Date().getTime();
         this.lastAccessTime = 0;
 
@@ -91,15 +92,15 @@ public class HttpSessionState implements Serializable {
      *
      * @param robotPluginMap
      * @param serverProperties
-     * @param sessionNumber
      * @param countryCode
+     * @param url
      * @return
      */
-    public static HttpSessionState init(Map<String, RobotFactory> robotPluginMap, ServerProperties serverProperties, String countryCode) //
+    public static HttpSessionState init(Map<String, RobotFactory> robotPluginMap, ServerProperties serverProperties, String countryCode, String url) //
     {
         String initTokenString = RandomUrlPostfix.generate(12, 12, 3, 3, 3);
         long sessionNumber = SESSION_COUNTER.incrementAndGet();
-        HttpSessionState httpSessionState = new HttpSessionState(initTokenString, sessionNumber, robotPluginMap, serverProperties, countryCode);
+        HttpSessionState httpSessionState = new HttpSessionState(initTokenString, sessionNumber, robotPluginMap, serverProperties, countryCode, url);
         LOG.info("session " + sessionNumber + " created");
         return httpSessionState;
     }
@@ -120,7 +121,7 @@ public class HttpSessionState implements Serializable {
         ServerProperties serverProperties,
         long sessionNumber) //
     {
-        HttpSessionState state = new HttpSessionState(initTokenString, sessionNumber, robotPluginMap, serverProperties, "..");
+        HttpSessionState state = new HttpSessionState(initTokenString, sessionNumber, robotPluginMap, serverProperties, "..", "");
         return state;
     }
 
@@ -254,6 +255,10 @@ public class HttpSessionState implements Serializable {
 
     public String getCountryCode() {
         return this.countryCode;
+    }
+
+    public String getUrl() {
+        return this.url;
     }
 
     public static HttpSessionState get(String initToken) {
