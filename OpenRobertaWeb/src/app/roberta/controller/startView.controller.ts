@@ -104,7 +104,11 @@ function initRobotList() {
         mainCallback(robot); // TODO call mainCallback(row.name, extensions)
         UTIL.cleanUri();
         if (optBookmark) {
-            var uri = window.location.toString();
+            var uri;
+            $(window).oneWrap('hashchange', function () {
+                window.history.replaceState({}, document.title, uri);
+            });
+            uri = window.location.toString();
             uri += '?loadSystem=' + robot;
             window.history.replaceState({}, document.title, uri);
             $('#show-message').oneWrap('hidden.bs.modal', function (e) {

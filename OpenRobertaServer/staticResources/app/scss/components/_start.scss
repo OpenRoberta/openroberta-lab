@@ -2,290 +2,322 @@
 ***** Typography ***** 
 *************************************/
 
-	/*************************************
-	***** Font Sizes ***** 
-	*************************************/
+/*************************************
+***** Font Sizes *****
+*************************************/
 
-	.font-size--xs {
-		font-size: rem(14px);
-		line-height: rem(20px);
-	}
+.font-size--xs {
+  font-size: rem(14px);
+  line-height: rem(20px);
+}
 
-	.font-size--s {
-		font-size: rem(16px);
-		line-height: rem(24px);
-	}
+.font-size--s {
+  font-size: rem(16px);
+  line-height: rem(24px);
+}
 
-	.font-size--md {
-		font-size: rem(20px);
-		line-height: rem(30px);
-	}
+.font-size--md {
+  font-size: rem(20px);
+  line-height: rem(30px);
+}
 
-	.font-size--lg {
-		font-size: rem(30px);
-		line-height: rem(40px);
-	}
+.font-size--lg {
+  font-size: rem(30px);
+  line-height: rem(40px);
+}
 
-	$sans-serif: 'Roboto', sans-serif;
-	$bold: 700;
+$sans-serif: 'Roboto', sans-serif;
+$bold: 700;
 
-	/*************************************
-	***** Headlines ***** 
-	*************************************/
+/*************************************
+***** Headlines *****
+*************************************/
 
-	h1, h2, h3, h4, h5 {
-		font-weight: $bold;
-	}
+h1, h2, h3, h4, h5 {
+  font-weight: $bold;
+}
 
-	h1 {
-		@extend .font-size--lg;
-		margin-bottom: rem(30px);
-	}
+h1 {
+  @extend .font-size--lg;
+  margin-bottom: rem(30px);
+}
 
-	h2 {
-		@extend .font-size--lg;
-		margin-bottom: rem(20px);
-	}
+h2 {
+  @extend .font-size--lg;
+  margin-bottom: rem(20px);
+}
 
-	h3 {
-		@extend .font-size--lg;
-		margin-bottom: rem(30px);
-	}
+h3 {
+  @extend .font-size--lg;
+  margin-bottom: rem(30px);
+}
 
-	h4 {
-		@extend .font-size--md;
-	}
+h4 {
+  @extend .font-size--md;
+}
 
-	h5 {
-		@extend .font-size--md;
-	}
+h5 {
+  @extend .font-size--md;
+}
 
-	.tint {
-		display: inline-block;
-		padding: rem(10px 20px);
-		margin: rem(0 -10px 0 -10px);
-		mix-blend-mode: multiply;
-		color: $white;
-		&--primary {
-			background: $primary;
-			transform: rotate(1deg);
-			position: relative;
-			top: rem(5px);
-		}
-		&--secondary {
-			background: $secondary;
-			transform: rotate(-1deg);
-		}
-		&--tertiary {
-			background: $tertiary;
-			transform: rotate(-2deg);
-		}
-		&--quaternary {
-			background: $quaternary;
-			transform: rotate(1deg);
-			position: relative;
-			top: rem(-8px);
-		}
+.tint {
+  display: inline-block;
+  padding: rem(10px 20px);
+  margin: rem(0 -10px 0 -10px);
+  mix-blend-mode: multiply;
+  color: $white;
 
-	}
+  &--primary {
+    background: $primary;
+    transform: rotate(1deg);
+    position: relative;
+    top: rem(5px);
+  }
 
-	/*************************************
-	***** Paragraph & Lists ***** 
-	*************************************/
+  &--secondary {
+    background: $secondary;
+    transform: rotate(-1deg);
+  }
 
-	p {
-		@extend .font-size--s;
-		margin-bottom: rem(15px);
-		&:last-child {
-			margin-bottom: 0;
-		}
-		&.teaser {
-			@extend .font-size--md;
-			&:last-child {
-				margin-bottom: rem(15px);
-			}
-			&+ .button {
-				margin-top: rem(20px);
-			}
-		}
-	}
+  &--tertiary {
+    background: $tertiary;
+    transform: rotate(-2deg);
+  }
 
-	/*************************************
-	***** Links ***** 
-	*************************************/
+  &--quaternary {
+    background: $quaternary;
+    transform: rotate(1deg);
+    position: relative;
+    top: rem(-8px);
+  }
 
-	a {
-		color: $primary;
-		text-decoration: underline;
-		@media (hover: hover) {
-			&:hover {
-				cursor: pointer;
-				text-decoration: none;
-			}
-		}
-	}
+}
 
-	/*************************************
-	***** Buttons ***** 
-	*************************************/
+/*************************************
+***** Paragraph & Lists *****
+*************************************/
 
-	.button {
-		display: inline-block;
-		border-radius: $border-radius--standard;
-		text-decoration: none;
-		font-weight: 700;
-		padding: rem(15px);
-		@extend .transition;
-		&--light {
-			color: $primary;
-			background: $white;
-		}
-		&.show {
-			background: rgba($primary,1);
-			color: $white;
-		}
-		@media (hover: hover) {
-			&:hover {
-				background: rgba($primary,1);
-				color: $white;
-			}
-		}	
-	}
+p {
+  @extend .font-size--s;
+  margin-bottom: rem(15px);
 
-	.button-big {
-		display: flex;
-		flex-direction: column;
-		height: 100%;
-		padding: rem(10px 80px 10px 15px);
-		@include media-breakpoint-up(md) {
-			padding: rem(15px 15px 50px 15px);
-		}
-		@include media-breakpoint-up(lg) {
-			padding: rem(15px 80px 15px 20px);
-		}
-		color: $black;
-		text-decoration: none;
-		border-radius: $border-radius--standard;
-		@extend .transition;
-		&--primary {
-			background: rgba($primary,.1);
-			border: rem(1px) solid rgba($primary,.5);
-			position: relative;
-			&::after {
-				@extend .button-big--arrow;
-				background-image: svg-icon-arrow($primary);
-			}
-			@media (hover: hover) {
-				&:hover {
-					background: rgba($primary,.2);
-					border: rem(1px) solid rgba($primary,1);
-				}
-			}	
-			&.icon {
-				background: rgba($primary,1);
-			}	
-		}
-		&--secondary {
-			background: rgba($secondary,.1);
-			border: rem(1px) solid rgba($secondary,.5);
-			position: relative;
-			&::after {
-				@extend .button-big--arrow;
-				background-image: svg-icon-arrow($secondary);
-			}
-			@media (hover: hover) {
-				&:hover {
-					background: rgba($secondary,.2);
-					border: rem(1px) solid rgba($secondary,1);
-				}
-			}
-			&.icon {
-				background: rgba($secondary,1);
-			}	
-		}
-		&--tertiary {
-			background: rgba($tertiary,.1);
-			border: rem(1px) solid rgba($tertiary,.5);
-			position: relative;
-			&::after {
-				@extend .button-big--arrow;
-				background-image: svg-icon-arrow($tertiary);
-			}
-			@media (hover: hover) {
-				&:hover {
-					background: rgba($tertiary,.2);
-					border: rem(1px) solid rgba($tertiary,1);
-				}
-			}
-			&.icon {
-				background: rgba($tertiary,1);
-			}	
-		}
-		&--quaternary {
-			background: rgba($quaternary,.1);
-			border: rem(1px) solid rgba($quaternary,.5);
-			position: relative;
-			&::after {
-				@extend .button-big--arrow;
-				background-image: svg-icon-arrow($quaternary);
-			}
-			@media (hover: hover) {
-				&:hover {
-					background: rgba($quaternary,.2);
-					border: rem(1px) solid rgba($quaternary,1);
-				}
-			}
-			&.icon {
-				background: rgba($quaternary,1);
-			}	
-		}
-		&.icon {
-			border: none;
-			color: $white;
-			padding: rem(15px 80px 10px 15px);
-			@include media-breakpoint-up(lg) {
-				padding: rem(40px 80px 40px 40px);
-			}
-			&::after {
-				@extend .button-big--arrow;
-				background-image: svg-icon-arrow($white);
-			}
-			@media (hover: hover) {
-				&:hover {
-					box-shadow: rem(0 20px 50px) rgba($black,.05);
-				}
-			}
-			svg {
-				fill: $white;
-				height: rem(25px);
-				width: auto;
-				margin-bottom: rem(20px);
-				align-self: flex-start;
-			}
-		}
-	}
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  &.teaser {
+    @extend .font-size--md;
+
+    &:last-child {
+      margin-bottom: rem(15px);
+    }
+
+    & + .button {
+      margin-top: rem(20px);
+    }
+  }
+}
+
+/*************************************
+***** Links *****
+*************************************/
+
+a {
+  color: $primary;
+  text-decoration: underline;
+  @media (hover: hover) {
+    &:hover {
+      cursor: pointer;
+      text-decoration: none;
+    }
+  }
+}
+
+/*************************************
+***** Buttons *****
+*************************************/
+
+.button {
+  display: inline-block;
+  border-radius: $border-radius--standard;
+  text-decoration: none;
+  font-weight: 700;
+  padding: rem(15px);
+  @extend .transition;
+
+  &--light {
+    color: $primary;
+    background: $white;
+  }
+
+  &.show {
+    background: rgba($primary, 1);
+    color: $white;
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      background: rgba($primary, 1);
+      color: $white;
+    }
+  }
+}
+
+.button-big {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: rem(10px 80px 10px 15px);
+  @include media-breakpoint-up(md) {
+    padding: rem(15px 15px 50px 15px);
+  }
+  @include media-breakpoint-up(lg) {
+    padding: rem(15px 80px 15px 20px);
+  }
+  color: $black;
+  text-decoration: none;
+  border-radius: $border-radius--standard;
+  @extend .transition;
+
+  &--primary {
+    background: rgba($primary, .1);
+    border: rem(1px) solid rgba($primary, .5);
+    position: relative;
+
+    &::after {
+      @extend .button-big--arrow;
+      background-image: svg-icon-arrow($primary);
+    }
+
+    @media (hover: hover) {
+      &:hover {
+        background: rgba($primary, .2);
+        border: rem(1px) solid rgba($primary, 1);
+      }
+    }
+
+    &.icon {
+      background: rgba($primary, 1);
+    }
+  }
+
+  &--secondary {
+    background: rgba($secondary, .1);
+    border: rem(1px) solid rgba($secondary, .5);
+    position: relative;
+
+    &::after {
+      @extend .button-big--arrow;
+      background-image: svg-icon-arrow($secondary);
+    }
+
+    @media (hover: hover) {
+      &:hover {
+        background: rgba($secondary, .2);
+        border: rem(1px) solid rgba($secondary, 1);
+      }
+    }
+
+    &.icon {
+      background: rgba($secondary, 1);
+    }
+  }
+
+  &--tertiary {
+    background: rgba($tertiary, .1);
+    border: rem(1px) solid rgba($tertiary, .5);
+    position: relative;
+
+    &::after {
+      @extend .button-big--arrow;
+      background-image: svg-icon-arrow($tertiary);
+    }
+
+    @media (hover: hover) {
+      &:hover {
+        background: rgba($tertiary, .2);
+        border: rem(1px) solid rgba($tertiary, 1);
+      }
+    }
+
+    &.icon {
+      background: rgba($tertiary, 1);
+    }
+  }
+
+  &--quaternary {
+    background: rgba($quaternary, .1);
+    border: rem(1px) solid rgba($quaternary, .5);
+    position: relative;
+
+    &::after {
+      @extend .button-big--arrow;
+      background-image: svg-icon-arrow($quaternary);
+    }
+
+    @media (hover: hover) {
+      &:hover {
+        background: rgba($quaternary, .2);
+        border: rem(1px) solid rgba($quaternary, 1);
+      }
+    }
+
+    &.icon {
+      background: rgba($quaternary, 1);
+    }
+  }
+
+  &.icon {
+    border: none;
+    color: $white;
+    padding: rem(15px 80px 10px 15px);
+    @include media-breakpoint-up(lg) {
+      padding: rem(40px 80px 40px 40px);
+    }
+
+    &::after {
+      @extend .button-big--arrow;
+      background-image: svg-icon-arrow($white);
+    }
+
+    @media (hover: hover) {
+      &:hover {
+        box-shadow: rem(0 20px 50px) rgba($black, .05);
+      }
+    }
+
+    svg {
+      fill: $white;
+      height: rem(25px);
+      width: auto;
+      margin-bottom: rem(20px);
+      align-self: flex-start;
+    }
+  }
+}
 
 /*************************************
 ***** Sections ***** 
 *************************************/
 
 section {
-	width: 100%;
+  width: 100%;
 }
 
 .section {
-	&--white {
-		background: $white;
-	}
-	&--light {
-		background: $gray-200;
-		// padding-top: rem(30px);
-		// padding-bottom: rem(30px);
-	}
+  &--white {
+    background: $white;
+  }
+
+  &--light {
+    background: $gray-200;
+    // padding-top: rem(30px);
+    // padding-bottom: rem(30px);
+  }
 }
 
 #start {
-	background: $white;
+  background: $white;
 }
 
 /*************************************
@@ -293,41 +325,41 @@ section {
 *************************************/
 
 #startup-message-statustext {
-	background: $primary;
-	// background: $secondary;
-	color: $white;
-	// color: $black;
-	// text-align: center;
-	position: absolute;
-	z-index: 999;
-	bottom: rem(50px);
-	right: rem(50px);
-	width: 100%;
-	max-width: rem(450px);
-    border-radius: $border-radius--standard;
-	// padding: rem(20px 40px 20px 20px);
-	box-shadow: rem(0 0 20px) rgba($black,.25);
-	// &::before,
-	// &::after {
-	// 	content: "";
-	// 	right: rem(20px);
-	// 	top: rem(15px);
-	// 	height: rem(15px);
-	// 	width: rem(2px);
-	// 	background-color: #333;
-	// 	background: $white;
-	// 	display: block;
-	// 	position: absolute;
-	// }
-	// &::before {
-	// 	transform: rotate(45deg);
-	// }
-	// &::after {
-	// 	transform: rotate(-45deg);
-	// }
-	h4, p {
-		padding: rem(20px);
-	}
+  background: $primary;
+  // background: $secondary;
+  color: $white;
+  // color: $black;
+  // text-align: center;
+  position: absolute;
+  z-index: 999;
+  bottom: rem(50px);
+  right: rem(50px);
+  width: 100%;
+  max-width: rem(450px);
+  border-radius: $border-radius--standard;
+  // padding: rem(20px 40px 20px 20px);
+  box-shadow: rem(0 0 20px) rgba($black, .25);
+  // &::before,
+  // &::after {
+  // 	content: "";
+  // 	right: rem(20px);
+  // 	top: rem(15px);
+  // 	height: rem(15px);
+  // 	width: rem(2px);
+  // 	background-color: #333;
+  // 	background: $white;
+  // 	display: block;
+  // 	position: absolute;
+  // }
+  // &::before {
+  // 	transform: rotate(45deg);
+  // }
+  // &::after {
+  // 	transform: rotate(-45deg);
+  // }
+  h4, p {
+    padding: rem(20px);
+  }
 }
 
 /*************************************
@@ -335,18 +367,19 @@ section {
 *************************************/
 
 .nepo {
-	display: inline-block;
-	&::before {
-		content: "";
-		display: inline-block;
-		width: rem(85px);
-		height: rem(20px);
-		background-image: url("img/nepo.svg");
-		background-position: left bottom;
-		background-repeat: no-repeat;
-		background-size: contain;
-		margin-right: rem(5px);
-	}
+  display: inline-block;
+
+  &::before {
+    content: "";
+    display: inline-block;
+    width: rem(85px);
+    height: rem(20px);
+    background-image: url("img/nepo.svg");
+    background-position: left bottom;
+    background-repeat: no-repeat;
+    background-size: contain;
+    margin-right: rem(5px);
+  }
 }
 
 /*************************************
@@ -354,27 +387,30 @@ section {
 *************************************/
 
 .teaser-news {
-    display: flex;
-    background: $gray-200;
-    padding: rem(15px);
-    @include media-breakpoint-up(lg) {
-        padding: rem(40px);
+  display: flex;
+  background: $gray-200;
+  padding: rem(15px);
+  @include media-breakpoint-up(lg) {
+    padding: rem(40px);
+  }
+  border-radius: $border-radius--standard;
+
+  &--header {
+    font-weight: $bold;
+    @extend .font-size--md;
+    margin-bottom: rem(10px);
+  }
+
+  &--body {
+    h3 {
+      color: $primary;
     }
-    border-radius: $border-radius--standard;
-    &--header {
-        font-weight: $bold;
-        @extend .font-size--md;
-        margin-bottom: rem(10px);
-    }
-    &--body {
-        h3 {
-            color: $primary;
-        }
-    }
-	&--image {
-		width: 100%;
-		height: auto;
-	}
+  }
+
+  &--image {
+    width: 100%;
+    height: auto;
+  }
 }
 
 /*************************************
@@ -382,27 +418,42 @@ section {
 *************************************/
 
 #start footer {
-    border-top: rem(1px) solid rgba($black,.2);
-    // padding-top: rem(40px);
-    padding-bottom: rem(96px); //40+96px from Header
+  border-top: rem(1px) solid rgba($black, .2);
+  // padding-top: rem(40px);
+  padding-bottom: rem(96px); //40+96px from Header
+  width: 100%;
+
+  img {
     width: 100%;
-	img {
-		width: 100%;
-	}
-    p,
-    .nav-link  {
-        font-size: rem(14px);
-        line-height: rem(20px);
-		margin-right: 0;
+  }
+
+  p,
+  .nav-link {
+    font-size: rem(14px);
+    line-height: rem(20px);
+    margin-right: 0;
+  }
+
+  .nav-item {
+    background: none;
+
+    &:hover {
+      background: none;
     }
-    .nav-item {
-        background: none;
-        &:hover {
-            background: none;
-        }
-    }
-    .nav-link {
-        padding: rem(5px 0);
-        color: $gray-600;
-    }
+  }
+
+  .nav-link {
+    padding: rem(5px 0);
+    color: $gray-600;
+  }
+}
+
+/*************************************
+***** Safari Flexbox Fix for 100% Height *****
+*************************************/
+
+@supports (background: -webkit-named-image(i)) {
+  .flexbox-fix {
+    display: flex;
+  }
 }

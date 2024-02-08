@@ -1137,8 +1137,8 @@ export function RGBAToHexA(rgba) {
 }
 
 export function cleanUri() {
-    var uri = window.location.toString();
-    var clean_uri = uri.substring(0, uri.indexOf('/'));
+    let location = new URL(document.location);
+    let clean_uri = location.protocol + '//' + location.host;
     window.history.replaceState({}, document.title, clean_uri);
 }
 
