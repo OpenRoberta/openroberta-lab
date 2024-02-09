@@ -89,11 +89,10 @@ function loadFromTutorial(tutId) {
         $('#tutorial-header').html(tutorial.name);
 
         // prepare the view
-        $('#tutorial-navigation, #tutorialEnd').toggle();
-        $('#head-navigation, #tab-navigation').toggle();
+        $('#tutorial-navigation, #tutorialEnd, #tutorialButton').show();
+        $('#head-navigation, #tab-navigation').hide();
 
         $('#tutorialHeader :first-child').addClass('active');
-        $('#tutorialButton').show();
         $('.blocklyToolboxDiv>.levelTabs').addClass('invisible');
 
         initStepEvents();
@@ -110,8 +109,9 @@ function initStepEvents() {
         nextStep();
         openTutorialView();
     });
-    $('#tutorialEnd').oneWrap('click', function () {
+    $('#tutorialEnd').oneWrap('click', function (e) {
         exitTutorial();
+        return false;
     });
 }
 
@@ -227,8 +227,8 @@ function createInstruction() {
                                 class: 'btn',
                                 click: function () {
                                     MSG.displayMessage(tutorial.end, 'POPUP', '');
-                                    $('.modal').oneWrap('hide.bs.modal', function (e) {
-                                        $('#tutorialEnd').clickWrap();
+                                    $('#show-message').oneWrap('hide.bs.modal', function (e) {
+                                        exitTutorial();
                                         return false;
                                     });
                                     return false;
@@ -502,8 +502,8 @@ function closeTutorialView() {
 }
 
 function exitTutorial() {
-    $('#tutorial-navigation, #tutorialEnd').toggle();
-    $('#head-navigation, #tab-navigation').toggle();
+    $('#tutorial-navigation, #tutorialEnd, #tutorialButton').hide();
+    $('#head-navigation, #tab-navigation').show();
     $('.blocklyToolboxDiv>.levelTabs').removeClass('invisible');
     GUISTATE_C.resetDynamicProgramToolbox();
     PROG_C.loadExternalToolbox(GUISTATE_C.getProgramToolbox());
