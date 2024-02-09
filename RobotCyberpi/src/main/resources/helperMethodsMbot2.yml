@@ -17,17 +17,10 @@ DIFFDRIVEFOR:
         mbot2.EM_stop()
 
     def getTimeToWait(rpmL, rpmR, distance):
-        absoluteDistance = abs(distance)
-        speedL = rpmL * _circumference / 60
-        speedR = rpmR * _circumference / 60
-
-        resultingSpeed = (speedL + speedR) / 2
-        angVel = (speedR - speedL) / (_trackWidth)
-        if angVel != 0 and resultingSpeed != 0:
-            radius = resultingSpeed / angVel
-            absoluteDistance = radius * math.sin(absoluteDistance/radius)
-        if resultingSpeed != 0:
-            return abs(absoluteDistance / resultingSpeed)
+        rpm = rpmL - (rpmL - rpmR) / 2 # motor rotations per minutes of the center of the robot
+        cmps = rpm * _circumference / 60 # cm per seconds of the center of the robot
+        if (cmps != 0):
+            return abs(distance / cmps)
         else:
             return 0
 
