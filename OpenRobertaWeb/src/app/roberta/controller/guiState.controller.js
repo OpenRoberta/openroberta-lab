@@ -1078,8 +1078,8 @@ function setLogin(result) {
     $('#head-navi-icon-user').removeClass('error');
     $('#head-navi-icon-user').addClass('ok');
     $('.menuLogin').addClass('pe-none');
-    $('#menuSaveProg').parent().addClass('disabled');
-    $('#menuSaveConfig').parent().addClass('disabled');
+    $('#menuSaveProg').parent().parent().addClass('disabled');
+    $('#menuSaveConfig').parent().parent().addClass('disabled');
 
     if (getRobot()) {
         setProgramSaved(true);
