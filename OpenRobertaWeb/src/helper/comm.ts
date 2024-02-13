@@ -6,7 +6,7 @@ import * as LOG from 'log';
  * prefix to be prepended to each URL used in ajax calls.
  */
 let urlPrefix: string = '/rest';
-let initToken = undefined;
+let initToken: string = undefined;
 let frontendSessionValid: boolean = true;
 
 /**
@@ -24,21 +24,35 @@ export const onNotificationsAvailableCallback = function (callback: Function): v
  */
 export let errorNum: number = 0;
 
+export function setErrorNum(value: number): void {
+    errorNum = value;
+}
+
+type ErrorFnType = (error: string | JSON) => void;
+
 /**
  * the error fn.
  */
-function errorFn(response): void {
+
+let errorFn: ErrorFnType = (response: string | JSON): void => {
     alert('The COMM (default) errorfn is called.'); // This is an annoying behavior ...
     LOG.info('The COMM (default) errorfn is called. Data follows');
     LOG.error(response);
     ping();
-}
-
+};
+/**
+ function errorFn(response: string | JSON): void {
+ alert('The COMM (default) errorfn is called.'); // This is an annoying behavior ...
+ LOG.info('The COMM (default) errorfn is called. Data follows');
+ LOG.error(response);
+ ping();
+ }
+ **/
 /**
  * remember the init token. It is added to each request to identify THIS
  * front end process. May be resetted to 'undefined'
  */
-export function setInitToken(newInitToken): void {
+export function setInitToken(newInitToken: string | undefined): void {
     if (initToken === undefined || newInitToken === undefined) {
         initToken = newInitToken;
     } else {
@@ -49,7 +63,7 @@ export function setInitToken(newInitToken): void {
 /**
  * set a error fn. A error function must accept one parameter: the response.
  */
-export function setErrorFn(newErrorFn: Function): void {
+export function setErrorFn(newErrorFn: ErrorFnType): void {
     errorFn = newErrorFn;
 }
 
@@ -64,7 +78,7 @@ export function get(url: string, data: string, successFn: Function, message: str
         dataType: 'json',
         data: data,
         success: WRAP.wrapREST(successFn, message),
-        error: WRAP.wrapErrorFn(errorFn),
+        error: WRAP.wrapErrorFn(errorFn, message), // TomsMarker should i always pass a message
     });
 }
 
@@ -73,7 +87,11 @@ export function get(url: string, data: string, successFn: Function, message: str
  */
 export function json(url: string, data: any, successFn: Function, message: string) {
     let log: string[] = LOG.reportToComm();
-    let load: { log: any[]; data: any; initToken: string } = {
+    let load: {
+        log: any[];
+        data: any;
+        initToken: string;
+    } = {
         log: log,
         data: data,
         initToken: initToken,
@@ -173,7 +191,11 @@ export function sendProgramHexToAgent(
         hex: Uint8Array;
         signature: string;
         filename: string;
-        extra: { auth: { password: string } };
+        extra: {
+            auth: {
+                password: string;
+            };
+        };
         wait_for_upload_port: boolean;
         use_1200bps_touch: boolean;
         network: boolean;
@@ -201,9 +223,8 @@ export function sendProgramHexToAgent(
     };
     let JSONrequest: string = JSON.stringify(request);
 
-    return $.ajax({
+    return $.ajax(urlPrefix + URL, {
         type: 'POST',
-        url: URL,
         data: JSONrequest,
         contentType: 'application/x-www-form-urlencoded; charset=utf-8',
         dataType: 'json',

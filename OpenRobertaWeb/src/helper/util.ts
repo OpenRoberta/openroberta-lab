@@ -9,7 +9,12 @@ import * as GUISTATE_C from 'guiState.controller';
 
 const ANIMATION_DURATION = 750;
 
-export function getLinesFromRectangle(myObj): { x1: any; x2: any; y1: any; y2: any }[] {
+export function getLinesFromRectangle(myObj: any): {
+    x1: number;
+    x2: number;
+    y1: number;
+    y2: number;
+}[] {
     return [
         {
             x1: myObj.x,
@@ -42,7 +47,7 @@ export function getLinesFromRectangle(myObj): { x1: any; x2: any; y1: any; y2: a
  * @return the (unique) start block from the program. Must exist.
  */
 function getTheStartBlock() {
-    let startBlock = null;
+    let startBlock: Blockly.Block = null;
     for (const block of Blockly.Workspace.getByContainer('blocklyDiv').getTopBlocks()) {
         if (!block.isDeletable()) {
             return block;
@@ -54,7 +59,7 @@ function getTheStartBlock() {
 /**
  * @return all block from the program.
  */
-function getAllBlocks() {
+function getAllBlocks(): Blockly.Block[] {
     return Blockly.Workspace.getByContainer('blocklyDiv').getAllBlocks();
 }
 
@@ -66,14 +71,14 @@ function getAllBlocks() {
  * @param {string}
  *            newName New configuration name.
  */
-function renameNeuron(oldName, newName) {
-    var blocks = getAllBlocks();
-    for (var x = 0; x < blocks.length; x++) {
-        var block = blocks[x];
+function renameNeuron(oldName: string, newName: string): void {
+    let blocks: Blockly.Block[] = getAllBlocks();
+    for (let x: number = 0; x < blocks.length; x++) {
+        let block: Blockly.Block = blocks[x];
         if (!block.dependNeuron) {
             continue;
         }
-        var dependNeuron;
+        let dependNeuron;
         if (typeof block.dependNeuron === 'function') {
             dependNeuron = block.dependNeuron();
         } else {

@@ -75,7 +75,7 @@ export function wrapTotal(fnToBeWrapped: Function, message: string) {
  *
  * @memberof WRAP
  */
-export function wrapUI(fnToBeWrapped: Function, message: string): Function {
+export function wrapUI(fnToBeWrapped: Function, message: string | undefined): Function {
     let wrap: Function = function (): undefined | Function {
         if (numberOfActiveActions > 0) {
             if (message !== undefined) {
@@ -116,7 +116,7 @@ export function wrapUI(fnToBeWrapped: Function, message: string): Function {
  */
 export function wrapREST(fnToBeWrapped: Function, message: string) {
     let rest: Function = function (): void {
-        COMM.errorNum = 0;
+        COMM.setErrorNum(0);
         numberOfActiveActions++;
         try {
             let fn: Function = wrapTotal(fnToBeWrapped, message);
@@ -140,7 +140,7 @@ export function wrapREST(fnToBeWrapped: Function, message: string) {
     return rest;
 }
 
-export function wrapErrorFn(errorFnToBeWrapped: Function) {
+export function wrapErrorFn(errorFnToBeWrapped: Function, message: string): Function {
     let wrap = function (): void {
         try {
             let fn: Function = wrapTotal(errorFnToBeWrapped, message);
@@ -186,7 +186,7 @@ $.fn.clickWrap = function (callback) {
         if (callback === undefined) {
             this.trigger('click');
         } else {
-            this.trigger('click',callback);
+            this.trigger('click', callback);
         }
         numberOfActiveActions++;
     } catch (e) {

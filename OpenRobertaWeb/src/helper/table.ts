@@ -6,7 +6,7 @@ import * as UTIL from 'util.roberta';
 export namespace CommonTable {
     export const options = {
         buttonsAlign: 'right',
-        formatLoadingMessage: function () {
+        formatLoadingMessage: function (): string {
             return '<div class="pace"></div>';
         },
         // @ts-ignore
@@ -54,7 +54,7 @@ export namespace CardView {
     }
 
     export function programTags(xml): string {
-        let myTags = getAttributeFromXml(xml, 'tags');
+        let myTags: string = getAttributeFromXml(xml, 'tags');
         return tags(myTags);
     }
     export function tags(tags): string {
@@ -70,11 +70,11 @@ export namespace CardView {
         return text ? text : '&nbsp;';
     }
 
-    export function titleTypcn(value: any, typicon: string) {
+    export function titleTypcn(value: any, typicon: string): string {
         return '<div><div class="cardViewLabel tutorialIcon typcn typcn-' + typicon + '"></div><span>' + value + '</span></div>';
     }
 
-    export function titleLabel(text: string, label: string, type: string) {
+    export function titleLabel(text: string, label: string, type: string): string {
         let myLabel: string = Blockly.Msg[label] || label;
         return (
             '<div class="' +

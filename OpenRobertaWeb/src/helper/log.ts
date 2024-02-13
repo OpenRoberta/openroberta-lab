@@ -14,7 +14,7 @@ let markerERROR: string = '[[ERR ]] ';
  * server or do both or do nothing, depending on switches. A marker is
  * prepended to the message
  */
-export function text(obj: string | JSON, marker: string): void {
+export function text(obj: string | JSON, marker?: string): void {
     if (marker === undefined) {
         marker = markerINFO;
     }
