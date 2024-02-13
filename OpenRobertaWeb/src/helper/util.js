@@ -178,6 +178,10 @@ function isEmpty(obj) {
     return Object.keys(obj).length === 0 && obj.constructor === Object;
 }
 
+export function isMobile() {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+}
+
 function getPropertyFromObject(obj, prop, arrayIndex) {
     //property not found
     if (typeof obj === 'undefined') return false;

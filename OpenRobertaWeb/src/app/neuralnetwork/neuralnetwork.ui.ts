@@ -416,7 +416,10 @@ export async function runNNEditor(hasSim: boolean) {
 
     // Listen for css-responsive changes and redraw the svg network.
     window.addEventListener('resize', () => {
-        hideAllCards();
+        // ignore resize on mobile devices: opening the virtual keyboard effects a resize event. The hide-class closes this. That is unwanted.
+        if (!UTIL.isMobile()) {
+            hideAllCards();
+        }
         drawNetworkUIForTabDefine();
     });
     resetSelections();
@@ -681,7 +684,10 @@ export async function runNNEditorForTabLearn(hasSim: boolean) {
 
     // Listen for css-responsive changes and redraw the svg network.
     window.addEventListener('resize', () => {
-        hideAllCards();
+        // ignore resize on mobile devices: opening the virtual keyboard effects a resize event. The hide-class closes this. That is unwanted.
+        if (!UTIL.isMobile()) {
+            hideAllCards();
+        }
         drawNetworkUIForTabLearn();
         trainingLossLineChart.drawLineChart(true);
     });
