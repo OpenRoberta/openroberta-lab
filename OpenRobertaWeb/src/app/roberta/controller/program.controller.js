@@ -432,11 +432,12 @@ function linkProgram() {
     var xml = Blockly.Xml.domToText(dom);
     //TODO this should be removed after the next release
     xml = '<export xmlns="http://de.fhg.iais.roberta.blockly"><program>' + xml + '</program><config>' + GUISTATE_C.getConfigurationXML() + '</config></export>';
-    var link = document.location + '?loadSystem=';
+    var location = new URL(document.location);
+    var clean_uri = location.protocol + '//' + location.host;
+    var link = clean_uri + '?loadSystem=';
     link += GUISTATE_C.getRobot();
     link += '&loadProgram=' + xml;
     link = encodeURI(link);
-    console.log(link);
     var $temp = $('<input>');
     $('body').append($temp);
     $temp.val(link).select();
