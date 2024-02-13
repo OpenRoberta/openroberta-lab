@@ -32,7 +32,6 @@ import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
-import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor;
@@ -624,15 +623,6 @@ public final class SpikePythonVisitor extends AbstractPythonVisitor implements I
     }
 
     @Override
-    public Void visitWaitStmt(WaitStmt waitStmt) {
-        this.src.add("while True:");
-        incrIndentation();
-        visitStmtList(waitStmt.statements);
-        decrIndentation();
-        return null;
-    }
-
-    @Override
     public Void visitWaitTimeStmt(WaitTimeStmt waitTimeStmt) {
         this.src.add("wait_for_seconds(");
         waitTimeStmt.time.accept(this);
@@ -740,6 +730,11 @@ public final class SpikePythonVisitor extends AbstractPythonVisitor implements I
         nlIndent();
 
         this.src.add("main()");
+    }
+
+    @Override
+    protected void addWaitStatementTimeout() {
+
     }
 
     private String getPortFromConfig(String name) {

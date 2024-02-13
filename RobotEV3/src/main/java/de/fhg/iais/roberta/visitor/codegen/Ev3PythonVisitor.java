@@ -47,7 +47,6 @@ import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
-import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassCalibrate;
@@ -104,14 +103,9 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     }
 
     @Override
-    public Void visitWaitStmt(WaitStmt waitStmt) {
-        this.src.add("while True:");
-        incrIndentation();
-        visitStmtList(waitStmt.statements);
+    protected void addWaitStatementTimeout() {
         nlIndent();
         this.src.add("hal.waitFor(15)");
-        decrIndentation();
-        return null;
     }
 
     @Override

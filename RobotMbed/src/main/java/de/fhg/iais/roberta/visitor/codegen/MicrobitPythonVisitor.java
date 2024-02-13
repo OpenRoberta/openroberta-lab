@@ -33,7 +33,6 @@ import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
-import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.CompassSensor;
@@ -87,16 +86,6 @@ public class MicrobitPythonVisitor extends AbstractPythonVisitor implements IMic
                 super.visitEmptyExpr(emptyExpr);
                 break;
         }
-        return null;
-    }
-
-    @Override
-    public Void visitWaitStmt(WaitStmt waitStmt) {
-        this.src.add("while True:");
-        incrIndentation();
-        visitStmtList(waitStmt.statements);
-        decrIndentation();
-        //        nlIndent();
         return null;
     }
 
@@ -301,6 +290,10 @@ public class MicrobitPythonVisitor extends AbstractPythonVisitor implements IMic
         nlIndent();
 
         super.generateProgramSuffix(withWrapping);
+    }
+
+    @Override
+    protected void addWaitStatementTimeout() {
     }
 
     @Override

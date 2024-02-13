@@ -46,7 +46,6 @@ import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
-import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderReset;
@@ -236,6 +235,11 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
         nlIndent();
 
         this.src.add("main()");
+    }
+
+    @Override
+    protected void addWaitStatementTimeout() {
+
     }
 
     @Override
@@ -765,15 +769,6 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
 
     @Override
     public Void visitPlayFileAction(PlayFileAction playFileAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitWaitStmt(WaitStmt waitStmt) {
-        this.src.add("while True:");
-        incrIndentation();
-        visitStmtList(waitStmt.statements);
-        decrIndentation();
         return null;
     }
 

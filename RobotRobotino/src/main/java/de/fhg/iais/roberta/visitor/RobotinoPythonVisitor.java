@@ -25,7 +25,6 @@ import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
-import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.DetectMarkSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
@@ -334,14 +333,9 @@ public final class RobotinoPythonVisitor extends AbstractPythonVisitor implement
     }
 
     @Override
-    public Void visitWaitStmt(WaitStmt waitStmt) {
-        this.src.add("while True:");
-        incrIndentation();
-        visitStmtList(waitStmt.statements);
+    protected void addWaitStatementTimeout() {
         nlIndent();
         this.src.add("time.sleep(0.2)");
-        decrIndentation();
-        return null;
     }
 
     @Override
