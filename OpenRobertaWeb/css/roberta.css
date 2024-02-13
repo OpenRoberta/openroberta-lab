@@ -3579,7 +3579,6 @@ input[type="number"] {
     display: -webkit-flex;
     display: flex;
     -webkit-justify-content: space-around;
-    justify-content: space-around;
 }
 
 #nn-learn-top-controls {
@@ -3604,7 +3603,7 @@ input[type="number"] {
 }
 
 #nn-show-math-all.nn-control {
-    flex: 0 0 25%;
+    flex: 0 0 15%;
     margin-right: 10px;
 }
 
@@ -3905,6 +3904,7 @@ button.nn-btn:hover {
     border: 2px solid #23b6ac;
     height: 100%;
     top: -4px;
+    width: 6em;
 }
 
 #nn-learn-features .core .nn-weight-click {
