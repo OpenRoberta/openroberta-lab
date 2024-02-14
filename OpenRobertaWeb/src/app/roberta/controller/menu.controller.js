@@ -2,7 +2,6 @@ import * as MSG from 'message';
 import * as COMM from 'comm';
 import * as WRAP from 'wrap';
 import * as ROBOT_C from 'robot.controller';
-import * as SOCKET_C from 'socket.controller';
 import * as USER_C from 'user.controller';
 import * as NOTIFICATION_C from 'notification.controller';
 import * as GUISTATE_C from 'guiState.controller';
@@ -17,6 +16,7 @@ import * as Blockly from 'blockly';
 import 'slick';
 import * as TUTORIAL_C from 'progTutorial.controller';
 import * as UTIL from 'util.roberta';
+import * as CONNECTION_C from 'connection.controller';
 
 var n = 0;
 
@@ -229,6 +229,9 @@ export function init(callback) {
 }
 
 function backToStartView() {
+    if (CONNECTION_C.getConnectionInstance() != null) {
+        CONNECTION_C.getConnectionInstance().terminate();
+    }
     if ($('.fromRight.rightActive').length > 0) {
         $('#blocklyDiv').closeRightView(function () {
             UTIL.closeSimRobotWindow();
@@ -380,7 +383,7 @@ function initMenuEvents() {
                     $('.levelTabs a[href="#expert"]').tabWrapShow();
                     break;
                 case 'menuDefaultFirmware':
-                    RUN_C.reset2DefaultFirmware();
+                    CONNECTION_C.getConnectionInstance().reset2DefaultFirmware();
                     break;
                 default:
                     break;
@@ -432,31 +435,13 @@ function initMenuEvents() {
             } else {
                 var domId = event.currentTarget.id;
                 if (domId === 'menuConnect') {
-                    if (
-                        GUISTATE_C.getConnection() == 'arduinoAgent' ||
-                        (GUISTATE_C.getConnection() == 'arduinoAgentOrToken' && GUISTATE_C.getIsAgent() == true)
-                    ) {
-                        var ports = SOCKET_C.getPortList();
-                        var robots = SOCKET_C.getRobotList();
-                        $('#singleModalListInput').empty();
-                        let i = 0;
-                        ports.forEach(function (port) {
-                            $('#singleModalListInput').append('<option value="' + port + '" selected>' + robots[i] + ' ' + port + '</option>');
-                            i++;
-                        });
-                        ROBOT_C.showListModal();
-                    } else if (GUISTATE_C.getConnection() == 'webview') {
-                        ROBOT_C.showScanModal();
-                    } else {
-                        $('#buttonCancelFirmwareUpdate').css('display', 'inline');
-                        $('#buttonCancelFirmwareUpdateAndRun').css('display', 'none');
-                        ROBOT_C.showSetTokenModal();
-                    }
+                    CONNECTION_C.getConnectionInstance().onClickMenuConnect();
                 } else if (domId === 'menuRobotInfo') {
-                    ROBOT_C.showRobotInfo();
+                    CONNECTION_C.getConnectionInstance().onClickShowRobotInfo();
                 } else if (domId === 'menuWlan') {
-                    ROBOT_C.showWlanForm();
+                    CONNECTION_C.getConnectionInstance().onClickShowWlanForm();
                 } else if (domId === 'menuRobotSwitch') {
+                    //some connections start sub processes those have to be closed when returning to start view, e.g. SpikeBle & Thymio
                     backToStartView();
                 }
             }

@@ -117,5 +117,45 @@ public final class PredefinedImage extends Expr {
         public String getImageString() {
             return this.imageString;
         }
+
+        public String getMatrixString() {
+            char[] img = getImageString().toCharArray();
+            StringBuilder matrixString = new StringBuilder("Matrix([");
+
+            int row = 0;
+            int col = 0;
+            
+            for ( int i = 0; i < img.length; i++ ) {
+                if ( col == 0 )
+                    matrixString.append("[");
+                switch ( img[i] ) {
+                    case ':':
+                        row++;
+                        col = 0;
+                        continue;
+                    case '9':
+                        matrixString.append("100");
+                        break;
+                    case '0':
+                        matrixString.append("0");
+                        break;
+                    default:
+                        continue;
+                }
+
+
+                if ( col != 4 ) {
+                    matrixString.append(", ");
+                } else {
+                    matrixString.append("]");
+                    if ( row != 4 )
+                        matrixString.append(", ");
+                }
+                col++;
+            }
+
+            matrixString.append("])");
+            return matrixString.toString();
+        }
     }
 }

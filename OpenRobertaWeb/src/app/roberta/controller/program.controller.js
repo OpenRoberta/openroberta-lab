@@ -57,6 +57,7 @@ function initView() {
         group: GUISTATE_C.getRobotGroup(),
         robot: GUISTATE_C.getRobot(),
     });
+    //TODO blocklyWorkspace
     GUISTATE_C.setBlocklyWorkspace(blocklyWorkspace);
     blocklyWorkspace.robControls.disable('saveProgram');
     blocklyWorkspace.robControls.refreshTooltips(GUISTATE_C.getRobotRealName());

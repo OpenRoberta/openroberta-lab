@@ -13,8 +13,8 @@ export const robot = {};
  */
 function init() {
     var ready = new $.Deferred();
-
-    server.ping = true;
+    //TODO changed default ping behaviour because we dont need to ping on init
+    server.ping = false;
     server.pingTime = 3000;
     server.robotsByName = {};
 
@@ -35,7 +35,6 @@ function init() {
     gui.configuration = {};
     gui.configuration.toolbox = '';
     gui.configuration.conf = '';
-    gui.connection = '';
     gui.vendor = '';
     gui.sim = false;
     gui.multipleSim = false;
@@ -45,15 +44,6 @@ function init() {
     gui.webotsSim = false;
     gui.webotsUrl = '';
     gui.fileExtension = '';
-    gui.connectionType = {
-        TOKEN: 'token',
-        AUTO: 'autoConnection',
-        AGENTORTOKEN: 'arduinoAgentOrToken',
-        LOCAL: 'local',
-        WEBVIEW: 'webview',
-        JSPLAY: 'jsPlay', //Play file in the browser with JavaScript
-        TDM: 'tdm', // Thymio Device Manager, only for Thymio
-    };
     gui.runEnabled = false;
 
     user.id = -1;
@@ -89,8 +79,6 @@ function init() {
     robot.nepoExitValue = 0;
     robot.time = -1;
     robot.robotPort = '';
-    robot.socket = null;
-    robot.hasWlan = false;
 
     var getInitFromServer = function () {
         COMM.setInitToken(undefined);

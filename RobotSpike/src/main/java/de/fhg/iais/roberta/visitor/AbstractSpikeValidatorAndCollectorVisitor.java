@@ -50,8 +50,12 @@ import de.fhg.iais.roberta.util.syntax.WithUserDefinedPort;
 import de.fhg.iais.roberta.visitor.validate.CommonNepoValidatorAndCollectorVisitor;
 
 
-public class SpikeValidatorAndCollectorVisitor extends CommonNepoValidatorAndCollectorVisitor implements ISpikeVisitor<Void> {
-
+/**
+ * Abstract ValidatorCollectorVisitor, keeps shared methods for Lego and Pybricks
+ * when extending from this class, make sure to execute super.[extended-method] since all basic
+ * configuration checks are located in this class
+ */
+public abstract class AbstractSpikeValidatorAndCollectorVisitor extends CommonNepoValidatorAndCollectorVisitor implements ISpikeVisitor<Void> {
 
     private static final Map<String, String> SENSOR_COMPONENT_TYPE_MAP = Collections.unmodifiableMap(new HashMap<String, String>() {{
         put("ULTRASONIC_SENSING", SC.ULTRASONIC);
@@ -59,7 +63,7 @@ public class SpikeValidatorAndCollectorVisitor extends CommonNepoValidatorAndCol
         put("KEYS_SENSING", SC.KEY);
     }});
 
-    public SpikeValidatorAndCollectorVisitor(ConfigurationAst robotConfiguration, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
+    protected AbstractSpikeValidatorAndCollectorVisitor(ConfigurationAst robotConfiguration, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
         super(robotConfiguration, beanBuilders);
     }
 
@@ -71,12 +75,13 @@ public class SpikeValidatorAndCollectorVisitor extends CommonNepoValidatorAndCol
     }
 
     @Override
-    public Void visitDisplayClearAction(DisplayClearAction displayClearAction) {
+    final public Void visitDisplayClearAction(DisplayClearAction displayClearAction) {
+        checkActorPort(displayClearAction);
         return null;
     }
 
     @Override
-    public Void visitDisplayImageAction(DisplayImageAction displayImageAction) {
+    final public Void visitDisplayImageAction(DisplayImageAction displayImageAction) {
         requiredComponentVisited(displayImageAction, displayImageAction.valuesToDisplay);
         checkActorPort(displayImageAction);
         usedHardwareBuilder.addUsedActor(new UsedActor("", "DISPLAY"));
@@ -84,7 +89,7 @@ public class SpikeValidatorAndCollectorVisitor extends CommonNepoValidatorAndCol
     }
 
     @Override
-    public Void visitDisplayTextAction(DisplayTextAction displayTextAction) {
+    final public Void visitDisplayTextAction(DisplayTextAction displayTextAction) {
         requiredComponentVisited(displayTextAction, displayTextAction.textToDisplay);
         checkActorPort(displayTextAction);
         usedHardwareBuilder.addUsedActor(new UsedActor("", "DISPLAY"));
@@ -92,17 +97,7 @@ public class SpikeValidatorAndCollectorVisitor extends CommonNepoValidatorAndCol
     }
 
     @Override
-    public Void visitGestureSensor(GestureSensor gestureSensor) {
-        return null;
-    }
-
-    @Override
-    public Void visitGyroSensor(GyroSensor gyroSensor) {
-        return null;
-    }
-
-    @Override
-    public Void visitImage(Image image) {
+    final public Void visitImage(Image image) {
         return null;
     }
 
@@ -113,14 +108,13 @@ public class SpikeValidatorAndCollectorVisitor extends CommonNepoValidatorAndCol
     }
 
     @Override
-    public Void visitRgbLedOffHiddenAction(RgbLedOffHiddenAction rgbLedOffHiddenAction) {
+    final public Void visitRgbLedOffHiddenAction(RgbLedOffHiddenAction rgbLedOffHiddenAction) {
         return null;
     }
 
     @Override
     public Void visitRgbLedOnHiddenAction(RgbLedOnHiddenAction rgbLedOnHiddenAction) {
         requiredComponentVisited(rgbLedOnHiddenAction, rgbLedOnHiddenAction.colour);
-        usedMethodBuilder.addUsedMethod(SpikeMethods.SETSTATUSLIGHT);
         return null;
     }
 
@@ -128,48 +122,55 @@ public class SpikeValidatorAndCollectorVisitor extends CommonNepoValidatorAndCol
     public Void visitMotorDiffCurveAction(MotorDiffCurveAction motorDiffCurveAction) {
         requiredComponentVisited(motorDiffCurveAction, motorDiffCurveAction.powerLeft, motorDiffCurveAction.powerRight);
         checkActorPort(motorDiffCurveAction);
-        return checkDiffDrive(motorDiffCurveAction);
+        checkDiffDrive(motorDiffCurveAction);
+        return null;
     }
 
     @Override
     public Void visitMotorDiffCurveForAction(MotorDiffCurveForAction motorDiffCurveForAction) {
         requiredComponentVisited(motorDiffCurveForAction, motorDiffCurveForAction.powerLeft, motorDiffCurveForAction.powerRight, motorDiffCurveForAction.distance);
         checkActorPort(motorDiffCurveForAction);
-        return checkDiffDrive(motorDiffCurveForAction);
+        checkDiffDrive(motorDiffCurveForAction);
+        return null;
     }
 
     @Override
     public Void visitMotorDiffOnAction(MotorDiffOnAction motorDiffOnAction) {
         requiredComponentVisited(motorDiffOnAction, motorDiffOnAction.power);
         checkActorPort(motorDiffOnAction);
-        return checkDiffDrive(motorDiffOnAction);
+        checkDiffDrive(motorDiffOnAction);
+        return null;
     }
 
     @Override
     public Void visitMotorDiffOnForAction(MotorDiffOnForAction motorDiffOnForAction) {
         requiredComponentVisited(motorDiffOnForAction, motorDiffOnForAction.distance, motorDiffOnForAction.power);
         checkActorPort(motorDiffOnForAction);
-        return checkDiffDrive(motorDiffOnForAction);
+        checkDiffDrive(motorDiffOnForAction);
+        return null;
     }
 
     @Override
-    public Void visitMotorDiffStopAction(MotorDiffStopAction motorDiffStopAction) {
+    final public Void visitMotorDiffStopAction(MotorDiffStopAction motorDiffStopAction) {
         checkActorPort(motorDiffStopAction);
-        return checkDiffDrive(motorDiffStopAction);
+        checkDiffDrive(motorDiffStopAction);
+        return null;
     }
 
     @Override
     public Void visitMotorDiffTurnAction(MotorDiffTurnAction motorDiffTurnAction) {
         requiredComponentVisited(motorDiffTurnAction, motorDiffTurnAction.power);
         checkActorPort(motorDiffTurnAction);
-        return checkDiffDrive(motorDiffTurnAction);
+        checkDiffDrive(motorDiffTurnAction);
+        return null;
     }
 
     @Override
-    public Void visitMotorDiffTurnForAction(MotorDiffTurnForAction motorDiffTurnForAction) {
+    final public Void visitMotorDiffTurnForAction(MotorDiffTurnForAction motorDiffTurnForAction) {
         requiredComponentVisited(motorDiffTurnForAction, motorDiffTurnForAction.degrees, motorDiffTurnForAction.power);
         checkActorPort(motorDiffTurnForAction);
-        return checkDiffDrive(motorDiffTurnForAction);
+        checkDiffDrive(motorDiffTurnForAction);
+        return null;
     }
 
     @Override
@@ -202,7 +203,7 @@ public class SpikeValidatorAndCollectorVisitor extends CommonNepoValidatorAndCol
     }
 
     @Override
-    public Void visitPlayNoteAction(PlayNoteAction playNoteAction) {
+    final public Void visitPlayNoteAction(PlayNoteAction playNoteAction) {
         checkActorPort(playNoteAction);
         return null;
     }
@@ -211,12 +212,11 @@ public class SpikeValidatorAndCollectorVisitor extends CommonNepoValidatorAndCol
     public Void visitPlayToneAction(PlayToneAction playToneAction) {
         requiredComponentVisited(playToneAction, playToneAction.frequency, playToneAction.duration);
         checkActorPort(playToneAction);
-        usedMethodBuilder.addUsedMethod(SpikeMethods.GETMIDI);
         return null;
     }
 
     @Override
-    public Void visitPredefinedImage(PredefinedImage predefinedImage) {
+    final public Void visitPredefinedImage(PredefinedImage predefinedImage) {
         return null;
     }
 
@@ -230,6 +230,7 @@ public class SpikeValidatorAndCollectorVisitor extends CommonNepoValidatorAndCol
         return null;
     }
 
+
     @Override
     public Void visitTouchSensor(TouchSensor touchSensor) {
         checkSensorPort(touchSensor);
@@ -238,21 +239,30 @@ public class SpikeValidatorAndCollectorVisitor extends CommonNepoValidatorAndCol
     }
 
     @Override
+    public Void visitGyroSensor(GyroSensor gyroSensor) {
+        return null;
+    }
+
+    @Override
+    public Void visitGestureSensor(GestureSensor gestureSensor) {
+        return null;
+    }
+
+    @Override
     public Void visitUltrasonicSensor(UltrasonicSensor ultrasonicSensor) {
         checkSensorPort(ultrasonicSensor);
-        usedMethodBuilder.addUsedMethod(SpikeMethods.GETSAMPLEULTRASONIC);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(ultrasonicSensor.getUserDefinedPort(), SC.ULTRASONIC, ultrasonicSensor.getMode()));
         return null;
     }
 
     @Override
-    public Void visitMathRandomFloatFunct(MathRandomFloatFunct mathRandomFloatFunct) {
+    final public Void visitMathRandomFloatFunct(MathRandomFloatFunct mathRandomFloatFunct) {
         usedHardwareBuilder.addUsedActor(new UsedActor(null, C.RANDOM_DOUBLE));
         return null;
     }
 
     @Override
-    public Void visitMathRandomIntFunct(MathRandomIntFunct mathRandomIntFunct) {
+    final public Void visitMathRandomIntFunct(MathRandomIntFunct mathRandomIntFunct) {
         super.visitMathRandomIntFunct(mathRandomIntFunct);
         usedHardwareBuilder.addUsedActor(new UsedActor(null, C.RANDOM));
         return null;
@@ -291,7 +301,7 @@ public class SpikeValidatorAndCollectorVisitor extends CommonNepoValidatorAndCol
         throw new DbcException("port " + portName + " is missing");
     }
 
-    private Void checkDiffDrive(Phrase phrase) {
+    protected void checkDiffDrive(Phrase phrase) {
         ConfigurationComponent diffDrive = this.robotConfiguration.optConfigurationComponentByType("DIFFERENTIALDRIVE");
         if ( diffDrive == null ) {
             addErrorToPhrase(phrase, "CONFIGURATION_ERROR_ACTOR_MISSING");
@@ -306,10 +316,9 @@ public class SpikeValidatorAndCollectorVisitor extends CommonNepoValidatorAndCol
                 usedHardwareBuilder.addUsedActor(new UsedActor("DIFFERENTIALDRIVE", SC.DIFFERENTIALDRIVE));
             }
         }
-        return null;
     }
 
-    private boolean checkActorPort(WithUserDefinedPort action) {
+    protected boolean checkActorPort(WithUserDefinedPort action) {
         Assert.isTrue(action instanceof Phrase, "checking Port of a non Phrase");
         ConfigurationComponent usedConfigurationBlock = this.robotConfiguration.optConfigurationComponent(action.getUserDefinedPort());
         if ( usedConfigurationBlock == null ) {
@@ -319,4 +328,6 @@ public class SpikeValidatorAndCollectorVisitor extends CommonNepoValidatorAndCol
         }
         return true;
     }
+
+
 }

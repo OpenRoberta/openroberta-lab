@@ -65,11 +65,14 @@ require.config({
         'user.model': 'js/app/roberta/models/user.model',
         'rest.robot': 'js/app/roberta/rest/robot',
         'startView.model': 'js/app/roberta/models/startView.model',
-        'socket.controller': 'js/app/roberta/controller/socket.controller',
-        'webview.controller': 'js/app/roberta/controller/webview.controller',
         'sourceCodeEditor.controller': 'js/app/roberta/controller/sourceCodeEditor.controller',
-        'thymioSocket.controller': 'js/app/roberta/controller/thymioSocket.controller',
-        'webUsb.controller': 'js/app/roberta/controller/webUsb.controller',
+        //start connections
+        'connection.interface': 'js/app/roberta/controller/connections/connection.interface',
+        'abstract.connections': 'js/app/roberta/controller/connections/abstract.connections',
+        connections: 'js/app/roberta/controller/connections/connections',
+        'connection.controller': 'js/app/roberta/controller/connection.controller',
+        //end connections
+        'webview.controller': 'js/app/roberta/controller/webview.controller',
         'simulation.constants': 'js/app/simulation/simulationLogic/constants',
         'simulation.math': 'js/app/simulation/simulationLogic/math',
         'robot.calliope': 'js/app/simulation/simulationLogic/robot.calliope',
@@ -223,19 +226,22 @@ require([
     'progRun.controller',
     'configuration.controller',
     'language.controller',
-    'socket.controller',
     'progTutorial.controller',
     'tutorialList.controller',
     'userGroup.controller',
     'volume-meter',
     'user.model',
-    'webview.controller',
     'sourceCodeEditor.controller',
     'codeflask',
     'confVisualization',
     'robotBlock',
     'startView.controller',
-    'webUsb.controller',
+    //start connections
+    'connection.interface',
+    'abstract.connections',
+    'connections',
+    'connection.controller',
+    //end connections
 ], function (require) {
     //window.Popper = require('popper.js').default;
     window.$ = window.jQuery = require('jquery');
@@ -268,7 +274,6 @@ require([
     userController = require('user.controller');
     nnController = require('nn.controller');
     userModel = require('user.model');
-    socketController = require('socket.controller');
     tutorialController = require('progTutorial.controller');
     userGroupController = require('userGroup.controller');
     webviewController = require('webview.controller');
@@ -277,7 +282,7 @@ require([
     confVisualization = require('confVisualization');
     robotBlock = require('robotBlock');
     startViewController = require('startView.controller');
-    webUsbController = require('webUsb.controller');
+    connectionController = require('connection.controller');
 
     $(document).ready(WRAP.wrapTotal(init, 'page init'));
 });
@@ -345,8 +350,8 @@ function initProgramming(robot, opt_callback, opt_params) {
             confListController.init();
             confDeleteController.init();
             progShareController.init();
-            webUsbController.init();
             guiStateController.setInitialState();
+            connectionController.initConnection(robot);
             $('#tabProgram').oneWrap('shown.bs.tab', function () {
                 callback && typeof callback === 'function' && callback(...params);
             });

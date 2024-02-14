@@ -119,9 +119,9 @@ robots:
     dir: wedo
     suffix: ".json"
     eval: false
-  spike:
-    template: spike
-    dir: spike
+  spikeLego:
+    template: spikeLego
+    dir: spikeLego
     suffix: ".py"
 
 progs:

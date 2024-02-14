@@ -140,18 +140,26 @@
       "rest.robot": [
         "app/roberta/rest/robot"
       ],
-      "socket.controller": [
-        "app/roberta/controller/socket.controller"
-      ],
       "webview.controller": [
         "app/roberta/controller/webview.controller"
       ],
       "sourceCodeEditor.controller": [
         "app/roberta/controller/sourceCodeEditor.controller"
       ],
-      "webUsb.controller": [
-        "app/roberta/controller/webUsb.controller"
+      //start connections
+      "connection.interface": [
+        "app/roberta/controller/connections/connection.interface"
       ],
+      "abstract.connections": [
+        "app/roberta/controller/connections/abstract.connections"
+      ],
+      "connections": [
+        "app/roberta/controller/connections/connections"
+      ],
+      "connection.controller": [
+        "app/roberta/controller/connection.controller"
+      ],
+      //end connections
       "startView.controller": [
         "app/roberta/controller/startView.controller"
       ],
