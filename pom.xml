@@ -13,7 +13,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>de.fhg.iais.openroberta</groupId>
     <artifactId>OpenRobertaParent</artifactId>
-    <version>5.2.10-SNAPSHOT</version>
+    <version>5.2.10</version>
     <packaging>pom</packaging>
     <name>RobertaParent</name>
     <description>the parent project of the OpenRoberta application</description>
