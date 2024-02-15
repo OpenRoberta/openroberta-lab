@@ -118,17 +118,17 @@ function displayMessage(messageId: string | undefined, output: string, replaceWi
  */
 function displayInformation(
     result: {
-        cause: string;
-        cmd: string;
-        initToken: string;
-        message: string;
-        parameters: {};
         rc: string;
+        cause?: string;
+        cmd?: string;
+        initToken?: string;
+        message?: string;
+        parameters?: {};
     },
     successMessage,
-    errorMessage,
     messageParam,
-    opt_robot
+    errorMessage?,
+    opt_robot?
 ): void {
     if (result.rc === 'ok') {
         $('.modal').modal('hide'); // close all opened popups

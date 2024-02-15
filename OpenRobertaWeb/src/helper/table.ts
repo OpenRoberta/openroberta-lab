@@ -4,12 +4,11 @@ import * as Blockly from 'blockly';
 import * as UTIL from 'util.roberta';
 
 export namespace CommonTable {
-    export const options = {
+    export const options: object = {
         buttonsAlign: 'right',
         formatLoadingMessage: function (): string {
             return '<div class="pace"></div>';
         },
-        // @ts-ignore
         height: UTIL.calcDataTableHeight,
         icons: {
             paginationSwitchDown: 'typcn-document-text',
@@ -23,7 +22,15 @@ export namespace CommonTable {
 }
 
 export namespace CardView {
-    export const options = {
+    export const options: {
+        cardView: string;
+        pageList: number[];
+        pageSize: number;
+        search: boolean;
+        rowStyle: {
+            classes: string;
+        };
+    } = {
         cardView: 'true',
         pageList: [12, 24, 48, 96],
         pageSize: 12,
@@ -36,7 +43,7 @@ export namespace CardView {
         return '<div class="typcn typcn-' + GUISTATE_C.findGroup(robot) + '"></div>';
     }
 
-    export function robotImage(robot: string, row): string {
+    export function robotImage(robot: string, row: string): string {
         return '<div class="text-center robotImage"><img src="/css/img/system_preview/' + robot + '.jpg" class="w-50" alt="' + row + '"/></div>';
     }
 
@@ -44,20 +51,20 @@ export namespace CardView {
         return '<div class="cardViewName">' + value + '</div>';
     }
 
-    export function description(description: string) {
+    export function description(description: string): string {
         return '<div class="cardViewDescription">' + description + '</div>';
     }
 
-    export function programDescription(xml: string) {
+    export function programDescription(xml: string): string {
         let myDescription = getAttributeFromXml(xml, 'description');
         return description(myDescription);
     }
 
-    export function programTags(xml): string {
+    export function programTags(xml: string): string {
         let myTags: string = getAttributeFromXml(xml, 'tags');
         return tags(myTags);
     }
-    export function tags(tags): string {
+    export function tags(tags: string): string {
         if (!tags) {
             tags = '&nbsp;';
         }

@@ -33,7 +33,7 @@ function functionName(func: Function): string {
  *
  * @memberof WRAP
  */
-export function wrapTotal(fnToBeWrapped: Function, message: string) {
+export function wrapTotal(fnToBeWrapped: Function, message?: string): Function {
     let wrap: Function = function () {
         let start: Date = new Date();
         try {
@@ -75,7 +75,7 @@ export function wrapTotal(fnToBeWrapped: Function, message: string) {
  *
  * @memberof WRAP
  */
-export function wrapUI(fnToBeWrapped: Function, message: string | undefined): Function {
+export function wrapUI(fnToBeWrapped: Function, message?: string): Function {
     let wrap: Function = function (): undefined | Function {
         if (numberOfActiveActions > 0) {
             if (message !== undefined) {
@@ -140,8 +140,8 @@ export function wrapREST(fnToBeWrapped: Function, message: string) {
     return rest;
 }
 
-export function wrapErrorFn(errorFnToBeWrapped: Function, message: string): Function {
-    let wrap = function (): void {
+export function wrapErrorFn(errorFnToBeWrapped: Function, message?: string): Function {
+    let wrap: Function = function (): void {
         try {
             let fn: Function = wrapTotal(errorFnToBeWrapped, message);
             let that: Function = this;
@@ -152,7 +152,7 @@ export function wrapErrorFn(errorFnToBeWrapped: Function, message: string): Func
             let err: Error = new Error();
             LOG.error(
                 'wrapErrorFn/wrapTotal CRASHED UNEXPECTED AND SEVERELY in function ' +
-                    functionName(fnToBeWrapped) +
+                    functionName(errorFnToBeWrapped) +
                     ' with EXCEPTION: ' +
                     e +
                     ' and stacktrace: ' +
@@ -164,7 +164,7 @@ export function wrapErrorFn(errorFnToBeWrapped: Function, message: string): Func
     return wrap;
 }
 
-$.fn.onWrap = function (event, callbackOrFilter, callbackOrMessage, optMessage) {
+$.fn.onWrap = function (event: string, callbackOrFilter: string | Function, callbackOrMessage?: string | Function, optMessage?: string): JQuery<HTMLElement> {
     if (typeof callbackOrFilter === 'string') {
         if (typeof callbackOrMessage === 'function') {
             return this.on(event, callbackOrFilter, WRAP.wrapUI(callbackOrMessage, optMessage));
@@ -180,7 +180,7 @@ $.fn.onWrap = function (event, callbackOrFilter, callbackOrMessage, optMessage) 
     }
 };
 
-$.fn.clickWrap = function (callback) {
+$.fn.clickWrap = function (callback?: Function) {
     numberOfActiveActions--;
     try {
         if (callback === undefined) {
@@ -191,7 +191,7 @@ $.fn.clickWrap = function (callback) {
         numberOfActiveActions++;
     } catch (e) {
         numberOfActiveActions++;
-        var err = new Error();
+        let err: Error = new Error();
         LOG.error(
             'clickWrap CRASHED UNEXPECTED AND SEVERELY in callback ' + functionName(callback) + ' with EXCEPTION: ' + e + ' and stacktrace: ' + err.stack
         );
@@ -199,27 +199,27 @@ $.fn.clickWrap = function (callback) {
     }
 };
 
-$.fn.tabWrapShow = function () {
+$.fn.tabWrapShow = function (): void {
     numberOfActiveActions--;
     try {
         this.tab('show');
         numberOfActiveActions++;
     } catch (e) {
         numberOfActiveActions++;
-        var err = new Error();
+        let err: Error = new Error();
         LOG.error('tabWrap CRASHED UNEXPECTED AND SEVERELY with EXCEPTION: ' + e + ' and stacktrace: ' + err.stack);
         COMM.ping(); // transfer data to the server
     }
 };
 
-$.fn.oneWrap = function (event, callback) {
+$.fn.oneWrap = function (event: string, callback: Function): void {
     numberOfActiveActions--;
     try {
         this.one(event, callback);
         numberOfActiveActions++;
     } catch (e) {
         numberOfActiveActions++;
-        var err = new Error();
+        let err: Error = new Error();
         LOG.error('oneWrap CRASHED UNEXPECTED AND SEVERELY in callback ' + functionName(callback) + ' with EXCEPTION: ' + e + ' and stacktrace: ' + err.stack);
         COMM.ping(); // transfer data to the server
     }

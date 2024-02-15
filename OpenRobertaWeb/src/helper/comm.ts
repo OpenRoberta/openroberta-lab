@@ -78,7 +78,7 @@ export function get(url: string, data: string, successFn: Function, message: str
         dataType: 'json',
         data: data,
         success: WRAP.wrapREST(successFn, message),
-        error: WRAP.wrapErrorFn(errorFn, message), // TomsMarker should i always pass a message
+        error: WRAP.wrapErrorFn(errorFn),
     });
 }
 
