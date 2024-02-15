@@ -193,17 +193,12 @@ export function clone(obj: undefined | null | object): [] | Date | object {
 export function isEmpty(obj: object): boolean {
     return Object.keys(obj).length === 0 && obj.constructor === Object;
 }
-
-<<<<<<< HEAD
-export function isMobile() {
+export function isMobile(): boolean {
     return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 }
 
-function getPropertyFromObject(obj, prop, arrayIndex) {
-=======
 export function getPropertyFromObject(obj: object | undefined, prop: string, arrayIndex: number | undefined) {
     // TomsMarker arrayIndex? or with undefined Type? and what retrun type?
->>>>>>> c75f2110d (Refactored util js to ts and adjust some other helper)
     //property not found
     if (typeof obj === 'undefined') return false;
 
