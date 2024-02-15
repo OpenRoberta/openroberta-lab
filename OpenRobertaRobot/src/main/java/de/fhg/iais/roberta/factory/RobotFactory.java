@@ -157,7 +157,7 @@ public class RobotFactory {
     }
     
     public final String getVendorId() {
-        return this.pluginProperties.getStringProperty("robot.vendor");
+        return this.pluginProperties.getStringProperty("robot.vendorId");
     }
 
     public final Boolean hasConfiguration() {
