@@ -291,16 +291,16 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
             suffix = ")";
         }
         if ( drive.equals(FischertechnikConstants.OMNIDRIVE) ) {
+            this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(Txt4Methods.OMNIDRIVECURVEDISTANCE));
         } else {
             this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(Txt4Methods.DIFFERENTIALDRIVEDISTANCE));
-            this.src.add("(");
-            motorOmniDiffCurveForAction.distance.accept(this);
-            this.src.add(", " + prefix);
-            motorOmniDiffCurveForAction.powerLeft.accept(this);
-            this.src.add(suffix + ", " + prefix);
-            motorOmniDiffCurveForAction.powerRight.accept(this);
         }
-
+        this.src.add("(");
+        motorOmniDiffCurveForAction.distance.accept(this);
+        this.src.add(", " + prefix);
+        motorOmniDiffCurveForAction.powerLeft.accept(this);
+        this.src.add(suffix + ", " + prefix);
+        motorOmniDiffCurveForAction.powerRight.accept(this);
         this.src.add(suffix + ")");
         return null;
     }

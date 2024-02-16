@@ -118,6 +118,8 @@ public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
 
         if ( configHasOmnidrive() ) {
             usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniDiffCurveForAction.getUserDefinedPort(), FischertechnikConstants.OMNIDRIVE));
+            usedMethodBuilder.addUsedMethod(Txt4Methods.OMNIDRIVE);
+            usedMethodBuilder.addUsedMethod(Txt4Methods.OMNIDRIVECURVEDISTANCE);
         } else {
             usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniDiffCurveForAction.getUserDefinedPort(), SC.DIFFERENTIALDRIVE));
             usedMethodBuilder.addUsedMethod(Txt4Methods.DIFFERENTIALDRIVE);

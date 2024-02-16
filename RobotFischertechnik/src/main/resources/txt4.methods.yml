@@ -37,15 +37,40 @@ DIFFERENTIALDRIVE:
 DIFFERENTIALDRIVEDISTANCE:
   PYTHON: |
     def diffDriveDistance(distance, speedL, speedR):
+        if distance < 0:
+            speedL = -speedL
+            speedR = -speedR
+        leftDirection = 1 if speedL > 0 else -1
+        rightDirection = 1 if speedR > 0 else -1
         diffDrive(speedL, speedR)
         wheelCircumference = WHEEL_DIAMETER * math.pi
         time.sleep(0.010)
         while True:
-            distanceLeft = abs(wheelCircumference * leftMotor.get_distance() / STEPS_PER_ROTATION);
-            distanceRight = abs(wheelCircumference * rightMotor.get_distance() / STEPS_PER_ROTATION);
+            distanceLeft = leftDirection * (wheelCircumference * leftMotor.get_distance() / STEPS_PER_ROTATION);
+            distanceRight = rightDirection * (wheelCircumference * rightMotor.get_distance() / STEPS_PER_ROTATION);
             distanceTraveled = (distanceLeft + distanceRight) / 2
-            if (distanceTraveled >= distance):
+            if (abs(distanceTraveled) >= abs(distance)):
                 leftMotor.stop_sync(rightMotor)
+                break;
+            time.sleep(0.010)
+
+OMNIDRIVECURVEDISTANCE:
+  PYTHON: |
+    def omniDriveCurveDistance(distance, speedL, speedR):
+        if distance < 0:
+            speedL = -speedL
+            speedR = -speedR
+        leftDirection = 1 if speedL > 0 else -1
+        rightDirection = 1 if speedR > 0 else -1
+        omniDrive(speedL, speedR, speedL, speedR)
+        wheelCircumference = WHEEL_DIAMETER * math.pi
+        time.sleep(0.010)
+        while True:
+            distanceLeft = leftDirection * (wheelCircumference * frontLeftMotor.get_distance() / STEPS_PER_ROTATION);
+            distanceRight = rightDirection * (wheelCircumference * frontRightMotor.get_distance() / STEPS_PER_ROTATION);
+            distanceTraveled = (distanceLeft + distanceRight) / 2
+            if (abs(distanceTraveled) >= abs(distance)):
+                frontLeftMotor.stop_sync(frontRightMotor, rearLeftMotor, rearRightMotor)
                 break;
             time.sleep(0.010)
 
@@ -75,7 +100,6 @@ OMNIDRIVEDIAGONALTLDISTANCE:
         stepsPerWheel = int(distancePerWheel / (2 * math.pi) * STEPS_PER_ROTATION) * 2
     
         frontLeftMotor.stop_sync(rearRightMotor)
-
         frontRightMotor.set_speed(speed, Motor.CCW)
         rearLeftMotor.set_speed(speed, Motor.CCW)
         frontRightMotor.set_distance(stepsPerWheel, rearLeftMotor)
