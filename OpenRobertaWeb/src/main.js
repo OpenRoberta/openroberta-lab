@@ -310,6 +310,7 @@ function init() {
         })
         .then(function () {
             menuController.init(initProgramming);
+            $('#sliderDiv').hide();
             if (!guiStateController.getStartWithoutPopup()) {
                 $('#tabStart').tabWrapShow();
                 $('.navbar-nav > li > ul > .login').addClass('disabled');
