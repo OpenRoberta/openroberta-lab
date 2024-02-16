@@ -845,10 +845,21 @@ $(window).on('resize', function () {
     if ($('#blocklyDiv')) {
         $('#blocklyDiv').outerWidth(leftWidth);
         $('#blocklyDiv').height(height);
+        $('.blocklyToolboxDiv').height($('.blocklyToolboxDiv').height() - 36);
+        if (leftWidth < 768) {
+            $('#program .blocklyToolboxDiv').addClass('small');
+        } else {
+            $('#program .blocklyToolboxDiv').removeClass('small');
+        }
     }
     if ($('#bricklyDiv')) {
         $('#bricklyDiv').width(parentWidth);
         $('#bricklyDiv').height(height);
+        if (parentWidth < 768) {
+            $('#configuration .blocklyToolboxDiv').addClass('small');
+        } else {
+            $('#configuration .blocklyToolboxDiv').removeClass('small');
+        }
     }
     for (const robotWindowElement of $('.simWindow:visible')) {
         if (robotWindowElement.offsetLeft >= $(window).width() - 20) {

@@ -63,7 +63,6 @@ body {
     height: 100%;
     width: 100%;
     font-family: 'Roboto', sans-serif;
-    overflow: hidden;
     font-size: 1em;
 }
 
@@ -869,22 +868,30 @@ button#simCustomObstacle.typcn:before {
     margin: 0;
 }
 
-.blocklyToolboxDiv > .nav-tabs {
+#toolboxDiv {
+    -webkit-overflow-scrolling: touch;
+}
+
+#toolboxDiv > .nav-tabs {
     border: 0;
 }
 
-.blocklyToolboxDiv > .nav-tabs li {
+#toolboxDiv > .nav-tabs li {
     width: 50%;
     text-align: center;
     border: none;
 }
 
-.blocklyToolboxDiv > .nav-tabs li > a.active {
+#toolboxDiv > .blocklyToolboxDiv {
+    position: relative !important;
+}
+
+#toolboxDiv > .nav-tabs li > a.active {
     background-color: #E9ECEF;
     color: #333333;
 }
 
-.blocklyToolboxDiv > .nav-tabs li > a {
+#toolboxDiv > .nav-tabs li > a {
     background-color: #C0C0C0;
     color: #fff;
     margin: 0;
@@ -1522,7 +1529,7 @@ table [data-toggle="collapse"].collapsed:after {
     margin-right: 6px;
 }
 
-.blocklyToolboxDiv > .nav-tabs .typcn:before {
+#toolboxDiv > .nav-tabs .typcn:before {
     position: relative;
     top: 1px;
 }

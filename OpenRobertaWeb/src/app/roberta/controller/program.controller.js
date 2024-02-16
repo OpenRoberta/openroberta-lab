@@ -61,8 +61,8 @@ function initView() {
     blocklyWorkspace.robControls.disable('saveProgram');
     blocklyWorkspace.robControls.refreshTooltips(GUISTATE_C.getRobotRealName());
     GUISTATE_C.checkSim();
-    var toolbox = $('#program .blocklyToolboxDiv');
-    toolbox.prepend(
+    $('#program').find('.blocklyToolboxDiv:first').wrap("<div id='toolboxDiv' style='position: absolute;'></div>");
+    $('#toolboxDiv').prepend(
         '<ul class="nav nav-tabs levelTabs"><li class="nav-item"><a class="nav-link typcn typcn-media-stop-outline active beginner" href="#beginner" data-bs-toggle="tab">1</a></li><li class="nav-item"><a href="#expert" class="nav-link typcn typcn-star-outline expert" data-bs-toggle="tab">2</a></li></ul>'
     );
 }
