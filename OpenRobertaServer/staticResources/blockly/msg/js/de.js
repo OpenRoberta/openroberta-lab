@@ -520,6 +520,7 @@ Blockly.Msg.LED_PROXH_ON_TOOLTIP = "Schaltet die Abstandsensor-LEDs mit den ange
 Blockly.Msg.LED_PROXV = "Schalte Bodensensor-LED an";
 Blockly.Msg.LED_PROXV_ON_TOOLTIP = "Schaltet die Bodensensor-LEDs mit den angegebenen Helligkeitswerten an. Die Prozentwerte reichen von 0% (aus) bis 100% (am hellsten).";
 Blockly.Msg.LED_SET_BRIGHTNESS_TOOLTIP = "Setzt die Helligkeit aller LEDs [0-100]";
+Blockly.Msg.LED_SET_BRIGHTNESS_TOOLTIP_PERCENT = "Setzt den Helligkeitswert der LED [0-100]";
 Blockly.Msg.LED_SET_INTENSITY_TOOLTIP = "Bestimme die Intensität/Helligkeit von einer Gruppe von LEDs in einem Bereich von 0 bis 100.";
 Blockly.Msg.LED_SOUND = "Schalte Mikrofon-LED an";
 Blockly.Msg.LED_SOUND_ON_TOOLTIP = "Schaltet die Mikrofon-LED mit den angegebenen Helligkeitswert an. Die Prozentwerte reichen von 0% (aus) bis 100% (am hellsten).";

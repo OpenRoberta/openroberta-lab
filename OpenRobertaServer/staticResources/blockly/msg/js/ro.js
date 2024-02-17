@@ -520,6 +520,7 @@ Blockly.Msg.LED_PROXH_ON_TOOLTIP = "Turns the bottom sensor LEDs on with the sup
 Blockly.Msg.LED_PROXV = "turn bottom sensor LED on";  // untranslated
 Blockly.Msg.LED_PROXV_ON_TOOLTIP = "Turns the various distance sensor LEDs on with the supplied brightness values. The percentage values range from 0% (off) to 100% (full brightness).";  // untranslated
 Blockly.Msg.LED_SET_BRIGHTNESS_TOOLTIP = "Sets the brightness of all LEDs [0-100]";  // untranslated
+Blockly.Msg.LED_SET_BRIGHTNESS_TOOLTIP_PERCENT = "Sets the brightness of the LED [0-100]";  // untranslated
 Blockly.Msg.LED_SET_INTENSITY_TOOLTIP = "Setați intensitatea LED-urilor selectate într-un interval de la 0 la 100. Sunt disponibile ledurile pentru urechi, cap și piept.";
 Blockly.Msg.LED_SOUND = "turn sound sensor LED on";  // untranslated
 Blockly.Msg.LED_SOUND_ON_TOOLTIP = "Turns the microphone LED on with the supplied brightness values. The percentage value range from 0% (off) to 100% (full brightness).";  // untranslated

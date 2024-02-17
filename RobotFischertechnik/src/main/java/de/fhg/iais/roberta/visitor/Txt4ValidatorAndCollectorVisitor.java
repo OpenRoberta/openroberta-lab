@@ -12,6 +12,7 @@ import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.constants.FischertechnikConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.action.LedSetBrightnessAction;
 import de.fhg.iais.roberta.syntax.action.MotorOmniDiffCurveAction;
 import de.fhg.iais.roberta.syntax.action.MotorOmniDiffCurveForAction;
 import de.fhg.iais.roberta.syntax.action.MotorOmniDiffOnAction;
@@ -23,6 +24,7 @@ import de.fhg.iais.roberta.syntax.action.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.MotorOnForAction;
 import de.fhg.iais.roberta.syntax.action.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.ServoOnForAction;
+import de.fhg.iais.roberta.syntax.action.light.LedAction;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
@@ -239,6 +241,18 @@ public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
     @Override
     public Void visitGetLineSensor(GetLineSensor getLineSensor) {
         usedHardwareBuilder.addUsedSensor(new UsedSensor(getLineSensor.getUserDefinedPort(), SC.INFRARED, getLineSensor.getMode()));
+        return null;
+    }
+
+    @Override
+    public Void visitLedAction(LedAction ledAction) {
+        usedHardwareBuilder.addUsedActor(new UsedActor(ledAction.getUserDefinedPort(), SC.LED));
+        return null;
+    }
+
+    @Override
+    public Void visitLedSetBrightnessAction(LedSetBrightnessAction ledSetBrightnessAction) {
+        usedHardwareBuilder.addUsedActor(new UsedActor(ledSetBrightnessAction.getUserDefinedPort(), SC.LED));
         return null;
     }
 

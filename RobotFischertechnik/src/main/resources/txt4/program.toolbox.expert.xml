@@ -109,6 +109,10 @@
                 </value>
             </block>
         </category>
+        <category name='TOOLBOX_LIGHT' svg='true'>
+            <block type='actions_led'></block>
+            <block type='actions_led_set_brightness'></block>
+        </category>
     </category>
     <category name='TOOLBOX_SENSOR' svg='true'>
         <block type='robSensors_encoder_getSample'></block>

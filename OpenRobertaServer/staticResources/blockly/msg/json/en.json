@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2024-02-04 16:22:13.120994",
+		"lastupdated": "2024-02-17 01:11:15.032358",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1073,6 +1073,7 @@
 	"LED_OFF_BUTTON_THYMIO_TOOLTIP": "Turns the button LED off.",
 	"LED_OFF_CIRCLE_THYMIO_TOOLTIP": "Turns the circle LED off.",
 	"LED_SET_BRIGHTNESS_TOOLTIP": "Sets the brightness of all LEDs [0-100]",
+	"LED_SET_BRIGHTNESS_TOOLTIP_PERCENT": "Sets the brightness of the LED [0-100]",
 	"LED_OFF_QUADRGB_TOOLTIP": "Turns off the fill lights of the quad RGB sensor",
 	"COLOUR_RGB_TOOLTIP": "Creates a color with the given red, green, and blue values. Values should be between 0 and 255.",
 	"IMAGE_TOOLTIP": "Creates an image for the display. You can specify the brightness of each pixel from 0 to 9 or # where 0 means no light, 1 is a bit bright and 9 or # is the brightest value.",

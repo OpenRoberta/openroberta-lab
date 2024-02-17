@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.visitor;
 
 
+import de.fhg.iais.roberta.syntax.action.LedSetBrightnessAction;
 import de.fhg.iais.roberta.syntax.action.MotorOmniDiffCurveAction;
 import de.fhg.iais.roberta.syntax.action.MotorOmniDiffCurveForAction;
 import de.fhg.iais.roberta.syntax.action.MotorOmniDiffOnAction;
@@ -12,6 +13,7 @@ import de.fhg.iais.roberta.syntax.action.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.MotorOnForAction;
 import de.fhg.iais.roberta.syntax.action.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.ServoOnForAction;
+import de.fhg.iais.roberta.syntax.action.light.LedAction;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetLineSensor;
@@ -51,4 +53,8 @@ public interface ITxt4Visitor<V> extends IVisitor<V> {
     V visitMotorOmniDiffStopAction(MotorOmniDiffStopAction motorOmniDiffStopAction);
 
     V visitGetLineSensor(GetLineSensor getLineSensor);
+
+    V visitLedAction(LedAction ledAction);
+
+    V visitLedSetBrightnessAction(LedSetBrightnessAction ledSetBrightnessAction);
 }

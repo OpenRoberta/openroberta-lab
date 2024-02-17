@@ -11,6 +11,7 @@ import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.constants.FischertechnikConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.action.LedSetBrightnessAction;
 import de.fhg.iais.roberta.syntax.action.MotorOmniDiffCurveAction;
 import de.fhg.iais.roberta.syntax.action.MotorOmniDiffCurveForAction;
 import de.fhg.iais.roberta.syntax.action.MotorOmniDiffOnAction;
@@ -22,6 +23,7 @@ import de.fhg.iais.roberta.syntax.action.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.MotorOnForAction;
 import de.fhg.iais.roberta.syntax.action.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.ServoOnForAction;
+import de.fhg.iais.roberta.syntax.action.light.LedAction;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
@@ -502,6 +504,28 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
     }
 
     @Override
+    public Void visitLedAction(LedAction ledAction) {
+        String port = getPortFromConfig(ledAction.getUserDefinedPort());
+        this.src.add("TXT_M_", port, "_led.set_brightness(");
+        if ( ledAction.mode.equals(SC.ON) ) {
+            this.src.add("512)");
+        } else {
+            this.src.add("0)");
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitLedSetBrightnessAction(LedSetBrightnessAction ledSetBrightnessAction) {
+        String port = getPortFromConfig(ledSetBrightnessAction.getUserDefinedPort());
+        this.src.add("TXT_M_", port, "_led.set_brightness(int(");
+        this.src.add("max(min(int((");
+        ledSetBrightnessAction.brightness.accept(this);
+        this.src.add(" / 100) * 512), 512), 0)))");
+        return null;
+    }
+
+    @Override
     public Void visitKeysSensor(KeysSensor keysSensor) {
         String port = getPortFromConfig(keysSensor.getUserDefinedPort());
         this.src.add("TXT_M_", port, "_mini_switch.get_state()");
@@ -617,6 +641,9 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
 
         this.src.add("txt_factory.init()").nlI();
         this.src.add("txt_factory.init_input_factory()").nlI();
+        if ( usedHardwareBean.isActorUsed(SC.LED) ) {
+            this.src.add("txt_factory.init_output_factory()").nlI();
+        }
         if ( usedHardwareBean.isActorUsed(SC.MOTOR) || usedHardwareBean.isActorUsed(SC.ENCODER) ) {
             this.src.add("txt_factory.init_motor_factory()").nlI();
         }
@@ -631,14 +658,14 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
         if ( !usedHardwareBean.getUsedActors().isEmpty() && !usedHardwareBean.getUsedSensors().isEmpty() ) {
             nlIndent();
         }
-        initMotors(usedHardwareBean);
+        initActors(usedHardwareBean);
         initSensors(usedHardwareBean);
         generateVariables(usedHardwareBean);
         this.src.add("txt_factory.initialized()");
 
     }
 
-    private void initMotors(UsedHardwareBean usedHardwareBean) {
+    private void initActors(UsedHardwareBean usedHardwareBean) {
         for ( ConfigurationComponent component : this.configurationAst.getConfigurationComponents().values() ) {
             if ( component.componentType.equals(SC.MOTOR) && usedHardwareBean.isActorUsed(SC.MOTOR) ) {
                 String port = component.getOptProperty("PORT").substring(1);
@@ -654,6 +681,10 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
             if ( component.componentType.equals(SC.SERVOMOTOR) && usedHardwareBean.isActorUsed(SC.SERVOMOTOR) ) {
                 String port = component.getOptProperty("PORT").substring(1);
                 this.src.add("TXT_M_S", port, "_servomotor = txt_factory.servomotor_factory.create_servomotor(TXT_M, ", port, ")").nlI();
+            }
+            if ( component.componentType.equals(SC.LED) && usedHardwareBean.isActorUsed(SC.LED) ) {
+                String port = component.getOptProperty("PORT").substring(1);
+                this.src.add("TXT_M_O", port, "_led = txt_factory.output_factory.create_led(TXT_M, " + port + ")").nlI();
             }
         }
     }
