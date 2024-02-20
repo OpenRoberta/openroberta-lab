@@ -77,8 +77,8 @@ export function get(url: string, data: string, successFn: Function, message: str
         type: 'GET',
         dataType: 'json',
         data: data,
-        success: WRAP.wrapREST(successFn, message),
-        error: WRAP.wrapErrorFn(errorFn),
+        success: WRAP.wrapREST(successFn, message) as any,
+        error: WRAP.wrapErrorFn(errorFn) as any,
     });
 }
 
@@ -110,8 +110,8 @@ export function json(url: string, data: any, successFn: Function, message: strin
         contentType: 'application/json; charset=utf-8',
         dataType: 'json',
         data: JSON.stringify(load),
-        success: WRAP.wrapREST(successFnWrapper, message),
-        error: WRAP.wrapErrorFn(errorFn),
+        success: WRAP.wrapREST(successFnWrapper, message) as any,
+        error: WRAP.wrapErrorFn(errorFn) as any,
     });
 }
 
@@ -133,8 +133,8 @@ export function xml(url: string, xml: string, successFn: Function, message: stri
         contentType: 'text/plain; charset=utf-8',
         dataType: 'json',
         data: xml,
-        success: WRAP.wrapREST(successFn, message),
-        error: WRAP.wrapErrorFn(errorFn),
+        success: WRAP.wrapREST(successFn, message) as any,
+        error: WRAP.wrapErrorFn(errorFn) as any,
     });
 }
 
@@ -235,9 +235,9 @@ export function sendProgramHexToAgent(
             202: function (): void {
                 WRAP.wrapREST(successFn, 'Upload success');
             },
-            400: WRAP.wrapErrorFn(errorFn),
-            403: WRAP.wrapErrorFn(errorFn),
-            404: WRAP.wrapErrorFn(errorFn),
+            400: WRAP.wrapErrorFn(errorFn) as any,
+            403: WRAP.wrapErrorFn(errorFn) as any,
+            404: WRAP.wrapErrorFn(errorFn) as any,
         },
         error: function (jqXHR: JQuery.jqXHR<any>): void {},
     });

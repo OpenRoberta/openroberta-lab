@@ -22,15 +22,7 @@ export namespace CommonTable {
 }
 
 export namespace CardView {
-    export const options: {
-        cardView: string;
-        pageList: number[];
-        pageSize: number;
-        search: boolean;
-        rowStyle: {
-            classes: string;
-        };
-    } = {
+    export const options: object = {
         cardView: 'true',
         pageList: [12, 24, 48, 96],
         pageSize: 12,

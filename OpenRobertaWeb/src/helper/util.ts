@@ -8,8 +8,9 @@ import 'jquery-validate';
 import 'bootstrap';
 import * as U from 'interpreter.util';
 import * as GUISTATE_C from 'guiState.controller';
-import { RobotBase } from 'robot.base'; //TomsMarker can i import those classes?
+import { RobotBase } from 'robot.base';
 import { RobotBaseMobile } from 'robot.base.mobile';
+import { WebAudio } from 'robot.actuators';
 
 const ANIMATION_DURATION: number = 750;
 
@@ -82,7 +83,7 @@ export function renameNeuron(oldName: string, newName: string): void {
         if (!block.dependNeuron) {
             continue;
         }
-        let dependNeuron; // TomsMarker dependNeuron type
+        let dependNeuron: Blockly.DependNeuron;
         if (typeof block.dependNeuron === 'function') {
             dependNeuron = block.dependNeuron();
         } else {
@@ -155,7 +156,7 @@ export function base64decode(b64string: string): Uint8Array {
     return new Uint8Array(byteNumbers);
 }
 
-export function clone(obj: undefined | null | object): [] | Date | object {
+export function clone(obj?: null | object): [] | Date | object {
     let copy: [] | object;
 
     // Handle the 3 simple types, and null or undefined
@@ -165,7 +166,7 @@ export function clone(obj: undefined | null | object): [] | Date | object {
     if (obj instanceof Date) {
         copy = new Date();
         // @ts-ignore
-        copy.setTime(obj.getTime()); // TomsMarker .setTime() does not exist on object
+        copy.setTime(obj.getTime());
         return copy;
     }
 
@@ -197,8 +198,7 @@ export function isMobile(): boolean {
     return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 }
 
-export function getPropertyFromObject(obj: object | undefined, prop: string, arrayIndex: number | undefined) {
-    // TomsMarker arrayIndex? or with undefined Type? and what retrun type?
+export function getPropertyFromObject(obj: object | undefined, prop: string, arrayIndex?: number) {
     //property not found
     if (typeof obj === 'undefined') return false;
 
@@ -218,7 +218,7 @@ export function getPropertyFromObject(obj: object | undefined, prop: string, arr
     return obj[prop];
 }
 
-export function setObjectProperty(obj: undefined | object, prop: string, value, arrayIndex: number | undefined) {
+export function setObjectProperty(obj: object | undefined, prop: string, value: any, arrayIndex?: number) {
     //property not found
     if (typeof obj === 'undefined') return false;
 
@@ -293,7 +293,6 @@ export function parseDate(d: string): number {
  *            Result-object from server call
  */
 export function formatResultLog(result: object): string {
-    // TomsMarker Type Result Object
     let str: string = '{';
     let comma: boolean = false;
     for (let key in result) {
@@ -358,7 +357,7 @@ export function showSingleModal(customize: Function, onSubmit: Function, onHidde
     customize();
     $('#single-modal-form').onWrap(
         'submit',
-        function (e) {
+        function (e): void {
             e.preventDefault();
             onSubmit();
         },
@@ -429,7 +428,6 @@ export function showMsgOnTop(msg: string): void {
  *            Result-object from server call
  */
 export function response(result: object): void {
-    // TomsMarker result type
     LOG.info('result from server: ' + formatResultLog(result));
     if (result.rc != 'ok') {
         MSG.displayMessage(result.message, 'POPUP', '');
@@ -495,13 +493,11 @@ export function getBasename(path: string): string {
     return base;
 }
 
-function destroyClickedElement(event): void {
-    // TomsMarker event needs to be Typed
+function destroyClickedElement(event: any): void {
     document.body.removeChild(event.target);
 }
 
-export function download(fileName: string, content): void {
-    // TomsMarker content needs to be typed (maybe BlobPart)
+export function download(fileName: string, content: string): void {
     if ('Blob' in window && navigator.userAgent.toLowerCase().match(/iPad|iPhone|Android/i) == null) {
         let contentAsBlob: Blob = new Blob([content], {
             type: 'application/octet-stream',
@@ -591,14 +587,12 @@ let __entityMap: object = {
 };
 
 String.prototype.escapeHTML = function () {
-    // TomsMarker escapeHTML does not exist on String
     return String(this).replace(/[&<>"'\/]/g, function (s: string) {
         return __entityMap[s];
     });
 };
 
-$.fn.draggable = function (opt: { handle: string; cursor: string; draggableClass: string; activeHandleClass: string }): void {
-    // TomsMarker opt object needs more params
+$.fn.draggable = function (opt: { handle: string; cursor: string; draggableClass: string; activeHandleClass: string; constraint: string; axis: string }): void {
     opt = $.extend(
         {
             handle: '',
@@ -650,8 +644,8 @@ $.fn.draggable = function (opt: { handle: string; cursor: string; draggableClass
                     // special case movable slider between workspace and right divs
                     if (opt.axis == 'x') {
                         let left: number = pageX + pos_x - drg_w;
-                        let left: number = Math.min(left, $('#main-section').width() - 24);
-                        let left: number = Math.max(left, 42); // TomsMarker should the other definitions be seperated by |?
+                        left = Math.min(left, $('#main-section').width() - 24);
+                        left = Math.max(left, 42);
                         $selected.offset({
                             top: 0,
                             left: left,
@@ -676,7 +670,7 @@ $.fn.draggable = function (opt: { handle: string; cursor: string; draggableClass
                         right: 'auto',
                     });
                 })
-                .on('mouseup touchend', function () {
+                .on('mouseup touchend', function (): void {
                     $(document).off('mousemove touchmove'); // Unbind events from document
                     if ($selected !== null) {
                         $selected.removeClass(opt.draggableClass);
@@ -684,7 +678,7 @@ $.fn.draggable = function (opt: { handle: string; cursor: string; draggableClass
                     }
                 });
         })
-        .on('mouseup touchend', function () {
+        .on('mouseup touchend', function (): void {
             if ($selected) {
                 if (opt.handle === '') {
                     $selected.removeClass(opt.draggableClass);
@@ -767,7 +761,7 @@ $.fn.closeRightView = function (opt_callBack: Function): void {
                 }
                 $('.fromRight').trigger('closed');
             },
-            always: function () {
+            always: function (): void {
                 $('.fromRight.shifting').removeClass('shifting');
             },
         }
@@ -932,8 +926,7 @@ export function clearAnnotations(workspace?: Blockly.Workspace): void {
  * @param {object}
  *            confAnnos - {block id, {type of annotation, message key}}
  */
-export function annotateBlocks(workspace: Blockly.Workspace, annotations: any): void {
-    // TomsMarker confAnno needs to be Typed
+export function annotateBlocks(workspace: Blockly.Workspace, annotations: any[]): void {
     for (let annoId in annotations) {
         let block: Blockly.Block = workspace.getBlockById(annoId);
         if (block) {
@@ -979,6 +972,7 @@ export function checkInCircle(px: number, py: number, cx: number, cy: number, r:
  */
 export function openSimRobotWindow(): void {
     for (const robotWindowElement of $('.simWindow-openedButHidden')) {
+        // Typescript compiler needs to be adjusted tsc --downleveliteration true or tsc --target es2015?
         let position: number = $(window).width() * simRobotWindowPositions[robotWindowElement.id];
 
         $('#' + robotWindowElement.id).animate(
@@ -1086,9 +1080,8 @@ export function initMicrophone(robot): void {
         console.log('Sorry, but there is no microphone available on your system');
     }
 }
-let thisWebAudio;
-export function getWebAudio() {
-    //TomsMarker thisWebAudio is missing its type
+let thisWebAudio: WebAudio;
+export function getWebAudio(): WebAudio {
     if (!thisWebAudio) {
         thisWebAudio = {};
         let AudioContext = window.AudioContext || window['webkitAudioContext'] || false;
@@ -1105,12 +1098,11 @@ export function getWebAudio() {
     return thisWebAudio;
 }
 
-export function extendMouseEvent(e: JQuery.TouchEventBase, scale: number, $layer): void {
-    // TomsMarker funtion params need Types
+export function extendMouseEvent(e: JQuery.TouchEventBase, scale: number, $layer: JQuery<HTMLElement>): void {
     let X: number = e.clientX || e.originalEvent.touches[0].pageX;
     let Y: number = e.clientY || e.originalEvent.touches[0].pageY;
-    let top = $layer.offset().top;
-    let left = $layer.offset().left;
+    let top: number = $layer.offset().top;
+    let left: number = $layer.offset().left;
     e.startX = (X - left) / scale;
     e.startY = (Y - top) / scale;
 }

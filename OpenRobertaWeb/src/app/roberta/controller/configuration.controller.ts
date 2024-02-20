@@ -187,7 +187,7 @@ export function saveAsToServer(): void {
                     $('#confirm').off();
                     $('#confirm').onWrap(
                         'click',
-                        function (e: Event) {
+                        function (e: Event): void {
                             e.preventDefault();
                             CONFIGURATION.saveConfigurationToServer(confName, xmlText, function (result: ConfResult): void {
                                 if (result.rc == 'ok') {

@@ -27,7 +27,7 @@ function initEvents(): void {
             let confName: string = conf[0];
             CONFIGURATION.deleteConfigurationFromListing(confName, function (result: ConfDeleteResult, confName: string): void {
                 // @ts-ignore
-                UTIL.response(result); // TomsMarker response doesnt exist?
+                UTIL.response(result); // response doesnt exist?
                 if (result.rc === 'ok') {
                     MSG.displayInformation(result, 'MESSAGE_CONFIGURATION_DELETED', result.message, confName, null);
                     $('#confList').find('button[name="refresh"]').clickWrap();
