@@ -11,6 +11,7 @@ import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.constants.FischertechnikConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.action.DisplayTextAction;
 import de.fhg.iais.roberta.syntax.action.LedSetBrightnessAction;
 import de.fhg.iais.roberta.syntax.action.MotorOmniDiffCurveAction;
 import de.fhg.iais.roberta.syntax.action.MotorOmniDiffCurveForAction;
@@ -526,6 +527,16 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
     }
 
     @Override
+    public Void visitDisplayTextAction(DisplayTextAction displayTextAction) {
+        this.src.add("display.set_attr(\"line");
+        displayTextAction.row.accept(this);
+        this.src.add(".text\", str(\'");
+        displayTextAction.text.accept(this);
+        this.src.add("\'))");
+        return null;
+    }
+
+    @Override
     public Void visitKeysSensor(KeysSensor keysSensor) {
         String port = getPortFromConfig(keysSensor.getUserDefinedPort());
         this.src.add("TXT_M_", port, "_mini_switch.get_state()");
@@ -635,9 +646,12 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
         if ( usedHardwareBean.isActorUsed(C.RANDOM) || usedHardwareBean.isActorUsed(C.RANDOM_DOUBLE) ) {
             this.src.add("import random").nlI();
         }
+        if ( usedHardwareBean.isActorUsed(SC.DISPLAY) ) {
+            this.src.add("from lib.display import *").nlI();
+        }
+
         this.src.add("import math").nlI();
         this.src.add("import time").nlI().nlI();
-
 
         this.src.add("txt_factory.init()").nlI();
         this.src.add("txt_factory.init_input_factory()").nlI();

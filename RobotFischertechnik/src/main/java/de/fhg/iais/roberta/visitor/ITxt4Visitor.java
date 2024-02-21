@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.visitor;
 
 
+import de.fhg.iais.roberta.syntax.action.DisplayTextAction;
 import de.fhg.iais.roberta.syntax.action.LedSetBrightnessAction;
 import de.fhg.iais.roberta.syntax.action.MotorOmniDiffCurveAction;
 import de.fhg.iais.roberta.syntax.action.MotorOmniDiffCurveForAction;
@@ -57,4 +58,6 @@ public interface ITxt4Visitor<V> extends IVisitor<V> {
     V visitLedAction(LedAction ledAction);
 
     V visitLedSetBrightnessAction(LedSetBrightnessAction ledSetBrightnessAction);
+
+    V visitDisplayTextAction(DisplayTextAction displayTextAction);
 }

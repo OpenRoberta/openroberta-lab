@@ -108,6 +108,18 @@
                     </block>
                 </value>
             </block>
+            <block type='actions_display_text_txt' id="display1" intask="true">
+                <value name="TEXT">
+                    <block type="text">
+                        <field name="TEXT">Hallo</field>
+                    </block>
+                </value>
+                <value name="ROW">
+                    <block type="math_number" id="Dy#ytr1sQ2WFyWrdDQ_!" intask="true">
+                        <field name="NUM">0</field>
+                    </block>
+                </value>
+            </block>
         </category>
         <category name='TOOLBOX_LIGHT' svg='true'>
             <block type='actions_led'></block>
