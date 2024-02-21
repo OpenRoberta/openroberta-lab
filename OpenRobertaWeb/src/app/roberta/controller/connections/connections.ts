@@ -710,7 +710,7 @@ class SpikePybricksWebBleConnection extends AbstractPromptConnection {
      * @param programString generated program string representation (mpy byte code)
      */
     private static encodeMpyBinary(programString: string): Uint8Array {
-        let programStringArray = programString.split(', ');
+        let programStringArray = programString.split(',');
         let mpyBinary = new Uint8Array(programStringArray.length);
 
         for (let i = 0; i < programStringArray.length; i++) {
