@@ -457,7 +457,6 @@ class SpikePybricksWebBleConnection extends AbstractPromptConnection {
                 await this.connect().then(async () => {
                     this.showProgressBarModal();
                     this.setResetModalListener();
-
                     await this.downloadProgram(result.compiledCode, this.setTransferProgress)
                         .then(async () => {
                             //we dont need this , but the user gets to see 100% for half a second after completion - just feels nice
@@ -537,8 +536,8 @@ class SpikePybricksWebBleConnection extends AbstractPromptConnection {
     private async connect(): Promise<String> {
         await this.stopPingDevice();
         if (this.isConnected()) return;
-        this.assertWebBleAvailability();
 
+        await this.assertWebBleAvailability();
         await this.requestDevice();
         await this.connectToGattServer();
         await this.getHubCapabilities();
@@ -595,11 +594,23 @@ class SpikePybricksWebBleConnection extends AbstractPromptConnection {
         return this.gattServer !== null && this.gattServer.connected;
     }
 
-    private assertWebBleAvailability() {
-        if (navigator.bluetooth == undefined) {
+    private async assertWebBleAvailability() {
+        //could not get Bluetooth now distinquish the error
+        if (!UTIL.isWebBleSupported()) {
+            throw new BleError(null, 'BLE_BROWSER_DOES_NOT_SUPPORT_WEB_BLE', BLE_ALERT_TYPES.ALERT);
+        }
+
+        if (navigator.bluetooth === undefined) {
+            let name = '';
+            if (UTIL.isEdge()) name = 'edge';
+            if (UTIL.isChromium()) name = 'chrome';
             //TODO add this helper text to blockly msg
             //for chrome : chrome://flags/#enable-experimental-web-platform-features enable feature
-            throw new BleError(null, 'BLE_FEATURE_NOT_AVAILABLE', BLE_ALERT_TYPES.ALERT);
+            throw new BleError(null, 'BLE_ENABLE_EXPERIMENTAL_FLAG \n' + name + '://flags/#enable-experimental-web-platform-features', BLE_ALERT_TYPES.ALERT);
+        }
+
+        if (!(await navigator.bluetooth.getAvailability())) {
+            throw new BleError(null, 'BLE_PLEASE_ENABLE_BLUETOOTH_ADAPTER_OR_GRANT_PERMISSION', BLE_ALERT_TYPES.ALERT);
         }
     }
 

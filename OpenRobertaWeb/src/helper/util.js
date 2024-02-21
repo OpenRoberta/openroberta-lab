@@ -1012,7 +1012,7 @@ export function isEdge() {
     return edge > -1;
 }
 
-function isChromium() {
+export function isChromium() {
     var ua = window.navigator.userAgent;
     var chrome = ua.indexOf('Chrome');
     return chrome > -1;
@@ -1025,6 +1025,11 @@ function isIOS() {
 export function isWebUsbSupported() {
     //webUSB is currently only supported by chromium browsers like google chrome, Edge, Microsoft Edge, etc.
     //webUSB is currently not supported on any IOS device
+    return isChromium() && !isIOS();
+}
+
+export function isWebBleSupported() {
+    //older versions of opera without chromium will not support webble
     return isChromium() && !isIOS();
 }
 
