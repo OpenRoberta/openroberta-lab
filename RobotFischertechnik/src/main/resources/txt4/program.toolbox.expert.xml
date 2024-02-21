@@ -124,6 +124,7 @@
         <category name='TOOLBOX_LIGHT' svg='true'>
             <block type='actions_led'></block>
             <block type='actions_led_set_brightness'></block>
+            <block type='actions_display_led_txt'></block>
         </category>
     </category>
     <category name='TOOLBOX_SENSOR' svg='true'>

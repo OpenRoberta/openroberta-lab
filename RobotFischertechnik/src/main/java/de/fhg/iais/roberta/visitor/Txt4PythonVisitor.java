@@ -11,6 +11,7 @@ import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.constants.FischertechnikConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.action.DisplayLedOnAction;
 import de.fhg.iais.roberta.syntax.action.DisplayTextAction;
 import de.fhg.iais.roberta.syntax.action.LedSetBrightnessAction;
 import de.fhg.iais.roberta.syntax.action.MotorOmniDiffCurveAction;
@@ -523,6 +524,18 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
         this.src.add("max(min(int((");
         ledSetBrightnessAction.brightness.accept(this);
         this.src.add(" / 100) * 512), 512), 0)))");
+        return null;
+    }
+
+    @Override
+    public Void visitDisplayLedOnAction(DisplayLedOnAction displayLedOnAction) {
+        this.src.add("display.set_attr(\"led.active\", str(");
+        if ( displayLedOnAction.mode.equals("ON") ) {
+            this.src.add("True");
+        } else {
+            this.src.add("False");
+        }
+        this.src.add(").lower())");
         return null;
     }
 
