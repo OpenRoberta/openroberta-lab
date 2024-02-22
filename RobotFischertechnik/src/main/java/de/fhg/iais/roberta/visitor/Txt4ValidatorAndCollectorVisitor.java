@@ -31,6 +31,7 @@ import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
+import de.fhg.iais.roberta.syntax.sensor.TouchKeySensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetLineSensor;
@@ -217,6 +218,13 @@ public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
     @Override
     public Void visitKeysSensor(KeysSensor keysSensor) {
         usedHardwareBuilder.addUsedSensor(new UsedSensor(keysSensor.getUserDefinedPort(), SC.KEY, keysSensor.getMode()));
+        return null;
+    }
+
+    @Override
+    public Void visitTouchKeySensor(TouchKeySensor touchKeySensor) {
+        usedHardwareBuilder.addUsedActor(new UsedActor(SC.DISPLAY, SC.DISPLAY));
+        usedHardwareBuilder.addUsedSensor(new UsedSensor(SC.DISPLAY, SC.BUTTON, touchKeySensor.getMode()));
         return null;
     }
 

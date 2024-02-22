@@ -131,6 +131,7 @@
         <block type='robSensors_encoder_getSample'></block>
         <block type='robSensors_encoder_reset_txt'></block>
         <block type='robSensors_key_getSample'></block>
+        <block type='robSensors_touchkey_getSample'></block>
         <block type='robSensors_ultrasonic_getSample'></block>
         <block type='robSensors_line_getSample'></block>
     </category>

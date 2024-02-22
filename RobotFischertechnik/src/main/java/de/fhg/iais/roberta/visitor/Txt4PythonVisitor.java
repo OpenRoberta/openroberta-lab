@@ -33,6 +33,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
+import de.fhg.iais.roberta.syntax.sensor.TouchKeySensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetLineSensor;
@@ -555,6 +556,19 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
         this.src.add("TXT_M_", port, "_mini_switch.get_state()");
         return null;
     }
+
+    @Override
+    public Void visitTouchKeySensor(TouchKeySensor touchKeySensor) {
+        this.src.add("display.get_attr(\"button");
+        if ( touchKeySensor.getUserDefinedPort().equals(SC.LEFT) ) {
+            this.src.add("Left");
+        } else {
+            this.src.add("Right");
+        }
+        this.src.add(".pressed\")");
+        return null;
+    }
+
     @Override
     public Void visitRgbColor(RgbColor rgbColor) {
         this.src.add("(");
