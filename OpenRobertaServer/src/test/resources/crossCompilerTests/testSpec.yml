@@ -37,7 +37,7 @@ robots:
   edison:
     template: edison
     dir: edison
-    suffix: ".wav"
+    suffix: ".py"
   ev3c4ev3:
     template: ev3
     dir: ev3
