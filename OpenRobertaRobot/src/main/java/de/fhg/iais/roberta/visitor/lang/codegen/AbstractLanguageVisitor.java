@@ -146,9 +146,11 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> {
 
         for ( String neuron : nnBean.getInputNeurons() ) {
             mkDecl(targetLanguage, neuron);
+            addForGlobalDeclIfPython(targetLanguage, neuron);
         }
         for ( String neuron : nnBean.getAllHiddenNeurons() ) {
             mkDecl(targetLanguage, neuron);
+            addForGlobalDeclIfPython(targetLanguage, neuron);
         }
         for ( String neuron : nnBean.getOutputNeurons() ) {
             mkDecl(targetLanguage, neuron);
@@ -161,13 +163,19 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> {
                 String targetName = (layer == weights.length() - 2) ? nnBean.getOutputNeurons().get(targetNum) : nnBean.getHiddenNeuronsByLayer(layer).get(targetNum);
                 mkDeclWithAssign(targetLanguage, "b_" + targetName);
                 mkWeightTerm(targetLanguage, biasesForLayer.getString(targetNum));
+                addForGlobalDeclIfPython(targetLanguage, "b_" + targetName);
                 for ( int sourceNum = 0; sourceNum < weightsForLayer.length(); sourceNum++ ) {
                     String sourceName = (layer == 0) ? nnBean.getInputNeurons().get(sourceNum) : nnBean.getHiddenNeuronsByLayer(layer - 1).get(sourceNum);
                     mkDeclWithAssign(targetLanguage, "w_" + sourceName + "_" + targetName);
                     mkWeightTerm(targetLanguage, weightsForLayer.getJSONArray(sourceNum).getString(targetNum));
+                    addForGlobalDeclIfPython(targetLanguage, "w_" + sourceName + "_" + targetName);
                 }
             }
         }
+    }
+
+    protected void addForGlobalDeclIfPython(String targetLanguage, String neuron) {
+        // do nothing. Only the AbstractPythonVisitor should verwrite this method!
     }
 
     protected final void generateNNStepFunction(String targetLanguage) {
@@ -176,12 +184,32 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> {
         final String activationKey = nnBean.getActivationKey();
 
         mkNnStepStart(targetLanguage);
+        if ( targetLanguage.equals("python") ) {
+            boolean globalWritten = false;
+            boolean secondNeuronFound = false;
+            for ( int layer = 0; layer < weights.length() - 1; layer++ ) {
+                final JSONArray weightsForLayer = weights.getJSONArray(layer);
+                int numberOfNeurons = weightsForLayer.getJSONArray(0).length();
+                for ( int targetNum = 0; targetNum < numberOfNeurons; targetNum++ ) {
+                    String targetName = (layer == weights.length() - 2) ? nnBean.getOutputNeurons().get(targetNum) : nnBean.getHiddenNeuronsByLayer(layer).get(targetNum);
+                    if ( !globalWritten ) {
+                        globalWritten = true;
+                        src.nlI().add("global ");
+                    }
+                    if ( secondNeuronFound ) {
+                        src.add(", ");
+                    }
+                    secondNeuronFound = true;
+                    src.add("____").add(targetName);
+                }
+            }
+        }
         for ( int layer = 0; layer < weights.length() - 1; layer++ ) {
             final JSONArray weightsForLayer = weights.getJSONArray(layer);
             int numberOfNeurons = weightsForLayer.getJSONArray(0).length();
             for ( int targetNum = 0; targetNum < numberOfNeurons; targetNum++ ) {
                 String targetName = (layer == weights.length() - 2) ? nnBean.getOutputNeurons().get(targetNum) : nnBean.getHiddenNeuronsByLayer(layer).get(targetNum);
-                mkStepAssign(targetLanguage, targetName);
+                src.nlI().add("____", targetName, " = ____b_", targetName);
                 for ( int sourceNum = 0; sourceNum < weightsForLayer.length(); sourceNum++ ) {
                     String sourceName = (layer == 0) ? nnBean.getInputNeurons().get(sourceNum) : nnBean.getHiddenNeuronsByLayer(layer - 1).get(sourceNum);
                     src.add(" + ____", sourceName, " * ____w_", sourceName, "_", targetName);
@@ -203,23 +231,6 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> {
             case "python":
             case "aseba":
                 // no terminator at all
-                break;
-            default:
-                Assert.fail("invalid target language for xNN: " + targetLanguage);
-        }
-    }
-
-    private void mkStepAssign(String targetLanguage, String targetName) {
-        switch ( targetLanguage ) {
-            case "java":
-            case "nxc":
-            case "c++":
-            case "aseba":
-                src.nlI().add("____", targetName, " = ____b_", targetName);
-                break;
-            case "python":
-                src.nlI().add("global ____").add(targetName);
-                src.nlI().add("____", targetName, " = ____b_", targetName);
                 break;
             default:
                 Assert.fail("invalid target language for xNN: " + targetLanguage);

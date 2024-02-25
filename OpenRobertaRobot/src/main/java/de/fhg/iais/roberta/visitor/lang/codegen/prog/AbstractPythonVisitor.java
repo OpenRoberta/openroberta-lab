@@ -73,6 +73,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
 import de.fhg.iais.roberta.syntax.lang.stmt.TernaryExpr;
 import de.fhg.iais.roberta.syntax.lang.stmt.TextAppendStmt;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
+import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.syntax.FunctionNames;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -92,6 +93,12 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
      */
     protected AbstractPythonVisitor(List<List<Phrase>> programPhrases, ClassToInstanceMap<IProjectBean> beans) {
         super(programPhrases, beans);
+    }
+
+    @Override
+    protected void addForGlobalDeclIfPython(String targetLanguage, String neuron) {
+        Assert.isTrue(targetLanguage.equals("python"));
+        usedGlobalVarInFunctions.add("____" + neuron);
     }
 
     @Override
@@ -764,24 +771,21 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
 
     @Override
     public Void visitNNSetInputNeuronVal(NNSetInputNeuronVal setVal) {
-        this.src.add("global ____").add(setVal.name);
-        this.src.nlI().add("____").add(setVal.name).add(" = ");
+        this.src.add("____").add(setVal.name).add(" = ");
         setVal.value.accept(this);
         return null;
     }
 
     @Override
     public Void visitNNSetWeightStmt(NNSetWeightStmt chgStmt) {
-        this.src.add("global ____w_", chgStmt.from, "_", chgStmt.to);
-        this.src.nlI().add("____w_", chgStmt.from, "_", chgStmt.to, " = ");
+        this.src.add("____w_", chgStmt.from, "_", chgStmt.to, " = ");
         chgStmt.value.accept(this);
         return null;
     }
 
     @Override
     public Void visitNNSetBiasStmt(NNSetBiasStmt chgStmt) {
-        this.src.add("global ____b_", chgStmt.name);
-        this.src.nlI().add("____b_", chgStmt.name, " = ");
+        this.src.add("____b_", chgStmt.name, " = ");
         chgStmt.value.accept(this);
         return null;
     }
