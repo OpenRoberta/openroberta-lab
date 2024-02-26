@@ -11,6 +11,7 @@ import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.constants.FischertechnikConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.action.DisplayLedOffAction;
 import de.fhg.iais.roberta.syntax.action.DisplayLedOnAction;
 import de.fhg.iais.roberta.syntax.action.DisplayTextAction;
 import de.fhg.iais.roberta.syntax.action.LedSetBrightnessAction;
@@ -42,7 +43,6 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.util.basic.C;
-import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.syntax.SC;
 import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractPythonVisitor;
 
@@ -85,6 +85,7 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
 
     @Override
     public Void visitMainTask(MainTask mainTask) {
+        UsedHardwareBean usedHardwareBean = this.getBean(UsedHardwareBean.class);
         StmtList variables = mainTask.variables;
         if ( !variables.get().isEmpty() ) {
             variables.accept(this);
@@ -111,6 +112,16 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
             this.src.add("global ", String.join(", ", this.usedGlobalVarInFunctions));
         } else {
             addPassIfProgramIsEmpty();
+        }
+        if ( usedHardwareBean.isActorUsed(FischertechnikConstants.DISPLAYLED) ) {
+            nlIndent();
+            incrIndentation();
+            this.src.add("for color, value in led_colors.items():").nlI();
+            incrIndentation();
+            this.src.add("if color != \"red\":").nlI();
+            this.src.add("display.set_attr(color + \"Led.visible\", str(False).lower())").nlI();
+            decrIndentation();
+            decrIndentation();
         }
         return null;
     }
@@ -530,13 +541,21 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
 
     @Override
     public Void visitDisplayLedOnAction(DisplayLedOnAction displayLedOnAction) {
-        this.src.add("display.set_attr(\"led.active\", str(");
-        if ( displayLedOnAction.mode.equals("ON") ) {
-            this.src.add("True");
-        } else {
-            this.src.add("False");
-        }
-        this.src.add(").lower())");
+        this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(Txt4Methods.DISPLAYLEDON), "(");
+        displayLedOnAction.colour.accept(this);
+        this.src.add(")");
+
+//        this.src.add("display.set_attr(\"led.color\", ");
+//        displayLedOnAction.colour.accept(this);
+//        this.src.add(")");
+//        nlIndent();
+//        this.src.add("display.set_attr(\"led.active\", str(True).lower())");
+        return null;
+    }
+
+    @Override
+    public Void visitDisplayLedOffAction(DisplayLedOffAction displayLedOffAction) {
+        this.src.add("display.set_attr(current_led + \".active\", str(False).lower())");
         return null;
     }
 
@@ -570,18 +589,6 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
     }
 
     @Override
-    public Void visitRgbColor(RgbColor rgbColor) {
-        this.src.add("(");
-        rgbColor.R.accept(this);
-        this.src.add(", ");
-        rgbColor.G.accept(this);
-        this.src.add(", ");
-        rgbColor.B.accept(this);
-        this.src.add(")");
-        return null;
-    }
-
-    @Override
     public Void visitTimerReset(TimerReset timerReset) {
         this.src.add("timer.reset()");
         return null;
@@ -590,53 +597,6 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
     @Override
     public Void visitTimerSensor(TimerSensor timerSensor) {
         this.src.add("timer.now() * 1000");
-        return null;
-    }
-
-    @Override
-    public Void visitColorConst(ColorConst colorConst) {
-        String color = "";
-        switch ( colorConst.getHexValueAsString().toUpperCase() ) {
-            case "#E701A7":
-                color = "'pink'";
-                break;
-            case "#571CC1":
-                color = "'violet'";
-                break;
-            case "#3590F5":
-                color = "'blue'";
-                break;
-            case "#77E7FF":
-                color = "'azure'";
-                break;
-            case "#0FCB54":
-                color = "'cyan'";
-                break;
-            case "#0BA845":
-                color = "'green'";
-                break;
-            case "#F7F700":
-                color = "'yellow'";
-                break;
-            case "#FAAC01":
-                color = "'orange'";
-                break;
-            case "#FA010C":
-                color = "'red'";
-                break;
-            case "#000000":
-                color = "'black'";
-                break;
-            case "#FFFFFF":
-                color = "'white'";
-                break;
-            case "#EBC300":
-                color = "None";
-                break;
-            default:
-                throw new DbcException("Invalid color constant: " + colorConst.getHexValueAsString());
-        }
-        this.src.add(color);
         return null;
     }
 
@@ -654,6 +614,24 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
         this.src.add("time.sleep(");
         waitTimeStmt.time.accept(this);
         this.src.add("/1000)");
+        return null;
+    }
+
+    @Override
+    public Void visitColorConst(ColorConst colorConst) {
+        this.src.add(colorConst.getHexIntAsString());
+        return null;
+    }
+
+    @Override
+    public Void visitRgbColor(RgbColor rgbColor) {
+        this.src.add("int(\"{:02x}{:02x}{:02x}\".format(min(max(");
+        rgbColor.R.accept(this);
+        this.src.add(", 0), 255), min(max(");
+        rgbColor.G.accept(this);
+        this.src.add(", 0), 255), min(max(");
+        rgbColor.B.accept(this);
+        this.src.add(", 0), 255)), 16)");
         return null;
     }
 
@@ -701,8 +679,8 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
         }
         initActors(usedHardwareBean);
         initSensors(usedHardwareBean);
+        this.src.add("txt_factory.initialized()").nlI();
         generateVariables(usedHardwareBean);
-        this.src.add("txt_factory.initialized()");
 
     }
 
@@ -774,6 +752,20 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
         }
         if ( usedHardwareBean.isActorUsed(SC.ENCODER) ) {
             this.src.add("STEPS_PER_ROTATION = 128").nlI();
+        }
+        if ( usedHardwareBean.isActorUsed(FischertechnikConstants.DISPLAYLED) ) {
+            this.src.add("current_led = \"redLed\"").nlI();
+            ;
+            this.src.add("led_colors = {\n" +
+                "    \"red\": 0xcc0000,\n" +
+                "    \"yellow\": 0xffff00,\n" +
+                "    \"green\": 0x33cc00,\n" +
+                "    \"cyan\": 0x33ffff,\n" +
+                "    \"blue\": 0x3366ff,\n" +
+                "    \"purple\": 0xcc33cc,\n" +
+                "    \"white\": 0xffffff,\n" +
+                "    \"black\": 0x000000\n" +
+                "}").nlI();
         }
     }
     @Override

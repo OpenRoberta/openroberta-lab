@@ -12,6 +12,7 @@ import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.constants.FischertechnikConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.action.DisplayLedOffAction;
 import de.fhg.iais.roberta.syntax.action.DisplayLedOnAction;
 import de.fhg.iais.roberta.syntax.action.DisplayTextAction;
 import de.fhg.iais.roberta.syntax.action.LedSetBrightnessAction;
@@ -268,7 +269,16 @@ public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
 
     @Override
     public Void visitDisplayLedOnAction(DisplayLedOnAction displayLedOnAction) {
+        usedMethodBuilder.addUsedMethod(Txt4Methods.DISPLAYLEDON);
         usedHardwareBuilder.addUsedActor(new UsedActor(displayLedOnAction.port, SC.DISPLAY));
+        usedHardwareBuilder.addUsedActor(new UsedActor(displayLedOnAction.port, FischertechnikConstants.DISPLAYLED));
+        return null;
+    }
+
+    @Override
+    public Void visitDisplayLedOffAction(DisplayLedOffAction displayLedOffAction) {
+        usedHardwareBuilder.addUsedActor(new UsedActor(displayLedOffAction.port, SC.DISPLAY));
+        usedHardwareBuilder.addUsedActor(new UsedActor(displayLedOffAction.port, FischertechnikConstants.DISPLAYLED));
         return null;
     }
 
