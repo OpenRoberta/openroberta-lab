@@ -561,11 +561,11 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
 
     @Override
     public Void visitDisplayTextAction(DisplayTextAction displayTextAction) {
-        this.src.add("display.set_attr(\"line");
+        this.src.add("display.set_attr(\"line\" + str(");
         displayTextAction.row.accept(this);
-        this.src.add(".text\", str(\'");
+        this.src.add(") + \".text\", str(");
         displayTextAction.text.accept(this);
-        this.src.add("\'))");
+        this.src.add("))");
         return null;
     }
 
