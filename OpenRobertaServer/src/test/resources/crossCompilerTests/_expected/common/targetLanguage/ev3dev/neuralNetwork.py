@@ -40,36 +40,27 @@ ____w_h1n2_n4 = 5
 
 
 def ____nnStep():
-    global ____h1n1
+    global ____h1n1, ____h1n2, ____n2, ____n4
     ____h1n1 = ____b_h1n1 + ____n1 * ____w_n1_h1n1 + ____n3 * ____w_n3_h1n1
-    global ____h1n2
     ____h1n2 = ____b_h1n2 + ____n1 * ____w_n1_h1n2 + ____n3 * ____w_n3_h1n2
-    global ____n2
     ____n2 = ____b_n2 + ____h1n1 * ____w_h1n1_n2 + ____h1n2 * ____w_h1n2_n2
-    global ____n4
     ____n4 = ____b_n4 + ____h1n1 * ____w_h1n1_n4 + ____h1n2 * ____w_h1n2_n4
 
 
 ___n = 0
 def ____runNN():
-    global ___n
-    global ____n1
+    global ____n1, ____n3, ____h1n1, ____h1n2, ____b_h1n1, ____w_n1_h1n1, ____w_n3_h1n1, ____b_h1n2, ____w_n1_h1n2, ____w_n3_h1n2, ____b_n2, ____w_h1n1_n2, ____w_h1n2_n2, ____b_n4, ____w_h1n1_n4, ____w_h1n2_n4, ___n
     ____n1 = 2
-    global ____n3
     ____n3 = 4
-    global ____w_n1_h1n1
     ____w_n1_h1n1 = ____w_h1n2_n2
-    global ____w_n3_h1n1
     ____w_n3_h1n1 = ____w_h1n2_n4
-    global ____b_n2
     ____b_n2 = ____b_h1n1
-    global ____b_n4
     ____b_n4 = ____b_h1n2
     ____nnStep()
     ___n = ____n2
 
 def run():
-    global ___n
+    global ____n1, ____n3, ____h1n1, ____h1n2, ____b_h1n1, ____w_n1_h1n1, ____w_n3_h1n1, ____b_h1n2, ____w_n1_h1n2, ____w_n3_h1n2, ____b_n2, ____w_h1n1_n2, ____w_h1n2_n2, ____b_n4, ____w_h1n1_n4, ____w_h1n2_n4, ___n
     ____runNN()
 
 def main():
