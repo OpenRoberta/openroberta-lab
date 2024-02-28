@@ -794,7 +794,7 @@ const createUserInputTableBs = (tableDiv: JQuery<HTMLElement>, tableEl: JQuery<H
     ] = [] as any;
 
     function formatCellsAsInputs(value) {
-        return `<input type='text' class='nn-table-input ${this.field}' value='${value}'>`;
+        return `<input type='text' class='nn-table-input' value='${value}'>`;
     }
 
     let updateTableCell = {
