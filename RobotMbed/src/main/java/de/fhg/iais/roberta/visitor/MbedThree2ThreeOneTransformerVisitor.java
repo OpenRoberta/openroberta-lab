@@ -49,7 +49,6 @@ public class MbedThree2ThreeOneTransformerVisitor extends MbedTransformerVisitor
         ConfigurationAst configuration) {
         this.blocklyDropdownFactory = blocklyDropdownFactory;
         this.configuration = configuration;
-
         // Rewrite previous configuration with updated names
         for ( ConfigurationComponent cc : configuration.getConfigurationComponentsValues() ) {
             if ( NEW_NAMES.containsKey(cc.componentType) ) {
@@ -76,19 +75,18 @@ public class MbedThree2ThreeOneTransformerVisitor extends MbedTransformerVisitor
     }
 
     @Override
-    public Phrase visitSingleMotorOnAction(SingleMotorOnAction singleMotorOnAction) {
-        return null;
+    public Phrase visitSingleMotorOnAction(SingleMotorOnAction a) {
+        return new SingleMotorOnAction(a.getProperty(), (Expr) a.speed.modify(this));
     }
 
     @Override
     public Phrase visitSingleMotorStopAction(SingleMotorStopAction singleMotorStopAction) {
-        return null;
+        return new SingleMotorStopAction(singleMotorStopAction.getProperty(), singleMotorStopAction.mode);
     }
 
     @Override
     public Phrase visitPlayNoteAction(PlayNoteAction playNoteAction) {
         String newName = getNewName(playNoteAction.port);
-
         return new PlayNoteAction(playNoteAction.getProperty(), playNoteAction.duration, playNoteAction.frequency, newName, playNoteAction.hide);
     }
 
@@ -104,8 +102,8 @@ public class MbedThree2ThreeOneTransformerVisitor extends MbedTransformerVisitor
     }
 
     @Override
-    public Phrase visitMbedPinWriteValueAction(MbedPinWriteValueAction mbedPinWriteValueAction) {
-        return null;
+    public Phrase visitMbedPinWriteValueAction(MbedPinWriteValueAction a) {
+        return new MbedPinWriteValueAction(a.getProperty(), a.mutation, a.pinValue, a.port, (Expr) a.value.modify(this));
     }
 
     @Override
