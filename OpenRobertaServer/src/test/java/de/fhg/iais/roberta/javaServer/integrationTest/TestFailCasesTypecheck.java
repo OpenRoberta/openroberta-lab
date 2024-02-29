@@ -7,6 +7,7 @@ import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.json.JSONObject;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -20,21 +21,42 @@ import de.fhg.iais.roberta.typecheck.InfoCollector;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.Util;
+import de.fhg.iais.roberta.util.ast.AstFactory;
 import de.fhg.iais.roberta.util.test.UnitTestHelper;
 import de.fhg.iais.roberta.visitor.validate.MicrobitV2TypecheckVisitor;
 
-public class TestFailCasesTypecheck extends ReuseIntegrationAsUnitTest {
+public class TestFailCasesTypecheck {
     private static final Logger LOG = LoggerFactory.getLogger(ReuseIntegrationAsUnitTest.class);
     private static RobotFactory testFactory;
     private static UsedHardwareBean usedHardwareBean;
-
+    private static JSONObject robotsFromTestSpec;
+    private static JSONObject progDeclsFromTestSpec;
+    private static final String CROSS_COMPILER_TESTS = "/crossCompilerTests/";
+    private static final String ROBOT_SPECIFIC = "robotSpecific/";
+    public static final String TEST_SPEC_YML = "classpath:/crossCompilerTests/testSpec.yml";
 
     @BeforeClass
     public static void setup() {
+        AstFactory.loadBlocks();
         Properties properties = Util.loadPropertiesRecursively("classpath:/microbitv2.properties");
         testFactory = new RobotFactory(new PluginProperties("microbitv2", "", "", properties));
+        JSONObject testSpecification = Util.loadYAML(TEST_SPEC_YML);
+        progDeclsFromTestSpec = testSpecification.getJSONObject("progs");
+        robotsFromTestSpec = testSpecification.getJSONObject("robots");
         UsedHardwareBean.Builder usedHardware = new UsedHardwareBean.Builder();
         usedHardwareBean = usedHardware.build();
+    }
+
+    private void setupRobotFactoryForRobot(String robotName) {
+        List<String> pluginDefines = new ArrayList<>(); // maybe used later to add properties
+        testFactory = Util.configureRobotPlugin(robotName, "", "", pluginDefines);
+    }
+
+    protected String setupRobotFactoryAndGetResourceDirForRobotSpecificTests(String robotName) {
+        setupRobotFactoryForRobot(robotName);
+        JSONObject robot = robotsFromTestSpec.getJSONObject(robotName);
+        final String robotDir = robot.getString("dir");
+        return CROSS_COMPILER_TESTS + ROBOT_SPECIFIC + robotDir + (robotDir.endsWith("/") ? "" : "/");
     }
 
     @Test

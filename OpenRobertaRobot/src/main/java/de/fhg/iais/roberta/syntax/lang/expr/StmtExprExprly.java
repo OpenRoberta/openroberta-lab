@@ -18,10 +18,11 @@ import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.blockly.generated.Statement;
 import de.fhg.iais.roberta.exprEvaluator.EvalExprErrorListener;
-import de.fhg.iais.roberta.exprEvaluator.ExprlyStatements;
+import de.fhg.iais.roberta.exprEvaluator.TextlyVisitor;
 import de.fhg.iais.roberta.exprly.generated.ExprlyLexer;
 import de.fhg.iais.roberta.exprly.generated.ExprlyParser;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.lang.stmt.Stmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.transformer.Ast2Jaxb;
 import de.fhg.iais.roberta.transformer.Jaxb2Ast;
@@ -120,8 +121,9 @@ public final class StmtExprExprly extends Expr {
             annotations.add(NepoInfo.error("PROGRAM_ERROR_EXPRBLOCK_PARSE"));
             return null;
         } else {
-            ExprlyStatements exprlyStatements = new ExprlyStatements();
-            StmtList stmtList = exprlyStatements.visitStatementList(expression);
+            //ExprlyStatements exprlyStatements = new ExprlyStatements();
+            TextlyVisitor<Stmt> exprlyStatements = new TextlyVisitor();
+            StmtList stmtList = (StmtList) exprlyStatements.visitStatementList(expression);
             return stmtList;
 
         }

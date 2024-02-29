@@ -37,7 +37,6 @@ import de.fhg.iais.roberta.syntax.lang.functions.IsListEmptyFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.LengthOfListFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.ListGetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.ListRepeat;
-import de.fhg.iais.roberta.syntax.lang.functions.ListSetIndex;
 import de.fhg.iais.roberta.syntax.lang.functions.MathConstrainFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathNumPropFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathOnListFunct;
@@ -70,7 +69,6 @@ public class ExprlyVisitor extends ExprlyBaseVisitor<Expr> {
     public Expr visitExpressionforStatements(ExprlyParser.ExprContext expr) {
         return visit(expr);
     }
-
 
     /**
      * @return AST instance of null const
@@ -499,72 +497,6 @@ public class ExprlyVisitor extends ExprlyBaseVisitor<Expr> {
         TernaryExpr ternaryExpr = new TernaryExpr(mkPropertyFromClass(ctx, TernaryExpr.class), visit(ctx.expr(0)), visit(ctx.expr(1)), visit(ctx.expr(2)));
         return ternaryExpr;
     }
-
-    @Override
-    public Expr visitStmtFunc(ExprlyParser.StmtFuncContext ctx) throws UnsupportedOperationException {
-        String f = ctx.FNAMESTMT().getText();
-        List<Expr> args = new LinkedList();
-
-        for ( ExprlyParser.ExprContext expr : ctx.expr() ) {
-            Expr ast = visit(expr);
-            ast.setReadOnly();
-            args.add(ast);
-        }
-        for ( int i = 0; i < args.size(); i++ ) {
-            if ( args.get(i) instanceof ExprList ) {
-                ExprList e = (ExprList) args.get(i);
-                e.setReadOnly();
-                args.set(i, new ListCreate(BlocklyType.ARRAY, e, mkInlineProperty(ctx, "robLists_create_with")));
-            }
-        }
-        return mkStmtExpr(f, args, ctx);
-    }
-
-    private Expr mkStmtExpr(String f, List<Expr> args, ExprlyParser.StmtFuncContext ctx) {
-        ExprList list = new ExprList();
-        for ( Expr e : args ) {
-            e.setReadOnly();
-            list.addExpr(e);
-        }
-        list.setReadOnly();
-        Sig signature = FunctionNames.get(f).signature;
-        int numberParams = signature.paramTypes.length;
-
-        if ( signature.varargParamType == null && args.size() == numberParams ) {
-            switch ( f ) {
-                case "showText":
-                    //return null;
-                    //Var a = null;
-                    //return new StmtExpr(new AssignStmt(mkInlineProperty(ctx, "variables_set"), a, args.get(1)));
-                case "setIndex":
-                    return new FunctionExpr(new ListSetIndex(ListElementOperations.SET, IndexLocation.FROM_START, args, mkExternalProperty(ctx, "lists_setIndex")));
-                case "setIndexFromEnd":
-                    return new FunctionExpr(new ListSetIndex(ListElementOperations.SET, IndexLocation.FROM_END, args, mkExternalProperty(ctx, "lists_setIndex")));
-                case "setIndexFirst":
-                    return new FunctionExpr(new ListSetIndex(ListElementOperations.SET, IndexLocation.FIRST, args, mkExternalProperty(ctx, "lists_setIndex")));
-                case "setIndexLast":
-                    return new FunctionExpr(new ListSetIndex(ListElementOperations.SET, IndexLocation.LAST, args, mkExternalProperty(ctx, "lists_setIndex")));
-                case "insertIndex":
-                    return new FunctionExpr(new ListSetIndex(ListElementOperations.INSERT, IndexLocation.FROM_START, args, mkExternalProperty(ctx, "lists_setIndex")));
-                case "insertIndexFromEnd":
-                    return new FunctionExpr(new ListSetIndex(ListElementOperations.INSERT, IndexLocation.FROM_END, args, mkExternalProperty(ctx, "lists_setIndex")));
-                case "insertIndexFirst":
-                    return new FunctionExpr(new ListSetIndex(ListElementOperations.INSERT, IndexLocation.FIRST, args, mkExternalProperty(ctx, "lists_setIndex")));
-                case "insertIndexLast":
-                    return new FunctionExpr(new ListSetIndex(ListElementOperations.INSERT, IndexLocation.LAST, args, mkExternalProperty(ctx, "lists_setIndex")));
-                case "removeIndex":
-                    return new FunctionExpr(new ListGetIndex(ListElementOperations.REMOVE, IndexLocation.FROM_START, args, "VOID", mkExternalProperty(ctx, "robLists_getIndex")));
-                case "removeIndexFromEnd":
-                    return new FunctionExpr(new ListGetIndex(ListElementOperations.REMOVE, IndexLocation.FROM_END, args, "VOID", mkExternalProperty(ctx, "robLists_getIndex")));
-                case "removeIndexFirst":
-                    return new FunctionExpr(new ListGetIndex(ListElementOperations.REMOVE, IndexLocation.FIRST, args, "VOID", mkExternalProperty(ctx, "robLists_getIndex")));
-                case "removeIndexLast":
-                    return new FunctionExpr(new ListGetIndex(ListElementOperations.REMOVE, IndexLocation.LAST, args, "VOID", mkExternalProperty(ctx, "robLists_getIndex")));
-            }
-        }
-        return null;
-    }
-
 
     @Override
     public Expr visitChildren(RuleNode node) {

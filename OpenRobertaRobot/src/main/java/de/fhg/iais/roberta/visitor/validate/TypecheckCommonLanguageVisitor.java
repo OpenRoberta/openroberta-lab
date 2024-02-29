@@ -104,7 +104,7 @@ public abstract class TypecheckCommonLanguageVisitor extends BaseVisitor<Blockly
     public BlocklyType visitEvalExpr(EvalExpr evalExpr) {
         BlocklyType expectedType = evalExpr.getBlocklyType();
         Sig.of(expectedType, expectedType).typeCheckPhrases(evalExpr, this, evalExpr.exprAsBlock);
-        evalExpr.elevateNepoInfos();
+        evalExpr.elevateNepoInfosAndCheckForCorrectness();
         return expectedType;
     }
 
@@ -308,8 +308,7 @@ public abstract class TypecheckCommonLanguageVisitor extends BaseVisitor<Blockly
 
     @Override
     public BlocklyType visitMathOnListFunct(MathOnListFunct mathOnListFunct) {
-        //return mathOnListFunct.functName.signature.typeCheckPhrases(mathOnListFunct, this, mathOnListFunct.list);
-        return mathOnListFunct.functName.signature.typeCheckPhraseList(mathOnListFunct, this, ((ExprList) mathOnListFunct.list).el);
+        return mathOnListFunct.functName.signature.typeCheckPhrases(mathOnListFunct, this, mathOnListFunct.list);
     }
 
     @Override
@@ -546,6 +545,7 @@ public abstract class TypecheckCommonLanguageVisitor extends BaseVisitor<Blockly
             String message = "no type found for variable: " + var.name;
             var.addTcError("unknown variable: " + var.name, true);
         }
+        var.setBlocklyTypeVar(varType);
         return varType;
     }
 

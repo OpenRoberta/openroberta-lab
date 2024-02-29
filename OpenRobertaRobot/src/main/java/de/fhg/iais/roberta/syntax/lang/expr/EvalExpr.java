@@ -17,7 +17,7 @@ import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.exprEvaluator.EvalExprErrorListener;
-import de.fhg.iais.roberta.exprEvaluator.ExprlyVisitor;
+import de.fhg.iais.roberta.exprEvaluator.TextlyVisitor;
 import de.fhg.iais.roberta.exprly.generated.ExprlyLexer;
 import de.fhg.iais.roberta.exprly.generated.ExprlyParser;
 import de.fhg.iais.roberta.exprly.generated.ExprlyParser.ExpressionContext;
@@ -78,18 +78,27 @@ public final class EvalExpr extends Expr {
     @Override
     public Block ast2xml() {
         if ( false ) {
-            String blocklyName = this.getBlocklyType().getBlocklyName();
-            Block jaxbDestination = new Block();
-            Mutation mutation = new Mutation();
-            mutation.setType(blocklyName);
-            Ast2Jaxb.setBasicProperties(this, jaxbDestination);
-            Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.TYPE, blocklyName);
-            Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.EXPRESSION, this.exprAsString);
-            jaxbDestination.setMutation(mutation);
-            return jaxbDestination;
+            return getBlock();
         } else {
-            return this.exprAsBlock.ast2xml();
+            if ( elevateNepoInfosAndCheckForCorrectness() ) {
+                return this.exprAsBlock.ast2xml();
+            } else {
+                return getBlock();
+            }
+
         }
+    }
+
+    private Block getBlock() {
+        String blocklyName = this.getBlocklyType().getBlocklyName();
+        Block jaxbDestination = new Block();
+        Mutation mutation = new Mutation();
+        mutation.setType(blocklyName);
+        Ast2Jaxb.setBasicProperties(this, jaxbDestination);
+        Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.TYPE, blocklyName);
+        Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.EXPRESSION, this.exprAsString);
+        jaxbDestination.setMutation(mutation);
+        return jaxbDestination;
     }
 
     @SuppressWarnings("unchecked")
@@ -125,7 +134,8 @@ public final class EvalExpr extends Expr {
             annotations.add(NepoInfo.error("PROGRAM_ERROR_EXPRBLOCK_PARSE"));
             return errorExpr;
         } else {
-            ExprlyVisitor exprlyVisitor = new ExprlyVisitor();
+            //ExprlyVisitor exprlyVisitor = new ExprlyVisitor();
+            TextlyVisitor<Expr> exprlyVisitor = new TextlyVisitor();
             Expr expr = exprlyVisitor.visitExpression(expression);
             return expr;
         }
@@ -147,10 +157,13 @@ public final class EvalExpr extends Expr {
      * retrieve typecheck errors from the AST sub-tree of this EvalExpr block.
      * They must be elevated to this block, because the EvalExpr block is explicitly designed to hide the sub-tree.
      */
-    public void elevateNepoInfos() {
+    public boolean elevateNepoInfosAndCheckForCorrectness() {
+        boolean errorFree = true;
         List<NepoInfo> infos = InfoCollector.collectInfos(this);
         for ( NepoInfo info : infos ) {
             addNepoInfo(info);
+            errorFree = false;
         }
+        return errorFree;
     }
 }

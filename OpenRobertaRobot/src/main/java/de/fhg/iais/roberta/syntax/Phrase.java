@@ -119,6 +119,9 @@ abstract public class Phrase implements IInfoCollectable {
         throw new DbcException("blocklyTypes inconsistent. Was: " + this.blocklyType + ", should be set to: " + blocklyType);
     }
 
+    public void setBlocklyTypeVar(BlocklyType blocklyType){
+        this.blocklyType = blocklyType;
+    }
     /**
      * @return true if name of this phrase (as found in its block descriptor) is equals to one of the names given as parameter
      */

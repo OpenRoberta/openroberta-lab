@@ -22,10 +22,6 @@ public final class StmtList extends Stmt {
     }
 
 
-    public final int size() {
-        return this.sl.size();
-    }
-
     /**
      * Add new element to the list.
      *
