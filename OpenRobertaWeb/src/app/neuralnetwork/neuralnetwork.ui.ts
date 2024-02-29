@@ -794,12 +794,12 @@ const createUserInputTableBs = (tableDiv: JQuery<HTMLElement>, tableEl: JQuery<H
     ] = [] as any;
 
     function formatCellsAsInputs(value) {
-        return `<input type='text' class='nn-table-input' value='${value}'>`;
+        return `<input type='text' class='nn-table-input' value='${value}' data-neuron='${this.field}'>`;
     }
 
     let updateTableCell = {
         'change input': function (e, value, row, index) {
-            let attr = e.currentTarget.classList[1];
+            let attr = e.currentTarget.dataset.neuron;
             tableEl.bootstrapTable('updateCell', {
                 index: index,
                 field: attr,
