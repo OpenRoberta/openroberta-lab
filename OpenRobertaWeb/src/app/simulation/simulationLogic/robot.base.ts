@@ -184,20 +184,20 @@ export abstract class RobotBase implements IRobot, ISelectable {
             let objectCorners = [
                 {
                     x: Math.round((this as unknown as RobotBaseMobile).chassis.frontRight.x),
-                    y: Math.round((this as unknown as RobotBaseMobile).chassis.frontRight.y)
+                    y: Math.round((this as unknown as RobotBaseMobile).chassis.frontRight.y),
                 },
                 {
                     x: Math.round((this as unknown as RobotBaseMobile).chassis.backRight.x),
-                    y: Math.round((this as unknown as RobotBaseMobile).chassis.backRight.y)
+                    y: Math.round((this as unknown as RobotBaseMobile).chassis.backRight.y),
                 },
                 {
                     x: Math.round((this as unknown as RobotBaseMobile).chassis.backLeft.x),
-                    y: Math.round((this as unknown as RobotBaseMobile).chassis.backLeft.y)
+                    y: Math.round((this as unknown as RobotBaseMobile).chassis.backLeft.y),
                 },
                 {
                     x: Math.round((this as unknown as RobotBaseMobile).chassis.frontLeft.x),
-                    y: Math.round((this as unknown as RobotBaseMobile).chassis.frontLeft.y)
-                }
+                    y: Math.round((this as unknown as RobotBaseMobile).chassis.frontLeft.y),
+                },
             ];
             for (let c in objectCorners) {
                 rCtx.beginPath();
@@ -246,6 +246,9 @@ export abstract class RobotBase implements IRobot, ISelectable {
     }
 
     updateActions(myRobot: RobotBase, dt: number, interpreterRunning: boolean): void {
+        if (interpreterRunning) {
+            this.time += dt;
+        }
         for (const item in this) {
             if (this[item] && (this[item] as unknown as IUpdateAction).updateAction) {
                 let myAction = this[item] as unknown as IUpdateAction;
@@ -288,8 +291,8 @@ export abstract class RobotBase implements IRobot, ISelectable {
         const $systemValuesView = $('#systemValuesView');
         $('#systemValuesView > div:not(:first-child)').remove();
         $systemValuesView.append('<div><label>FPS</label><span>' + UTIL.round(1 / dt, 0) + '</span></div>');
+        $systemValuesView.append('<div><label>' + Blockly.Msg['SENSOR_TIME'] + '</label><span>' + UTIL.round(this.time, 3) + 's</span></div>');
         if (this.mobile) {
-            $systemValuesView.append('<div><label>' + Blockly.Msg['SENSOR_TIME'] + '</label><span>' + UTIL.round(this.time, 3) + 's</span></div>');
             $systemValuesView.append('<div><label>Robot X</label><span>' + UTIL.round((this as unknown as RobotBaseMobile).pose.x / 3, 1) + '</span></div>');
             $systemValuesView.append('<div><label>Robot Y</label><span>' + UTIL.round((this as unknown as RobotBaseMobile).pose.y / 3, 1) + '</span></div>');
             $systemValuesView.append(
@@ -297,8 +300,14 @@ export abstract class RobotBase implements IRobot, ISelectable {
             );
         }
         const $timerValuesView = $('#timerValuesView');
-        $timerValuesView.html('');
-        //$timerValuesView.append(this.timer.getLabel());
+        const $timerHeading = $('#headingTwo');
+        if (this.timer) {
+            $timerHeading.show();
+            $timerValuesView.html('');
+            $timerValuesView.append(this.timer.getLabel());
+        } else {
+            $timerHeading.hide();
+        }
 
         const $sensorValuesView = $('#sensorValuesView');
         $sensorValuesView.html('');
@@ -340,7 +349,7 @@ export class RobotFactory {
         [235, 106, 10],
         [186, 204, 30],
         [242, 148, 0],
-        [0, 90, 148]
+        [0, 90, 148],
     ];
 
     static async createRobots(
@@ -358,8 +367,8 @@ export class RobotFactory {
             if (index > MAX_SIM_ROBOTS - 1) {
                 alert(
                     'The maximum number of robots that can be simulated at the same time is ' +
-                    MAX_SIM_ROBOTS +
-                    '. The number of robots exceeding this number is not simulated!'
+                        MAX_SIM_ROBOTS +
+                        '. The number of robots exceeding this number is not simulated!'
                 );
                 return { robots: myRobots, robotClass: myRobotClass };
             }

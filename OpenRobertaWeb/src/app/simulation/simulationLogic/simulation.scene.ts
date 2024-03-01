@@ -470,6 +470,9 @@ export class SimulationScene {
             });
             this.showFullyLoadedSim(callbackOnLoaded);
         }
+        this.robots.forEach((robot, index) => {
+            robot.time = 0;
+        });
     }
 
     private showFullyLoadedSim(callbackOnLoaded: () => void) {
