@@ -1,7 +1,7 @@
 import { SelectionListener } from 'robot.base';
 import { Interpreter } from 'interpreter.interpreter';
 import { EdisonChassis, EdisonLeds, WebAudio } from 'robot.actuators';
-import { RobotBaseMobile } from 'robot.base.mobile';
+import { Pose, RobotBaseMobile } from 'robot.base.mobile';
 import { EdisonInfraredSensors, EV3Keys, Keys, LineSensor, SoundSensorBoolean } from 'robot.sensors';
 import * as $ from 'jquery';
 
@@ -18,8 +18,8 @@ export default class RobotEdison extends RobotBaseMobile {
 
     constructor(id: number, configuration: object, interpreter: Interpreter, savedName: string, myListener: SelectionListener) {
         super(id, configuration, interpreter, savedName, myListener);
-        this.pose.x = 60;
-        this.pose.y = 60;
+        this.pose = new Pose(60, 60);
+        this.initialPose = new Pose(60, 60);
         this.mouse = {
             x: 7,
             y: 0,
