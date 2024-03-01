@@ -14,7 +14,7 @@
         </block>
     </instance>
     <instance x="560" y="216">
-        <block type="robConf_gyro" id="}O,nU9g2cL:S*jCf~_Z*" intask="true">
+        <block type="robConf_gyro" id="}O,nU9g2cL:S*jCf~_Z*" intask="true" deletable="false">
             <field name="NAME">_K</field>
         </block>
     </instance>
