@@ -193,7 +193,8 @@ DISPLAYLEDON:
         r, g, b = (hex_value >> i & 0xFF for i in (16, 8, 0))
         color_diffs = []
         for name, color in led_colors.items():
+            cr, cg, cb = (color >> i & 0xFF for i in (16, 8, 0))
             # Euclidean distance calculation
-            distance = math.sqrt((r - ((color >> 16) & 0xFF)) ** 2 + (g - ((color >> 8) & 0xFF)) ** 2 + (b - (color & 0xFF)) ** 2)
+            distance = math.sqrt((r - cr) ** 2 + (g - cg) ** 2 + (b - cb) ** 2)
             color_diffs.append((distance, name))
         return min(color_diffs)[1]
