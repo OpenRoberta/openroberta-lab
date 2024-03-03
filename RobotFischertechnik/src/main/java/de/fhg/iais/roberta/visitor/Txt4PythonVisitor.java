@@ -39,6 +39,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.EncoderReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetLineSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.MotionSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
@@ -570,6 +571,12 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
     }
 
     @Override
+    public Void visitMotionSensor(MotionSensor motionSensor) {
+        this.src.add("motion_detector.detected()");
+        return null;
+    }
+
+    @Override
     public Void visitKeysSensor(KeysSensor keysSensor) {
         String port = getPortFromConfig(keysSensor.getUserDefinedPort());
         this.src.add("TXT_M_", port, "_mini_switch.get_state()");
@@ -679,6 +686,7 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
         }
         initActors(usedHardwareBean);
         initSensors(usedHardwareBean);
+        initCamera(usedHardwareBean);
         this.src.add("txt_factory.initialized()").nlI();
         generateVariables(usedHardwareBean);
 
@@ -725,6 +733,39 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
         }
     }
 
+    private void initCamera(UsedHardwareBean usedHardwareBean) {
+        if ( usedHardwareBean.isSensorUsed(FischertechnikConstants.CAMERA) ) {
+            ConfigurationComponent camera = getCamera();
+            String usbPort = camera.getOptProperty("PORT").substring(3);
+            String cameraVariable = "TXT_M_USB1_" + usbPort + "_camera";
+            this.src.add("txt_factory.init_usb_factory()").nlI();
+            this.src.add("txt_factory.init_camera_factory()").nlI();
+            this.src.add(cameraVariable + "= txt_factory.usb_factory.create_camera(TXT_M, " + usbPort + ")").nlI();
+            this.src.add(cameraVariable + ".set_rotate(False)").nlI();
+            this.src.add(cameraVariable + ".set_height(240)").nlI();
+            this.src.add(cameraVariable + ".set_width(320)").nlI();
+            this.src.add(cameraVariable + ".set_fps(15)").nlI();
+            this.src.add(cameraVariable + ".start()").nlI();
+            this.src.add("CAMERA_HEIGHT = 240").nlI();
+            this.src.add("CAMERA_WIDTH = 320").nlI();
+            nlIndent();
+            if ( usedHardwareBean.isSensorUsed(SC.MOTION) ) {
+                String percent = camera.getOptProperty("MOTION");
+                this.src.add("motion_detector =  txt_factory.camera_factory.create_motion_detector" +
+                    "(0, 0, CAMERA_WIDTH, CAMERA_HEIGHT," +
+                    " CAMERA_WIDTH * CAMERA_HEIGHT * (" + percent + " / 100) / 500)").nlI();
+            }
+        }
+    }
+
+    private ConfigurationComponent getCamera() {
+        for ( ConfigurationComponent component : this.configurationAst.getConfigurationComponents().values() ) {
+            if ( component.componentType.equals(FischertechnikConstants.TXTCAMERA) ) {
+                return component;
+            }
+        }
+        return null;
+    }
     private void generateVariables(UsedHardwareBean usedHardwareBean) {
         if ( usedHardwareBean.isActorUsed(FischertechnikConstants.OMNIDRIVE) ) {
             ConfigurationComponent omniDrive = getOmniDrive();

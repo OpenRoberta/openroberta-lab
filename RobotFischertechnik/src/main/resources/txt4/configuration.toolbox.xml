@@ -10,6 +10,13 @@
         <block type='robConf_ultrasonic'></block>
         <block type='robConf_key'></block>
         <block type='robConf_line'></block>
+        <block type='robConf_camera_txt'>
+            <value name='COLOUR'>
+                <block type='robColour_picker' deletable="false">
+                    <field name='COLOUR'>#cc0000</field>
+                </block>
+            </value>
+        </block>
     </category>
 
     

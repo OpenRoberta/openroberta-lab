@@ -141,6 +141,7 @@
         <block type='robSensors_touchkey_getSample'></block>
         <block type='robSensors_ultrasonic_getSample'></block>
         <block type='robSensors_line_getSample'></block>
+        <block type='robSensors_motion_getSample'></block>
     </category>
     <category name='TOOLBOX_CONTROL' svg='true'>
         <category name='TOOLBOX_DECISION' svg='true'>

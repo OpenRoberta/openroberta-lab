@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2024-02-23 10:57:53.485451",
+		"lastupdated": "2024-03-03 21:04:19.363325",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -653,6 +653,9 @@
 	"MODE_CAPACITIVE": "capacitive",
 	"MODE_RESISTIVE": "resistive",
 	"MODE_TOUCH": "touch mode",
+	"MODE_MOTION": "motion",
+	"MODE_NUMBERLINES": "number of lines",
+	"MODE_BALL": "ball information",
 	"LOOP": "repeat until",
 	"LOOP_FOREVER": "repeat indefinitely",
 	"CONNECTION_SEND_DATA": "send message",
@@ -1360,6 +1363,10 @@
 	"SENSOR_JOYSTICK": "joystick",
 	"JOYSTICK_GETSAMPLE_TOOLTIP": "Gets the current reading of one of the axes of the joystick",
 	"JOYSTICK_GETSAMPLE_TOOLTIP_MBOT2": "Is the joystick moved into the specified direction or pressed?",
+	"SENSOR_CAMERA_COLOUR_GETSAMPLE_TOOLTIP": "Returns the average color of the specified camera area (configuration).",
+	"SENSOR_CAMERA_NUMBERLINES_GETSAMPLE_TOOLTIP": "Returns the number of lines detected by the camera (up to 4).",
+	"SENSOR_CAMERA_MOTION_GETSAMPLE_TOOLTIP": "Returns a boolean (true or false) indicating whether a specified amount of pixel change, as defined by the sensitivity in the configuration, has occurred.",
+	"SENSOR_CAMERA_BALL_GETSAMPLE_TOOLTIP": "Returns a list [x, y, diameter] representing information about a ball matching the color set in the configuration. If no ball is found, returns a list of [-1, -1, -1].",
 	"MESSAGE_ROBOT_DISCONNECTED": "An active robot was disconnected",
 	"INTERNAL_PORT": "internal",
 	"PULSELOW": "pulse time LOW",
@@ -1601,6 +1608,7 @@
 	"SENSOR_PULSE_GETSAMPLE_TOOLTIP": "Gets the current reading from the pulse sensor.",
 	"SENSOR_PULSE_GETSAMPLE_TOOLTIP_ARDUINO": "Gets the current reading from the pulse sensor. The value is between 0 and 1023.",
 	"SENSOR_RFID_GETSAMPLE_TOOLTIP": "Gets the current reading from the RFID reader.",
+	"SENSOR_LINE_INFORMATION_TOOLTIP": "Returns a list [x, y, width] or the colour of the line at the specified index (1-4).",
 	"CONFIGURATION_PORT": "Port1",
 	"CONFIGURATION_NO_PORT": "no port",
 	"PORT_HEAD": "head",

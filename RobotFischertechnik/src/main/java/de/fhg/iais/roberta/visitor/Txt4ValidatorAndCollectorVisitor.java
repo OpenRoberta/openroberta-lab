@@ -37,6 +37,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.EncoderReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetLineSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.MotionSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
@@ -285,6 +286,15 @@ public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
     @Override
     public Void visitDisplayTextAction(DisplayTextAction displayTextAction) {
         usedHardwareBuilder.addUsedActor(new UsedActor(displayTextAction.port, SC.DISPLAY));
+        requiredComponentVisited(displayTextAction, displayTextAction.text);
+        requiredComponentVisited(displayTextAction, displayTextAction.row);
+        return null;
+    }
+
+    @Override
+    public Void visitMotionSensor(MotionSensor motionSensor) {
+        usedHardwareBuilder.addUsedSensor(new UsedSensor(motionSensor.getUserDefinedPort(), FischertechnikConstants.CAMERA, SC.MOTION));
+        usedHardwareBuilder.addUsedSensor(new UsedSensor(motionSensor.getUserDefinedPort(), SC.MOTION, SC.MOTION));
         return null;
     }
 

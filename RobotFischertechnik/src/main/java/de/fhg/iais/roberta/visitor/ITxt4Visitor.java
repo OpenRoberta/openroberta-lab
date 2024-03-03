@@ -22,6 +22,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.EncoderReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetLineSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.MotionSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 
 public interface ITxt4Visitor<V> extends IVisitor<V> {
@@ -68,6 +69,7 @@ public interface ITxt4Visitor<V> extends IVisitor<V> {
 
     V visitDisplayLedOffAction(DisplayLedOffAction displayLedOffAction);
 
-
     V visitDisplayTextAction(DisplayTextAction displayTextAction);
+
+    V visitMotionSensor(MotionSensor motionSensor);
 }
