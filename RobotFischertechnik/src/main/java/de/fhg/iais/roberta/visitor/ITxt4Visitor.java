@@ -18,6 +18,7 @@ import de.fhg.iais.roberta.syntax.action.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.ServoOnForAction;
 import de.fhg.iais.roberta.syntax.action.light.LedAction;
 import de.fhg.iais.roberta.syntax.sensor.TouchKeySensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetLineSensor;
@@ -72,4 +73,6 @@ public interface ITxt4Visitor<V> extends IVisitor<V> {
     V visitDisplayTextAction(DisplayTextAction displayTextAction);
 
     V visitMotionSensor(MotionSensor motionSensor);
+
+    V visitColorSensor(ColorSensor colorSensor);
 }

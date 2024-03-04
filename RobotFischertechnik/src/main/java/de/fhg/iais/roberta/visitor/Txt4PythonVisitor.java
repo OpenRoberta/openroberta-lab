@@ -35,6 +35,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.TouchKeySensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetLineSensor;
@@ -87,11 +88,6 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
     @Override
     public Void visitMainTask(MainTask mainTask) {
         UsedHardwareBean usedHardwareBean = this.getBean(UsedHardwareBean.class);
-        StmtList variables = mainTask.variables;
-        if ( !variables.get().isEmpty() ) {
-            variables.accept(this);
-            nlIndent();
-        }
         if ( this.programPhrases
             .stream()
             .filter(phrase -> phrase.getKind().getCategory() == Category.METHOD && !phrase.getKind().hasName("METHOD_CALL"))
@@ -106,6 +102,11 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
             this.src.add(helperMethodImpls);
         }
         nlIndent();
+        StmtList variables = mainTask.variables;
+        if ( !variables.get().isEmpty() ) {
+            variables.accept(this);
+            nlIndent();
+        }
         this.src.add("def run():");
         incrIndentation();
         if ( !this.usedGlobalVarInFunctions.isEmpty() ) {
@@ -577,6 +578,14 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
     }
 
     @Override
+    public Void visitColorSensor(ColorSensor colorSensor) {
+        this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(Txt4Methods.CAMERAGETCOLOUR));
+        this.src.add("()");
+
+        return null;
+    }
+
+    @Override
     public Void visitKeysSensor(KeysSensor keysSensor) {
         String port = getPortFromConfig(keysSensor.getUserDefinedPort());
         this.src.add("TXT_M_", port, "_mini_switch.get_state()");
@@ -737,23 +746,37 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
         if ( usedHardwareBean.isSensorUsed(FischertechnikConstants.CAMERA) ) {
             ConfigurationComponent camera = getCamera();
             String usbPort = camera.getOptProperty("PORT").substring(3);
+            int cameraHeight = 240;
+            int cameraWidth = 320;
             String cameraVariable = "TXT_M_USB1_" + usbPort + "_camera";
             this.src.add("txt_factory.init_usb_factory()").nlI();
             this.src.add("txt_factory.init_camera_factory()").nlI();
             this.src.add(cameraVariable + "= txt_factory.usb_factory.create_camera(TXT_M, " + usbPort + ")").nlI();
             this.src.add(cameraVariable + ".set_rotate(False)").nlI();
-            this.src.add(cameraVariable + ".set_height(240)").nlI();
-            this.src.add(cameraVariable + ".set_width(320)").nlI();
+            this.src.add(cameraVariable + ".set_height(" + cameraHeight + ")").nlI();
+            this.src.add(cameraVariable + ".set_width(" + cameraWidth + ")").nlI();
             this.src.add(cameraVariable + ".set_fps(15)").nlI();
             this.src.add(cameraVariable + ".start()").nlI();
-            this.src.add("CAMERA_HEIGHT = 240").nlI();
-            this.src.add("CAMERA_WIDTH = 320").nlI();
+            this.src.add("CAMERA_HEIGHT = " + cameraHeight).nlI();
+            this.src.add("CAMERA_WIDTH = " + cameraWidth).nlI();
             nlIndent();
             if ( usedHardwareBean.isSensorUsed(SC.MOTION) ) {
-                String percent = camera.getOptProperty("MOTION");
+                String sensitivity = camera.getOptProperty("MOTION");
                 this.src.add("motion_detector =  txt_factory.camera_factory.create_motion_detector" +
                     "(0, 0, CAMERA_WIDTH, CAMERA_HEIGHT," +
-                    " CAMERA_WIDTH * CAMERA_HEIGHT * (" + percent + " / 100) / 500)").nlI();
+                    " CAMERA_WIDTH * CAMERA_HEIGHT * (" + sensitivity + " / 100) / 500)").nlI();
+                this.src.add(cameraVariable, ".add_detector(motion_detector)").nlI();
+
+            }
+            if ( usedHardwareBean.isSensorUsed(SC.COLOUR) ) {
+                int percent = Integer.valueOf(camera.getOptProperty("COLOURSIZE"));
+
+                double colourWidth = cameraWidth * ((double) percent / 100);
+                double colourHeight = cameraHeight * ((double) percent / 100);
+                int startX = (cameraWidth - (int) colourWidth) / 2;
+                int startY = (cameraHeight - (int) colourHeight) / 2;
+                this.src.add("color_detector = txt_factory.camera_factory.create_color_detector(", startX, ", ", startY, ", ", (int) colourWidth, ", ", (int) colourHeight, ", 1)").nlI();
+                this.src.add(cameraVariable, ".add_detector(color_detector)").nlI();
             }
         }
     }

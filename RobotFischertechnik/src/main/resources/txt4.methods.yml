@@ -198,3 +198,11 @@ DISPLAYLEDON:
             distance = math.sqrt((r - cr) ** 2 + (g - cg) ** 2 + (b - cb) ** 2)
             color_diffs.append((distance, name))
         return min(color_diffs)[1]
+
+CAMERAGETCOLOUR:
+  PYTHON: |
+    def getCameraColour():
+        if color_detector.detected():
+            return color_detector.get_result().value.get_hex()
+        else:
+            return -1

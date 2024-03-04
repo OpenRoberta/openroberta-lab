@@ -142,6 +142,10 @@
         <block type='robSensors_ultrasonic_getSample'></block>
         <block type='robSensors_line_getSample'></block>
         <block type='robSensors_motion_getSample'></block>
+        <block type='robSensors_colour_getSample'></block>
+        <block type='robSensors_ball_getSample'></block>
+        <block type='robSensors_cameraline_getSample'></block>
+        <block type='robSensors_get_line_camera_txt'></block>
     </category>
     <category name='TOOLBOX_CONTROL' svg='true'>
         <category name='TOOLBOX_DECISION' svg='true'>

@@ -33,6 +33,7 @@ import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.TouchKeySensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetLineSensor;
@@ -295,6 +296,14 @@ public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
     public Void visitMotionSensor(MotionSensor motionSensor) {
         usedHardwareBuilder.addUsedSensor(new UsedSensor(motionSensor.getUserDefinedPort(), FischertechnikConstants.CAMERA, SC.MOTION));
         usedHardwareBuilder.addUsedSensor(new UsedSensor(motionSensor.getUserDefinedPort(), SC.MOTION, SC.MOTION));
+        return null;
+    }
+
+    @Override
+    public Void visitColorSensor(ColorSensor colorSensor) {
+        usedHardwareBuilder.addUsedSensor(new UsedSensor(colorSensor.getUserDefinedPort(), FischertechnikConstants.CAMERA, SC.COLOUR));
+        usedHardwareBuilder.addUsedSensor(new UsedSensor(colorSensor.getUserDefinedPort(), SC.COLOUR, SC.COLOUR));
+        usedMethodBuilder.addUsedMethod(Txt4Methods.CAMERAGETCOLOUR);
         return null;
     }
 

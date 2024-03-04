@@ -13,7 +13,7 @@
         <block type='robConf_camera_txt'>
             <value name='COLOUR'>
                 <block type='robColour_picker' deletable="false">
-                    <field name='COLOUR'>#cc0000</field>
+                    <field name='COLOUR'>#FFA500</field>
                 </block>
             </value>
         </block>
