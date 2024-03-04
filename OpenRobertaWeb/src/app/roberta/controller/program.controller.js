@@ -18,8 +18,21 @@ var blocklyWorkspace;
 var listenToBlocklyEvents = true;
 var seen = true;
 
-export const SSID = '';
-export const password = '';
+var _SSID = '';
+var _password = '';
+
+export function setSSID(SSID) {
+    _SSID = SSID;
+}
+export function getSSID() {
+    return _SSID;
+}
+export function setPassword(password) {
+    _password = password;
+}
+export function getPassword() {
+    return _password;
+}
 
 /**
  * Inject Blockly with initial toolbox

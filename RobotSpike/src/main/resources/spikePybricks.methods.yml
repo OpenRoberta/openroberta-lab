@@ -1,0 +1,209 @@
+include: "classpath:/common.methods.yml"
+
+HSVTORGB:
+  PYTHON: |
+    def hsv2rgb(color):
+        h = float(color.h)
+        s = float(color.s / 100.0)
+        v = float(color.v / 100.0)
+    
+        c = v * s
+        x = c * (1 - abs(((h/60.0) % 2) - 1))
+        m = v - c
+
+        if 0.0 <= h < 60:
+            rgb = (c, x, 0)
+        elif 0.0 <= h < 120:
+            rgb = (x, c, 0)
+        elif 0.0 <= h < 180:
+            rgb = (0, c, x)
+        elif 0.0 <= h < 240:
+            rgb = (0, x, c)
+        elif 0.0 <= h < 300:
+            rgb = (x, 0, c)
+        elif 0.0 <= h < 360:
+            rgb = (c, 0, x)
+    
+        return list(map(lambda n: (n + m) * 255, rgb))  
+
+TANKDRIVE_DIST:
+  PYTHON: |
+    def circle_circumference(diameter):
+        return math.pi * (diameter)
+
+    def distance_to_angle(distance):
+        return (distance/circle_circumference(WHEEL_DIAMETER)) * 360
+    
+    def rpm_to_mm_sec(rpm):
+        return (rpm/360) * circle_circumference(WHEEL_DIAMETER)
+    
+    def catch_edge_cases(dist, left_speed, right_speed):
+        near_zero = 0.5
+        if(abs(dist) < near_zero)
+            return True
+        if((abs(left_speed) < near_zero and abs(right_speed) < near_zero)):
+            left_speed = (abs(left_speed)/left_speed) * 0.5
+            right_speed = (abs(right_speed)/right_speed) * 0.5
+        #just go straight no need for calculations
+        if abs(left_speed - right_speed) <  near_zero:
+            drive_base.settings(straight_speed=get_speed_from_percent(left_speed))
+            drive_base.straight(abs(left_speed)/left_speed * dist * 10)
+            return True
+        #in case velocities cancel dont move, because no distance will be driven
+        if abs(left_speed+right_speed) < near_zero:
+            return True
+        return False
+    
+    def wait_for_completion():
+        while not (left_motor.done() and right_motor.done()):
+              pass
+    
+    def tank_drive_dist(dist, left_speed, right_speed):
+        if catch_edge_cases(dist, left_speed, right_speed):
+            return
+        sign = abs(dist)/dist
+        #to mm always calc with positive dist
+        dist = (abs(dist) * 10)
+        #we have to keep rpm to set motor speed later
+        rpm_left = get_speed_from_percent(left_speed)
+        rpm_right = get_speed_from_percent(right_speed)
+        #we need mm/sec to calculate driven radius
+        speed_left_mm_sec =  rpm_to_mm_sec(rpm_left)
+        speed_right_mm_sec = rpm_to_mm_sec(rpm_right)
+    
+        #we need this distinction because inner/outer circle change depending on which motor is faster
+        if (abs(rpm_right) > abs(rpm_left)):
+            drives_radius = (TRACKWIDTH/2.0) * ((speed_left_mm_sec+speed_right_mm_sec)/(speed_right_mm_sec-speed_left_mm_sec))
+            left_circle = circle_circumference(drives_radius - (TRACKWIDTH/2))
+            right_circle = circle_circumference(drives_radius + (TRACKWIDTH/2))
+        else:
+            drives_radius = (TRACKWIDTH/2.0) * ((speed_left_mm_sec+speed_right_mm_sec)/(speed_left_mm_sec-speed_right_mm_sec))
+            left_circle = circle_circumference(drives_radius + (TRACKWIDTH/2))
+            right_circle = circle_circumference(drives_radius - (TRACKWIDTH/2))
+    
+        percent_to_drive = (dist / circle_circumference(drives_radius))
+        angle_left = distance_to_angle(percent_to_drive * left_circle)
+        angle_right = distance_to_angle(percent_to_drive * right_circle)
+    
+        if not rpm_left :
+            rpm_left = 1
+        if not rpm_right :
+            rpm_right = 1
+    
+        left_motor.run_angle(rpm_left,abs(rpm_left)/rpm_left * sign * angle_left , wait=False)
+        right_motor.run_angle(rpm_right,abs(rpm_right)/rpm_right * sign * angle_right, wait=False)
+    
+        wait_for_completion()
+
+DIFFDRIVE:
+  PYTHON: |
+    def diff_drive(left_speed, right_speed, regulated):
+        if(regulated):
+            left_motor.run(get_speed_from_percent(left_speed))
+            right_motor.run(get_speed_from_percent(right_speed))
+        else:
+            left_motor.dc(left_speed)
+            right_motor.dc(right_speed)
+
+DRIVE_STRAIGHT:
+  PYTHON: |
+    def drive_straight(speed, dist):
+        if abs(speed) < 0.5:
+            speed = (abs(speed)/speed) * 0.5
+        drive_base.settings(straight_speed = get_speed_from_percent(speed))
+        drive_base.straight(abs(speed)/speed * dist * 10 )
+
+
+SPEED_FROM_PERCENT:
+  PYTHON: |
+    def get_speed_from_percent(percent):
+        if percent < -100 :
+            percent = -100
+        if percent > 100 :
+            percent = 100
+        return int(810.0 * (percent/100.0))
+
+GET_ACCELERATION:
+  PYTHON: |
+    def get_acceleration():
+        return math.sqrt((abs(hub.imu.acceleration()[0])**2) + (abs(hub.imu.acceleration()[1])**2) + (abs(hub.imu.acceleration()[2])**2))
+
+IS_FREE_FALL:
+  PYTHON: |
+    def is_free_fall():
+        threshold = 350
+        stopWatch.time()
+        start = stopWatch.time()
+        while start - stopWatch.time() < 333:
+            if(get_acceleration() < threshold): 
+                return True;
+        return False
+
+IS_TAPPED:
+  PYTHON: |
+    def lerp(a, b, t):
+        x = a[0] * (1-t) + t * b[0]
+        y = a[1] * (1-t) + t * b[1]
+        z = a[2] * (1-t) + t * b[2]
+        return vector(x,y,z)
+    
+    def diff(a,b):
+        return vector(a[0]-b[0],a[1]-b[1],a[2]-b[2])
+    
+    lowPassValue = hub.imu.acceleration()
+    def is_tapped(threshold = 5000):
+        global lowPassValue
+        start = stopWatch.time()
+        while start - stopWatch.time() < 333:
+            acceleration = hub.imu.acceleration()
+            lowPassValue = lerp(lowPassValue, acceleration, 1/2)
+            deltaAcceleration = diff(acceleration, lowPassValue)
+            prod =  math.sqrt((abs(deltaAcceleration[0])**2) + (abs(deltaAcceleration[1])**2) + (abs(deltaAcceleration[2])**2))
+            if prod > threshold:
+              return True
+        wait(20)
+        return False
+
+IS_SHAKEN:
+  PYTHON: |
+    def is_shaken():
+        count_tapped = 0
+        tapped = True
+        while tapped := is_tapped(1000):
+            if tapped:
+                count_tapped += 1
+                wait(75)
+            if count_tapped >= 10:
+                return True
+        return False
+
+TURN_FOR:
+  PYTHON: |
+    def turn_for(power, degrees, direction):
+        if power == 0 or degrees == 0:
+            return
+        sign = (abs(power)/power)
+        tr = (get_speed_from_percent( power ) * 2 * (WHEEL_DIAMETER * math.pi)) / (TRACKWIDTH * math.pi)
+        if abs(tr) < 5 :
+            tr = (abs(tr)/tr) * 5
+        drive_base.settings(turn_rate = tr)
+        drive_base.turn( sign * degrees * direction )
+
+SHOW_ANIMATION:
+  PYTHON: |
+    def show_animation(image_list):
+        hub.display.animate(image_list, 500);
+        wait(500 * len(image_list))
+        hub.display.icon(image_list[len(image_list)-1])
+
+GET_COLOR:
+  PYTHON: |
+    def get_color(color_sensor):
+        hsv = color_sensor.hsv()
+        color = color_sensor.color()
+        if(color == Color.BLACK):
+            if abs(hsv.v) > 10  :
+                return Color.BLACK
+        elif abs(abs(hsv.h) - abs(color.h))%330 < 30 or color == Color.WHITE:
+            return color
+        return Color.NONE

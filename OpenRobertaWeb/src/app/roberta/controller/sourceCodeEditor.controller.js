@@ -191,16 +191,25 @@ function getSourceCode(reload) {
     var configName = isNamedConfig ? GUISTATE_C.getConfigurationName() : undefined;
     var xmlConfigText = GUISTATE_C.isConfigurationAnonymous() ? GUISTATE_C.getConfigurationXML() : undefined;
     var language = GUISTATE_C.getLanguage();
-    PROGRAM.showSourceProgram(GUISTATE_C.getProgramName(), configName, xmlProgram, xmlConfigText, PROG_C.SSID, PROG_C.password, language, function (result) {
-        PROG_C.reloadProgram(result);
-        if (result.rc == 'ok') {
-            if (reload) {
-                $('#tabSourceCodeEditor').tabWrapShow();
+    PROGRAM.showSourceProgram(
+        GUISTATE_C.getProgramName(),
+        configName,
+        xmlProgram,
+        xmlConfigText,
+        PROG_C.getSSID(),
+        PROG_C.password,
+        language,
+        function (result) {
+            PROG_C.reloadProgram(result);
+            if (result.rc == 'ok') {
+                if (reload) {
+                    $('#tabSourceCodeEditor').tabWrapShow();
+                }
+                GUISTATE_C.setState(result);
+                flask.updateCode(result.sourceCode);
+            } else {
+                MSG.displayInformation(result, result.message, result.message, result.parameters);
             }
-            GUISTATE_C.setState(result);
-            flask.updateCode(result.sourceCode);
-        } else {
-            MSG.displayInformation(result, result.message, result.message, result.parameters);
         }
-    });
+    );
 }

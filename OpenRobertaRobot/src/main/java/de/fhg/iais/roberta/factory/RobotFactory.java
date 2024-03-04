@@ -157,18 +157,6 @@ public class RobotFactory {
         return this.pluginProperties.getStringProperty("robot.announcement");
     }
 
-    public final Boolean hasStopButton() {
-        return this.pluginProperties.getStringProperty("robot.stopButton") != null;
-    }
-
-    public final String getConnectionType() {
-        return this.pluginProperties.getStringProperty("robot.connection");
-    }
-
-    public final void setConnectionType(String type) {
-        this.pluginProperties.setStringProperty("robot.connection", type);
-    }
-
     public final String getVendorId() {
         return this.pluginProperties.getStringProperty("robot.vendor");
     }
@@ -210,10 +198,6 @@ public class RobotFactory {
 
     public final String getMenuVersion() {
         return this.pluginProperties.getStringProperty("robot.menu.version");
-    }
-
-    public final Boolean hasWlanCredentials() {
-        return this.pluginProperties.getStringProperty("robot.haswlan") != null;
     }
 
     public final String getFirmwareDefaultProgramName() {

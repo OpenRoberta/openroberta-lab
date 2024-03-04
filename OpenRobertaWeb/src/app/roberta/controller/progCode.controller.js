@@ -18,7 +18,7 @@ function init() {
     flask = new CodeFlask('#codeContent', {
         language: 'java',
         lineNumbers: true,
-        readonly: true
+        readonly: true,
     });
     initEvents();
 }
@@ -53,13 +53,13 @@ export { init, setCode, setCodeLanguage };
 
 function initEvents() {
     $('#codeButton').off('click touchend');
-    $('#codeButton').onWrap('click touchend', function(event) {
+    $('#codeButton').onWrap('click touchend', function (event) {
         toggleCode($(this));
         return false;
     });
     $('#codeDownload').onWrap(
         'click',
-        function(event) {
+        function (event) {
             var filename = GUISTATE_C.getProgramName() + '.' + GUISTATE_C.getSourceCodeFileExtension();
             UTIL.download(filename, GUISTATE_C.getProgramSource());
             MSG.displayMessage('MENU_MESSAGE_DOWNLOAD', 'TOAST', filename);
@@ -68,7 +68,7 @@ function initEvents() {
     );
     $('#codeRefresh').onWrap(
         'click',
-        function(event) {
+        function (event) {
             event.stopPropagation();
             var dom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
             var xmlProgram = Blockly.Xml.domToText(dom);
@@ -85,10 +85,10 @@ function initEvents() {
                 configName,
                 xmlProgram,
                 xmlConfigText,
-                PROG_C.SSID,
+                PROG_C.getSSID(),
                 PROG_C.password,
                 language,
-                function(result) {
+                function (result) {
                     PROG_C.reloadProgram(result, true);
                     if (result.rc == 'ok') {
                         GUISTATE_C.setState(result);
@@ -120,10 +120,10 @@ function toggleCode($button) {
             configName,
             xmlProgram,
             xmlConfigText,
-            PROG_C.SSID,
+            PROG_C.getSSID(),
             PROG_C.password,
             language,
-            function(result) {
+            function (result) {
                 PROG_C.reloadProgram(result);
                 if (result.rc == 'ok') {
                     GUISTATE_C.setState(result);

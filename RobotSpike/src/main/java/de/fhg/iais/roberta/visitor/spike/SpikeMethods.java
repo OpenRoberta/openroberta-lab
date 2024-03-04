@@ -1,4 +1,5 @@
-package de.fhg.iais.roberta.visitor;
+package de.fhg.iais.roberta.visitor.spike;
+
 
 public enum SpikeMethods {
     GETSAMPLEULTRASONIC,

@@ -22,7 +22,8 @@
     "dapjs": "^2.3.0",
     "isomorphic-ws": "^5.0.0",
     "jquery": "^3.7.1",
-    "lodash.isequal": "^4.5.0"
+    "lodash.isequal": "^4.5.0",
+    "web-bluetooth": "^0.1.2"
   },
   "devDependencies": {
     "@cor3ntin/flexbuffers-wasm": "^0.0.18",
@@ -32,6 +33,7 @@
     "@types/jquery": "^3.5.22",
     "@types/jquery.validation": "^1.16.6",
     "@types/lodash.isequal": "^4.5.6",
+    "@types/web-bluetooth": "^0.0.20",
     "autoprefixer": "^10.2.6",
     "cssnano": "^5.0.6",
     "gulp": "^4.0.2",

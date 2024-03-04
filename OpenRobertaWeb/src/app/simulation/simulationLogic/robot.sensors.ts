@@ -649,7 +649,6 @@ export class ThymioLineSensors implements ILabel, ISensor, IDrawable {
         values['infrared']['line'] = {};
         values['infrared']['line']['left'] = this.left.line;
         values['infrared']['line']['right'] = this.right.line;
-        console.log(values);
     }
 
     drawPriority: number = 4;

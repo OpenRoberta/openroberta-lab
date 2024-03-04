@@ -17,6 +17,8 @@ import de.fhg.iais.roberta.syntax.action.spike.MotorOnForAction;
 import de.fhg.iais.roberta.syntax.action.spike.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.spike.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.spike.PlayToneAction;
+import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
+import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
@@ -26,6 +28,12 @@ import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.spike.Image;
 import de.fhg.iais.roberta.syntax.spike.PredefinedImage;
 
+/**
+ * All spike-methods for code-generation function time should usually be Void,<br>
+ * functions should return null.
+ *
+ * @param <V> usually is Void
+ */
 public interface ISpikeVisitor<V> extends IVisitor<V> {
     V visitMotorOnForAction(MotorOnForAction motorOnForAction);
 
@@ -76,4 +84,9 @@ public interface ISpikeVisitor<V> extends IVisitor<V> {
     V visitImage(Image image);
 
     V visitPredefinedImage(PredefinedImage predefinedImage);
+
+    V visitColorConst(ColorConst colorConst);
+
+    V visitWaitTimeStmt(WaitTimeStmt waitTimeStmt);
+
 }

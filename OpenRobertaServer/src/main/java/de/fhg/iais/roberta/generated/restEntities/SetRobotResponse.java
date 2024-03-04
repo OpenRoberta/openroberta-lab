@@ -25,12 +25,11 @@ public class SetRobotResponse extends BaseResponse {
     protected boolean markerSim;
     protected boolean markerSimDefined = false;
     protected boolean nn;
-    protected JSONArray nnActivations;
     protected boolean nnDefined = false;
+    protected JSONArray nnActivations;
     protected boolean webotsSim;
     protected boolean webotsSimDefined = false;
     protected String webotsUrl;
-    protected String connection;
     protected String vendor;
     protected boolean configurationUsed;
     protected boolean configurationUsedDefined = false;
@@ -38,8 +37,6 @@ public class SetRobotResponse extends BaseResponse {
     protected String signature;
     protected String sourceCodeFileExtension;
     protected String binaryFileExtension;
-    protected boolean hasWlan;
-    protected boolean hasWlanDefined = false;
     protected String firmwareDefault;
 
     /**
@@ -92,14 +89,12 @@ public class SetRobotResponse extends BaseResponse {
         JSONArray nnActivations,
         boolean webotsSim,
         String webotsUrl,
-        String connection,
         String vendor,
         boolean configurationUsed,
         String commandLine,
         String signature,
         String sourceCodeFileExtension,
         String binaryFileExtension,
-        boolean hasWlan,
         String firmwareDefault) {
         SetRobotResponse entity = new SetRobotResponse();
         entity.setCmd(cmd);
@@ -129,14 +124,12 @@ public class SetRobotResponse extends BaseResponse {
         entity.setNnActivations(nnActivations);
         entity.setWebotsSim(webotsSim);
         entity.setWebotsUrl(webotsUrl);
-        entity.setConnection(connection);
         entity.setVendor(vendor);
         entity.setConfigurationUsed(configurationUsed);
         entity.setCommandLine(commandLine);
         entity.setSignature(signature);
         entity.setSourceCodeFileExtension(sourceCodeFileExtension);
         entity.setBinaryFileExtension(binaryFileExtension);
-        entity.setHasWlan(hasWlan);
         entity.setFirmwareDefault(firmwareDefault);
         entity.immutable();
         return entity;
@@ -206,14 +199,12 @@ public class SetRobotResponse extends BaseResponse {
                     setMarkerSim(jsonO.getBoolean(key));
                 } else if ( "nn".equals(key) ) {
                     setNn(jsonO.getBoolean(key));
-                } else if ( "nn.activations".equals(key) ) {
+                } else if ( "nnActivations".equals(key) ) {
                     setNnActivations(jsonO.getJSONArray(key));
                 } else if ( "webotsSim".equals(key) ) {
                     setWebotsSim(jsonO.getBoolean(key));
                 } else if ( "webotsUrl".equals(key) ) {
                     setWebotsUrl(jsonO.optString(key));
-                } else if ( "connection".equals(key) ) {
-                    setConnection(jsonO.getString(key));
                 } else if ( "vendor".equals(key) ) {
                     setVendor(jsonO.getString(key));
                 } else if ( "configurationUsed".equals(key) ) {
@@ -226,8 +217,6 @@ public class SetRobotResponse extends BaseResponse {
                     setSourceCodeFileExtension(jsonO.getString(key));
                 } else if ( "binaryFileExtension".equals(key) ) {
                     setBinaryFileExtension(jsonO.getString(key));
-                } else if ( "hasWlan".equals(key) ) {
-                    setHasWlan(jsonO.getBoolean(key));
                 } else if ( "firmwareDefault".equals(key) ) {
                     setFirmwareDefault(jsonO.optString(key));
                 } else {
@@ -296,13 +285,10 @@ public class SetRobotResponse extends BaseResponse {
             _message = "required property nn of SetRobotResponse-object is not set: " + toString();
         }
         if ( nnActivations == null ) {
-            _message = "required property nn.activations of SetRobotResponse-object is not set: " + toString();
+            _message = "required property nnActivations of SetRobotResponse-object is not set: " + toString();
         }
         if ( !webotsSimDefined ) {
             _message = "required property webotsSim of SetRobotResponse-object is not set: " + toString();
-        }
-        if ( connection == null ) {
-            _message = "required property connection of SetRobotResponse-object is not set: " + toString();
         }
         if ( vendor == null ) {
             _message = "required property vendor of SetRobotResponse-object is not set: " + toString();
@@ -315,9 +301,6 @@ public class SetRobotResponse extends BaseResponse {
         }
         if ( binaryFileExtension == null ) {
             _message = "required property binaryFileExtension of SetRobotResponse-object is not set: " + toString();
-        }
-        if ( !hasWlanDefined ) {
-            _message = "required property hasWlan of SetRobotResponse-object is not set: " + toString();
         }
         if ( _message != null ) {
             this.immutable = false;
@@ -478,21 +461,21 @@ public class SetRobotResponse extends BaseResponse {
     }
 
     /**
-     * GET NN activations. Object must be immutable. Never return null or an undefined/default value.
+     * GET nnActivations. Object must be immutable. Never return null or an undefined/default value.
      */
     public JSONArray getNnActivations() {
         if ( !this.immutable ) {
-            throw new RuntimeException("no NN activations from an object under construction: " + toString());
+            throw new RuntimeException("no nnActivations from an object under construction: " + toString());
         }
         return this.nnActivations;
     }
 
     /**
-     * SET NN activations for the robot. Object must be mutable.
+     * SET nnActivations. Object must be mutable.
      */
     public SetRobotResponse setNnActivations(JSONArray nnActivations) {
         if ( this.immutable ) {
-            throw new RuntimeException("nn activations assigned to an immutable object: " + toString());
+            throw new RuntimeException("nnActivations assigned to an immutable object: " + toString());
         }
         this.nnActivations = nnActivations;
         return this;
@@ -547,27 +530,6 @@ public class SetRobotResponse extends BaseResponse {
             throw new RuntimeException("webotsUrl assigned to an immutable object: " + toString());
         }
         this.webotsUrl = webotsUrl;
-        return this;
-    }
-
-    /**
-     * GET connection. Object must be immutable. Never return null or an undefined/default value.
-     */
-    public String getConnection() {
-        if ( !this.immutable ) {
-            throw new RuntimeException("no connection from an object under construction: " + toString());
-        }
-        return this.connection;
-    }
-
-    /**
-     * SET connection. Object must be mutable.
-     */
-    public SetRobotResponse setConnection(String connection) {
-        if ( this.immutable ) {
-            throw new RuntimeException("connection assigned to an immutable object: " + toString());
-        }
-        this.connection = connection;
         return this;
     }
 
@@ -717,28 +679,6 @@ public class SetRobotResponse extends BaseResponse {
     }
 
     /**
-     * GET hasWlan. Object must be immutable. Never return null or an undefined/default value.
-     */
-    public boolean getHasWlan() {
-        if ( !this.immutable ) {
-            throw new RuntimeException("no hasWlan from an object under construction: " + toString());
-        }
-        return this.hasWlan;
-    }
-
-    /**
-     * SET hasWlan. Object must be mutable.
-     */
-    public SetRobotResponse setHasWlan(boolean hasWlan) {
-        if ( this.immutable ) {
-            throw new RuntimeException("hasWlan assigned to an immutable object: " + toString());
-        }
-        this.hasWlan = hasWlan;
-        this.hasWlanDefined = true;
-        return this;
-    }
-
-    /**
      * GET firmwareDefault. Object must be immutable. Never return null or an undefined/default value.
      */
     public String getFirmwareDefault() {
@@ -834,7 +774,6 @@ public class SetRobotResponse extends BaseResponse {
             if ( this.webotsUrl != null ) {
                 jsonO.put("webotsUrl", this.webotsUrl);
             }
-            jsonO.put("connection", this.connection);
             jsonO.put("vendor", this.vendor);
             jsonO.put("configurationUsed", this.configurationUsed);
             if ( this.commandLine != null ) {
@@ -845,7 +784,6 @@ public class SetRobotResponse extends BaseResponse {
             }
             jsonO.put("sourceCodeFileExtension", this.sourceCodeFileExtension);
             jsonO.put("binaryFileExtension", this.binaryFileExtension);
-            jsonO.put("hasWlan", this.hasWlan);
             if ( this.firmwareDefault != null ) {
                 jsonO.put("firmwareDefault", this.firmwareDefault);
             }
@@ -857,7 +795,7 @@ public class SetRobotResponse extends BaseResponse {
 
     @Override
     public String toString() {
-        return "SetRobotResponse [immutable=" + this.immutable + ", cmd=" + this.cmd + ", rc=" + this.rc + ", message=" + this.message + ", cause=" + this.cause + ", parameters=" + this.parameters + ", initToken=" + this.initToken + ", serverTime=" + this.serverTime + ", serverVersion=" + this.serverVersion + ", robotWait=" + this.robotWait + ", robotBattery=" + this.robotBattery + ", robotName=" + this.robotName + ", robotVersion=" + this.robotVersion + ", robotFirmwareName=" + this.robotFirmwareName + ", robotSensorvalues=" + this.robotSensorvalues + ", robotNepoexitvalue=" + this.robotNepoexitvalue + ", robotState=" + this.robotState + ", notificationsAvailable=" + this.notificationsAvailable + ", robot=" + this.robot + ", program=" + this.program + ", configuration=" + this.configuration + ", sim=" + this.sim + ", multipleSim=" + this.multipleSim + ", markerSim=" + this.markerSim + ", nn=" + this.nn + ", nnActivations=" + this.nnActivations + ", webotsSim=" + this.webotsSim + ", webotsUrl=" + this.webotsUrl + ", connection=" + this.connection + ", vendor=" + this.vendor + ", configurationUsed=" + this.configurationUsed + ", commandLine=" + this.commandLine + ", signature=" + this.signature + ", sourceCodeFileExtension=" + this.sourceCodeFileExtension + ", binaryFileExtension=" + this.binaryFileExtension + ", hasWlan=" + this.hasWlan + ", firmwareDefault=" + this.firmwareDefault + " ]";
+        return "SetRobotResponse [immutable=" + this.immutable + ", cmd=" + this.cmd + ", rc=" + this.rc + ", message=" + this.message + ", cause=" + this.cause + ", parameters=" + this.parameters + ", initToken=" + this.initToken + ", serverTime=" + this.serverTime + ", serverVersion=" + this.serverVersion + ", robotWait=" + this.robotWait + ", robotBattery=" + this.robotBattery + ", robotName=" + this.robotName + ", robotVersion=" + this.robotVersion + ", robotFirmwareName=" + this.robotFirmwareName + ", robotSensorvalues=" + this.robotSensorvalues + ", robotNepoexitvalue=" + this.robotNepoexitvalue + ", robotState=" + this.robotState + ", notificationsAvailable=" + this.notificationsAvailable + ", robot=" + this.robot + ", program=" + this.program + ", configuration=" + this.configuration + ", sim=" + this.sim + ", multipleSim=" + this.multipleSim + ", markerSim=" + this.markerSim + ", nn=" + this.nn + ", nnActivations=" + this.nnActivations + ", webotsSim=" + this.webotsSim + ", webotsUrl=" + this.webotsUrl + ", vendor=" + this.vendor + ", configurationUsed=" + this.configurationUsed + ", commandLine=" + this.commandLine + ", signature=" + this.signature + ", sourceCodeFileExtension=" + this.sourceCodeFileExtension + ", binaryFileExtension=" + this.binaryFileExtension + ", firmwareDefault=" + this.firmwareDefault + " ]";
     }
 
     @Override
