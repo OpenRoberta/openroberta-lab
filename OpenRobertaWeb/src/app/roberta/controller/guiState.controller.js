@@ -5,12 +5,10 @@ import * as HELP_C from 'progHelp.controller';
 import * as LEGAL_C from 'legal.controller';
 import * as WEBVIEW_C from 'webview.controller';
 import * as CV from 'confVisualization';
-import * as SOCKET_C from 'socket.controller';
 import * as $ from 'jquery';
 import * as Blockly from 'blockly';
-import * as THYMIO_C from 'thymioSocket.controller';
 import * as NOTIFICATION_C from 'notification.controller';
-import * as WEBUSB_C from 'webUsb.controller';
+import * as CONNECTION_C from 'connection.controller';
 import * as PROGRAM_C from 'program.controller';
 import * as CONFIGURATION_C from 'configuration.controller';
 import * as USER_C from 'user.controller';
@@ -22,8 +20,8 @@ import { switchLanguage as TUTORIALLIST_C_switchLanguage } from 'tutorialList.co
 import { switchLanguage as LOGLIST_C_switchLanguage } from 'logList.controller';
 import { switchLanguage as PROGINFO_C_switchLanguage } from 'progInfo.controller';
 
-var LONG = 300000; // Ping time 5min
-var SHORT = 3000; // Ping time 3sec
+export var LONG = 300000; // Ping time 5min
+export var SHORT = 3000; // Ping time 3sec
 
 /**
  * Init robot
@@ -49,9 +47,6 @@ function init(language, opt_data) {
 
         GUISTATE.robot.name = '';
         GUISTATE.robot.robotPort = '';
-        GUISTATE.robot.socket = null;
-        GUISTATE.gui.isAgent = true;
-        GUISTATE.gui.isWebUsbSelected = false;
 
         //GUISTATE.socket.portNames = [];
         //GUISTATE.socket.vendorIds = [];
@@ -92,6 +87,7 @@ function setInitialState() {
         $('#head-navigation-program-edit').css('display', 'none');
         GUISTATE.gui.bricklyWorkspace.markFocused();
     }
+
     // Robot?
     $('#menu-' + GUISTATE.gui.robot)
         .parent()
@@ -140,33 +136,33 @@ function setState(result) {
     if (result['robot.version']) {
         GUISTATE.robot.version = result['robot.version'];
     }
-    if (getConnection() !== getConnectionTypeEnum().TDM) {
-        if (result['robot.firmwareName'] != undefined) {
-            GUISTATE.robot.fWName = result['robot.firmwareName'];
-        } else {
-            GUISTATE.robot.fWName = '';
-        }
-        if (result['robot.wait'] != undefined) {
-            GUISTATE.robot.time = result['robot.wait'];
-        } else {
-            GUISTATE.robot.time = -1;
-        }
-        if (result['robot.battery'] != undefined) {
-            GUISTATE.robot.battery = result['robot.battery'];
-        } else {
-            GUISTATE.robot.battery = '';
-        }
-        if (result['robot.name'] != undefined) {
-            GUISTATE.robot.name = result['robot.name'];
-        } else {
-            GUISTATE.robot.name = '';
-        }
-        if (result['robot.state'] != undefined) {
-            GUISTATE.robot.state = result['robot.state'];
-        } else {
-            GUISTATE.robot.state = '';
-        }
+    //if (getConnection() !== getConnectionTypeEnum().TDM) {
+    if (result['robot.firmwareName'] != undefined) {
+        GUISTATE.robot.fWName = result['robot.firmwareName'];
+    } else {
+        GUISTATE.robot.fWName = '';
     }
+    if (result['robot.wait'] != undefined) {
+        GUISTATE.robot.time = result['robot.wait'];
+    } else {
+        GUISTATE.robot.time = -1;
+    }
+    if (result['robot.battery'] != undefined) {
+        GUISTATE.robot.battery = result['robot.battery'];
+    } else {
+        GUISTATE.robot.battery = '';
+    }
+    if (result['robot.name'] != undefined) {
+        GUISTATE.robot.name = result['robot.name'];
+    } else {
+        GUISTATE.robot.name = '';
+    }
+    if (result['robot.state'] != undefined) {
+        GUISTATE.robot.state = result['robot.state'];
+    } else {
+        GUISTATE.robot.state = '';
+    }
+    //}
     if (result['robot.sensorvalues'] != undefined) {
         GUISTATE.robot.sensorValues = result['robot.sensorvalues'];
     } else {
@@ -189,56 +185,7 @@ function setState(result) {
         $('#iconDisplayLogin').addClass('error');
     }
 
-    let connectionType = getConnection();
-    switch (getConnection()) {
-        case GUISTATE.gui.connectionType.AGENTORTOKEN:
-        case GUISTATE.gui.connectionType.TDM:
-            if (GUISTATE.gui.isAgent === true) {
-                break;
-            }
-        case GUISTATE.gui.connectionType.TOKEN:
-            $('#menuConnect').parent().removeClass('disabled');
-            if (GUISTATE.robot.state === 'wait') {
-                $('#head-navi-icon-robot').removeClass('error');
-                $('#head-navi-icon-robot').removeClass('busy');
-                $('#head-navi-icon-robot').addClass('wait');
-                setRunEnabled(true);
-                $('#runSourceCodeEditor').removeClass('disabled');
-            } else if (GUISTATE.robot.state === 'busy') {
-                $('#head-navi-icon-robot').removeClass('wait');
-                $('#head-navi-icon-robot').removeClass('error');
-                $('#head-navi-icon-robot').addClass('busy');
-                setRunEnabled(false);
-                $('#runSourceCodeEditor').addClass('disabled');
-            } else {
-                $('#head-navi-icon-robot').removeClass('busy');
-                $('#head-navi-icon-robot').removeClass('wait');
-                $('#head-navi-icon-robot').addClass('error');
-                setRunEnabled(false);
-                $('#runSourceCodeEditor').addClass('disabled');
-            }
-            break;
-        case GUISTATE.gui.connectionType.AUTO:
-            break;
-        case GUISTATE.gui.connectionType.LOCAL:
-            break;
-        case GUISTATE.gui.connectionType.JSPLAY:
-            break;
-        case GUISTATE.gui.connectionType.AGENT:
-            break;
-        case GUISTATE.gui.connectionType.WEBVIEW:
-            break;
-        default:
-            break;
-    }
-}
-
-function getIsAgent() {
-    return GUISTATE.gui.isAgent;
-}
-
-function setIsAgent(isAgent) {
-    GUISTATE.gui.isAgent = isAgent;
+    CONNECTION_C.getConnectionInstance().setState();
 }
 
 function getBlocklyWorkspace() {
@@ -270,15 +217,16 @@ function setRobot(robot, result, opt_init) {
     GUISTATE.gui.webotsSim = result.webotsSim;
     GUISTATE.gui.webotsUrl = result.webotsUrl;
     GUISTATE.gui.neuralNetwork = result.neuralNetwork === undefined ? false : result.neuralNetwork;
-    GUISTATE.gui.connection = result.connection;
     GUISTATE.gui.vendor = result.vendor;
     GUISTATE.gui.signature = result.signature;
     GUISTATE.gui.commandLine = result.commandLine;
     GUISTATE.gui.configurationUsed = result.configurationUsed;
     GUISTATE.gui.sourceCodeFileExtension = result.sourceCodeFileExtension;
     GUISTATE.gui.binaryFileExtension = result.binaryFileExtension;
-    GUISTATE.gui.hasWlan = result.hasWlan;
     GUISTATE.gui.firmwareDefault = result.firmwareDefault;
+
+    //TODO we default to auto selecting first connection option, only call this once the setRobot was used
+
     $('#blocklyDiv, #bricklyDiv').css('background', 'url(../../../../css/img/' + robotGroup + 'Background.jpg) repeat');
     $('#blocklyDiv, #bricklyDiv').css('background-size', '100%');
     $('#blocklyDiv, #bricklyDiv').css('background-position', 'initial');
@@ -319,70 +267,6 @@ function setRobot(robot, result, opt_init) {
     $('#simRobot').removeClass('typcn-' + GUISTATE.gui.robotGroup);
     $('#simRobot').addClass('typcn-' + robotGroup);
 
-    var connectionType = getConnection();
-    $('#robotConnect').removeClass('disabled');
-    switch (getConnection()) {
-        case GUISTATE.gui.connectionType.TOKEN:
-            SOCKET_C.listRobotStop();
-            $('#head-navi-icon-robot').removeClass('error');
-            $('#head-navi-icon-robot').removeClass('busy');
-            $('#head-navi-icon-robot').removeClass('wait');
-            setRunEnabled(false);
-            $('#runSourceCodeEditor').addClass('disabled');
-            $('#menuConnect').parent().removeClass('disabled');
-            setPingTime(SHORT);
-            break;
-        case GUISTATE.gui.connectionType.LOCAL:
-        case GUISTATE.gui.connectionType.AUTO:
-        case GUISTATE.gui.connectionType.JSPLAY:
-            SOCKET_C.listRobotStop();
-            if (WEBUSB_C.isConnected()) {
-                WEBUSB_C.removeDevice();
-            }
-            WEBUSB_C.setIsWebUsbSelected(false);
-            $('#head-navi-icon-robot').removeClass('error');
-            $('#head-navi-icon-robot').removeClass('busy');
-            $('#head-navi-icon-robot').addClass('wait');
-            setRunEnabled(true);
-            $('#runSourceCodeEditor').removeClass('disabled');
-            $('#menuConnect').parent().addClass('disabled');
-            setPingTime(LONG);
-            break;
-        case GUISTATE.gui.connectionType.AGENTORTOKEN:
-            SOCKET_C.listRobotStart();
-            if (GUISTATE.gui.isAgent == true) {
-                updateMenuStatus();
-            } else {
-                $('#menuConnect').parent().removeClass('disabled');
-            }
-            $('#runSourceCodeEditor').addClass('disabled');
-            setPingTime(SHORT);
-            break;
-        case GUISTATE.gui.connectionType.TDM:
-            THYMIO_C.init();
-            setPingTime(SHORT);
-            break;
-        case GUISTATE.gui.connectionType.WEBVIEW:
-            SOCKET_C.listRobotStop();
-            $('#head-navi-icon-robot').removeClass('error');
-            $('#head-navi-icon-robot').removeClass('busy');
-            $('#head-navi-icon-robot').removeClass('wait');
-            setRunEnabled(false);
-            $('#menuConnect').parent().removeClass('disabled');
-            // are we in an Open Roberta Webview
-            if (inWebview()) {
-                $('#robotConnect').removeClass('disabled');
-            } else {
-                $('#robotConnect').addClass('disabled');
-            }
-            $('#runSourceCodeEditor').addClass('disabled');
-            setPingTime(LONG);
-            break;
-        default:
-            setPingTime(SHORT);
-            break;
-    }
-
     var groupSwitched = false;
     if (findGroup(robot) != getRobotGroup()) {
         groupSwitched = true;
@@ -417,12 +301,6 @@ function setRobot(robot, result, opt_init) {
         }
     }
 
-    if (GUISTATE.gui.hasWlan) {
-        $('#robotWlan').removeClass('hidden');
-    } else {
-        $('#robotWlan').addClass('hidden');
-    }
-
     if (GUISTATE.gui.nn) {
         $('#nn-activations').empty();
         $('.tabLinkNN').show();
@@ -437,11 +315,7 @@ function setRobot(robot, result, opt_init) {
     } else {
         $('.tabLinkNN').hide();
     }
-    if (getHasRobotStopButton(robot)) {
-        GUISTATE.gui.blocklyWorkspace && GUISTATE.gui.blocklyWorkspace.robControls.showStopProgram();
-    } else {
-        GUISTATE.gui.blocklyWorkspace && GUISTATE.gui.blocklyWorkspace.robControls.hideStopProgram();
-    }
+
     UTIL.clearTabAlert('tabConfiguration'); // also clear tab alert when switching robots
 }
 
@@ -577,18 +451,6 @@ export function getRobotDeprecatedData(robot) {
     }
 }
 
-function getHasRobotStopButton(robotName) {
-    for (var robot in getRobots()) {
-        if (!getRobots().hasOwnProperty(robot)) {
-            continue;
-        }
-        if (getRobots()[robot].name == robotName && getRobots()[robot].stopButton == true) {
-            return true;
-        }
-    }
-    return false;
-}
-
 function getRobotInfoDE(robotName) {
     for (var robot in getRobots()) {
         if (!getRobots().hasOwnProperty(robot)) {
@@ -614,23 +476,8 @@ function getRobotInfoEN(robotName) {
 }
 
 function isRobotConnected() {
-    if (GUISTATE.robot.time > 0) {
-        return true;
-    }
-    if (
-        GUISTATE.gui.connection === GUISTATE.gui.connectionType.AUTO ||
-        GUISTATE.gui.connection === GUISTATE.gui.connectionType.LOCAL ||
-        GUISTATE.gui.connectionType.JSPLAY
-    ) {
-        return true;
-    }
-    if (GUISTATE.gui.connection === GUISTATE.gui.connectionType.AGENTORTOKEN) {
-        return true;
-    }
-    if (GUISTATE.gui.connection === GUISTATE.gui.connectionType.WEBVIEW && WEBVIEW_C.isRobotConnected()) {
-        return true;
-    }
-    return false;
+    if (!CONNECTION_C.getConnectionInstance()) return false;
+    return CONNECTION_C.getConnectionInstance().isRobotConnected();
 }
 
 function isConfigurationUsed() {
@@ -1224,14 +1071,6 @@ function getListOfTutorials() {
     return GUISTATE.server.tutorial;
 }
 
-function getConnectionTypeEnum() {
-    return GUISTATE.gui.connectionType;
-}
-
-function getConnection() {
-    return GUISTATE.gui.connection;
-}
-
 function getVendor() {
     return GUISTATE.gui.vendor;
 }
@@ -1242,14 +1081,6 @@ function getSignature() {
 
 function getCommandLine() {
     return GUISTATE.gui.commandLine;
-}
-
-function setProgramToDownload() {
-    return (GUISTATE.gui.program.download = true);
-}
-
-function isProgramToDownload() {
-    return GUISTATE.gui.program.download;
 }
 
 function setPing(ping) {
@@ -1266,14 +1097,6 @@ function setPingTime(time) {
 
 function getPingTime() {
     return GUISTATE.server.pingTime;
-}
-
-function setSocket(socket) {
-    GUISTATE.robot.socket = socket;
-}
-
-function getSocket() {
-    return GUISTATE.robot.socket;
 }
 
 function getAvailableHelp() {
@@ -1293,50 +1116,7 @@ function setWebview(webview) {
 }
 
 function updateMenuStatus(numOfConnections) {
-    // TODO revice this function, because isAgent is the exception
-    switch (numOfConnections) {
-        case 0:
-            if (getConnection() !== GUISTATE.gui.connectionType.AGENTORTOKEN) {
-                $('#head-navi-icon-robot').removeClass('error');
-                $('#head-navi-icon-robot').removeClass('busy');
-                $('#head-navi-icon-robot').removeClass('wait');
-                setRunEnabled(false);
-                $('#runSourceCodeEditor').addClass('disabled');
-                $('#menuConnect').parent().addClass('disabled');
-                setIsAgent(true);
-            } else {
-                setIsAgent(false);
-            }
-            break;
-        case 1:
-            setIsAgent(true);
-            $('#head-navi-icon-robot').removeClass('error');
-            $('#head-navi-icon-robot').removeClass('busy');
-            $('#head-navi-icon-robot').addClass('wait');
-            setRunEnabled(true);
-            $('#runSourceCodeEditor').removeClass('disabled');
-            $('#menuConnect').parent().addClass('disabled');
-            break;
-        default:
-            setIsAgent(true);
-            // Always:
-            $('#menuConnect').parent().removeClass('disabled');
-            // If the port is not chosen:
-            if (getRobotPort() == '') {
-                $('#head-navi-icon-robot').removeClass('error');
-                $('#head-navi-icon-robot').removeClass('busy');
-                $('#head-navi-icon-robot').removeClass('wait');
-                setRunEnabled(false);
-                //$('#menuConnect').parent().addClass('disabled');
-            } else {
-                $('#head-navi-icon-robot').removeClass('error');
-                $('#head-navi-icon-robot').removeClass('busy');
-                $('#head-navi-icon-robot').addClass('wait');
-                setRunEnabled(true);
-                $('#runSourceCodeEditor').removeClass('disabled');
-            }
-            break;
-    }
+    CONNECTION_C.getConnectionInstance().updateMenuStatus(numOfConnections);
 }
 
 function updateTutorialMenu() {
@@ -1363,8 +1143,6 @@ export {
     isConfigurationAnonymous,
     isKioskMode,
     setState,
-    getIsAgent,
-    setIsAgent,
     getBlocklyWorkspace,
     setBlocklyWorkspace,
     getBricklyWorkspace,
@@ -1459,19 +1237,13 @@ export {
     hasWebotsSim,
     getWebotsUrl,
     getListOfTutorials,
-    getConnectionTypeEnum,
-    getConnection,
     getVendor,
     getSignature,
     getCommandLine,
-    setProgramToDownload,
-    isProgramToDownload,
     setPing,
     doPing,
     setPingTime,
     getPingTime,
-    setSocket,
-    getSocket,
     getAvailableHelp,
     getTheme,
     inWebview,

@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 
 import de.fhg.iais.roberta.components.UsedActor;
+import de.fhg.iais.roberta.components.UsedImport;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
 import de.fhg.iais.roberta.syntax.lang.methods.Method;
@@ -18,6 +19,7 @@ import de.fhg.iais.roberta.typecheck.BlocklyType;
  * Container for all used hardware related information, used in for example code generation. Currently used for more than just used hardware, should be split up
  * into multiple separate beans in the future.
  */
+//TODO change name of class, no longer only used hardware
 //TODO move unrelated data to specific beans. Refactor fields from Mbed into usedActors/Sensors
 public class UsedHardwareBean implements IProjectBean {
 
@@ -37,6 +39,7 @@ public class UsedHardwareBean implements IProjectBean {
     private Set<UsedActor> usedActors = new LinkedHashSet<>();
     private Set<String> usedImages = new HashSet<>();
     private Map<String, String[][]> usedIDImages = new HashMap<>();
+    private Set<UsedImport> usedImports = new LinkedHashSet<>();
 
     public List<VarDeclaration> getVisitedVars() {
         return this.visitedVars;
@@ -71,6 +74,10 @@ public class UsedHardwareBean implements IProjectBean {
         return this.isNNBlockUsed;
     }
 
+    public Set<UsedImport> getUsedImports() {
+        return this.usedImports;
+    }
+
     public Set<UsedSensor> getUsedSensors() {
         return this.usedSensors;
     }
@@ -93,6 +100,10 @@ public class UsedHardwareBean implements IProjectBean {
 
     public boolean isActorUsed(String type) {
         return this.usedActors.stream().anyMatch(usedActor -> usedActor.getType().equals(type));
+    }
+
+    public boolean isImportUsed(String type) {
+        return this.usedImports.stream().anyMatch(usedImport -> usedImport.getType().equals(type));
     }
 
     public Map<Integer, Boolean> getLoopsLabelContainer() {
@@ -144,6 +155,11 @@ public class UsedHardwareBean implements IProjectBean {
 
         public Builder setNNBlockUsed(boolean isNNBlockUsed) {
             this.usedHardwareBean.isNNBlockUsed = isNNBlockUsed;
+            return this;
+        }
+
+        public Builder addUsedImport(UsedImport usedImport) {
+            this.usedHardwareBean.usedImports.add(usedImport);
             return this;
         }
 

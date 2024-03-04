@@ -1,13 +1,11 @@
-package de.fhg.iais.roberta.visitor;
+package de.fhg.iais.roberta.visitor.spike;
 
 import java.util.List;
 
 import com.google.common.collect.ClassToInstanceMap;
 
-import de.fhg.iais.roberta.bean.CodeGeneratorSetupBean;
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
-import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.light.RgbLedOffHiddenAction;
@@ -28,11 +26,7 @@ import de.fhg.iais.roberta.syntax.action.spike.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.spike.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.spike.PlayToneAction;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
-import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
-import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
-import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
-import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor;
@@ -47,16 +41,13 @@ import de.fhg.iais.roberta.syntax.spike.PredefinedImage;
 import de.fhg.iais.roberta.util.basic.C;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.syntax.SC;
-import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractPythonVisitor;
+import de.fhg.iais.roberta.visitor.AbstractSpikePythonVisitor;
 
 /**
- * This class is implementing {@link IVisitor}. All methods are implemented and they append a human-readable Python code representation of a phrase to a
- * StringBuilder. <b>This representation is correct Python code.</b> <br>
+ * This class is extending {@link AbstractSpikePythonVisitor}. <br>All methods are implemented and they append a human-readable Python code representation of a phrase to a
+ * StringBuilder. <b>This representation is correct Python code.</b><br>
  */
-public final class SpikePythonVisitor extends AbstractPythonVisitor implements ISpikeVisitor<Void> {
-
-    private final ConfigurationAst configurationAst;
-    private String rightMotorPort;
+public final class SpikePythonVisitor extends AbstractSpikePythonVisitor {
 
     /**
      * initialize the Python code generator visitor.
@@ -65,40 +56,12 @@ public final class SpikePythonVisitor extends AbstractPythonVisitor implements I
      */
     public SpikePythonVisitor(
         List<List<Phrase>> programPhrases, ClassToInstanceMap<IProjectBean> beans, ConfigurationAst configurationAst) {
-        super(programPhrases, beans);
-        this.configurationAst = configurationAst;
+        super(programPhrases, beans, configurationAst);
     }
 
     @Override
-    public Void visitMainTask(MainTask mainTask) {
-        StmtList variables = mainTask.variables;
-        if ( !variables.get().isEmpty() ) {
-            variables.accept(this);
-            nlIndent();
-        }
-        if ( this.programPhrases
-            .stream()
-            .filter(phrase -> phrase.getKind().getCategory() == Category.METHOD && !phrase.getKind().hasName("METHOD_CALL"))
-            .count() > 0 ) {
-            generateUserDefinedMethods();
-        }
-        if ( !this.getBean(CodeGeneratorSetupBean.class).getUsedMethods().isEmpty() ) {
-            String helperMethodImpls =
-                this.getBean(CodeGeneratorSetupBean.class)
-                    .getHelperMethodGenerator()
-                    .getHelperMethodDefinitions(this.getBean(CodeGeneratorSetupBean.class).getUsedMethods());
-            this.src.add(helperMethodImpls);
-        }
-        nlIndent();
-        this.src.add("def run():");
-        incrIndentation();
-        if ( !this.usedGlobalVarInFunctions.isEmpty() ) {
-            nlIndent();
-            this.src.add("global ", String.join(", ", this.usedGlobalVarInFunctions));
-        } else {
-            addPassIfProgramIsEmpty();
-        }
-        return null;
+    protected void addExceptionSadFaceToCode() {
+        src.add("hub.light_matrix.show_image('SAD')");
     }
 
     @Override
@@ -449,18 +412,6 @@ public final class SpikePythonVisitor extends AbstractPythonVisitor implements I
     }
 
     @Override
-    public Void visitRgbColor(RgbColor rgbColor) {
-        this.src.add("(");
-        rgbColor.R.accept(this);
-        this.src.add(", ");
-        rgbColor.G.accept(this);
-        this.src.add(", ");
-        rgbColor.B.accept(this);
-        this.src.add(")");
-        return null;
-    }
-
-    @Override
     public Void visitTimerReset(TimerReset timerReset) {
         this.src.add("timer.reset()");
         return null;
@@ -624,15 +575,6 @@ public final class SpikePythonVisitor extends AbstractPythonVisitor implements I
     }
 
     @Override
-    public Void visitWaitStmt(WaitStmt waitStmt) {
-        this.src.add("while True:");
-        incrIndentation();
-        visitStmtList(waitStmt.statements);
-        decrIndentation();
-        return null;
-    }
-
-    @Override
     public Void visitWaitTimeStmt(WaitTimeStmt waitTimeStmt) {
         this.src.add("wait_for_seconds(");
         waitTimeStmt.time.accept(this);
@@ -712,38 +654,4 @@ public final class SpikePythonVisitor extends AbstractPythonVisitor implements I
         generateNNStuff("python");
     }
 
-    @Override
-    protected void generateProgramSuffix(boolean withWrapping) {
-        if ( !withWrapping ) {
-            return;
-        }
-        decrIndentation(); // everything is still indented from main program
-        nlIndent();
-        nlIndent();
-        this.src.add("def main():");
-        incrIndentation();
-        nlIndent();
-        this.src.add("try:");
-        incrIndentation();
-        nlIndent();
-        this.src.add("run()");
-        decrIndentation();
-        nlIndent();
-        this.src.add("except Exception as e:");
-        incrIndentation();
-        nlIndent();
-        this.src.add("hub.light_matrix.show_image('SAD')");
-        decrIndentation();
-        //TODO finally close open ports
-        decrIndentation();
-        nlIndent();
-        nlIndent();
-
-        this.src.add("main()");
-    }
-
-    private String getPortFromConfig(String name) {
-        ConfigurationComponent block = configurationAst.getConfigurationComponent(name);
-        return block.getComponentProperties().get("PORT");
-    }
 }

@@ -9,18 +9,21 @@ import * as WEBVIEW_C from 'webview.controller';
 import * as CODEEDITOR_C from 'sourceCodeEditor.controller';
 import * as PROGCODE_C from 'progCode.controller';
 import * as $ from 'jquery';
+// @ts-ignore
 import * as Blockly from 'blockly';
 import 'jquery-validate';
+import { ConnectionInterface } from 'connection.interface';
+import * as CONNECTION_C from 'connection.controller';
 
-var $formSingleModal;
-var $formSingleListModal;
-var robotPort;
+let $formSingleModal;
+let robotPort;
+let connectionInstance: ConnectionInterface;
 
 /**
  * Initialize robot
  */
 function init(robot) {
-    var ready = $.Deferred();
+    let ready = $.Deferred();
     $.when(
         ROBOT.setRobot(robot, function (result) {
             if (result.rc == 'ok') {
@@ -37,17 +40,16 @@ function init(robot) {
 /**
  * Set token
  *
- * @param {token}
- *            Token value to be set
+ * @param token Token value to be set
  */
-function setToken(token) {
+function setToken(token: string) {
     $formSingleModal.validate();
     if ($formSingleModal.valid()) {
         ROBOT.setToken(token, function (result) {
             if (result.rc === 'ok') {
                 GUISTATE_C.setRobotToken(token);
                 GUISTATE_C.setState(result);
-                // console.log(result.message);
+                // @ts-ignore
                 MSG.displayInformation(result, 'MESSAGE_ROBOT_CONNECTED', result.message, GUISTATE_C.getRobotName());
                 handleFirmwareConflict(result['robot.update'], result['robot.serverVersion']);
             } else {
@@ -74,7 +76,7 @@ function initRobotForms() {
     $('#iconDisplayRobotState').onWrap(
         'click',
         function () {
-            showRobotInfo();
+            connectionInstance.onClickShowRobotInfo();
         },
         'display robot state'
     );
@@ -120,7 +122,9 @@ function initRobotForms() {
             e.preventDefault();
             $('#wlan-form').validate();
             if ($('#wlan-form').valid()) {
+                // @ts-ignore
                 PROGRAM_C.SSID = document.getElementById('wlanSsid').value;
+                // @ts-ignore
                 PROGRAM_C.password = document.getElementById('wlanPassword').value;
                 $('#menu-wlan').modal('hide');
             }
@@ -191,7 +195,7 @@ function initRobotForms() {
     $('#show-available-connections').onWrap(
         'connect',
         function (event, data) {
-            var result = {};
+            let result = {};
             result['robot.name'] = data.brickname;
             result['robot.state'] = 'wait';
             GUISTATE_C.setState(result);
@@ -212,6 +216,7 @@ function showSetTokenModal() {
             $('#single-modal a[href]').attr('href', 'http://wiki.open-roberta.org');
         },
         function () {
+            // @ts-ignore
             setToken($('#singleModalInput').val().toUpperCase());
         },
         function () {
@@ -261,7 +266,7 @@ function showListModal() {
             $('#single-modal-list a[href]').attr('href', 'http://wiki.open-roberta.org');
         },
         function () {
-            //console.log(document.getElementById("singleModalListInput").value);
+            // @ts-ignore
             setPort(document.getElementById('singleModalListInput').value);
         },
         function () {}
@@ -269,53 +274,9 @@ function showListModal() {
 }
 
 /**
- * Show robot info
- */
-function showRobotInfo() {
-    if (GUISTATE_C.getRobotName().length !== 0) {
-        $('#robotName').html(GUISTATE_C.getRobotName());
-    } else {
-        $('#robotName').html('-');
-    }
-    $('#robotSystem').html(GUISTATE_C.getRobotRealName());
-    if (GUISTATE_C.getRobotState() === 'wait' || $('#head-navi-icon-robot').hasClass('wait')) {
-        $('#robotStateWait').css('display', 'inline');
-        $('#robotStateDisconnected').css('display', 'none');
-        $('#robotStateBusy').css('display', 'none');
-    } else if (GUISTATE_C.getRobotState() === 'busy') {
-        $('#robotStateWait').css('display', 'none');
-        $('#robotStateDisconnected').css('display', 'none');
-        $('#robotStateBusy').css('display', 'inline');
-    } else {
-        $('#robotStateWait').css('display', 'none');
-        $('#robotStateDisconnected').css('display', 'inline');
-        $('#robotStateBusy').css('display', 'none');
-    }
-    if (GUISTATE_C.getLanguage() == 'EN') {
-        $('#robotBattery').text(GUISTATE_C.getRobotBattery() + ' V');
-    } else {
-        $('#robotBattery').text(GUISTATE_C.getRobotBattery().toString().replace('.', ',') + ' V');
-    }
-    var robotWait = parseInt(GUISTATE_C.getRobotTime(), 10);
-    if (robotWait < 1000) {
-        $('#robotWait').text(robotWait + ' ms');
-    } else {
-        $('#robotWait').text(Math.round(robotWait / 1000) + ' s');
-    }
-    $('#show-robot-info').modal('show');
-}
-
-/**
- * Show WLAN credentials form to save them for further REST calls.
- */
-function showWlanForm() {
-    $('#menu-wlan').modal('show');
-}
-
-/**
  * Handle firmware conflict between server and robot
  */
-function handleFirmwareConflict(updateInfo, robotServerVersion) {
+function handleFirmwareConflict(updateInfo, robotServerVersion: string) {
     if (updateInfo < 0) {
         LOG.info(
             "The firmware version '" +
@@ -334,6 +295,7 @@ function handleFirmwareConflict(updateInfo, robotServerVersion) {
                 GUISTATE_C.getRobotVersion() +
                 "' on the robot"
         );
+        // @ts-ignore
         MSG.displayMessage('MESSAGE_FIRMWARE_ERROR', 'POPUP', '');
         return true;
     }
@@ -347,8 +309,10 @@ function updateFirmware() {
     ROBOT.updateFirmware(function (result) {
         GUISTATE_C.setState(result);
         if (result.rc === 'ok') {
+            // @ts-ignore
             MSG.displayMessage('MESSAGE_RESTART_ROBOT', 'POPUP', '');
         } else {
+            // @ts-ignore
             MSG.displayInformation(result, '', result.message, GUISTATE_C.getRobotFWName());
         }
     });
@@ -357,13 +321,17 @@ function updateFirmware() {
 /**
  * Switch robot
  */
-function switchRobot(robot, opt_continue, opt_callback) {
+function switchRobot(robot: string, opt_continue: boolean, opt_callback) {
+    // @ts-ignore
     PROGRAM_C.SSID = null;
+    // @ts-ignore
     PROGRAM_C.password = null;
+    // @ts-ignore
     document.getElementById('wlanSsid').value = '';
+    // @ts-ignore
     document.getElementById('wlanPassword').value = '';
 
-    var further;
+    let further;
     // no need to ask for saving programs if you switch the robot in between a group
     if (typeof opt_continue === 'undefined' && GUISTATE_C.findGroup(robot) == GUISTATE_C.getRobotGroup()) {
         further = true;
@@ -388,6 +356,9 @@ function switchRobot(robot, opt_continue, opt_callback) {
                 } else {
                     GUISTATE_C.setRobot(robot, result);
                 }
+
+                CONNECTION_C.switchConnection(robot);
+
                 CONFIGURATION_C.changeRobotSvg();
                 if (GUISTATE_C.getView() == 'tabConfList') {
                     $('#confList>.bootstrap-table').find('button[name="refresh"]').clickWrap();
@@ -405,7 +376,8 @@ function switchRobot(robot, opt_continue, opt_callback) {
                 //                    });
                 typeof opt_callback === 'function'
                     ? opt_callback()
-                    : MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getRobotRealName());
+                    : // @ts-ignore
+                      MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getRobotRealName());
                 let deprecatedData = GUISTATE_C.getRobotDeprecatedData(robot);
                 if (deprecatedData !== undefined) {
                     $('#show-message>.modal-dialog').removeClass('modal-sm');
@@ -415,6 +387,7 @@ function switchRobot(robot, opt_continue, opt_callback) {
                     MSG.displayPopupMessage(GUISTATE_C.getLanguage(), deprecatedData, 'OK', false);
                 }
             } else {
+                // @ts-ignore
                 MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getRobotRealName());
             }
         });
@@ -440,22 +413,12 @@ function switchRobot(robot, opt_continue, opt_callback) {
             );
         });
         if (GUISTATE_C.isUserLoggedIn()) {
+            // @ts-ignore
             MSG.displayMessage('POPUP_BEFOREUNLOAD_LOGGEDIN', 'POPUP', '', true);
         } else {
+            // @ts-ignore
             MSG.displayMessage('POPUP_BEFOREUNLOAD', 'POPUP', '', true);
         }
     }
 }
-export {
-    init,
-    setPort,
-    getPort,
-    showSetTokenModal,
-    showScanModal,
-    showListModal,
-    showRobotInfo,
-    showWlanForm,
-    handleFirmwareConflict,
-    updateFirmware,
-    switchRobot,
-};
+export { init, setPort, getPort, showSetTokenModal, showScanModal, showListModal, handleFirmwareConflict, updateFirmware, switchRobot };

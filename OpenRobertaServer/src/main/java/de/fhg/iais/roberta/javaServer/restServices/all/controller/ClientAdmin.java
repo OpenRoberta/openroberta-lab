@@ -197,14 +197,12 @@ public class ClientAdmin {
                     response.setNnActivations(robotFactory.getNNActivations());
                     response.setWebotsSim(robotFactory.hasWebotsSim());
                     response.setWebotsUrl(robotFactory.getWebotsUrl());
-                    response.setConnection(robotFactory.getConnectionType());
                     response.setVendor(robotFactory.getVendorId());
                     response.setConfigurationUsed(robotFactory.hasConfiguration());
                     response.setCommandLine(robotFactory.getCommandline());
                     response.setSignature(robotFactory.getSignature());
                     response.setSourceCodeFileExtension(robotFactory.getSourceCodeFileExtension());
                     response.setBinaryFileExtension(robotFactory.getBinaryFileExtension());
-                    response.setHasWlan(robotFactory.hasWlanCredentials());
                     response.setFirmwareDefault(robotFactory.getFirmwareDefaultProgramName());
                     LOG.info("set robot to {}", robot);
                     Statistics.info("ChangeRobot", "success", true, "robot", robot);

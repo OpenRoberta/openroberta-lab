@@ -101,7 +101,6 @@ public class ClientInit {
                     robotDescription.put("infoDE", robotInfoDE);
                     robotDescription.put("infoEN", robotInfoEN);
                     robotDescription.put("announcement", httpSessionState.getRobotFactory(robot).getRobotAnnouncement());
-                    robotDescription.put("stopButton", httpSessionState.getRobotFactory(robot).hasStopButton());
                     robotDescription.put("group", httpSessionState.getRobotFactory(robot).getGroup());
                     robotDescription.put("sim", httpSessionState.getRobotFactory(robot).hasSim());
                     robotDescription.put("nn", httpSessionState.getRobotFactory(robot).hasNN());

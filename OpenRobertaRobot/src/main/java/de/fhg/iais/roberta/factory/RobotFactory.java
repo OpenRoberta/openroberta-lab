@@ -10,7 +10,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.json.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -109,13 +108,13 @@ public class RobotFactory {
         return this.pluginProperties.getStringProperty("robot.nn") != null && this.pluginProperties.getStringProperty("robot.nn").equals("true");
     }
 
-    public final JSONArray getNNActivations() {
+    public final List<String> getNNActivations() {
         if ( hasNN() ) {
             String values = this.pluginProperties.getStringProperty("robot.nn.activations");
-            List<String> activations = Stream.of(values.trim().split("\\s*,\\s*")).collect(Collectors.toList());
-            return new JSONArray(activations);
+
+            return Stream.of(values.trim().split("\\s*,\\s*")).collect(Collectors.toList());
         }
-        return new JSONArray();
+        return Collections.emptyList();
     }
 
     public Boolean hasWebotsSim() {
@@ -156,19 +155,7 @@ public class RobotFactory {
     public final String getRobotAnnouncement() {
         return this.pluginProperties.getStringProperty("robot.announcement");
     }
-
-    public final Boolean hasStopButton() {
-        return this.pluginProperties.getStringProperty("robot.stopButton") != null;
-    }
-
-    public final String getConnectionType() {
-        return this.pluginProperties.getStringProperty("robot.connection");
-    }
-
-    public final void setConnectionType(String type) {
-        this.pluginProperties.setStringProperty("robot.connection", type);
-    }
-
+    
     public final String getVendorId() {
         return this.pluginProperties.getStringProperty("robot.vendor");
     }
@@ -210,10 +197,6 @@ public class RobotFactory {
 
     public final String getMenuVersion() {
         return this.pluginProperties.getStringProperty("robot.menu.version");
-    }
-
-    public final Boolean hasWlanCredentials() {
-        return this.pluginProperties.getStringProperty("robot.haswlan") != null;
     }
 
     public final String getFirmwareDefaultProgramName() {
