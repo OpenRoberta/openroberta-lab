@@ -1797,7 +1797,7 @@ function mkColorScaleWeight(): _D3.scale.Linear<string, number> {
 }
 
 function mkColorScaleBias(): _D3.scale.Linear<string, number> {
-    return D3.scale.linear<string, number>().domain([-1, 0, 1]).range(['#f59322', '#eeeeee', '#0877bd']).clamp(true);
+    return D3.scale.linear<string, number>().domain([-1, 0, 1]).range(['#f59322', '#222222', '#0877bd']).clamp(true);
 }
 
 function drawValuesBox(text: D3Selection, valueForColor: number, forNodeOutput?: boolean): void {
