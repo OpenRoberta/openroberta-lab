@@ -231,7 +231,7 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor ultrasonicSensor) {
         String sensorPort = ultrasonicSensor.getUserDefinedPort();
-        src.add("ultrasonic_sensor_").add(sensorPort).add(".distance()");
+        src.add("ultrasonic_sensor_").add(sensorPort).add(".distance()/10");
         return null;
     }
 
@@ -251,17 +251,17 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
             case "REDCHANNEL":
                 src.add("hsv2rgb(");
                 src.add("color_sensor_").add(sensorPort).add(".hsv()");
-                src.add(")[0]");
+                src.add(")[0]/2.55");
                 break;
             case "GREENCHANNEL":
                 src.add("hsv2rgb(");
                 src.add("color_sensor_").add(sensorPort).add(".hsv()");
-                src.add(")[1]");
+                src.add(")[1]/2.55");
                 break;
             case "BLUECHANNEL":
                 src.add("hsv2rgb(");
                 src.add("color_sensor_").add(sensorPort).add(".hsv()");
-                src.add(")[2]");
+                src.add(")[2]/2.55");
                 break;
             default:
                 throw new DbcException("Invalid color sensor mode: " + colorSensor.getMode());
@@ -483,9 +483,7 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
 
     @Override
     public Void visitPlayNoteAction(PlayNoteAction playNoteAction) {
-        double duration = Double.parseDouble(playNoteAction.duration);
-
-        src.add("hub.speaker.beep(").add(String.valueOf(playNoteAction.frequency)).add(", ").add(String.valueOf(duration)).add(");");
+        src.add("hub.speaker.beep(").add(String.valueOf(playNoteAction.frequency)).add(", ").add(String.valueOf(playNoteAction.duration)).add(");");
         return null;
     }
 
@@ -517,9 +515,9 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
     public Void visitDisplayImageAction(DisplayImageAction displayImageAction) {
         switch ( displayImageAction.displayImageMode ) {
             case "ANIMATION":
-                src.add("show_lego_like_animation(list(");
+                src.add("show_animation(list(");
                 displayImageAction.valuesToDisplay.accept(this);
-                src.add("), 500)").nlI();
+                src.add("))").nlI();
                 break;
             case "IMAGE":
                 src.add("hub.display.icon(");
@@ -605,8 +603,6 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
                 break;
             //pybricks has more limited colors (no azure)
             case "#77E7FF":
-                color = "Color.CYAN";
-                break;
             case "#0FCB54":
                 color = "Color.CYAN";
                 break;

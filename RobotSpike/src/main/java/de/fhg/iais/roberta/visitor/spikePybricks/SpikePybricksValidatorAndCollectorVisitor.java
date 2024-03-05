@@ -55,7 +55,7 @@ public class SpikePybricksValidatorAndCollectorVisitor extends AbstractSpikeVali
     final public Void visitDisplayImageAction(DisplayImageAction displayImageAction) {
         super.visitDisplayImageAction(displayImageAction);
         usedHardwareBuilder.addUsedImport(new UsedImport(SC.WAIT));
-        usedMethodBuilder.addUsedMethod(SpikePybricksMethods.SHOW_LEGO_LIKE_ANIMATION);
+        usedMethodBuilder.addUsedMethod(SpikePybricksMethods.SHOW_ANIMATION);
         return null;
     }
 

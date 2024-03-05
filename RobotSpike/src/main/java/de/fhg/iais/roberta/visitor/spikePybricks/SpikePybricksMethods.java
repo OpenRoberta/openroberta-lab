@@ -8,6 +8,6 @@ public enum SpikePybricksMethods {
     SPEED_FROM_PERCENT,
     TURN_FOR,
     DRIVE_STRAIGHT,
-    SHOW_LEGO_LIKE_ANIMATION,
+    SHOW_ANIMATION,
     DIFFDRIVE
 }
