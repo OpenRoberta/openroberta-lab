@@ -172,9 +172,6 @@
             <field name='COLOUR'>#3590F5</field>
         </block>
         <block type='colour_picker_spike'>
-            <field name='COLOUR'>#E701A7</field>
-        </block>
-        <block type='colour_picker_spike'>
             <field name='COLOUR'>#77E7FF</field>
         </block>
         <block type='colour_picker_spike'>

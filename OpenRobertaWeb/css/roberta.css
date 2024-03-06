@@ -4026,8 +4026,9 @@ button.nn-btn:hover {
 
 #nn-learn-training-loss-linechart {
     flex: 0 0 40%;
+    max-width: 200px;
     height: 100%;
-    border: 1px solid #0009;
+    border: 1px solid #333333;
 }
 
 .nn-output-stats {

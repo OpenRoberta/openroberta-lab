@@ -386,7 +386,15 @@ export class SimulationScene {
         }
     }
 
-    init(robotType: string, refresh: boolean, interpreters: Interpreter[], configurations: object[], savedNames: string[], callbackOnLoaded: () => void) {
+    init(
+        robotType: string,
+        refresh: boolean,
+        interpreters: Interpreter[],
+        configurations: object[],
+        savedNames: string[],
+        importPoses: any[],
+        callbackOnLoaded: () => void
+    ) {
         let switchRobot: boolean = !this.robotType || this.robotType != robotType;
         this.robotType = robotType;
         let scene = this;
@@ -398,6 +406,7 @@ export class SimulationScene {
             RobotFactory.createRobots(interpreters, configurations, savedNames, this.sim.selectionListener, this.robotType).then((result) => {
                 this.robots = result.robots;
                 this.robotClass = result.robotClass;
+                this.setRobotPoses(importPoses);
                 this.initViews();
                 if (switchRobot) {
                     scene.imgBackgroundList = [];
