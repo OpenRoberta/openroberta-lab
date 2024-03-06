@@ -58,8 +58,7 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
     @Override
     protected void addExceptionSadFaceToCode() {
         src.add("while True:").nlI();
-        indent();
-        src.add("hub.display.icon(Matrix([[0, 0, 0, 0, 0], [0, 100, 0, 100, 0], [0, 0, 0, 0, 0], [0, 100, 100, 100, 0], [100, 0, 0, 0, 100]]))");
+        src.add("    hub.display.icon(Matrix([[0, 0, 0, 0, 0], [0, 100, 0, 100, 0], [0, 0, 0, 0, 0], [0, 100, 100, 100, 0], [100, 0, 0, 0, 100]]))");
         decrIndentation();
     }
 
@@ -423,7 +422,6 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
                 break;
             default:
                 throw new DbcException("Invalid motor unit: " + motorOnForAction.unit);
-
         }
         motorOnForAction.value.accept(this);
         src.add(", speed = get_speed_from_percent(");
@@ -752,8 +750,10 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
      * python import math doesn't exist in pybricks context
      */
     private void importMathFunctions() {
-        if ( usedHardwareBean.isImportUsed(SC.SQRT) )
-            src.add("from umath import sqrt").nlI();
+        src.add("import umath").nlI();
+        src.add("import urandom");
+        //if ( usedHardwareBean.isImportUsed(SC.SQRT) )
+        //   src.add("from umath import sqrt").nlI();
     }
 
     private void instantiateComponents() {

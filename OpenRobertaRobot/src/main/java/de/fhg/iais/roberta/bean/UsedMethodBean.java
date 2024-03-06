@@ -25,6 +25,10 @@ public class UsedMethodBean implements IProjectBean {
         return Collections.unmodifiableSet(this.usedMethods);
     }
 
+    public boolean isMethodUsed(Enum<?> method) {
+        return this.getUsedMethods().stream().anyMatch(usedMethod -> usedMethod.equals(method));
+    }
+
     public Collection<Class<? extends Enum<?>>> getAdditionalEnums() {
         return Collections.unmodifiableCollection(this.additionalEnums);
     }

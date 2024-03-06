@@ -34,6 +34,7 @@ public class SpikePybricksValidatorAndCollectorVisitor extends AbstractSpikeVali
         ConfigurationAst robotConfiguration,
         ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
         super(robotConfiguration, beanBuilders);
+        usedMethodBuilder.addUsedMethod(SpikePybricksMethods.MATH);
     }
 
     @Override
@@ -141,7 +142,6 @@ public class SpikePybricksValidatorAndCollectorVisitor extends AbstractSpikeVali
     final public Void visitGestureSensor(GestureSensor gestureSensor) {
         super.visitGestureSensor(gestureSensor);
         usedHardwareBuilder.addUsedSensor(new UsedSensor("GYRO", SC.GYRO, SC.DEFAULT));
-        usedHardwareBuilder.addUsedImport(new UsedImport(SC.SQRT));
         usedHardwareBuilder.addUsedImport(new UsedImport(SC.WAIT));
         //Port is a place-holder there is no Port that the Timer is connected to pybricks only has one Timer
         //Timer is listed as Sensor in OpenRobertaLab so i use addUsedSensor here

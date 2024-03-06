@@ -9,5 +9,6 @@ public enum SpikePybricksMethods {
     TURN_FOR,
     DRIVE_STRAIGHT,
     SHOW_ANIMATION,
+    MATH,
     DIFFDRIVE
 }

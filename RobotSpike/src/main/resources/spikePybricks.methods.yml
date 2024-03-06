@@ -29,7 +29,7 @@ HSVTORGB:
 TANKDRIVE_DIST:
   PYTHON: |
     def circle_circumference(diameter):
-        return 3.14159265359 * (diameter)
+        return math.pi * (diameter)
 
     def distance_to_angle(distance):
         return (distance/circle_circumference(WHEEL_DIAMETER)) * 360
@@ -39,9 +39,11 @@ TANKDRIVE_DIST:
     
     def catch_edge_cases(dist, left_speed, right_speed):
         near_zero = 0.5
-        #don't do anything to avoid stalling program
-        if((abs(left_speed) < near_zero and abs(right_speed) < near_zero) or abs(dist) < near_zero):
+        if(abs(dist) < near_zero)
             return True
+        if((abs(left_speed) < near_zero and abs(right_speed) < near_zero)):
+            left_speed = (abs(left_speed)/left_speed) * 0.5
+            right_speed = (abs(right_speed)/right_speed) * 0.5
         #just go straight no need for calculations
         if abs(left_speed - right_speed) <  near_zero:
             drive_base.settings(straight_speed=get_speed_from_percent(left_speed))
@@ -107,7 +109,7 @@ DRIVE_STRAIGHT:
   PYTHON: |
     def drive_straight(speed, dist):
         if abs(speed) < 0.5:
-            return
+            speed = (abs(speed)/speed) * 0.5
         drive_base.settings(straight_speed = get_speed_from_percent(speed))
         drive_base.straight(abs(speed)/speed * dist * 10 )
 
@@ -124,7 +126,7 @@ SPEED_FROM_PERCENT:
 GESTURES:
   PYTHON: |
     def get_acceleration():
-        return sqrt((abs(hub.imu.acceleration()[0])**2) + (abs(hub.imu.acceleration()[1])**2) + (abs(hub.imu.acceleration()[2])**2))
+        return math.sqrt((abs(hub.imu.acceleration()[0])**2) + (abs(hub.imu.acceleration()[1])**2) + (abs(hub.imu.acceleration()[2])**2))
 
     def is_free_fall():
         threshold = 350
@@ -161,11 +163,11 @@ TURN_FOR:
   PYTHON: |
     def turn_for(power, degrees, direction):
         if power == 0 or degrees == 0:
-              return
+            return
         sign = (abs(power)/power)
-        tr = (get_speed_from_percent( power ) * 2 * (WHEEL_DIAMETER * 3.14159265359)) / (TRACKWIDTH * 3.14159265359)
+        tr = (get_speed_from_percent( power ) * 2 * (WHEEL_DIAMETER * math.pi)) / (TRACKWIDTH * math.pi)
         if abs(tr) < 5 :
-              return
+            tr = (abs(tr)/tr) * 5
         drive_base.settings(turn_rate = tr)
         drive_base.turn( sign * degrees * direction )
 
@@ -176,3 +178,43 @@ SHOW_ANIMATION:
         hub.display.animate(image_list, 500);
         wait(500 * len(image_list))
         hub.display.icon(image_list[len(image_list)-1])
+
+MATH:
+  PYTHON: |
+    class random:
+        def randint(a,b):
+            return urandom.randint(a,b)
+        def random():
+            return urandom.random()
+    
+    class math:
+        pi = umath.pi
+        e = umath.e
+        def ceil(n):
+            return umath.ceil(n)
+        def floor(n):
+            return umath.floor(n)
+        def sqrt(n):
+            return umath.sqrt(n)
+        def pow(n,m):
+            return n**m
+        def fabs(n):
+            return abs(n)
+        def log(n):
+            return umath.log(n)
+        def log10(n):
+            return log(n)/log(10)
+        def exp(n):
+            e**n
+        def sin(n):
+            return umath.sin(n)
+        def cos(n):
+            return umath.cos(n)
+        def tan(n):
+            return umath.tan(n)
+        def asin(n):
+            return umath.asin(n)
+        def acos(n):
+            return umath.acos(n)
+        def atan(n):
+            return umath.atan(n)
