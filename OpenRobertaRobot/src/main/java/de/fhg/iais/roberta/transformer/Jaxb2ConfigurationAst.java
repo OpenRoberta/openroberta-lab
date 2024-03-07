@@ -178,6 +178,11 @@ public final class Jaxb2ConfigurationAst {
         for ( int i = 1; i < firstBlock.getField().size(); i++ ) {
             map.put(firstBlock.getField().get(i).getName(), firstBlock.getField().get(i).getValue());
         }
+        for ( Value value : firstBlock.getValue() ) {
+            String name = value.getName();
+            String val = value.getBlock().getField().get(0).getValue().toString();
+            map.put(name, val);
+        }
         // TODO in order to avoid robot specific workarounds in the Robot project:
         // TODO this is workaround for the robot specific "robBrick_*-Brick" blocks, which have varying names for the "userDefinedPortName" from robot to robot
         // TODO this this should be removed if possible
