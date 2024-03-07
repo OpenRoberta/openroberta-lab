@@ -34,6 +34,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
+import de.fhg.iais.roberta.syntax.sensor.CameraBallSensor;
 import de.fhg.iais.roberta.syntax.sensor.CameraLineColourSensor;
 import de.fhg.iais.roberta.syntax.sensor.CameraLineInformationSensor;
 import de.fhg.iais.roberta.syntax.sensor.CameraLineSensor;
@@ -610,6 +611,13 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
         return null;
     }
 
+    @Override
+    public Void visitCameraBallSensor(CameraBallSensor cameraBallSensor) {
+        this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(Txt4Methods.BALLINFORMATION), "()");
+
+        return null;
+    }
+
 
     @Override
     public Void visitKeysSensor(KeysSensor keysSensor) {
@@ -808,9 +816,34 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
                 this.src.add("line_detector = txt_factory.camera_factory.create_line_detector(60, 20, 100, 100, 5, 100, -100, 100, 1)").nlI();
                 this.src.add(cameraVariable, ".add_detector(line_detector)").nlI();
             }
+            if ( usedHardwareBean.isSensorUsed(FischertechnikConstants.BALL) ) {
+                this.src.add("ball_detector = txt_factory.camera_factory.create_ball_detector(0, 0, 320, 240, 10, 100, -100, 100, ");
+                this.src.add(hexToRgb(camera.getOptProperty("COLOUR")));
+                this.src.add(", 20)").nlI();
+                this.src.add(cameraVariable, ".add_detector(ball_detector)").nlI();
+            }
         }
     }
 
+    private String hexToRgb(String hexStr) {
+        hexStr = hexStr.startsWith("#") ? hexStr.substring(1) : hexStr;
+
+        int hlen = hexStr.length();
+        int componentLength = hlen / 3;
+
+        StringBuilder result = new StringBuilder("[");
+        for ( int i = 0; i < hlen; i += componentLength ) {
+            String hexComponent = hexStr.substring(i, i + componentLength);
+            int rgbComponent = Integer.parseInt(hexComponent, 16);
+            result.append(rgbComponent);
+            if ( i < hlen - componentLength ) {
+                result.append(", ");
+            }
+        }
+        result.append("]");
+
+        return result.toString();
+    }
     private ConfigurationComponent getCamera() {
         for ( ConfigurationComponent component : this.configurationAst.getConfigurationComponents().values() ) {
             if ( component.componentType.equals(FischertechnikConstants.TXTCAMERA) ) {

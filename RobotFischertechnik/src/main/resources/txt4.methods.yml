@@ -215,3 +215,10 @@ LINEINFORMATION:
             return [line.width,  line.position]  
         else:
             return [-1, -1]
+
+BALLINFORMATION:
+  PYTHON: |
+    def getBallInformation():
+        if ball_detector.detected():
+            return [ball_detector.get_center_x(), ball_detector.get_center_y(), ball_detector.get_diameter()]
+        return [-1, -1, -1]

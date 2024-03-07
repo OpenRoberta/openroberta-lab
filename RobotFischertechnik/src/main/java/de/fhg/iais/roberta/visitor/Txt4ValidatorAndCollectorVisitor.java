@@ -31,6 +31,7 @@ import de.fhg.iais.roberta.syntax.action.light.LedAction;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
+import de.fhg.iais.roberta.syntax.sensor.CameraBallSensor;
 import de.fhg.iais.roberta.syntax.sensor.CameraLineColourSensor;
 import de.fhg.iais.roberta.syntax.sensor.CameraLineInformationSensor;
 import de.fhg.iais.roberta.syntax.sensor.CameraLineSensor;
@@ -331,6 +332,14 @@ public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
         usedHardwareBuilder.addUsedSensor(new UsedSensor(cameraLineColourSensor.getUserDefinedPort(), FischertechnikConstants.CAMERA, FischertechnikConstants.LINE));
         usedHardwareBuilder.addUsedSensor(new UsedSensor(cameraLineColourSensor.getUserDefinedPort(), FischertechnikConstants.LINE, FischertechnikConstants.LINE));
         requiredComponentVisited(cameraLineColourSensor, cameraLineColourSensor.lineId);
+        return null;
+    }
+
+    @Override
+    public Void visitCameraBallSensor(CameraBallSensor cameraBallSensor) {
+        usedHardwareBuilder.addUsedSensor(new UsedSensor(cameraBallSensor.getUserDefinedPort(), FischertechnikConstants.CAMERA, FischertechnikConstants.BALL));
+        usedHardwareBuilder.addUsedSensor(new UsedSensor(cameraBallSensor.getUserDefinedPort(), FischertechnikConstants.BALL, FischertechnikConstants.BALL));
+        usedMethodBuilder.addUsedMethod(Txt4Methods.BALLINFORMATION);
         return null;
     }
 
