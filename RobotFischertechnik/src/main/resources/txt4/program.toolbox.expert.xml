@@ -145,7 +145,20 @@
         <block type='robSensors_colour_getSample'></block>
         <block type='robSensors_ball_getSample'></block>
         <block type='robSensors_cameraline_getSample'></block>
-        <block type='robSensors_get_line_camera_txt'></block>
+        <block type='robSensors_get_line_camera_txt'>
+            <value name='INDEX'>
+                <block type='math_number'>
+                    <field name='NUM'>0</field>
+                </block>
+            </value>
+        </block>
+        <block type="robSensors_get_line_colour_camera_txt">
+            <value name='INDEX'>
+                <block type='math_number'>
+                    <field name='NUM'>0</field>
+                </block>
+            </value>
+        </block>
     </category>
     <category name='TOOLBOX_CONTROL' svg='true'>
         <category name='TOOLBOX_DECISION' svg='true'>

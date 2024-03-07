@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2024-03-04 02:43:34.731962",
+		"lastupdated": "2024-03-06 23:21:14.962910",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1608,7 +1608,8 @@
 	"SENSOR_PULSE_GETSAMPLE_TOOLTIP": "Gets the current reading from the pulse sensor.",
 	"SENSOR_PULSE_GETSAMPLE_TOOLTIP_ARDUINO": "Gets the current reading from the pulse sensor. The value is between 0 and 1023.",
 	"SENSOR_RFID_GETSAMPLE_TOOLTIP": "Gets the current reading from the RFID reader.",
-	"SENSOR_LINE_INFORMATION_TOOLTIP": "Returns a list [x, y, width] or the colour of the line at the specified index (1-4).",
+	"SENSOR_LINE_INFORMATION_TOOLTIP": "Returns a list [position [-100;100], width] of the line at the specified index (0-3).",
+	"SENSOR_LINE_COLOUR_TOOLTIP": "Returns the colour of at the specified index (0-3).",
 	"CONFIGURATION_PORT": "Port1",
 	"CONFIGURATION_NO_PORT": "no port",
 	"PORT_HEAD": "head",

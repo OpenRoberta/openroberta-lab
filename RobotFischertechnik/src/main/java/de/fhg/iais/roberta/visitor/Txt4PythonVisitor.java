@@ -34,6 +34,9 @@ import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
+import de.fhg.iais.roberta.syntax.sensor.CameraLineColourSensor;
+import de.fhg.iais.roberta.syntax.sensor.CameraLineInformationSensor;
+import de.fhg.iais.roberta.syntax.sensor.CameraLineSensor;
 import de.fhg.iais.roberta.syntax.sensor.TouchKeySensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderReset;
@@ -586,6 +589,29 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
     }
 
     @Override
+    public Void visitCameraLineSensor(CameraLineSensor cameraLineSensor) {
+        this.src.add("line_detector.get_line_count()");
+        return null;
+    }
+
+    @Override
+    public Void visitCameraLineInformationSensor(CameraLineInformationSensor cameraLineInformationSensor) {
+        this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(Txt4Methods.LINEINFORMATION), "(");
+        cameraLineInformationSensor.lineId.accept(this);
+        this.src.add(")");
+        return null;
+    }
+
+    @Override
+    public Void visitCameraLineColourSensor(CameraLineColourSensor cameraLineColourSensor) {
+        this.src.add("line_detector.get_line_by_index(");
+        cameraLineColourSensor.lineId.accept(this);
+        this.src.add(").color.get_hex() if line_detector.get_line_by_index(0) else -1");
+        return null;
+    }
+
+
+    @Override
     public Void visitKeysSensor(KeysSensor keysSensor) {
         String port = getPortFromConfig(keysSensor.getUserDefinedPort());
         this.src.add("TXT_M_", port, "_mini_switch.get_state()");
@@ -777,6 +803,10 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
                 int startY = (cameraHeight - (int) colourHeight) / 2;
                 this.src.add("color_detector = txt_factory.camera_factory.create_color_detector(", startX, ", ", startY, ", ", (int) colourWidth, ", ", (int) colourHeight, ", 1)").nlI();
                 this.src.add(cameraVariable, ".add_detector(color_detector)").nlI();
+            }
+            if ( usedHardwareBean.isSensorUsed(FischertechnikConstants.LINE) ) {
+                this.src.add("line_detector = txt_factory.camera_factory.create_line_detector(60, 20, 100, 100, 5, 100, -100, 100, 1)").nlI();
+                this.src.add(cameraVariable, ".add_detector(line_detector)").nlI();
             }
         }
     }

@@ -58,4 +58,17 @@
             <field name="NAME">_B</field>
         </block>
     </instance>
+    <instance x="70" y="360">
+        <block type='robConf_camera_txt' id="CAM">
+            <field name="NAME">CAM</field>
+            <field name="COLOURSIZE">30</field>
+            <field name="MOTION">2</field>
+            <field name="PORT">USB1</field>
+            <value name='COLOUR'>
+                <block type='robColour_picker' deletable="false" id="COL">
+                    <field name='COLOUR'>#FFA500</field>
+                </block>
+            </value>
+        </block>
+    </instance>
 </block_set>

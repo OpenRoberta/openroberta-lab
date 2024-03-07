@@ -7,5 +7,7 @@ public class FischertechnikConstants {
     public static final String TXTCAMERA = "TXT_CAMERA";
     public static final String CAMERA = "CAMERA";
 
+    public static final String LINE = "LINE";
+
 
 }

@@ -206,3 +206,12 @@ CAMERAGETCOLOUR:
             return color_detector.get_result().value.get_hex()
         else:
             return -1
+
+LINEINFORMATION:
+  PYTHON: |
+    def getLineInformation(index):
+        line = line_detector.get_line_by_index(index)
+        if line is not None:
+            return [line.width,  line.position]  
+        else:
+            return [-1, -1]

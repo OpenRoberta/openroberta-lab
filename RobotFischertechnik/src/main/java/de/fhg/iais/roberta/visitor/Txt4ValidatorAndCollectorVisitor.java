@@ -31,6 +31,9 @@ import de.fhg.iais.roberta.syntax.action.light.LedAction;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
+import de.fhg.iais.roberta.syntax.sensor.CameraLineColourSensor;
+import de.fhg.iais.roberta.syntax.sensor.CameraLineInformationSensor;
+import de.fhg.iais.roberta.syntax.sensor.CameraLineSensor;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.TouchKeySensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
@@ -304,6 +307,30 @@ public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
         usedHardwareBuilder.addUsedSensor(new UsedSensor(colorSensor.getUserDefinedPort(), FischertechnikConstants.CAMERA, SC.COLOUR));
         usedHardwareBuilder.addUsedSensor(new UsedSensor(colorSensor.getUserDefinedPort(), SC.COLOUR, SC.COLOUR));
         usedMethodBuilder.addUsedMethod(Txt4Methods.CAMERAGETCOLOUR);
+        return null;
+    }
+
+    @Override
+    public Void visitCameraLineSensor(CameraLineSensor cameraLineSensor) {
+        usedHardwareBuilder.addUsedSensor(new UsedSensor(cameraLineSensor.getUserDefinedPort(), FischertechnikConstants.CAMERA, FischertechnikConstants.LINE));
+        usedHardwareBuilder.addUsedSensor(new UsedSensor(cameraLineSensor.getUserDefinedPort(), FischertechnikConstants.LINE, FischertechnikConstants.LINE));
+        return null;
+    }
+
+    @Override
+    public Void visitCameraLineInformationSensor(CameraLineInformationSensor cameraLineInformationSensor) {
+        usedHardwareBuilder.addUsedSensor(new UsedSensor(cameraLineInformationSensor.getUserDefinedPort(), FischertechnikConstants.CAMERA, FischertechnikConstants.LINE));
+        usedHardwareBuilder.addUsedSensor(new UsedSensor(cameraLineInformationSensor.getUserDefinedPort(), FischertechnikConstants.LINE, FischertechnikConstants.LINE));
+        requiredComponentVisited(cameraLineInformationSensor, cameraLineInformationSensor.lineId);
+        usedMethodBuilder.addUsedMethod(Txt4Methods.LINEINFORMATION);
+        return null;
+    }
+
+    @Override
+    public Void visitCameraLineColourSensor(CameraLineColourSensor cameraLineColourSensor) {
+        usedHardwareBuilder.addUsedSensor(new UsedSensor(cameraLineColourSensor.getUserDefinedPort(), FischertechnikConstants.CAMERA, FischertechnikConstants.LINE));
+        usedHardwareBuilder.addUsedSensor(new UsedSensor(cameraLineColourSensor.getUserDefinedPort(), FischertechnikConstants.LINE, FischertechnikConstants.LINE));
+        requiredComponentVisited(cameraLineColourSensor, cameraLineColourSensor.lineId);
         return null;
     }
 
