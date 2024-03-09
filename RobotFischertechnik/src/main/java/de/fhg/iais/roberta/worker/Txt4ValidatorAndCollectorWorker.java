@@ -33,7 +33,7 @@ public class Txt4ValidatorAndCollectorWorker extends AbstractValidatorAndCollect
     @Override
     protected CommonNepoValidatorAndCollectorVisitor getVisitor(
         Project project, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
-        return new Txt4ValidatorAndCollectorVisitor(project.getConfigurationAst(), beanBuilders);
+        return new Txt4ValidatorAndCollectorVisitor(project.getConfigurationAst(), beanBuilders, false);
     }
 
     @Override

@@ -1,13 +1,25 @@
 import { SelectionListener } from 'robot.base';
 import { Interpreter } from 'interpreter.interpreter';
-import RobotEv3 from 'robot.ev3';
-import { ThymioButtonLeds, ThymioChassis, ThymioCircleLeds, ThymioProxHLeds, ThymioRGBLeds, ThymioSoundLed, ThymioTemperatureLeds, WebAudio } from 'robot.actuators';
-import { EV3Keys, TapSensor, ThymioInfraredSensors, ThymioLineSensors, VolumeMeterSensor } from 'robot.sensors';
+import {
+    ChassisMobile,
+    ThymioButtonLeds,
+    ThymioChassis,
+    ThymioCircleLeds,
+    ThymioProxHLeds,
+    ThymioRGBLeds,
+    ThymioSoundLed,
+    ThymioTemperatureLeds,
+    WebAudio,
+} from 'robot.actuators';
+import { EV3Keys, Keys, TapSensor, ThymioInfraredSensors, ThymioLineSensors, VolumeMeterSensor } from 'robot.sensors';
 import * as $ from 'jquery';
+import { RobotBaseMobile } from 'robot.base.mobile';
 
-export default class RobotThymio extends RobotEv3 {
+export default class RobotThymio extends RobotBaseMobile {
+    chassis: ChassisMobile;
     override readonly imgList = ['simpleBackgroundSmall', 'drawBackground', 'rescueBackground', 'mathBackground'];
-    override webAudio: WebAudio = new WebAudio();
+    webAudio: WebAudio = new WebAudio();
+    buttons: Keys;
     private lineSensor: ThymioLineSensors;
     private infraredSensors: ThymioInfraredSensors;
     private tapSensor: TapSensor;
@@ -21,6 +33,7 @@ export default class RobotThymio extends RobotEv3 {
 
     constructor(id: number, configuration: object, interpreter: Interpreter, savedName: string, myListener: SelectionListener) {
         super(id, configuration, interpreter, savedName, myListener);
+        this.configure(configuration);
     }
 
     protected override configure(configuration: object): void {

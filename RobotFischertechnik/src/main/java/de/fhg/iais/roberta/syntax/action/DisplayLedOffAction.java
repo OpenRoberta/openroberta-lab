@@ -8,7 +8,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.WithUserDefinedPort;
 
-@NepoPhrase(category = "ACTOR", blocklyNames = {"actions_display_led_off_txt"}, name = "DISPLAY_LED_OFF_ACTION")
+@NepoPhrase(category = "ACTOR", blocklyNames = {"actions_display_led_off_txt4"}, name = "DISPLAY_LED_OFF_ACTION")
 public final class DisplayLedOffAction extends Action implements WithUserDefinedPort {
     @NepoField(name = "ACTORPORT")
     public final String port;

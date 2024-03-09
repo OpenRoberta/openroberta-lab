@@ -8,7 +8,7 @@ import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-@NepoPhrase(category = "ACTOR", blocklyNames = {"actions_motor_on_for_txt"}, name = "MOTOR_ON_FOR_ACTION")
+@NepoPhrase(category = "ACTOR", blocklyNames = {"actions_motor_on_for_txt4"}, name = "MOTOR_ON_FOR_ACTION")
 public final class MotorOnForAction extends ActionWithUserChosenName {
     @NepoValue(name = BlocklyConstants.POWER, type = BlocklyType.NUMBER)
     public final Expr power;

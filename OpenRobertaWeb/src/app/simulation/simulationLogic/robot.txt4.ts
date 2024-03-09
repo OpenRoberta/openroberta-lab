@@ -1,77 +1,99 @@
 import { Pose, RobotBaseMobile } from 'robot.base.mobile';
-import { ColorSensor, DistanceSensor, EV3Keys, GyroSensorExt, InfraredSensor, Keys, Timer, TouchSensor, UltrasonicSensor } from 'robot.sensors';
-import { EncoderChassisDiffDrive, EV3Chassis, StatusLed, TTS, WebAudio } from 'robot.actuators';
+import { DistanceSensor, EV3Keys, InfraredSensor, Keys, Timer, Txt4InfraredSensors, UltrasonicSensor } from 'robot.sensors';
+import { EncoderChassisDiffDrive, StatusLed, Txt4Chassis } from 'robot.actuators';
 import { RobotBase, SelectionListener } from 'robot.base';
 import { Interpreter } from 'interpreter.interpreter';
 import * as $ from 'jquery';
 
-export default class RobotEv3 extends RobotBaseMobile {
+export default class RobotTxt4 extends RobotBaseMobile {
     chassis: EncoderChassisDiffDrive;
     led: StatusLed;
-    volume: number = 0.5;
-    tts: TTS = new TTS();
-    webAudio: WebAudio = new WebAudio();
     override timer: Timer = new Timer(5);
     buttons: Keys;
 
     constructor(id: number, configuration: object, interpreter: Interpreter, savedName: string, myListener: SelectionListener) {
         super(id, configuration, interpreter, savedName, myListener);
         this.configure(configuration);
-        //M.display(M.maze(8, 8));
     }
 
     override updateActions(robot: RobotBase, dt, interpreterRunning: boolean): void {
         super.updateActions(robot, dt, interpreterRunning);
-        let volume = this.interpreter.getRobotBehaviour().getActionState('volume', true);
+        /*let volume = this.interpreter.getRobotBehaviour().getActionState('volume', true);
         if (volume || volume === 0) {
             this.volume = volume / 100.0;
-        }
+        }*/
     }
 
+    // TODO check if needed
     override reset() {
         super.reset();
-        this.volume = 0.5;
     }
 
     // this method might go up to BaseMobileRobots as soon as the configuration has detailed information about the sensors geometry and location on the robot
     protected configure(configuration: object): void {
-        this.chassis = new EV3Chassis(this.id, configuration, 2, this.pose);
-        this.led = new StatusLed({ x: -10, y: 0 }, this.chassis.geom.color);
+        /*
+    "ACTUATORS": {
+        "_B": {
+            "TYPE": "DISPLAY"
+        },
+        "_D": {
+            "MOTOR_L": "M1",
+            "BRICK_TRACK_WIDTH": "13.5",
+            "BRICK_WHEEL_DIAMETER": "6",
+            "MOTOR_R": "M2",
+            "TYPE": "DIFFERENTIALDRIVE"
+        }
+    },
+    "SENSORS": {
+        "B": {
+            "PORTL": "I7",
+            "TYPE": "LINE",
+            "PORTR": "I8"
+        },
+        "E": {
+            "SENSOR_COUNTER": "C1",
+            "PORT": "M1",
+            "TYPE": "ENCODER"
+        },
+        "U": {
+            "PORT": "I6",
+            "VCC": "9V",
+            "TYPE": "ULTRASONIC"
+        },
+        "E2": {
+            "SENSOR_COUNTER": "C2",
+            "PORT": "M2",
+            "TYPE": "ENCODER"
+        },
+        "CAM": {
+            "MOTION": "2",
+            "PORT": "USB1",
+            "TYPE": "TXT_CAMERA",
+            "COLOUR": "#FFA500",
+            "COLOURSIZE": "30"
+        }
+    }
+}
+         */
+        this.chassis = new Txt4Chassis(this.id, configuration, 1.75, this.pose);
+        this.led = new StatusLed({ x: 0, y: 0 }, (this.chassis as Txt4Chassis).geomDisplay.color);
         let sensors: object = configuration['SENSORS'];
+        console.log(sensors);
         for (const c in sensors) {
             switch (sensors[c]['TYPE']) {
-                case 'TOUCH':
-                    // only one is drawable as bumper
-                    this[c] = new TouchSensor(c, 25, 0, this.chassis.geom.color);
-                    break;
-                case 'GYRO':
-                    // only one is usable
-                    this[c] = new GyroSensorExt(c, 0, 0, 0);
-                    break;
-                case 'COLOR':
-                    let myColorSensors = [];
-                    let ev3 = this;
-                    Object.keys(this).forEach((x) => {
-                        if (ev3[x] && ev3[x] instanceof ColorSensor) {
-                            myColorSensors.push(ev3[x]);
-                        }
-                    });
-                    const ord = myColorSensors.length + 1;
-                    const id = Object.keys(sensors).filter((port) => sensors[port]['TYPE'] == 'COLOR').length;
-                    let y = ord * 10 - 5 * (id + 1);
-                    this[c] = new ColorSensor(c, 15, y, 0, 5);
-                    break;
                 case 'INFRARED':
+                    this[c] = new Txt4InfraredSensors({ x: 14, y: 0 });
+                    break;
                 case 'ULTRASONIC': {
                     let mySensors = [];
-                    let ev3 = this;
+                    let txt4 = this;
                     Object.keys(this).forEach((x) => {
-                        if (ev3[x] && ev3[x] instanceof DistanceSensor) {
-                            mySensors.push(ev3[x]);
+                        if (txt4[x] && txt4[x] instanceof DistanceSensor) {
+                            mySensors.push(txt4[x]);
                         }
                     });
                     const ord = mySensors.length + 1;
-                    const num = Object.keys(sensors).filter((port) => sensors[port]['TYPE'] == 'ULTRASONIC' || sensors[port]['TYPE'] == 'INFRARED').length;
+                    const num = Object.keys(sensors).filter((port) => sensors[port]['TYPE'] == 'ULTRASONIC').length;
                     let position: Pose = new Pose(this.chassis.geom.x + this.chassis.geom.w, 0, 0);
                     if (num == 3) {
                         if (ord == 1) {

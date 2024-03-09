@@ -11,7 +11,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.WithUserDefinedPort;
 
-@NepoPhrase(category = "ACTOR", blocklyNames = {"actions_display_led_on_txt"}, name = "DISPLAY_LED_ON_ACTION")
+@NepoPhrase(category = "ACTOR", blocklyNames = {"actions_display_led_on_txt4"}, name = "DISPLAY_LED_ON_ACTION")
 public final class DisplayLedOnAction extends Action implements WithUserDefinedPort {
     @NepoValue(name = "COLOUR", type = BlocklyType.COLOR)
     public final Expr colour;

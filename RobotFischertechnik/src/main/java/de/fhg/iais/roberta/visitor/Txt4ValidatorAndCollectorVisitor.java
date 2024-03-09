@@ -57,14 +57,15 @@ import de.fhg.iais.roberta.visitor.validate.CommonNepoValidatorAndCollectorVisit
 
 public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndCollectorVisitor implements ITxt4Visitor<Void> {
 
-
+    private final boolean isSim;
     private static final Map<String, String> SENSOR_COMPONENT_TYPE_MAP = Collections.unmodifiableMap(new HashMap<String, String>() {{
     }});
     private boolean driveWasChecked;
 
-    public Txt4ValidatorAndCollectorVisitor(ConfigurationAst robotConfiguration, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
+    public Txt4ValidatorAndCollectorVisitor(ConfigurationAst robotConfiguration, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders, boolean isSim) {
         super(robotConfiguration, beanBuilders);
         driveWasChecked = false;
+        this.isSim = isSim;
     }
 
     @Override

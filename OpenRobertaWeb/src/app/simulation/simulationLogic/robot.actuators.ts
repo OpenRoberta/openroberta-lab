@@ -115,26 +115,44 @@ export abstract class ChassisDiffDrive extends ChassisMobile {
         rightAngle: 0,
         leftAngle: 0,
     };
-    private readonly TRACKWIDTH: number;
+    protected readonly TRACKWIDTH: number;
     protected readonly WHEELDIAMETER: number;
 
     constructor(id: number, configuration: object, maxRotation: number) {
         super(id);
-        this.TRACKWIDTH = configuration['TRACKWIDTH'] * 3;
-        this.WHEELDIAMETER = configuration['WHEELDIAMETER'];
-        this.ENC = 360.0 / (3.0 * Math.PI * this.WHEELDIAMETER);
-        this.MAXPOWER = (maxRotation * this.WHEELDIAMETER * Math.PI * 3) / 100;
-        for (const item in configuration['ACTUATORS']) {
-            const motor = configuration['ACTUATORS'][item];
-            if (motor['MOTOR_DRIVE'] === 'RIGHT') {
-                this.right.port = item;
-                this.right.speed = 0;
+        if (configuration['TRACKWIDTH'] === 0 && configuration['WHEELDIAMETER'] === 0) {
+            // new configuration!
+            console.log('new');
+            for (const conf in configuration['ACTUATORS']) {
+                let myConf = configuration['ACTUATORS'][conf];
+                if (myConf['TYPE'] && myConf['TYPE'] === 'DIFFERENTIALDRIVE') {
+                    this.TRACKWIDTH = Number(myConf['BRICK_TRACK_WIDTH']) * 3;
+                    this.WHEELDIAMETER = Number(myConf['BRICK_WHEEL_DIAMETER']);
+                    this.right.port = myConf['MOTOR_R'];
+                    this.right.speed = 0;
+                    this.left.port = myConf['MOTOR_L'];
+                    this.left.speed = 0;
+                }
             }
-            if (motor['MOTOR_DRIVE'] === 'LEFT') {
-                this.left.port = item;
-                this.left.speed = 0;
+        } else {
+            // old configuration!
+            console.log('old');
+            this.TRACKWIDTH = configuration['TRACKWIDTH'] * 3;
+            this.WHEELDIAMETER = configuration['WHEELDIAMETER'];
+            for (const item in configuration['ACTUATORS']) {
+                const motor = configuration['ACTUATORS'][item];
+                if (motor['MOTOR_DRIVE'] === 'RIGHT') {
+                    this.right.port = item;
+                    this.right.speed = 0;
+                }
+                if (motor['MOTOR_DRIVE'] === 'LEFT') {
+                    this.left.port = item;
+                    this.left.speed = 0;
+                }
             }
         }
+        this.ENC = 360.0 / (3.0 * Math.PI * this.WHEELDIAMETER);
+        this.MAXPOWER = (maxRotation * this.WHEELDIAMETER * Math.PI * 3) / 100;
     }
 
     draw(rCtx: CanvasRenderingContext2D, myRobot: RobotBaseMobile): void {
@@ -152,7 +170,7 @@ export abstract class ChassisDiffDrive extends ChassisMobile {
         rCtx.fillRect(this.wheelBack.x, this.wheelBack.y, this.wheelBack.w, this.wheelBack.h);
         // draw geometry
         rCtx.fillStyle = this.geom.color;
-        rCtx.fillRect(15, -10, 8, 20);
+        //rCtx.fillRect(15, -10, 8, 20);
         rCtx.shadowBlur = 5;
         rCtx.shadowColor = 'black';
         rCtx.beginPath();
@@ -779,7 +797,62 @@ export class RobotinoChassis extends ChassisMobile {
     }
 }
 
-export abstract class LegoChassis extends ChassisDiffDrive implements ILabel {
+export abstract class EncoderChassisDiffDrive extends ChassisDiffDrive {
+    reset(): void {
+        this.encoder.left = 0;
+        this.encoder.right = 0;
+        this.left.speed = 0;
+        this.right.speed = 0;
+    }
+
+    override updateAction(myRobot: RobotBaseMobile, dt: number, interpreterRunning: boolean): void {
+        super.updateAction(myRobot, dt, interpreterRunning);
+        this.encoder.left += this.left.speed * dt;
+        this.encoder.right += this.right.speed * dt;
+        const encoder = myRobot.interpreter.getRobotBehaviour().getActionState('encoder', true);
+        if (encoder) {
+            if (encoder[this.left.port.toLowerCase()] && encoder[this.left.port.toLowerCase()] === 'reset') {
+                this.encoder.left = 0;
+            }
+            if (encoder[this.right.port.toLowerCase()] && encoder[this.right.port.toLowerCase()] === 'reset') {
+                this.encoder.right = 0;
+            }
+        }
+    }
+
+    override updateSensor(
+        running: boolean,
+        dt: number,
+        myRobot: RobotBase,
+        values: object,
+        uCtx: CanvasRenderingContext2D,
+        udCtx: CanvasRenderingContext2D,
+        personalObstacleList: any[]
+    ): void {
+        super.updateSensor(running, dt, myRobot, values, uCtx, udCtx, personalObstacleList);
+        if (running) {
+            this.updateEncoders(running, values);
+        }
+    }
+
+    private updateEncoders(running: boolean, values: any) {
+        if (running) {
+            values.encoder = {};
+            values.encoder[this.left.port.toLowerCase()] = {};
+            values.encoder[this.right.port.toLowerCase()] = {};
+            values.encoder[this.left.port.toLowerCase()][C.DEGREE] = this.encoder.left * this.ENC;
+            values.encoder[this.right.port.toLowerCase()][C.DEGREE] = this.encoder.right * this.ENC;
+            values.encoder[this.left.port.toLowerCase()][C.ROTATION] = (this.encoder.left * this.ENC) / 360;
+            values.encoder[this.right.port.toLowerCase()][C.ROTATION] = (this.encoder.right * this.ENC) / 360;
+            values.encoder[this.left.port.toLowerCase()][C.ROTATION] = (this.encoder.left * this.ENC) / 360;
+            values.encoder[this.right.port.toLowerCase()][C.ROTATION] = (this.encoder.right * this.ENC) / 360;
+            values.encoder[this.left.port.toLowerCase()][C.DISTANCE] = this.encoder.left / 3;
+            values.encoder[this.right.port.toLowerCase()][C.DISTANCE] = this.encoder.right / 3;
+        }
+    }
+}
+
+export abstract class LegoChassis extends EncoderChassisDiffDrive implements ILabel {
     backLeft: PointRobotWorldBumped = {
         x: -30,
         y: -20,
@@ -821,42 +894,9 @@ export abstract class LegoChassis extends ChassisDiffDrive implements ILabel {
         bumped: false,
     };
 
-    reset(): void {
-        this.encoder.left = 0;
-        this.encoder.right = 0;
-        this.left.speed = 0;
-        this.right.speed = 0;
+    override reset(): void {
+        super.reset();
         $('#display' + this.id).html('');
-    }
-
-    override updateAction(myRobot: RobotBaseMobile, dt: number, interpreterRunning: boolean): void {
-        super.updateAction(myRobot, dt, interpreterRunning);
-        this.encoder.left += this.left.speed * dt;
-        this.encoder.right += this.right.speed * dt;
-        const encoder = myRobot.interpreter.getRobotBehaviour().getActionState('encoder', true);
-        if (encoder) {
-            if (encoder[this.left.port.toLowerCase()] && encoder[this.left.port.toLowerCase()] === 'reset') {
-                this.encoder.left = 0;
-            }
-            if (encoder[this.right.port.toLowerCase()] && encoder[this.right.port.toLowerCase()] === 'reset') {
-                this.encoder.right = 0;
-            }
-        }
-    }
-
-    override updateSensor(
-        running: boolean,
-        dt: number,
-        myRobot: RobotBase,
-        values: object,
-        uCtx: CanvasRenderingContext2D,
-        udCtx: CanvasRenderingContext2D,
-        personalObstacleList: any[]
-    ): void {
-        super.updateSensor(running, dt, myRobot, values, uCtx, udCtx, personalObstacleList);
-        if (running) {
-            this.updateEncoders(running, values);
-        }
     }
 
     wheelBack: Geometry = {
@@ -929,22 +969,6 @@ export abstract class LegoChassis extends ChassisDiffDrive implements ILabel {
     }
 
     readonly labelPriority: number = 10;
-
-    private updateEncoders(running: boolean, values: any) {
-        if (running) {
-            values.encoder = {};
-            values.encoder[this.left.port.toLowerCase()] = {};
-            values.encoder[this.right.port.toLowerCase()] = {};
-            values.encoder[this.left.port.toLowerCase()][C.DEGREE] = this.encoder.left * this.ENC;
-            values.encoder[this.right.port.toLowerCase()][C.DEGREE] = this.encoder.right * this.ENC;
-            values.encoder[this.left.port.toLowerCase()][C.ROTATION] = (this.encoder.left * this.ENC) / 360;
-            values.encoder[this.right.port.toLowerCase()][C.ROTATION] = (this.encoder.right * this.ENC) / 360;
-            values.encoder[this.left.port.toLowerCase()][C.ROTATION] = (this.encoder.left * this.ENC) / 360;
-            values.encoder[this.right.port.toLowerCase()][C.ROTATION] = (this.encoder.right * this.ENC) / 360;
-            values.encoder[this.left.port.toLowerCase()][C.DISTANCE] = this.encoder.left / 3;
-            values.encoder[this.right.port.toLowerCase()][C.DISTANCE] = this.encoder.right / 3;
-        }
-    }
 }
 
 export class EV3Chassis extends LegoChassis {
@@ -1127,6 +1151,155 @@ export class NXTChassis extends LegoChassis {
             }
         }
     }
+}
+
+export class Txt4Chassis extends EncoderChassisDiffDrive implements ILabel {
+    geom: Geometry = {
+        x: -28,
+        y: -13,
+        w: 46,
+        h: 26,
+        radius: 1.5,
+        color: '#d11921',
+    };
+    topView: string = '';
+    backLeft: PointRobotWorldBumped = {
+        x: -30,
+        y: -20,
+        rx: 0,
+        ry: 0,
+        bumped: false,
+    };
+    backMiddle: PointRobotWorld = {
+        x: -30,
+        y: 0,
+        rx: 0,
+        ry: 0,
+    };
+    backRight: PointRobotWorldBumped = {
+        x: -30,
+        y: 20,
+        rx: 0,
+        ry: 0,
+        bumped: false,
+    };
+    frontLeft: PointRobotWorldBumped = {
+        x: 25,
+        y: -22.5,
+        rx: 0,
+        ry: 0,
+        bumped: false,
+    };
+    frontMiddle: PointRobotWorld = {
+        x: 25,
+        y: 0,
+        rx: 0,
+        ry: 0,
+    };
+    frontRight: PointRobotWorldBumped = {
+        x: 25,
+        y: 22.5,
+        rx: 0,
+        ry: 0,
+        bumped: false,
+    };
+
+    wheelBack: Geometry = {
+        x: -28,
+        y: -1,
+        w: 2,
+        h: 2,
+        color: '#000000',
+    };
+    wheelLeft: Geometry = {
+        x: -8,
+        y: -24,
+        w: 16,
+        h: 8,
+        color: '#000000',
+    };
+    wheelRight: Geometry = {
+        x: -8,
+        y: 16,
+        w: 16,
+        h: 8,
+        color: '#000000',
+    };
+    axisDiff = 0;
+    geomDisplay: Geometry = {
+        x: -18, //-26,
+        y: -13, //-13,
+        w: 26, //46,
+        h: 26, //26
+        radius: 1.5,
+        color: 'DimGrey',
+    };
+
+    override reset(): void {
+        super.reset();
+        $('#display' + this.id).html('');
+    }
+
+    constructor(id: number, configuration: {}, maxRotation: number, pose: Pose) {
+        super(id, configuration, maxRotation);
+        this.transformNewPose(pose, this);
+        this.wheelLeft.w = this.WHEELDIAMETER * 3;
+        this.wheelLeft.x = -this.wheelLeft.w / 2;
+        this.wheelRight.w = this.WHEELDIAMETER * 3;
+        this.wheelRight.x = -this.wheelRight.w / 2;
+        this.wheelLeft.y = -this.TRACKWIDTH / 2 - 4;
+        this.wheelRight.y = this.TRACKWIDTH / 2 - 4;
+        this.wheelFrontRight.x = this.wheelRight.x + this.wheelRight.w;
+        this.wheelFrontRight.y = this.wheelRight.y + this.wheelRight.h;
+        this.wheelBackRight.x = this.wheelRight.x;
+        this.wheelBackRight.y = this.wheelRight.y + this.wheelRight.h;
+        this.wheelFrontLeft.x = this.wheelLeft.x + this.wheelLeft.w;
+        this.wheelFrontLeft.y = this.wheelLeft.y;
+        this.wheelBackLeft.x = this.wheelLeft.x;
+        this.wheelBackLeft.y = this.wheelLeft.y;
+        SIMATH.transform(pose, this.wheelFrontRight);
+        SIMATH.transform(pose, this.wheelBackRight);
+        SIMATH.transform(pose, this.wheelFrontLeft);
+        SIMATH.transform(pose, this.wheelBackLeft);
+    }
+
+    override draw(rCtx: CanvasRenderingContext2D, myRobot: RobotBaseMobile) {
+        super.draw(rCtx, myRobot);
+        rCtx.shadowBlur = 5;
+        rCtx.shadowColor = 'black';
+        rCtx.fillStyle = this.geomDisplay.color;
+        rCtx.beginPath();
+        rCtx.rect(this.geomDisplay.x, this.geomDisplay.y, this.geomDisplay.w, this.geomDisplay.h);
+        rCtx.closePath();
+        rCtx.fill();
+        rCtx.shadowBlur = 0;
+        rCtx.shadowOffsetX = 0;
+    }
+
+    getLabel(): string {
+        return (
+            '<div><label>' +
+            this.left.port +
+            ' ' +
+            Blockly.Msg['SENSOR_ENCODER'] +
+            ' ' +
+            Blockly.Msg.LEFT +
+            '</label><span>' +
+            UTIL.round(this.encoder.left * this.ENC, 0) +
+            '°</span></div>' +
+            '<div><label>' +
+            this.right.port +
+            ' ' +
+            Blockly.Msg['SENSOR_ENCODER'] +
+            ' ' +
+            Blockly.Msg.RIGHT +
+            '</label><span>' +
+            UTIL.round(this.encoder.right * this.ENC, 0) +
+            '°</span></div>'
+        );
+    }
+
+    readonly labelPriority: number = 10;
 }
 
 export class EdisonChassis extends ChassisDiffDrive {
@@ -1767,11 +1940,18 @@ export class StatusLed implements IUpdateAction, IDrawable, IReset {
     blink: number = 0;
     blinkColor: string = 'LIGHTGREY';
     color: string = 'LIGHTGREY';
+    backColor: string;
     mode: string;
     r: number = 7;
     timer: number = 0;
-    x: number = -10;
-    y: number = 0;
+    x: number;
+    y: number;
+
+    constructor(location: Point, geomColor: string) {
+        this.x = location.x;
+        this.y = location.y;
+        this.backColor = geomColor;
+    }
 
     draw(rCtx: CanvasRenderingContext2D, myRobot: RobotBaseMobile): void {
         rCtx.save();
@@ -1779,7 +1959,7 @@ export class StatusLed implements IUpdateAction, IDrawable, IReset {
         let grd = rCtx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.r);
         grd.addColorStop(0, this.color);
         grd.addColorStop(0.25, this.color);
-        grd.addColorStop(1, myRobot.chassis.geom.color);
+        grd.addColorStop(1, this.backColor);
         rCtx.fillStyle = grd;
         rCtx.beginPath();
         rCtx.arc(this.x, this.y, this.r, 0, Math.PI * 2);

@@ -11,7 +11,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.syntax.WithUserDefinedPort;
 
-@NepoPhrase(category = "ACTOR", blocklyNames = {"actions_display_text_txt"}, name = "DISPLAY_TEXT_ACTION")
+@NepoPhrase(category = "ACTOR", blocklyNames = {"actions_display_text_txt4"}, name = "DISPLAY_TEXT_ACTION")
 public final class DisplayTextAction extends Action implements WithUserDefinedPort {
     @NepoValue(name = BlocklyConstants.TEXT, type = BlocklyType.ANY)
     public final Expr text;

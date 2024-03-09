@@ -9,7 +9,7 @@ import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
-@NepoPhrase(name = "OMNIDIFF_TURN_ACTION", category = "ACTOR", blocklyNames = {"actions_motorOmniDiff_turn_txt"})
+@NepoPhrase(name = "OMNIDIFF_TURN_ACTION", category = "ACTOR", blocklyNames = {"actions_motorOmniDiff_turn_txt4"})
 public final class MotorOmniDiffTurnAction extends ActionWithoutUserChosenName {
     @NepoField(name = BlocklyConstants.DIRECTION)
     public final String direction;

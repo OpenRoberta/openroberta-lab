@@ -11,7 +11,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.syntax.WithUserDefinedPort;
 
-@NepoExpr(name = "CAMERA_LINE_INFORMATION", category = "SENSOR", blocklyNames = {"robSensors_get_line_camera_txt"})
+@NepoExpr(name = "CAMERA_LINE_INFORMATION", category = "SENSOR", blocklyNames = {"robSensors_get_line_camera_txt4"})
 public final class CameraLineInformationSensor extends Sensor implements WithUserDefinedPort {
 
     @NepoField(name = "MODE")

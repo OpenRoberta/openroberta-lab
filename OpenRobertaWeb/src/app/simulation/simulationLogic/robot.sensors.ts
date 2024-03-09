@@ -659,6 +659,64 @@ export class ThymioLineSensors implements ILabel, ISensor, IDrawable {
     }
 }
 
+export class Txt4InfraredSensors implements ILabel, ISensor, IDrawable {
+    left: LineSensor;
+    right: LineSensor;
+
+    constructor(location: Point) {
+        this.left = new LineSensor({ x: location.x, y: location.y - 3 }, 3);
+        this.right = new LineSensor({ x: location.x, y: location.y + 3 }, 3);
+    }
+
+    labelPriority: number;
+
+    getLabel(): string {
+        return (
+            '<div><label>' +
+            Blockly.Msg['SENSOR_INFRARED'] +
+            ' ' +
+            Blockly.Msg.MODE_LINE +
+            '</label></div>' +
+            '<div><label>&nbsp;-&nbsp;' +
+            Blockly.Msg['BOTTOM_LEFT'] +
+            '</label><span>' +
+            this.left.line +
+            '</span></div>' +
+            '<div><label>&nbsp;-&nbsp;' +
+            Blockly.Msg['BOTTOM_RIGHT'] +
+            '</label><span>' +
+            this.right.line +
+            '</span></div>'
+        );
+    }
+
+    updateSensor(
+        running: boolean,
+        dt: number,
+        myRobot: RobotBase,
+        values: object,
+        uCtx: CanvasRenderingContext2D,
+        udCtx: CanvasRenderingContext2D,
+        personalObstacleList: any[],
+        markerList: MarkerSimulationObject[]
+    ): void {
+        this.left.updateSensor(running, dt, myRobot, values, uCtx, udCtx, personalObstacleList);
+        this.right.updateSensor(running, dt, myRobot, values, uCtx, udCtx, personalObstacleList);
+        this.left.line = this.left.line ? true : false;
+        this.right.line = this.right.line ? true : false;
+        values['infrared']['line'] = {};
+        values['infrared']['line']['left'] = this.left.line;
+        values['infrared']['line']['right'] = this.right.line;
+    }
+
+    drawPriority: number = 4;
+
+    draw(rCtx: CanvasRenderingContext2D, myRobot: RobotBase): void {
+        this.left.draw(rCtx, myRobot);
+        this.right.draw(rCtx, myRobot);
+    }
+}
+
 export class MbotInfraredSensor implements IExternalSensor, IDrawable, ILabel {
     right: { value: number } = { value: 0 };
     left: { value: number } = { value: 0 };
