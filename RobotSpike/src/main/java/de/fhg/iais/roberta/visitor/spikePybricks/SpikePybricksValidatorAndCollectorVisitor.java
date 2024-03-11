@@ -153,7 +153,6 @@ public class SpikePybricksValidatorAndCollectorVisitor extends AbstractSpikeVali
             case "SHAKE":
                 usedMethodBuilder.addUsedMethod(SpikePybricksMethods.IS_SHAKEN);
             case "TAPPED":
-                usedMethodBuilder.addUsedMethod(SpikePybricksMethods.GET_ACCELERATION);
                 usedMethodBuilder.addUsedMethod(SpikePybricksMethods.IS_TAPPED);
                 usedHardwareBuilder.addUsedImport(new UsedImport(SC.WAIT));
                 usedHardwareBuilder.addUsedSensor(new UsedSensor("TIMER_1", SC.TIMER, SC.DEFAULT));

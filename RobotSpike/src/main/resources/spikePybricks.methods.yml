@@ -141,15 +141,27 @@ IS_FREE_FALL:
 
 IS_TAPPED:
   PYTHON: |
-    def is_tapped():
-        threshold = 3500
-        val = 0.0
-        prev_val = get_acceleration()
+    def lerp(a, b, t):
+        x = a[0] * (1-t) + t * b[0]
+        y = a[1] * (1-t) + t * b[1]
+        z = a[2] * (1-t) + t * b[2]
+        return vector(x,y,z)
+    
+    def diff(a,b):
+        return vector(a[0]-b[0],a[1]-b[1],a[2]-b[2])
+    
+    lowPassValue = hub.imu.acceleration()
+    def is_tapped(threshold = 5000):
+        global lowPassValue
         start = stopWatch.time()
         while start - stopWatch.time() < 333:
-            val = get_acceleration()
-            if abs(val - prev_val) > threshold:
-                return True
+            acceleration = hub.imu.acceleration()
+            lowPassValue = lerp(lowPassValue, acceleration, 1/2)
+            deltaAcceleration = diff(acceleration, lowPassValue)
+            prod =  math.sqrt((abs(deltaAcceleration[0])**2) + (abs(deltaAcceleration[1])**2) + (abs(deltaAcceleration[2])**2))
+            if prod > threshold:
+              return True
+        wait(20)
         return False
 
 IS_SHAKEN:
@@ -157,11 +169,11 @@ IS_SHAKEN:
     def is_shaken():
         count_tapped = 0
         tapped = True
-        while tapped := is_tapped():
+        while tapped := is_tapped(1000):
             if tapped:
                 count_tapped += 1
-                wait(200)
-            if count_tapped >= 3:
+                wait(75)
+            if count_tapped >= 10:
                 return True
         return False
 
