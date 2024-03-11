@@ -27,10 +27,6 @@ import de.fhg.iais.roberta.syntax.action.spike.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.spike.PlayToneAction;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
-import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
-import de.fhg.iais.roberta.syntax.lang.functions.MathPowerFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
-import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathSingleFunct;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
@@ -276,13 +272,14 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
     @Override
     public Void visitTouchSensor(TouchSensor touchSensor) {
         String sensorPort = touchSensor.getUserDefinedPort();
-        src.add("touch_sensor_").add(sensorPort);
         switch ( touchSensor.getMode() ) {
             case "PRESSED":
+                src.add("touch_sensor_").add(sensorPort);
                 src.add(".pressed()");
                 break;
             case "FORCE":
-                src.add(".force()");
+                src.add("min(touch_sensor_").add(sensorPort);
+                src.add(".force() * 10.0 , 100.0)");
                 break;
             default:
                 throw new DbcException("Invalid touch sensor mode: " + touchSensor.getMode());
@@ -652,9 +649,9 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
                 src.add(")");
                 break;
             case LOG10:
-                src.add("umath.log(");
+                src.add("math.log(");
                 mathSingleFunct.param.get(0).accept(this);
-                src.add(")/umath.log(10)");
+                src.add(")/math.log(10)");
                 break;
             case POW10:
                 src.add("10 **");
@@ -666,50 +663,13 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
                 this.src.add(")");
                 break;
             case EXP:
-                this.src.add("umath.e**");
+                this.src.add("math.e**");
                 mathSingleFunct.param.get(0).accept(this);
                 break;
             default:
-                this.src.add("u");
                 super.visitMathSingleFunct(mathSingleFunct);
                 break;
         }
-        return null;
-    }
-
-    @Override
-    public Void visitMathConst(MathConst mathConst) {
-        switch ( mathConst.mathConst ) {
-            case GOLDEN_RATIO:
-            case INFINITY:
-                super.visitMathConst(mathConst);
-                break;
-            default:
-                this.src.add("u");
-                super.visitMathConst(mathConst);
-                break;
-        }
-        return null;
-    }
-
-    @Override
-    public Void visitMathPowerFunct(MathPowerFunct mathPowerFunct) {
-        this.src.add("u");
-        super.visitMathPowerFunct(mathPowerFunct);
-        return null;
-    }
-
-    @Override
-    public Void visitMathRandomFloatFunct(MathRandomFloatFunct mathRandomFloatFunct) {
-        this.src.add("u");
-        super.visitMathRandomFloatFunct(mathRandomFloatFunct);
-        return null;
-    }
-
-    @Override
-    public Void visitMathRandomIntFunct(MathRandomIntFunct mathRandomIntFunct) {
-        this.src.add("u");
-        super.visitMathRandomIntFunct(mathRandomIntFunct);
         return null;
     }
 
@@ -830,8 +790,8 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
      * python import math doesn't exist in pybricks context
      */
     private void importMathFunctions() {
-        src.add("import umath").nlI();
-        src.add("import urandom");
+        src.add("import umath as math").nlI();
+        src.add("import urandom as random");
     }
 
     private void instantiateComponents() {

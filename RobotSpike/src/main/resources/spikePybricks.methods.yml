@@ -29,7 +29,7 @@ HSVTORGB:
 TANKDRIVE_DIST:
   PYTHON: |
     def circle_circumference(diameter):
-        return umath.pi * (diameter)
+        return math.pi * (diameter)
 
     def distance_to_angle(distance):
         return (distance/circle_circumference(WHEEL_DIAMETER)) * 360
@@ -126,7 +126,7 @@ SPEED_FROM_PERCENT:
 GET_ACCELERATION:
   PYTHON: |
     def get_acceleration():
-        return umath.sqrt((abs(hub.imu.acceleration()[0])**2) + (abs(hub.imu.acceleration()[1])**2) + (abs(hub.imu.acceleration()[2])**2))
+        return math.sqrt((abs(hub.imu.acceleration()[0])**2) + (abs(hub.imu.acceleration()[1])**2) + (abs(hub.imu.acceleration()[2])**2))
 
 IS_FREE_FALL:
   PYTHON: |
@@ -171,7 +171,7 @@ TURN_FOR:
         if power == 0 or degrees == 0:
             return
         sign = (abs(power)/power)
-        tr = (get_speed_from_percent( power ) * 2 * (WHEEL_DIAMETER * umath.pi)) / (TRACKWIDTH * umath.pi)
+        tr = (get_speed_from_percent( power ) * 2 * (WHEEL_DIAMETER * math.pi)) / (TRACKWIDTH * math.pi)
         if abs(tr) < 5 :
             tr = (abs(tr)/tr) * 5
         drive_base.settings(turn_rate = tr)
