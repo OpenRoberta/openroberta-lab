@@ -29,7 +29,7 @@ HSVTORGB:
 TANKDRIVE_DIST:
   PYTHON: |
     def circle_circumference(diameter):
-        return math.pi * (diameter)
+        return umath.pi * (diameter)
 
     def distance_to_angle(distance):
         return (distance/circle_circumference(WHEEL_DIAMETER)) * 360
@@ -123,11 +123,13 @@ SPEED_FROM_PERCENT:
             percent = 100
         return int(810.0 * (percent/100.0))
 
-GESTURES:
+GET_ACCELERATION:
   PYTHON: |
     def get_acceleration():
-        return math.sqrt((abs(hub.imu.acceleration()[0])**2) + (abs(hub.imu.acceleration()[1])**2) + (abs(hub.imu.acceleration()[2])**2))
+        return umath.sqrt((abs(hub.imu.acceleration()[0])**2) + (abs(hub.imu.acceleration()[1])**2) + (abs(hub.imu.acceleration()[2])**2))
 
+IS_FREE_FALL:
+  PYTHON: |
     def is_free_fall():
         threshold = 350
         stopWatch.time()
@@ -137,6 +139,8 @@ GESTURES:
                 return True;
         return False
 
+IS_TAPPED:
+  PYTHON: |
     def is_tapped():
         threshold = 3500
         val = 0.0
@@ -148,6 +152,8 @@ GESTURES:
                 return True
         return False
 
+IS_SHAKEN:
+  PYTHON: |
     def is_shaken():
         count_tapped = 0
         tapped = True
@@ -165,12 +171,11 @@ TURN_FOR:
         if power == 0 or degrees == 0:
             return
         sign = (abs(power)/power)
-        tr = (get_speed_from_percent( power ) * 2 * (WHEEL_DIAMETER * math.pi)) / (TRACKWIDTH * math.pi)
+        tr = (get_speed_from_percent( power ) * 2 * (WHEEL_DIAMETER * umath.pi)) / (TRACKWIDTH * umath.pi)
         if abs(tr) < 5 :
             tr = (abs(tr)/tr) * 5
         drive_base.settings(turn_rate = tr)
         drive_base.turn( sign * degrees * direction )
-
 
 SHOW_ANIMATION:
   PYTHON: |
@@ -178,7 +183,7 @@ SHOW_ANIMATION:
         hub.display.animate(image_list, 500);
         wait(500 * len(image_list))
         hub.display.icon(image_list[len(image_list)-1])
-    
+
 GET_COLOR:
   PYTHON: |
     def get_color(color_sensor):

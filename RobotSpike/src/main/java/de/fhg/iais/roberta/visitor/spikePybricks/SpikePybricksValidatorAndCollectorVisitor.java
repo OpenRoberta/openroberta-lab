@@ -142,11 +142,25 @@ public class SpikePybricksValidatorAndCollectorVisitor extends AbstractSpikeVali
     final public Void visitGestureSensor(GestureSensor gestureSensor) {
         super.visitGestureSensor(gestureSensor);
         usedHardwareBuilder.addUsedSensor(new UsedSensor("GYRO", SC.GYRO, SC.DEFAULT));
-        usedHardwareBuilder.addUsedImport(new UsedImport(SC.WAIT));
-        //Port is a place-holder there is no Port that the Timer is connected to pybricks only has one Timer
-        //Timer is listed as Sensor in OpenRobertaLab so i use addUsedSensor here
-        usedHardwareBuilder.addUsedSensor(new UsedSensor("TIMER_1", SC.TIMER, SC.DEFAULT));
-        usedMethodBuilder.addUsedMethod(SpikePybricksMethods.GESTURES);
+
+        switch ( gestureSensor.getMode() ) {
+            case "FREEFALL":
+                usedMethodBuilder.addUsedMethod(SpikePybricksMethods.GET_ACCELERATION);
+                usedMethodBuilder.addUsedMethod(SpikePybricksMethods.IS_FREE_FALL);
+                usedHardwareBuilder.addUsedImport(new UsedImport(SC.WAIT));
+                usedHardwareBuilder.addUsedSensor(new UsedSensor("TIMER_1", SC.TIMER, SC.DEFAULT));
+                break;
+            case "SHAKE":
+                usedMethodBuilder.addUsedMethod(SpikePybricksMethods.IS_SHAKEN);
+            case "TAPPED":
+                usedMethodBuilder.addUsedMethod(SpikePybricksMethods.GET_ACCELERATION);
+                usedMethodBuilder.addUsedMethod(SpikePybricksMethods.IS_TAPPED);
+                usedHardwareBuilder.addUsedImport(new UsedImport(SC.WAIT));
+                usedHardwareBuilder.addUsedSensor(new UsedSensor("TIMER_1", SC.TIMER, SC.DEFAULT));
+                break;
+            default:
+                break;
+        }
         return null;
     }
 
@@ -174,7 +188,15 @@ public class SpikePybricksValidatorAndCollectorVisitor extends AbstractSpikeVali
     @Override
     final public Void visitColorSensor(ColorSensor colorSensor) {
         super.visitColorSensor(colorSensor);
-        usedMethodBuilder.addUsedMethod(SpikePybricksMethods.HSVTORGB);
+        switch ( colorSensor.getMode() ) {
+            case "GREENCHANNEL":
+            case "REDCHANNEL":
+            case "BLUECHANNEL":
+                usedMethodBuilder.addUsedMethod(SpikePybricksMethods.HSVTORGB);
+                break;
+            default:
+                break;
+        }
         usedHardwareBuilder.addUsedImport(new UsedImport(SC.PORT));
         usedMethodBuilder.addUsedMethod(SpikePybricksMethods.GET_COLOR);
         usedHardwareBuilder.addUsedImport(new UsedImport(SC.COlOR_CONST));
@@ -183,7 +205,6 @@ public class SpikePybricksValidatorAndCollectorVisitor extends AbstractSpikeVali
 
     @Override
     final public Void visitGyroSensor(GyroSensor gyroSensor) {
-        super.visitGyroSensor(gyroSensor);
         usedHardwareBuilder.addUsedSensor(new UsedSensor("GYRO", SC.GYRO, SC.DEFAULT));
         return null;
     }

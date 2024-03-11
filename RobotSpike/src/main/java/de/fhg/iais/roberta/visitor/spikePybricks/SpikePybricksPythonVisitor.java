@@ -294,13 +294,13 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
     public Void visitGyroSensor(GyroSensor gyroSensor) {
         switch ( gyroSensor.getSlot() ) {
             case "X":
-                src.add("hub.imu.rotation(vector(1, 0, 0))");
+                src.add("hub.imu.tilt()[0]");
                 break;
             case "Y":
-                src.add("hub.imu.rotation(vector(0, 1, 0))");
+                src.add("hub.imu.tilt()[1]");
                 break;
             case "Z":
-                src.add("hub.imu.rotation(vector(0, 0, 1))");
+                src.add("hub.imu.heading()%180 if abs(hub.imu.heading()%360) < 180 else -abs(hub.imu.heading()%360 - 360)");
                 break;
             default:
                 throw new DbcException("Invalid gyro sensor slot: " + gyroSensor.getSlot());
@@ -312,22 +312,22 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
     public Void visitGestureSensor(GestureSensor gestureSensor) {
         switch ( gestureSensor.getMode() ) {
             case "FRONT":
-                src.add("(hub.imu.up() == Side.FRONT)");
-                break;
-            case "BACK":
-                src.add("(hub.imu.up() == Side.BACK)");
-                break;
-            case "UP":
                 src.add("(hub.imu.up() == Side.TOP)");
                 break;
-            case "DOWN":
+            case "BACK":
                 src.add("(hub.imu.up() == Side.BOTTOM)");
                 break;
+            case "UP":
+                src.add("(hub.imu.up() == Side.FRONT)");
+                break;
+            case "DOWN":
+                src.add("(hub.imu.up() == Side.BACK)");
+                break;
             case "LEFT":
-                src.add("(hub.imu.up() == Side.LEFT)");
+                src.add("(hub.imu.up() == Side.RIGHT)");
                 break;
             case "RIGHT":
-                src.add("(hub.imu.up() == Side.RIGHT)");
+                src.add("(hub.imu.up() == Side.LEFT)");
                 break;
             case "TAPPED":
                 src.add("is_tapped()");
@@ -832,8 +832,6 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
     private void importMathFunctions() {
         src.add("import umath").nlI();
         src.add("import urandom");
-        //if ( usedHardwareBean.isImportUsed(SC.SQRT) )
-        //   src.add("from umath import sqrt").nlI();
     }
 
     private void instantiateComponents() {
