@@ -178,43 +178,15 @@ SHOW_ANIMATION:
         hub.display.animate(image_list, 500);
         wait(500 * len(image_list))
         hub.display.icon(image_list[len(image_list)-1])
-
-MATH:
-  PYTHON: |
-    class random:
-        def randint(a,b):
-            return urandom.randint(a,b)
-        def random():
-            return urandom.random()
     
-    class math:
-        pi = umath.pi
-        e = umath.e
-        def ceil(n):
-            return umath.ceil(n)
-        def floor(n):
-            return umath.floor(n)
-        def sqrt(n):
-            return umath.sqrt(n)
-        def pow(n,m):
-            return n**m
-        def fabs(n):
-            return abs(n)
-        def log(n):
-            return umath.log(n)
-        def log10(n):
-            return log(n)/log(10)
-        def exp(n):
-            e**n
-        def sin(n):
-            return umath.sin(n)
-        def cos(n):
-            return umath.cos(n)
-        def tan(n):
-            return umath.tan(n)
-        def asin(n):
-            return umath.asin(n)
-        def acos(n):
-            return umath.acos(n)
-        def atan(n):
-            return umath.atan(n)
+GET_COLOR:
+  PYTHON: |
+    def get_color(color_sensor):
+        hsv = color_sensor.hsv()
+        color = color_sensor.color()
+        if abs(abs(hsv.h) - abs(color.h)) < 30 :
+            return color
+        else:
+            if(color == Color.BLACK and abs(abs(hsv.v) - abs(color.v)) > 20):
+                return Color.BLACK
+            return Color.NONE

@@ -27,6 +27,11 @@ import de.fhg.iais.roberta.syntax.action.spike.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.spike.PlayToneAction;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
+import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
+import de.fhg.iais.roberta.syntax.lang.functions.MathPowerFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
+import de.fhg.iais.roberta.syntax.lang.functions.MathSingleFunct;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor;
@@ -245,7 +250,7 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
                 src.add("color_sensor_").add(sensorPort).add(".ambient()");
                 break;
             case "COLOUR":
-                src.add("color_sensor_").add(sensorPort).add(".color()");
+                src.add("get_color(color_sensor_").add(sensorPort).add(")");
                 break;
             case "REDCHANNEL":
                 src.add("hsv2rgb(");
@@ -634,6 +639,81 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
     }
 
     @Override
+    public Void visitMathSingleFunct(MathSingleFunct mathSingleFunct) {
+        switch ( mathSingleFunct.functName ) {
+            case SQUARE:
+                mathSingleFunct.param.get(0).accept(this);
+                src.add(" * ");
+                mathSingleFunct.param.get(0).accept(this);
+                break;
+            case ABS:
+                src.add("abs(");
+                mathSingleFunct.param.get(0).accept(this);
+                src.add(")");
+                break;
+            case LOG10:
+                src.add("umath.log(");
+                mathSingleFunct.param.get(0).accept(this);
+                src.add(")/umath.log(10)");
+                break;
+            case POW10:
+                src.add("10 **");
+                mathSingleFunct.param.get(0).accept(this);
+                break;
+            case ROUND:
+                this.src.add("round(");
+                mathSingleFunct.param.get(0).accept(this);
+                this.src.add(")");
+                break;
+            case EXP:
+                this.src.add("umath.e**");
+                mathSingleFunct.param.get(0).accept(this);
+                break;
+            default:
+                this.src.add("u");
+                super.visitMathSingleFunct(mathSingleFunct);
+                break;
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitMathConst(MathConst mathConst) {
+        switch ( mathConst.mathConst ) {
+            case GOLDEN_RATIO:
+            case INFINITY:
+                super.visitMathConst(mathConst);
+                break;
+            default:
+                this.src.add("u");
+                super.visitMathConst(mathConst);
+                break;
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitMathPowerFunct(MathPowerFunct mathPowerFunct) {
+        this.src.add("u");
+        super.visitMathPowerFunct(mathPowerFunct);
+        return null;
+    }
+
+    @Override
+    public Void visitMathRandomFloatFunct(MathRandomFloatFunct mathRandomFloatFunct) {
+        this.src.add("u");
+        super.visitMathRandomFloatFunct(mathRandomFloatFunct);
+        return null;
+    }
+
+    @Override
+    public Void visitMathRandomIntFunct(MathRandomIntFunct mathRandomIntFunct) {
+        this.src.add("u");
+        super.visitMathRandomIntFunct(mathRandomIntFunct);
+        return null;
+    }
+
+    @Override
     protected void generateProgramPrefix(boolean withWrapping) {
         if ( !withWrapping ) {
             return;
@@ -820,7 +900,16 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
             usedHardwareBean.getUsedSensors().stream().filter(usedActor -> usedActor.getType().equals("COLOR")).forEach(sensor -> {
                 if ( configurationAst.optConfigurationComponent(sensor.getPort()) != null ) {
                     nlIndent();
-                    src.add("color_sensor_").add(sensor.getPort()).add(" = ColorSensor(Port.").add(getPortFromConfig(sensor.getPort())).add(")");
+                    src.add("color_sensor_").add(sensor.getPort()).add(" = ColorSensor(Port.").add(getPortFromConfig(sensor.getPort())).add(")").nlI();
+                    src.add("Color.RED = Color(0,70,70)").nlI();
+                    src.add("Color.GREEN = Color(120,70,70)").nlI();
+                    src.add("Color.MAGENTA = Color(300,70,70)").nlI();
+                    src.add("Color.YELLOW = Color(60,70,70)").nlI();
+                    src.add("Color.ORANGE = Color(30,70,70)").nlI();
+                    src.add("Color.CYAN = Color(180,70,70)").nlI();
+                    src.add("Color.BLUE = Color(225,70,70)").nlI();
+                    src.add("Color.BLACK = Color(0,0,50)").nlI();
+                    src.add("color_sensor_").add(sensor.getPort()).add(".detectable_colors([Color.RED, Color.GREEN, Color.BLUE, Color.MAGENTA, Color.YELLOW, Color.ORANGE, Color.CYAN, Color.BLACK , Color.WHITE, Color.NONE])");
                 }
             });
         }

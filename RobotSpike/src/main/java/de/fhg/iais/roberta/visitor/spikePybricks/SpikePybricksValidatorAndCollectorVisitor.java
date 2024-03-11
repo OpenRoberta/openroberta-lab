@@ -34,8 +34,8 @@ public class SpikePybricksValidatorAndCollectorVisitor extends AbstractSpikeVali
         ConfigurationAst robotConfiguration,
         ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
         super(robotConfiguration, beanBuilders);
-        usedMethodBuilder.addUsedMethod(SpikePybricksMethods.MATH);
     }
+
 
     @Override
     final public Void visitMotorDiffTurnForAction(MotorDiffTurnForAction motorDiffTurnForAction) {
@@ -176,6 +176,8 @@ public class SpikePybricksValidatorAndCollectorVisitor extends AbstractSpikeVali
         super.visitColorSensor(colorSensor);
         usedMethodBuilder.addUsedMethod(SpikePybricksMethods.HSVTORGB);
         usedHardwareBuilder.addUsedImport(new UsedImport(SC.PORT));
+        usedMethodBuilder.addUsedMethod(SpikePybricksMethods.GET_COLOR);
+        usedHardwareBuilder.addUsedImport(new UsedImport(SC.COlOR_CONST));
         return null;
     }
 
