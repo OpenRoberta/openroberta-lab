@@ -222,3 +222,9 @@ BALLINFORMATION:
         if ball_detector.detected():
             return [ball_detector.get_center_x(), ball_detector.get_center_y(), ball_detector.get_diameter()]
         return [-1, -1, -1]
+
+COLOURCOMPARE:
+  PYTHON: |
+    def compareColour(hex1, hex2, tolerance):
+        color1 = Color(hex="#{:06x}".format(hex1 & 0xFFFFFF))
+        return color1.compare(hex="#{:06x}".format(hex2 & 0xFFFFFF), hue_tolerance=tolerance)

@@ -34,6 +34,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
+import de.fhg.iais.roberta.syntax.logic.ColourCompare;
 import de.fhg.iais.roberta.syntax.sensor.CameraBallSensor;
 import de.fhg.iais.roberta.syntax.sensor.CameraLineColourSensor;
 import de.fhg.iais.roberta.syntax.sensor.CameraLineInformationSensor;
@@ -618,6 +619,18 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
         return null;
     }
 
+    @Override
+    public Void visitColourCompare(ColourCompare colourCompare) {
+        this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(Txt4Methods.COLOURCOMPARE), "(");
+        colourCompare.colour1.accept(this);
+        this.src.add(", ");
+        colourCompare.colour2.accept(this);
+        this.src.add(", ");
+        colourCompare.tolerance.accept(this);
+        this.src.add(")");
+        return null;
+    }
+
 
     @Override
     public Void visitKeysSensor(KeysSensor keysSensor) {
@@ -703,6 +716,9 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
         }
         if ( usedHardwareBean.isActorUsed(SC.DISPLAY) ) {
             this.src.add("from lib.display import *").nlI();
+        }
+        if ( usedHardwareBean.isSensorUsed(SC.COLOUR) ) {
+            this.src.add("from fischertechnik.models.Color import Color").nlI();
         }
 
         this.src.add("import math").nlI();

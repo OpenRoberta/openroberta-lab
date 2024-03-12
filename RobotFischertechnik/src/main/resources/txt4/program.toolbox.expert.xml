@@ -218,7 +218,14 @@
         </category>
     </category>
     <category name='TOOLBOX_LOGIC' svg='true'>
-        <block type='logic_compare'></block>
+        <block type='logic_compare'>
+            <value name='TOLERANCE'>
+                <block type='math_number'>
+                    <field name='NUM'>30</field>
+                </block>
+            </value>
+        </block>
+        <block type='logic_colour_compare'></block>
         <block type='logic_operation'></block>
         <block type='logic_negate'></block>
         <block type='logic_boolean'></block>
