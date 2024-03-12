@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.visitor;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.google.common.collect.ClassToInstanceMap;
 
@@ -9,6 +10,7 @@ import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.components.ConfigurationAst;
+import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.constants.FischertechnikConstants;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.DisplayLedOffAction;
@@ -653,13 +655,13 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
 
     @Override
     public Void visitTimerReset(TimerReset timerReset) {
-        this.src.add("timer.reset()");
+        this.src.add("_timer", timerReset.sensorPort, " = time.time()");
         return null;
     }
 
     @Override
     public Void visitTimerSensor(TimerSensor timerSensor) {
-        this.src.add("timer.now() * 1000");
+        this.src.add("((time.time() - _timer", timerSensor.getUserDefinedPort(), ") * 1000)");
         return null;
     }
 
@@ -748,7 +750,21 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
         initCamera(usedHardwareBean);
         this.src.add("txt_factory.initialized()").nlI();
         generateVariables(usedHardwareBean);
+        generateTimerVariables();
+    }
 
+    private void generateTimerVariables() {
+        this.getBean(UsedHardwareBean.class)
+            .getUsedSensors()
+            .stream()
+            .filter(usedSensor -> usedSensor.getType().equals(SC.TIMER))
+            .collect(Collectors.groupingBy(UsedSensor::getPort))
+            .keySet()
+            .forEach(port -> {
+                this.usedGlobalVarInFunctions.add("_timer" + port);
+                nlIndent();
+                this.src.add("_timer", port, " = time.time()");
+            });
     }
 
     private void initActors(UsedHardwareBean usedHardwareBean) {

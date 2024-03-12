@@ -159,6 +159,8 @@
                 </block>
             </value>
         </block>
+        <block type='robSensors_timer_getSample'></block>
+        <block type='robSensors_timer_reset'></block>
     </category>
     <category name='TOOLBOX_CONTROL' svg='true'>
         <category name='TOOLBOX_DECISION' svg='true'>
