@@ -123,7 +123,13 @@
         </category>
         <category name='TOOLBOX_LIGHT' svg='true'>
             <block type='actions_led'></block>
-            <block type='actions_led_set_brightness'></block>
+            <block type='actions_led_set_brightness'>
+                <value name="BRIGHTNESS">
+                    <block type="math_number" id="Dy#ytr1sQ2WFyWrdDQ_!" intask="true">
+                        <field name="NUM">180</field>
+                    </block>
+                </value>
+            </block>
             <block type='actions_display_led_on_txt'>
                 <value name='COLOUR'>
                     <block type='robColour_picker'>

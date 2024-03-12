@@ -78,6 +78,9 @@ public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
 
     @Override
     public Void visitMotorOmniDiffOnAction(MotorOmniDiffOnAction motorOmniDiffOnAction) {
+        requiredComponentVisited(motorOmniDiffOnAction, motorOmniDiffOnAction.power);
+
+
         usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniDiffOnAction.getUserDefinedPort(), SC.ENCODER));
         usedMethodBuilder.addUsedMethod(Txt4Methods.MOTORSTART);
 
@@ -94,6 +97,8 @@ public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
 
     @Override
     public Void visitMotorOmniDiffOnForAction(MotorOmniDiffOnForAction motorOmniDiffOnForAction) {
+        requiredComponentVisited(motorOmniDiffOnForAction, motorOmniDiffOnForAction.power, motorOmniDiffOnForAction.distance);
+
         usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniDiffOnForAction.getUserDefinedPort(), SC.ENCODER));
         usedMethodBuilder.addUsedMethod(Txt4Methods.MOTORSTART);
 
@@ -111,6 +116,7 @@ public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
 
     @Override
     public Void visitMotorOmniDiffCurveAction(MotorOmniDiffCurveAction motorOmniDiffCurveAction) {
+        requiredComponentVisited(motorOmniDiffCurveAction, motorOmniDiffCurveAction.powerLeft, motorOmniDiffCurveAction.powerRight);
         usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniDiffCurveAction.getUserDefinedPort(), SC.ENCODER));
         usedMethodBuilder.addUsedMethod(Txt4Methods.MOTORSTART);
 
@@ -126,6 +132,8 @@ public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
 
     @Override
     public Void visitMotorOmniDiffCurveForAction(MotorOmniDiffCurveForAction motorOmniDiffCurveForAction) {
+        requiredComponentVisited(motorOmniDiffCurveForAction, motorOmniDiffCurveForAction.distance, motorOmniDiffCurveForAction.powerLeft, motorOmniDiffCurveForAction.powerRight);
+
         usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniDiffCurveForAction.getUserDefinedPort(), SC.ENCODER));
         usedMethodBuilder.addUsedMethod(Txt4Methods.MOTORSTART);
 
@@ -143,18 +151,18 @@ public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
 
     private void addOmnidriveDistanceMethods(String direction) {
         switch ( direction ) {
-            case "HEART": //forward
-            case "HEART_SMALL": //backward
-            case "HAPPY": //left
-            case "SMILE": //right
+            case "FORWARD": //forward
+            case "BACKWARD": //backward
+            case "LEFT": //left
+            case "RIGHT": //right
                 usedMethodBuilder.addUsedMethod(Txt4Methods.OMNIDRIVESTRAIGHTDISTANCE);
                 break;
-            case "CONFUSED": //forward left
-            case "SUPRISED": //backward right
+            case "FORWARDLEFT": //forward left
+            case "BACKWARDRIGHT": //backward right
                 usedMethodBuilder.addUsedMethod(Txt4Methods.OMNIDRIVEDIAGONALTLDISTANCE);
                 break;
-            case "ASLEEP": //forward right
-            case "ANGRY": //backward left
+            case "FORWARDRIGHT": //forward right
+            case "BACKWARDLEFT": //backward left
                 usedMethodBuilder.addUsedMethod(Txt4Methods.OMNIDRIVEDIAGONALTRDISTANCE);
                 break;
             default:
@@ -164,6 +172,7 @@ public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
 
     @Override
     public Void visitMotorOmniDiffTurnAction(MotorOmniDiffTurnAction motorOmniDiffTurnAction) {
+        requiredComponentVisited(motorOmniDiffTurnAction, motorOmniDiffTurnAction.power);
         usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniDiffTurnAction.getUserDefinedPort(), SC.ENCODER));
         usedMethodBuilder.addUsedMethod(Txt4Methods.MOTORSTART);
         if ( configHasOmnidrive() ) {
@@ -178,6 +187,7 @@ public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
 
     @Override
     public Void visitMotorOmniDiffTurnForAction(MotorOmniDiffTurnForAction motorOmniDiffTurnForAction) {
+        requiredComponentVisited(motorOmniDiffTurnForAction, motorOmniDiffTurnForAction.degrees, motorOmniDiffTurnForAction.power);
         usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniDiffTurnForAction.getUserDefinedPort(), SC.ENCODER));
         if ( configHasOmnidrive() ) {
             usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniDiffTurnForAction.getUserDefinedPort(), FischertechnikConstants.OMNIDRIVE));
@@ -191,6 +201,7 @@ public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
 
     @Override
     public Void visitMotorOnForAction(MotorOnForAction motorOnForAction) {
+        requiredComponentVisited(motorOnForAction, motorOnForAction.power, motorOnForAction.value);
         usedHardwareBuilder.addUsedActor(new UsedActor(motorOnForAction.getUserDefinedPort(), SC.ENCODER));
         usedMethodBuilder.addUsedMethod(Txt4Methods.MOTORSTARTFOR);
 
@@ -213,6 +224,7 @@ public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
 
     @Override
     public Void visitServoOnForAction(ServoOnForAction servoOnForAction) {
+        requiredComponentVisited(servoOnForAction, servoOnForAction.value);
         usedHardwareBuilder.addUsedActor(new UsedActor(servoOnForAction.getUserDefinedPort(), SC.SERVOMOTOR));
         return null;
     }
@@ -270,6 +282,7 @@ public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
 
     @Override
     public Void visitLedSetBrightnessAction(LedSetBrightnessAction ledSetBrightnessAction) {
+        requiredComponentVisited(ledSetBrightnessAction, ledSetBrightnessAction.brightness);
         usedHardwareBuilder.addUsedActor(new UsedActor(ledSetBrightnessAction.getUserDefinedPort(), SC.LED));
         return null;
     }
@@ -321,18 +334,18 @@ public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
 
     @Override
     public Void visitCameraLineInformationSensor(CameraLineInformationSensor cameraLineInformationSensor) {
+        requiredComponentVisited(cameraLineInformationSensor, cameraLineInformationSensor.lineId);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(cameraLineInformationSensor.getUserDefinedPort(), FischertechnikConstants.CAMERA, FischertechnikConstants.LINE));
         usedHardwareBuilder.addUsedSensor(new UsedSensor(cameraLineInformationSensor.getUserDefinedPort(), FischertechnikConstants.LINE, FischertechnikConstants.LINE));
-        requiredComponentVisited(cameraLineInformationSensor, cameraLineInformationSensor.lineId);
         usedMethodBuilder.addUsedMethod(Txt4Methods.LINEINFORMATION);
         return null;
     }
 
     @Override
     public Void visitCameraLineColourSensor(CameraLineColourSensor cameraLineColourSensor) {
+        requiredComponentVisited(cameraLineColourSensor, cameraLineColourSensor.lineId);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(cameraLineColourSensor.getUserDefinedPort(), FischertechnikConstants.CAMERA, FischertechnikConstants.LINE));
         usedHardwareBuilder.addUsedSensor(new UsedSensor(cameraLineColourSensor.getUserDefinedPort(), FischertechnikConstants.LINE, FischertechnikConstants.LINE));
-        requiredComponentVisited(cameraLineColourSensor, cameraLineColourSensor.lineId);
         return null;
     }
 
