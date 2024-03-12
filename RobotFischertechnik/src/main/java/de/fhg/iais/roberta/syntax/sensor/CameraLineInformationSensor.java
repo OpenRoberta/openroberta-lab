@@ -38,6 +38,6 @@ public final class CameraLineInformationSensor extends Sensor implements WithUse
 
     @Override
     public String getUserDefinedPort() {
-        return this.port;
+        return this.hide.getValue();
     }
 }

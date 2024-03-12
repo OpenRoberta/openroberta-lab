@@ -9,9 +9,10 @@ import de.fhg.iais.roberta.transformer.forField.NepoValue;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
+import de.fhg.iais.roberta.util.syntax.WithUserDefinedPort;
 
 @NepoPhrase(category = "ACTOR", blocklyNames = {"actions_display_text_txt"}, name = "DISPLAY_TEXT_ACTION")
-public final class DisplayTextAction extends Action {
+public final class DisplayTextAction extends Action implements WithUserDefinedPort {
     @NepoValue(name = BlocklyConstants.TEXT, type = BlocklyType.ANY)
     public final Expr text;
     @NepoValue(name = BlocklyConstants.ROW, type = BlocklyType.NUMBER_INT)
@@ -32,4 +33,8 @@ public final class DisplayTextAction extends Action {
         setReadOnly();
     }
 
+    @Override
+    public String getUserDefinedPort() {
+        return this.hide.getValue();
+    }
 }

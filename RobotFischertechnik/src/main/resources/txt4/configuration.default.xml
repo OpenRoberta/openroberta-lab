@@ -54,13 +54,13 @@
         </block>
     </instance>
     <instance x="350" y="310">
-        <block type="robConf_display" id="DI" intask="true">
+        <block type="robConf_display" deletable="false" id="DI" intask="true">
             <field name="NAME">_B</field>
         </block>
     </instance>
     <instance x="70" y="360">
         <block type='robConf_camera_txt' id="CAM">
-            <field name="NAME">CAM</field>
+            <field name="NAME">C</field>
             <field name="COLOURSIZE">30</field>
             <field name="MOTION">2</field>
             <field name="PORT">USB1</field>

@@ -38,6 +38,6 @@ public final class CameraLineColourSensor extends Sensor implements WithUserDefi
 
     @Override
     public String getUserDefinedPort() {
-        return this.port;
+        return this.hide.getValue();
     }
 }
