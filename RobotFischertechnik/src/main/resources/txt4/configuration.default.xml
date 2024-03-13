@@ -1,56 +1,45 @@
 <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="txt4" xmlversion="" description="" tags="">
 
     <instance x="70" y="103">
-        <block type="robConf_omnidrive" id="AM=n{?7R#nO#1~?a3j~u" intask="true">
-            <field name="NAME">_O</field>
+        <block type="robConf_differentialdrive" id="AM=n{?7R#nO#1~?a3j~u" intask="true">
+            <field name="NAME">_D</field>
             <field name="BRICK_WHEEL_DIAMETER">6</field>
             <field name="BRICK_TRACK_WIDTH">15</field>
-            <field name="WHEEL_BASE">10.2</field>
-            <field name="MOTOR_FL">M1</field>
-            <field name="MOTOR_FR">M2</field>
-            <field name="MOTOR_RL">M3</field>
-            <field name="MOTOR_RR">M4</field>
+            <field name="MOTOR_L">M1</field>
+            <field name="MOTOR_R">M2</field>
         </block>
     </instance>
     <instance x="350" y="103">
         <block type="robConf_encoder" id="`M1" intask="true">
-            <field name="NAME">FL</field>
+            <field name="NAME">ML</field>
             <field name="PORT">M1</field>
             <field name="SENSOR_COUNTER">C1</field>
         </block>
     </instance>
     <instance x="600" y="103">
         <block type="robConf_encoder" id="`M2" intask="true">
-            <field name="NAME">FR</field>
+            <field name="NAME">MR</field>
             <field name="PORT">M2</field>
             <field name="SENSOR_COUNTER">C2</field>
-        </block>
-    </instance>
-    <instance x="350" y="160">
-        <block type="robConf_encoder" id="`M3" intask="true">
-            <field name="NAME">RL</field>
-            <field name="PORT">M3</field>
-            <field name="SENSOR_COUNTER">C3</field>
-        </block>
-    </instance>
-    <instance x="600" y="160">
-        <block type="robConf_encoder" id="`M4" intask="true">
-            <field name="NAME">RR</field>
-            <field name="PORT">M4</field>
-            <field name="SENSOR_COUNTER">C4</field>
         </block>
     </instance>
     <instance x="350" y="460">
         <block type="robConf_ultrasonic" id="U" intask="true">
             <field name="NAME">U</field>
-            <field name="PORT">I6</field>
+            <field name="PORT">I3</field>
         </block>
     </instance>
     <instance x="350" y="360">
         <block type="robConf_line" id="L" intask="true">
             <field name="NAME">B</field>
-            <field name="PORTL">I7</field>
-            <field name="PORTR">I8</field>
+            <field name="PORTL">I1</field>
+            <field name="PORTR">I2</field>
+        </block>
+    </instance>
+    <instance x="350" y="560">
+        <block type="robConf_led" id="led" intask="true">
+            <field name="NAME">L</field>
+            <field name="PORT">O5</field>
         </block>
     </instance>
     <instance x="350" y="310">
