@@ -16,7 +16,7 @@
                 </value>
                 <value name='DISTANCE'>
                     <block type='math_number'>
-                        <field name='NUM'>10</field>
+                        <field name='NUM'>20</field>
                     </block>
                 </value>
             </block>
@@ -45,7 +45,7 @@
                 </value>
                 <value name='DISTANCE'>
                     <block type='math_integer'>
-                        <field name='NUM'>10</field>
+                        <field name='NUM'>20</field>
                     </block>
                 </value>
             </block>
