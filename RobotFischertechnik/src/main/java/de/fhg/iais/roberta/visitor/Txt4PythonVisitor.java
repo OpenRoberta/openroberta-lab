@@ -522,7 +522,7 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
         } else {
             port = configurationComponent.getProperty("PORTR");
         }
-        this.src.add("TXT_M_", port, "_trail_follower.get_state()");
+        this.src.add("(!TXT_M_", port, "_trail_follower.get_state())");
         return null;
     }
 
