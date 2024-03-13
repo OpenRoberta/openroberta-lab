@@ -516,7 +516,7 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
     @Override
     public Void visitGetLineSensor(GetLineSensor getLineSensor) {
         ConfigurationComponent configurationComponent = this.configurationAst.getConfigurationComponent(getLineSensor.getUserDefinedPort());
-        String port = "";
+        String port;
         if ( getLineSensor.getSlot().equals(SC.LEFT) ) {
             port = configurationComponent.getProperty("PORTL");
         } else {
@@ -835,7 +835,7 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
 
             }
             if ( usedHardwareBean.isSensorUsed(SC.COLOUR) ) {
-                int percent = Integer.valueOf(camera.getOptProperty("COLOURSIZE"));
+                int percent = Integer.parseInt(camera.getOptProperty("COLOURSIZE"));
 
                 double colourWidth = cameraWidth * ((double) percent / 100);
                 double colourHeight = cameraHeight * ((double) percent / 100);
@@ -914,7 +914,7 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
         }
         if ( usedHardwareBean.isActorUsed(FischertechnikConstants.DISPLAYLED) ) {
             this.src.add("current_led = \"redLed\"").nlI();
-            ;
+
             this.src.add("led_colors = {\n" +
                 "    \"red\": 0xcc0000,\n" +
                 "    \"yellow\": 0xffff00,\n" +
