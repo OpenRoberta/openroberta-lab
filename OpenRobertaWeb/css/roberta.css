@@ -1390,7 +1390,7 @@ table .typcn-chevron-right:before {
     transform: rotate(-90deg);
 }
 
-table [data-toggle="collapse"]:after {
+table [data-bs-toggle="collapse"]:after {
     content: url("data:image/svg+xml;utf8,<svg version='1.1' xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 32 32'><path d='M24.267 17.733l-8.267-8.4-8.267 8.4c-0.267 0.267-0.4 0.667-0.4 0.933s0.133 0.667 0.4 0.933c0.267 0.267 0.533 0.4 0.933 0.4h14.667c0.4 0 0.667-0.133 0.933-0.4s0.4-0.667 0.4-0.933-0.133-0.667-0.4-0.933z'></path></svg>");
     float: right;
 }
@@ -1407,7 +1407,7 @@ table [data-toggle="collapse"]:after {
     background-image: url("../css/svg/arrow-sorted-down.svg");
 }
 
-table [data-toggle="collapse"].collapsed:after {
+table [data-bs-toggle="collapse"].collapsed:after {
     -ms-transform: rotate(180deg);
     transform: rotate(180deg);
 }
@@ -2041,6 +2041,10 @@ div.imgSol img, div.imgSol svg {
     height: 48px;
     padding-top: 0;
     padding-bottom: 0;
+}
+
+.form-control:not(#start .fixed-table-toolbar>.float-right>.form-control) {
+    appearance: auto;
 }
 
 #start .fixed-table-toolbar > .float-right > .form-control {

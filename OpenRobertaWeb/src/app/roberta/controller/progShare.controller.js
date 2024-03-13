@@ -2,7 +2,6 @@ import * as LOG from 'log';
 import * as UTIL from 'util.roberta';
 import * as MSG from 'message';
 import * as GUISTATE_C from 'guiState.controller';
-import * as LANG from 'language.controller';
 import { eventsLike, formatLike, rowAttributes } from 'galleryList.controller';
 import * as PROGRAM from 'program.model';
 import * as USERGROUP from 'userGroup.model';
@@ -484,10 +483,11 @@ var formatSharedWith = function (value, row, index) {
                     '<i class="typcn typcn-plus"></i>' +
                     '</button>' +
                     '</span>' +
-                    '<input class="shareLabelInput form-control" type="text" name="user.account" lkey="Blockly.Msg.SHARE_WITH_USER" data-translation-targets="placeholder"/>' +
+                    '<input class="shareLabelInput form-control" type="text" name="user.account" placeholder="' +
+                    Blockly.Msg.SHARE_WITH_USER +
+                    '"/>' +
                     '</div>'
             );
-            LANG.translate($html);
             return $('<div></div>').append($html).html();
         }
         if (value.type === 'UserGroup') {
@@ -495,42 +495,44 @@ var formatSharedWith = function (value, row, index) {
                 USERGROUP.loadUserGroupList(function (data) {
                     if (data.rc == 'ok' && data.userGroups && data.userGroups.length > 0) {
                         var existingUserGroupNames = $('#relationsTable')
-                                .bootstrapTable('getData')
-                                .filter(function (dataEntry) {
-                                    return dataEntry.sharedWith && dataEntry.sharedWith.type === 'UserGroup';
-                                })
-                                .map(function (dataEntry) {
-                                    return dataEntry.sharedWith.label;
-                                }),
-                            $td = $('#relationsTable tr[data-index="' + index + '"] script').parent(),
-                            html;
-
-                        html =
-                            '<div class="input-group" title="" data-bs-original-title lkey="Blockly.Msg.SHARE_WITH_USERGROUP" data-translation-targets="title data-bs-original-title">' +
-                            '<label class="input-group-btn" for="shareWithUserGroupInput">' +
-                            '<button type="button" style="height:48px" class="btn disabled editor">' +
-                            '<i class="typcn typcn-group"></i>' +
-                            '</button>' +
-                            '</label>' +
-                            '<span class="input-group-btn">' +
-                            '<button class="addShare btn" type="button" style="height: 48px">' +
-                            '<i class="typcn typcn-plus"></i>' +
-                            '</button>' +
-                            '</span>' +
-                            '<select class="shareLabelInput form-control" name="userGroup.name">' +
-                            '<option value="" lkey="Blockly.Msg.SHARE_WITH_USERGROUP" data-translation-targets="html"></option>' +
-                            data.userGroups
-                                .filter(function (userGroup) {
-                                    return existingUserGroupNames.indexOf(userGroup.name) === -1;
-                                })
-                                .reduce(function (carry, userGroup) {
-                                    return carry + '<option value="' + userGroup.name + '">' + userGroup.name + '</option>';
-                                }, '') +
-                            '</select>' +
-                            '</div>';
-
-                        $td.html(html);
-                        LANG.translate($td);
+                            .bootstrapTable('getData')
+                            .filter(function (dataEntry) {
+                                return dataEntry.sharedWith && dataEntry.sharedWith.type === 'UserGroup';
+                            })
+                            .map(function (dataEntry) {
+                                return dataEntry.sharedWith.label;
+                            });
+                        var $td = $('#relationsTable tr[data-index="' + index + '"] script').parent();
+                        var $html = $(
+                            '<td><div class="input-group">' +
+                                '<label class="input-group-btn" for="shareWithUserGroupInput">' +
+                                '<button type="button" style="height:48px" class="btn disabled editor">' +
+                                '<i class="typcn typcn-group"></i>' +
+                                '</button>' +
+                                '</label>' +
+                                '<span class="input-group-btn">' +
+                                '<button class="addShare btn" type="button" style="height: 48px">' +
+                                '<i class="typcn typcn-plus"></i>' +
+                                '</button>' +
+                                '</span>' +
+                                '<select class="shareLabelInput form-control" name="userGroup.name">' +
+                                '<option value="">' +
+                                Blockly.Msg.SHARE_WITH_USERGROUP +
+                                '</option>' +
+                                data.userGroups
+                                    .filter(function (userGroup) {
+                                        return existingUserGroupNames.indexOf(userGroup.name) === -1;
+                                    })
+                                    .reduce(function (carry, userGroup) {
+                                        return carry + '<option value="' + userGroup.name + '">' + userGroup.name + '</option>';
+                                    }, '') +
+                                '</select>' +
+                                '</div></td>'
+                        );
+                        $('#relationsTable')
+                            .find('tr[data-index="' + index + '"]')
+                            .show();
+                        $td.replaceWith($html[0]);
                         Object.keys(eventAddShare).forEach(function (eventKey) {
                             if (!eventAddShare.hasOwnProperty(eventKey)) {
                                 return;
@@ -541,7 +543,6 @@ var formatSharedWith = function (value, row, index) {
                                 eventAddShare[eventKey](e, value, row, index);
                             });
                         });
-                        $td.parent().show();
                     }
                 });
             }

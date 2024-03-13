@@ -122,7 +122,7 @@ function initProgListViewEvents() {
         },
         'back to program view'
     );
-    $programNameTable.onWrap('toggle-pagination.bs.table', function () {
+    $programNameTable.onWrap('toggle-pagination.bs.table shown.bs.collapse', function () {
         resizeTable();
     });
     $(window).onWrap('resize', function () {
