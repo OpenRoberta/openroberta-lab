@@ -203,7 +203,18 @@ CAMERAGETCOLOUR:
   PYTHON: |
     def getCameraColour():
         if color_detector.detected():
-            return color_detector.get_result().value.get_hex()
+            result = color_detector.get_result().value.get_hex()
+            return int(result[1:], 16)
+        else:
+            return -1
+
+LINEGETCOLOUR:
+  PYTHON: |
+    def getLineColour(index):
+        line = line_detector.get_line_by_index(index)
+        if line:
+            colour = line.color.get_hex()
+            return int(colour[1:], 16)
         else:
             return -1
 
@@ -226,5 +237,7 @@ BALLINFORMATION:
 COLOURCOMPARE:
   PYTHON: |
     def compareColour(hex1, hex2, tolerance):
-        color1 = Color(hex="#{:06x}".format(hex1 & 0xFFFFFF))
-        return color1.compare(hex="#{:06x}".format(hex2 & 0xFFFFFF), hue_tolerance=tolerance)
+        hex1AsString = "#{:06x}".format(hex1 & 0xFFFFFF)
+        hex2AsString = "#{:06x}".format(hex2 & 0xFFFFFF)
+        color1 = Color(hex = hex1AsString)
+        return color1.compare(hex = hex2AsString, hue_tolerance=tolerance)

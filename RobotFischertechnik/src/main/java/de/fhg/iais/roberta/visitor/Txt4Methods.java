@@ -20,4 +20,5 @@ public enum Txt4Methods {
     LINEINFORMATION,
     BALLINFORMATION,
     COLOURCOMPARE,
+    LINEGETCOLOUR,
 }

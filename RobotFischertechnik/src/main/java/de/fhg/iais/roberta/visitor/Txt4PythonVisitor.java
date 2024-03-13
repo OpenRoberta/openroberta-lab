@@ -608,9 +608,9 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
 
     @Override
     public Void visitCameraLineColourSensor(CameraLineColourSensor cameraLineColourSensor) {
-        this.src.add("line_detector.get_line_by_index(");
+        this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(Txt4Methods.LINEGETCOLOUR), "(");
         cameraLineColourSensor.lineId.accept(this);
-        this.src.add(").color.get_hex() if line_detector.get_line_by_index(0) else -1");
+        this.src.add(")");
         return null;
     }
 

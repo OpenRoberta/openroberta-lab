@@ -379,6 +379,7 @@ public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
         requiredComponentVisited(cameraLineColourSensor, cameraLineColourSensor.lineId);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(cameraLineColourSensor.getUserDefinedPort(), FischertechnikConstants.CAMERA, FischertechnikConstants.LINE));
         usedHardwareBuilder.addUsedSensor(new UsedSensor(cameraLineColourSensor.getUserDefinedPort(), FischertechnikConstants.LINE, FischertechnikConstants.LINE));
+        usedMethodBuilder.addUsedMethod(Txt4Methods.LINEGETCOLOUR);
         return null;
     }
 
