@@ -1002,7 +1002,7 @@ button#simCustomObstacle.typcn:before {
     float: right;
 }
 
-#head-navigation-program-edit .dropdown-menu > li > a {
+#head-navigation-program-edit .dropdown-menu > li > a, #head-navigation-configuration-edit .dropdown-menu > li > a {
     position: relative;
     padding-right: 70px;
 }

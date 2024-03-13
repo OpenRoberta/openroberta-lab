@@ -395,7 +395,8 @@ function initMenuEvents() {
         '.dropdown-menu li:not(.disabled) a',
         function (event) {
             $('.modal').modal('hide'); // close all opened popups
-            switch (event.target.id) {
+            var targetId = event.target.id || event.currentTarget.id;
+            switch (targetId) {
                 case 'menuCheckConfig':
                     MSG.displayMessage('MESSAGE_NOT_AVAILABLE', 'POPUP', '');
                     break;
@@ -764,96 +765,120 @@ function initMenuEvents() {
     });
 
     $(document).onWrap('keydown', function (e) {
-        if (GUISTATE_C.getView() != 'tabProgram') {
-            return;
-        }
-        //Overriding the Ctrl + 2 for creating a debug block
-        if ((e.metaKey || e.ctrlKey) && e.which == 50) {
-            e.preventDefault();
-            var debug = GUISTATE_C.getBlocklyWorkspace().newBlock('robActions_debug');
-            debug.initSvg();
-            debug.render();
-            debug.setInTask(false);
+        if (GUISTATE_C.getView() === 'tabProgram') {
+            //Overriding the Ctrl + 2 for creating a debug block
+            if ((e.metaKey || e.ctrlKey) && e.which == 50) {
+                e.preventDefault();
+                var debug = GUISTATE_C.getBlocklyWorkspace().newBlock('robActions_debug');
+                debug.initSvg();
+                debug.render();
+                debug.setInTask(false);
 
-            return false;
-        }
-        //Overriding the Ctrl + 3 for creating an assertion block
-        if ((e.metaKey || e.ctrlKey) && e.which == 51) {
-            e.preventDefault();
-            var assert = GUISTATE_C.getBlocklyWorkspace().newBlock('robActions_assert');
-            assert.initSvg();
-            assert.setInTask(false);
-            assert.render();
-            var logComp = GUISTATE_C.getBlocklyWorkspace().newBlock('logic_compare');
-            logComp.initSvg();
-            logComp.setMovable(false);
-            logComp.setInTask(false);
-            logComp.setDeletable(false);
-            logComp.render();
-            var parentConnection = assert.getInput('OUT').connection;
-            var childConnection = logComp.outputConnection;
-            parentConnection.connect(childConnection);
-            return false;
-        }
-        //Overriding the Ctrl + 4 for creating an evaluate expression block
-        if ((e.metaKey || e.ctrlKey) && e.which == 52) {
-            e.preventDefault();
-            var expr = GUISTATE_C.getBlocklyWorkspace().newBlock('robActions_eval_expr');
-            expr.initSvg();
-            expr.render();
-            expr.setInTask(false);
-            return false;
-        }
-        //Overriding the Ctrl + 5 for creating an evaluate statement block
-        if ((e.metaKey || e.ctrlKey) && e.which == 53) {
-            e.preventDefault();
-            var expr = GUISTATE_C.getBlocklyWorkspace().newBlock('robActions_eval_stmt');
-            expr.initSvg();
-            expr.render();
-            expr.setInTask(false);
-            return false;
-        }
-        //Overriding the Ctrl + S for saving the program in the database on the server
-        if ((e.metaKey || e.ctrlKey) && e.which == 83) {
-            e.preventDefault();
-            if (GUISTATE_C.isUserLoggedIn()) {
-                if (GUISTATE_C.getProgramName() === 'NEPOprog' || e.shiftKey) {
-                    PROGRAM_C.showSaveAsModal();
-                } else if (!GUISTATE_C.isProgramSaved()) {
-                    PROGRAM_C.saveToServer();
+                return false;
+            }
+            //Overriding the Ctrl + 3 for creating an assertion block
+            if ((e.metaKey || e.ctrlKey) && e.which == 51) {
+                e.preventDefault();
+                var assert = GUISTATE_C.getBlocklyWorkspace().newBlock('robActions_assert');
+                assert.initSvg();
+                assert.setInTask(false);
+                assert.render();
+                var logComp = GUISTATE_C.getBlocklyWorkspace().newBlock('logic_compare');
+                logComp.initSvg();
+                logComp.setMovable(false);
+                logComp.setInTask(false);
+                logComp.setDeletable(false);
+                logComp.render();
+                var parentConnection = assert.getInput('OUT').connection;
+                var childConnection = logComp.outputConnection;
+                parentConnection.connect(childConnection);
+                return false;
+            }
+            //Overriding the Ctrl + 4 for creating an evaluate expression block
+            if ((e.metaKey || e.ctrlKey) && e.which == 52) {
+                e.preventDefault();
+                var expr = GUISTATE_C.getBlocklyWorkspace().newBlock('robActions_eval_expr');
+                expr.initSvg();
+                expr.render();
+                expr.setInTask(false);
+                return false;
+            }
+            //Overriding the Ctrl + 5 for creating an evaluate statement block
+            if ((e.metaKey || e.ctrlKey) && e.which == 53) {
+                e.preventDefault();
+                var expr = GUISTATE_C.getBlocklyWorkspace().newBlock('robActions_eval_stmt');
+                expr.initSvg();
+                expr.render();
+                expr.setInTask(false);
+                return false;
+            }
+            //Overriding the Ctrl + S for saving the program in the database on the server
+            if ((e.metaKey || e.ctrlKey) && e.which == 83) {
+                e.preventDefault();
+                if (GUISTATE_C.isUserLoggedIn()) {
+                    if (GUISTATE_C.getProgramName() === 'NEPOprog' || e.shiftKey) {
+                        PROGRAM_C.showSaveAsModal();
+                    } else if (!GUISTATE_C.isProgramSaved()) {
+                        PROGRAM_C.saveToServer();
+                    }
+                } else {
+                    MSG.displayMessage('ORA_PROGRAM_GET_ONE_ERROR_NOT_LOGGED_IN', 'POPUP', '');
                 }
-            } else {
-                MSG.displayMessage('ORA_PROGRAM_GET_ONE_ERROR_NOT_LOGGED_IN', 'POPUP', '');
             }
-        }
-        //Overriding the Ctrl + R for running the program
-        if ((e.metaKey || e.ctrlKey) && e.which == 82) {
-            e.preventDefault();
-            if (GUISTATE_C.isRunEnabled()) {
-                RUN_C.runOnBrick();
+            //Overriding the Ctrl + R for running the program
+            if ((e.metaKey || e.ctrlKey) && e.which == 82) {
+                e.preventDefault();
+                if (GUISTATE_C.isRunEnabled()) {
+                    RUN_C.runOnBrick();
+                }
             }
-        }
-        //Overriding the Ctrl + M for viewing all programs
-        if ((e.metaKey || e.ctrlKey) && e.which == 77) {
-            e.preventDefault();
-            if (GUISTATE_C.isUserLoggedIn()) {
-                $('#progList').trigger('Programs');
-                $('.navbar-nav a[href="#progList"]').tab('show');
-            } else {
-                MSG.displayMessage('ORA_PROGRAM_GET_ONE_ERROR_NOT_LOGGED_IN', 'POPUP', '');
+            //Overriding the Ctrl + M for viewing all programs
+            if ((e.metaKey || e.ctrlKey) && e.which == 77) {
+                e.preventDefault();
+                if (GUISTATE_C.isUserLoggedIn()) {
+                    $('#progList').trigger('Programs');
+                    $('#tabProgList').tabWrapShow();
+                } else {
+                    MSG.displayMessage('ORA_PROGRAM_GET_ONE_ERROR_NOT_LOGGED_IN', 'POPUP', '');
+                }
             }
-        }
-        //Overriding the Ctrl + I for importing NEPO Xml
-        if ((e.metaKey || e.ctrlKey) && e.which == 73) {
-            e.preventDefault();
-            IMPORT_C.importXml();
-            return false;
-        }
-        //Overriding the Ctrl + E for exporting the NEPO code
-        if ((e.metaKey || e.ctrlKey) && e.which == 69) {
-            e.preventDefault();
-            PROGRAM_C.exportXml();
-            return false;
+            //Overriding the Ctrl + I for importing NEPO Xml
+            if ((e.metaKey || e.ctrlKey) && e.which == 73) {
+                e.preventDefault();
+                IMPORT_C.importXml();
+                return false;
+            }
+            //Overriding the Ctrl + E for exporting the NEPO code
+            if ((e.metaKey || e.ctrlKey) && e.which == 69) {
+                e.preventDefault();
+                PROGRAM_C.exportXml();
+                return false;
+            }
+        } else {
+            if (GUISTATE_C.getView() === 'tabConfiguration') {
+                //Overriding the Ctrl + S for saving the configuration in the database on the server
+                if ((e.metaKey || e.ctrlKey) && e.which == 83) {
+                    e.preventDefault();
+                    if (GUISTATE_C.isUserLoggedIn()) {
+                        if (GUISTATE_C.isConfigurationStandard() || e.shiftKey) {
+                            CONFIGURATION_C.showSaveAsModal();
+                        } else if (!GUISTATE_C.isProgramSaved()) {
+                            CONFIGURATION_C.saveToServer();
+                        }
+                    } else {
+                        MSG.displayMessage('ORA_PROGRAM_GET_ONE_ERROR_NOT_LOGGED_IN', 'POPUP', '');
+                    }
+                }
+                //Overriding the Ctrl + M for viewing all configurations
+                if ((e.metaKey || e.ctrlKey) && e.which == 77) {
+                    e.preventDefault();
+                    if (GUISTATE_C.isUserLoggedIn()) {
+                        $('#tabConfList').tabWrapShow();
+                    } else {
+                        MSG.displayMessage('ORA_PROGRAM_GET_ONE_ERROR_NOT_LOGGED_IN', 'POPUP', '');
+                    }
+                }
+            }
         }
     });
 }
