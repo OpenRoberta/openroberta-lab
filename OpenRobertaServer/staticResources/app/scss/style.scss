@@ -2,8 +2,7 @@
 ***** Project Libraries ***** 
 *************************************/
 
-@import "libraries/rem";
-//Maybe useful.
+// Bootstrap Customization
 @import "components/variables";
 
 // Bootstrap Components
@@ -59,9 +58,3 @@
 // @import "libraries/prettify"; What is it for? CSS file has some errors.
 @import "libraries/huebee.min";
 //@import "libraries/neuralnetwork-bundle";
-
-/*************************************
-***** New Start Page 2024 ***** 
-*************************************/
-
-@import "components/start";

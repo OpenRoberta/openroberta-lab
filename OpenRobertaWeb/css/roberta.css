@@ -2113,6 +2113,448 @@ div.imgSol img, div.imgSol svg {
     margin-top: 4px;
 }
 
+/*************************************
+***** New Start Page 2024 ***** 
+*************************************/
+
+.transition, .button-big, .button, .button-big--arrow, .button-big.icon::after, .button-big--quaternary::after, .button-big--tertiary::after, .button-big--secondary::after, .button-big--primary::after {
+    transition: all 0.3s;
+}
+
+/*************************************
+***** Typography *****
+*************************************/
+
+/*************************************
+***** Headlines *****
+*************************************/
+
+h1, h2, h3, h4, h5 {
+    font-weight: 700;
+}
+
+h1 {
+    font-size: 30px;
+    line-height: 40px;
+    margin-bottom: 30px;
+}
+
+h2 {
+    font-size: 30px;
+    line-height: 40px;
+    margin-bottom: 20px;
+}
+
+h3 {
+    font-size: 30px;
+    line-height: 40px;
+    margin-bottom: 30px;
+}
+
+h4 {
+    font-size: 20px;
+    line-height: 30px;
+}
+
+h5 {
+    font-size: 20px;
+    line-height: 30px;
+}
+
+.tint {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 0 -10px 0 -10px;
+    mix-blend-mode: multiply;
+    color: #fff;
+}
+
+.tint--primary {
+    background: #39378B;
+    transform: rotate(1deg);
+    position: relative;
+    top: 5px;
+}
+
+.tint--secondary {
+    background: #FDC300;
+    transform: rotate(-1deg);
+}
+
+.tint--tertiary {
+    background: #33B8CA;
+    transform: rotate(-2deg);
+}
+
+.tint--quaternary {
+    background: #88BCE2;
+    transform: rotate(1deg);
+    position: relative;
+    top: -8px;
+}
+
+/*************************************
+***** Paragraph & Lists *****
+*************************************/
+
+p {
+    font-size: 16px;
+    line-height: 24px;
+    margin-bottom: 15px;
+}
+
+p:last-child {
+    margin-bottom: 0;
+}
+
+p.teaser {
+    font-size: 20px;
+    line-height: 30px;
+}
+
+p.teaser:last-child {
+    margin-bottom: 15px;
+}
+
+p.teaser + .button {
+    margin-top: 20px;
+}
+
+/*************************************
+***** Links *****
+*************************************/
+
+a {
+    color: #39378B;
+    text-decoration: underline;
+}
+
+@media (hover: hover) {
+    a:hover {
+        cursor: pointer;
+        text-decoration: none;
+    }
+}
+
+/*************************************
+***** Buttons *****
+*************************************/
+
+.button-big--arrow, .button-big.icon::after, .button-big--quaternary::after, .button-big--tertiary::after, .button-big--secondary::after, .button-big--primary::after {
+    content: "";
+    height: 30px;
+    width: 30px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    position: absolute;
+    bottom: 15px;
+    right: 20px;
+}
+
+@media (hover: hover) {
+    .button-big--arrow:hover, .button-big.icon:hover::after, .button-big--quaternary:hover::after, .button-big--tertiary:hover::after, .button-big--secondary:hover::after, .button-big--primary:hover::after {
+        right: 15px;
+    }
+}
+
+.button {
+    display: inline-block;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 700;
+    padding: 15px;
+}
+
+.button--light {
+    color: #39378B;
+    background: #fff;
+}
+
+.button.show {
+    background: #39378b;
+    color: #fff;
+}
+
+@media (hover: hover) {
+    .button:hover {
+        background: #39378b;
+        color: #fff;
+    }
+}
+
+.button-big {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 10px 80px 10px 15px;
+    color: #000;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+@media (min-width: 768px) {
+    .button-big {
+        padding: 15px 15px 50px 15px;
+    }
+}
+
+@media (min-width: 992px) {
+    .button-big {
+        padding: 15px 80px 15px 20px;
+    }
+}
+
+.button-big--primary {
+    background: rgba(57, 55, 139, 0.1);
+    border: 1px solid rgba(57, 55, 139, 0.5);
+    position: relative;
+}
+
+.button-big--primary::after {
+    background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#39378B" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/></svg>');
+}
+
+@media (hover: hover) {
+    .button-big--primary:hover {
+        background: rgba(57, 55, 139, 0.2);
+        border: 1px solid #39378b;
+    }
+}
+
+.button-big--primary.icon {
+    background: #39378b;
+}
+
+.button-big--secondary {
+    background: rgba(253, 195, 0, 0.1);
+    border: 1px solid rgba(253, 195, 0, 0.5);
+    position: relative;
+}
+
+.button-big--secondary::after {
+    background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#FDC300" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/></svg>');
+}
+
+@media (hover: hover) {
+    .button-big--secondary:hover {
+        background: rgba(253, 195, 0, 0.2);
+        border: 1px solid #fdc300;
+    }
+}
+
+.button-big--secondary.icon {
+    background: #fdc300;
+}
+
+.button-big--tertiary {
+    background: rgba(51, 184, 202, 0.1);
+    border: 1px solid rgba(51, 184, 202, 0.5);
+    position: relative;
+}
+
+.button-big--tertiary::after {
+    background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#33B8CA" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/></svg>');
+}
+
+@media (hover: hover) {
+    .button-big--tertiary:hover {
+        background: rgba(51, 184, 202, 0.2);
+        border: 1px solid #33b8ca;
+    }
+}
+
+.button-big--tertiary.icon {
+    background: #33b8ca;
+}
+
+.button-big--quaternary {
+    background: rgba(136, 188, 226, 0.1);
+    border: 1px solid rgba(136, 188, 226, 0.5);
+    position: relative;
+}
+
+.button-big--quaternary::after {
+    background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#88BCE2" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/></svg>');
+}
+
+@media (hover: hover) {
+    .button-big--quaternary:hover {
+        background: rgba(136, 188, 226, 0.2);
+        border: 1px solid #88bce2;
+    }
+}
+
+.button-big--quaternary.icon {
+    background: #88bce2;
+}
+
+.button-big.icon {
+    border: none;
+    color: #fff;
+    padding: 15px 80px 10px 15px;
+}
+
+@media (min-width: 992px) {
+    .button-big.icon {
+        padding: 40px 80px 40px 40px;
+    }
+}
+
+.button-big.icon::after {
+    background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#fff" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/></svg>');
+}
+
+@media (hover: hover) {
+    .button-big.icon:hover {
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.05);
+    }
+}
+
+.button-big.icon svg {
+    fill: #fff;
+    height: 25px;
+    width: auto;
+    margin-bottom: 20px;
+    align-self: flex-start;
+}
+
+/*************************************
+***** Sections *****
+*************************************/
+
+section {
+    width: 100%;
+}
+
+.section--white {
+    background: #fff;
+}
+
+.section--light {
+    background: #e9ecef;
+}
+
+#start {
+    background: #fff;
+}
+
+/*************************************
+***** Banner *****
+*************************************/
+
+#startup-message-statustext {
+    background: #39378B;
+    color: #fff;
+    position: absolute;
+    z-index: 999;
+    bottom: 50px;
+    right: 50px;
+    width: 100%;
+    max-width: 450px;
+    border-radius: 5px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.25);
+}
+
+#startup-message-statustext h4, #startup-message-statustext p {
+    padding: 20px;
+}
+
+/*************************************
+***** NEPO Block in Colors *****
+*************************************/
+
+.nepo {
+    display: inline-block;
+}
+
+.nepo::before {
+    content: "";
+    display: inline-block;
+    width: 85px;
+    height: 20px;
+    background-image: url("img/nepo.svg");
+    background-position: left bottom;
+    background-repeat: no-repeat;
+    background-size: contain;
+    margin-right: 5px;
+}
+
+/*************************************
+***** News *****
+*************************************/
+
+.teaser-news {
+    display: flex;
+    background: #e9ecef;
+    padding: 15px;
+    border-radius: 5px;
+}
+
+@media (min-width: 992px) {
+    .teaser-news {
+        padding: 40px;
+    }
+}
+
+.teaser-news--header {
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 30px;
+    margin-bottom: 10px;
+}
+
+.teaser-news--body h3 {
+    color: #39378B;
+}
+
+.teaser-news--image {
+    width: 100%;
+    height: auto;
+}
+
+/*************************************
+***** Footer *****
+*************************************/
+
+#start footer {
+    border-top: 1px solid rgba(0, 0, 0, 0.2);
+    padding-bottom: 96px;
+    width: 100%;
+}
+
+#start footer img {
+    width: 100%;
+}
+
+#start footer p,
+#start footer .nav-link {
+    font-size: 14px;
+    line-height: 20px;
+    margin-right: 0;
+}
+
+#start footer .nav-item {
+    background: none;
+}
+
+#start footer .nav-item:hover {
+    background: none;
+}
+
+#start footer .nav-link {
+    padding: 5px 0;
+    color: #6c757d;
+}
+
+/*************************************
+***** Safari Flexbox Fix for 100% Height *****
+*************************************/
+@supports (background: -webkit-named-image(i)) {
+    .flexbox-fix {
+        display: flex;
+    }
+}
+
 .galleryTable.table, .galleryTable tr {
     border: 0.75em solid #E9ECEF;
     border-collapse: collapse;
