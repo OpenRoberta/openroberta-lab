@@ -103,7 +103,7 @@ void ____math() {
     NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, ( ( ___numberVar ) % ( ___numberVar ) ));
     NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, MIN(MAX(___numberVar, ___numberVar), ___numberVar));
     NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, Random((___numberVar) - (___numberVar)) + (___numberVar));
-    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, Random(100) / 100);
+    NumOut(___numberVar, (MAXLINES - ___numberVar) * MAXLINES, Random(100) / 100.0);
 }
 
 void ____lists() {

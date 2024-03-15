@@ -1037,7 +1037,7 @@ public final class NxtNxcVisitor extends AbstractCppVisitor implements INxtVisit
 
     @Override
     public Void visitMathRandomFloatFunct(MathRandomFloatFunct mathRandomFloatFunct) {
-        this.src.add("Random(100) / 100");
+        this.src.add("Random(100) / 100.0");
         return null;
     }
 
