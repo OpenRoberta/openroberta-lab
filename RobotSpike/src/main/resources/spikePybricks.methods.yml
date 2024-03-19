@@ -201,8 +201,8 @@ GET_COLOR:
     def get_color(color_sensor):
         hsv = color_sensor.hsv()
         color = color_sensor.color()
-        if(color == Color.BLACK):
-            if abs(hsv.v) > 10  :
+        if(color == Color.BLACK or color == Color.NONE):
+            if hsv.v > 5 or hsv.s > 10:
                 return Color.BLACK
         elif abs(abs(hsv.h) - abs(color.h))%330 < 30 or color == Color.WHITE:
             return color

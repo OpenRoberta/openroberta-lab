@@ -855,19 +855,19 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
 
     private void instantiateColorSensor() {
         if ( usedHardwareBean.isSensorUsed(SC.COLOR) ) {
+            src.add("Color.RED = Color(0,35,35)").nlI();
+            src.add("Color.GREEN = Color(140,20,20)").nlI();
+            src.add("Color.MAGENTA = Color(315,50,20)").nlI();
+            src.add("Color.YELLOW = Color(55,35,35)").nlI();
+            src.add("Color.ORANGE = Color(30,35,35)").nlI();
+            src.add("Color.CYAN = Color(180,20,20)").nlI();
+            src.add("Color.BLUE = Color(225,20,20)").nlI();
+            src.add("Color.BLACK = Color(0,10,10)").nlI();
+            src.add("Color.WHITE = Color(0,0,60)").nlI();
             usedHardwareBean.getUsedSensors().stream().filter(usedActor -> usedActor.getType().equals("COLOR")).forEach(sensor -> {
                 if ( configurationAst.optConfigurationComponent(sensor.getPort()) != null ) {
                     nlIndent();
                     src.add("color_sensor_").add(sensor.getPort()).add(" = ColorSensor(Port.").add(getPortFromConfig(sensor.getPort())).add(")").nlI();
-                    src.add("Color.RED = Color(0,70,70)").nlI();
-                    src.add("Color.GREEN = Color(120,70,70)").nlI();
-                    src.add("Color.MAGENTA = Color(300,70,70)").nlI();
-                    src.add("Color.YELLOW = Color(60,70,70)").nlI();
-                    src.add("Color.ORANGE = Color(30,70,70)").nlI();
-                    src.add("Color.CYAN = Color(180,70,70)").nlI();
-                    src.add("Color.BLUE = Color(225,70,70)").nlI();
-                    src.add("Color.BLACK = Color(0,0,35)").nlI();
-                    src.add("Color.WHITE = Color(0,0,70)").nlI();
                     src.add("color_sensor_").add(sensor.getPort()).add(".detectable_colors([Color.RED, Color.GREEN, Color.BLUE, Color.MAGENTA, Color.YELLOW, Color.ORANGE, Color.CYAN, Color.BLACK , Color.WHITE, Color.NONE])");
                 }
             });
