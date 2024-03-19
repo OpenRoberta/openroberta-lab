@@ -791,7 +791,7 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
      */
     private void importMathFunctions() {
         src.add("import umath as math").nlI();
-        src.add("import urandom as random");
+        src.add("import urandom as random").nlI();
     }
 
     private void instantiateComponents() {

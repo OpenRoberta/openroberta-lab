@@ -39,7 +39,7 @@ TANKDRIVE_DIST:
     
     def catch_edge_cases(dist, left_speed, right_speed):
         near_zero = 0.5
-        if(abs(dist) < near_zero)
+        if(abs(dist) < near_zero):
             return True
         if((abs(left_speed) < near_zero and abs(right_speed) < near_zero)):
             left_speed = (abs(left_speed)/left_speed) * 0.5
