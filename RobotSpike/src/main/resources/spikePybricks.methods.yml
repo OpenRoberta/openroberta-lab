@@ -134,7 +134,7 @@ IS_FREE_FALL:
         threshold = 350
         stopWatch.time()
         start = stopWatch.time()
-        while start - stopWatch.time() < 333:
+        while stopWatch.time() - start < 333:
             if(get_acceleration() < threshold): 
                 return True;
         return False
@@ -154,7 +154,7 @@ IS_TAPPED:
     def is_tapped(threshold = 5000):
         global lowPassValue
         start = stopWatch.time()
-        while start - stopWatch.time() < 333:
+        while stopWatch.time() - start < 333:
             acceleration = hub.imu.acceleration()
             lowPassValue = lerp(lowPassValue, acceleration, 1/2)
             deltaAcceleration = diff(acceleration, lowPassValue)
