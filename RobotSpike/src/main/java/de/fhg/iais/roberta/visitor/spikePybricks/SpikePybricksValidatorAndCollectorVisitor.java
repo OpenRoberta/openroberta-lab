@@ -72,7 +72,8 @@ public class SpikePybricksValidatorAndCollectorVisitor extends AbstractSpikeVali
     final public Void visitMotorDiffTurnAction(MotorDiffTurnAction motorDiffTurnAction) {
         super.visitMotorDiffTurnAction(motorDiffTurnAction);
         usedMethodBuilder.addUsedMethod(SpikePybricksMethods.SPEED_FROM_PERCENT);
-        usedMethodBuilder.addUsedMethod(SpikePybricksMethods.DIFFDRIVE);
+        if(!motorDiffTurnAction.regulation)
+            usedMethodBuilder.addUsedMethod(SpikePybricksMethods.DIFFDRIVE);
         return null;
     }
 
@@ -80,7 +81,8 @@ public class SpikePybricksValidatorAndCollectorVisitor extends AbstractSpikeVali
     final public Void visitMotorDiffOnAction(MotorDiffOnAction motorDiffOnAction) {
         super.visitMotorDiffOnAction(motorDiffOnAction);
         usedMethodBuilder.addUsedMethod(SpikePybricksMethods.SPEED_FROM_PERCENT);
-        usedMethodBuilder.addUsedMethod(SpikePybricksMethods.DIFFDRIVE);
+        if(!motorDiffOnAction.regulation)
+            usedMethodBuilder.addUsedMethod(SpikePybricksMethods.DIFFDRIVE);
         return null;
     }
 
