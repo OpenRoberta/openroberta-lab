@@ -243,25 +243,25 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
                 src.add("color_sensor_").add(sensorPort).add(".reflection()");
                 break;
             case "AMBIENTLIGHT":
-                src.add("color_sensor_").add(sensorPort).add(".ambient()");
+                src.add("int(color_sensor_").add(sensorPort).add(".ambient())");
                 break;
             case "COLOUR":
                 src.add("get_color(color_sensor_").add(sensorPort).add(")");
                 break;
             case "REDCHANNEL":
-                src.add("hsv2rgb(");
+                src.add("int(hsv2rgb(");
                 src.add("color_sensor_").add(sensorPort).add(".hsv()");
-                src.add(")[0]/2.55");
+                src.add(")[0]/2.55)");
                 break;
             case "GREENCHANNEL":
-                src.add("hsv2rgb(");
+                src.add("int(hsv2rgb(");
                 src.add("color_sensor_").add(sensorPort).add(".hsv()");
-                src.add(")[1]/2.55");
+                src.add(")[1]/2.55)");
                 break;
             case "BLUECHANNEL":
-                src.add("hsv2rgb(");
+                src.add("int(hsv2rgb(");
                 src.add("color_sensor_").add(sensorPort).add(".hsv()");
-                src.add(")[2]/2.55");
+                src.add(")[2]/2.55)");
                 break;
             default:
                 throw new DbcException("Invalid color sensor mode: " + colorSensor.getMode());
