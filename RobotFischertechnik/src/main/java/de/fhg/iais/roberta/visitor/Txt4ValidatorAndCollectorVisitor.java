@@ -27,6 +27,7 @@ import de.fhg.iais.roberta.syntax.action.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.MotorOnForAction;
 import de.fhg.iais.roberta.syntax.action.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.ServoOnForAction;
+import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.light.LedAction;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
@@ -282,6 +283,12 @@ public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
         usedHardwareBuilder.addUsedActor(new UsedActor(displayTextAction.port, SC.DISPLAY));
         requiredComponentVisited(displayTextAction, displayTextAction.text);
         requiredComponentVisited(displayTextAction, displayTextAction.row);
+        return null;
+    }
+
+    @Override
+    public Void visitClearDisplayAction(ClearDisplayAction clearDisplayAction) {
+        usedHardwareBuilder.addUsedActor(new UsedActor(clearDisplayAction.port, SC.DISPLAY));
         return null;
     }
 

@@ -1,13 +1,6 @@
 <toolbox_set id="toolbox" style="display: none">
     <category name='TOOLBOX_ACTION' svg='true'>
         <category name="TOOLBOX_DRIVE" svg="true">
-            <block type="actions_motorOmniDiff_on_txt4">
-                <value name="POWER">
-                    <block type="math_number" id="653">
-                        <field name="NUM">30</field>
-                    </block>
-                </value>
-            </block>
             <block type='actions_motorOmniDiff_on_for_txt4'>
                 <value name='POWER'>
                     <block type='math_number'>
@@ -20,6 +13,14 @@
                     </block>
                 </value>
             </block>
+            <block type="actions_motorOmniDiff_on_txt4">
+                <value name="POWER">
+                    <block type="math_number" id="653">
+                        <field name="NUM">30</field>
+                    </block>
+                </value>
+            </block>
+            <block type='actions_motorOmniDiff_stop_txt4'></block>
             <block type='actions_motorOmniDiff_curve'>
                 <value name='POWER_LEFT'>
                     <block type='math_integer'>
@@ -49,7 +50,6 @@
                     </block>
                 </value>
             </block>
-            <block type='actions_motorOmniDiff_stop_txt4'></block>
             <block type='actions_motorOmniDiff_turn_for_txt4'>
                 <value name='POWER'>
                     <block type='math_number'>
@@ -71,14 +71,6 @@
             </block>
         </category>
         <category name='TOOLBOX_MOVE' svg='true'>
-            <block type='actions_motor_on_txt4'>
-                <value name="POWER">
-                    <block type="math_number" id="653">
-                        <field name="NUM">30</field>
-                    </block>
-                </value>
-            </block>
-            <block type='actions_motor_stop_txt4'></block>
             <block type='actions_motor_on_for_txt4'>
                 <value name='POWER'>
                     <block type='math_number'>
@@ -91,6 +83,14 @@
                     </block>
                 </value>
             </block>
+            <block type='actions_motor_on_txt4'>
+                <value name="POWER">
+                    <block type="math_number" id="653">
+                        <field name="NUM">30</field>
+                    </block>
+                </value>
+            </block>
+            <block type='actions_motor_stop_txt4'></block>
             <block type="robActions_servo_on_for_txt4">
                 <value name="VALUE">
                     <block type="math_number" id="Dy#ytr1sQ2WFyWrdDQ_!" intask="true">
@@ -99,15 +99,7 @@
                 </value>
             </block>
         </category>
-
         <category name='TOOLBOX_DISPLAY' svg='true'>
-            <block type="robActions_serial_print">
-                <value name="OUT">
-                    <block type="text">
-                        <field name="TEXT">Hallo</field>
-                    </block>
-                </value>
-            </block>
             <block type='actions_display_text_txt4' id="display1" intask="true">
                 <value name="TEXT">
                     <block type="text">
@@ -117,6 +109,14 @@
                 <value name="ROW">
                     <block type="math_number" id="Dy#ytr1sQ2WFyWrdDQ_!" intask="true">
                         <field name="NUM">0</field>
+                    </block>
+                </value>
+            </block>
+            <block type="robActions_display_clear" id="q+[A7O6_,h}%P}:P:oad" intask="true"/>
+            <block type="robActions_serial_print">
+                <value name="OUT">
+                    <block type="text">
+                        <field name="TEXT">Hallo</field>
                     </block>
                 </value>
             </block>
@@ -140,16 +140,19 @@
             <block type='actions_display_led_off_txt4'></block>
         </category>
     </category>
+    [sensors.touchkey.txt4, sensors.ultrasonic.txt4, sensors.infrared.txt4, sensors.timer.txt4, sensors.colour.txt4, sensors.cameraline.txt4, sensors.ball.txt4,
+    sensors.motion.txt4, sensors.encoder.txt4, sensors.key.txt4];
+
+
     <category name='TOOLBOX_SENSOR' svg='true'>
-        <block type='robSensors_encoder_getSample'></block>
-        <block type='robSensors_encoder_reset_txt4'></block>
-        <block type='robSensors_key_getSample'></block>
         <block type='robSensors_touchkey_getSample'></block>
         <block type='robSensors_ultrasonic_getSample'></block>
         <block type='robSensors_infrared_getSample'></block>
-        <block type='robSensors_motion_getSample'></block>
+        <block type='robSensors_encoder_getSample'></block>
+        <block type='robSensors_encoder_reset_txt4'></block>
+        <block type='robSensors_timer_getSample'></block>
+        <block type='robSensors_timer_reset'></block>
         <block type='robSensors_colour_getSample'></block>
-        <block type='robSensors_ball_getSample'></block>
         <block type='robSensors_cameraline_getSample'></block>
         <block type='robSensors_get_line_camera_txt4'>
             <value name='INDEX'>
@@ -165,8 +168,9 @@
                 </block>
             </value>
         </block>
-        <block type='robSensors_timer_getSample'></block>
-        <block type='robSensors_timer_reset'></block>
+        <block type='robSensors_ball_getSample'></block>
+        <block type='robSensors_motion_getSample'></block>
+        <block type='robSensors_key_getSample'></block>
     </category>
     <category name='TOOLBOX_CONTROL' svg='true'>
         <category name='TOOLBOX_DECISION' svg='true'>
@@ -216,7 +220,6 @@
                 <value name="WAIT0">
                     <block type="logic_compare">
                         <value name="A">
-                            <block type="robSensors_getSample"/>
                             <block type='robSensors_getSample'></block>
                         </value>
                         <value name="B">
@@ -287,15 +290,6 @@
         <block type='math_cast_toString'></block>
         <block type='math_cast_toChar'></block>
     </category>
-    <category name="TOOLBOX_NN" svg="true">
-        <block type="robActions_NNstep"></block>
-        <block type="robActions_set_inputneuron_val"></block>
-        <block type="robSensors_get_outputneuron_val"></block>
-        <block type="robActions_set_weight"></block>
-        <block type="robActions_set_bias"></block>
-        <block type="robSensors_get_weight"></block>
-        <block type="robSensors_get_bias"></block>
-    </category>
     <category name='TOOLBOX_TEXT' svg='true'>
         <block type='text'></block>
         <block type='text_comment'></block>
@@ -305,27 +299,34 @@
         <block type='text_cast_char_toNumber'></block>
     </category>
     <category name='TOOLBOX_LIST' svg='true'>
-        <block type='robLists_create_with'>
-            <mutation
-                    items='0'
-                    list_type='Number'></mutation>
+        <block type="robLists_create_with">
+            <mutation items="0" list_type="Number"></mutation>
         </block>
-        <block type='robLists_create_with'>
-            <value name='ADD0'>
-                <block type='math_number'></block>
+        <block type="robLists_create_with">
+            <mutation items="3" list_type="Number"></mutation>
+            <value name="ADD0">
+                <block type="math_number"></block>
             </value>
-            <value name='ADD1'>
-                <block type='math_number'></block>
+            <value name="ADD1">
+                <block type="math_number"></block>
             </value>
-            <value name='ADD2'>
-                <block type='math_number'></block>
+            <value name="ADD2">
+                <block type="math_number"></block>
             </value>
         </block>
-        <block type='robLists_length'></block>
-        <block type='robLists_isEmpty'></block>
-        <block type='robLists_indexOf'></block>
-        <block type='robLists_getIndex'></block>
-        <block type='robLists_setIndex'></block>
+        <block type="robLists_repeat">
+            <value name="NUM">
+                <block type="math_number">
+                    <field name="NUM">5</field>
+                </block>
+            </value>
+        </block>
+        <block type="robLists_length"></block>
+        <block type="robLists_isEmpty"></block>
+        <block type="robLists_indexOf"></block>
+        <block type="robLists_getIndex"></block>
+        <block type="robLists_setIndex"></block>
+        <block type="robLists_getSublist"></block>
     </category>
     <category name='TOOLBOX_COLOUR' svg='true'>
         <block type='robColour_picker'>

@@ -28,6 +28,7 @@ import de.fhg.iais.roberta.syntax.action.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.MotorOnForAction;
 import de.fhg.iais.roberta.syntax.action.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.ServoOnForAction;
+import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.light.LedAction;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
@@ -74,6 +75,7 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
         super(programPhrases, beans);
         this.configurationAst = configurationAst;
     }
+
     private ConfigurationComponent getOmniDrive() {
         for ( ConfigurationComponent component : this.configurationAst.getConfigurationComponents().values() ) {
             if ( component.componentType.equals(FischertechnikConstants.OMNIDRIVE) ) {
@@ -579,6 +581,12 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
     }
 
     @Override
+    public Void visitClearDisplayAction(ClearDisplayAction clearDisplayAction) {
+        // TODO implement this method
+        return null;
+    }
+
+    @Override
     public Void visitMotionSensor(MotionSensor motionSensor) {
         this.src.add("motion_detector.detected()");
         return null;
@@ -876,6 +884,7 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
 
         return result.toString();
     }
+
     private ConfigurationComponent getCamera() {
         for ( ConfigurationComponent component : this.configurationAst.getConfigurationComponents().values() ) {
             if ( component.componentType.equals(FischertechnikConstants.TXTCAMERA) ) {
@@ -884,6 +893,7 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
         }
         return null;
     }
+
     private void generateVariables(UsedHardwareBean usedHardwareBean) {
         if ( usedHardwareBean.isActorUsed(FischertechnikConstants.OMNIDRIVE) ) {
             ConfigurationComponent omniDrive = getOmniDrive();
@@ -927,6 +937,7 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
                 "}").nlI();
         }
     }
+
     @Override
     protected void generateProgramSuffix(boolean withWrapping) {
         if ( !withWrapping ) {

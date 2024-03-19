@@ -21,6 +21,7 @@ import de.fhg.iais.roberta.syntax.action.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.MotorOnForAction;
 import de.fhg.iais.roberta.syntax.action.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.ServoOnForAction;
+import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.light.LedAction;
 import de.fhg.iais.roberta.syntax.logic.ColourCompare;
 import de.fhg.iais.roberta.syntax.sensor.CameraBallSensor;
@@ -154,6 +155,11 @@ public final class Txt4StackMachineVisitor extends AbstractStackMachineVisitor i
 
     @Override
     public Void visitDisplayTextAction(DisplayTextAction displayTextAction) {
+        return null;
+    }
+
+    @Override
+    public Void visitClearDisplayAction(ClearDisplayAction clearDisplayAction) {
         return null;
     }
 

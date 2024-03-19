@@ -16,6 +16,7 @@ import de.fhg.iais.roberta.syntax.action.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.MotorOnForAction;
 import de.fhg.iais.roberta.syntax.action.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.ServoOnForAction;
+import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.light.LedAction;
 import de.fhg.iais.roberta.syntax.logic.ColourCompare;
 import de.fhg.iais.roberta.syntax.sensor.CameraBallSensor;
@@ -78,6 +79,8 @@ public interface ITxt4Visitor<V> extends IVisitor<V> {
     V visitDisplayLedOffAction(DisplayLedOffAction displayLedOffAction);
 
     V visitDisplayTextAction(DisplayTextAction displayTextAction);
+
+    V visitClearDisplayAction(ClearDisplayAction clearDisplayAction);
 
     V visitMotionSensor(MotionSensor motionSensor);
 
