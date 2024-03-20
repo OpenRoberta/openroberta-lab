@@ -500,7 +500,7 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
 
     @Override
     public Void visitRgbLedOnHiddenAction(RgbLedOnHiddenAction rgbLedOnHiddenAction) {
-        if(usedHardwareBean.isImportUsed(SC.COlOR_IMPORT)){
+        if(usedHardwareBean.isImportUsed(SC.HUB_LIGHT)){
             src.add("hub_light_on(");
             rgbLedOnHiddenAction.colour.accept(this);
             src.add(")");

@@ -207,7 +207,7 @@ public class SpikePybricksValidatorAndCollectorVisitor extends AbstractSpikeVali
         }
         usedHardwareBuilder.addUsedImport(new UsedImport(SC.PORT));
         usedMethodBuilder.addUsedMethod(SpikePybricksMethods.GET_COLOR);
-        usedHardwareBuilder.addUsedImport(new UsedImport(SC.COlOR_IMPORT));
+        usedHardwareBuilder.addUsedImport(new UsedImport(SC.HUB_LIGHT));
         usedMethodBuilder.addUsedMethod(SpikePybricksMethods.HUB_LIGHT);
         return null;
     }
