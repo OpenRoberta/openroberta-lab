@@ -518,7 +518,7 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
             case "ANIMATION":
                 src.add("show_animation(list(");
                 displayImageAction.valuesToDisplay.accept(this);
-                src.add("))").nlI();
+                src.add("))");
                 break;
             case "IMAGE":
                 src.add("hub.display.icon(");
