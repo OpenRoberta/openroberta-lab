@@ -280,7 +280,7 @@ public abstract class AbstractSpikeValidatorAndCollectorVisitor extends CommonNe
         }
     }
 
-    private ConfigurationComponent getMotorFromUserName(String userName) {
+    protected ConfigurationComponent getMotorFromUserName(String userName) {
         for ( Map.Entry<String, ConfigurationComponent> entry : this.robotConfiguration.getConfigurationComponents().entrySet() ) {
             ConfigurationComponent component = entry.getValue();
             String comProp = component.componentProperties.get("PORT");

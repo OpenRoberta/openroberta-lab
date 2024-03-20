@@ -17,6 +17,7 @@ import de.fhg.iais.roberta.syntax.action.spike.MotorDiffTurnForAction;
 import de.fhg.iais.roberta.syntax.action.spike.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.spike.MotorOnForAction;
 import de.fhg.iais.roberta.syntax.action.spike.MotorStopAction;
+import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
@@ -108,6 +109,13 @@ public class SpikePybricksValidatorAndCollectorVisitor extends AbstractSpikeVali
     final public void checkDiffDrive(Phrase phrase) {
         super.checkDiffDrive(phrase);
         usedHardwareBuilder.addUsedImport(new UsedImport(SC.PORT));
+        ConfigurationComponent diffDrive = this.robotConfiguration.optConfigurationComponentByType("DIFFERENTIALDRIVE");
+        if ( diffDrive != null ) {
+            String leftUserPort = diffDrive.getComponentProperties().get("MOTOR_L");
+            String rightUserPort = diffDrive.getComponentProperties().get("MOTOR_R");
+            usedHardwareBuilder.addLockedComponent("MOTOR_L", leftUserPort);
+            usedHardwareBuilder.addLockedComponent("MOTOR_R", rightUserPort);
+        }
     }
 
     @Override

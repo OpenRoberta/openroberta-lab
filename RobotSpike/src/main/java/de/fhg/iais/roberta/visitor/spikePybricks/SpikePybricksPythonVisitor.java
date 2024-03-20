@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.visitor.spikePybricks;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.google.common.collect.ClassToInstanceMap;
 
@@ -825,8 +826,18 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
     private void instantiateMotors() {
         if ( usedHardwareBean.isActorUsed(SC.MOTOR) ) {
             usedHardwareBean.getUsedActors().stream().filter(usedActor -> usedActor.getType().equals("MOTOR")).forEach(motor -> {
-                nlIndent();
-                src.add("motor").add(motor.getPort()).add(" = Motor(Port.").add(motor.getPort()).add(")");
+                AtomicBoolean componentLocked = new AtomicBoolean(false);
+                usedHardwareBean.getLockedComponent().forEach(
+                    (component, port) -> {
+                        if((motor.getPort()).equals(port)) {
+                            src.add("motor").add(motor.getPort()).add(" = left_motor").nlI();
+                            componentLocked.set(true);
+                        }
+                    }
+                );
+                if(!componentLocked.get()){
+                    src.add("motor").add(motor.getPort()).add(" = Motor(Port.").add(motor.getPort()).add(")").nlI();
+                }
             });
         }
     }
