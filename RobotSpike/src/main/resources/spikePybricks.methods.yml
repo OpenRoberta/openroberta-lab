@@ -207,3 +207,13 @@ GET_COLOR:
         elif abs(abs(hsv.h) - abs(color.h))%330 < 30 or color == Color.WHITE:
             return color
         return Color.NONE
+
+HUB_LIGHT:
+  PYTHON: |
+    def hub_light_on(color):
+        if color != Color.BLACK and color != Color.WHITE and color != Color.NONE :
+            hub.light.on(Color(color.h,100,100))
+        elif color == Color.BLACK or color == Color.NONE:
+            hub.light.on(Color(0,0,0))
+        elif color == Color.WHITE :
+            hub.light.on(Color(0,0,100))

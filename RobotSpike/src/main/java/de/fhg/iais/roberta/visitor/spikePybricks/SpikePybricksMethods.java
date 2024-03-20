@@ -13,5 +13,6 @@ public enum SpikePybricksMethods {
     IS_TAPPED,
     IS_SHAKEN,
     GET_ACCELERATION,
-    DIFFDRIVE
+    DIFFDRIVE,
+    HUB_LIGHT
 }

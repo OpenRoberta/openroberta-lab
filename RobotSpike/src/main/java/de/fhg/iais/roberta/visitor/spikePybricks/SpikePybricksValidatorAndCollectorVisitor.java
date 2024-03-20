@@ -193,7 +193,6 @@ public class SpikePybricksValidatorAndCollectorVisitor extends AbstractSpikeVali
         return null;
     }
 
-
     @Override
     final public Void visitColorSensor(ColorSensor colorSensor) {
         super.visitColorSensor(colorSensor);
@@ -209,6 +208,7 @@ public class SpikePybricksValidatorAndCollectorVisitor extends AbstractSpikeVali
         usedHardwareBuilder.addUsedImport(new UsedImport(SC.PORT));
         usedMethodBuilder.addUsedMethod(SpikePybricksMethods.GET_COLOR);
         usedHardwareBuilder.addUsedImport(new UsedImport(SC.COlOR_IMPORT));
+        usedMethodBuilder.addUsedMethod(SpikePybricksMethods.HUB_LIGHT);
         return null;
     }
 

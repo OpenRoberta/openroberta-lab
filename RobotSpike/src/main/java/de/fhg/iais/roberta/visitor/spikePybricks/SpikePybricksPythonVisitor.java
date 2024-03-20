@@ -500,9 +500,15 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
 
     @Override
     public Void visitRgbLedOnHiddenAction(RgbLedOnHiddenAction rgbLedOnHiddenAction) {
-        src.add("hub.light.on(");
-        rgbLedOnHiddenAction.colour.accept(this);
-        src.add(")");
+        if(usedHardwareBean.isImportUsed(SC.COlOR_IMPORT)){
+            src.add("hub_light_on(");
+            rgbLedOnHiddenAction.colour.accept(this);
+            src.add(")");
+        }else {
+            src.add("hub.light.on(");
+            rgbLedOnHiddenAction.colour.accept(this);
+            src.add(")");
+        }
         return null;
     }
 
@@ -874,7 +880,7 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
             src.add("Color.CYAN = Color(180,20,20)").nlI();
             src.add("Color.BLUE = Color(225,20,20)").nlI();
             src.add("Color.BLACK = Color(0,10,10)").nlI();
-            src.add("Color.WHITE = Color(0,0,60)").nlI();
+            src.add("Color.WHITE = Color(0,0,70)").nlI();
             usedHardwareBean.getUsedSensors().stream().filter(usedActor -> usedActor.getType().equals("COLOR")).forEach(sensor -> {
                 if ( configurationAst.optConfigurationComponent(sensor.getPort()) != null ) {
                     nlIndent();
