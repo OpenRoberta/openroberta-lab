@@ -242,6 +242,7 @@ public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
         checkActorPort(servoOnForAction);
         requiredComponentVisited(servoOnForAction, servoOnForAction.value);
         usedHardwareBuilder.addUsedActor(new UsedActor(servoOnForAction.getUserDefinedPort(), SC.SERVOMOTOR));
+        addToPhraseIfUnsupportedInSim(servoOnForAction, false, isSim);
         return null;
     }
 
@@ -249,6 +250,7 @@ public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
     public Void visitLedAction(LedAction ledAction) {
         checkActorPort(ledAction);
         usedHardwareBuilder.addUsedActor(new UsedActor(ledAction.getUserDefinedPort(), SC.LED));
+        addToPhraseIfUnsupportedInSim(ledAction, false, isSim);
         return null;
     }
 
@@ -257,6 +259,7 @@ public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
         checkActorPort(ledSetBrightnessAction);
         requiredComponentVisited(ledSetBrightnessAction, ledSetBrightnessAction.brightness);
         usedHardwareBuilder.addUsedActor(new UsedActor(ledSetBrightnessAction.getUserDefinedPort(), SC.LED));
+        addToPhraseIfUnsupportedInSim(ledSetBrightnessAction, false, isSim);
         return null;
     }
 

@@ -1,6 +1,10 @@
 package de.fhg.iais.roberta.visitor;
 
+import java.util.Arrays;
 import java.util.List;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import de.fhg.iais.roberta.bean.NNBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
@@ -23,6 +27,7 @@ import de.fhg.iais.roberta.syntax.action.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.ServoOnForAction;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.light.LedAction;
+import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.logic.ColourCompare;
 import de.fhg.iais.roberta.syntax.sensor.CameraBallSensor;
 import de.fhg.iais.roberta.syntax.sensor.CameraLineColourSensor;
@@ -38,6 +43,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.MotionSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
+import de.fhg.iais.roberta.util.basic.C;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.lang.codegen.AbstractStackMachineVisitor;
 
@@ -50,42 +56,89 @@ public final class Txt4StackMachineVisitor extends AbstractStackMachineVisitor i
 
     @Override
     public Void visitMotorOnAction(MotorOnAction motorOnAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitMotorOmniDiffOnAction(MotorOmniDiffOnAction motorOmniDiffOnAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitMotorOmniDiffOnForAction(MotorOmniDiffOnForAction motorOmniDiffOnForAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitMotorOmniDiffCurveAction(MotorOmniDiffCurveAction motorOmniDiffCurveAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitMotorOmniDiffCurveForAction(MotorOmniDiffCurveForAction motorOmniDiffCurveForAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitMotorOmniDiffTurnAction(MotorOmniDiffTurnAction motorOmniDiffTurnAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitMotorOmniDiffTurnForAction(MotorOmniDiffTurnForAction motorOmniDiffTurnForAction) {
-        return null;
+        motorOnAction.power.accept(this);
+        String name = motorOnAction.getUserDefinedPort();
+        String port = this.configuration.getConfigurationComponent(name).componentProperties.get("PORT");
+        JSONObject o = makeNode(C.MOTOR_ON_ACTION).put(C.PORT, port).put(C.NAME, name).put(C.SPEED_ONLY, true);
+        return add(o);
     }
 
     @Override
     public Void visitMotorOnForAction(MotorOnForAction motorOnForAction) {
-        return null;
+        motorOnForAction.power.accept(this);
+        motorOnForAction.value.accept(this);
+        String name = motorOnForAction.getUserDefinedPort();
+        String port = this.configuration.getConfigurationComponent(name).componentProperties.get("PORT");
+        JSONObject o = makeNode(C.MOTOR_ON_ACTION).put(C.PORT, port).put(C.NAME, name).put(C.SPEED_ONLY, false);
+        o.put(C.MOTOR_DURATION, motorOnForAction.unit.toLowerCase());
+        add(o);
+        return add(makeNode(C.MOTOR_STOP).put(C.PORT, port.toLowerCase()));
+    }
+
+    @Override
+    public Void visitMotorOmniDiffOnAction(MotorOmniDiffOnAction motorOmniDiffOnAction) {
+        motorOmniDiffOnAction.power.accept(this);
+        String direction = motorOmniDiffOnAction.direction.equals("FORWARD") ? C.FOREWARD : C.BACKWARD;
+        JSONObject o =
+            makeNode(C.DRIVE_ACTION).put(C.DRIVE_DIRECTION, direction).put(C.SPEED_ONLY, true).put(C.SET_TIME, false);
+        return add(o);
+    }
+
+    @Override
+    public Void visitMotorOmniDiffOnForAction(MotorOmniDiffOnForAction motorOmniDiffOnForAction) {
+        motorOmniDiffOnForAction.power.accept(this);
+        motorOmniDiffOnForAction.distance.accept(this);
+        String direction = motorOmniDiffOnForAction.direction.equals("FORWARD") ? C.FOREWARD : C.BACKWARD;
+        JSONObject o =
+            makeNode(C.DRIVE_ACTION).put(C.DRIVE_DIRECTION, direction).put(C.SPEED_ONLY, false).put(C.SET_TIME, false);
+        add(o);
+        return add(makeNode(C.STOP_DRIVE));
+    }
+
+    @Override
+    public Void visitMotorOmniDiffCurveAction(MotorOmniDiffCurveAction motorOmniDiffCurveAction) {
+        motorOmniDiffCurveAction.powerLeft.accept(this);
+        motorOmniDiffCurveAction.powerRight.accept(this);
+        String direction = motorOmniDiffCurveAction.direction.equals("FORWARD") ? C.FOREWARD : C.BACKWARD;
+        JSONObject o =
+            makeNode(C.CURVE_ACTION).put(C.DRIVE_DIRECTION, direction).put(C.SPEED_ONLY, true).put(C.SET_TIME, false);
+        return add(o);
+    }
+
+    @Override
+    public Void visitMotorOmniDiffCurveForAction(MotorOmniDiffCurveForAction motorOmniDiffCurveForAction) {
+        motorOmniDiffCurveForAction.powerLeft.accept(this);
+        motorOmniDiffCurveForAction.powerRight.accept(this);
+        motorOmniDiffCurveForAction.distance.accept(this);
+        String direction = motorOmniDiffCurveForAction.direction.equals("FORWARD") ? C.FOREWARD : C.BACKWARD;
+        JSONObject o =
+            makeNode(C.CURVE_ACTION).put(C.DRIVE_DIRECTION, direction).put(C.SPEED_ONLY, false).put(C.SET_TIME, false);
+        add(o);
+        return add(makeNode(C.STOP_DRIVE));
+    }
+
+    @Override
+    public Void visitMotorOmniDiffTurnAction(MotorOmniDiffTurnAction motorOmniDiffTurnAction) {
+        motorOmniDiffTurnAction.power.accept(this);
+        JSONObject o =
+            makeNode(C.TURN_ACTION)
+                .put(C.TURN_DIRECTION, motorOmniDiffTurnAction.direction.toLowerCase())
+                .put(C.SPEED_ONLY, true)
+                .put(C.SET_TIME, false);
+        return add(o);
+    }
+
+    @Override
+    public Void visitMotorOmniDiffTurnForAction(MotorOmniDiffTurnForAction motorOmniDiffTurnForAction) {
+        motorOmniDiffTurnForAction.power.accept(this);
+        motorOmniDiffTurnForAction.degrees.accept(this);
+        JSONObject o =
+            makeNode(C.TURN_ACTION)
+                .put(C.TURN_DIRECTION, motorOmniDiffTurnForAction.direction.toLowerCase())
+                .put(C.SPEED_ONLY, false)
+                .put(C.SET_TIME, false);
+        add(o);
+        return add(makeNode(C.STOP_DRIVE));
     }
 
     @Override
@@ -120,7 +173,8 @@ public final class Txt4StackMachineVisitor extends AbstractStackMachineVisitor i
 
     @Override
     public Void visitMotorStopAction(MotorStopAction motorStopAction) {
-        return null;
+        JSONObject o = makeNode(C.STOP_DRIVE);
+        return add(o);
     }
 
     @Override
@@ -145,12 +199,26 @@ public final class Txt4StackMachineVisitor extends AbstractStackMachineVisitor i
 
     @Override
     public Void visitDisplayLedOnAction(DisplayLedOnAction displayLedOnAction) {
-        return null;
+        String mode = displayLedOnAction.mode.toLowerCase();
+        displayLedOnAction.colour.accept(this);
+        JSONObject o = makeNode(C.LIGHT_ACTION).put(C.MODE, mode).put(C.NAME, "txt4");
+        return add(o);
+    }
+
+    @Override
+    public Void visitColorConst(ColorConst colorConst) {
+        int r = colorConst.getRedChannelInt();
+        int g = colorConst.getGreenChannelInt();
+        int b = colorConst.getBlueChannelInt();
+
+        JSONObject o = makeNode(C.EXPR).put(C.EXPR, "COLOR_CONST").put(C.VALUE, new JSONArray(Arrays.asList(r, g, b)));
+        return add(o);
     }
 
     @Override
     public Void visitDisplayLedOffAction(DisplayLedOffAction displayLedOffAction) {
-        return null;
+        JSONObject o = makeNode(C.RGBLED_OFF_ACTION);
+        return add(o);
     }
 
     @Override

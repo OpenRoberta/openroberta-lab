@@ -78,7 +78,6 @@ export default class RobotTxt4 extends RobotBaseMobile {
         this.chassis = new Txt4Chassis(this.id, configuration, 1.75, this.pose);
         this.led = new StatusLed({ x: 0, y: 0 }, (this.chassis as Txt4Chassis).geomDisplay.color);
         let sensors: object = configuration['SENSORS'];
-        console.log(sensors);
         for (const c in sensors) {
             switch (sensors[c]['TYPE']) {
                 case 'INFRARED':

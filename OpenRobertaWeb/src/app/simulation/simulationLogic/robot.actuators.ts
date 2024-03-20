@@ -122,7 +122,6 @@ export abstract class ChassisDiffDrive extends ChassisMobile {
         super(id);
         if (configuration['TRACKWIDTH'] === 0 && configuration['WHEELDIAMETER'] === 0) {
             // new configuration!
-            console.log('new');
             for (const conf in configuration['ACTUATORS']) {
                 let myConf = configuration['ACTUATORS'][conf];
                 if (myConf['TYPE'] && myConf['TYPE'] === 'DIFFERENTIALDRIVE') {
@@ -136,7 +135,6 @@ export abstract class ChassisDiffDrive extends ChassisMobile {
             }
         } else {
             // old configuration!
-            console.log('old');
             this.TRACKWIDTH = configuration['TRACKWIDTH'] * 3;
             this.WHEELDIAMETER = configuration['WHEELDIAMETER'];
             for (const item in configuration['ACTUATORS']) {
