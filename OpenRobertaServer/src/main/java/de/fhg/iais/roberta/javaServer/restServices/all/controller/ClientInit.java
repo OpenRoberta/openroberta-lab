@@ -103,7 +103,11 @@ public class ClientInit {
                     robotDescription.put("announcement", httpSessionState.getRobotFactory(robot).getRobotAnnouncement());
                     robotDescription.put("group", httpSessionState.getRobotFactory(robot).getGroup());
                     robotDescription.put("sim", httpSessionState.getRobotFactory(robot).hasSim());
-                    robotDescription.put("nn", httpSessionState.getRobotFactory(robot).hasNN());
+                    // add the robot extensions. Currently only "nn"
+                    JSONObject robotExtensions = new JSONObject();
+                    robotExtensions.put("nn", httpSessionState.getRobotFactory(robot).nnProperty());
+                    robotDescription.put("extensions", robotExtensions);
+                    // end add
                     robotDescription.put("progLanguage", httpSessionState.getRobotFactory(robot).getSourceCodeFileExtension());
                 }
                 robots.put("" + i, robotDescription);

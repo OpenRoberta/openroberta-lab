@@ -1,5 +1,8 @@
 package de.fhg.iais.roberta.javaServer.restServices.all.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -179,21 +182,27 @@ public class ClientAdmin {
                     RobotFactory robotFactory = httpSessionState.getRobotFactory();
                     response.setRobot(robot);
 
+                    // get the extensions. Currently only nn
+                    List<String> extensions = new ArrayList<>();
+                    if ( request.getExtensions().optBoolean("nn", false) ) {
+                        extensions.add("nn");
+                    }
+
                     JSONObject program = new JSONObject();
                     JSONObject toolbox = new JSONObject();
-                    toolbox.put("beginner", robotFactory.getProgramToolboxBeginner());
-                    toolbox.put("expert", robotFactory.getProgramToolboxExpert());
+                    toolbox.put("beginner", robotFactory.getProgramToolboxBeginner(extensions));
+                    toolbox.put("expert", robotFactory.getProgramToolboxExpert(extensions));
                     program.put("toolbox", toolbox);
-                    program.put("prog", robotFactory.getProgramDefault());
+                    program.put("prog", robotFactory.getProgramDefault(extensions));
                     response.setProgram(program);
                     JSONObject configuration = new JSONObject();
-                    configuration.put("toolbox", robotFactory.getConfigurationToolbox());
+                    configuration.put("toolbox", robotFactory.getConfigurationToolbox(extensions));
                     configuration.put("conf", robotFactory.getConfigurationDefault());
                     response.setConfiguration(configuration);
                     response.setSim(robotFactory.hasSim());
                     response.setMultipleSim(robotFactory.hasMultipleSim());
                     response.setMarkerSim(robotFactory.hasMarkerSim());
-                    response.setNn(robotFactory.hasNN());
+                    response.setNn(true); // TODO: temporary fix
                     response.setNnActivations(robotFactory.getNNActivations());
                     response.setWebotsSim(robotFactory.hasWebotsSim());
                     response.setWebotsUrl(robotFactory.getWebotsUrl());

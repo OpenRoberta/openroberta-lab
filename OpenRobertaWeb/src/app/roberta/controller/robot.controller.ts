@@ -22,10 +22,10 @@ let connectionInstance: ConnectionInterface;
 /**
  * Initialize robot
  */
-function init(robot) {
+function init(robot, extensions) {
     let ready = $.Deferred();
     $.when(
-        ROBOT.setRobot(robot, function (result) {
+        ROBOT.setRobot(robot, extensions, function (result) {
             if (result.rc == 'ok') {
                 GUISTATE_C.setRobot(robot, result, true);
             }
@@ -194,8 +194,8 @@ function initRobotForms() {
         'connect',
         function (event, data) {
             let result = {};
-            result['robot.name'] = data.brickname;
-            result['robot.state'] = 'wait';
+            result['robotName'] = data.brickname;
+            result['robotState'] = 'wait';
             GUISTATE_C.setState(result);
             $('#show-available-connections').modal('hide');
         },
@@ -319,7 +319,7 @@ function updateFirmware() {
 /**
  * Switch robot
  */
-function switchRobot(robot: string, opt_continue: boolean, opt_callback) {
+function switchRobot(robot: string, extensions: object, opt_continue?: boolean, opt_callback?: Function) {
     // @ts-ignore
     PROGRAM_C.SSID = null;
     // @ts-ignore
@@ -342,7 +342,7 @@ function switchRobot(robot: string, opt_continue: boolean, opt_callback) {
             typeof opt_callback === 'function' && opt_callback();
             return;
         }
-        ROBOT.setRobot(robot, function (result) {
+        ROBOT.setRobot(robot, extensions, function (result) {
             if (result.rc === 'ok') {
                 if ($('.rightMenuButton.rightActive').length > 0) {
                     $('.rightMenuButton.rightActive').clickWrap();
@@ -396,7 +396,7 @@ function switchRobot(robot: string, opt_continue: boolean, opt_callback) {
                 'click',
                 function (e) {
                     e.preventDefault();
-                    switchRobot(robot, true, opt_callback);
+                    switchRobot(robot, extensions, true, opt_callback);
                 },
                 'confirm modal'
             );

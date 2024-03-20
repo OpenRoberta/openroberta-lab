@@ -134,7 +134,7 @@ function ping(successFn) {
             }
             if (successFn !== undefined) {
                 successFn(result);
-                if (onNotificationsAvailable && result['notifications.available']) {
+                if (onNotificationsAvailable && result['notificationsAvailable']) {
                     onNotificationsAvailable();
                 }
             }

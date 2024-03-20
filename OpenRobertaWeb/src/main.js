@@ -325,12 +325,13 @@ function init() {
 }
 
 var mainCallbackCalled = false;
-function initProgramming(robot, opt_callback, opt_params) {
+function initProgramming(robot, extensions, opt_callback, opt_params) {
     let callback = opt_callback;
     let params = opt_params;
+    guiStateController.setExtensions(extensions);
     if (!mainCallbackCalled) {
         mainCallbackCalled = true;
-        $.when(robotController.init(robot)).then(function () {
+        $.when(robotController.init(robot, extensions)).then(function () {
             $('#tabProgram, #tabConfiguration').parent().removeClass('invisible');
             $('.notStart').removeClass('disabled');
             $('#header').addClass('shadow');
@@ -357,7 +358,7 @@ function initProgramming(robot, opt_callback, opt_params) {
             $('#tabProgram').tabWrapShow();
         });
     } else {
-        robotController.switchRobot(robot, true, function () {
+        robotController.switchRobot(robot, extensions, true, function () {
             $('#tabProgram, #tabConfiguration').parent().removeClass('invisible');
             $('#header').addClass('shadow');
             $('.notStart').removeClass('disabled');

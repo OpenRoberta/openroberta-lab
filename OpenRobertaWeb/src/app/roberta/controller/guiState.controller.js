@@ -96,6 +96,20 @@ function setInitialState() {
     updateTutorialMenu();
 }
 
+function setExtensions(extensions) {
+    GUISTATE.robot.extentions = extensions;
+}
+
+function hasExtension(value) {
+    var hasExtension = false;
+    for (const extension in GUISTATE.robot.extentions) {
+        if (extension === value) {
+            hasExtension = true;
+        }
+    }
+    return hasExtension;
+}
+
 /**
  * Check if a program is a standard program or not
  *
@@ -130,48 +144,48 @@ function isKioskMode() {
 }
 
 function setState(result) {
-    if (result['server.version']) {
-        GUISTATE.server.version = result['server.version'];
+    if (result['serverVersion']) {
+        GUISTATE.server.version = result['serverVersion'];
     }
-    if (result['robot.version']) {
-        GUISTATE.robot.version = result['robot.version'];
+    if (result['robotVersion']) {
+        GUISTATE.robot.version = result['robotVersion'];
     }
     //if (getConnection() !== getConnectionTypeEnum().TDM) {
-    if (result['robot.firmwareName'] != undefined) {
-        GUISTATE.robot.fWName = result['robot.firmwareName'];
+    if (result['robotFirmwareName'] != undefined) {
+        GUISTATE.robot.fWName = result['robotFirmwareName'];
     } else {
         GUISTATE.robot.fWName = '';
     }
-    if (result['robot.wait'] != undefined) {
-        GUISTATE.robot.time = result['robot.wait'];
+    if (result['robotWait'] != undefined) {
+        GUISTATE.robot.time = result['robotWait'];
     } else {
         GUISTATE.robot.time = -1;
     }
-    if (result['robot.battery'] != undefined) {
-        GUISTATE.robot.battery = result['robot.battery'];
+    if (result['robotBattery'] != undefined) {
+        GUISTATE.robot.battery = result['robotBattery'];
     } else {
         GUISTATE.robot.battery = '';
     }
-    if (result['robot.name'] != undefined) {
-        GUISTATE.robot.name = result['robot.name'];
+    if (result['robotName'] != undefined) {
+        GUISTATE.robot.name = result['robotName'];
     } else {
         GUISTATE.robot.name = '';
     }
-    if (result['robot.state'] != undefined) {
-        GUISTATE.robot.state = result['robot.state'];
+    if (result['robotState'] != undefined) {
+        GUISTATE.robot.state = result['robotState'];
     } else {
         GUISTATE.robot.state = '';
     }
     //}
-    if (result['robot.sensorvalues'] != undefined) {
-        GUISTATE.robot.sensorValues = result['robot.sensorvalues'];
+    if (result['robotSensorvalues'] != undefined) {
+        GUISTATE.robot.sensorValues = result['robotSensorvalues'];
     } else {
         GUISTATE.robot.sensorValues = '';
     }
-    if (result['robot.nepoexitvalue'] != undefined) {
+    if (result['robotNepoexitvalue'] != undefined) {
         //TODO: For different robots we have different error messages
-        if (result['robot.nepoexitvalue'] !== GUISTATE.robot.nepoExitValue) {
-            GUISTATE.nepoExitValue = result['robot.nepoexitvalue'];
+        if (result['robotNepoexitvalue'] !== GUISTATE.robot.nepoExitValue) {
+            GUISTATE.nepoExitValue = result['robotNepoexitvalue'];
             if (GUISTATE.nepoExitValue !== 143 && GUISTATE.robot.nepoExitValue !== 0) {
                 MSG.displayMessage('POPUP_PROGRAM_TERMINATED_UNEXPECTED', 'POPUP', '');
             }
@@ -213,11 +227,9 @@ function setRobot(robot, result, opt_init) {
     GUISTATE.gui.sim = result.sim;
     GUISTATE.gui.multipleSim = result.multipleSim;
     GUISTATE.gui.markerSim = result.markerSim;
-    GUISTATE.gui.nn = result.nn;
     GUISTATE.gui.nnActivations = result.nnActivations;
     GUISTATE.gui.webotsSim = result.webotsSim;
     GUISTATE.gui.webotsUrl = result.webotsUrl;
-    GUISTATE.gui.neuralNetwork = result.neuralNetwork === undefined ? false : result.neuralNetwork;
     GUISTATE.gui.vendor = result.vendor;
     GUISTATE.gui.signature = result.signature;
     GUISTATE.gui.commandLine = result.commandLine;
@@ -302,7 +314,7 @@ function setRobot(robot, result, opt_init) {
         }
     }
 
-    if (GUISTATE.gui.nn) {
+    if (hasExtension('nn')) {
         $('#nn-activations').empty();
         $('.tabLinkNN').show();
         $.each(GUISTATE.gui.nnActivations, function (_, item) {
@@ -1056,10 +1068,6 @@ function hasMarkerSim() {
     return GUISTATE.gui.markerSim == true;
 }
 
-function hasNN() {
-    return GUISTATE.gui.nn == true;
-}
-
 function hasWebotsSim() {
     return GUISTATE.gui.webotsSim == true;
 }
@@ -1252,4 +1260,6 @@ export {
     updateMenuStatus,
     updateTutorialMenu,
     getLegalTextsMap,
+    setExtensions,
+    hasExtension,
 };

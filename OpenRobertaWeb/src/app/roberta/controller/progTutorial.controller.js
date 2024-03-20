@@ -41,7 +41,7 @@ function loadFromTutorial(tutId) {
     tutorialId = tutId;
     tutorial = tutorialList && tutorialList[tutId];
     if (tutorial) {
-        ROBOT_C.switchRobot(tutorial.robot, null, startTutorial);
+        ROBOT_C.switchRobot(tutorial.robot, {}, false, startTutorial);
     }
 
     function startTutorial() {

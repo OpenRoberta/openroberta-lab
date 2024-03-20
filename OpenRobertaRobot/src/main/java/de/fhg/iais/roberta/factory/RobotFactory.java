@@ -23,12 +23,14 @@ import de.fhg.iais.roberta.worker.IWorker;
 public class RobotFactory {
     private static final Logger LOG = LoggerFactory.getLogger(RobotFactory.class);
 
+    private static final List<String> NO_DEFINITIONS = Collections.emptyList();
+
     private final PluginProperties pluginProperties;
     private final BlocklyDropdownFactory blocklyDropdown2EnumFactory;
-    private final String beginnerToolbox;
-    private final String expertToolbox;
-    private final String programDefault;
-    private final String configurationToolbox;
+    private final List<String> beginnerToolbox;
+    private final List<String> expertToolbox;
+    private final List<String> programDefault;
+    private final List<String> configurationToolbox;
     private final String configurationDefault;
     private Map<String, IWorker> workers = new HashMap<>(); //worker type to implementing class(es) collect->de.fhg.iais.roberta.visitor.collect.Ev3UsedHardwareCollectorWorker
     private Map<String, List<String>> workflows = new HashMap<>(); //workflow name to a list of types of applicable workers: showsource->collect,generate
@@ -36,14 +38,11 @@ public class RobotFactory {
     public RobotFactory(PluginProperties pluginProperties) {
         this.pluginProperties = pluginProperties;
         this.blocklyDropdown2EnumFactory = new BlocklyDropdownFactory();
-        this.beginnerToolbox = Util.readResourceContent(this.pluginProperties.getStringProperty("robot.program.toolbox.beginner"));
-        this.expertToolbox = Util.readResourceContent(this.pluginProperties.getStringProperty("robot.program.toolbox.expert"));
-        if ( hasNN() ) {
-            this.programDefault = Util.readResourceContent(this.pluginProperties.getStringProperty("robot.program.default.nn"));
-        } else {
-            this.programDefault = Util.readResourceContent(this.pluginProperties.getStringProperty("robot.program.default"));
-        }
-        this.configurationToolbox = Util.readResourceContent(this.pluginProperties.getStringProperty("robot.configuration.toolbox"));
+        this.beginnerToolbox = Util.readResourceContentAsTemplate(this.pluginProperties.getStringProperty("robot.program.toolbox.beginner"));
+        this.expertToolbox = Util.readResourceContentAsTemplate(this.pluginProperties.getStringProperty("robot.program.toolbox.expert"));
+        this.programDefault = Util.readResourceContentAsTemplate(this.pluginProperties.getStringProperty("robot.program.default"));
+        this.configurationToolbox = Util.readResourceContentAsTemplate(this.pluginProperties.getStringProperty("robot.configuration.toolbox"));
+        // A configuration must NOT contain #ifdefs
         this.configurationDefault = Util.readResourceContent(this.pluginProperties.getStringProperty("robot.configuration.default"));
         loadWorkers();
     }
@@ -69,20 +68,20 @@ public class RobotFactory {
         return group != null && !group.equals("") ? group : this.pluginProperties.getRobotName();
     }
 
-    public final String getProgramToolboxBeginner() {
-        return this.beginnerToolbox;
+    public final String getProgramToolboxBeginner(List<String> extensions) {
+        return Util.applyTemplate(this.beginnerToolbox, extensions);
     }
 
-    public final String getProgramToolboxExpert() {
-        return this.expertToolbox;
+    public final String getProgramToolboxExpert(List<String> extensions) {
+        return Util.applyTemplate(this.expertToolbox, extensions);
     }
 
-    public final String getProgramDefault() {
-        return this.programDefault;
+    public final String getProgramDefault(List<String> extensions) {
+        return Util.applyTemplate(this.programDefault, extensions);
     }
 
-    public final String getConfigurationToolbox() {
-        return this.configurationToolbox;
+    public final String getConfigurationToolbox(List<String> extensions) {
+        return Util.applyTemplate(this.configurationToolbox, extensions);
     }
 
     public final String getConfigurationDefault() {
@@ -93,32 +92,36 @@ public class RobotFactory {
         return this.pluginProperties.getStringProperty("robot.real.name");
     }
 
-    public final Boolean hasSim() {
+    public final boolean hasSim() {
         return !this.pluginProperties.getStringProperty("robot.plugin.workflow.getsimulationcode").equals("do.nothing");
     }
 
-    public final Boolean hasMultipleSim() {
-        return this.pluginProperties.getStringProperty("robot.multisim") != null && this.pluginProperties.getStringProperty("robot.multisim").equals("true");
+    public final boolean hasMultipleSim() {
+        String p = this.pluginProperties.getStringProperty("robot.multisim");
+        return p != null && p.equals("true");
     }
 
     public boolean hasMarkerSim() {
-        return this.pluginProperties.getStringProperty("robot.markersim") != null && this.pluginProperties.getStringProperty("robot.markersim").equals("true");
+        String p = this.pluginProperties.getStringProperty("robot.markersim");
+        return p != null && p.equals("true");
     }
 
-    public final Boolean hasNN() {
-        return this.pluginProperties.getStringProperty("robot.nn") != null && this.pluginProperties.getStringProperty("robot.nn").equals("true");
+    public final String nnProperty() {
+        String p = this.pluginProperties.getStringProperty("robot.nn");
+        return p == null ? "never" : p;
     }
 
     public final JSONArray getNNActivations() {
-        if ( hasNN() ) {
-            String values = this.pluginProperties.getStringProperty("robot.nn.activations");
+        String values = this.pluginProperties.getStringProperty("robot.nn.activations");
+        if ( values == null ) {
+            return new JSONArray();
+        } else {
             List<String> activations = Stream.of(values.trim().split("\\s*,\\s*")).collect(Collectors.toList());
             return new JSONArray(activations);
         }
-        return new JSONArray();
     }
 
-    public Boolean hasWebotsSim() {
+    public boolean hasWebotsSim() {
         return this.pluginProperties.getStringProperty("robot.webots.sim") != null && this.pluginProperties.getStringProperty("robot.webots.sim").equals("true");
     }
 
@@ -161,7 +164,7 @@ public class RobotFactory {
         return this.pluginProperties.getStringProperty("robot.vendor");
     }
 
-    public final Boolean hasConfiguration() {
+    public final boolean hasConfiguration() {
         return Boolean.parseBoolean(this.pluginProperties.getStringProperty("robot.configuration"));
     }
 

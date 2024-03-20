@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -64,9 +65,11 @@ public class TestToolboxBlocksAreUsedInTestFiles {
     }
 
     private static Set<String> getBlockNamesForAllToolboxes(RobotFactory robotFactory) {
+        List<String> extensions = new ArrayList<>();
+        extensions.add("nn"); // HERE ALL DEFINITIONS ARE NEEDED TO GET THE TOOLBOX OF MAXIMAL SIZE. DANGEROUS PART!
         Set<String> blockNames = new HashSet<>();
-        blockNames.addAll(getBlockNamesFromContent(robotFactory.getProgramToolboxBeginner()));
-        blockNames.addAll(getBlockNamesFromContent(robotFactory.getProgramToolboxExpert()));
+        blockNames.addAll(getBlockNamesFromContent(robotFactory.getProgramToolboxBeginner(extensions)));
+        blockNames.addAll(getBlockNamesFromContent(robotFactory.getProgramToolboxExpert(extensions)));
         return blockNames;
     }
 

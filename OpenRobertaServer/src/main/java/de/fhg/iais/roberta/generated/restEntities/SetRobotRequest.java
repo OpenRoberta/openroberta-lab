@@ -15,6 +15,7 @@ import org.json.JSONObject;
  */
 public class SetRobotRequest extends BaseRequest {
     protected String robot;
+    protected JSONObject extensions;
 
     /**
      * the request description for the /setRobot REST request
@@ -38,10 +39,11 @@ public class SetRobotRequest extends BaseRequest {
     /**
      * the request description for the /setRobot REST request
      */
-    public static SetRobotRequest makeFromProperties(String cmd, String robot) {
+    public static SetRobotRequest makeFromProperties(String cmd, String robot, JSONObject extensions) {
         SetRobotRequest entity = new SetRobotRequest();
         entity.setCmd(cmd);
         entity.setRobot(robot);
+        entity.setExtensions(extensions);
         entity.immutable();
         return entity;
     }
@@ -66,6 +68,8 @@ public class SetRobotRequest extends BaseRequest {
                     setCmd(jsonO.optString(key));
                 } else if ( "robot".equals(key) ) {
                     setRobot(jsonO.getString(key));
+                } else if ( "extensions".equals(key) ) {
+                    setExtensions(jsonO.getJSONObject(key));
                 } else {
                     throw new RuntimeException("JSON parse error. Found invalid key: " + key + " in " + jsonO);
                 }
@@ -101,6 +105,9 @@ public class SetRobotRequest extends BaseRequest {
         if ( robot == null ) {
             _message = "required property robot of SetRobotRequest-object is not set: " + toString();
         }
+        if ( extensions == null ) {
+            _message = "required property extensions of SetRobotRequest-object is not set: " + toString();
+        }
         if ( _message != null ) {
             this.immutable = false;
             throw new RuntimeException(_message);
@@ -130,6 +137,27 @@ public class SetRobotRequest extends BaseRequest {
     }
 
     /**
+     * GET extensions. Object must be immutable. Never return null or an undefined/default value.
+     */
+    public JSONObject getExtensions() {
+        if ( !this.immutable ) {
+            throw new RuntimeException("no extensions from an object under construction: " + toString());
+        }
+        return this.extensions;
+    }
+
+    /**
+     * SET extensions. Object must be mutable.
+     */
+    public SetRobotRequest setExtensions(JSONObject extensions) {
+        if ( this.immutable ) {
+            throw new RuntimeException("extensions assigned to an immutable object: " + toString());
+        }
+        this.extensions = extensions;
+        return this;
+    }
+
+    /**
      * generates a JSON-object from an immutable bean.<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
@@ -144,6 +172,7 @@ public class SetRobotRequest extends BaseRequest {
                 jsonO.put("cmd", this.cmd);
             }
             jsonO.put("robot", this.robot);
+            jsonO.put("extensions", this.extensions);
         } catch ( JSONException e ) {
             throw new RuntimeException("JSON unparse error when unparsing: " + this, e);
         }
@@ -152,7 +181,7 @@ public class SetRobotRequest extends BaseRequest {
 
     @Override
     public String toString() {
-        return "SetRobotRequest [immutable=" + this.immutable + ", cmd=" + this.cmd + ", robot=" + this.robot + " ]";
+        return "SetRobotRequest [immutable=" + this.immutable + ", cmd=" + this.cmd + ", robot=" + this.robot + ", extensions=" + this.extensions + " ]";
     }
 
     @Override

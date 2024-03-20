@@ -29,7 +29,6 @@ export function init(callback: Function) {
     let r = GUISTATE_C.getRobots();
     robots = Object.keys(r).map(function (index) {
         let robot = r[index];
-        robot.startSelection = [];
         return robot;
     });
     const iCalliopeNoBlue = robots.findIndex((robot, index) => {
@@ -39,7 +38,7 @@ export function init(callback: Function) {
         return robot.name === 'calliope2017';
     });
     if (iCalliopeNoBlue > -1 && iCalliopeBlue > -1) {
-        robots[iCalliopeNoBlue].startSelection.push('blue');
+        robots[iCalliopeNoBlue].extensions.blue = true;
         robots.splice(iCalliopeBlue, 1);
     }
     robots.forEach(function (row, index) {
@@ -87,29 +86,31 @@ function initRobotList() {
     const startRobots = robots.slice(0, numPopularRobots);
     function clickRobot(e, value, row, optBookmark?) {
         e.stopPropagation();
-        let extensions = [];
+        $('.accordion-collapse.show').collapse('hide');
+        let extensions = {};
         $(e.target)
             .closest('.card-views')
             .find('.form-check-input')
             .each(function () {
                 if ($(this).prop('checked')) {
                     let extension: string = $(this).val().toString();
-                    extensions.push(extension);
+                    extensions[extension] = true;
                 }
             });
         let robot = row.name;
-        if (extensions.indexOf('blue') !== -1 && row.name === 'calliope2017NoBlue') {
+        if (extensions.hasOwnProperty('blue') && extensions['blue'] && row.name === 'calliope2017NoBlue') {
             robot = 'calliope2017';
         }
-        mainCallback(robot); // TODO call mainCallback(row.name, extensions)
+        mainCallback(robot, extensions); // TODO call mainCallback(row.name, extensions)
         UTIL.cleanUri();
         if (optBookmark) {
             var uri;
             $(window).oneWrap('hashchange', function () {
                 window.history.replaceState({}, document.title, uri);
             });
+            const extensionsArray: string[] = Object.keys(extensions).map((key) => key);
             uri = window.location.toString();
-            uri += '?loadSystem=' + robot;
+            uri += '?loadSystem=' + robot + '&extensions=' + extensionsArray.join(',');
             window.history.replaceState({}, document.title, uri);
             $('#show-message').oneWrap('hidden.bs.modal', function (e) {
                 e.preventDefault();
@@ -203,21 +204,28 @@ function initRobotList() {
             },
             {
                 title: '',
-                field: 'startSelection',
+                field: 'extensions',
                 searchable: false,
                 // TODO activate this when nn is seletable for all robots
-                formatter: function (startSelection, row) {
-                    let myStartSelection = $('#startSelectionTemplate').html();
-                    let $myStartSelection = $(myStartSelection);
-                    $myStartSelection.addClass('invisible');
-                    startSelection.forEach((value) => {
-                        $myStartSelection.removeClass('invisible');
-                        $myStartSelection
-                            .find('#' + value)
-                            .parent()
-                            .removeClass('hidden');
-                    });
-                    return $myStartSelection[0].outerHTML;
+                formatter: function (extensions, row, index) {
+                    let myextensions = $('#startSelectionTemplate').html();
+                    let $myextensions = $(myextensions);
+                    $myextensions.addClass('invisible');
+                    $myextensions.find('.accordion-button.collapsed').attr({ 'aria-controls': 'extend_' + index, 'data-bs-target': '#extend_' + index });
+                    $myextensions.find('.accordion-collapse.collapse').attr({ id: 'extend_' + index });
+                    for (const value in extensions) {
+                        if (extensions[value] !== 'never') {
+                            $myextensions.removeClass('invisible');
+                            $myextensions
+                                .find('#extend_' + value)
+                                .parent()
+                                .removeClass('hidden');
+                            if (extensions[value] === 'always') {
+                                $myextensions.find('#extend_' + value).attr({ checked: 'checked', disabled: true, readOnly: true });
+                            }
+                        }
+                    }
+                    return $myextensions[0].outerHTML;
                 },
             },
             {
@@ -278,7 +286,6 @@ function initRobotList() {
 }
 function initView() {
     $('#tabProgram, #tabConfiguration').parent().addClass('invisible');
-    $('#tabNN, #tabNNLearn').parent().hide();
     $('.notStart').addClass('disabled');
     $('#header').removeClass('shadow');
     GUISTATE_C.resetRobot();

@@ -62,7 +62,7 @@ public class ProjectWorkflowRestController {
             response.setCmd("showSourceP");
             response.setSourceCode(project.getSourceCode().toString());
             response.setProgXML(project.getAnnotatedProgramAsXml());
-            response.setConfAnnos(project.getConfAnnotationList());
+            response.setConfAnnos(new JSONObject(project.getConfAnnotationList()));
             addProjectResultToResponse(response, project);
             Statistics.info("ProgramSource", "success", project.hasSucceeded());
             return UtilForREST.responseWithFrontendInfo(response, httpSessionState, this.robotCommunicator);
@@ -94,7 +94,7 @@ public class ProjectWorkflowRestController {
             response.setJavaScriptProgram(project.getSourceCode().toString());
             response.setFileExtension(project.getSourceCodeFileExtension());
             response.setProgXML(project.getAnnotatedProgramAsXml());
-            response.setConfAnnos(project.getConfAnnotationList());
+            response.setConfAnnos(new JSONObject(project.getConfAnnotationList()));
             response.setConfiguration(project.getConfigurationJSON());
             response.setProgramName(project.getProgramName());
             addProjectResultToResponse(response, project);
@@ -125,7 +125,7 @@ public class ProjectWorkflowRestController {
             ProjectService.executeWorkflow("run", project);
             response.setCmd("runPBack");
             response.setProgXML(project.getAnnotatedProgramAsXml());
-            response.setConfAnnos(project.getConfAnnotationList());
+            response.setConfAnnos(new JSONObject(project.getConfAnnotationList()));
             response.setCompiledCode(project.getCompiledHex());
             response.setConfiguration(project.getConfigurationJSON());
             // TODO auto connection robots return COMPILERWORKFLOW_SUCCESS or COMPILERWORKFLOW_PROGRAM_GENERATION_SUCCESS

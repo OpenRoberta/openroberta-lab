@@ -21,8 +21,8 @@ public class ProgramRestTest extends AbstractRestInterfaceTest {
 
     @Test
     public void programWorkflowTest() throws Exception {
-        restClient.setRobot(mkFRR(this.sPid.getInitToken(), "{'cmd':'setRobot'; 'robot':'ev3lejosv1'}"));
-        restClient.setRobot(mkFRR(this.sMinscha.getInitToken(), "{'cmd':'setRobot'; 'robot':'ev3lejosv1'}"));
+        restClient.setRobot(mkFRR(this.sPid.getInitToken(), "{'cmd':'setRobot'; 'robot':'ev3lejosv1', 'extensions':{}}"));
+        restClient.setRobot(mkFRR(this.sMinscha.getInitToken(), "{'cmd':'setRobot'; 'robot':'ev3lejosv1', 'extensions':{}}"));
         pidCreatesAndUpdates4Programs();
         minschaCreates1ConfAnd2Programs();
         pidSharesProgramsMinschaCanAccessRW();
@@ -408,7 +408,7 @@ public class ProgramRestTest extends AbstractRestInterfaceTest {
         Assert.assertTrue(this.sPid.isUserLoggedIn());
 
         //change robot and check if it worked
-        restClient.setRobot(mkFRR(this.sPid.getInitToken(), "{'cmd':'setRobot'; 'robot':'calliope2017'}"));
+        restClient.setRobot(mkFRR(this.sPid.getInitToken(), "{'cmd':'setRobot'; 'robot':'calliope2017', 'extensions':{}}"));
         Assert.assertEquals("calliope2017", this.sPid.getRobotName());
 
         //save new Program and check number of Programs
@@ -419,7 +419,7 @@ public class ProgramRestTest extends AbstractRestInterfaceTest {
         assertProgramListingAsExpected(this.sPid, "['p5']");
 
         //swap back
-        restClient.setRobot(mkFRR(this.sPid.getInitToken(), "{'cmd':'setRobot'; 'robot':'ev3lejosv1'}"));
+        restClient.setRobot(mkFRR(this.sPid.getInitToken(), "{'cmd':'setRobot'; 'robot':'ev3lejosv1', 'extensions':{}}"));
         Assert.assertEquals("ev3lejosv1", this.sPid.getRobotName());
         //check if program list of ev3 prorams remained unchanged
         assertProgramListingAsExpected(this.sPid, "['p1','p4']");

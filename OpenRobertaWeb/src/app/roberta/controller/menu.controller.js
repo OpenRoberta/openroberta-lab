@@ -32,6 +32,7 @@ const Q_TOUR = 'tour';
 const Q_KIOSK = 'kiosk';
 const Q_EXAMPLE_VIEW = 'exampleView';
 const Q_LOAD_PROGRAM = 'loadProgram';
+const Q_EXTENSIONS = 'extensions';
 var mainCallback;
 
 // from https://stackoverflow.com/questions/19491336/get-url-parameter-jquery-or-how-to-get-query-string-values-in-js/21903119#21903119
@@ -137,6 +138,7 @@ function handleQuery() {
         localhost:1999?loadSystem=ev3lejosv1&tutorial=bionics4education1&kiosk
         localhost:1999?loadSystem=ev3lejosv1&exampleView
         localhost:1999?loadSystem=ev3lejosv1&loadProgram=<export> ... </export>
+        localhost:1999?loadSystem=ev3lejosv1&extensions=nn,...
      */
     if (newStyle) {
         var forgotPasswort = getUrlParameter(Q_FORGOT_PASSWORD);
@@ -159,11 +161,13 @@ function handleQuery() {
         if (loadSystem) {
             GUISTATE_C.setStartWithoutPopup();
             let callback;
+            let extend = {};
             let parameter = [];
             let tutorial = getUrlParameter(Q_TUTORIAL);
             let loadProgram = getUrlParameter(Q_LOAD_PROGRAM);
             let exampleView = getUrlParameter(Q_EXAMPLE_VIEW);
             let gallery = getUrlParameter(Q_GALLERY);
+            let extensions = getUrlParameter(Q_EXTENSIONS);
             if (tutorial) {
                 if (tutorial === 'true' || tutorial === true) {
                     callback = function () {
@@ -191,9 +195,19 @@ function handleQuery() {
                 callback = function () {
                     $('#tabGalleryList').tabWrapShow();
                 };
+            } else if (extensions) {
+                let extensionsArray = extensions.split(',');
+                extensionsArray.forEach(function (extension) {
+                    // TODO remove this when the server can handle all extensions -> robot variants
+                    if (loadSystem === 'calliope2017NoBlue' && extension === 'blue') {
+                        loadSystem === 'calliope2017';
+                    } else {
+                        extend[extension] = true;
+                    }
+                });
             }
             if (mainCallback && mainCallback instanceof Function) {
-                mainCallback(loadSystem, callback, parameter);
+                mainCallback(loadSystem, extend, callback, parameter);
             }
         }
     }

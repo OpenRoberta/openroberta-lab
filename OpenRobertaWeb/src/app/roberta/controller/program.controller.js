@@ -325,7 +325,8 @@ function loadFromGallery(program) {
             MSG.displayInformation(result, '', result.message);
         });
     }
-    ROBOT_C.switchRobot(robotType, null, loadProgramFromGallery);
+    //TODO !!!!
+    ROBOT_C.switchRobot(robotType, {}, false, loadProgramFromGallery);
 }
 
 function initProgramForms() {

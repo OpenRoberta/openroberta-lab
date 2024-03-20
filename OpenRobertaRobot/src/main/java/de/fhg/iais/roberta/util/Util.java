@@ -14,6 +14,7 @@ import java.nio.file.Paths;
 import java.sql.Timestamp;
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.Date;
@@ -23,6 +24,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.StringJoiner;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -49,6 +51,8 @@ public class Util {
     private static final Pattern NUMBER_PATTERN = Pattern.compile("^(-?\\d+((.|e-|e\\+)?\\d*|_?\\d*[a-zA-Z]{0,3})?|(0x|0X)[0-9a-fA-F]*)$");
     private static final Pattern FILENAME_PATTERN = Pattern.compile("^[\\w-]+.[A-Za-z]{1,6}$");
     private static final Pattern PORT_NAME_PATTERN = Pattern.compile("^\\w+$");
+    private static final Pattern IFDEF_PATTERN = Pattern.compile("^\\s*#ifdef (.*)$");
+    private static final Pattern END_PATTERN = Pattern.compile("^\\s*#end$");
     private static final String INVALID = "invalid";
     /**
      * YAML parser. NOT thread-safe!
@@ -318,6 +322,8 @@ public class Util {
         return "E-" + Util.errorTicketNumber.incrementAndGet();
     }
 
+    private static List<String> EMPTY_STRING_LIST = new ArrayList<>();
+
     /**
      * read all lines from a resource, concatenate them to a string separated by a newline
      *
@@ -338,6 +344,61 @@ public class Util {
         } catch ( Exception e ) {
             throw new DbcException("reading resource failed for: " + resourceName, e);
         }
+
+    }
+
+    /**
+     * read all lines from a resource, concatenate them to a string separated by a newline.
+     * Allow #ifdef <extension> ... #end for conditional adding/removing resource lines
+     *
+     * @param resourceName
+     * @return the content of the resource as a String list
+     * @throws DbcException if the read fails
+     */
+    public static List<String> readResourceContentAsTemplate(String resourceName) {
+        final Class<?> clazz = Util.class;
+        final List<String> resourceAsList = new ArrayList<>();
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(clazz.getResourceAsStream(resourceName), StandardCharsets.UTF_8))) {
+            String line;
+            while ( (line = in.readLine()) != null ) {
+                resourceAsList.add(line);
+            }
+            return resourceAsList;
+        } catch ( Exception e ) {
+            throw new DbcException("reading resource as template failed for: " + resourceName, e);
+        }
+    }
+
+    /**
+     * read all lines from a resource, concatenate them to a string separated by a newline.
+     * Allow #ifdef <extension> ... #end for conditional adding/removing resource lines
+     *
+     * @param resourceName
+     * @return the content of the resource as a String list
+     * @throws DbcException if the read fails
+     */
+    public static String applyTemplate(List<String> resourceAsList, List<String> extensions) {
+        final String lineSeparator = System.lineSeparator();
+        final StringBuilder sb = new StringBuilder();
+        boolean ignoreLinesTriggeredByIfdef = false;
+        for ( String line : resourceAsList ) {
+            Matcher m = IFDEF_PATTERN.matcher(line);
+            if ( m.matches() ) {
+                if ( ignoreLinesTriggeredByIfdef ) {
+                    throw new DbcException("resource has nested #ifdefs");
+                } else {
+                    String extension = m.group(1);
+                    if ( !extensions.contains(extension) ) {
+                        ignoreLinesTriggeredByIfdef = true;
+                    }
+                }
+            } else if ( END_PATTERN.matcher(line).matches() ) {
+                ignoreLinesTriggeredByIfdef = false;
+            } else if ( !ignoreLinesTriggeredByIfdef ) {
+                sb.append(line).append(lineSeparator);
+            }
+        }
+        return sb.toString();
     }
 
     /**

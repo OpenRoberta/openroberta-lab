@@ -176,7 +176,7 @@
         <block type="math_on_list"></block>
         <block type="math_modulo"></block>
     </category>
-    <!--
+    #ifdef nn
     <category name="TOOLBOX_NN" svg="true">
         <block type="robActions_NNstep"></block>
         <block type="robActions_set_inputneuron_val"></block>
@@ -186,7 +186,7 @@
         <block type="robSensors_get_weight"></block>
         <block type="robSensors_get_bias"></block>
     </category>
-    -->
+    #end
     <category name="TOOLBOX_TEXT" svg="true">
         <block type="text_comment"></block>
     </category>

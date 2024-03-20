@@ -45,12 +45,13 @@ function setToken(token, successFn) {
  * @param robot
  *            {String} - robot type
  */
-function setRobot(robot, successFn) {
+function setRobot(robot, extensions, successFn) {
     return COMM.json(
         '/admin/setRobot',
         {
             cmd: 'setRobot',
             robot: robot,
+            extensions: extensions,
         },
         successFn,
         "set robot '" + robot + "'"

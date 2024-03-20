@@ -321,9 +321,9 @@ public class GroupRestTest extends AbstractRestInterfaceTest {
         Assert.assertTrue(this.groupMember1.isUserLoggedIn() && this.groupMember2.isUserLoggedIn());
 
 
-        restClient.setRobot(mkFRR(this.groupMember1.getInitToken(), "{'cmd':'setRobot'; 'robot':'ev3lejosv1'}"));
-        restClient.setRobot(mkFRR(this.groupMember2.getInitToken(), "{'cmd':'setRobot'; 'robot':'ev3lejosv1'}"));
-        restClient.setRobot(mkFRR(this.sPid.getInitToken(), "{'cmd':'setRobot'; 'robot':'ev3lejosv1'}"));
+        restClient.setRobot(mkFRR(this.groupMember1.getInitToken(), "{'cmd':'setRobot'; 'robot':'ev3lejosv1', 'extensions':{}}"));
+        restClient.setRobot(mkFRR(this.groupMember2.getInitToken(), "{'cmd':'setRobot'; 'robot':'ev3lejosv1', 'extensions':{}}"));
+        restClient.setRobot(mkFRR(this.sPid.getInitToken(), "{'cmd':'setRobot'; 'robot':'ev3lejosv1', 'extensions':{}}"));
         //Member1 saves ev3 Programs
         saveProgramAs(this.groupMember1, "PidsGroup:Member1", "PidsGroup:Member1", "gp1", ".1.PidsGroup:Member1", null, null, "ok", Key.PROGRAM_SAVE_SUCCESS);
         saveProgramAs(this.groupMember1, "PidsGroup:Member1", "PidsGroup:Member1", "gp2", ".1.PidsGroup:Member1", null, null, "ok", Key.PROGRAM_SAVE_SUCCESS);
@@ -352,8 +352,8 @@ public class GroupRestTest extends AbstractRestInterfaceTest {
      * </ul>
      */
     private void member1SavesCalliopeProgram() throws Exception {
-        restClient.setRobot(mkFRR(this.groupMember1.getInitToken(), "{'cmd':'setRobot'; 'robot':'calliope2017'}"));
-        restClient.setRobot(mkFRR(this.sPid.getInitToken(), "{'cmd':'setRobot'; 'robot':'calliope2017'}"));
+        restClient.setRobot(mkFRR(this.groupMember1.getInitToken(), "{'cmd':'setRobot'; 'robot':'calliope2017', 'extensions':{}}"));
+        restClient.setRobot(mkFRR(this.sPid.getInitToken(), "{'cmd':'setRobot'; 'robot':'calliope2017', 'extensions':{}}"));
         Assert.assertEquals("calliope2017", groupMember1.getRobotName());
 
         //Member1 saves calliope program
@@ -364,8 +364,8 @@ public class GroupRestTest extends AbstractRestInterfaceTest {
         //check Pids programs
         assertProgramListingAsExpected(this.sPid, "['gp4']");
 
-        restClient.setRobot(mkFRR(this.sPid.getInitToken(), "{'cmd':'setRobot'; 'robot':'ev3lejosv1'}"));
-        restClient.setRobot(mkFRR(this.groupMember1.getInitToken(), "{'cmd':'setRobot'; 'robot':'ev3lejosv1'}"));
+        restClient.setRobot(mkFRR(this.sPid.getInitToken(), "{'cmd':'setRobot'; 'robot':'ev3lejosv1', 'extensions':{}}"));
+        restClient.setRobot(mkFRR(this.groupMember1.getInitToken(), "{'cmd':'setRobot'; 'robot':'ev3lejosv1', 'extensions':{}}"));
 
 
     }

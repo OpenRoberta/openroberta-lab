@@ -84,7 +84,7 @@ public final class XsltAndJavaTransformer {
             BlockSet jaxbProgram = JaxbHelper.xml2Element(programText, BlockSet.class);
             xmlVersion = jaxbProgram.getXmlversion();
             Assert.notNull(jaxbProgram, "jaxb returns null for the program");
-            checkAndAddNnDataForPlugin(factory.hasNN(), jaxbProgram);
+            checkAndAddNnDataForPlugin(factory.nnProperty(), jaxbProgram);
             // jaxbProgram.setXmlversion("4.0"); // this is a bit too early, may cause problems, but later it is much more expensive
             programText = JaxbHelper.blockSet2xml(jaxbProgram);
         } catch ( Exception e ) {
@@ -127,8 +127,8 @@ public final class XsltAndJavaTransformer {
         return output;
     }
 
-    private void checkAndAddNnDataForPlugin(boolean hasNN, BlockSet jaxbImportExport) {
-        if ( hasNN ) {
+    private void checkAndAddNnDataForPlugin(String nnProperty, BlockSet jaxbImportExport) {
+        if ( !nnProperty.equals("never") ) {
             for ( Instance instance : jaxbImportExport.getInstance() ) {
                 if ( instance.getBlock().get(0).getType().contains("robControls_start") ) {
                     Block startBlock = instance.getBlock().get(0);
