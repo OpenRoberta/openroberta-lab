@@ -53,6 +53,7 @@ import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractPythonVisitor;
  */
 public class MbedPythonVisitor extends AbstractPythonVisitor implements IMbedVisitor<Void> {
     protected final ConfigurationAst robotConfiguration;
+    protected final String robotType;
 
     /**
      * initialize the Python code generator visitor.
@@ -62,11 +63,12 @@ public class MbedPythonVisitor extends AbstractPythonVisitor implements IMbedVis
     public MbedPythonVisitor(List<List<Phrase>> programPhrases, ConfigurationAst robotConfiguration, ClassToInstanceMap<IProjectBean> beans) {
         super(programPhrases, beans);
         this.robotConfiguration = robotConfiguration;
+        this.robotType = robotConfiguration.getRobotType();
     }
 
     @Override
     public Void visitPredefinedImage(PredefinedImage predefinedImage) {
-        this.src.add("microbit.Image.", predefinedImage.getImageName());
+        this.src.add(this.robotType +".Image.", predefinedImage.getImageName());
         return null;
     }
 
@@ -74,10 +76,10 @@ public class MbedPythonVisitor extends AbstractPythonVisitor implements IMbedVis
     public Void visitEmptyExpr(EmptyExpr emptyExpr) {
         switch ( emptyExpr.getDefVal() ) {
             case PREDEFINED_IMAGE:
-                this.src.add("microbit.Image.SILLY");
+                this.src.add(this.robotType +".Image.SILLY");
                 break;
             case IMAGE:
-                this.src.add("microbit.Image()");
+                this.src.add(this.robotType +".Image()");
                 break;
             default:
                 super.visitEmptyExpr(emptyExpr);
@@ -98,7 +100,7 @@ public class MbedPythonVisitor extends AbstractPythonVisitor implements IMbedVis
 
     @Override
     public Void visitWaitTimeStmt(WaitTimeStmt waitTimeStmt) {
-        this.src.add("microbit.sleep(");
+        this.src.add(this.robotType +".sleep(");
         waitTimeStmt.time.accept(this);
         this.src.add(")");
         return null;
@@ -106,13 +108,13 @@ public class MbedPythonVisitor extends AbstractPythonVisitor implements IMbedVis
 
     @Override
     public Void visitClearDisplayAction(ClearDisplayAction clearDisplayAction) {
-        this.src.add("microbit.display.clear()");
+        this.src.add(this.robotType +".display.clear()");
         return null;
     }
 
     @Override
     public Void visitImage(Image image) {
-        this.src.add("microbit.Image('");
+        this.src.add(this.robotType +".Image('");
         for ( int i = 0; i < 5; i++ ) {
             for ( int j = 0; j < 5; j++ ) {
                 String pixel = image.image[i][j].trim();
@@ -133,7 +135,7 @@ public class MbedPythonVisitor extends AbstractPythonVisitor implements IMbedVis
 
     @Override
     public Void visitDisplayTextAction(DisplayTextAction displayTextAction) {
-        this.src.add("microbit.display.");
+        this.src.add(this.robotType +".display.");
         appendTextDisplayType(displayTextAction);
         if ( !displayTextAction.msg.getKind().hasName("STRING_CONST") ) {
             this.src.add("str(");
@@ -156,7 +158,7 @@ public class MbedPythonVisitor extends AbstractPythonVisitor implements IMbedVis
 
     @Override
     public Void visitDisplayImageAction(DisplayImageAction displayImageAction) {
-        this.src.add("microbit.display.show(");
+        this.src.add(this.robotType +".display.show(");
         displayImageAction.valuesToDisplay.accept(this);
         this.src.add(")");
         return null;
@@ -174,41 +176,41 @@ public class MbedPythonVisitor extends AbstractPythonVisitor implements IMbedVis
         String port = keysSensor.getUserDefinedPort();
         ConfigurationComponent configurationComponent = this.robotConfiguration.getConfigurationComponent(port);
         String pin1 = configurationComponent.getProperty("PIN1");
-        this.src.add("microbit.button_", pin1.toLowerCase(Locale.ENGLISH), ".is_pressed()");
+        this.src.add(this.robotType +".button_", pin1.toLowerCase(Locale.ENGLISH), ".is_pressed()");
         return null;
     }
 
     @Override
     public Void visitTemperatureSensor(TemperatureSensor temperatureSensor) {
-        this.src.add("microbit.temperature()");
+        this.src.add(this.robotType +".temperature()");
         return null;
     }
 
     @Override
     public Void visitTimerSensor(TimerSensor timerSensor) {
-        this.src.add("( microbit.running_time() - timer1 )");
+        this.src.add("( "+this.robotType+".running_time() - timer1 )");
         return null;
     }
 
     @Override
     public Void visitTimerReset(TimerReset timerReset) {
-        this.src.add("timer1 = microbit.running_time()");
+        this.src.add("timer1 = "+this.robotType+".running_time()");
         return null;
     }
 
     @Override
     public Void visitAccelerometerSensor(AccelerometerSensor accelerometerSensor) {
         if ( accelerometerSensor.getSlot().equals(SC.STRENGTH) ) {
-            this.src.add("math.sqrt(microbit.accelerometer.get_x()**2 + microbit.accelerometer.get_y()**2 + microbit.accelerometer.get_z()**2)");
+            this.src.add("math.sqrt("+this.robotType+".accelerometer.get_x()**2 + "+this.robotType+".accelerometer.get_y()**2 + "+this.robotType+".accelerometer.get_z()**2)");
         } else {
-            this.src.add("microbit.accelerometer.get_", accelerometerSensor.getSlot().toLowerCase(Locale.ENGLISH), "()");
+            this.src.add(this.robotType +".accelerometer.get_", accelerometerSensor.getSlot().toLowerCase(Locale.ENGLISH), "()");
         }
         return null;
     }
 
     @Override
     public Void visitLightSensor(LightSensor lightSensor) {
-        this.src.add("round(microbit.display.read_light_level() / 2.55)");
+        this.src.add("round("+this.robotType+".display.read_light_level() / 2.55)");
         return null;
     }
 
@@ -219,15 +221,15 @@ public class MbedPythonVisitor extends AbstractPythonVisitor implements IMbedVis
         String pin1 = configurationComponent.getProperty("PIN1");
         String valueType = pinValueSensor.getMode().toLowerCase(Locale.ENGLISH);
         if ( valueType.equalsIgnoreCase(SC.PULSEHIGH) ) {
-            this.src.add("machine.time_pulse_us(microbit.pin");
+            this.src.add("machine.time_pulse_us("+this.robotType+".pin");
             this.src.add(pin1);
             this.src.add(", 1)");
         } else if ( valueType.equalsIgnoreCase(SC.PULSELOW) ) {
-            this.src.add("machine.time_pulse_us(microbit.pin");
+            this.src.add("machine.time_pulse_us("+this.robotType+".pin");
             this.src.add(pin1);
             this.src.add(", 0)");
         } else {
-            this.src.add("microbit.pin");
+            this.src.add(this.robotType +".pin");
             this.src.add(pin1);
             this.src.add(".read_");
             this.src.add(valueType);
@@ -250,7 +252,7 @@ public class MbedPythonVisitor extends AbstractPythonVisitor implements IMbedVis
         if ( !this.usedGlobalVarInFunctions.isEmpty() ) {
             this.src.add("global ", String.join(", ", this.usedGlobalVarInFunctions));
         }
-//        TODO add as soon as microbit runtime is updated
+//        TODO add as soon as robot runtime is updated
 //        if ( this.robotConfiguration.isComponentTypePresent(SC.DIGITAL_PIN) ) {
 //            for ( ConfigurationComponent usedConfigurationBlock : this.robotConfiguration.getConfigurationComponentsValues() ) {
 //                if ( usedConfigurationBlock.getComponentType().equals(SC.DIGITAL_PIN) ) {
@@ -264,7 +266,7 @@ public class MbedPythonVisitor extends AbstractPythonVisitor implements IMbedVis
 //                        continue;
 //                    }
 //                    nlIndent();
-//                    this.src.add("microbit.MicroBitDigitalPin.set_pull(microbit.pin", pin1, ".",mode,");");
+//                    this.src.add(this.robotName+"."+this.robotType+"DigitalPin.set_pull("+this.robotType+".pin", pin1, ".",mode,");");
 //                }
 //            }
 //        }
@@ -301,7 +303,7 @@ public class MbedPythonVisitor extends AbstractPythonVisitor implements IMbedVis
 
     @Override
     public Void visitGestureSensor(GestureSensor gestureSensor) {
-        this.src.add("(\"", gestureSensor.getMode().toString().toLowerCase().replace("_", " "), "\" == microbit.accelerometer.current_gesture())");
+        this.src.add("(\"", gestureSensor.getMode().toString().toLowerCase().replace("_", " "), "\" == "+this.robotType+".accelerometer.current_gesture())");
         return null;
     }
 
@@ -316,13 +318,13 @@ public class MbedPythonVisitor extends AbstractPythonVisitor implements IMbedVis
 
     @Override
     public Void visitCompassSensor(CompassSensor compassSensor) {
-        this.src.add("microbit.compass.heading()");
+        this.src.add(this.robotType +".compass.heading()");
         return null;
     }
 
     @Override
     public Void visitPinTouchSensor(PinTouchSensor pinTouchSensor) {
-        this.src.add("microbit.pin", pinTouchSensor.getUserDefinedPort(), ".is_touched()");
+        this.src.add(this.robotType +".pin", pinTouchSensor.getUserDefinedPort(), ".is_touched()");
         return null;
     }
 
@@ -367,7 +369,7 @@ public class MbedPythonVisitor extends AbstractPythonVisitor implements IMbedVis
         String port = mbedPinWriteValueAction.port;
         ConfigurationComponent configurationComponent = this.robotConfiguration.getConfigurationComponent(port);
         String pin1 = configurationComponent.getProperty("PIN1");
-        this.src.add("microbit.pin", pin1);
+        this.src.add(this.robotType +".pin", pin1);
         String valueType = mbedPinWriteValueAction.pinValue.equals(SC.DIGITAL) ? "digital(" : "analog(";
         this.src.add(".write_", valueType);
         mbedPinWriteValueAction.value.accept(this);
@@ -377,7 +379,7 @@ public class MbedPythonVisitor extends AbstractPythonVisitor implements IMbedVis
 
     @Override
     public Void visitDisplaySetPixelAction(DisplaySetPixelAction displaySetPixelAction) {
-        this.src.add("microbit.display.set_pixel(");
+        this.src.add(this.robotType +".display.set_pixel(");
         displaySetPixelAction.x.accept(this);
         this.src.add(", ");
         displaySetPixelAction.y.accept(this);
@@ -389,7 +391,7 @@ public class MbedPythonVisitor extends AbstractPythonVisitor implements IMbedVis
 
     @Override
     public Void visitDisplayGetPixelAction(DisplayGetPixelAction displayGetPixelAction) {
-        this.src.add("microbit.display.get_pixel(");
+        this.src.add(this.robotType +".display.get_pixel(");
         displayGetPixelAction.x.accept(this);
         this.src.add(", ");
         displayGetPixelAction.y.accept(this);
@@ -402,7 +404,7 @@ public class MbedPythonVisitor extends AbstractPythonVisitor implements IMbedVis
         if ( !withWrapping ) {
             return;
         }
-        this.src.add("import microbit");
+        this.src.add("import "+this.robotType);
         nlIndent();
         this.src.add("import random");
         nlIndent();
@@ -426,7 +428,7 @@ public class MbedPythonVisitor extends AbstractPythonVisitor implements IMbedVis
         this.src.add("class ContinueLoop(Exception): pass");
         nlIndent();
         nlIndent();
-        this.src.add("timer1 = microbit.running_time()");
+        this.src.add("timer1 = "+this.robotType+".running_time()");
         if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.RADIO) ) {
             nlIndent();
             this.src.add("radio.on()");
