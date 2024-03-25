@@ -298,7 +298,7 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
                 src.add("hub.imu.tilt()[1]");
                 break;
             case "Z":
-                src.add("hub.imu.heading()%180 if abs(hub.imu.heading()%360) < 180 else -abs(hub.imu.heading()%360 - 360)");
+                src.add("int(hub.imu.heading()%180 if abs(hub.imu.heading()%360) < 180 else -abs(hub.imu.heading()%360 - 360))");
                 break;
             default:
                 throw new DbcException("Invalid gyro sensor slot: " + gyroSensor.getSlot());
