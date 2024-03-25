@@ -655,16 +655,16 @@ function isProgramSaved() {
 
 function setProgramSaved(save) {
     if (save) {
-        $('#menuSaveProg').parent().parent().removeClass('disabled');
-        $('#menuSaveProg').parent().parent().addClass('disabled');
+        $('#menuSaveProg').parent().removeClass('disabled');
+        $('#menuSaveProg').parent().addClass('disabled');
         getBlocklyWorkspace().robControls.disable('saveProgram');
     } else {
         if (isUserLoggedIn() && !isProgramStandard() && isProgramWritable()) {
-            $('#menuSaveProg').parent().parent().removeClass('disabled');
+            $('#menuSaveProg').parent().removeClass('disabled');
             getBlocklyWorkspace().robControls.enable('saveProgram');
         } else {
-            $('#menuSaveProg').parent().parent().removeClass('disabled');
-            $('#menuSaveProg').parent().parent().addClass('disabled');
+            $('#menuSaveProg').parent().removeClass('disabled');
+            $('#menuSaveProg').parent().addClass('disabled');
             getBlocklyWorkspace().robControls.disable('saveProgram');
         }
     }
@@ -938,8 +938,8 @@ function setLogin(result) {
     $('#head-navi-icon-user').removeClass('error');
     $('#head-navi-icon-user').addClass('ok');
     $('.menuLogin').addClass('pe-none');
-    $('#menuSaveProg').parent().parent().addClass('disabled');
-    $('#menuSaveConfig').parent().parent().addClass('disabled');
+    $('#menuSaveProg').parent().addClass('disabled');
+    $('#menuSaveConfig').parent().addClass('disabled');
 
     if (getRobot()) {
         setProgramSaved(true);

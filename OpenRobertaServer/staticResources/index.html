@@ -66,8 +66,8 @@ limitations under the License.
                         </a>
                         <ul class='dropdown-menu'>
                             <li>
-                                <a class='dropdown-item menuRunProg' href='#'>
-                                    <span class='typcn typcn-media-play' id='menuRunProg' lkey='Blockly.Msg.MENU_START_BRICK'>run on brick</span>
+                                <a class='dropdown-item menuRunProg' id='menuRunProg' href='#'>
+                                    <span class='typcn typcn-media-play' lkey='Blockly.Msg.MENU_START_BRICK'>run on brick</span>
                                     <span class='kbd text-muted'>Ctrl&#8239;+&#8201;R</span>
                                 </a>
                             </li>
@@ -103,14 +103,14 @@ limitations under the License.
                                 </a>
                             </li>
                             <li class='login disabled'>
-                                <a class='dropdown-item' href='#'>
-                                    <span class='typcn typcn-cloud-storage' id='menuSaveProg' lkey='Blockly.Msg.MENU_SAVE'></span>
+                                <a class='dropdown-item' id='menuSaveProg' href='#'>
+                                    <span class='typcn typcn-cloud-storage' lkey='Blockly.Msg.MENU_SAVE'></span>
                                     <span class='kbd text-muted'>Ctrl/Cmd&#8239;+&#8201;S</span>
                                 </a>
                             </li>
                             <li class='login disabled'>
-                                <a class='dropdown-item' href='#'>
-                                    <span class='typcn typcn-cloud-storage' id='menuSaveAsProg' lkey='Blockly.Msg.MENU_SAVE_AS'></span>
+                                <a class='dropdown-item' id='menuSaveAsProg' href='#'>
+                                    <span class='typcn typcn-cloud-storage' lkey='Blockly.Msg.MENU_SAVE_AS'></span>
                                     <span class='kbd text-muted'>Ctrl/Cmd&#8239;+&#8201;Shift&#8239;+&#8201;S</span>
                                 </a>
                             </li>
@@ -130,19 +130,19 @@ limitations under the License.
                                 </a>
                             </li>
                             <li>
-                                <a class='dropdown-item' href='#'>
-                                    <span class='typcn typcn-download' id='menuExportProg' lkey='Blockly.Msg.MENU_EXPORT_PROG'></span>
+                                <a class='dropdown-item' id='menuExportProg' href='#'>
+                                    <span class='typcn typcn-download' lkey='Blockly.Msg.MENU_EXPORT_PROG'></span>
                                     <span class='kbd text-muted'>Ctrl/Cmd&#8239;+&#8201;E</span>
                                 </a>
                             </li>
                             <li class='login disabled'>
-                                <a class='dropdown-item' href='#'>
-                                    <span class='typcn typcn-download' id='menuExportAllProgs' lkey='Blockly.Msg.MENU_EXPORT_ALL_PROGS'></span>
+                                <a class='dropdown-item' id='menuExportAllProgs' href='#'>
+                                    <span class='typcn typcn-download' lkey='Blockly.Msg.MENU_EXPORT_ALL_PROGS'></span>
                                 </a>
                             </li>
                             <li>
-                                <a class='dropdown-item' href='#'>
-                                    <span class='typcn typcn-upload menuImportProg' lkey='Blockly.Msg.MENU_IMPORT_PROG'></span>
+                                <a class='menuImportProg dropdown-item' href='#'>
+                                    <span class='typcn typcn-upload' lkey='Blockly.Msg.MENU_IMPORT_PROG'></span>
                                     <span class='kbd text-muted'>Ctrl/Cmd&#8239;+&#8201;I</span>
                                 </a>
                             </li>
@@ -179,11 +179,11 @@ limitations under the License.
                             </li>
                             <li class='login disabled'>
                                 <a class='dropdown-item' href='#'>
-                                    <span class='typcn typcn-cloud-storage' id='menuSaveConfig' lkey='Blockly.Msg.MENU_SAVE'></span>
+                                    <span class='typcn typcn-cloud-storage' lkey='Blockly.Msg.MENU_SAVE'></span>
                                     <span class='kbd text-muted'>Ctrl/Cmd&#8239;+&#8201;S</span>
                                 </a>
                             </li>
-                            <li class='login disabled'>
+                            <li class='login disabled' id='menuSaveConfig'>
                                 <a class='dropdown-item' href='#'>
                                     <span class='typcn typcn-cloud-storage' id='menuSaveAsConfig' lkey='Blockly.Msg.MENU_SAVE_AS'></span>
                                     <span class='kbd text-muted'>Ctrl/Cmd&#8239;+&#8201;Shift&#8239;+&#8201;S</span>
@@ -193,8 +193,8 @@ limitations under the License.
                     </li>
                     <!-- menu robot *** revised *** -->
                     <li class='nav-item dropdown notStart' id='head-navigation-robot'>
-                        <a class='nav-link dropdown-toggle' data-bs-toggle='dropdown' href='#'>
-                            <span class='head-navi-icons typcn typcn-open' id='head-navi-icon-robot'></span>
+                        <a class='nav-link dropdown-toggle' data-bs-toggle='dropdown' id='head-navi-icon-robot' href='#'>
+                            <span class='head-navi-icons typcn typcn-open'></span>
                             <span class='head-navi-title hidden-sm hidden-md hidden-lg' lkey='Blockly.Msg.MENU_ROBOT'></span>
                         </a>
                         <ul class='dropdown-menu' id='navigation-robot'> <!-- TODO remove id (new start popup) -->
@@ -223,8 +223,8 @@ limitations under the License.
                     </li>
                     <!-- menu help *** revised *** -->
                     <li class='nav-item dropdown ' id='head-navigation-help'>
-                        <a class='nav-link dropdown-toggle' data-bs-toggle='dropdown' href='#'>
-                            <span class='head-navi-icons typcn typcn-lightbulb' id='head-navi-icon-help'></span>
+                        <a class='nav-link dropdown-toggle' data-bs-toggle='dropdown' id='head-navi-icon-help' href='#'>
+                            <span class='head-navi-icons typcn typcn-lightbulb'></span>
                             <span class='head-navi-title hidden-sm hidden-md hidden-lg' lkey='Blockly.Msg.MENU_HELP'></span>
                         </a>
                         <ul class='dropdown-menu'>
@@ -269,8 +269,8 @@ limitations under the License.
                     </li>
                     <!-- menu user *** revised *** -->
                     <li class='nav-item dropdown' id='head-navigation-user'>
-                        <a class='nav-link dropdown-toggle' data-bs-toggle='dropdown' href='#'>
-                            <span class='head-navi-icons  typcn typcn-user' id='head-navi-icon-user'></span>
+                        <a class='nav-link dropdown-toggle' data-bs-toggle='dropdown' id='head-navi-icon-user' href='#'>
+                            <span class='head-navi-icons  typcn typcn-user'></span>
                             <span class='head-navi-title hidden-sm hidden-md hidden-lg' lkey='Blockly.Msg.MENU_USER'></span>
                         </a>
                         <ul class='dropdown-menu' id='head-navigation-user-dropdown'>
