@@ -8,6 +8,7 @@ import de.fhg.iais.roberta.components.UsedImport;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.spike.DisplayImageAction;
+import de.fhg.iais.roberta.syntax.action.spike.DisplayTextAction;
 import de.fhg.iais.roberta.syntax.action.spike.MotorDiffCurveAction;
 import de.fhg.iais.roberta.syntax.action.spike.MotorDiffCurveForAction;
 import de.fhg.iais.roberta.syntax.action.spike.MotorDiffOnAction;
@@ -215,6 +216,13 @@ public class SpikePybricksValidatorAndCollectorVisitor extends AbstractSpikeVali
     @Override
     final public Void visitGyroSensor(GyroSensor gyroSensor) {
         usedHardwareBuilder.addUsedSensor(new UsedSensor("GYRO", SC.GYRO, SC.DEFAULT));
+        return null;
+    }
+
+    @Override
+    final public Void visitDisplayTextAction(DisplayTextAction displayTextAction){
+        super.visitDisplayTextAction(displayTextAction);
+        usedMethodBuilder.addUsedMethod(SpikePybricksMethods.DISPLAY_TEXT);
         return null;
     }
 

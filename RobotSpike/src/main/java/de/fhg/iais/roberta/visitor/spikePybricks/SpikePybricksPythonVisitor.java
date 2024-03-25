@@ -541,13 +541,13 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
     public Void visitDisplayTextAction(DisplayTextAction displayTextAction) {
         switch ( displayTextAction.displayTextMode ) {
             case "CHARACTER":
-                src.add("hub.display.text(str(");
+                src.add("display_text(str(");
                 displayTextAction.textToDisplay.accept(this);
                 src.add("))");
                 break;
             case "TEXT":
                 //TODO implement scrolling text ?
-                src.add("hub.display.text(str(");
+                src.add("display_text(str(");
                 displayTextAction.textToDisplay.accept(this);
                 src.add("))");
                 break;

@@ -89,7 +89,7 @@ public abstract class AbstractSpikeValidatorAndCollectorVisitor extends CommonNe
     }
 
     @Override
-    final public Void visitDisplayTextAction(DisplayTextAction displayTextAction) {
+    public Void visitDisplayTextAction(DisplayTextAction displayTextAction) {
         requiredComponentVisited(displayTextAction, displayTextAction.textToDisplay);
         checkActorPort(displayTextAction);
         usedHardwareBuilder.addUsedActor(new UsedActor("", "DISPLAY"));
