@@ -508,7 +508,7 @@ class SpikePybricksWebBleConnection extends AbstractPromptConnection {
 
     private async stopPingDevice() {
         this.ping = false;
-        new Promise((resolve) => setTimeout(resolve, 500));
+        await new Promise((resolve) => setTimeout(resolve, 500));
     }
 
     private startPingDevice() {
@@ -564,6 +564,7 @@ class SpikePybricksWebBleConnection extends AbstractPromptConnection {
 
         if (!this.downloadInProgress && this.oldProgram == programString) {
             progressBarFunction(1);
+            await this.stopProgram();
             return await this.startProgram();
         }
 
