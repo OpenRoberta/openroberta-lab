@@ -323,6 +323,7 @@ class ThymioDeviceManagerConnection extends AbstractConnection {
         this.terminated = true;
         this.selectedNode = undefined;
         this.publishDisonnected();
+        GUISTATE.gui.blocklyWorkspace.robControls.hideStopProgram();
     }
 
     publishConnected(): void {
