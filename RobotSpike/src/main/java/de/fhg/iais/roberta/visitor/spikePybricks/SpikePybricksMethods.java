@@ -15,5 +15,5 @@ public enum SpikePybricksMethods {
     GET_ACCELERATION,
     DIFFDRIVE,
     DISPLAY_TEXT,
-    HUB_LIGHT
+    RPM_TO_MM_SEC, CIRCLE_CIRCUMFERENCE, HUB_LIGHT
 }

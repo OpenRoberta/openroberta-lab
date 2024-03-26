@@ -28,29 +28,21 @@ HSVTORGB:
 
 TANKDRIVE_DIST:
   PYTHON: |
-    def circle_circumference(diameter):
-        return math.pi * (diameter)
-
     def distance_to_angle(distance):
         return (distance/circle_circumference(WHEEL_DIAMETER)) * 360
     
-    def rpm_to_mm_sec(rpm):
-        return (rpm/360) * circle_circumference(WHEEL_DIAMETER)
-    
     def catch_edge_cases(dist, left_speed, right_speed):
         near_zero = 0.5
-        if(abs(dist) < near_zero):
+        #in case velocities cancel dont move, because no distance will be driven
+        if(abs(dist) < near_zero or abs(left_speed+right_speed) < near_zero):
             return True
         if((abs(left_speed) < near_zero and abs(right_speed) < near_zero)):
             left_speed = (abs(left_speed)/left_speed) * 0.5
             right_speed = (abs(right_speed)/right_speed) * 0.5
         #just go straight no need for calculations
         if abs(left_speed - right_speed) <  near_zero:
-            drive_base.settings(straight_speed=get_speed_from_percent(left_speed))
+            drive_base.settings(straight_speed= rpm_to_mm_sec(get_speed_from_percent(left_speed)))
             drive_base.straight(abs(left_speed)/left_speed * dist * 10)
-            return True
-        #in case velocities cancel dont move, because no distance will be driven
-        if abs(left_speed+right_speed) < near_zero:
             return True
         return False
     
@@ -110,7 +102,7 @@ DRIVE_STRAIGHT:
     def drive_straight(speed, dist):
         if abs(speed) < 0.5:
             speed = (abs(speed)/speed) * 0.5
-        drive_base.settings(straight_speed = get_speed_from_percent(speed))
+        drive_base.settings(straight_speed = rpm_to_mm_sec(get_speed_from_percent(speed)))
         drive_base.straight(abs(speed)/speed * dist * 10 )
 
 
@@ -122,6 +114,16 @@ SPEED_FROM_PERCENT:
         if percent > 100 :
             percent = 100
         return int(810.0 * (percent/100.0))
+
+RPM_TO_MM_SEC:
+  PYTHON: |
+    def rpm_to_mm_sec(rpm):
+        return (rpm/360) * circle_circumference(WHEEL_DIAMETER)
+
+CIRCLE_CIRCUMFERENCE:
+  PYTHON: |
+    def circle_circumference(diameter):
+        return math.pi * (diameter)
 
 GET_ACCELERATION:
   PYTHON: |

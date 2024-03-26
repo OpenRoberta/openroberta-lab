@@ -120,14 +120,14 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
             src.add("drive_base.drive(");
             switch ( motorDiffOnAction.direction ) {
                 case "BACKWARD":
-                    src.add("-(").add("get_speed_from_percent").add("(");
+                    src.add("-(").add("rpm_to_mm_sec(get_speed_from_percent").add("(");
                     motorDiffOnAction.power.accept(this);
-                    src.add("))");
+                    src.add(")))");
                     break;
                 case "FORWARD":
-                    src.add("get_speed_from_percent").add("(");
+                    src.add("rpm_to_mm_sec(get_speed_from_percent").add("(");
                     motorDiffOnAction.power.accept(this);
-                    src.add(")");
+                    src.add("))");
                     break;
                 default:
                     throw new DbcException("Invalid direction: " + motorDiffOnAction.direction);
@@ -168,12 +168,12 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
                 case "RIGHT":
                     src.add(" get_speed_from_percent").add("(");
                     motorDiffTurnAction.power.accept(this);
-                    src.add(") / 2 ");
+                    src.add(") * (WHEEL_DIAMETER * math.pi) / (TRACKWIDTH * math.pi)");
                     break;
                 case "LEFT":
                     src.add(" -( get_speed_from_percent").add("(");
                     motorDiffTurnAction.power.accept(this);
-                    src.add(")) / 2 ");
+                    src.add(")) * (WHEEL_DIAMETER * math.pi) / (TRACKWIDTH * math.pi)");
                     break;
                 default:
                     throw new DbcException("Invalid turn direction: " + motorDiffTurnAction.direction);

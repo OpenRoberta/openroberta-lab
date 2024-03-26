@@ -65,6 +65,8 @@ public class SpikePybricksValidatorAndCollectorVisitor extends AbstractSpikeVali
     @Override
     final public Void visitMotorDiffOnForAction(MotorDiffOnForAction motorDiffOnForAction) {
         super.visitMotorDiffOnForAction(motorDiffOnForAction);
+        usedMethodBuilder.addUsedMethod(SpikePybricksMethods.RPM_TO_MM_SEC);
+        usedMethodBuilder.addUsedMethod(SpikePybricksMethods.CIRCLE_CIRCUMFERENCE);
         usedMethodBuilder.addUsedMethod(SpikePybricksMethods.SPEED_FROM_PERCENT);
         usedMethodBuilder.addUsedMethod(SpikePybricksMethods.DRIVE_STRAIGHT);
         return null;
@@ -85,6 +87,10 @@ public class SpikePybricksValidatorAndCollectorVisitor extends AbstractSpikeVali
         usedMethodBuilder.addUsedMethod(SpikePybricksMethods.SPEED_FROM_PERCENT);
         if(!motorDiffOnAction.regulation)
             usedMethodBuilder.addUsedMethod(SpikePybricksMethods.DIFFDRIVE);
+        else {
+            usedMethodBuilder.addUsedMethod(SpikePybricksMethods.RPM_TO_MM_SEC);
+            usedMethodBuilder.addUsedMethod(SpikePybricksMethods.CIRCLE_CIRCUMFERENCE);
+        }
         return null;
     }
 
@@ -94,6 +100,8 @@ public class SpikePybricksValidatorAndCollectorVisitor extends AbstractSpikeVali
         usedHardwareBuilder.addUsedImport(new UsedImport(SC.WAIT));
         usedMethodBuilder.addUsedMethod(SpikePybricksMethods.DIFFDRIVE);
         usedMethodBuilder.addUsedMethod(SpikePybricksMethods.TANKDRIVE_DIST);
+        usedMethodBuilder.addUsedMethod(SpikePybricksMethods.RPM_TO_MM_SEC);
+        usedMethodBuilder.addUsedMethod(SpikePybricksMethods.CIRCLE_CIRCUMFERENCE);
         usedMethodBuilder.addUsedMethod(SpikePybricksMethods.SPEED_FROM_PERCENT);
         return null;
     }
