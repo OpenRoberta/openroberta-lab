@@ -183,7 +183,7 @@ TURN_FOR:
         if power == 0 or degrees == 0:
             return
         sign = (abs(power)/power)
-        tr = (get_speed_from_percent( power ) * 2 * (WHEEL_DIAMETER * math.pi)) / (TRACKWIDTH * math.pi)
+        tr = (get_speed_from_percent( power )  * (WHEEL_DIAMETER * math.pi)) / (TRACKWIDTH * math.pi)
         if abs(tr) < 5 :
             tr = (abs(tr)/tr) * 5
         drive_base.settings(turn_rate = tr)
@@ -226,4 +226,3 @@ DISPLAY_TEXT:
             if ord(c) < 33 or ord(c) > 125:
                 text_list[idx] = '?'
         hub.display.text("".join(text_list))
-    

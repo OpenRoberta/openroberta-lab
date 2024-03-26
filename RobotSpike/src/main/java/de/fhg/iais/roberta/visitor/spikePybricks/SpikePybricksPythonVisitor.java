@@ -166,14 +166,14 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
             src.add("drive_base.drive(0,");
             switch ( motorDiffTurnAction.direction ) {
                 case "RIGHT":
-                    src.add("get_speed_from_percent").add("(");
+                    src.add(" get_speed_from_percent").add("(");
                     motorDiffTurnAction.power.accept(this);
-                    src.add(")");
+                    src.add(") / 2 ");
                     break;
                 case "LEFT":
-                    src.add("-( get_speed_from_percent").add("(");
+                    src.add(" -( get_speed_from_percent").add("(");
                     motorDiffTurnAction.power.accept(this);
-                    src.add(") )");
+                    src.add(")) / 2 ");
                     break;
                 default:
                     throw new DbcException("Invalid turn direction: " + motorDiffTurnAction.direction);
