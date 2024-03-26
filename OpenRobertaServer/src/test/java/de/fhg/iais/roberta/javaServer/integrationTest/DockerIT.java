@@ -19,8 +19,8 @@ import com.google.common.io.Resources;
 
 import de.fhg.iais.roberta.testutil.HttpClientWrapper;
 import de.fhg.iais.roberta.testutil.JSONUtilForServer;
-import de.fhg.iais.roberta.util.basic.Clock;
 import de.fhg.iais.roberta.util.Key;
+import de.fhg.iais.roberta.util.basic.Clock;
 
 /**
  * run a workflow concurrently against a docker container<br>
@@ -136,7 +136,7 @@ public class DockerIT {
         thinkTimeInMillisec += step(httpClientWrapper, "program", request, Key.PROGRAM_SAVE_SUCCESS, 2, 6);
 
         // set robot type, then think 10-14 sec
-        request = JSONUtilForServer.mkD("{'cmd':'setRobot';'robot':'calliope2017'}");
+        request = JSONUtilForServer.mkD("{'cmd':'setRobot';'robot':'calliope2017', 'extensions':{}}");
         thinkTimeInMillisec += step(httpClientWrapper, "admin", request, Key.ROBOT_SET_SUCCESS, 10, 14);
 
         // compile a program 5 times, think 5-10 sec

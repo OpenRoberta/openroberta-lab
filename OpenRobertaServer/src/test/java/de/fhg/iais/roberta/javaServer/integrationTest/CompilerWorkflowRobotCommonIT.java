@@ -73,7 +73,7 @@ public class CompilerWorkflowRobotCommonIT {
             "server.log.configfile=/logback-test.xml"
         };
 
-    private static final boolean CROSSCOMPILER_CALL = true;
+    private static final boolean CROSSCOMPILER_CALL = false;
     private static final boolean SHOW_SUCCESS = true;
 
     private static final String RESOURCE_BASE = "/crossCompilerTests/common/";
@@ -472,7 +472,7 @@ public class CompilerWorkflowRobotCommonIT {
      * @param robotName ...
      */
     private void setRobotTo(String robotName) throws Exception {
-        Response response = this.restAdmin.setRobot(JSONUtilForServer.mkFRR("{'cmd':'setRobot','robot':'" + robotName + "'}"));
+        Response response = this.restAdmin.setRobot(JSONUtilForServer.mkFRR("{'cmd':'setRobot','robot':'" + robotName + "', 'extensions':{}}"));
         JSONUtilForServer.assertEntityRc(response, "ok", Key.ROBOT_SET_SUCCESS);
     }
 

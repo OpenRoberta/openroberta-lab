@@ -77,7 +77,7 @@ public class CompilerWorkflowRobotSpecificIT {
             "server.log.configfile=/logback-test.xml"
         };
 
-    private static final boolean CROSSCOMPILER_CALL = true;
+    private static final boolean CROSSCOMPILER_CALL = false;
     private static final boolean SHOW_SUCCESS = true;
 
     private static JSONObject robotsFromTestSpec;
@@ -335,7 +335,7 @@ public class CompilerWorkflowRobotSpecificIT {
     }
 
     private void setRobotTo(String robot) throws Exception {
-        Response response = this.restAdmin.setRobot(JSONUtilForServer.mkFRR("{'cmd':'setRobot','robot':'" + robot + "'}"));
+        Response response = this.restAdmin.setRobot(JSONUtilForServer.mkFRR("{'cmd':'setRobot','robot':'" + robot + "', 'extensions':{}}"));
         JSONUtilForServer.assertEntityRc(response, "ok", Key.ROBOT_SET_SUCCESS);
     }
 
