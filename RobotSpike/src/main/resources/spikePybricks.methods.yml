@@ -41,7 +41,7 @@ TANKDRIVE_DIST:
             right_speed = (abs(right_speed)/right_speed) * 0.5
         #just go straight no need for calculations
         if abs(left_speed - right_speed) <  near_zero:
-            drive_base.settings(straight_speed= rpm_to_mm_sec(get_speed_from_percent(left_speed)))
+            drive_base.settings(straight_speed= rpm_to_mm_sec(get_rpm_from_percent(left_speed)))
             drive_base.straight(abs(left_speed)/left_speed * dist * 10)
             return True
         return False
@@ -57,8 +57,8 @@ TANKDRIVE_DIST:
         #to mm always calc with positive dist
         dist = (abs(dist) * 10)
         #we have to keep rpm to set motor speed later
-        rpm_left = get_speed_from_percent(left_speed)
-        rpm_right = get_speed_from_percent(right_speed)
+        rpm_left = get_rpm_from_percent(left_speed)
+        rpm_right = get_rpm_from_percent(right_speed)
         #we need mm/sec to calculate driven radius
         speed_left_mm_sec =  rpm_to_mm_sec(rpm_left)
         speed_right_mm_sec = rpm_to_mm_sec(rpm_right)
@@ -91,8 +91,8 @@ DIFFDRIVE:
   PYTHON: |
     def diff_drive(left_speed, right_speed, regulated):
         if(regulated):
-            left_motor.run(get_speed_from_percent(left_speed))
-            right_motor.run(get_speed_from_percent(right_speed))
+            left_motor.run(get_rpm_from_percent(left_speed))
+            right_motor.run(get_rpm_from_percent(right_speed))
         else:
             left_motor.dc(left_speed)
             right_motor.dc(right_speed)
@@ -102,13 +102,13 @@ DRIVE_STRAIGHT:
     def drive_straight(speed, dist):
         if abs(speed) < 0.5:
             speed = (abs(speed)/speed) * 0.5
-        drive_base.settings(straight_speed = rpm_to_mm_sec(get_speed_from_percent(speed)))
+        drive_base.settings(straight_speed = rpm_to_mm_sec(get_rpm_from_percent(speed)))
         drive_base.straight(abs(speed)/speed * dist * 10 )
 
 
-SPEED_FROM_PERCENT:
+RPM_FROM_PERCENT:
   PYTHON: |
-    def get_speed_from_percent(percent):
+    def get_rpm_from_percent(percent):
         if percent < -100 :
             percent = -100
         if percent > 100 :
@@ -185,7 +185,7 @@ TURN_FOR:
         if power == 0 or degrees == 0:
             return
         sign = (abs(power)/power)
-        tr = (get_speed_from_percent( power )  * (WHEEL_DIAMETER * math.pi)) / (TRACKWIDTH * math.pi)
+        tr = (get_rpm_from_percent( power )  * (WHEEL_DIAMETER * math.pi)) / (TRACKWIDTH * math.pi)
         if abs(tr) < 5 :
             tr = (abs(tr)/tr) * 5
         drive_base.settings(turn_rate = tr)
