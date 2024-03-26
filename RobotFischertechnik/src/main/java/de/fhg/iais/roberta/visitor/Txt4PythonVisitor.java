@@ -29,7 +29,6 @@ import de.fhg.iais.roberta.syntax.action.MotorOnForAction;
 import de.fhg.iais.roberta.syntax.action.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.ServoOnForAction;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
-import de.fhg.iais.roberta.syntax.action.light.LedAction;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
@@ -46,7 +45,7 @@ import de.fhg.iais.roberta.syntax.sensor.TouchKeySensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.GetLineSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.MotionSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
@@ -516,27 +515,15 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
     }
 
     @Override
-    public Void visitGetLineSensor(GetLineSensor getLineSensor) {
-        ConfigurationComponent configurationComponent = this.configurationAst.getConfigurationComponent(getLineSensor.getUserDefinedPort());
+    public Void visitInfraredSensor(InfraredSensor infraredSensor) {
+        ConfigurationComponent configurationComponent = this.configurationAst.getConfigurationComponent(infraredSensor.getUserDefinedPort());
         String port;
-        if ( getLineSensor.getSlot().equals(SC.LEFT) ) {
+        if ( infraredSensor.getSlot().equals(SC.LEFT) ) {
             port = configurationComponent.getProperty("PORTL");
         } else {
             port = configurationComponent.getProperty("PORTR");
         }
         this.src.add("(!TXT_M_", port, "_trail_follower.get_state())");
-        return null;
-    }
-
-    @Override
-    public Void visitLedAction(LedAction ledAction) {
-        String port = getPortFromConfig(ledAction.getUserDefinedPort());
-        this.src.add("TXT_M_", port, "_led.set_brightness(");
-        if ( ledAction.mode.equals(SC.ON) ) {
-            this.src.add("512)");
-        } else {
-            this.src.add("0)");
-        }
         return null;
     }
 
@@ -596,7 +583,6 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
     public Void visitColorSensor(ColorSensor colorSensor) {
         this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(Txt4Methods.CAMERAGETCOLOUR));
         this.src.add("()");
-
         return null;
     }
 

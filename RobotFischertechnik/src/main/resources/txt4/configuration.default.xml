@@ -36,12 +36,6 @@
             <field name="PORTR">I2</field>
         </block>
     </instance>
-    <instance x="350" y="560">
-        <block type="robConf_led" id="led" intask="true">
-            <field name="NAME">L</field>
-            <field name="PORT">O5</field>
-        </block>
-    </instance>
     <instance x="350" y="310">
         <block type="robConf_display" deletable="false" id="DI" intask="true">
             <field name="NAME">_B</field>

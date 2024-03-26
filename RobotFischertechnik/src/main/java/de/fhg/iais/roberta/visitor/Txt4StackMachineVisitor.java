@@ -26,7 +26,6 @@ import de.fhg.iais.roberta.syntax.action.MotorOnForAction;
 import de.fhg.iais.roberta.syntax.action.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.ServoOnForAction;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
-import de.fhg.iais.roberta.syntax.action.light.LedAction;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.logic.ColourCompare;
 import de.fhg.iais.roberta.syntax.sensor.CameraBallSensor;
@@ -37,7 +36,7 @@ import de.fhg.iais.roberta.syntax.sensor.TouchKeySensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.GetLineSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.MotionSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
@@ -143,31 +142,39 @@ public final class Txt4StackMachineVisitor extends AbstractStackMachineVisitor i
 
     @Override
     public Void visitEncoderSensor(EncoderSensor encoderSensor) {
+        // TODO
         return null;
     }
 
     @Override
     public Void visitEncoderReset(EncoderReset encoderReset) {
+        // TODO
         return null;
     }
 
     @Override
     public Void visitServoOnForAction(ServoOnForAction servoOnForAction) {
+        // not supported
         return null;
     }
 
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor ultrasonicSensor) {
-        return null;
+        String mode = ultrasonicSensor.getMode();
+        String port = ultrasonicSensor.getUserDefinedPort();
+        JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.ULTRASONIC).put(C.PORT, port).put(C.MODE, mode.toLowerCase());
+        return add(o);
     }
 
     @Override
     public Void visitKeysSensor(KeysSensor keysSensor) {
+        // not supported
         return null;
     }
 
     @Override
     public Void visitTouchKeySensor(TouchKeySensor touchKeySensor) {
+        // TODO
         return null;
     }
 
@@ -179,21 +186,21 @@ public final class Txt4StackMachineVisitor extends AbstractStackMachineVisitor i
 
     @Override
     public Void visitMotorOmniDiffStopAction(MotorOmniDiffStopAction motorOmniDiffStopAction) {
+        // TODO
         return null;
     }
 
     @Override
-    public Void visitGetLineSensor(GetLineSensor getLineSensor) {
-        return null;
-    }
-
-    @Override
-    public Void visitLedAction(LedAction ledAction) {
-        return null;
+    public Void visitInfraredSensor(InfraredSensor infraredSensor) {
+        String port = infraredSensor.getUserDefinedPort();
+        String slot = infraredSensor.getSlot().toLowerCase();
+        JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.INFRARED).put(C.PORT, port).put(C.SLOT, slot);
+        return add(o);
     }
 
     @Override
     public Void visitLedSetBrightnessAction(LedSetBrightnessAction ledSetBrightnessAction) {
+        // not supported
         return null;
     }
 
@@ -268,11 +275,15 @@ public final class Txt4StackMachineVisitor extends AbstractStackMachineVisitor i
 
     @Override
     public Void visitTimerSensor(TimerSensor timerSensor) {
-        return null;
+        String port = timerSensor.getUserDefinedPort();
+        JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.TIMER).put(C.PORT, port);
+        return add(o);
     }
 
     @Override
     public Void visitTimerReset(TimerReset timerReset) {
-        return null;
+        String port = timerReset.sensorPort;
+        JSONObject o = makeNode(C.TIMER_SENSOR_RESET).put(C.PORT, port);
+        return add(o);
     }
 }

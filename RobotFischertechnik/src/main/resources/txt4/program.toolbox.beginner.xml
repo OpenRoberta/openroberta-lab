@@ -89,7 +89,6 @@
             </value>
         </block>
         <block type='actions_display_led_off_txt4'></block>
-        <block type='actions_led'></block>
     </category>
     <category name='TOOLBOX_SENSOR' svg='true'>
         <block type='robSensors_touchkey_getSample'></block>

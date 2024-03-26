@@ -291,7 +291,7 @@ export class UltrasonicSensor extends DistanceSensor {
             ' ' +
             Blockly.Msg['SENSOR_ULTRASONIC'] +
             '</label><span>' +
-            UTIL.roundUltraSound(this.distance / 3.0, 0) +
+            UTIL.round(this.distance / 3.0, 0) +
             ' cm</span></div>'
         );
     }
@@ -331,13 +331,7 @@ export class InfraredSensor extends DistanceSensor {
     getLabel(): string {
         if (this.name) {
             return (
-                '<div><label>' +
-                this.name +
-                ' ' +
-                Blockly.Msg['SENSOR_INFRARED'] +
-                '</label><span>' +
-                UTIL.roundUltraSound(this.distance / 3.0, 0) +
-                ' cm</span></div>'
+                '<div><label>' + this.name + ' ' + Blockly.Msg['SENSOR_INFRARED'] + '</label><span>' + UTIL.round(this.distance / 3.0, 0) + ' cm</span></div>'
             );
         }
         return (
@@ -346,7 +340,7 @@ export class InfraredSensor extends DistanceSensor {
             ' ' +
             Blockly.Msg['SENSOR_INFRARED'] +
             '</label><span>' +
-            UTIL.roundUltraSound(this.distance / 3.0, 0) +
+            UTIL.round(this.distance / 3.0, 0) +
             ' cm</span></div>'
         );
     }
@@ -395,7 +389,7 @@ export class ThymioInfraredSensor extends InfraredSensor {
             distance = 100.0;
         }
         distance = UTIL.round(distance, 0);
-        return '<div><label>&nbsp;-&nbsp;' + this.name + '</label><span>' + UTIL.roundUltraSound(distance, 0) + ' %</span></div>';
+        return '<div><label>&nbsp;-&nbsp;' + this.name + '</label><span>' + UTIL.round(distance, 0) + ' %</span></div>';
     }
 
     override updateSensor(
@@ -456,7 +450,6 @@ export class LineSensor implements ISensor, IDrawable, ILabel {
     readonly color: string;
     drawPriority: number = 4;
     labelPriority: number = 4;
-    readonly port: string;
     readonly theta: number;
     readonly x: number;
     readonly y: number;
@@ -659,11 +652,17 @@ export class ThymioLineSensors implements ILabel, ISensor, IDrawable {
     }
 }
 
-export class Txt4InfraredSensors implements ILabel, ISensor, IDrawable {
+export class Txt4InfraredSensors implements ILabel, IExternalSensor, IDrawable {
     left: LineSensor;
     right: LineSensor;
+    color: string;
+    port: string;
+    theta: number;
+    x: number;
+    y: number;
 
-    constructor(location: Point) {
+    constructor(port: string, location: Point) {
+        this.port = port;
         this.left = new LineSensor({ x: location.x, y: location.y - 3 }, 3);
         this.right = new LineSensor({ x: location.x, y: location.y + 3 }, 3);
     }
@@ -704,9 +703,10 @@ export class Txt4InfraredSensors implements ILabel, ISensor, IDrawable {
         this.right.updateSensor(running, dt, myRobot, values, uCtx, udCtx, personalObstacleList);
         this.left.line = this.left.line ? true : false;
         this.right.line = this.right.line ? true : false;
-        values['infrared']['line'] = {};
-        values['infrared']['line']['left'] = this.left.line;
-        values['infrared']['line']['right'] = this.right.line;
+        values['infrared'] = {};
+        values['infrared'][this.port] = {};
+        values['infrared'][this.port]['left'] = this.left.line;
+        values['infrared'][this.port]['right'] = this.right.line;
     }
 
     drawPriority: number = 4;

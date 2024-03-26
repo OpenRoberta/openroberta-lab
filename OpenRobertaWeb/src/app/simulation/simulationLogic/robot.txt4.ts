@@ -1,5 +1,5 @@
 import { Pose, RobotBaseMobile } from 'robot.base.mobile';
-import { DistanceSensor, EV3Keys, InfraredSensor, Keys, Timer, Txt4InfraredSensors, UltrasonicSensor } from 'robot.sensors';
+import { DistanceSensor, EV3Keys, Keys, Timer, Txt4InfraredSensors, UltrasonicSensor } from 'robot.sensors';
 import { EncoderChassisDiffDrive, StatusLed, Txt4Chassis } from 'robot.actuators';
 import { RobotBase, SelectionListener } from 'robot.base';
 import { Interpreter } from 'interpreter.interpreter';
@@ -81,7 +81,7 @@ export default class RobotTxt4 extends RobotBaseMobile {
         for (const c in sensors) {
             switch (sensors[c]['TYPE']) {
                 case 'INFRARED':
-                    this[c] = new Txt4InfraredSensors({ x: 14, y: 0 });
+                    this[c] = new Txt4InfraredSensors(c, { x: 14, y: 0 });
                     break;
                 case 'ULTRASONIC': {
                     let mySensors = [];
@@ -116,11 +116,7 @@ export default class RobotTxt4 extends RobotBaseMobile {
                                 break;
                         }
                     }
-                    if (sensors[c]['TYPE'] == 'ULTRASONIC') {
-                        this[c] = new UltrasonicSensor(c, position.x, position.y, position.theta, 255);
-                    } else {
-                        this[c] = new InfraredSensor(c, position.x, position.y, position.theta, 70);
-                    }
+                    this[c] = new UltrasonicSensor(c, position.x, position.y, position.theta, 400); // see https://www.fischertechnik.de/de-de/schulen/lernmaterial/sekundarstufe-programmieren/stem-coding-competition
                     break;
                 }
             }

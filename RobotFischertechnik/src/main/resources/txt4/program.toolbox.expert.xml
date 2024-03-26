@@ -122,14 +122,6 @@
             </block>
         </category>
         <category name='TOOLBOX_LIGHT' svg='true'>
-            <block type='actions_led'></block>
-            <block type='actions_led_set_brightness'>
-                <value name="BRIGHTNESS">
-                    <block type="math_number" id="Dy#ytr1sQ2WFyWrdDQ_!" intask="true">
-                        <field name="NUM">180</field>
-                    </block>
-                </value>
-            </block>
             <block type='actions_display_led_on_txt4'>
                 <value name='COLOUR'>
                     <block type='robColour_picker'>
@@ -138,6 +130,20 @@
                 </value>
             </block>
             <block type='actions_display_led_off_txt4'></block>
+            <block type='actions_led_set_brightness'>
+                <value name="BRIGHTNESS">
+                    <block type="math_number" id="Dy#ytr1sQ2WFyWrdDQ_!" intask="true">
+                        <field name="NUM">0</field>
+                    </block>
+                </value>
+            </block>
+            <block type='actions_led_set_brightness'>
+                <value name="BRIGHTNESS">
+                    <block type="math_number" id="Dy#ytr1sQ2WFyWrdDQ_!" intask="true">
+                        <field name="NUM">100</field>
+                    </block>
+                </value>
+            </block>
         </category>
     </category>
     [sensors.touchkey.txt4, sensors.ultrasonic.txt4, sensors.infrared.txt4, sensors.timer.txt4, sensors.colour.txt4, sensors.cameraline.txt4, sensors.ball.txt4,

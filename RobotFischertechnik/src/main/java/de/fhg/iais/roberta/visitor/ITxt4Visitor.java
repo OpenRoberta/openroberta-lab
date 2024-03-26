@@ -17,7 +17,6 @@ import de.fhg.iais.roberta.syntax.action.MotorOnForAction;
 import de.fhg.iais.roberta.syntax.action.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.ServoOnForAction;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
-import de.fhg.iais.roberta.syntax.action.light.LedAction;
 import de.fhg.iais.roberta.syntax.logic.ColourCompare;
 import de.fhg.iais.roberta.syntax.sensor.CameraBallSensor;
 import de.fhg.iais.roberta.syntax.sensor.CameraLineColourSensor;
@@ -27,7 +26,7 @@ import de.fhg.iais.roberta.syntax.sensor.TouchKeySensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.GetLineSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.MotionSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
@@ -68,9 +67,7 @@ public interface ITxt4Visitor<V> extends IVisitor<V> {
 
     V visitMotorOmniDiffStopAction(MotorOmniDiffStopAction motorOmniDiffStopAction);
 
-    V visitGetLineSensor(GetLineSensor getLineSensor);
-
-    V visitLedAction(LedAction ledAction);
+    V visitInfraredSensor(InfraredSensor infraredSensor);
 
     V visitLedSetBrightnessAction(LedSetBrightnessAction ledSetBrightnessAction);
 
