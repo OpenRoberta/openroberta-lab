@@ -826,6 +826,8 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
             src.add("TRACKWIDTH = ").add(diffDrive.getComponentProperties().get("BRICK_TRACK_WIDTH")).add(" * 10").nlI();
             src.add("WHEEL_DIAMETER = 56").nlI();
             src.add("drive_base = DriveBase(left_motor, right_motor, wheel_diameter=WHEEL_DIAMETER, axle_track=TRACKWIDTH)").nlI();
+            //accelerate to max speed within 0.1 seconds, this value is subject to change
+            src.add("drive_base.settings(straight_acceleration=810*10, turn_acceleration=810*10)").nlI();
         }
     }
 
