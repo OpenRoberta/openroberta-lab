@@ -82,8 +82,8 @@ TANKDRIVE_DIST:
         if not rpm_right :
             rpm_right = 1
     
-        left_motor.run_angle(rpm_left,abs(rpm_left)/rpm_left * sign * angle_left , wait=False)
-        right_motor.run_angle(rpm_right,abs(rpm_right)/rpm_right * sign * angle_right, wait=False)
+        left_motor.run_angle(rpm_left, sign * abs(angle_left) , wait=False)
+        right_motor.run_angle(rpm_right, sign * abs(angle_right) , wait=False)
     
         wait_for_completion()
 
