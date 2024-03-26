@@ -120,12 +120,12 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
             src.add("drive_base.drive(");
             switch ( motorDiffOnAction.direction ) {
                 case "BACKWARD":
-                    src.add("-(").add("rpm_to_mm_sec(get_rpm_from_percent").add("(");
+                    src.add("-(").add("deg_sec_to_mm_sec(get_deg_sec_from_percent").add("(");
                     motorDiffOnAction.power.accept(this);
                     src.add(")))");
                     break;
                 case "FORWARD":
-                    src.add("rpm_to_mm_sec(get_rpm_from_percent").add("(");
+                    src.add("deg_sec_to_mm_sec(get_deg_sec_from_percent").add("(");
                     motorDiffOnAction.power.accept(this);
                     src.add("))");
                     break;
@@ -166,12 +166,12 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
             src.add("drive_base.drive(0,");
             switch ( motorDiffTurnAction.direction ) {
                 case "RIGHT":
-                    src.add(" get_rpm_from_percent").add("(");
+                    src.add(" get_deg_sec_from_percent").add("(");
                     motorDiffTurnAction.power.accept(this);
                     src.add(") * (WHEEL_DIAMETER * math.pi) / (TRACKWIDTH * math.pi)");
                     break;
                 case "LEFT":
-                    src.add(" -( get_rpm_from_percent").add("(");
+                    src.add(" -( get_deg_sec_from_percent").add("(");
                     motorDiffTurnAction.power.accept(this);
                     src.add(")) * (WHEEL_DIAMETER * math.pi) / (TRACKWIDTH * math.pi)");
                     break;
@@ -427,7 +427,7 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
                 throw new DbcException("Invalid motor unit: " + motorOnForAction.unit);
         }
         motorOnForAction.value.accept(this);
-        src.add(", speed = get_rpm_from_percent(");
+        src.add(", speed = get_deg_sec_from_percent(");
         motorOnForAction.power.accept(this);
         src.add("))");
 
@@ -439,7 +439,7 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
 
         src.add("motor").add(motorPort);
         if ( motorOnAction.regulation ) {
-            src.add(".run(get_rpm_from_percent(");
+            src.add(".run(get_deg_sec_from_percent(");
             motorOnAction.power.accept(this);
             src.add("))");
         } else {

@@ -4,7 +4,7 @@ package de.fhg.iais.roberta.visitor.spikePybricks;
 public enum SpikePybricksMethods {
     HSVTORGB,
     TANKDRIVE_DIST,
-    RPM_FROM_PERCENT,
+    DEG_SEC_FROM_PERCENT,
     TURN_FOR,
     DRIVE_STRAIGHT,
     SHOW_ANIMATION,
@@ -15,5 +15,7 @@ public enum SpikePybricksMethods {
     GET_ACCELERATION,
     DIFFDRIVE,
     DISPLAY_TEXT,
-    RPM_TO_MM_SEC, CIRCLE_CIRCUMFERENCE, HUB_LIGHT
+    DEG_SEC_TO_MM_SEC,
+    CIRCLE_CIRCUMFERENCE,
+    HUB_LIGHT
 }

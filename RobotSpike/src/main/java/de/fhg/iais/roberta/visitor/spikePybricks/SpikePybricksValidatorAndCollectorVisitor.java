@@ -42,7 +42,7 @@ public class SpikePybricksValidatorAndCollectorVisitor extends AbstractSpikeVali
     @Override
     final public Void visitMotorDiffTurnForAction(MotorDiffTurnForAction motorDiffTurnForAction) {
         super.visitMotorDiffTurnForAction(motorDiffTurnForAction);
-        usedMethodBuilder.addUsedMethod(SpikePybricksMethods.RPM_FROM_PERCENT);
+        usedMethodBuilder.addUsedMethod(SpikePybricksMethods.DEG_SEC_FROM_PERCENT);
         usedMethodBuilder.addUsedMethod(SpikePybricksMethods.TURN_FOR);
         return null;
     }
@@ -65,9 +65,9 @@ public class SpikePybricksValidatorAndCollectorVisitor extends AbstractSpikeVali
     @Override
     final public Void visitMotorDiffOnForAction(MotorDiffOnForAction motorDiffOnForAction) {
         super.visitMotorDiffOnForAction(motorDiffOnForAction);
-        usedMethodBuilder.addUsedMethod(SpikePybricksMethods.RPM_TO_MM_SEC);
+        usedMethodBuilder.addUsedMethod(SpikePybricksMethods.DEG_SEC_TO_MM_SEC);
         usedMethodBuilder.addUsedMethod(SpikePybricksMethods.CIRCLE_CIRCUMFERENCE);
-        usedMethodBuilder.addUsedMethod(SpikePybricksMethods.RPM_FROM_PERCENT);
+        usedMethodBuilder.addUsedMethod(SpikePybricksMethods.DEG_SEC_FROM_PERCENT);
         usedMethodBuilder.addUsedMethod(SpikePybricksMethods.DRIVE_STRAIGHT);
         return null;
     }
@@ -75,7 +75,7 @@ public class SpikePybricksValidatorAndCollectorVisitor extends AbstractSpikeVali
     @Override
     final public Void visitMotorDiffTurnAction(MotorDiffTurnAction motorDiffTurnAction) {
         super.visitMotorDiffTurnAction(motorDiffTurnAction);
-        usedMethodBuilder.addUsedMethod(SpikePybricksMethods.RPM_FROM_PERCENT);
+        usedMethodBuilder.addUsedMethod(SpikePybricksMethods.DEG_SEC_FROM_PERCENT);
         if(!motorDiffTurnAction.regulation)
             usedMethodBuilder.addUsedMethod(SpikePybricksMethods.DIFFDRIVE);
         return null;
@@ -84,11 +84,11 @@ public class SpikePybricksValidatorAndCollectorVisitor extends AbstractSpikeVali
     @Override
     final public Void visitMotorDiffOnAction(MotorDiffOnAction motorDiffOnAction) {
         super.visitMotorDiffOnAction(motorDiffOnAction);
-        usedMethodBuilder.addUsedMethod(SpikePybricksMethods.RPM_FROM_PERCENT);
+        usedMethodBuilder.addUsedMethod(SpikePybricksMethods.DEG_SEC_FROM_PERCENT);
         if(!motorDiffOnAction.regulation)
             usedMethodBuilder.addUsedMethod(SpikePybricksMethods.DIFFDRIVE);
         else {
-            usedMethodBuilder.addUsedMethod(SpikePybricksMethods.RPM_TO_MM_SEC);
+            usedMethodBuilder.addUsedMethod(SpikePybricksMethods.DEG_SEC_TO_MM_SEC);
             usedMethodBuilder.addUsedMethod(SpikePybricksMethods.CIRCLE_CIRCUMFERENCE);
         }
         return null;
@@ -100,9 +100,9 @@ public class SpikePybricksValidatorAndCollectorVisitor extends AbstractSpikeVali
         usedHardwareBuilder.addUsedImport(new UsedImport(SC.WAIT));
         usedMethodBuilder.addUsedMethod(SpikePybricksMethods.DIFFDRIVE);
         usedMethodBuilder.addUsedMethod(SpikePybricksMethods.TANKDRIVE_DIST);
-        usedMethodBuilder.addUsedMethod(SpikePybricksMethods.RPM_TO_MM_SEC);
+        usedMethodBuilder.addUsedMethod(SpikePybricksMethods.DEG_SEC_TO_MM_SEC);
         usedMethodBuilder.addUsedMethod(SpikePybricksMethods.CIRCLE_CIRCUMFERENCE);
-        usedMethodBuilder.addUsedMethod(SpikePybricksMethods.RPM_FROM_PERCENT);
+        usedMethodBuilder.addUsedMethod(SpikePybricksMethods.DEG_SEC_FROM_PERCENT);
         return null;
     }
 
@@ -110,7 +110,7 @@ public class SpikePybricksValidatorAndCollectorVisitor extends AbstractSpikeVali
     final public Void visitMotorDiffCurveAction(MotorDiffCurveAction motorDiffCurveAction) {
         super.visitMotorDiffCurveAction(motorDiffCurveAction);
         usedMethodBuilder.addUsedMethod(SpikePybricksMethods.DIFFDRIVE);
-        usedMethodBuilder.addUsedMethod(SpikePybricksMethods.RPM_FROM_PERCENT);
+        usedMethodBuilder.addUsedMethod(SpikePybricksMethods.DEG_SEC_FROM_PERCENT);
         return null;
     }
 
@@ -137,7 +137,7 @@ public class SpikePybricksValidatorAndCollectorVisitor extends AbstractSpikeVali
     @Override
     final public Void visitMotorOnForAction(MotorOnForAction motorOnForAction) {
         super.visitMotorOnForAction(motorOnForAction);
-        usedMethodBuilder.addUsedMethod(SpikePybricksMethods.RPM_FROM_PERCENT);
+        usedMethodBuilder.addUsedMethod(SpikePybricksMethods.DEG_SEC_FROM_PERCENT);
         usedHardwareBuilder.addUsedImport(new UsedImport(SC.PORT));
         return null;
     }
@@ -145,14 +145,14 @@ public class SpikePybricksValidatorAndCollectorVisitor extends AbstractSpikeVali
     @Override
     final public Void visitMotorOnAction(MotorOnAction motorOnAction) {
         super.visitMotorOnAction(motorOnAction);
-        usedMethodBuilder.addUsedMethod(SpikePybricksMethods.RPM_FROM_PERCENT);
+        usedMethodBuilder.addUsedMethod(SpikePybricksMethods.DEG_SEC_FROM_PERCENT);
         usedHardwareBuilder.addUsedImport(new UsedImport(SC.PORT));
         return null;
     }
 
     final public Void visitMotorStopAction(MotorStopAction motorStopAction) {
         super.visitMotorStopAction(motorStopAction);
-        usedMethodBuilder.addUsedMethod(SpikePybricksMethods.RPM_FROM_PERCENT);
+        usedMethodBuilder.addUsedMethod(SpikePybricksMethods.DEG_SEC_FROM_PERCENT);
         usedHardwareBuilder.addUsedImport(new UsedImport(SC.PORT));
         return null;
     }
