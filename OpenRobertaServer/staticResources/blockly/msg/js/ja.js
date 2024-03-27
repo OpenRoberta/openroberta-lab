@@ -632,6 +632,7 @@ Blockly.Msg.LOGIC_BOOLEAN_FALSE = "false";
 Blockly.Msg.LOGIC_BOOLEAN_HELPURL = "https://github.com/google/blockly/wiki/Logic#values";  // untranslated
 Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP = "True または false を返します。";
 Blockly.Msg.LOGIC_BOOLEAN_TRUE = "true";
+Blockly.Msg.LOGIC_COLOUR_COMPARE_TOOLTIP = "Compares two colors based on their hue values while considering a specified tolerance range [0°-360°].";  // untranslated
 Blockly.Msg.LOGIC_COMPARE_HELPURL = "https://ja.wikipedia.org/wiki/不等式";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_EQ = "もし両方がお互いに等しく入力した場合は true を返します。";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GT = "最初の入力が 2 番目の入力よりも大きい場合は true を返します。";

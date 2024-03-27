@@ -632,6 +632,7 @@ Blockly.Msg.LOGIC_BOOLEAN_FALSE = "хлусьня";
 Blockly.Msg.LOGIC_BOOLEAN_HELPURL = "https://github.com/google/blockly/wiki/Logic#values";  // untranslated
 Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP = "Вяртае «ісьціна» ці «хлусьня».";
 Blockly.Msg.LOGIC_BOOLEAN_TRUE = "ісьціна";
+Blockly.Msg.LOGIC_COLOUR_COMPARE_TOOLTIP = "Compares two colors based on their hue values while considering a specified tolerance range [0°-360°].";  // untranslated
 Blockly.Msg.LOGIC_COMPARE_HELPURL = "https://be-x-old.wikipedia.org/wiki/%D0%9D%D1%8F%D1%80%D0%BE%D1%9E%D0%BD%D0%B0%D1%81%D1%8C%D1%86%D1%8C";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_EQ = "Вяртае «ісьціна», калі абодва ўводы роўныя.";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GT = "Вяртае «ісьціна», калі першы ўвод большы за другі.";

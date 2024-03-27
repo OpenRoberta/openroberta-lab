@@ -632,6 +632,7 @@ Blockly.Msg.LOGIC_BOOLEAN_FALSE = "false";
 Blockly.Msg.LOGIC_BOOLEAN_HELPURL = "https://github.com/google/blockly/wiki/Logic#values";  // untranslated
 Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP = "Retorna o ver o false.";
 Blockly.Msg.LOGIC_BOOLEAN_TRUE = "ver";
+Blockly.Msg.LOGIC_COLOUR_COMPARE_TOOLTIP = "Compares two colors based on their hue values while considering a specified tolerance range [0°-360°].";  // untranslated
 Blockly.Msg.LOGIC_COMPARE_HELPURL = "https://en.wikipedia.org/wiki/Inequality_(mathematics)";  // untranslated
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_EQ = "Retornar ver si le duo entratas es equal.";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GT = "Retornar ver si le prime entrata es major que le secunde.";

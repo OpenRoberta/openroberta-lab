@@ -632,6 +632,7 @@ Blockly.Msg.LOGIC_BOOLEAN_FALSE = "e pasaktë";
 Blockly.Msg.LOGIC_BOOLEAN_HELPURL = "https://github.com/google/blockly/wiki/Logic#values";  // untranslated
 Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP = "Kthehet ose të saktë ose të pasaktë.";
 Blockly.Msg.LOGIC_BOOLEAN_TRUE = "e saktë";
+Blockly.Msg.LOGIC_COLOUR_COMPARE_TOOLTIP = "Compares two colors based on their hue values while considering a specified tolerance range [0°-360°].";  // untranslated
 Blockly.Msg.LOGIC_COMPARE_HELPURL = "http://en.wikipedia.org/wiki/Inequality_(mathematics)";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_EQ = "Ktheje të saktë nëse të dy hyrjet janë të barabarta me njëra-tjetrën.";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GT = "Ktheje të saktë nëse hyrja e parë është më e madhe se hyrja e dytë.";

@@ -632,6 +632,7 @@ Blockly.Msg.LOGIC_BOOLEAN_FALSE = "epätosi";
 Blockly.Msg.LOGIC_BOOLEAN_HELPURL = "https://github.com/google/blockly/wiki/Logic#values";  // untranslated
 Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP = "Palauttaa joko tosi tai epätosi.";
 Blockly.Msg.LOGIC_BOOLEAN_TRUE = "tosi";
+Blockly.Msg.LOGIC_COLOUR_COMPARE_TOOLTIP = "Compares two colors based on their hue values while considering a specified tolerance range [0°-360°].";  // untranslated
 Blockly.Msg.LOGIC_COMPARE_HELPURL = "https://fi.wikipedia.org/wiki/Ep%C3%A4yht%C3%A4l%C3%B6";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_EQ = "Palauta tosi, jos syötteet ovat keskenään samat.";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GT = "Palauttaa tosi, jos ensimmäinen syöte on suurempi, kuin toinen.";

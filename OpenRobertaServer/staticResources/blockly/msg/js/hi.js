@@ -632,6 +632,7 @@ Blockly.Msg.LOGIC_BOOLEAN_FALSE = "फॉल्स";
 Blockly.Msg.LOGIC_BOOLEAN_HELPURL = "https://github.com/google/blockly/wiki/Logic#values";  // untranslated
 Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP = "ट्रू या फॉल्स रिटर्न करता है।";
 Blockly.Msg.LOGIC_BOOLEAN_TRUE = "ट्रू";
+Blockly.Msg.LOGIC_COLOUR_COMPARE_TOOLTIP = "Compares two colors based on their hue values while considering a specified tolerance range [0°-360°].";  // untranslated
 Blockly.Msg.LOGIC_COMPARE_HELPURL = "https://en.wikipedia.org/wiki/Inequality_(mathematics)";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_EQ = "ट्रू रिटर्न करें यदि दोनो इनपुट इक दूसरे के बराबर हों।";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GT = "ट्रू रिटर्न करें यदि पहला इनपुट दूसरे इनपुट से बड़ा हो।";

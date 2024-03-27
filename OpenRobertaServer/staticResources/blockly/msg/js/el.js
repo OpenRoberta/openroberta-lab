@@ -632,6 +632,7 @@ Blockly.Msg.LOGIC_BOOLEAN_FALSE = "ψευδής";
 Blockly.Msg.LOGIC_BOOLEAN_HELPURL = "https://github.com/google/blockly/wiki/Logic#values";  // untranslated
 Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP = "Επιστρέφει είτε αληθής είτε ψευδής.";
 Blockly.Msg.LOGIC_BOOLEAN_TRUE = "αληθής";
+Blockly.Msg.LOGIC_COLOUR_COMPARE_TOOLTIP = "Compares two colors based on their hue values while considering a specified tolerance range [0°-360°].";  // untranslated
 Blockly.Msg.LOGIC_COMPARE_HELPURL = "https://en.wikipedia.org/wiki/Inequality_(mathematics)";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_EQ = "Επιστρέφει αληθής αν και οι δύο είσοδοι είναι ίσες μεταξύ τους.";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GT = "Επιστρέφει αληθής αν η πρώτη είσοδος είναι μεγαλύτερη από τη δεύτερη είσοδο.";

@@ -632,6 +632,7 @@ Blockly.Msg.LOGIC_BOOLEAN_FALSE = "нетачно";
 Blockly.Msg.LOGIC_BOOLEAN_HELPURL = "https://github.com/google/blockly/wiki/Logic#values";  // untranslated
 Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP = "враћа вредност или тачно или нетачно.";
 Blockly.Msg.LOGIC_BOOLEAN_TRUE = "тачно";
+Blockly.Msg.LOGIC_COLOUR_COMPARE_TOOLTIP = "Compares two colors based on their hue values while considering a specified tolerance range [0°-360°].";  // untranslated
 Blockly.Msg.LOGIC_COMPARE_HELPURL = "https://sr.wikipedia.org/wiki/Неједнакост";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_EQ = "Враћа вредност „тачно“ ако су оба улаза једнака.";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GT = "Враћа вредност „тачно“ ако је први улаз већи од другог.";

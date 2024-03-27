@@ -632,6 +632,7 @@ Blockly.Msg.LOGIC_BOOLEAN_FALSE = "səhf";
 Blockly.Msg.LOGIC_BOOLEAN_HELPURL = "https://github.com/google/blockly/wiki/Logic#values";  // untranslated
 Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP = "\"doğru\" və ya \"səhf\" cavanını qaytarır.";
 Blockly.Msg.LOGIC_BOOLEAN_TRUE = "doğru";
+Blockly.Msg.LOGIC_COLOUR_COMPARE_TOOLTIP = "Compares two colors based on their hue values while considering a specified tolerance range [0°-360°].";  // untranslated
 Blockly.Msg.LOGIC_COMPARE_HELPURL = "https://az.wikipedia.org/wiki/bərabərsizlik_(riyazi)";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_EQ = "Girişlər bir birinə bərabərdirsə \"doğru\" cavabını qaytarır.";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GT = "Birinci giriş ikincidən böyükdürsə \"doğru\" cavabını qaytarır.";

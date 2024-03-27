@@ -632,6 +632,7 @@ Blockly.Msg.LOGIC_BOOLEAN_FALSE = "sai";
 Blockly.Msg.LOGIC_BOOLEAN_HELPURL = "https://github.com/google/blockly/wiki/Logic#values";  // untranslated
 Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP = "Hoàn trả \"đúng\" hoặc \"sai\".";
 Blockly.Msg.LOGIC_BOOLEAN_TRUE = "đúng";
+Blockly.Msg.LOGIC_COLOUR_COMPARE_TOOLTIP = "Compares two colors based on their hue values while considering a specified tolerance range [0°-360°].";  // untranslated
 Blockly.Msg.LOGIC_COMPARE_HELPURL = "https://vi.wikipedia.org/wiki/B%E1%BA%A5t_%C4%91%E1%BA%B3ng_th%E1%BB%A9c";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_EQ = "Hoàn trả giá trị \"đúng\" (true) nếu giá trị hai đầu vào bằng nhau.";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GT = "Hoàn trả giá trị \"đúng\" (true) nếu đầu vào thứ nhất lớn hơn đầu vào thứ hai.";

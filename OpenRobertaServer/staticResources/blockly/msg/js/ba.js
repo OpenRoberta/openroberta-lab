@@ -632,6 +632,7 @@ Blockly.Msg.LOGIC_BOOLEAN_FALSE = "ялған";
 Blockly.Msg.LOGIC_BOOLEAN_HELPURL = "https://github.com/google/blockly/wiki/Logic#values";  // untranslated
 Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP = "Дөрөҫ йәки ялғанды ҡайтара.";
 Blockly.Msg.LOGIC_BOOLEAN_TRUE = "дөрөҫ";
+Blockly.Msg.LOGIC_COLOUR_COMPARE_TOOLTIP = "Compares two colors based on their hue values while considering a specified tolerance range [0°-360°].";  // untranslated
 Blockly.Msg.LOGIC_COMPARE_HELPURL = "https://en.wikipedia.org/wiki/Inequality_(математика)";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_EQ = "Өҫтәмәләр тигеҙ булһа, дөрөҫ мәғәнәһен кире ҡайтара.";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GT = "Беренсе өҫтәмә икенсеһенән ҙурыраҡ булһа, дөрөҫ мәғәнәһен кире ҡайтара.";

@@ -632,6 +632,7 @@ Blockly.Msg.LOGIC_BOOLEAN_FALSE = "মিথ্যা";
 Blockly.Msg.LOGIC_BOOLEAN_HELPURL = "https://github.com/google/blockly/wiki/Logic#values";  // untranslated
 Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP = "পাঠাবে হয় সত্য অথবা মিথ্যা।";
 Blockly.Msg.LOGIC_BOOLEAN_TRUE = "সত্য";
+Blockly.Msg.LOGIC_COLOUR_COMPARE_TOOLTIP = "Compares two colors based on their hue values while considering a specified tolerance range [0°-360°].";  // untranslated
 Blockly.Msg.LOGIC_COMPARE_HELPURL = "https://en.wikipedia.org/wiki/Inequality_(mathematics)";  // untranslated
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_EQ = "পাঠাবে সত্য যদি উভয় ইনপুটই সমান হয়।";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GT = "পাঠাবে সত্য যদি প্রথম ইনপুট দ্বিতীয় ইনপুট থেকে বড় হয়।";

@@ -632,6 +632,7 @@ Blockly.Msg.LOGIC_BOOLEAN_FALSE = "nepravda";
 Blockly.Msg.LOGIC_BOOLEAN_HELPURL = "https://github.com/google/blockly/wiki/Logic#values";  // untranslated
 Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP = "Vráť buď hodnotu pravda alebo nepravda.";
 Blockly.Msg.LOGIC_BOOLEAN_TRUE = "pravda";
+Blockly.Msg.LOGIC_COLOUR_COMPARE_TOOLTIP = "Compares two colors based on their hue values while considering a specified tolerance range [0°-360°].";  // untranslated
 Blockly.Msg.LOGIC_COMPARE_HELPURL = "https://en.wikipedia.org/wiki/Inequality_(mathematics)";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_EQ = "Vráť hodnotu pravda, ak sú vstupy rovnaké.";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GT = "Vráť hodnotu pravda ak prvý vstup je väčší než druhý.";

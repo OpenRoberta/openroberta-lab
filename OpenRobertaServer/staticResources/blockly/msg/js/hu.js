@@ -632,6 +632,7 @@ Blockly.Msg.LOGIC_BOOLEAN_FALSE = "hamis";
 Blockly.Msg.LOGIC_BOOLEAN_HELPURL = "https://github.com/google/blockly/wiki/Logic#values";  // untranslated
 Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP = "Igaz, vagy hamis érték";
 Blockly.Msg.LOGIC_BOOLEAN_TRUE = "igaz";
+Blockly.Msg.LOGIC_COLOUR_COMPARE_TOOLTIP = "Compares two colors based on their hue values while considering a specified tolerance range [0°-360°].";  // untranslated
 Blockly.Msg.LOGIC_COMPARE_HELPURL = "https://hu.wikipedia.org/wiki/Egyenl%C5%91tlens%C3%A9g";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_EQ = "Igaz, ha a kifejezés két oldala egyenlő.";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GT = "Igaz, ha a bal oldali kifejezés nagyobb, mint a jobb oldali.";

@@ -632,6 +632,7 @@ Blockly.Msg.LOGIC_BOOLEAN_FALSE = "שגוי";
 Blockly.Msg.LOGIC_BOOLEAN_HELPURL = "https://github.com/google/blockly/wiki/Logic#values";  // untranslated
 Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP = "תחזיר אם נכון או אם שגוי.";
 Blockly.Msg.LOGIC_BOOLEAN_TRUE = "נכון";
+Blockly.Msg.LOGIC_COLOUR_COMPARE_TOOLTIP = "Compares two colors based on their hue values while considering a specified tolerance range [0°-360°].";  // untranslated
 Blockly.Msg.LOGIC_COMPARE_HELPURL = "https://en.wikipedia.org/wiki/Inequality_(mathematics)";  // untranslated
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_EQ = "תחזיר נכון אם שני הקלטים שווים אחד לשני.";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GT = "תחזיר נכון אם הקלט הראשון גדול יותר מהקלט השני.";

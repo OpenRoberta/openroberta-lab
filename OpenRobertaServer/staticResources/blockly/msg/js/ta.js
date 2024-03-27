@@ -632,6 +632,7 @@ Blockly.Msg.LOGIC_BOOLEAN_FALSE = "பொய்";
 Blockly.Msg.LOGIC_BOOLEAN_HELPURL = "https://github.com/google/blockly/wiki/Logic#values";  // untranslated
 Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP = "மெய், அல்லது பொய் பின்கொடு.";
 Blockly.Msg.LOGIC_BOOLEAN_TRUE = "மெய்";
+Blockly.Msg.LOGIC_COLOUR_COMPARE_TOOLTIP = "Compares two colors based on their hue values while considering a specified tolerance range [0°-360°].";  // untranslated
 Blockly.Msg.LOGIC_COMPARE_HELPURL = "https://en.wikipedia.org/wiki/Inequality_(mathematics)";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_EQ = "இரண்டு மாறியும் ஈடானால், மெய் பின்கொடு.";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GT = "முதல் உள்ளீடு இரண்டாவதைவிட அதிகமாக இருந்தால், மெய் பின்கொடு.";

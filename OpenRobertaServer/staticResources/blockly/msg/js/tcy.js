@@ -632,6 +632,7 @@ Blockly.Msg.LOGIC_BOOLEAN_FALSE = "ಸುಲ್ಲು";
 Blockly.Msg.LOGIC_BOOLEAN_HELPURL = "https://github.com/google/blockly/wiki/Logic#values";  // untranslated
 Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP = "Returns either true or false.";  // untranslated
 Blockly.Msg.LOGIC_BOOLEAN_TRUE = "ಸತ್ಯೊ";
+Blockly.Msg.LOGIC_COLOUR_COMPARE_TOOLTIP = "Compares two colors based on their hue values while considering a specified tolerance range [0°-360°].";  // untranslated
 Blockly.Msg.LOGIC_COMPARE_HELPURL = "https://en.wikipedia.org/wiki/Inequality_(mathematics)";  // untranslated
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_EQ = "ರಡ್ಡ್ ಅತ್ತಂದೆ ಬೇತೆ ಸೂಚನೆಲು ನಿಜೊಕ್ಕುಲಾ ಸಮೊ ಇತ್ತ್ಂಡ ಪಿರ ಕೊರ್ಲೆ.";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GT = "ಸುರುತ ಅತ್ತಂದೆ ರಡ್ಡನೆದ ಸೂಚನೆಡ್ದ್ ನಿಜೊಕ್ಕುಲಾ ಮಲ್ಲೆ ಆದಿತ್ತ್ಂಡ ಪಿರ ಕೊರ್ಲೆ";

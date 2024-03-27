@@ -132,6 +132,13 @@
     </category>
     <category name="TOOLBOX_LOGIC" svg="true">
         <block type="logic_compare"/>
+        <block type='logic_colour_compare'>
+            <value name='TOLERANCE'>
+                <block type='math_number'>
+                    <field name='NUM'>50</field>
+                </block>
+            </value>
+        </block>
         <block type="logic_operation"/>
         <block type="logic_boolean"/>
     </category>

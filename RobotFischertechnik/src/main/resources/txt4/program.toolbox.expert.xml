@@ -244,7 +244,13 @@
                 </block>
             </value>
         </block>
-        <block type='logic_colour_compare'></block>
+        <block type='logic_colour_compare'>
+            <value name='TOLERANCE'>
+                <block type='math_number'>
+                    <field name='NUM'>50</field>
+                </block>
+            </value>
+        </block>
         <block type='logic_operation'></block>
         <block type='logic_negate'></block>
         <block type='logic_boolean'></block>

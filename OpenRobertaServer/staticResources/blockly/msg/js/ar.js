@@ -632,6 +632,7 @@ Blockly.Msg.LOGIC_BOOLEAN_FALSE = "خاطئ";
 Blockly.Msg.LOGIC_BOOLEAN_HELPURL = "https://github.com/google/blockly/wiki/Logic#values";  // untranslated
 Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP = "يرجع صحيح أو خاطئ.";
 Blockly.Msg.LOGIC_BOOLEAN_TRUE = "صحيح";
+Blockly.Msg.LOGIC_COLOUR_COMPARE_TOOLTIP = "Compares two colors based on their hue values while considering a specified tolerance range [0°-360°].";  // untranslated
 Blockly.Msg.LOGIC_COMPARE_HELPURL = "https://en.wikipedia.org/wiki/Inequality_(mathematics)";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_EQ = "يرجع صحيح إذا كان كلا المدخلات مساوية بعضها البعض.";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GT = "يرجع صحيح إذا كان الإدخال الأول أكبر من الإدخال الثاني.";

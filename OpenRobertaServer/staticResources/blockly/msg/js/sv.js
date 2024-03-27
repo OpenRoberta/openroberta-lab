@@ -632,6 +632,7 @@ Blockly.Msg.LOGIC_BOOLEAN_FALSE = "falskt";
 Blockly.Msg.LOGIC_BOOLEAN_HELPURL = "https://github.com/google/blockly/wiki/Logic#values";  // untranslated
 Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP = "Returnerar antingen sant eller falskt.";
 Blockly.Msg.LOGIC_BOOLEAN_TRUE = "sant";
+Blockly.Msg.LOGIC_COLOUR_COMPARE_TOOLTIP = "Compares two colors based on their hue values while considering a specified tolerance range [0°-360°].";  // untranslated
 Blockly.Msg.LOGIC_COMPARE_HELPURL = "https://sv.wikipedia.org/wiki/Olikhet";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_EQ = "Ger tillbaka sant om båda värdena är lika med varandra.";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GT = "Ger tillbaka sant om det första värdet är större än det andra.";

@@ -632,6 +632,7 @@ Blockly.Msg.LOGIC_BOOLEAN_FALSE = "onwaar";
 Blockly.Msg.LOGIC_BOOLEAN_HELPURL = "https://github.com/google/blockly/wiki/Logic#values";
 Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP = "Geeft \"waar\" of \"onwaar\" terug.";
 Blockly.Msg.LOGIC_BOOLEAN_TRUE = "waar";
+Blockly.Msg.LOGIC_COLOUR_COMPARE_TOOLTIP = "Compares two colors based on their hue values while considering a specified tolerance range [0°-360°].";  // untranslated
 Blockly.Msg.LOGIC_COMPARE_HELPURL = "https://nl.wikipedia.org/wiki/Ongelijkheid_(wiskunde)";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_EQ = "Geeft \"waar\", als beide waarden gelijk aan elkaar zijn.";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GT = "Geeft \"waar\" terug als de eerste invoer meer is dan de tweede invoer.";

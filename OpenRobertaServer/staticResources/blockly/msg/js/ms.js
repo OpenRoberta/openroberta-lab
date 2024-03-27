@@ -632,6 +632,7 @@ Blockly.Msg.LOGIC_BOOLEAN_FALSE = "palsu";
 Blockly.Msg.LOGIC_BOOLEAN_HELPURL = "https://github.com/google/blockly/wiki/Logic#values";  // untranslated
 Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP = "Kembalikan samada benar atau palsu.";
 Blockly.Msg.LOGIC_BOOLEAN_TRUE = "benar";
+Blockly.Msg.LOGIC_COLOUR_COMPARE_TOOLTIP = "Compares two colors based on their hue values while considering a specified tolerance range [0°-360°].";  // untranslated
 Blockly.Msg.LOGIC_COMPARE_HELPURL = "https://id.wikipedia.org/wiki/Pertidaksamaan";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_EQ = "Kembali benar jika kedua-dua input benar antara satu sama lain.";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GT = "Kembali benar jika input pertama adalah lebih besar daripada input kedua.";

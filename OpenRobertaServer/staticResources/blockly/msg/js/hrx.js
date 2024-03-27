@@ -632,6 +632,7 @@ Blockly.Msg.LOGIC_BOOLEAN_FALSE = "falsch";
 Blockly.Msg.LOGIC_BOOLEAN_HELPURL = "https://github.com/google/blockly/wiki/Logic#values";  // untranslated
 Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP = "Ist entweder woahr (true) orrer falsch (false)";
 Blockly.Msg.LOGIC_BOOLEAN_TRUE = "woahr";
+Blockly.Msg.LOGIC_COLOUR_COMPARE_TOOLTIP = "Compares two colors based on their hue values while considering a specified tolerance range [0°-360°].";  // untranslated
 Blockly.Msg.LOGIC_COMPARE_HELPURL = "https://hrx.wikipedia.org/wiki/Vergleich_%28Zahlen%29";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_EQ = "Ist woahr (true) wenn beide Wearte identisch sind.";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GT = "Ist woahr (true) wenn der erschte Weart grösser als der zwooite Weart ist.";

@@ -632,6 +632,7 @@ Blockly.Msg.LOGIC_BOOLEAN_FALSE = "klaidinga";
 Blockly.Msg.LOGIC_BOOLEAN_HELPURL = "https://github.com/google/blockly/wiki/Logic#values";  // untranslated
 Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP = "Reikšmė gali būti \"teisinga\"/\"Taip\" arba \"klaidinga\"/\"Ne\".";
 Blockly.Msg.LOGIC_BOOLEAN_TRUE = "tiesa";
+Blockly.Msg.LOGIC_COLOUR_COMPARE_TOOLTIP = "Compares two colors based on their hue values while considering a specified tolerance range [0°-360°].";  // untranslated
 Blockly.Msg.LOGIC_COMPARE_HELPURL = "https://en.wikipedia.org/wiki/Inequality_(mathematics)";  // untranslated
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_EQ = "Tenkinama, jei abu reiškiniai lygūs.";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GT = "Return true if the first input is greater than the second input.";  // untranslated

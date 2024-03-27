@@ -632,6 +632,7 @@ Blockly.Msg.LOGIC_BOOLEAN_FALSE = "gaou";
 Blockly.Msg.LOGIC_BOOLEAN_HELPURL = "https://github.com/google/blockly/wiki/Logic#values";  // untranslated
 Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP = "Distreiñ pe gwir pe faos";
 Blockly.Msg.LOGIC_BOOLEAN_TRUE = "gwir";
+Blockly.Msg.LOGIC_COLOUR_COMPARE_TOOLTIP = "Compares two colors based on their hue values while considering a specified tolerance range [0°-360°].";  // untranslated
 Blockly.Msg.LOGIC_COMPARE_HELPURL = "https://en.wikipedia.org/wiki/Inequality_(mathematics)";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_EQ = "Distreiñ gwir m'eo par an daou voned.";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GT = "Distreiñ gwir m'eo brasoc'h ar moned kentañ eget an eil.";

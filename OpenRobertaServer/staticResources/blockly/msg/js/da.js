@@ -632,6 +632,7 @@ Blockly.Msg.LOGIC_BOOLEAN_FALSE = "falsk";
 Blockly.Msg.LOGIC_BOOLEAN_HELPURL = "https://github.com/google/blockly/wiki/Logic#values";  // untranslated
 Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP = "Returnerer enten sand eller falsk.";
 Blockly.Msg.LOGIC_BOOLEAN_TRUE = "sand";
+Blockly.Msg.LOGIC_COLOUR_COMPARE_TOOLTIP = "Compares two colors based on their hue values while considering a specified tolerance range [0°-360°].";  // untranslated
 Blockly.Msg.LOGIC_COMPARE_HELPURL = "https://da.wikipedia.org/wiki/Ulighed_(matematik)";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_EQ = "Returnere sand, hvis begge inputs er lig med hinanden.";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GT = "Returnere sand, hvis det første input er større end det andet input.";

@@ -632,6 +632,7 @@ Blockly.Msg.LOGIC_BOOLEAN_FALSE = "невистина";
 Blockly.Msg.LOGIC_BOOLEAN_HELPURL = "https://github.com/google/blockly/wiki/Logic#values";  // untranslated
 Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP = "Дава или вистина или невистина.";
 Blockly.Msg.LOGIC_BOOLEAN_TRUE = "вистина";
+Blockly.Msg.LOGIC_COLOUR_COMPARE_TOOLTIP = "Compares two colors based on their hue values while considering a specified tolerance range [0°-360°].";  // untranslated
 Blockly.Msg.LOGIC_COMPARE_HELPURL = "https://mk.wikipedia.org/wiki/Неравенство";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_EQ = "Дава вистина ако обата вноса се еднакви.";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GT = "Дава вистина ако првиот внос е поголем од вториот.";

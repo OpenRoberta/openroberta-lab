@@ -632,6 +632,7 @@ Blockly.Msg.LOGIC_BOOLEAN_FALSE = "ဢမ်ႇၼႅၼ်ႈၼႃ";
 Blockly.Msg.LOGIC_BOOLEAN_HELPURL = "https://github.com/google/blockly/wiki/Logic#values";  // untranslated
 Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP = "မၢၼ်ႇမႅၼ်ႈလႄႈသင် ဢမ်ႇၼႅၼ်ႈၼႃလႄႈသင် ႁူၼ်ၶိုၼ်း";
 Blockly.Msg.LOGIC_BOOLEAN_TRUE = "မၢၼ်ႇမႅၼ်ႈ";
+Blockly.Msg.LOGIC_COLOUR_COMPARE_TOOLTIP = "Compares two colors based on their hue values while considering a specified tolerance range [0°-360°].";  // untranslated
 Blockly.Msg.LOGIC_COMPARE_HELPURL = "https://en.wikipedia.org/wiki/Inequality_(ပၢႆးၼပ်ႉ)";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_EQ = "သင်ဝႃႈ ဢၼ်ၽိူမ်ႉသႂ်ႇ တင်းသွင် မိူၼ်တၢင်ႇဢၼ်ၸိုင် မႄးၶိုၼ်း ႁႂ်ႈမၢၼ်ႇမႅၼ်ႈ";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GT = "သင်ဝႃႈ ဢၼ်ၽိူမ်ႉသႂ်ႇ ဢွၼ်တၢင်း ယႂ်ႇလိူဝ် ဢၼ်ၽိူမ်ႉသႂ်ႇ မၢႆသွင်ၸိုင် မႄးၶိုၼ်း ႁႂ်ႈမၢၼ်ႇမႅၼ်ႈ";

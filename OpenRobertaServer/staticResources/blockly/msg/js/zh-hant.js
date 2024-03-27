@@ -632,6 +632,7 @@ Blockly.Msg.LOGIC_BOOLEAN_FALSE = "否";
 Blockly.Msg.LOGIC_BOOLEAN_HELPURL = "https://github.com/google/blockly/wiki/Logic#values";  // untranslated
 Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP = "返回 真 或 否。";
 Blockly.Msg.LOGIC_BOOLEAN_TRUE = "真";
+Blockly.Msg.LOGIC_COLOUR_COMPARE_TOOLTIP = "Compares two colors based on their hue values while considering a specified tolerance range [0°-360°].";  // untranslated
 Blockly.Msg.LOGIC_COMPARE_HELPURL = "https://zh.wikipedia.org/wiki/不等";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_EQ = "如果這兩個輸入區塊內容相等，返回 真。";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GT = "如果第一個輸入大於第二個輸入，返回 真。";

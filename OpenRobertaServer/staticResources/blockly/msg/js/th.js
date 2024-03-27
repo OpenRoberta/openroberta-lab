@@ -632,6 +632,7 @@ Blockly.Msg.LOGIC_BOOLEAN_FALSE = "เท็จ";
 Blockly.Msg.LOGIC_BOOLEAN_HELPURL = "https://github.com/google/blockly/wiki/Logic#values";  // untranslated
 Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP = "คืนค่าเป็นจริงหรือเท็จ";
 Blockly.Msg.LOGIC_BOOLEAN_TRUE = "จริง";
+Blockly.Msg.LOGIC_COLOUR_COMPARE_TOOLTIP = "Compares two colors based on their hue values while considering a specified tolerance range [0°-360°].";  // untranslated
 Blockly.Msg.LOGIC_COMPARE_HELPURL = "https://th.wikipedia.org/wiki/อสมการ";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_EQ = "คืนค่าเป็น \"จริง\" ถ้าค่าที่ใส่ทั้งสองค่านั้นเท่ากัน";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GT = "คืนค่าเป็น \"จริง\" ถ้าค่าแรกมากกว่าค่าที่สอง";

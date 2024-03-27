@@ -632,6 +632,7 @@ Blockly.Msg.LOGIC_BOOLEAN_FALSE = "mali";
 Blockly.Msg.LOGIC_BOOLEAN_HELPURL = "https://github.com/google/blockly/wiki/Logic#values";  // untranslated
 Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP = "Nag babalik ng true or false.";
 Blockly.Msg.LOGIC_BOOLEAN_TRUE = "tama";
+Blockly.Msg.LOGIC_COLOUR_COMPARE_TOOLTIP = "Compares two colors based on their hue values while considering a specified tolerance range [0°-360°].";  // untranslated
 Blockly.Msg.LOGIC_COMPARE_HELPURL = "http://en.wikipedia.org/wiki/Inequality_(mathematics)";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_EQ = "Nag babalik ng true kung ang pinasok ay parehong magkatumbas.";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GT = "Nagbabalik ng true kung ang unang pinasok ay mas malaki kaysa pangalawang pinasok.";

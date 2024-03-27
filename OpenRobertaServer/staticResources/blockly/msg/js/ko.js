@@ -632,6 +632,7 @@ Blockly.Msg.LOGIC_BOOLEAN_FALSE = "거짓";
 Blockly.Msg.LOGIC_BOOLEAN_HELPURL = "https://ko.wikipedia.org/wiki/%EC%A7%84%EB%A6%BF%EA%B0%92";
 Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP = "참 혹은 거짓 모두 반환합니다.";
 Blockly.Msg.LOGIC_BOOLEAN_TRUE = "참";
+Blockly.Msg.LOGIC_COLOUR_COMPARE_TOOLTIP = "Compares two colors based on their hue values while considering a specified tolerance range [0°-360°].";  // untranslated
 Blockly.Msg.LOGIC_COMPARE_HELPURL = "https://en.wikipedia.org/wiki/Inequality_(mathematics)";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_EQ = "두 값이 같으면, 참(true) 값을 돌려줍니다.";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GT = "첫 번째 값이 두 번째 값보다 크면, 참(true) 값을 돌려줍니다.";
