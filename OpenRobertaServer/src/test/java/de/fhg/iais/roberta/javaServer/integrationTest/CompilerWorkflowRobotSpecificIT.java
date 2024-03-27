@@ -77,7 +77,7 @@ public class CompilerWorkflowRobotSpecificIT {
             "server.log.configfile=/logback-test.xml"
         };
 
-    private static final boolean CROSSCOMPILER_CALL = false;
+    private static final boolean CROSSCOMPILER_CALL = true;
     private static final boolean SHOW_SUCCESS = true;
 
     private static JSONObject robotsFromTestSpec;
