@@ -492,8 +492,11 @@ export class Interpreter {
                 case C.SHOW_TEXT_ACTION: {
                     const text = this.state.pop();
                     const name = stmt[C.NAME];
-                    if (name === 'ev3') {
-                        const x = this.state.pop();
+                    if (name === 'ev3' || name === 'txt4') {
+                        let x = 0;
+                        if (name === 'ev3') {
+                            x = this.state.pop();
+                        }
                         const y = this.state.pop();
                         this.robotBehaviour.showTextActionPosition(text, x, y);
                         return [0, true];

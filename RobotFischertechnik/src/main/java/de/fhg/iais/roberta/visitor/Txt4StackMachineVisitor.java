@@ -174,8 +174,10 @@ public final class Txt4StackMachineVisitor extends AbstractStackMachineVisitor i
 
     @Override
     public Void visitTouchKeySensor(TouchKeySensor touchKeySensor) {
-        // TODO
-        return null;
+        String port = "txt4Button";
+        port += touchKeySensor.getUserDefinedPort().toLowerCase().substring(0, 1).toUpperCase() + touchKeySensor.getUserDefinedPort().toLowerCase().substring(1);
+        JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.BUTTONS).put(C.PORT, port);
+        return add(o);
     }
 
     @Override
@@ -208,7 +210,7 @@ public final class Txt4StackMachineVisitor extends AbstractStackMachineVisitor i
     public Void visitDisplayLedOnAction(DisplayLedOnAction displayLedOnAction) {
         String mode = displayLedOnAction.mode.toLowerCase();
         displayLedOnAction.colour.accept(this);
-        JSONObject o = makeNode(C.LIGHT_ACTION).put(C.MODE, mode).put(C.NAME, "txt4");
+        JSONObject o = makeNode(C.RGBLED_ON_ACTION).put(C.MODE, mode);
         return add(o);
     }
 
@@ -230,7 +232,10 @@ public final class Txt4StackMachineVisitor extends AbstractStackMachineVisitor i
 
     @Override
     public Void visitDisplayTextAction(DisplayTextAction displayTextAction) {
-        return null;
+        displayTextAction.row.accept(this);
+        displayTextAction.text.accept(this);
+        JSONObject o = makeNode(C.SHOW_TEXT_ACTION).put(C.NAME, "txt4");
+        return add(o);
     }
 
     @Override

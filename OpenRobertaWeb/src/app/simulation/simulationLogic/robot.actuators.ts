@@ -1067,6 +1067,7 @@ export class EV3Chassis extends LegoChassis {
     constructor(id: number, configuration: {}, maxRotation: number, pose: Pose) {
         super(id, configuration, maxRotation, pose);
         $('#simRobotContent').append(this.topView);
+        $('#simRobotWindow button').removeClass('btn-close-white');
         $('#brick' + this.id).hide();
     }
 
@@ -1134,6 +1135,7 @@ export class NXTChassis extends LegoChassis {
     constructor(id: number, configuration: {}, maxRotation: number, pose: Pose) {
         super(id, configuration, maxRotation, pose);
         $('#simRobotContent').append(this.topView);
+        $('#simRobotWindow button').removeClass('btn-close-white');
         $('#brick' + this.id).hide();
     }
 
@@ -1160,7 +1162,58 @@ export class Txt4Chassis extends EncoderChassisDiffDrive implements ILabel {
         radius: 1.5,
         color: '#d11921',
     };
-    topView: string = '';
+    topView: string =
+        '<svg id="brick' +
+        this.id +
+        '" viewBox="0 0 450 450" width="450px" height="450px" xmlns="http://www.w3.org/2000/svg" xmlns:bx="https://boxy-svg.com">' +
+        '    <defs>' +
+        '        <radialGradient id="radialGradient' +
+        this.id +
+        '" xlink:href="#linearGradient' +
+        this.id +
+        '"/>' +
+        '        <linearGradient id="linearGradient' +
+        this.id +
+        '">' +
+        '            <stop id="stopOn' +
+        this.id +
+        '" offset="0" style="stop-color:#00ff00;stop-opacity:1;"/>' +
+        '            <stop id="stopOff' +
+        this.id +
+        '" offset="1" style="stop-color:#00ff00;stop-opacity:0;"/>' +
+        '        </linearGradient>' +
+        '"/>' +
+        '    </defs>' +
+        '  <rect width="450" height="450" style=""/>' +
+        '  <g transform="matrix(1, 0, 0, 1, 135, 100)">' +
+        '    <rect width="180" height="250" style="stroke: rgb(0, 0, 0); fill: rgb(204, 204, 204);" id="txt4Background"/>' +
+        '    <rect style="fill: rgb(153, 153, 153);" width="180" height="25" id="txt4Header"/>' +
+        '<g id="display' +
+        this.id +
+        '" clip-path="url(#clipPath)" fill="#000" transform="translate(0, 20)" font-family="Courier New" font-size="10pt">' +
+        '</g>' +
+        '<defs>' +
+        '<clipPath id="clipPath">' +
+        '<rect x="0" y="0" width="180" height="250"/>' +
+        '</clipPath></defs>' +
+        '    <g>' +
+        '      <rect style="paint-order: fill; fill: rgb(221, 221, 221);" y="190" width="70" height="25" x="5"/>' +
+        '      <ellipse style="paint-order: fill; fill:url(#radialGradient0);" cx="90" cy="202.5" rx="10" ry="10"/>' +
+        '      <rect class="simKey" style="paint-order: fill; fill: rgb(221, 221, 221);" y="190" width="70" height="25" x="105"/>' +
+        '      <text style="fill: rgb(255, 255, 255); font-family: Arial, sans-serif; font-size: 20px; white-space: pre;" x="32" y="208.104">&lt;</text>' +
+        '      <text style="fill: rgb(255, 255, 255); font-family: Arial, sans-serif; font-size: 20px; white-space: pre;" x="134" y="208.104">&gt;</text>' +
+        '      <rect class="simKey" style="paint-order: fill; fill: rgb(221, 221, 221);"  fill-opacity="0" y="190" width="70" height="25" x="5" id="txt4ButtonLeft' +
+        this.id +
+        '"/>' +
+        '      <rect class="simKey" style="paint-order: fill; fill: rgb(221, 221, 221);"  fill-opacity="0" y="190" width="70" height="25" x="105" id="txt4ButtonRight' +
+        this.id +
+        '"/>' +
+        '    </g>' +
+        '    <rect class="simKey" style="fill: rgb(153, 153, 153);" y="225" width="180" height="25" id="txt4StopProgram' +
+        this.id +
+        '"/>' +
+        '  </g>' +
+        '</svg>';
     backLeft: PointRobotWorldBumped = {
         x: -30,
         y: -20,
@@ -1259,6 +1312,26 @@ export class Txt4Chassis extends EncoderChassisDiffDrive implements ILabel {
         SIMATH.transform(pose, this.wheelBackRight);
         SIMATH.transform(pose, this.wheelFrontLeft);
         SIMATH.transform(pose, this.wheelBackLeft);
+        $('#simRobotContent').append(this.topView);
+        $('#simRobotWindow button').addClass('btn-close-white');
+        $('#brick' + this.id).hide();
+    }
+
+    override updateAction(myRobot: RobotBaseMobile, dt: number, interpreterRunning: boolean): void {
+        super.updateAction(myRobot, dt, interpreterRunning);
+        let display = myRobot.interpreter.getRobotBehaviour().getActionState('display', true);
+        if (display) {
+            let text = display.text;
+            let x = display.x;
+            let y = display.y;
+            let $display = $('#display' + this.id);
+            if (text) {
+                $display.html($display.html() + '<text x=' + x * 10 + ' y=' + (y + 1) * 20 + '>' + text + '</text>');
+            }
+            if (display.clear) {
+                $display.html('');
+            }
+        }
     }
 
     override draw(rCtx: CanvasRenderingContext2D, myRobot: RobotBaseMobile) {
@@ -1354,9 +1427,9 @@ export class EdisonChassis extends ChassisDiffDrive {
     topView: string =
         '<svg id="brick' +
         this.id +
-        '" width="360" height="440" viewBox="0 0 360 440" xmlns="http://www.w3.org/2000/svg">\n' +
-        '  <defs>\n' +
-        '    <style>.cls-1{fill:#fff;}.cls-2{fill:none;stroke:#fff;stroke-miterlimit:10;}.cls-3{fill:#ff7000;};}</style>\n' +
+        '" width="360" height="440" viewBox="0 0 360 440" xmlns="http://www.w3.org/2000/svg">' +
+        '  <defs>' +
+        '    <style>.cls-1{fill:#fff;}.cls-2{fill:none;stroke:#fff;stroke-miterlimit:10;}.cls-3{fill:#ff7000;};}</style>' +
         '        <radialGradient id="radialGradientL' +
         this.id +
         '" cx="0.5" cy="0.5" r="1"  xlink:href="#linearGradientL' +
@@ -1389,58 +1462,58 @@ export class EdisonChassis extends ChassisDiffDrive {
         '        </linearGradient>' +
         '    </defs>' +
         '  <rect id="background" class="cls-1" width="360" height="440" style="fill: #333333;"/>' +
-        '  <g transform="matrix(1, 0, 0, 1, -35, 5)">\n' +
-        '    <g>\n' +
-        '      <g id="main">\n' +
-        '        <path class="cls-3" d="m380.51,26.85c5.22,1.73,9.49,7.65,9.49,13.15v380c0,5.5-4.5,10-10,10H50c-5.5,0-10-4.5-10-10V40c0-5.5,4.27-11.42,9.49-13.15,0,0,81.01-26.85,165.51-26.85s165.51,26.85,165.51,26.85Z"/>\n' +
-        '      </g>\n' +
-        '    </g>\n' +
-        '    <g id="bricks">\n' +
-        '      <circle id="pin" class="cls-2" cx="66" cy="403.5" r="11"/>\n' +
-        '      <circle id="pin-2" class="cls-2" cx="109.5" cy="404" r="11"/>\n' +
-        '      <circle id="pin-3" class="cls-2" cx="109.5" cy="360.5" r="11"/>\n' +
-        '      <circle id="pin-4" class="cls-2" cx="109.5" cy="317" r="11"/>\n' +
-        '      <circle id="pin-5" class="cls-2" cx="109.5" cy="273.5" r="11"/>\n' +
-        '      <circle id="pin-6" class="cls-2" cx="109.5" cy="230" r="11"/>\n' +
-        '      <path id="pin-7" class="cls-2" d="m109.5,197.5c6.08,0,11-4.92,11-11s-4.92-11-11-11c-6.08,0-11,4.92-11,11,0,6.08,4.92,11,11,11Z"/>\n' +
-        '      <circle id="pin-8" class="cls-2" cx="109.5" cy="143" r="11"/>\n' +
-        '      <circle id="pin-9" class="cls-2" cx="109.5" cy="99.5" r="11"/>\n' +
-        '      <circle id="pin-10" class="cls-2" cx="66" cy="360" r="11"/>\n' +
-        '      <path id="pin-11" class="cls-2" d="m66.5,305.5c-6.08,0-11,4.92-11,11s4.92,11,11,11,11-4.92,11-11-4.92-11-11-11Z"/>\n' +
-        '      <circle id="pin-12" class="cls-2" cx="66.5" cy="273" r="11"/>\n' +
-        '      <circle id="pin-13" class="cls-2" cx="66.5" cy="229.5" r="11"/>\n' +
-        '      <circle id="pin-14" class="cls-2" cx="66.5" cy="186" r="11" transform="translate(-96.2 73.99) rotate(-35.78)"/>\n' +
-        '      <circle id="pin-15" class="cls-2" cx="66.5" cy="142.5" r="11"/>\n' +
-        '      <circle id="pin-16" class="cls-2" cx="66.5" cy="99" r="11"/>\n' +
-        '      <circle id="pin-17" class="cls-2" cx="320.5" cy="403.5" r="11"/>\n' +
-        '      <path id="pin-18" class="cls-2" d="m364,393c-6.08,0-11,4.92-11,11s4.92,11,11,11,11-4.92,11-11-4.92-11-11-11Z"/>\n' +
-        '      <circle id="pin-19" class="cls-2" cx="364" cy="360.5" r="11"/>\n' +
-        '      <circle id="pin-20" class="cls-2" cx="364" cy="317" r="11" transform="translate(-116.65 272.67) rotate(-35.78)"/>\n' +
-        '      <circle id="pin-21" class="cls-2" cx="364" cy="273.5" r="11"/>\n' +
-        '      <circle id="pin-22" class="cls-2" cx="364" cy="230" r="11"/>\n' +
-        '      <circle id="pin-23" class="cls-2" cx="364" cy="186.5" r="11"/>\n' +
-        '      <circle id="pin-24" class="cls-2" cx="364" cy="143" r="11"/>\n' +
-        '      <circle id="pin-25" class="cls-2" cx="364" cy="99.5" r="11"/>\n' +
-        '      <circle id="pin-26" class="cls-2" cx="320.5" cy="360" r="11"/>\n' +
-        '      <circle id="pin-27" class="cls-2" cx="321" cy="316.5" r="11"/>\n' +
-        '      <circle id="pin-28" class="cls-2" cx="321" cy="273" r="11"/>\n' +
-        '      <circle id="pin-29" class="cls-2" cx="321" cy="229.5" r="11"/>\n' +
-        '      <circle id="pin-30" class="cls-2" cx="321" cy="186" r="11"/>\n' +
-        '      <circle id="pin-31" class="cls-2" cx="321" cy="142.5" r="11"/>\n' +
-        '      <circle id="pin-32" class="cls-2" cx="321" cy="99" r="11"/>\n' +
-        '    </g>\n' +
+        '  <g transform="matrix(1, 0, 0, 1, -35, 5)">' +
+        '    <g>' +
+        '      <g id="main">' +
+        '        <path class="cls-3" d="m380.51,26.85c5.22,1.73,9.49,7.65,9.49,13.15v380c0,5.5-4.5,10-10,10H50c-5.5,0-10-4.5-10-10V40c0-5.5,4.27-11.42,9.49-13.15,0,0,81.01-26.85,165.51-26.85s165.51,26.85,165.51,26.85Z"/>' +
+        '      </g>' +
+        '    </g>' +
+        '    <g id="bricks">' +
+        '      <circle id="pin" class="cls-2" cx="66" cy="403.5" r="11"/>' +
+        '      <circle id="pin-2" class="cls-2" cx="109.5" cy="404" r="11"/>' +
+        '      <circle id="pin-3" class="cls-2" cx="109.5" cy="360.5" r="11"/>' +
+        '      <circle id="pin-4" class="cls-2" cx="109.5" cy="317" r="11"/>' +
+        '      <circle id="pin-5" class="cls-2" cx="109.5" cy="273.5" r="11"/>' +
+        '      <circle id="pin-6" class="cls-2" cx="109.5" cy="230" r="11"/>' +
+        '      <path id="pin-7" class="cls-2" d="m109.5,197.5c6.08,0,11-4.92,11-11s-4.92-11-11-11c-6.08,0-11,4.92-11,11,0,6.08,4.92,11,11,11Z"/>' +
+        '      <circle id="pin-8" class="cls-2" cx="109.5" cy="143" r="11"/>' +
+        '      <circle id="pin-9" class="cls-2" cx="109.5" cy="99.5" r="11"/>' +
+        '      <circle id="pin-10" class="cls-2" cx="66" cy="360" r="11"/>' +
+        '      <path id="pin-11" class="cls-2" d="m66.5,305.5c-6.08,0-11,4.92-11,11s4.92,11,11,11,11-4.92,11-11-4.92-11-11-11Z"/>' +
+        '      <circle id="pin-12" class="cls-2" cx="66.5" cy="273" r="11"/>' +
+        '      <circle id="pin-13" class="cls-2" cx="66.5" cy="229.5" r="11"/>' +
+        '      <circle id="pin-14" class="cls-2" cx="66.5" cy="186" r="11" transform="translate(-96.2 73.99) rotate(-35.78)"/>' +
+        '      <circle id="pin-15" class="cls-2" cx="66.5" cy="142.5" r="11"/>' +
+        '      <circle id="pin-16" class="cls-2" cx="66.5" cy="99" r="11"/>' +
+        '      <circle id="pin-17" class="cls-2" cx="320.5" cy="403.5" r="11"/>' +
+        '      <path id="pin-18" class="cls-2" d="m364,393c-6.08,0-11,4.92-11,11s4.92,11,11,11,11-4.92,11-11-4.92-11-11-11Z"/>' +
+        '      <circle id="pin-19" class="cls-2" cx="364" cy="360.5" r="11"/>' +
+        '      <circle id="pin-20" class="cls-2" cx="364" cy="317" r="11" transform="translate(-116.65 272.67) rotate(-35.78)"/>' +
+        '      <circle id="pin-21" class="cls-2" cx="364" cy="273.5" r="11"/>' +
+        '      <circle id="pin-22" class="cls-2" cx="364" cy="230" r="11"/>' +
+        '      <circle id="pin-23" class="cls-2" cx="364" cy="186.5" r="11"/>' +
+        '      <circle id="pin-24" class="cls-2" cx="364" cy="143" r="11"/>' +
+        '      <circle id="pin-25" class="cls-2" cx="364" cy="99.5" r="11"/>' +
+        '      <circle id="pin-26" class="cls-2" cx="320.5" cy="360" r="11"/>' +
+        '      <circle id="pin-27" class="cls-2" cx="321" cy="316.5" r="11"/>' +
+        '      <circle id="pin-28" class="cls-2" cx="321" cy="273" r="11"/>' +
+        '      <circle id="pin-29" class="cls-2" cx="321" cy="229.5" r="11"/>' +
+        '      <circle id="pin-30" class="cls-2" cx="321" cy="186" r="11"/>' +
+        '      <circle id="pin-31" class="cls-2" cx="321" cy="142.5" r="11"/>' +
+        '      <circle id="pin-32" class="cls-2" cx="321" cy="99" r="11"/>' +
+        '    </g>' +
         '    <circle id="rec' +
         this.id +
-        '" class="simKey" cx="215" cy="359.27" r="27.78" fill="#666666"/>\n' +
-        '    <g id="button_2">\n' +
-        '      <path fill="#666666" d="m187.22,336.6c0,1.1.54,1.28,1.2.4,0,0,8.8-11.73,26.02-11.73,17.22,0,27.05,11.8,27.05,11.8.7.85,1.28.64,1.28-.46v-51.56c0-1.1-.9-2-2-2h-51.56c-1.1,0-2,.9-2,2v51.56Z"/>\n' +
-        '    </g>\n' +
-        '    <g id="button_3">\n' +
+        '" class="simKey" cx="215" cy="359.27" r="27.78" fill="#666666"/>' +
+        '    <g id="button_2">' +
+        '      <path fill="#666666" d="m187.22,336.6c0,1.1.54,1.28,1.2.4,0,0,8.8-11.73,26.02-11.73,17.22,0,27.05,11.8,27.05,11.8.7.85,1.28.64,1.28-.46v-51.56c0-1.1-.9-2-2-2h-51.56c-1.1,0-2,.9-2,2v51.56Z"/>' +
+        '    </g>' +
+        '    <g id="button_3">' +
         '    <path fill="#666666" id="play' +
         this.id +
         '" class="simKey" ' +
-        '      d="m216,230.11c-.55-.95-1.45-.95-2,0l-26,45.03c-.55.95-.1,1.73,1,1.73h52c1.1,0,1.55-.78,1-1.73l-26-45.03Z"/>\n' +
-        '    </g>\n' +
+        '      d="m216,230.11c-.55-.95-1.45-.95-2,0l-26,45.03c-.55.95-.1,1.73,1,1.73h52c1.1,0,1.55-.78,1-1.73l-26-45.03Z"/>' +
+        '    </g>' +
         '    <ellipse id="lled-' +
         this.id +
         '" cx="125" cy="45" rx="20" ry="15"' +
@@ -1453,7 +1526,7 @@ export class EdisonChassis extends ChassisDiffDrive {
         ' style="fill:url(#radialGradientR' +
         this.id +
         ');fill-opacity:1;stroke:none;stroke-width:0.800002"/>' +
-        '  </g>\n' +
+        '  </g>' +
         '</svg>';
     wheelBack: Geometry = {
         x: 0,
@@ -1486,6 +1559,7 @@ export class EdisonChassis extends ChassisDiffDrive {
         this.left.port = 'LMOTOR';
         this.left.speed = 0;
         $('#simRobotContent').append(this.topView);
+        $('#simRobotWindow button').addClass('btn-close-white');
         $('#brick' + this.id).hide();
     }
 
@@ -1784,6 +1858,7 @@ export class ThymioChassis extends ChassisDiffDrive {
         this.left.port = C.LEFT;
         this.left.speed = 0;
         $('#simRobotContent').append(this.topView);
+        $('#simRobotWindow button').removeClass('btn-close-white');
         $('#brick' + this.id).hide();
     }
 
@@ -2644,6 +2719,7 @@ export class RGBLed implements IUpdateAction, IDrawable, IReset {
     x: number;
     y: number;
     port: string;
+    resetColor: string = 'grey';
     protected toReset: boolean;
     protected id: number;
 
@@ -2656,7 +2732,7 @@ export class RGBLed implements IUpdateAction, IDrawable, IReset {
     }
 
     draw(rCtx: CanvasRenderingContext2D, myRobot: RobotBase): void {
-        if (this.color != 'grey') {
+        if (this.color !== this.resetColor) {
             if (!Array.isArray(this.color)) {
                 this.color = [255, 0, 0];
             }
@@ -2673,7 +2749,7 @@ export class RGBLed implements IUpdateAction, IDrawable, IReset {
     drawPriority: number = 11;
 
     reset(): void {
-        this.color = 'grey';
+        this.color = this.resetColor;
         $('#' + this.port + '-' + this.id).css({ fill: 'rgba(0, 0, 0, 0)' });
     }
 
@@ -2683,22 +2759,53 @@ export class RGBLed implements IUpdateAction, IDrawable, IReset {
             if (led[this.port]) {
                 led = led[this.port];
                 if (led.mode && led.mode === 'off') {
-                    this.color = 'grey';
+                    this.color = this.resetColor;
                 } else if (led.color) {
                     this.color = led.color;
                 }
             } else if (!led.port) {
                 if (led.mode && led.mode === 'off') {
-                    this.color = 'grey';
+                    this.color = this.resetColor;
                 } else if (led.color) {
                     this.color = led.color;
                 }
             }
-            if (this.color === 'grey') {
+            if (this.color === this.resetColor) {
                 $('#' + this.port + '-' + myRobot.id).css({ fill: 'rgba(' + this.color[0] + ', ' + this.color[1] + ', ' + this.color[2] + ', 0)' });
             } else {
                 $('#' + this.port + '-' + myRobot.id).css({ fill: 'rgba(' + this.color[0] + ', ' + this.color[1] + ', ' + this.color[2] + ', 255)' });
             }
+        }
+    }
+}
+
+export class Txt4RGBLed extends RGBLed {
+    override color = 'LightGray';
+    override resetColor = 'LightGray';
+
+    constructor(id: number, p: Point, reset: boolean, port?: string, radius?: number) {
+        super(p, reset, port, radius);
+        this.id = id;
+    }
+
+    override draw(rCtx: CanvasRenderingContext2D, myRobot: RobotBase) {
+        super.draw(rCtx, myRobot);
+        this.change();
+    }
+
+    change(): void {
+        if (this.color !== this.resetColor) {
+            $('#stopOn' + this.id).css({
+                'stop-color': 'rgb(' + this.color[0] + ',' + this.color[1] + ',' + this.color[2] + ')',
+                'stop-opacity': 1,
+            });
+            $('#stopOff' + this.id).css({
+                'stop-color': 'rgb(' + this.color[0] + ',' + this.color[1] + ',' + this.color[2] + ')',
+                'stop-opacity': 0,
+            });
+        } else {
+            $('#stopOn' + this.id).css({ 'stop-color': 'LightGray', 'stop-opacity': 1 });
+            $('#stopOff' + this.id).css({ 'stop-color': 'LightGray', 'stop-opacity': 1 });
         }
     }
 }

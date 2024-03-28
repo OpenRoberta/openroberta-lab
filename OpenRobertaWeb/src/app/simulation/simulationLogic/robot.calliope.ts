@@ -39,6 +39,7 @@ export default class RobotCalliope extends RobotBaseStationary {
         // TODO touch pins and the gesture sensor to configuration
         // TODO display to configuration
         $('#simRobotContent').append(this.topView);
+        $('#simRobotWindow button').removeClass('btn-close-white');
         $.validator.addClassRules('range', { required: true, number: true });
         this.gestureSensor = new GestureSensor();
 

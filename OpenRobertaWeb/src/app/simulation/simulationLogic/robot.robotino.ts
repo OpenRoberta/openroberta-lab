@@ -57,5 +57,6 @@ export default class RobotRobotino extends RobotBaseMobile {
                 let myoptical = configuration['SENSORS'][optical];
                 robotino[myoptical['BK']] = new OpticalSensor(optical, myoptical['BK'], 50, index % 2 == 0 ? -6 : 6, 0, 5);
             });
+        $('#simRobot').hide();
     }
 }

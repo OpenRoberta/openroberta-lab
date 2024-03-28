@@ -1,13 +1,13 @@
 import { Pose, RobotBaseMobile } from 'robot.base.mobile';
 import { DistanceSensor, EV3Keys, Keys, Timer, Txt4InfraredSensors, UltrasonicSensor } from 'robot.sensors';
-import { EncoderChassisDiffDrive, StatusLed, Txt4Chassis } from 'robot.actuators';
+import { EncoderChassisDiffDrive, Txt4Chassis, Txt4RGBLed } from 'robot.actuators';
 import { RobotBase, SelectionListener } from 'robot.base';
 import { Interpreter } from 'interpreter.interpreter';
 import * as $ from 'jquery';
 
 export default class RobotTxt4 extends RobotBaseMobile {
     chassis: EncoderChassisDiffDrive;
-    led: StatusLed;
+    led: Txt4RGBLed;
     override timer: Timer = new Timer(5);
     buttons: Keys;
 
@@ -31,52 +31,8 @@ export default class RobotTxt4 extends RobotBaseMobile {
 
     // this method might go up to BaseMobileRobots as soon as the configuration has detailed information about the sensors geometry and location on the robot
     protected configure(configuration: object): void {
-        /*
-    "ACTUATORS": {
-        "_B": {
-            "TYPE": "DISPLAY"
-        },
-        "_D": {
-            "MOTOR_L": "M1",
-            "BRICK_TRACK_WIDTH": "13.5",
-            "BRICK_WHEEL_DIAMETER": "6",
-            "MOTOR_R": "M2",
-            "TYPE": "DIFFERENTIALDRIVE"
-        }
-    },
-    "SENSORS": {
-        "B": {
-            "PORTL": "I7",
-            "TYPE": "LINE",
-            "PORTR": "I8"
-        },
-        "E": {
-            "SENSOR_COUNTER": "C1",
-            "PORT": "M1",
-            "TYPE": "ENCODER"
-        },
-        "U": {
-            "PORT": "I6",
-            "VCC": "9V",
-            "TYPE": "ULTRASONIC"
-        },
-        "E2": {
-            "SENSOR_COUNTER": "C2",
-            "PORT": "M2",
-            "TYPE": "ENCODER"
-        },
-        "CAM": {
-            "MOTION": "2",
-            "PORT": "USB1",
-            "TYPE": "TXT_CAMERA",
-            "COLOUR": "#FFA500",
-            "COLOURSIZE": "30"
-        }
-    }
-}
-         */
         this.chassis = new Txt4Chassis(this.id, configuration, 1.75, this.pose);
-        this.led = new StatusLed({ x: 0, y: 0 }, (this.chassis as Txt4Chassis).geomDisplay.color);
+        this.led = new Txt4RGBLed(this.id, { x: 0, y: 0 }, true, null, 3);
         let sensors: object = configuration['SENSORS'];
         for (const c in sensors) {
             switch (sensors[c]['TYPE']) {
@@ -123,39 +79,28 @@ export default class RobotTxt4 extends RobotBaseMobile {
         }
         let myButtons = [
             {
-                name: 'escape',
+                name: 'txt4ButtonLeft',
                 value: false,
             },
             {
-                name: 'up',
+                name: 'txt4ButtonRight',
                 value: false,
             },
             {
-                name: 'left',
-                value: false,
-            },
-            {
-                name: 'enter',
-                value: false,
-            },
-            {
-                name: 'right',
-                value: false,
-            },
-            {
-                name: 'down',
+                name: 'txt4StopProgram',
                 value: false,
             },
         ];
         this.buttons = new EV3Keys(myButtons, this.id);
-        let ev3 = this;
+        let txt4 = this;
         for (let property in this['buttons']['keys']) {
-            let $property = $('#' + this['buttons']['keys'][property].name + ev3.id);
+            let $property = $('#' + this['buttons']['keys'][property].name + txt4.id);
+            console.log($property[0]);
             $property.on('mousedown touchstart', function () {
-                ev3['buttons']['keys'][this.id.replace(/\d+$/, '')]['value'] = true;
+                txt4['buttons']['keys'][this.id.replace(/\d+$/, '')]['value'] = true;
             });
             $property.on('mouseup touchend', function () {
-                ev3['buttons']['keys'][this.id.replace(/\d+$/, '')]['value'] = false;
+                txt4['buttons']['keys'][this.id.replace(/\d+$/, '')]['value'] = false;
             });
         }
     }
