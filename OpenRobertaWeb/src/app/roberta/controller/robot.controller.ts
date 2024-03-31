@@ -331,7 +331,7 @@ function switchRobot(robot: string, extensions: object, opt_continue?: boolean, 
 
     let further;
     // no need to ask for saving programs if you switch the robot in between a group
-    if (typeof opt_continue === 'undefined' && GUISTATE_C.findGroup(robot) == GUISTATE_C.getRobotGroup()) {
+    if (!opt_continue && GUISTATE_C.findGroup(robot) == GUISTATE_C.getRobotGroup()) {
         further = true;
     } else {
         further = opt_continue || false;

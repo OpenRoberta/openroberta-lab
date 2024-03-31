@@ -29,6 +29,12 @@ export function init(callback: Function) {
     let r = GUISTATE_C.getRobots();
     robots = Object.keys(r).map(function (index) {
         let robot = r[index];
+        if (robot['sim']) {
+            robot['extensions']['sim'] = true;
+        } else {
+            robot['extensions']['sim'] = false;
+        }
+        delete robot['sim'];
         return robot;
     });
     const iCalliopeNoBlue = robots.findIndex((robot, index) => {
@@ -174,12 +180,6 @@ function initRobotList() {
                 },
             },
             {
-                field: 'nn',
-                visible: false,
-                sortable: true,
-                searchable: false,
-            },
-            {
                 field: 'progLanguage',
                 visible: false,
                 sortable: true,
@@ -197,16 +197,9 @@ function initRobotList() {
                 },
             },
             {
-                field: 'sim',
-                visible: false,
-                sortable: true,
-                searchable: false,
-            },
-            {
                 title: '',
                 field: 'extensions',
                 searchable: false,
-                // TODO activate this when nn is seletable for all robots
                 formatter: function (extensions, row, index) {
                     let myextensions = $('#startSelectionTemplate').html();
                     let $myextensions = $(myextensions);
@@ -214,6 +207,10 @@ function initRobotList() {
                     $myextensions.find('.accordion-button.collapsed').attr({ 'aria-controls': 'extend_' + index, 'data-bs-target': '#extend_' + index });
                     $myextensions.find('.accordion-collapse.collapse').attr({ id: 'extend_' + index });
                     for (const value in extensions) {
+                        // sim is currently not selectable but always available if supported
+                        if (value === 'sim') {
+                            continue;
+                        }
                         if (extensions[value] !== 'never') {
                             $myextensions.removeClass('invisible');
                             $myextensions
@@ -223,6 +220,7 @@ function initRobotList() {
                             if (extensions[value] === 'always') {
                                 $myextensions.find('#extend_' + value).attr({ checked: 'checked', disabled: true, readOnly: true });
                             }
+                            translate($myextensions);
                         }
                     }
                     return $myextensions[0].outerHTML;
@@ -351,6 +349,27 @@ function initRobotListEvents() {
     });
     $('#start .btn-group input').onWrap('change', function (e) {
         let myFilter: {} = {};
+        const myFilterAlgorithm: {} = {
+            filterAlgorithm: (row, filters) => {
+                let foundExt: boolean = true;
+                filters.extensions.forEach((filterExtension) => {
+                    if (!row.extensions[filterExtension]) {
+                        foundExt = false;
+                    } else if (row.extensions[filterExtension] === 'never') {
+                        foundExt = false;
+                    }
+                });
+                let foundProgLang: boolean = false;
+                filters.progLanguage.forEach((filterProgLanguage) => {
+                    if (row.progLanguage === filterProgLanguage) {
+                        foundProgLang = true;
+                    }
+                });
+                return foundExt && foundProgLang;
+            },
+        };
+        myFilter['progLanguage'] = [];
+        myFilter['extensions'] = [];
         $('input.progLang').each(function () {
             if ($(this).prop('checked')) {
                 if (!myFilter['progLanguage']) {
@@ -361,10 +380,10 @@ function initRobotListEvents() {
         });
         $('input.feature').each(function () {
             if ($(this).prop('checked')) {
-                myFilter[$(this).val().toString()] = true;
+                myFilter['extensions'].push($(this).val().toString());
             }
         });
-        $('#robotTable').bootstrapTable('filterBy', myFilter);
+        $('#robotTable').bootstrapTable('filterBy', myFilter, myFilterAlgorithm);
     });
     $('#startImportProg').onWrap(
         'click',

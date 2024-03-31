@@ -1,7 +1,6 @@
 import * as MSG from 'message';
 import * as COMM from 'comm';
 import * as WRAP from 'wrap';
-import * as ROBOT_C from 'robot.controller';
 import * as USER_C from 'user.controller';
 import * as NOTIFICATION_C from 'notification.controller';
 import * as GUISTATE_C from 'guiState.controller';
@@ -387,6 +386,9 @@ function initMenuEvents() {
                 case 'menuExportAllProgs':
                     PROGRAM_C.exportAllXml();
                     break;
+                case 'menuImportProg':
+                    IMPORT_C.importXml();
+                    break;
                 case 'menuLinkProg':
                     PROGRAM_C.linkProgram();
                     break;
@@ -442,22 +444,15 @@ function initMenuEvents() {
         '.dropdown-menu li:not(.disabled) a',
         function (event) {
             $('.modal').modal('hide');
-            var choosenRobotType = event.target.parentElement.dataset.type;
-            //TODO: change from ardu to botnroll and mbot with friends
-            //I guess it is changed now, check downstairs at menuConnect
-            if (choosenRobotType) {
-                ROBOT_C.switchRobot(choosenRobotType);
-            } else {
-                var domId = event.currentTarget.id;
-                if (domId === 'menuConnect') {
-                    CONNECTION_C.getConnectionInstance().showConnectionModal();
-                } else if (domId === 'menuRobotInfo') {
-                    CONNECTION_C.getConnectionInstance().showRobotInfo();
-                } else if (domId === 'menuWlan') {
-                    CONNECTION_C.getConnectionInstance().showWlanModal();
-                } else if (domId === 'menuRobotSwitch') {
-                    backToStartView();
-                }
+            var domId = event.currentTarget.id;
+            if (domId === 'menuConnect') {
+                CONNECTION_C.getConnectionInstance().showConnectionModal();
+            } else if (domId === 'menuRobotInfo') {
+                CONNECTION_C.getConnectionInstance().showRobotInfo();
+            } else if (domId === 'menuWlan') {
+                CONNECTION_C.getConnectionInstance().showWlanModal();
+            } else if (domId === 'menuRobotSwitch') {
+                backToStartView();
             }
         },
         'robot clicked'
@@ -469,9 +464,7 @@ function initMenuEvents() {
         function (event) {
             $('.modal').modal('hide'); // close all opened popups
             var domId = event.target.id;
-            if (domId === 'menuShowStart') {
-                backToStartView();
-            } else if (domId === 'menuAbout') {
+            if (domId === 'menuAbout') {
                 $('#version').text(GUISTATE_C.getServerVersion());
                 $('#show-about').modal('show');
             } else if (domId === 'menuLogging') {
@@ -480,6 +473,32 @@ function initMenuEvents() {
         },
         'help clicked'
     );
+    $('.menuGeneral').onWrap(
+        'click',
+        function (event) {
+            window.open('https://jira.iais.fraunhofer.de/wiki/display/ORInfo');
+        },
+        'head navigation menu item general clicked'
+    );
+    $('.menuFaq').onWrap(
+        'click',
+        function (event) {
+            window.open('https://jira.iais.fraunhofer.de/wiki/display/ORInfo/FAQ');
+        },
+        'head navigation menu item faq clicked'
+    );
+    $('.menuAboutProject').onWrap(
+        'click',
+        function (event) {
+            if (GUISTATE_C.getLanguage() == 'de') {
+                window.open('https://www.roberta-home.de/index.php?id=135');
+            } else {
+                window.open('https://www.roberta-home.de/index.php?id=135&L=1');
+            }
+        },
+        'head navigation menu item about clicked'
+    );
+    $('.menuShowStart').onWrap('click', () => backToStartView());
 
     $('#head-navigation-user').onWrap(
         'click',
@@ -515,8 +534,13 @@ function initMenuEvents() {
         },
         'user clicked'
     );
-
-    $('#logoShowStart').onWrap('click', () => backToStartView());
+    $('.menuLogin').onWrap(
+        'click',
+        function (event) {
+            USER_C.showLoginForm();
+        },
+        'head navigation menu item login clicked'
+    );
 
     $('#menuTabProgram').onWrap(
         'click',
@@ -597,133 +621,7 @@ function initMenuEvents() {
         $('.navbar-fixed-top .dropdown').removeClass('open');
     });
 
-    $('.menuGeneral').onWrap(
-        'click',
-        function (event) {
-            window.open('https://jira.iais.fraunhofer.de/wiki/display/ORInfo');
-        },
-        'head navigation menu item general clicked'
-    );
-    $('.menuFaq').onWrap(
-        'click',
-        function (event) {
-            window.open('https://jira.iais.fraunhofer.de/wiki/display/ORInfo/FAQ');
-        },
-        'head navigation menu item faq clicked'
-    );
-    $('.shortcut').onWrap(
-        'click',
-        function (event) {
-            window.open('https://jira.iais.fraunhofer.de/wiki/display/ORInfo/FAQ');
-        },
-        'head navigation menu item faq (shortcut) clicked'
-    );
-    $('.menuAboutProject').onWrap(
-        'click',
-        function (event) {
-            if (GUISTATE_C.getLanguage() == 'de') {
-                window.open('https://www.roberta-home.de/index.php?id=135');
-            } else {
-                window.open('https://www.roberta-home.de/index.php?id=135&L=1');
-            }
-        },
-        'head navigation menu item about clicked'
-    );
-    $('.menuLogin').onWrap(
-        'click',
-        function (event) {
-            USER_C.showLoginForm();
-        },
-        'head navigation menu item login clicked'
-    );
-    $('.menuImportProg').onWrap('click', function (event) {
-        IMPORT_C.importXml();
-    }),
-        'import program clicked';
-
-    $('#startPopupBack').on('click', function (event) {
-        $('#popup-robot-main').removeClass('hidden', 1000);
-        $('.popup-robot.robotSubGroup').addClass('hidden', 1000);
-        $('.robotSpecial').removeClass('robotSpecial');
-        $('#startPopupBack').addClass('hidden');
-        $('#popup-robot-main').slick('refresh');
-    });
-    var mousex = 0;
-    var mousey = 0;
-    $('.popup-robot').on('mousedown', function (event) {
-        mousex = event.clientX;
-        mousey = event.clientY;
-    });
-    $('.popup-robot').onWrap(
-        'click',
-        function (event) {
-            if (Math.abs(event.clientX - mousex) >= 3 || Math.abs(event.clientY - mousey) >= 3) {
-                return;
-            }
-            event.preventDefault();
-            $('#startPopupBack').clickWrap();
-            var choosenRobotType = event.target.dataset.type || event.currentTarget.dataset.type;
-            var choosenRobotGroup = event.target.dataset.group || event.currentTarget.dataset.group;
-            if (event.target.className.indexOf('info') >= 0) {
-                var win = window.open(GUISTATE_C.getRobots()[choosenRobotType].info, '_blank');
-            } else {
-                if (choosenRobotType) {
-                    if (choosenRobotGroup) {
-                        $('#popup-robot-main').addClass('hidden');
-                        $('.popup-robot.' + choosenRobotType).removeClass('hidden');
-                        $('.popup-robot.' + choosenRobotType).addClass('robotSpecial');
-                        $('#startPopupBack').removeClass('hidden');
-                        return;
-                    } else {
-                        if ($('#checkbox_id').is(':checked')) {
-                            UTIL.cleanUri(); // removes # which may potentially be added by other operations
-                            var uri = window.location.toString();
-                            uri += QUERY_START + Q_LOAD_SYSTEM + QUERY_ASSIGNMENT + choosenRobotType;
-                            window.history.replaceState({}, document.title, uri);
-
-                            $('#show-message').oneWrap('hidden.bs.modal', function (e) {
-                                e.preventDefault();
-                                UTIL.cleanUri();
-                                ROBOT_C.switchRobot(choosenRobotType, true);
-                            });
-                            MSG.displayMessage('POPUP_CREATE_BOOKMARK', 'POPUP', '');
-                        } else {
-                            ROBOT_C.switchRobot(choosenRobotType, true);
-                        }
-                    }
-                }
-
-                $('#show-startup-message').modal('hide');
-            }
-        },
-        'robot choosen in start popup'
-    );
-
-    $('#moreReleases').onWrap(
-        'click',
-        function (event) {
-            $('#oldReleases').show({
-                start: function () {
-                    $('#moreReleases').addClass('hidden');
-                },
-            });
-        },
-        'show more releases clicked'
-    );
-
-    $('#goToWiki').onWrap(
-        'click',
-        function (event) {
-            event.preventDefault();
-            window.open('https://jira.iais.fraunhofer.de/wiki/display/ORInfo', '_blank');
-            event.stopPropagation();
-            $('#show-startup-message').modal('show');
-        },
-        'go to wiki clicked'
-    );
-
     // init popup events
-
     $('.cancelPopup').onWrap(
         'click',
         function () {

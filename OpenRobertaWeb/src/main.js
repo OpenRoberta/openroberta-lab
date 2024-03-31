@@ -358,7 +358,7 @@ function initProgramming(robot, extensions, opt_callback, opt_params) {
             $('#tabProgram').tabWrapShow();
         });
     } else {
-        robotController.switchRobot(robot, extensions, true, function () {
+        robotController.switchRobot(robot, extensions, null, function () {
             $('#tabProgram, #tabConfiguration').parent().removeClass('invisible');
             $('#header').addClass('shadow');
             $('.notStart').removeClass('disabled');
