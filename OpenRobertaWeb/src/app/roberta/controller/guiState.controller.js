@@ -1242,7 +1242,6 @@ export {
     hasSim,
     hasMultiSim,
     hasMarkerSim,
-    hasNN,
     hasWebotsSim,
     getWebotsUrl,
     getListOfTutorials,
