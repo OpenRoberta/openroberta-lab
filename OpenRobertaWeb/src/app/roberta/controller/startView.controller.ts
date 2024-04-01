@@ -21,6 +21,7 @@ import * as MSG from 'message';
 
 var robots = [];
 var mainCallback: Function;
+var uniqueProgLanguages: string[] = [];
 const numPopularRobots: number = 8;
 
 export function init(callback: Function) {
@@ -49,6 +50,10 @@ export function init(callback: Function) {
     }
     robots.forEach(function (row, index) {
         row.rowNum = index;
+    });
+    let progLanguages = robots.map((robot) => robot.progLanguage);
+    uniqueProgLanguages = progLanguages.filter(function (item, pos) {
+        return progLanguages.indexOf(item) == pos;
     });
 
     const preload = (src) =>
@@ -372,12 +377,12 @@ function initRobotListEvents() {
         myFilter['extensions'] = [];
         $('input.progLang').each(function () {
             if ($(this).prop('checked')) {
-                if (!myFilter['progLanguage']) {
-                    myFilter['progLanguage'] = [];
-                }
                 myFilter['progLanguage'].push($(this).val().toString());
             }
         });
+        if (myFilter['progLanguage'].length === 0) {
+            myFilter['progLanguage'] = uniqueProgLanguages;
+        }
         $('input.feature').each(function () {
             if ($(this).prop('checked')) {
                 myFilter['extensions'].push($(this).val().toString());
