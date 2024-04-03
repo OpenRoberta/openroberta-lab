@@ -350,8 +350,7 @@ export class Network {
      * in the network.
      */
     backProp(target: number[], errorFunc: H.ErrorFunction = H.Errors.SQUARE): void {
-        // The output node is a special case. We use the user-defined error
-        // function for the derivative.
+        // The output node is a special case. We use the user-defined error function for the derivative.
         let outputLayer = this.network[this.network.length - 1];
         for (let i = 0; i < outputLayer.length; i++) {
             let outputNode = outputLayer[i];
@@ -454,10 +453,10 @@ export class Network {
             this.setInputValuesFromArray(inputsForLearning);
             this.forwardProp();
             outputLayer.forEach((outputNode, idx) => {
-                loss += Math.sqrt(H.Errors.SQUARE.error(outputNode.output, outputTargetValues[idx]));
+                loss += H.Errors.SQUARE.error(outputNode.output, outputTargetValues[idx]);
             });
         });
-        return loss / dataPoints.length;
+        return loss;
     }
 
     /** Iterates over every node in the network */

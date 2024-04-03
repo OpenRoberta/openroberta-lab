@@ -348,7 +348,7 @@ export async function runNNEditor(hasSim: boolean) {
         inputTableNumRowsForExploring++;
         numTableRowsChanged++;
         let currentUserInputs: number[][] = tableToArray(tableEl);
-        createUserInputTableBs(tableDiv, tableEl, currentUserInputs, inputTableNumRowsForExploring);
+        createUserInputTableBs(false, tableDiv, tableEl, currentUserInputs, inputTableNumRowsForExploring);
         tableEl.bootstrapTable('scrollTo', 'bottom');
     });
 
@@ -360,7 +360,7 @@ export async function runNNEditor(hasSim: boolean) {
             inputTableNumRowsForExploring = 1;
         }
         let currentUserInputs: number[][] = tableToArray(tableEl);
-        createUserInputTableBs(tableDiv, tableEl, currentUserInputs, inputTableNumRowsForExploring);
+        createUserInputTableBs(false, tableDiv, tableEl, currentUserInputs, inputTableNumRowsForExploring);
         tableEl.bootstrapTable('scrollTo', 'bottom');
     });
 
@@ -397,9 +397,9 @@ export async function runNNEditor(hasSim: boolean) {
             inputsForExploringEnteringMode = true;
             if (userInputsForExploring.length == 0) {
                 inputTableNumRowsForExploring = 3;
-                createUserInputTableBs(tableDiv, tableEl, null, inputTableNumRowsForExploring);
+                createUserInputTableBs(false, tableDiv, tableEl, null, inputTableNumRowsForExploring);
             } else {
-                createUserInputTableBs(tableDiv, tableEl, userInputsForExploring, inputTableNumRowsForExploring);
+                createUserInputTableBs(false, tableDiv, tableEl, userInputsForExploring, inputTableNumRowsForExploring);
             }
             tableDiv.on('shown.bs.modal', function () {
                 tableEl.bootstrapTable('resetView');
@@ -593,7 +593,7 @@ export async function runNNEditorForTabLearn(hasSim: boolean) {
         inputTableNumRowsForLearning++;
         numTableRowsChanged++;
         let currentUserInputs: number[][] = tableToArray(tableEl);
-        createUserInputTableBs(tableDiv, tableEl, currentUserInputs, inputTableNumRowsForLearning);
+        createUserInputTableBs(true, tableDiv, tableEl, currentUserInputs, inputTableNumRowsForLearning);
         tableEl.bootstrapTable('scrollTo', 'bottom');
     });
 
@@ -605,7 +605,7 @@ export async function runNNEditorForTabLearn(hasSim: boolean) {
             inputTableNumRowsForLearning = 1;
         }
         let currentUserInputs: number[][] = tableToArray(tableEl);
-        createUserInputTableBs(tableDiv, tableEl, currentUserInputs, inputTableNumRowsForLearning);
+        createUserInputTableBs(true, tableDiv, tableEl, currentUserInputs, inputTableNumRowsForLearning);
         tableEl.bootstrapTable('scrollTo', 'bottom');
     });
 
@@ -642,9 +642,9 @@ export async function runNNEditorForTabLearn(hasSim: boolean) {
             inputsForLearningEnteringMode = true;
             if (userInputsForLearning.length == 0) {
                 inputTableNumRowsForLearning = 3;
-                createUserInputTableBs(tableDiv, tableEl, null, inputTableNumRowsForLearning);
+                createUserInputTableBs(true, tableDiv, tableEl, null, inputTableNumRowsForLearning);
             } else {
-                createUserInputTableBs(tableDiv, tableEl, userInputsForLearning, inputTableNumRowsForLearning);
+                createUserInputTableBs(true, tableDiv, tableEl, userInputsForLearning, inputTableNumRowsForLearning);
             }
             tableDiv.on('shown.bs.modal', function () {
                 tableEl.bootstrapTable('resetView');
@@ -733,10 +733,10 @@ const processUserInputTable = (fileInputEl: JQuery<HTMLElement>, tableDiv: JQuer
             let fileReader = new FileReader();
             fileReader.onload = function () {
                 let data = fileReader.result;
-                let maxInputOutputArrayLength: number = state.inputs.length + state.outputs.length;
                 let inputData = UTIL.csvToArray(data);
                 if (forLearning) {
-                    if (!isInputDataValid(inputData) || maxInputOutputArrayLength !== inputData[0].length) {
+                    let numberOfNeededColumns: number = state.inputs.length + state.outputs.length;
+                    if (!isInputDataValid(numberOfNeededColumns, inputData)) {
                         MSG.displayMessage('NN_INVALID_TEST_TRAIN_DATA', 'POPUP', '', '', '');
                         inputData = file = null;
                         return;
@@ -744,29 +744,31 @@ const processUserInputTable = (fileInputEl: JQuery<HTMLElement>, tableDiv: JQuer
                         MSG.displayMessage(`NN_TEST_TRAIN_DATA_UPLOAD_SUCCESS`, 'TOAST', inputData.length.toString(), '', '');
                         userInputsForLearning = inputData;
                         inputTableNumRowsForLearning = inputData.length;
-                        createUserInputTableBs(tableDiv, tableEl, userInputsForLearning, inputTableNumRowsForLearning);
+                        createUserInputTableBs(true, tableDiv, tableEl, userInputsForLearning, inputTableNumRowsForLearning);
                     }
                 } else {
-                    if (!isInputDataValid(inputData) || maxInputOutputArrayLength < inputData[0].length) {
+                    let numberOfNeededColumns: number = state.inputs.length;
+                    if (!isInputDataValid(numberOfNeededColumns, inputData)) {
                         MSG.displayMessage('NN_INVALID_TEST_TRAIN_DATA', 'POPUP', '', '', '');
                         inputData = file = null;
                         return;
                     } else {
                         MSG.displayMessage(`NN_TEST_TRAIN_DATA_UPLOAD_SUCCESS`, 'TOAST', inputData.length.toString(), '', '');
-                        if (maxInputOutputArrayLength === inputData[0].length) {
-                            userInputsForExploring = inputData.map((val: number[]) => val.slice(0, -1));
-                        } else {
-                            userInputsForExploring = inputData;
-                        }
+                        userInputsForExploring = inputData;
                         inputTableNumRowsForExploring = inputData.length;
-                        createUserInputTableBs(tableDiv, tableEl, userInputsForExploring, inputTableNumRowsForExploring);
+                        createUserInputTableBs(false, tableDiv, tableEl, userInputsForExploring, inputTableNumRowsForExploring);
                     }
                 }
                 tableDiv.modal('show');
             };
             fileReader.readAsText(file);
 
-            const isInputDataValid = (inputData: number[][]) => inputData.every((val, _, arr) => val.length === arr[0].length);
+            const isInputDataValid = (numberOfNeededColumns: number, inputData: number[][]) => {
+                if (inputData.length <= 0) {
+                    return false;
+                }
+                return inputData.every((val, _, arr) => val.length === numberOfNeededColumns);
+            };
         }
     });
 };
@@ -774,13 +776,17 @@ const processUserInputTable = (fileInputEl: JQuery<HTMLElement>, tableDiv: JQuer
 const tableToArray = (tableEl: JQuery<HTMLElement>) =>
     tableEl.bootstrapTable('getData').map((rowValue: object) => Object.values(rowValue).map((value) => value.toString().replace(',', '.')));
 
-const createUserInputTableBs = (tableDiv: JQuery<HTMLElement>, tableEl: JQuery<HTMLElement>, userInputs: number[][] = null, inputTableNumRows: number) => {
+const createUserInputTableBs = (
+    forLearning: boolean,
+    tableDiv: JQuery<HTMLElement>,
+    tableEl: JQuery<HTMLElement>,
+    userInputs: number[][] = null,
+    inputTableNumRows: number
+) => {
     tableDiv.show();
-    let inputOutputNeurons: string[] = [...state.inputs, ...state.outputs];
-
-    if (userInputs && userInputs[0].length !== inputOutputNeurons.length) {
-        userInputs = userInputs.map((val: number[]) => [...val, ...new Array(Math.abs(inputOutputNeurons.length - val.length)).fill('0')]);
+    if (forLearning) {
     }
+    let neuronsToShow: string[] = forLearning ? [...state.inputs, ...state.outputs] : [...state.inputs];
 
     let rowData: [
         {
@@ -810,7 +816,7 @@ const createUserInputTableBs = (tableDiv: JQuery<HTMLElement>, tableEl: JQuery<H
     };
 
     // populate table header with input and output neurons
-    inputOutputNeurons.forEach((neuron) => {
+    neuronsToShow.forEach((neuron) => {
         let obj = {
             field: neuron,
             title:
@@ -828,7 +834,7 @@ const createUserInputTableBs = (tableDiv: JQuery<HTMLElement>, tableEl: JQuery<H
         let currentRow: {
             [key: string]: number;
         } = {};
-        inputOutputNeurons.forEach((neuron, idx) => {
+        neuronsToShow.forEach((neuron, idx) => {
             currentRow[neuron] = typeof value === 'object' ? value[idx] : value;
         });
         rowData.push(currentRow);
