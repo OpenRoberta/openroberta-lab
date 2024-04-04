@@ -1449,6 +1449,8 @@ export class MicrobitConnection extends AutoConnection {}
 
 export class Microbitv2Connection extends AutoConnection {}
 
+export class Calliopev3Connection extends AutoConnection {}
+
 //Nao
 export class NaoConnection extends TokenConnection {}
 

@@ -1,0 +1,72 @@
+<toolbox_set id="toolbox" style="display: none">
+    <category name="TOOLBOX_ACTION" svg="true">
+        <block type="robConf_motor"/>
+        <block type="robConf_servo"/>
+        <block type="robConf_ledbar"/>
+        <block type="robConf_fourdigitdisplay"/>
+        <block type="robConf_digitalin"/>
+        <block type="robConf_analogin"/>
+        <block type='robConf_callibot2' intask='true'>
+            <statement name='BUS'>
+                <block type='robConf_motorc' intask='true' movable='false'>
+                    <field name='NAME'>M</field>
+                    <field name='PORT'>MOTOR_L</field>
+                </block>
+                <block type='robConf_motorc' intask='true' movable='false'>
+                    <field name='NAME'>M2</field>
+                    <field name='PORT'>MOTOR_R</field>
+                </block>
+                <block type='robConf_rgbled' intask='true' movable='false'>
+                    <field name='NAME'>R</field>
+                    <field name='PORT'>RGBLED_LF</field>
+                </block>
+                <block type='robConf_rgbled' intask='true' movable='false'>
+                    <field name='NAME'>R2</field>
+                    <field name='PORT'>RGBLED_RF</field>
+                </block>
+                <block type='robConf_rgbled' intask='true' movable='false'>
+                    <field name='NAME'>R3</field>
+                    <field name='PORT'>RGBLED_LR</field>
+                </block>
+                <block type='robConf_rgbled' intask='true' movable='false'>
+                    <field name='NAME'>R4</field>
+                    <field name='PORT'>RGBLED_RR</field>
+                </block>
+                <block type='robConf_led' intask='true' movable='false'>
+                    <field name='NAME'>L</field>
+                    <field name='PORT'>LED_L</field>
+                </block>
+                <block type='robConf_led' intask='true' movable='false'>
+                    <field name='NAME'>L2</field>
+                    <field name='PORT'>LED_R</field>
+                </block>
+                <block type='robConf_infrared' intask='true' movable='false'>
+                    <field name='NAME'>I</field>
+                    <field name='PORT'>INFRARED_L</field>
+                </block>
+                <block type='robConf_infrared' intask='true' movable='false'>
+                    <field name='NAME'>I2</field>
+                    <field name='PORT'>INFRARED_R</field>
+                </block>
+                <block type='robConf_ultrasonicc' intask='true' movable='false'>
+                    <field name='NAME'>U</field>
+                </block>
+                <block type='robConf_servoc' intask='true' movable='false'>
+                    <field name='NAME'>S</field>
+                    <field name='PORT'>SERVO_S1</field>
+                </block>
+                <block type='robConf_servoc' intask='true' movable='false'>
+                    <field name='NAME'>S2</field>
+                    <field name='PORT'>SERVO_S2</field>
+                </block>
+            </statement>
+        </block>
+    </category>
+    <category name="TOOLBOX_SENSOR" svg="true">
+        <block type="robConf_ultrasonic"/>
+        <block type="robConf_humidity"/>
+        <block type="robConf_digitalout"/>
+        <block type="robConf_analogout"/>
+        <block type="robConf_colourtcs3472"/>
+    </category>
+</toolbox_set>

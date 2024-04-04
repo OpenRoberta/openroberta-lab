@@ -12,13 +12,13 @@ import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.Util;
 
-public abstract class MicrobitCompilerWorker implements ICompilerWorker {
+public abstract class MbedCompilerWorker implements ICompilerWorker {
 
-    private static final Logger LOG = LoggerFactory.getLogger(MicrobitCompilerWorker.class);
-    private final String version;
+    private static final Logger LOG = LoggerFactory.getLogger(MbedCompilerWorker.class);
+    private final String robotType;
 
-    public MicrobitCompilerWorker(String version) {
-        this.version = version;
+    public MbedCompilerWorker(String robotType) {
+        this.robotType = robotType;
     }
 
     @Override
@@ -36,13 +36,15 @@ public abstract class MicrobitCompilerWorker implements ICompilerWorker {
         String sourceCode = project.getSourceCode().toString();
 
         String scriptName = compilerResourcesDir + "/compile.py";
+        String runtimeHexDir = compilerResourcesDir + "/runtimeHex";
 
         String[] executableWithParameters =
             {
                 compilerBinDir + "python",
                 scriptName,
                 sourceCode,
-                version
+                runtimeHexDir,
+                robotType
             };
         project.setCompiledHex(this.getBinaryFromCrossCompiler(executableWithParameters));
         if ( project.getCompiledHex() != null ) {
@@ -63,9 +65,12 @@ public abstract class MicrobitCompilerWorker implements ICompilerWorker {
             String compiledHex = IOUtils.toString(p.getInputStream(), StandardCharsets.US_ASCII);
             p.waitFor();
             p.destroy();
+            if ( p.waitFor() != 0 ) {
+                throw new RuntimeException(compiledHex);
+            }
             return compiledHex;
         } catch ( Exception e ) {
-            LOG.error("exception when calling the cross compiler", e);
+            LOG.error("exception when calling the cross compiler: {}", e.getMessage());
             return null;
         }
     }

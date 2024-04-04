@@ -1,8 +1,8 @@
 package de.fhg.iais.roberta.worker;
 
-public class MicrobitV2CompilerWorker extends MicrobitCompilerWorker {
+public class MicrobitV2CompilerWorker extends MbedCompilerWorker {
 
     public MicrobitV2CompilerWorker() {
-        super("V2");
+        super("microbit-v2");
     }
 }
