@@ -1760,6 +1760,7 @@ function updateUI(tabSuffix: string) {
     }
 }
 
+// outdated data misses the names of hidden neurons. They have to be generated. See NNBean.java#setNN
 function selectDefaultId(forHidden?: boolean, layerIdx?: number): string {
     let i = 1;
     while (true) {

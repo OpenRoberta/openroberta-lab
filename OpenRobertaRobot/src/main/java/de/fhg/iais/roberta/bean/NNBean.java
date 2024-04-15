@@ -37,7 +37,8 @@ public class NNBean implements IProjectBean {
         Integer batchSize,
         Boolean discretize,
         Float percTrainData,
-        String activationKey, List<List<String>> hiddenNeurons) {
+        String activationKey,
+        List<List<String>> hiddenNeurons) {
         this.inputNeurons = inputNeurons;
         this.outputNeurons = outputNeurons;
         this.weights = weights;
@@ -133,7 +134,7 @@ public class NNBean implements IProjectBean {
         private Float percTrainData = null;
         private String activationKey = null;
         private Integer numHiddenLayers = null;
-        private List<List<String>> hiddenNeurons = new ArrayList<>();
+        private List<List<String>> hiddenNeuronsLayers = new ArrayList<>();
 
         /**
          * data contains the NN definition. Save it for later usage.
@@ -148,13 +149,30 @@ public class NNBean implements IProjectBean {
                 this.weights = netStateDefinition.optJSONArray("weights", EMPTY_JSON_ARRAY);
                 this.bias = netStateDefinition.optJSONArray("biases", EMPTY_JSON_ARRAY);
                 netStateDefinition.optJSONArray("inputs", EMPTY_JSON_ARRAY).forEach(i -> inputNeurons.add((String) i));
-                netStateDefinition.optJSONArray("hiddenNeurons", EMPTY_JSON_ARRAY).forEach(h -> {
-                    List<String> hiddenLayerNeurons = new ArrayList<>();
-                    ((JSONArray) h).forEach(neuron -> hiddenLayerNeurons.add((String) neuron));
-                    hiddenNeurons.add(hiddenLayerNeurons);
-                });
                 netStateDefinition.optJSONArray("outputs", EMPTY_JSON_ARRAY).forEach(o -> outputNeurons.add((String) o));
                 netStateDefinition.optJSONArray("networkShape", EMPTY_JSON_ARRAY).forEach(c -> networkShape.add((Integer) c));
+
+                hiddenNeuronsLayers = new ArrayList<>();
+                JSONArray netStateHiddenNeurons = netStateDefinition.optJSONArray("hiddenNeurons", null);
+                if ( netStateHiddenNeurons == null ) {
+                    // earlier versions of nn data misses the names of hidden neurons. They have to be generated. See neuralnetwork.ui.ts#selectDefaultId
+                    if ( networkShape.size() != 0 ) {
+                        for ( int i = 0; i < networkShape.size(); i++ ) {
+                            List<String> hiddenNeuronLayer = new ArrayList<>();
+                            for ( int j = 0; j < networkShape.get(i); j++ ) {
+                                hiddenNeuronLayer.add("h" + (i + 1) + "n" + (j + 1));
+                            }
+                            hiddenNeuronsLayers.add(hiddenNeuronLayer);
+                        }
+                    }
+                } else {
+                    netStateHiddenNeurons.forEach(hiddenLayer -> {
+                        List<String> hiddenLayerNeurons = new ArrayList<>();
+                        ((JSONArray) hiddenLayer).forEach(neuron -> hiddenLayerNeurons.add((String) neuron));
+                        hiddenNeuronsLayers.add(hiddenLayerNeurons);
+                    });
+                }
+
                 this.learningRate = netStateDefinition.getFloat("learningRate");
                 this.regularizationRate = netStateDefinition.getFloat("regularizationRate");
                 this.noise = netStateDefinition.getFloat("noise");
@@ -184,7 +202,7 @@ public class NNBean implements IProjectBean {
 
         @Override
         public NNBean build() {
-            return new NNBean(inputNeurons, outputNeurons, weights, bias, networkShape, numHiddenLayers, learningRate, regularizationRate, noise, batchSize, discretize, percTrainData, activationKey, hiddenNeurons);
+            return new NNBean(inputNeurons, outputNeurons, weights, bias, networkShape, numHiddenLayers, learningRate, regularizationRate, noise, batchSize, discretize, percTrainData, activationKey, hiddenNeuronsLayers);
         }
     }
 }
