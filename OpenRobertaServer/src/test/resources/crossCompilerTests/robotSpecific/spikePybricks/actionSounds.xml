@@ -1,0 +1,80 @@
+<export xmlns="http://de.fhg.iais.roberta.blockly"><program><block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="spike" xmlversion="3.1" description="" tags=""><instance x="311" y="-129"><block type="robControls_start" id="1" intask="true" deletable="false"><mutation declare="true"></mutation><field name="DEBUG"></field><statement name="ST"><block type="robGlobalVariables_declare" id="i,i;/fxiZ;_?gHYSt]l8" intask="true" deletable="false" movable="false"><mutation next="true" declaration_type="Number"></mutation><field name="VAR">A</field><field name="TYPE">Number</field><value name="VALUE"><block type="math_number" id="^S/^HjS+=!*^wC[~^8Eu" intask="true"><field name="NUM">440</field></block></value></block><block type="robGlobalVariables_declare" id="n0lD*J1SpPIPZdvAZ)v!" intask="true" deletable="false" movable="false"><mutation next="false" declaration_type="Number"></mutation><field name="VAR">C</field><field name="TYPE">Number</field><value name="VALUE"><block type="math_number" id="]Iy(BKnyvL^cs05ScJ1d" intask="true"><field name="NUM">261.6</field></block></value></block></statement></block><block type="actions_display_image" id=",CL=5KkCO;:CEr;m.4)M" intask="true"><mutation type="IMAGE"></mutation><field name="TYPE">IMAGE</field><hide name="ACTORPORT" value="_B"></hide><value name="VALUE"><block type="image_get_image" id="IwI5}5ej--.Qm2meF_X(" intask="true"><field name="IMAGE">MUSIC_QUAVER</field></block></value></block><block type="actions_play_note" id="(]~s9^1U6v#JI=LY(Z-k" intask="true"><field name="DURATION">2000</field><field name="FREQUENCY">261.626</field><hide name="ACTORPORT" value="_S"></hide></block><block type="actions_play_note" id="^||/W|XNT9946B^9fbly" intask="true"><field name="DURATION">1000</field><field name="FREQUENCY">391.995</field><hide name="ACTORPORT" value="_S"></hide></block><block type="actions_play_note" id="8/u6uBMB!LeC@J{g2~v@" intask="true"><field name="DURATION">500</field><field name="FREQUENCY">783.991</field><hide name="ACTORPORT" value="_S"></hide></block><block type="actions_play_note" id="=1k0VCxP3g2g[5Ix-sJy" intask="true"><field name="DURATION">250</field><field name="FREQUENCY">329.628</field><hide name="ACTORPORT" value="_S"></hide></block><block type="actions_play_note" id="dMb%/8oF*KiYdQ,771Z*" intask="true"><field name="DURATION">125</field><field name="FREQUENCY">146.832</field><hide name="ACTORPORT" value="_S"></hide></block><block type="actions_play_tone" id="PL#dG`MAShHSPc-M6y-m" intask="true"><hide name="ACTORPORT" value="_S"></hide><value name="FREQUENCY"><block type="variables_get" id="~V-iKWqJj,;3vE29`972" intask="true"><mutation datatype="Number"></mutation><field name="VAR">A</field></block></value><value name="DURATION"><block type="math_number" id="mlf;=Y_(W8?3zv+x%iSY" intask="true"><field name="NUM">250</field></block></value></block><block type="actions_play_tone" id="0}LK)45cX%4i`)p.c5g1" intask="true"><hide name="ACTORPORT" value="_S"></hide><value name="FREQUENCY"><block type="variables_get" id="AqWKu@gpP]Yk;837E6ON" intask="true"><mutation datatype="Number"></mutation><field name="VAR">C</field></block></value><value name="DURATION"><block type="math_number" id="?aX^5:C4V+0WKHTE253p" intask="true"><field name="NUM">250</field></block></value></block></instance></block_set></program><config><block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="spike" xmlversion="" description="" tags="">
+    <instance x="70" y="103">
+        <block type="robConf_differentialdrive" id="AM=n{?7R#nO#1~?a3j~u" intask="true">
+            <field name="NAME">_D</field>
+            <field name="BRICK_WHEEL_DIAMETER">5.6</field>
+            <field name="BRICK_TRACK_WIDTH">11.5</field>
+            <field name="MOTOR_L">A</field>
+            <field name="MOTOR_R">B</field>
+        </block>
+    </instance>
+    <instance x="289" y="183">
+        <block type="robConf_robot" id="robot" intask="true">
+            <field name="ROBOT">undefined</field>
+        </block>
+    </instance>
+    <instance x="560" y="216">
+        <block type="robConf_gyro" id="}O,nU9g2cL:S*jCf~_Z*" intask="true" deletable="false">
+            <field name="NAME">_K</field>
+        </block>
+    </instance>
+    <instance x="143" y="251">
+        <block type="robConf_motor" id="`CW3f_/xL#;Z!)*[EZz@" intask="true">
+            <field name="NAME">MA</field>
+            <field name="PORT">A</field>
+        </block>
+    </instance>
+    <instance x="560" y="252">
+        <block type="robConf_motor" id="S(Xm/UHHH;N[4Km1TML0" intask="true">
+            <field name="NAME">MB</field>
+            <field name="PORT">B</field>
+        </block>
+    </instance>
+    <instance x="119" y="314">
+        <block type="robConf_colour" id="e^*dGK},@+!mbUm6.p:-" intask="true">
+            <field name="NAME">F</field>
+            <field name="PORT">C</field>
+        </block>
+    </instance>
+    <instance x="560" y="315">
+        <block type="robConf_ultrasonic" id="Z5a?AUX(BKNfDVeH/-Dz" intask="true">
+            <field name="NAME">U</field>
+            <field name="PORT">D</field>
+        </block>
+    </instance>
+    <instance x="144" y="373">
+        <block type="robConf_display" id="tt" intask="true" deletable="false">
+            <field name="NAME">_B</field>
+        </block>
+    </instance>
+    <instance x="560" y="377">
+        <block type="robConf_touch" id="BK+JQtM]!+,YDt)K-{]*" intask="true">
+            <field name="NAME">B</field>
+            <field name="PORT">F</field>
+        </block>
+    </instance>
+    <instance x="136" y="440">
+        <block type="robConf_key" id="](;J)ShyJ;~HcwPOpoZQ" intask="true" deletable="false">
+            <field name="NAME">links</field>
+            <field name="PIN1">LEFT</field>
+        </block>
+    </instance>
+    <instance x="560" y="438">
+        <block type="robConf_key" id="aCW;Mk]1|#;zP8{)Ax*;" intask="true" deletable="false">
+            <field name="NAME">rechts</field>
+            <field name="PIN1">RIGHT</field>
+        </block>
+    </instance>
+    <instance x="560" y="495">
+        <block type="robConf_rgbled" id="C8/{!k%9L]YDK@vW/y,h" intask="true" deletable="false">
+            <field name="NAME">_R</field>
+            <field name="PORT">RGBLED_LF</field>
+        </block>
+    </instance>
+    <instance x="153" y="522">
+        <block type="robConf_buzzer" id="W3:Yn.C(/356snBah3a:" intask="true" deletable="false">
+            <field name="NAME">_S</field>
+        </block>
+    </instance>
+</block_set>
+</config></export>

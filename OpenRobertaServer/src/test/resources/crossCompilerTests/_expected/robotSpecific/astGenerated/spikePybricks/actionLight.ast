@@ -1,0 +1,8 @@
+RgbLedOnHiddenAction[colour: ColorConst[hexValue: #E701A7]]
+WaitTimeStmt[time: NumConst[value: 500]]
+RgbLedOffHiddenAction[]
+WaitTimeStmt[time: NumConst[value: 500]]
+
+(repeat [FOREVER, BoolConst[value: true]]
+AktionStmt [RgbLedOnHiddenAction[colour: SensorExpr [ColorSensor [F, COLOUR, - EMPTY_SLOT -]]]]
+)

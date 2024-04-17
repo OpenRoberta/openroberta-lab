@@ -1,0 +1,80 @@
+<export xmlns="http://de.fhg.iais.roberta.blockly"><program><block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="spike" xmlversion="3.1" description="" tags=""><instance x="378" y="-59"><block type="robControls_start" id="1" intask="true" deletable="false"><mutation declare="false"></mutation><field name="DEBUG"></field></block><block type="actions_motorDiff_on_for" id="[D_`02sP3BKB,P+|SY)B" intask="true"><field name="DIRECTION">FORWARD</field><hide name="ACTORPORT" value="_D"></hide><value name="POWER"><block type="math_number" id="LyJ1`^nbD2QtLWlg9`{)" intask="true"><field name="NUM">30</field></block></value><value name="DISTANCE"><block type="math_number" id="4}-#)|:AK1KgV1~wEO~M" intask="true"><field name="NUM">10</field></block></value></block><block type="actions_motorDiff_on_for" id="1N(P(6hV7r~f^kv4GiyL" intask="true"><field name="DIRECTION">BACKWARD</field><hide name="ACTORPORT" value="_D"></hide><value name="POWER"><block type="math_number" id="Q}.@#5Cv;8MAtg]M0cea" intask="true"><field name="NUM">30</field></block></value><value name="DISTANCE"><block type="math_number" id="S|}b78z|s#)~ZI@I!{/f" intask="true"><field name="NUM">10</field></block></value></block><block type="actions_motorDiff_on_for" id="@xxQ?w-XmjHa`|[aDzrN" intask="true"><field name="DIRECTION">BACKWARD</field><hide name="ACTORPORT" value="_D"></hide><value name="POWER"><block type="math_number" id="S#@NcpvD/D9hL6|L{S_J" intask="true"><field name="NUM">-30</field></block></value><value name="DISTANCE"><block type="math_number" id="1ewFNC-:OM^d^j8HDZv5" intask="true"><field name="NUM">-10</field></block></value></block><block type="actions_motorDiff_on" id="RSz,Kk=G/MhSM}~biQ.K" intask="true"><field name="DIRECTION">FORWARD</field><field name="REGULATION">TRUE</field><hide name="ACTORPORT" value="_D"></hide><value name="POWER"><block type="math_number" id="o8tpJ3.:=R4X5L]0%njt" intask="true"><field name="NUM">30</field></block></value></block><block type="robControls_wait_time" id="!Qose!NtZM8xbs/*sTrf" intask="true"><value name="WAIT"><block type="math_number" id="z19T@%%Gt*m_X#w#J-xG" intask="true"><field name="NUM">500</field></block></value></block><block type="actions_motorDiff_on" id="=l}pMtKdiICt}wx.XpH-" intask="true"><field name="DIRECTION">FORWARD</field><field name="REGULATION">TRUE</field><hide name="ACTORPORT" value="_D"></hide><value name="POWER"><block type="math_number" id="W~m6R(5x/xToaSr2jCl." intask="true"><field name="NUM">-30</field></block></value></block><block type="robControls_wait_time" id="lIz+#h@XJD,[!Th}.@1X" intask="true"><value name="WAIT"><block type="math_number" id="1M7[s;ldS}]]dm?:6f9o" intask="true"><field name="NUM">500</field></block></value></block><block type="actions_motorDiff_stop" id="I1?cH`eAanrb-C+z/Rvt" intask="true"><field name="CONTROL">COAST</field><hide name="ACTORPORT" value="_D"></hide></block><block type="robControls_wait_time" id="[@T`R9Y7B|.R0J).BRcq" intask="true"><value name="WAIT"><block type="math_number" id="juXr=V3B_ysZ4/NLtQ4D" intask="true"><field name="NUM">500</field></block></value></block><block type="actions_motorDiff_on" id="oas?5O/z2,ux7;1{NoL6" intask="true"><field name="DIRECTION">FORWARD</field><field name="REGULATION">FALSE</field><hide name="ACTORPORT" value="_D"></hide><value name="POWER"><block type="math_number" id="hL0R{JxxUbWo4!{Ipi:r" intask="true"><field name="NUM">30</field></block></value></block><block type="robControls_wait_time" id="h];neImSDM8ehNXM9Rsg" intask="true"><value name="WAIT"><block type="math_number" id="T6iS.#-/n[jt.I(Jxh[K" intask="true"><field name="NUM">500</field></block></value></block><block type="actions_motorDiff_on" id="=vU!FTu{Bh4Rm;r8yLy|" intask="true"><field name="DIRECTION">FORWARD</field><field name="REGULATION">FALSE</field><hide name="ACTORPORT" value="_D"></hide><value name="POWER"><block type="math_number" id="i=kIVD%]X)MyX;vs!Zcr" intask="true"><field name="NUM">-30</field></block></value></block><block type="robControls_wait_time" id="T+s^Meq5KOIxEPqKM/Ra" intask="true"><value name="WAIT"><block type="math_number" id="CdiJs:hG17e:IOb;M~:(" intask="true"><field name="NUM">500</field></block></value></block><block type="actions_motorDiff_stop" id="(Xyg2_/HjHLwGHP.CX:L" intask="true"><field name="CONTROL">BRAKE</field><hide name="ACTORPORT" value="_D"></hide></block><block type="robControls_wait_time" id="[HWSKl-Uxy-#eEqGEm2!" intask="true"><value name="WAIT"><block type="math_number" id="`zFruq;Cv3wEbX1SloW4" intask="true"><field name="NUM">500</field></block></value></block><block type="actions_motorDiff_turn_for" id="1[Zj2Ndyxfhv%U;AOBV1" intask="true"><field name="DIRECTION">RIGHT</field><hide name="ACTORPORT" value="_D"></hide><value name="POWER"><block type="math_number" id="vvj=rhUz7d(5}9(O:0I{" intask="true"><field name="NUM">30</field></block></value><value name="DEGREES"><block type="math_number" id="7[=iwLV(gU4A;qEcV10a" intask="true"><field name="NUM">20</field></block></value></block><block type="actions_motorDiff_turn_for" id="T6=wsOnFaYmPWaJ6_Q@=" intask="true"><field name="DIRECTION">LEFT</field><hide name="ACTORPORT" value="_D"></hide><value name="POWER"><block type="math_number" id="}3D/5Qv+y^r-Lfcjf3:T" intask="true"><field name="NUM">30</field></block></value><value name="DEGREES"><block type="math_number" id="k2j!T:mUttykPIni-Pz{" intask="true"><field name="NUM">20</field></block></value></block><block type="actions_motorDiff_turn_for" id="W]`#dC=/1v_2ms-}YOyg" intask="true"><field name="DIRECTION">LEFT</field><hide name="ACTORPORT" value="_D"></hide><value name="POWER"><block type="math_number" id="5O7F|eAtZ:Z9k}ij|y+}" intask="true"><field name="NUM">-30</field></block></value><value name="DEGREES"><block type="math_number" id="I]4q`%_1fT{mA0.cBswq" intask="true"><field name="NUM">-20</field></block></value></block><block type="actions_motorDiff_turn" id="C.#7MDWQcxI5xqvW%pD(" intask="true"><field name="DIRECTION">RIGHT</field><field name="REGULATION">TRUE</field><hide name="ACTORPORT" value="_D"></hide><value name="POWER"><block type="math_number" id="dt!s|e#c_lb{!s[`i#sh" intask="true"><field name="NUM">30</field></block></value></block><block type="robControls_wait_time" id="O`On1K%t`h2bL2f3(=|K" intask="true"><value name="WAIT"><block type="math_number" id="7@=*UGj5AZj~.XsH(TRC" intask="true"><field name="NUM">500</field></block></value></block><block type="actions_motorDiff_turn" id=")=RTvl/LJF~jbuxg+1T4" intask="true"><field name="DIRECTION">RIGHT</field><field name="REGULATION">TRUE</field><hide name="ACTORPORT" value="_D"></hide><value name="POWER"><block type="math_number" id="u.e=T1z{pqNPFNnkr-%Q" intask="true"><field name="NUM">-30</field></block></value></block><block type="robControls_wait_time" id="bx)L)g+uk}J3T6O;5!!Q" intask="true"><value name="WAIT"><block type="math_number" id="{6f3IkqE)f/C=W?h/;b," intask="true"><field name="NUM">500</field></block></value></block><block type="actions_motorDiff_turn" id="`HML8tn-3Vmv}A#S@F-4" intask="true"><field name="DIRECTION">LEFT</field><field name="REGULATION">FALSE</field><hide name="ACTORPORT" value="_D"></hide><value name="POWER"><block type="math_number" id="bnk4[Pi/W.{%DB5mgR]b" intask="true"><field name="NUM">30</field></block></value></block><block type="robControls_wait_time" id="q5xwF[9D;mfa5PEr3*.D" intask="true"><value name="WAIT"><block type="math_number" id="!_H2fxV.R_.#/y8?*2+S" intask="true"><field name="NUM">500</field></block></value></block><block type="actions_motorDiff_curve_for" id="d832RH%=Z?yP|R0h4.ei" intask="true"><field name="DIRECTION">FORWARD</field><hide name="ACTORPORT" value="_D"></hide><value name="POWER_LEFT"><block type="math_number" id="~`4gx*`J*cGAqNAi~Bbb" intask="true"><field name="NUM">10</field></block></value><value name="POWER_RIGHT"><block type="math_number" id="i}G5IdC-JkeW?K}lrzV#" intask="true"><field name="NUM">30</field></block></value><value name="DISTANCE"><block type="math_number" id="aoe|`[{5i!Eta|4(:XV1" intask="true"><field name="NUM">20</field></block></value></block><block type="actions_motorDiff_curve_for" id="ypQtkvz.^[3[P`vn3KA=" intask="true"><field name="DIRECTION">BACKWARD</field><hide name="ACTORPORT" value="_D"></hide><value name="POWER_LEFT"><block type="math_number" id="MiWPN4qCKG^Gzo?k`;u=" intask="true"><field name="NUM">10</field></block></value><value name="POWER_RIGHT"><block type="math_number" id="ja3ZWA:(-up3=HtE~2bQ" intask="true"><field name="NUM">30</field></block></value><value name="DISTANCE"><block type="math_number" id="AcR9EevxFiQihC4:Sv7f" intask="true"><field name="NUM">20</field></block></value></block><block type="actions_motorDiff_curve_for" id="(?-sdCA`c[M:^ph[=-YK" intask="true"><field name="DIRECTION">FORWARD</field><hide name="ACTORPORT" value="_D"></hide><value name="POWER_LEFT"><block type="math_number" id="Y=1helABa)D_Y~@nu_l{" intask="true"><field name="NUM">-29</field></block></value><value name="POWER_RIGHT"><block type="math_number" id="pU[)mkQ;aC218Mf{B7A_" intask="true"><field name="NUM">30</field></block></value><value name="DISTANCE"><block type="math_number" id="2%|u@KKy.{k~L*/llf-Z" intask="true"><field name="NUM">-1</field></block></value></block><block type="actions_motorDiff_curve" id="d;%{xUM-Wne32vzG,^;1" intask="true"><field name="DIRECTION">FORWARD</field><field name="REGULATION">TRUE</field><hide name="ACTORPORT" value="_D"></hide><value name="POWER_LEFT"><block type="math_number" id=":7XK_H*VdeN]Oi:os*KZ" intask="true"><field name="NUM">10</field></block></value><value name="POWER_RIGHT"><block type="math_number" id="4UKCT]F0Jgw1Eo;s,IKf" intask="true"><field name="NUM">30</field></block></value></block><block type="robControls_wait_time" id="w4?a6]{(*`-1P;Jo|op8" intask="true"><value name="WAIT"><block type="math_number" id="`FuCSJryMejOJkblCz]S" intask="true"><field name="NUM">500</field></block></value></block><block type="actions_motorDiff_curve" id="H4D3fAdXhZ6Nu|G8GtS7" intask="true"><field name="DIRECTION">FORWARD</field><field name="REGULATION">TRUE</field><hide name="ACTORPORT" value="_D"></hide><value name="POWER_LEFT"><block type="math_number" id="J]]@/bWY5@}L}FeTfGT0" intask="true"><field name="NUM">-30</field></block></value><value name="POWER_RIGHT"><block type="math_number" id="D`HY{Zny{6`h.JAmL[KH" intask="true"><field name="NUM">-30</field></block></value></block><block type="robControls_wait_time" id="+JWqGudNfzfhpS`B}-43" intask="true"><value name="WAIT"><block type="math_number" id="ezO:.n7qoe.ySGiej=/{" intask="true"><field name="NUM">500</field></block></value></block><block type="actions_motorDiff_curve" id=")y/A3zD{a_O7Gf5Hun,P" intask="true"><field name="DIRECTION">BACKWARD</field><field name="REGULATION">FALSE</field><hide name="ACTORPORT" value="_D"></hide><value name="POWER_LEFT"><block type="math_number" id="Bc7tYX=dSYqOJjca6Tx," intask="true"><field name="NUM">10</field></block></value><value name="POWER_RIGHT"><block type="math_number" id="gI]-A~]kbc=%i?(;|%iu" intask="true"><field name="NUM">30</field></block></value></block></instance></block_set></program><config><block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="spike" xmlversion="" description="" tags="">
+    <instance x="70" y="103">
+        <block type="robConf_differentialdrive" id="AM=n{?7R#nO#1~?a3j~u" intask="true">
+            <field name="NAME">_D</field>
+            <field name="BRICK_WHEEL_DIAMETER">5.6</field>
+            <field name="BRICK_TRACK_WIDTH">11.5</field>
+            <field name="MOTOR_L">A</field>
+            <field name="MOTOR_R">B</field>
+        </block>
+    </instance>
+    <instance x="289" y="183">
+        <block type="robConf_robot" id="robot" intask="true">
+            <field name="ROBOT">undefined</field>
+        </block>
+    </instance>
+    <instance x="560" y="216">
+        <block type="robConf_gyro" id="}O,nU9g2cL:S*jCf~_Z*" intask="true" deletable="false">
+            <field name="NAME">_K</field>
+        </block>
+    </instance>
+    <instance x="143" y="251">
+        <block type="robConf_motor" id="`CW3f_/xL#;Z!)*[EZz@" intask="true">
+            <field name="NAME">MA</field>
+            <field name="PORT">A</field>
+        </block>
+    </instance>
+    <instance x="560" y="252">
+        <block type="robConf_motor" id="S(Xm/UHHH;N[4Km1TML0" intask="true">
+            <field name="NAME">MB</field>
+            <field name="PORT">B</field>
+        </block>
+    </instance>
+    <instance x="119" y="314">
+        <block type="robConf_colour" id="e^*dGK},@+!mbUm6.p:-" intask="true">
+            <field name="NAME">F</field>
+            <field name="PORT">C</field>
+        </block>
+    </instance>
+    <instance x="560" y="315">
+        <block type="robConf_ultrasonic" id="Z5a?AUX(BKNfDVeH/-Dz" intask="true">
+            <field name="NAME">U</field>
+            <field name="PORT">D</field>
+        </block>
+    </instance>
+    <instance x="144" y="373">
+        <block type="robConf_display" id="tt" intask="true" deletable="false">
+            <field name="NAME">_B</field>
+        </block>
+    </instance>
+    <instance x="560" y="377">
+        <block type="robConf_touch" id="BK+JQtM]!+,YDt)K-{]*" intask="true">
+            <field name="NAME">B</field>
+            <field name="PORT">F</field>
+        </block>
+    </instance>
+    <instance x="136" y="440">
+        <block type="robConf_key" id="](;J)ShyJ;~HcwPOpoZQ" intask="true" deletable="false">
+            <field name="NAME">links</field>
+            <field name="PIN1">LEFT</field>
+        </block>
+    </instance>
+    <instance x="560" y="438">
+        <block type="robConf_key" id="aCW;Mk]1|#;zP8{)Ax*;" intask="true" deletable="false">
+            <field name="NAME">rechts</field>
+            <field name="PIN1">RIGHT</field>
+        </block>
+    </instance>
+    <instance x="560" y="495">
+        <block type="robConf_rgbled" id="C8/{!k%9L]YDK@vW/y,h" intask="true" deletable="false">
+            <field name="NAME">_R</field>
+            <field name="PORT">RGBLED_LF</field>
+        </block>
+    </instance>
+    <instance x="153" y="522">
+        <block type="robConf_buzzer" id="W3:Yn.C(/356snBah3a:" intask="true" deletable="false">
+            <field name="NAME">_S</field>
+        </block>
+    </instance>
+</block_set>
+</config></export>

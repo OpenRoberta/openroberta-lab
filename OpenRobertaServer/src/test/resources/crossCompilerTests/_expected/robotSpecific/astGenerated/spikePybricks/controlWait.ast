@@ -1,0 +1,7 @@
+WaitStmt [
+(repeat [WAIT, BoolConst[value: true]]
+)]
+WaitTimeStmt[time: NumConst[value: 500]]
+WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [TouchSensor [B, PRESSED, - EMPTY_SLOT -]]], BoolConst[value: true]]]
+)]

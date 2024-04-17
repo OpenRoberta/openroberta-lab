@@ -1,0 +1,6 @@
+Sensors: 
+[UsedSensor [GYRO, GYRO, DEFAULT], UsedSensor [TIMER_1, TIMER, DEFAULT]]
+Actors: 
+[UsedActor [, DISPLAY]]
+Methods: 
+[DISPLAY_TEXT, GET_ACCELERATION, IS_FREE_FALL, IS_SHAKEN, IS_TAPPED]

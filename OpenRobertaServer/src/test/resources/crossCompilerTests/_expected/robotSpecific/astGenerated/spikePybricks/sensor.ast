@@ -1,0 +1,50 @@
+DisplayTextAction[displayTextMode: TEXT, textToDisplay: SensorExpr [KeysSensor [links, PRESSED, - EMPTY_SLOT -]]]
+DisplayTextAction[displayTextMode: TEXT, textToDisplay: SensorExpr [TouchSensor [B, PRESSED, - EMPTY_SLOT -]]]
+DisplayTextAction[displayTextMode: TEXT, textToDisplay: SensorExpr [UltrasonicSensor [U, DISTANCE, - EMPTY_SLOT -]]]
+WaitStmt [
+(repeat [WAIT, Binary [LT, SensorExpr [GetSampleSensor [UltrasonicSensor [U, DISTANCE, - EMPTY_SLOT -]]], NumConst[value: 30]]]
+)]
+DisplayTextAction[displayTextMode: TEXT, textToDisplay: StringConst[value: Distance below 30cm]]
+WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [TouchSensor [B, PRESSED, - EMPTY_SLOT -]]], BoolConst[value: true]]]
+)]
+DisplayTextAction[displayTextMode: TEXT, textToDisplay: StringConst[value: Touch Pressed]]
+WaitStmt [
+(repeat [WAIT, Binary [GT, SensorExpr [GetSampleSensor [TouchSensor [B, FORCE, - EMPTY_SLOT -]]], NumConst[value: 30]]]
+)]
+DisplayTextAction[displayTextMode: TEXT, textToDisplay: StringConst[value: Force Above 30%]]
+WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [ColorSensor [F, COLOUR, - EMPTY_SLOT -]]], ColorConst[hexValue: #ffffff]]]
+)]
+DisplayTextAction[displayTextMode: TEXT, textToDisplay: StringConst[value: White Detected]]
+WaitStmt [
+(repeat [WAIT, Binary [LT, SensorExpr [GetSampleSensor [ColorSensor [F, LIGHT, - EMPTY_SLOT -]]], NumConst[value: 50]]]
+)]
+DisplayTextAction[displayTextMode: TEXT, textToDisplay: StringConst[value: Light Above 30%]]
+WaitStmt [
+(repeat [WAIT, Binary [LT, SensorExpr [GetSampleSensor [ColorSensor [F, AMBIENTLIGHT, - EMPTY_SLOT -]]], NumConst[value: 50]]]
+)]
+DisplayTextAction[displayTextMode: TEXT, textToDisplay: StringConst[value: Ambient Light Above 30%]]
+WaitStmt [
+(repeat [WAIT, Binary [LT, SensorExpr [GetSampleSensor [ColorSensor [F, REDCHANNEL, - EMPTY_SLOT -]]], NumConst[value: 30]]]
+)]
+DisplayTextAction[displayTextMode: TEXT, textToDisplay: StringConst[value: Red Above 30%]]
+WaitStmt [
+(repeat [WAIT, Binary [LT, SensorExpr [GetSampleSensor [ColorSensor [F, GREENCHANNEL, - EMPTY_SLOT -]]], NumConst[value: 30]]]
+)]
+DisplayTextAction[displayTextMode: TEXT, textToDisplay: StringConst[value: Green Above 30%]]
+WaitStmt [
+(repeat [WAIT, Binary [LT, SensorExpr [GetSampleSensor [ColorSensor [F, BLUECHANNEL, - EMPTY_SLOT -]]], NumConst[value: 30]]]
+)]
+DisplayTextAction[displayTextMode: TEXT, textToDisplay: StringConst[value: Blue Above 30%]]
+WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [KeysSensor [links, PRESSED, - EMPTY_SLOT -]]], BoolConst[value: true]]]
+)]
+DisplayTextAction[displayTextMode: TEXT, textToDisplay: StringConst[value: Button Left Pressed]]
+WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [KeysSensor [rechts, PRESSED, - EMPTY_SLOT -]]], BoolConst[value: true]]]
+)]
+DisplayTextAction[displayTextMode: TEXT, textToDisplay: StringConst[value: Button Right Pressed]]
+TimerReset[sensorPort: 1]
+WaitTimeStmt[time: NumConst[value: 500]]
+DisplayTextAction[displayTextMode: TEXT, textToDisplay: FunctionExpr [TextJoinFunct [StringConst[value: Timer:], SensorExpr [TimerSensor [1, VALUE, - EMPTY_SLOT -]]]]]

@@ -89,7 +89,7 @@ public abstract class AbstractSpikeValidatorAndCollectorVisitor extends CommonNe
     }
 
     @Override
-    final public Void visitDisplayTextAction(DisplayTextAction displayTextAction) {
+    public Void visitDisplayTextAction(DisplayTextAction displayTextAction) {
         requiredComponentVisited(displayTextAction, displayTextAction.textToDisplay);
         checkActorPort(displayTextAction);
         usedHardwareBuilder.addUsedActor(new UsedActor("", "DISPLAY"));
@@ -203,7 +203,7 @@ public abstract class AbstractSpikeValidatorAndCollectorVisitor extends CommonNe
     }
 
     @Override
-    final public Void visitPlayNoteAction(PlayNoteAction playNoteAction) {
+    public Void visitPlayNoteAction(PlayNoteAction playNoteAction) {
         checkActorPort(playNoteAction);
         return null;
     }
@@ -280,7 +280,7 @@ public abstract class AbstractSpikeValidatorAndCollectorVisitor extends CommonNe
         }
     }
 
-    private ConfigurationComponent getMotorFromUserName(String userName) {
+    protected ConfigurationComponent getMotorFromUserName(String userName) {
         for ( Map.Entry<String, ConfigurationComponent> entry : this.robotConfiguration.getConfigurationComponents().entrySet() ) {
             ConfigurationComponent component = entry.getValue();
             String comProp = component.componentProperties.get("PORT");

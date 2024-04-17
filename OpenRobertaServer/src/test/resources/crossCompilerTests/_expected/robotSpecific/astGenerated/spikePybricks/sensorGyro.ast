@@ -1,0 +1,4 @@
+
+(repeat [FOREVER, BoolConst[value: true]]
+AktionStmt [DisplayTextAction[displayTextMode: TEXT, textToDisplay: FunctionExpr [TextJoinFunct [StringConst[value: x], SensorExpr [GyroSensor [_K, ANGLE, X]], StringConst[value: y], SensorExpr [GyroSensor [_K, ANGLE, Y]], StringConst[value: z], SensorExpr [GyroSensor [_K, ANGLE, Z]]]]]]
+)

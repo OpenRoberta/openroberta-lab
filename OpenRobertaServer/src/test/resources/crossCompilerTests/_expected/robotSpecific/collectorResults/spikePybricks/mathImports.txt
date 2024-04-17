@@ -1,0 +1,6 @@
+Sensors: 
+[]
+Actors: 
+[UsedActor [, DISPLAY], UsedActor [null, random], UsedActor [null, randDouble]]
+Methods: 
+[ABS, CAST, COS, DISPLAY_TEXT, DIVISIBLE_BY, EVEN, EXP, LN, LOG10, NEGATIVE, ODD, POSITIVE, POWER, RANDOM, ROOT, ROUNDDOWN, ROUNDUP, SIN, SQUARE, WHOLE]

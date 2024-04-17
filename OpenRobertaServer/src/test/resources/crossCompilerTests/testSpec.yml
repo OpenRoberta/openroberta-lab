@@ -123,6 +123,10 @@ robots:
     template: spike
     dir: spike
     suffix: ".py"
+  spikePybricks:
+    template: spike
+    dir: spikePybricks
+    suffix: ".py"
 
 progs:
   assign:

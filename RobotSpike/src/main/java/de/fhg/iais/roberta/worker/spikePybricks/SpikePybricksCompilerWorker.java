@@ -1,6 +1,10 @@
 package de.fhg.iais.roberta.worker.spikePybricks;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.nio.charset.StandardCharsets;
+import java.util.stream.Collectors;
 
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -10,6 +14,7 @@ import de.fhg.iais.roberta.bean.CompilerSetupBean;
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.Util;
+import de.fhg.iais.roberta.util.basic.Pair;
 import de.fhg.iais.roberta.worker.ICompilerWorker;
 
 public class SpikePybricksCompilerWorker implements ICompilerWorker {
@@ -17,42 +22,61 @@ public class SpikePybricksCompilerWorker implements ICompilerWorker {
 
     @Override
     public void execute(Project project) {
-        project.setResult(this.runBuild(project));
+        String programName = project.getProgramName();
+        String robot = project.getRobot();
+
+        Pair<Key, String> workflowResult = this.runBuild(project);
+        project.setResult(workflowResult.getFirst());
+
+        if ( workflowResult.getFirst() == Key.COMPILERWORKFLOW_SUCCESS ) {
+            project.setCompiledHex(workflowResult.getSecond());
+            LOG.info("compile {} program {} successful", robot, programName);
+        } else {
+            project.addResultParam("MESSAGE", workflowResult.getSecond());
+            LOG.error("compile of program {} for robot {} failed with message: {}", programName, robot, workflowResult);
+        }
     }
 
-    private Key runBuild(Project project) {
+    private Pair<Key, String> runBuild(Project project) {
         CompilerSetupBean compilerWorkflowBean = project.getWorkerResult(CompilerSetupBean.class);
         String compilerResourcesDir = compilerWorkflowBean.getCompilerResourcesDir();
         String sourceCode = project.getSourceCode().toString();
+        String mpyCrossVersion = "6";
 
         String[] executableWithParameters =
             {
                 "python",
                 compilerResourcesDir + "compile.py",
-                sourceCode
+                sourceCode,
+                mpyCrossVersion
             };
 
-        project.setCompiledHex(this.getBinaryFromCrossCompiler(executableWithParameters));
+        Pair<String, String> result = this.getBinaryFromCrossCompiler(executableWithParameters);
+        String status = result.getFirst();
+        String compiledhex = result.getSecond();
 
-        if ( project.getCompiledHex() != null && !project.getCompiledHex().isEmpty() ) {
-            return Key.COMPILERWORKFLOW_SUCCESS;
+        if ( status.equals("success") ) {
+            return Pair.of(Key.COMPILERWORKFLOW_SUCCESS, compiledhex);
         } else {
             Util.logCrosscompilerError(LOG, "no binary returned", sourceCode, project.isNativeEditorCode());
-            return Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED;
+            return Pair.of(Key.COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED, compiledhex);
         }
     }
 
-    protected final String getBinaryFromCrossCompiler(String[] executableWithParameters) {
+    protected final Pair<String, String> getBinaryFromCrossCompiler(String[] executableWithParameters) {
         try {
             ProcessBuilder procBuilder = new ProcessBuilder(executableWithParameters);
             procBuilder.redirectErrorStream(true);
             procBuilder.redirectInput(ProcessBuilder.Redirect.INHERIT);
             procBuilder.redirectOutput(ProcessBuilder.Redirect.PIPE);
             Process p = procBuilder.start();
-            String compiledHex = IOUtils.toString(p.getInputStream(), StandardCharsets.US_ASCII);
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream(), StandardCharsets.UTF_8));
+            String status = reader.readLine();
+            String compiledHex = reader.lines().collect(Collectors.joining());
             p.waitFor();
             p.destroy();
-            return compiledHex;
+            return Pair.of(status, compiledHex);
         } catch ( Exception e ) {
             LOG.error("exception when calling the cross compiler", e);
             return null;

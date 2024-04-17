@@ -1,0 +1,6 @@
+Sensors: 
+[UsedSensor [links, BUTTON, DEFAULT], UsedSensor [B, TOUCH, PRESSED], UsedSensor [U, ULTRASONIC, DISTANCE], UsedSensor [B, TOUCH, FORCE], UsedSensor [F, COLOR, DEFAULT], UsedSensor [rechts, BUTTON, DEFAULT], UsedSensor [1, TIMER, DEFAULT], UsedSensor [1, TIMER, VALUE]]
+Actors: 
+[UsedActor [, DISPLAY]]
+Methods: 
+[DISPLAY_TEXT, GET_COLOR, GET_DIST, HSVTORGB]

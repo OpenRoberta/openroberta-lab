@@ -1,0 +1,37 @@
+DisplayTextAction[displayTextMode: TEXT, textToDisplay: SensorExpr [GestureSensor [- EMPTY_PORT -, FRONT, - EMPTY_SLOT -]]]
+WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [GestureSensor [- EMPTY_PORT -, FRONT, - EMPTY_SLOT -]]], BoolConst[value: true]]]
+)]
+DisplayTextAction[displayTextMode: TEXT, textToDisplay: StringConst[value: front]]
+WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [GestureSensor [- EMPTY_PORT -, BACK, - EMPTY_SLOT -]]], BoolConst[value: true]]]
+)]
+DisplayTextAction[displayTextMode: TEXT, textToDisplay: StringConst[value: back]]
+WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [GestureSensor [- EMPTY_PORT -, UP, - EMPTY_SLOT -]]], BoolConst[value: true]]]
+)]
+DisplayTextAction[displayTextMode: TEXT, textToDisplay: StringConst[value: upright]]
+WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [GestureSensor [- EMPTY_PORT -, DOWN, - EMPTY_SLOT -]]], BoolConst[value: true]]]
+)]
+DisplayTextAction[displayTextMode: TEXT, textToDisplay: StringConst[value: upside down]]
+WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [GestureSensor [- EMPTY_PORT -, LEFT, - EMPTY_SLOT -]]], BoolConst[value: true]]]
+)]
+DisplayTextAction[displayTextMode: TEXT, textToDisplay: StringConst[value: left]]
+WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [GestureSensor [- EMPTY_PORT -, RIGHT, - EMPTY_SLOT -]]], BoolConst[value: true]]]
+)]
+DisplayTextAction[displayTextMode: TEXT, textToDisplay: StringConst[value: right]]
+WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [GestureSensor [- EMPTY_PORT -, TAPPED, - EMPTY_SLOT -]]], BoolConst[value: true]]]
+)]
+DisplayTextAction[displayTextMode: TEXT, textToDisplay: StringConst[value: tapped]]
+WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [GestureSensor [- EMPTY_PORT -, SHAKE, - EMPTY_SLOT -]]], BoolConst[value: true]]]
+)]
+DisplayTextAction[displayTextMode: TEXT, textToDisplay: StringConst[value: shaking]]
+WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [GestureSensor [- EMPTY_PORT -, FREEFALL, - EMPTY_SLOT -]]], BoolConst[value: true]]]
+)]
+DisplayTextAction[displayTextMode: TEXT, textToDisplay: StringConst[value: free fall]]

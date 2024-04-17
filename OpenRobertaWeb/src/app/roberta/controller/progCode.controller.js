@@ -6,6 +6,7 @@ import * as PROGRAM from 'program.model';
 import * as Blockly from 'blockly';
 import * as CodeFlask from 'codeflask';
 import * as $ from 'jquery';
+import { getProgramName } from 'guiState.controller';
 
 const INITIAL_WIDTH = 0.5;
 var blocklyWorkspace;
@@ -86,7 +87,7 @@ function initEvents() {
                 xmlProgram,
                 xmlConfigText,
                 PROG_C.getSSID(),
-                PROG_C.password,
+                PROG_C.getPassword(),
                 language,
                 function (result) {
                     PROG_C.reloadProgram(result, true);
@@ -121,7 +122,7 @@ function toggleCode($button) {
             xmlProgram,
             xmlConfigText,
             PROG_C.getSSID(),
-            PROG_C.password,
+            PROG_C.getPassword(),
             language,
             function (result) {
                 PROG_C.reloadProgram(result);

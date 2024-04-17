@@ -1,0 +1,8 @@
+DisplayImageAction[displayImageMode: IMAGE, valuesToDisplay: PredefinedImage[imageName: MUSIC_QUAVER]]
+PlayNoteAction[duration: 2000, frequency: 261.626]
+PlayNoteAction[duration: 1000, frequency: 391.995]
+PlayNoteAction[duration: 500, frequency: 783.991]
+PlayNoteAction[duration: 250, frequency: 329.628]
+PlayNoteAction[duration: 125, frequency: 146.832]
+PlayToneAction[frequency: Var [A], duration: NumConst[value: 250]]
+PlayToneAction[frequency: Var [C], duration: NumConst[value: 250]]

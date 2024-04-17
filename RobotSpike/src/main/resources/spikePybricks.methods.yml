@@ -28,29 +28,21 @@ HSVTORGB:
 
 TANKDRIVE_DIST:
   PYTHON: |
-    def circle_circumference(diameter):
-        return math.pi * (diameter)
-
     def distance_to_angle(distance):
         return (distance/circle_circumference(WHEEL_DIAMETER)) * 360
     
-    def rpm_to_mm_sec(rpm):
-        return (rpm/360) * circle_circumference(WHEEL_DIAMETER)
-    
     def catch_edge_cases(dist, left_speed, right_speed):
         near_zero = 0.5
-        if(abs(dist) < near_zero)
+        #in case velocities cancel dont move, because no distance will be driven
+        if(abs(dist) < near_zero or abs(left_speed+right_speed) < near_zero):
             return True
-        if((abs(left_speed) < near_zero and abs(right_speed) < near_zero)):
-            left_speed = (abs(left_speed)/left_speed) * 0.5
-            right_speed = (abs(right_speed)/right_speed) * 0.5
+        if((abs(left_speed) < 1.5 and abs(right_speed) < 1.5)):
+            left_speed = (abs(left_speed)/left_speed) * 1.5
+            right_speed = (abs(right_speed)/right_speed) * 1.5
         #just go straight no need for calculations
         if abs(left_speed - right_speed) <  near_zero:
-            drive_base.settings(straight_speed=get_speed_from_percent(left_speed))
+            drive_base.settings(straight_speed= deg_sec_to_mm_sec(get_deg_sec_from_percent(left_speed)))
             drive_base.straight(abs(left_speed)/left_speed * dist * 10)
-            return True
-        #in case velocities cancel dont move, because no distance will be driven
-        if abs(left_speed+right_speed) < near_zero:
             return True
         return False
     
@@ -64,15 +56,15 @@ TANKDRIVE_DIST:
         sign = abs(dist)/dist
         #to mm always calc with positive dist
         dist = (abs(dist) * 10)
-        #we have to keep rpm to set motor speed later
-        rpm_left = get_speed_from_percent(left_speed)
-        rpm_right = get_speed_from_percent(right_speed)
+        #we have to keep deg_sec to set motor speed later
+        deg_sec_left = get_deg_sec_from_percent(left_speed)
+        deg_sec_right = get_deg_sec_from_percent(right_speed)
         #we need mm/sec to calculate driven radius
-        speed_left_mm_sec =  rpm_to_mm_sec(rpm_left)
-        speed_right_mm_sec = rpm_to_mm_sec(rpm_right)
+        speed_left_mm_sec =  deg_sec_to_mm_sec(deg_sec_left)
+        speed_right_mm_sec = deg_sec_to_mm_sec(deg_sec_right)
     
         #we need this distinction because inner/outer circle change depending on which motor is faster
-        if (abs(rpm_right) > abs(rpm_left)):
+        if (abs(deg_sec_right) > abs(deg_sec_left)):
             drives_radius = (TRACKWIDTH/2.0) * ((speed_left_mm_sec+speed_right_mm_sec)/(speed_right_mm_sec-speed_left_mm_sec))
             left_circle = circle_circumference(drives_radius - (TRACKWIDTH/2))
             right_circle = circle_circumference(drives_radius + (TRACKWIDTH/2))
@@ -85,13 +77,13 @@ TANKDRIVE_DIST:
         angle_left = distance_to_angle(percent_to_drive * left_circle)
         angle_right = distance_to_angle(percent_to_drive * right_circle)
     
-        if not rpm_left :
-            rpm_left = 1
-        if not rpm_right :
-            rpm_right = 1
+        if not deg_sec_left :
+            deg_sec_left = 1
+        if not deg_sec_right :
+            deg_sec_right = 1
     
-        left_motor.run_angle(rpm_left,abs(rpm_left)/rpm_left * sign * angle_left , wait=False)
-        right_motor.run_angle(rpm_right,abs(rpm_right)/rpm_right * sign * angle_right, wait=False)
+        left_motor.run_angle(deg_sec_left, sign * abs(angle_left) , wait=False)
+        right_motor.run_angle(deg_sec_right, sign * abs(angle_right) , wait=False)
     
         wait_for_completion()
 
@@ -99,8 +91,8 @@ DIFFDRIVE:
   PYTHON: |
     def diff_drive(left_speed, right_speed, regulated):
         if(regulated):
-            left_motor.run(get_speed_from_percent(left_speed))
-            right_motor.run(get_speed_from_percent(right_speed))
+            left_motor.run(get_deg_sec_from_percent(left_speed))
+            right_motor.run(get_deg_sec_from_percent(right_speed))
         else:
             left_motor.dc(left_speed)
             right_motor.dc(right_speed)
@@ -108,20 +100,29 @@ DIFFDRIVE:
 DRIVE_STRAIGHT:
   PYTHON: |
     def drive_straight(speed, dist):
-        if abs(speed) < 0.5:
-            speed = (abs(speed)/speed) * 0.5
-        drive_base.settings(straight_speed = get_speed_from_percent(speed))
+        if abs(speed) < 1.5:
+            speed = (abs(speed)/speed) * 1.5
+        drive_base.settings(straight_speed = deg_sec_to_mm_sec(get_deg_sec_from_percent(speed)))
         drive_base.straight(abs(speed)/speed * dist * 10 )
 
-
-SPEED_FROM_PERCENT:
+DEG_SEC_FROM_PERCENT:
   PYTHON: |
-    def get_speed_from_percent(percent):
+    def get_deg_sec_from_percent(percent):
         if percent < -100 :
             percent = -100
         if percent > 100 :
             percent = 100
         return int(810.0 * (percent/100.0))
+
+DEG_SEC_TO_MM_SEC:
+  PYTHON: |
+    def deg_sec_to_mm_sec(deg_sec):
+        return (deg_sec/360) * circle_circumference(WHEEL_DIAMETER)
+
+CIRCLE_CIRCUMFERENCE:
+  PYTHON: |
+    def circle_circumference(diameter):
+        return math.pi * (diameter)
 
 GET_ACCELERATION:
   PYTHON: |
@@ -134,7 +135,7 @@ IS_FREE_FALL:
         threshold = 350
         stopWatch.time()
         start = stopWatch.time()
-        while start - stopWatch.time() < 333:
+        while stopWatch.time() - start < 333:
             if(get_acceleration() < threshold): 
                 return True;
         return False
@@ -150,15 +151,14 @@ IS_TAPPED:
     def diff(a,b):
         return vector(a[0]-b[0],a[1]-b[1],a[2]-b[2])
     
-    lowPassValue = hub.imu.acceleration()
     def is_tapped(threshold = 5000):
-        global lowPassValue
+        low_pass_value = hub.imu.acceleration()
         start = stopWatch.time()
-        while start - stopWatch.time() < 333:
+        while stopWatch.time() - start < 333:
             acceleration = hub.imu.acceleration()
-            lowPassValue = lerp(lowPassValue, acceleration, 1/2)
-            deltaAcceleration = diff(acceleration, lowPassValue)
-            prod =  math.sqrt((abs(deltaAcceleration[0])**2) + (abs(deltaAcceleration[1])**2) + (abs(deltaAcceleration[2])**2))
+            low_pass_value = lerp(low_pass_value, acceleration, 1/2)
+            delta_acceleration = diff(acceleration, low_pass_value)
+            prod =  math.sqrt((abs(delta_acceleration[0])**2) + (abs(delta_acceleration[1])**2) + (abs(delta_acceleration[2])**2))
             if prod > threshold:
               return True
         wait(20)
@@ -183,9 +183,9 @@ TURN_FOR:
         if power == 0 or degrees == 0:
             return
         sign = (abs(power)/power)
-        tr = (get_speed_from_percent( power ) * 2 * (WHEEL_DIAMETER * math.pi)) / (TRACKWIDTH * math.pi)
+        tr = (get_deg_sec_from_percent( power )  * (WHEEL_DIAMETER * math.pi)) / (TRACKWIDTH * math.pi)
         if abs(tr) < 5 :
-            tr = (abs(tr)/tr) * 5
+            tr = 5
         drive_base.settings(turn_rate = tr)
         drive_base.turn( sign * degrees * direction )
 
@@ -193,7 +193,7 @@ SHOW_ANIMATION:
   PYTHON: |
     def show_animation(image_list):
         hub.display.animate(image_list, 500);
-        wait(500 * len(image_list))
+        wait(500 * len(image_list) - 10)
         hub.display.icon(image_list[len(image_list)-1])
 
 GET_COLOR:
@@ -201,9 +201,37 @@ GET_COLOR:
     def get_color(color_sensor):
         hsv = color_sensor.hsv()
         color = color_sensor.color()
-        if(color == Color.BLACK):
-            if abs(hsv.v) > 10  :
+        if(color == Color.BLACK or color == Color.NONE):
+            if hsv.v > 5 or hsv.s > 10:
                 return Color.BLACK
         elif abs(abs(hsv.h) - abs(color.h))%330 < 30 or color == Color.WHITE:
             return color
         return Color.NONE
+
+HUB_LIGHT:
+  PYTHON: |
+    def hub_light_on(color):
+        if color != Color.BLACK and color != Color.WHITE and color != Color.NONE :
+            hub.light.on(Color(color.h,100,100))
+        elif color == Color.BLACK or color == Color.NONE:
+            hub.light.on(Color(0,0,0))
+        elif color == Color.WHITE :
+            hub.light.on(Color(0,0,100))
+
+DISPLAY_TEXT:
+  PYTHON: |
+    def display_text(text):
+        text_list = list(text)
+        for idx,c in enumerate(text_list):
+            if ord(c) < 33 or ord(c) > 125:
+                text_list[idx] = '?'
+        hub.display.text("".join(text_list))
+
+GET_DIST:
+  PYTHON: |
+    def get_dist(distance_sensor):
+        dist = distance_sensor.distance()/10
+        if dist >= 200:
+            return 999
+        else:
+            return int(dist)

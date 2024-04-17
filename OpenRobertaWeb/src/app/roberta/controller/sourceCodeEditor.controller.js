@@ -197,7 +197,7 @@ function getSourceCode(reload) {
         xmlProgram,
         xmlConfigText,
         PROG_C.getSSID(),
-        PROG_C.password,
+        PROG_C.getPassword(),
         language,
         function (result) {
             PROG_C.reloadProgram(result);

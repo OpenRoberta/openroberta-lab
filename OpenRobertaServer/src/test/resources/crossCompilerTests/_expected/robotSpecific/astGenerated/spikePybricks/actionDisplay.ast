@@ -1,0 +1,7 @@
+DisplayTextAction[displayTextMode: TEXT, textToDisplay: StringConst[value: ABC]]
+DisplayTextAction[displayTextMode: CHARACTER, textToDisplay: StringConst[value: DEF]]
+DisplayImageAction[displayImageMode: IMAGE, valuesToDisplay: Image [[#, , , , #]:[, , , , ]:[, , #, , ]:[, , , , ]:[#, , , , #]]]
+DisplayImageAction[displayImageMode: ANIMATION, valuesToDisplay: Var [item]]
+DisplayClearAction[]
+DisplayImageAction[displayImageMode: IMAGE, valuesToDisplay: PredefinedImage[imageName: YES]]
+WaitTimeStmt[time: NumConst[value: 2000]]

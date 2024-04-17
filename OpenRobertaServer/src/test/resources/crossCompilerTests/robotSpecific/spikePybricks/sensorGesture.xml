@@ -1,0 +1,80 @@
+<export xmlns="http://de.fhg.iais.roberta.blockly"><program><block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="spike" xmlversion="3.1" description="" tags=""><instance x="120" y="-123"><block type="robControls_start" id="1" intask="true" deletable="false"><mutation declare="false"></mutation><field name="DEBUG"></field></block><block type="actions_display_text" id="=52VRRzj`r4~hN(nYVK+" intask="true"><field name="TYPE">TEXT</field><hide name="ACTORPORT" value="_B"></hide><value name="TEXT"><block type="robSensors_gesture_getSample" id="~Rb#iGyc?}x@1wNS1@h4" intask="true"><mutation mode="FRONT"></mutation><field name="MODE">FRONT</field><field name="SENSORPORT"></field><field name="SLOT"></field></block></value></block><block type="robControls_wait_for" id="pmg,pMAY%3r;=r*;2hwg" intask="true"><value name="WAIT0"><block type="logic_compare" id="cgkA_FU8dSS3[JZ}]J/D" intask="true"><field name="OP">EQ</field><value name="A"><block type="robSensors_getSample" id="jyBCq)S1q~5}IGLie*de" intask="true"><mutation input="GESTURE_FRONT"></mutation><field name="SENSORTYPE">GESTURE_FRONT</field><field name="SENSORPORT"></field><field name="SLOT"></field></block></value><value name="B"><block type="logic_boolean" id="@`c+*8^cUgU/_!q^BgUw" intask="true"><field name="BOOL">TRUE</field></block></value></block></value></block><block type="actions_display_text" id=";~#rzgp*ML1rqdE*SF:v" intask="true"><field name="TYPE">TEXT</field><hide name="ACTORPORT" value="_B"></hide><value name="TEXT"><block type="text" id="8rs}0+tV1^ducoChpj.h" intask="true"><field name="TEXT">front</field></block></value></block><block type="robControls_wait_for" id=";L+lN![1Td(;_CM0]PxM" intask="true"><value name="WAIT0"><block type="logic_compare" id="u^=[i)WNM,zNJS5Fn^j=" intask="true"><field name="OP">EQ</field><value name="A"><block type="robSensors_getSample" id="AcDJiQTDKXhrZA.y@4am" intask="true"><mutation input="GESTURE_BACK"></mutation><field name="SENSORTYPE">GESTURE_BACK</field><field name="SENSORPORT"></field><field name="SLOT"></field></block></value><value name="B"><block type="logic_boolean" id="[TF_|DQUl8JF~)=cZi+Z" intask="true"><field name="BOOL">TRUE</field></block></value></block></value></block><block type="actions_display_text" id="Z0,ja)hiX!hsGbroKp~C" intask="true"><field name="TYPE">TEXT</field><hide name="ACTORPORT" value="_B"></hide><value name="TEXT"><block type="text" id="JYI_~1:7,F*2:ub_}6qJ" intask="true"><field name="TEXT">back</field></block></value></block><block type="robControls_wait_for" id="6j)-YPAPTsQLI6=xyCRL" intask="true"><value name="WAIT0"><block type="logic_compare" id="hmwN-)3NH94[mMh!WURh" intask="true"><field name="OP">EQ</field><value name="A"><block type="robSensors_getSample" id="MtR;~3*oB.bM|-VbYu7g" intask="true"><mutation input="GESTURE_UP"></mutation><field name="SENSORTYPE">GESTURE_UP</field><field name="SENSORPORT"></field><field name="SLOT"></field></block></value><value name="B"><block type="logic_boolean" id="5cv`A+Uwav8Lfvayh()!" intask="true"><field name="BOOL">TRUE</field></block></value></block></value></block><block type="actions_display_text" id="^NO~3:2E!mWAHtl#S041" intask="true"><field name="TYPE">TEXT</field><hide name="ACTORPORT" value="_B"></hide><value name="TEXT"><block type="text" id="|tJ3gC!-jIJ;{ZxopkKe" intask="true"><field name="TEXT">upright</field></block></value></block><block type="robControls_wait_for" id="utVZo`tm8^Waz+R;{DQ0" intask="true"><value name="WAIT0"><block type="logic_compare" id=":~XtF6G%KOum_xoh0AuV" intask="true"><field name="OP">EQ</field><value name="A"><block type="robSensors_getSample" id="7kK1uS;q5`K[RxtOaHE-" intask="true"><mutation input="GESTURE_DOWN"></mutation><field name="SENSORTYPE">GESTURE_DOWN</field><field name="SENSORPORT"></field><field name="SLOT"></field></block></value><value name="B"><block type="logic_boolean" id="d=~Yzs~s./K`6HA2rq#u" intask="true"><field name="BOOL">TRUE</field></block></value></block></value></block><block type="actions_display_text" id="Gt.?#iwlU~SRB/_pB~Fn" intask="true"><field name="TYPE">TEXT</field><hide name="ACTORPORT" value="_B"></hide><value name="TEXT"><block type="text" id="_i-Z@?)H!tb`T_^EkTL6" intask="true"><field name="TEXT">upside down</field></block></value></block><block type="robControls_wait_for" id="1CR/bKY1mUlot,_gzV7P" intask="true"><value name="WAIT0"><block type="logic_compare" id="PkI@@ACe?@b`#4%Y!.^," intask="true"><field name="OP">EQ</field><value name="A"><block type="robSensors_getSample" id="B;=x8EiWL;;jwMXjQANA" intask="true"><mutation input="GESTURE_LEFT"></mutation><field name="SENSORTYPE">GESTURE_LEFT</field><field name="SENSORPORT"></field><field name="SLOT"></field></block></value><value name="B"><block type="logic_boolean" id="?)PyE7~?UV?78fi?!iTX" intask="true"><field name="BOOL">TRUE</field></block></value></block></value></block><block type="actions_display_text" id="APoMws/_xUV^a5z6@XZ4" intask="true"><field name="TYPE">TEXT</field><hide name="ACTORPORT" value="_B"></hide><value name="TEXT"><block type="text" id="b`oe[nl)3px^A4I(wI?b" intask="true"><field name="TEXT">left</field></block></value></block><block type="robControls_wait_for" id="b3wx:BF8t}e-7=g-%1y1" intask="true"><value name="WAIT0"><block type="logic_compare" id="52W[86}DhvBfxr(Vg1XY" intask="true"><field name="OP">EQ</field><value name="A"><block type="robSensors_getSample" id="I|]Kyuf~5]3hsphloZvA" intask="true"><mutation input="GESTURE_RIGHT"></mutation><field name="SENSORTYPE">GESTURE_RIGHT</field><field name="SENSORPORT"></field><field name="SLOT"></field></block></value><value name="B"><block type="logic_boolean" id="sf1mF,Qp-3p4c*N`I,EG" intask="true"><field name="BOOL">TRUE</field></block></value></block></value></block><block type="actions_display_text" id="Y1yZzyt~0M/|yq,FbuC(" intask="true"><field name="TYPE">TEXT</field><hide name="ACTORPORT" value="_B"></hide><value name="TEXT"><block type="text" id="N};4L8kh=R(M!sy3fG{M" intask="true"><field name="TEXT">right</field></block></value></block><block type="robControls_wait_for" id="mc@!]j5t{|cP:3d?i[TB" intask="true"><value name="WAIT0"><block type="logic_compare" id="uhcR@oH=LSlx:A^ygcvi" intask="true"><field name="OP">EQ</field><value name="A"><block type="robSensors_getSample" id="5a~QOZd)mIME}e!+L_?(" intask="true"><mutation input="GESTURE_TAPPED"></mutation><field name="SENSORTYPE">GESTURE_TAPPED</field><field name="SENSORPORT"></field><field name="SLOT"></field></block></value><value name="B"><block type="logic_boolean" id="`fSSi~{dep@B]^d^V#%o" intask="true"><field name="BOOL">TRUE</field></block></value></block></value></block><block type="actions_display_text" id="b6bQb`Ufy+iq0S:Y36r/" intask="true"><field name="TYPE">TEXT</field><hide name="ACTORPORT" value="_B"></hide><value name="TEXT"><block type="text" id="}4K:-s|Hs!NZa+;.DpM}" intask="true"><field name="TEXT">tapped</field></block></value></block><block type="robControls_wait_for" id="kR)n2?Nqy1bB-hx)%gTZ" intask="true"><value name="WAIT0"><block type="logic_compare" id="k_MF~+?!oA.B!+`S3tsy" intask="true"><field name="OP">EQ</field><value name="A"><block type="robSensors_getSample" id="1,PmwPY88BaMT)*-Sbpx" intask="true"><mutation input="GESTURE_SHAKE"></mutation><field name="SENSORTYPE">GESTURE_SHAKE</field><field name="SENSORPORT"></field><field name="SLOT"></field></block></value><value name="B"><block type="logic_boolean" id="u9WLGk`?5#XI75}dh%Cb" intask="true"><field name="BOOL">TRUE</field></block></value></block></value></block><block type="actions_display_text" id="WQD5]@ED3*jjBSkf6A~S" intask="true"><field name="TYPE">TEXT</field><hide name="ACTORPORT" value="_B"></hide><value name="TEXT"><block type="text" id="9|i-}+@wFo!7n8pVOG~(" intask="true"><field name="TEXT">shaking</field></block></value></block><block type="robControls_wait_for" id="nWP`/*9)N_FTA+j{khGv" intask="true"><value name="WAIT0"><block type="logic_compare" id="B%@hk+:o.Dnx8G/+{;xd" intask="true"><field name="OP">EQ</field><value name="A"><block type="robSensors_getSample" id="rUGguDIj?OQQbc|.:~(/" intask="true"><mutation input="GESTURE_FREEFALL"></mutation><field name="SENSORTYPE">GESTURE_FREEFALL</field><field name="SENSORPORT"></field><field name="SLOT"></field></block></value><value name="B"><block type="logic_boolean" id="j48!4pxKA.6=p,1MtXo#" intask="true"><field name="BOOL">TRUE</field></block></value></block></value></block><block type="actions_display_text" id="Gm68_0s!K5;!mU@lbv9L" intask="true"><field name="TYPE">TEXT</field><hide name="ACTORPORT" value="_B"></hide><value name="TEXT"><block type="text" id="8s(nv?!3n(EQ?6_ak3SB" intask="true"><field name="TEXT">free fall</field></block></value></block></instance></block_set></program><config><block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="spike" xmlversion="" description="" tags="">
+    <instance x="70" y="103">
+        <block type="robConf_differentialdrive" id="AM=n{?7R#nO#1~?a3j~u" intask="true">
+            <field name="NAME">_D</field>
+            <field name="BRICK_WHEEL_DIAMETER">5.6</field>
+            <field name="BRICK_TRACK_WIDTH">11.5</field>
+            <field name="MOTOR_L">A</field>
+            <field name="MOTOR_R">B</field>
+        </block>
+    </instance>
+    <instance x="289" y="183">
+        <block type="robConf_robot" id="robot" intask="true">
+            <field name="ROBOT">undefined</field>
+        </block>
+    </instance>
+    <instance x="560" y="216">
+        <block type="robConf_gyro" id="}O,nU9g2cL:S*jCf~_Z*" intask="true" deletable="false">
+            <field name="NAME">_K</field>
+        </block>
+    </instance>
+    <instance x="143" y="251">
+        <block type="robConf_motor" id="`CW3f_/xL#;Z!)*[EZz@" intask="true">
+            <field name="NAME">MA</field>
+            <field name="PORT">A</field>
+        </block>
+    </instance>
+    <instance x="560" y="252">
+        <block type="robConf_motor" id="S(Xm/UHHH;N[4Km1TML0" intask="true">
+            <field name="NAME">MB</field>
+            <field name="PORT">B</field>
+        </block>
+    </instance>
+    <instance x="119" y="314">
+        <block type="robConf_colour" id="e^*dGK},@+!mbUm6.p:-" intask="true">
+            <field name="NAME">F</field>
+            <field name="PORT">C</field>
+        </block>
+    </instance>
+    <instance x="560" y="315">
+        <block type="robConf_ultrasonic" id="Z5a?AUX(BKNfDVeH/-Dz" intask="true">
+            <field name="NAME">U</field>
+            <field name="PORT">D</field>
+        </block>
+    </instance>
+    <instance x="144" y="373">
+        <block type="robConf_display" id="tt" intask="true" deletable="false">
+            <field name="NAME">_B</field>
+        </block>
+    </instance>
+    <instance x="560" y="377">
+        <block type="robConf_touch" id="BK+JQtM]!+,YDt)K-{]*" intask="true">
+            <field name="NAME">B</field>
+            <field name="PORT">F</field>
+        </block>
+    </instance>
+    <instance x="136" y="440">
+        <block type="robConf_key" id="](;J)ShyJ;~HcwPOpoZQ" intask="true" deletable="false">
+            <field name="NAME">links</field>
+            <field name="PIN1">LEFT</field>
+        </block>
+    </instance>
+    <instance x="560" y="438">
+        <block type="robConf_key" id="aCW;Mk]1|#;zP8{)Ax*;" intask="true" deletable="false">
+            <field name="NAME">rechts</field>
+            <field name="PIN1">RIGHT</field>
+        </block>
+    </instance>
+    <instance x="560" y="495">
+        <block type="robConf_rgbled" id="C8/{!k%9L]YDK@vW/y,h" intask="true" deletable="false">
+            <field name="NAME">_R</field>
+            <field name="PORT">RGBLED_LF</field>
+        </block>
+    </instance>
+    <instance x="153" y="522">
+        <block type="robConf_buzzer" id="W3:Yn.C(/356snBah3a:" intask="true" deletable="false">
+            <field name="NAME">_S</field>
+        </block>
+    </instance>
+</block_set>
+</config></export>

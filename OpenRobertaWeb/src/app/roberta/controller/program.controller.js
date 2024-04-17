@@ -18,8 +18,8 @@ var blocklyWorkspace;
 var listenToBlocklyEvents = true;
 var seen = true;
 
-var _SSID = '';
-var _password = '';
+let _SSID = '';
+let _password = '';
 
 export function setSSID(SSID) {
     _SSID = SSID;
@@ -593,7 +593,7 @@ function programToBlocklyWorkspace(xml, opt_fromShowSource) {
 
     var language = GUISTATE_C.getLanguage();
     if ($('#codeDiv').hasClass('rightActive') && opt_fromShowSource) {
-        PROGRAM.showSourceProgram(GUISTATE_C.getProgramName(), configName, xmlProgram, xmlConfigText, language, SSID, password, function (result) {
+        PROGRAM.showSourceProgram(GUISTATE_C.getProgramName(), configName, xmlProgram, xmlConfigText, language, getSSID(), getPassword(), function (result) {
             PROGCODE_C.setCode(result.sourceCode);
         });
     }

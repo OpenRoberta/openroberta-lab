@@ -1,0 +1,80 @@
+<export xmlns="http://de.fhg.iais.roberta.blockly"><program><block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="spike" xmlversion="3.1" description="" tags=""><instance x="-8" y="-29"><block type="robControls_start" id="1" intask="true" deletable="false"><mutation declare="true"></mutation><field name="DEBUG"></field><statement name="ST"><block type="robGlobalVariables_declare" id="t.(SRm1{hCERRO[*{h)r" intask="true" deletable="false" movable="false"><mutation next="false" declaration_type="Number"></mutation><field name="VAR">item</field><field name="TYPE">Number</field><value name="VALUE"><block type="math_number" id="QZ0@h#LRkgqMecY.HB:W" intask="true"><field name="NUM">0</field></block></value></block></statement></block><block type="text_comment" id="Wg8yNeZt`bWvr62-pQ`@" intask="true"><field name="TEXT">String 42</field></block><block type="actions_display_text" id=":[1C)2?NG!X}si2+W,jK" intask="true"><field name="TYPE">TEXT</field><hide name="ACTORPORT" value="_B"></hide><value name="TEXT"><block type="math_cast_toString" id="us/?h(M)?,I7Iv#2X(3c" intask="true"><value name="VALUE"><block type="math_number" id="G3zTI4D?KE9*@^jKKmE)" intask="true"><field name="NUM">42</field></block></value></block></value></block><block type="text_comment" id="JFxHF`Qg4H)yu+zO4bgh" intask="true"><field name="TEXT">thjs is a J</field></block><block type="actions_display_text" id="kMNvQ/7[8Yo[{mjl%+OL" intask="true"><field name="TYPE">TEXT</field><hide name="ACTORPORT" value="_B"></hide><value name="TEXT"><block type="math_cast_toChar" id="r(dcI=:akOEXb[aSVl,L" intask="true"><value name="VALUE"><block type="math_number" id="/i_@uXt{p{fb#vHaGe;e" intask="true"><field name="NUM">74</field></block></value></block></value></block><block type="variables_set" id="j4-+O+6avFdWXz=h/VDc" intask="true"><mutation datatype="Number"></mutation><field name="VAR">item</field><value name="VALUE"><block type="math_arithmetic" id=",Pr%SQuG|f(7H3[;Jc:[" intask="true"><field name="OP">ADD</field><value name="A"><block type="math_single" id="/lR23t^5W9ZOVv~WUKCb" intask="true"><field name="OP">ROOT</field><value name="NUM"><block type="math_constant" id="!zu*DHFA[AA=/YEUFw49" intask="true"><field name="CONSTANT">PI</field></block></value></block></value><value name="B"><block type="math_trig" id="l[8PU:EYhpVPC8azW0yp" intask="true"><field name="OP">SIN</field><value name="NUM"><block type="math_constant" id="=Nlg3bPqw_h9,15N4Ax9" intask="true"><field name="CONSTANT">E</field></block></value></block></value></block></value></block><block type="variables_set" id="+,?xv}sq;Bznp!;@#?0m" intask="true"><mutation datatype="Number"></mutation><field name="VAR">item</field><value name="VALUE"><block type="math_single" id="998Nqn%A/=mRScEPxoRV" intask="true"><field name="OP">NEG</field><value name="NUM"><block type="math_single" id="^??0*X@;y0*uLMG1c)B~" intask="true"><field name="OP">POW10</field><value name="NUM"><block type="math_single" id="en*1#fz%Wc0shjzSEUU@" intask="true"><field name="OP">EXP</field><value name="NUM"><block type="math_single" id="TxT8:I,r^Hc7Kzx4NW2?" intask="true"><field name="OP">LOG10</field><value name="NUM"><block type="math_single" id="pFa%a]{+o}6u;00g^:}d" intask="true"><field name="OP">LN</field><value name="NUM"><block type="math_single" id="_)L^o*~#4w(w0|5HPV}e" intask="true"><field name="OP">ABS</field><value name="NUM"><block type="math_arithmetic" id="~c1G=mC:.~O~uR7`OI*X" intask="true"><field name="OP">ADD</field><value name="A"><block type="math_single" id=":#r/2F.bo[@D_M{1SB^h" intask="true"><field name="OP">SQUARE</field><value name="NUM"><block type="math_constant" id="NpwvbmF}xXXyggKhsdJ1" intask="true"><field name="CONSTANT">GOLDEN_RATIO</field></block></value></block></value><value name="B"><block type="math_trig" id="GFxd*.djaH/lLw*]a-EI" intask="true"><field name="OP">COS</field><value name="NUM"><block type="math_constant" id="xW[;0cqY+j23:p2D7L/A" intask="true"><field name="CONSTANT">SQRT2</field></block></value></block></value></block></value></block></value></block></value></block></value></block></value></block></value></block></value></block><block type="robMath_change" id="oJNI`rpX@[_yUmCz]8;A" intask="true"><value name="VAR"><block type="variables_get" id="ilK`b(bhotcjvDhGn*?h" intask="true"><mutation datatype="Number"></mutation><field name="VAR">item</field></block></value><value name="DELTA"><block type="math_number" id=":/X(BG?]e499n0b0?F[J" intask="true"><field name="NUM">1</field></block></value></block><block type="actions_display_text" id="p-(1LQ.eewXg7qlie0X-" intask="true"><field name="TYPE">TEXT</field><hide name="ACTORPORT" value="_B"></hide><value name="TEXT"><block type="math_constrain" id=":hg*p_]RZeQslf74Va8O" intask="true"><value name="VALUE"><block type="math_modulo" id="fhe{UPCEjCz9pntu:NC(" intask="true"><value name="DIVIDEND"><block type="math_round" id="CJ`}IGQ%6Q3IP~F_3O}`" intask="true"><field name="OP">ROUNDUP</field><value name="NUM"><block type="variables_get" id="Cb#+oho%YY38Bj1.Bu{q" intask="true"><mutation datatype="Number"></mutation><field name="VAR">item</field></block></value></block></value><value name="DIVISOR"><block type="math_round" id="i!}w?f*SQ6hUr/~tWqvx" intask="true"><field name="OP">ROUNDDOWN</field><value name="NUM"><block type="variables_get" id="U!{3=GqB{+U].5,5F+qH" intask="true"><mutation datatype="Number"></mutation><field name="VAR">item</field></block></value></block></value></block></value><value name="LOW"><block type="math_number" id="6s4NxOSy7k?aQM}f#%~{" intask="true"><field name="NUM">1</field></block></value><value name="HIGH"><block type="math_number" id="gx}F2Zj:/CIa2p)^*Lh~" intask="true"><field name="NUM">2</field></block></value></block></value></block><block type="actions_display_text" id="1/^lupaq9b4wUcp}]cL?" intask="true"><field name="TYPE">TEXT</field><hide name="ACTORPORT" value="_B"></hide><value name="TEXT"><block type="math_random_int" id="V;(dX*hE(K)f2NH/TW}5" intask="true"><value name="FROM"><block type="math_number" id="3YG6:RG{Bk:E9f7~6.px" intask="true"><field name="NUM">1</field></block></value><value name="TO"><block type="math_number" id="=i`yGI5aVC~5i#e}-N6x" intask="true"><field name="NUM">100</field></block></value></block></value></block><block type="actions_display_text" id="Rjeg|;)`=I1BE70S~j]6" intask="true"><field name="TYPE">TEXT</field><hide name="ACTORPORT" value="_B"></hide><value name="TEXT"><block type="math_random_float" id="GC+P|Eq[RZVI*NRUzO~?" intask="true"></block></value></block><block type="actions_display_text" id="U_Vr2d5^LU5z*lJ.Eg0Y" intask="true"><field name="TYPE">TEXT</field><hide name="ACTORPORT" value="_B"></hide><value name="TEXT"><block type="math_number_property" id="ruGw~x^Zz)1+^?UnsXTs" intask="true"><mutation divisor_input="false"></mutation><field name="PROPERTY">EVEN</field><value name="NUMBER_TO_CHECK"><block type="math_random_float" id="XPD3K{YF,@}`HNjtfo]8" intask="true"></block></value></block></value></block><block type="actions_display_text" id="X~.{4U8.p7f3/^x,15;?" intask="true"><field name="TYPE">TEXT</field><hide name="ACTORPORT" value="_B"></hide><value name="TEXT"><block type="math_number_property" id="t:YDS6p8)a0OM,Rb5rpJ" intask="true"><mutation divisor_input="false"></mutation><field name="PROPERTY">ODD</field><value name="NUMBER_TO_CHECK"><block type="math_random_float" id="f`4TlR*d^wfW`[QmOz4:" intask="true"></block></value></block></value></block><block type="actions_display_text" id="Apo;|A64PV}Bpg[4{TMg" intask="true"><field name="TYPE">TEXT</field><hide name="ACTORPORT" value="_B"></hide><value name="TEXT"><block type="math_number_property" id="~?9M.67sKLIq#ik?pOEq" intask="true"><mutation divisor_input="false"></mutation><field name="PROPERTY">WHOLE</field><value name="NUMBER_TO_CHECK"><block type="math_random_float" id="gK`Ofa:44e]qy25A7XPR" intask="true"></block></value></block></value></block><block type="actions_display_text" id="]V6FWN(I%,zLEgfYF;Aj" intask="true"><field name="TYPE">TEXT</field><hide name="ACTORPORT" value="_B"></hide><value name="TEXT"><block type="math_number_property" id="P#(^Omf`me`RgYfr4eGJ" intask="true"><mutation divisor_input="false"></mutation><field name="PROPERTY">POSITIVE</field><value name="NUMBER_TO_CHECK"><block type="math_random_float" id="}c^Gb0cDU,vN-HaCeYpo" intask="true"></block></value></block></value></block><block type="actions_display_text" id="[QUoRa-bGVXQa2}`M_t~" intask="true"><field name="TYPE">TEXT</field><hide name="ACTORPORT" value="_B"></hide><value name="TEXT"><block type="math_number_property" id="*%o*0`/Wc?=[f2c^YWnj" intask="true"><mutation divisor_input="false"></mutation><field name="PROPERTY">NEGATIVE</field><value name="NUMBER_TO_CHECK"><block type="math_random_float" id="%;FPH537j_w?VJ4Jj)ig" intask="true"></block></value></block></value></block><block type="actions_display_text" id="dM_J~2/^rH]dOz.HS%Na" intask="true"><field name="TYPE">TEXT</field><hide name="ACTORPORT" value="_B"></hide><value name="TEXT"><block type="math_number_property" id="[2aRV{_t3O^!B5%PWsKB" intask="true"><mutation divisor_input="true"></mutation><field name="PROPERTY">DIVISIBLE_BY</field><value name="NUMBER_TO_CHECK"><block type="math_random_float" id="5X~AP7@)^n/W(fqwgS+z" intask="true"></block></value><value name="DIVISOR"><block type="math_number" id="Ls;:SEoGLNT1UXSp]{n8" intask="true"><field name="NUM">1</field></block></value></block></value></block></instance></block_set></program><config><block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="spike" xmlversion="" description="" tags="">
+    <instance x="70" y="103">
+        <block type="robConf_differentialdrive" id="AM=n{?7R#nO#1~?a3j~u" intask="true">
+            <field name="NAME">_D</field>
+            <field name="BRICK_WHEEL_DIAMETER">5.6</field>
+            <field name="BRICK_TRACK_WIDTH">11.5</field>
+            <field name="MOTOR_L">A</field>
+            <field name="MOTOR_R">B</field>
+        </block>
+    </instance>
+    <instance x="289" y="183">
+        <block type="robConf_robot" id="robot" intask="true">
+            <field name="ROBOT">undefined</field>
+        </block>
+    </instance>
+    <instance x="560" y="216">
+        <block type="robConf_gyro" id="}O,nU9g2cL:S*jCf~_Z*" intask="true" deletable="false">
+            <field name="NAME">_K</field>
+        </block>
+    </instance>
+    <instance x="143" y="251">
+        <block type="robConf_motor" id="`CW3f_/xL#;Z!)*[EZz@" intask="true">
+            <field name="NAME">MA</field>
+            <field name="PORT">A</field>
+        </block>
+    </instance>
+    <instance x="560" y="252">
+        <block type="robConf_motor" id="S(Xm/UHHH;N[4Km1TML0" intask="true">
+            <field name="NAME">MB</field>
+            <field name="PORT">B</field>
+        </block>
+    </instance>
+    <instance x="119" y="314">
+        <block type="robConf_colour" id="e^*dGK},@+!mbUm6.p:-" intask="true">
+            <field name="NAME">F</field>
+            <field name="PORT">C</field>
+        </block>
+    </instance>
+    <instance x="560" y="315">
+        <block type="robConf_ultrasonic" id="Z5a?AUX(BKNfDVeH/-Dz" intask="true">
+            <field name="NAME">U</field>
+            <field name="PORT">D</field>
+        </block>
+    </instance>
+    <instance x="144" y="373">
+        <block type="robConf_display" id="tt" intask="true" deletable="false">
+            <field name="NAME">_B</field>
+        </block>
+    </instance>
+    <instance x="560" y="377">
+        <block type="robConf_touch" id="BK+JQtM]!+,YDt)K-{]*" intask="true">
+            <field name="NAME">B</field>
+            <field name="PORT">F</field>
+        </block>
+    </instance>
+    <instance x="136" y="440">
+        <block type="robConf_key" id="](;J)ShyJ;~HcwPOpoZQ" intask="true" deletable="false">
+            <field name="NAME">links</field>
+            <field name="PIN1">LEFT</field>
+        </block>
+    </instance>
+    <instance x="560" y="438">
+        <block type="robConf_key" id="aCW;Mk]1|#;zP8{)Ax*;" intask="true" deletable="false">
+            <field name="NAME">rechts</field>
+            <field name="PIN1">RIGHT</field>
+        </block>
+    </instance>
+    <instance x="560" y="495">
+        <block type="robConf_rgbled" id="C8/{!k%9L]YDK@vW/y,h" intask="true" deletable="false">
+            <field name="NAME">_R</field>
+            <field name="PORT">RGBLED_LF</field>
+        </block>
+    </instance>
+    <instance x="153" y="522">
+        <block type="robConf_buzzer" id="W3:Yn.C(/356snBah3a:" intask="true" deletable="false">
+            <field name="NAME">_S</field>
+        </block>
+    </instance>
+</block_set>
+</config></export>

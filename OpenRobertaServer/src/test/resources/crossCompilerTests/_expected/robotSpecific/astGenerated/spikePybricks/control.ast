@@ -1,0 +1,22 @@
+
+(repeat [FOREVER, BoolConst[value: true]]
+(repeat [TIMES, Var [k0], NumConst[value: 0], NumConst[value: 10], NumConst[value: 1]]
+if Binary [NEQ, Binary [OR, BoolConst[value: true], BoolConst[value: true]], BoolConst[value: false]]
+,then
+if Binary [EQ, Binary [AND, BoolConst[value: true], BoolConst[value: true]], BoolConst[value: false]]
+,then
+AktionStmt [DisplayTextAction[displayTextMode: TEXT, textToDisplay: StringConst[value: B]]]
+,else
+AktionStmt [DisplayTextAction[displayTextMode: TEXT, textToDisplay: StringConst[value: A]]]
+
+
+)WaitTimeStmt[time: NumConst[value: 500]]
+)
+
+(repeat [FOR, Var [i], NumConst[value: 1], NumConst[value: 10], NumConst[value: 1]]
+(repeat [UNTIL, Unary [NOT, BoolConst[value: true]]]WaitTimeStmt[time: NumConst[value: 500]]
+)StmtFlowCon[flow: BREAK]
+)
+
+(repeat [FOR_EACH, Binary [IN, VarDeclaration [NUMBER, item, EmptyExpr [defVal=NUMBER], false, false], Var [item2]]]WaitTimeStmt[time: NumConst[value: 500]]
+)

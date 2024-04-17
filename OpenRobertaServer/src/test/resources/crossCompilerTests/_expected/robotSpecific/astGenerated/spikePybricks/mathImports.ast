@@ -1,0 +1,20 @@
+StmtTextComment[textComment: String 42]
+DisplayTextAction[displayTextMode: TEXT, textToDisplay: FunctionExpr [MathCastStringFunct[value: NumConst[value: 42]]]]
+StmtTextComment[textComment: thjs is a J]
+DisplayTextAction[displayTextMode: TEXT, textToDisplay: FunctionExpr [MathCastCharFunct[value: NumConst[value: 74]]]]
+
+Var [item] := Binary [ADD, FunctionExpr [MathSingleFunct [ROOT, [MathConst[mathConst: PI]]]], FunctionExpr [MathSingleFunct [SIN, [MathConst[mathConst: E]]]]]
+
+
+Var [item] := Unary [NEG, FunctionExpr [MathSingleFunct [POW10, [FunctionExpr [MathSingleFunct [EXP, [FunctionExpr [MathSingleFunct [LOG10, [FunctionExpr [MathSingleFunct [LN, [FunctionExpr [MathSingleFunct [ABS, [Binary [ADD, FunctionExpr [MathSingleFunct [SQUARE, [MathConst[mathConst: GOLDEN_RATIO]]]], FunctionExpr [MathSingleFunct [COS, [MathConst[mathConst: SQRT2]]]]]]]]]]]]]]]]]]]]]
+
+MathChangeStmt[var: Var [item], delta: NumConst[value: 1]]
+DisplayTextAction[displayTextMode: TEXT, textToDisplay: FunctionExpr [MathConstrainFunct[value: FunctionExpr [MathModuloFunct[dividend: FunctionExpr [MathSingleFunct [ROUNDUP, [Var [item]]]], divisor: FunctionExpr [MathSingleFunct [ROUNDDOWN, [Var [item]]]]]], lowerBound: NumConst[value: 1], upperBound: NumConst[value: 2]]]]
+DisplayTextAction[displayTextMode: TEXT, textToDisplay: FunctionExpr [MathRandomIntFunct[from: NumConst[value: 1], to: NumConst[value: 100]]]]
+DisplayTextAction[displayTextMode: TEXT, textToDisplay: FunctionExpr [MathRandomFloatFunct[]]]
+DisplayTextAction[displayTextMode: TEXT, textToDisplay: FunctionExpr [MathNumPropFunct [EVEN, [FunctionExpr [MathRandomFloatFunct[]]]]]]
+DisplayTextAction[displayTextMode: TEXT, textToDisplay: FunctionExpr [MathNumPropFunct [ODD, [FunctionExpr [MathRandomFloatFunct[]]]]]]
+DisplayTextAction[displayTextMode: TEXT, textToDisplay: FunctionExpr [MathNumPropFunct [WHOLE, [FunctionExpr [MathRandomFloatFunct[]]]]]]
+DisplayTextAction[displayTextMode: TEXT, textToDisplay: FunctionExpr [MathNumPropFunct [POSITIVE, [FunctionExpr [MathRandomFloatFunct[]]]]]]
+DisplayTextAction[displayTextMode: TEXT, textToDisplay: FunctionExpr [MathNumPropFunct [NEGATIVE, [FunctionExpr [MathRandomFloatFunct[]]]]]]
+DisplayTextAction[displayTextMode: TEXT, textToDisplay: FunctionExpr [MathNumPropFunct [DIVISIBLE_BY, [FunctionExpr [MathRandomFloatFunct[]], NumConst[value: 1]]]]]

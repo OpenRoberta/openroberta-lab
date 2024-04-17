@@ -323,6 +323,7 @@ class ThymioDeviceManagerConnection extends AbstractConnection {
         this.terminated = true;
         this.selectedNode = undefined;
         this.publishDisonnected();
+        GUISTATE.gui.blocklyWorkspace.robControls.hideStopProgram();
     }
 
     publishConnected(): void {
@@ -476,7 +477,9 @@ class SpikePybricksWebBleConnection extends AbstractPromptConnection {
                 if (error.name === BleError.NAME) {
                     console.log(error.blocklyMessage);
                     if (error.alertType === BLE_ALERT_TYPES.ALERT) {
-                        MSG.displayInformation({ rc: 'error' }, null, error.blocklyMessage, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
+                        if (error.blocklyMessage == 'BLE_ERROR_COMMUNICATION') $('#save-client-compiled-program').modal('hide');
+                        //@ts-ignore
+                        MSG.displayInformation({ rc: 'error' }, null, error.blocklyMessage);
                     }
                 }
             }
@@ -495,7 +498,7 @@ class SpikePybricksWebBleConnection extends AbstractPromptConnection {
         try {
             await this.writeGatt(SERVICE_UUIDS.PYBRICKS_COMMAND_EVENT_UUID, new Uint8Array([COMMANDS.STOP_USER_PROGRAM]));
         } catch (error) {
-            throw new BleError(error, 'BLE_DEVICE_BUSY_OR_NOT_CONNECTED_THIS_SHOULD_NOT_HAPPEN', BLE_ALERT_TYPES.INFORMATION);
+            throw new BleError(error, 'BLE_ERROR_STOP', BLE_ALERT_TYPES.INFORMATION);
         }
     }
 
@@ -508,7 +511,7 @@ class SpikePybricksWebBleConnection extends AbstractPromptConnection {
 
     private async stopPingDevice() {
         this.ping = false;
-        new Promise((resolve) => setTimeout(resolve, 500));
+        await new Promise((resolve) => setTimeout(resolve, 500));
     }
 
     private startPingDevice() {
@@ -555,15 +558,16 @@ class SpikePybricksWebBleConnection extends AbstractPromptConnection {
         const payloadSize = this.maxWriteSize - SpikePybricksWebBleConnection.HEADER_SIZE;
 
         if (this.downloadInProgress) {
-            throw new BleError(null, 'BLE_DOWNLOAD_ALREADY_IN_PROGRESS', BLE_ALERT_TYPES.INFORMATION);
+            throw new BleError(null, 'BLE_DOWNLOAD_IN_PROGRESS', BLE_ALERT_TYPES.INFORMATION);
         }
 
         if (programBlob.size > this.maxProgramSize) {
-            throw new BleError(null, 'BLE_MAX_PROGRAM_SIZE_REACHED', BLE_ALERT_TYPES.ALERT);
+            throw new BleError(null, 'BLE_ERROR_PROGRAM_SIZE', BLE_ALERT_TYPES.ALERT);
         }
 
         if (!this.downloadInProgress && this.oldProgram == programString) {
             progressBarFunction(1);
+            await this.stopProgram();
             return await this.startProgram();
         }
 
@@ -578,7 +582,7 @@ class SpikePybricksWebBleConnection extends AbstractPromptConnection {
             await this.startProgram();
         } catch (error) {
             this.oldProgram = '';
-            throw new BleError(error, 'BLE_COMMUNICATION_ERROR', BLE_ALERT_TYPES.ALERT);
+            throw new BleError(error, 'BLE_ERROR_COMMUNICATION', BLE_ALERT_TYPES.ALERT);
         } finally {
             this.downloadInProgress = false;
         }
@@ -597,20 +601,15 @@ class SpikePybricksWebBleConnection extends AbstractPromptConnection {
     private async assertWebBleAvailability() {
         //could not get Bluetooth now distinquish the error
         if (!UTIL.isWebBleSupported()) {
-            throw new BleError(null, 'BLE_BROWSER_DOES_NOT_SUPPORT_WEB_BLE', BLE_ALERT_TYPES.ALERT);
+            throw new BleError(null, 'BLE_NOT_SUPPORTED', BLE_ALERT_TYPES.ALERT);
         }
 
         if (navigator.bluetooth === undefined) {
-            let name = '';
-            if (UTIL.isEdge()) name = 'edge';
-            if (UTIL.isChromium()) name = 'chrome';
-            //TODO add this helper text to blockly msg
-            //for chrome : chrome://flags/#enable-experimental-web-platform-features enable feature
-            throw new BleError(null, 'BLE_ENABLE_EXPERIMENTAL_FLAG \n' + name + '://flags/#enable-experimental-web-platform-features', BLE_ALERT_TYPES.ALERT);
+            throw new BleError(null, 'BLE_FEATURE_DISABLED', BLE_ALERT_TYPES.ALERT);
         }
 
         if (!(await navigator.bluetooth.getAvailability())) {
-            throw new BleError(null, 'BLE_ADAPTER_DISABLED_OR_NO_PERMISSION', BLE_ALERT_TYPES.ALERT);
+            throw new BleError(null, 'BLE_ADAPTER_DISABLED', BLE_ALERT_TYPES.ALERT);
         }
     }
 
@@ -621,7 +620,7 @@ class SpikePybricksWebBleConnection extends AbstractPromptConnection {
                 optionalServices: [SERVICE_UUIDS.PYBRICKS_SERVICE_UUID, SERVICE_UUIDS.DEVICE_INFORMATION_SERVICE_UUID, SERVICE_UUIDS.NORDIC_UART_SERVICE_UUID],
             });
         } catch (error) {
-            throw new BleError(error, 'BLE_NO_DEVICE_SELECTED', BLE_ALERT_TYPES.INFORMATION);
+            throw new BleError(error, 'BLE_NO_DEVICE_SELECTED', BLE_ALERT_TYPES.ALERT);
         }
     }
 
@@ -629,7 +628,7 @@ class SpikePybricksWebBleConnection extends AbstractPromptConnection {
         try {
             await this.bleDevice.gatt.connect().then((returnedGattServer) => (this.gattServer = returnedGattServer));
         } catch (error) {
-            throw new BleError(error, 'BLE_FAILED_TO_CONNECT_DEVICE_MIGHT_BE_BUSY', BLE_ALERT_TYPES.ALERT);
+            throw new BleError(error, 'BLE_ERROR_DEVICE_BUSY', BLE_ALERT_TYPES.ALERT);
         }
     }
 
@@ -648,7 +647,7 @@ class SpikePybricksWebBleConnection extends AbstractPromptConnection {
                 });
             });
         } catch (error) {
-            throw new BleError(error, 'BLE_FAILED_TO_GET_CAPABILITIES', BLE_ALERT_TYPES.ALERT);
+            throw new BleError(error, 'BLE_ERROR_CAPABILITIES', BLE_ALERT_TYPES.ALERT);
         }
     }
 

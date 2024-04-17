@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.visitor.spikePybricks;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.google.common.collect.ClassToInstanceMap;
 
@@ -119,14 +120,14 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
             src.add("drive_base.drive(");
             switch ( motorDiffOnAction.direction ) {
                 case "BACKWARD":
-                    src.add("-(").add("get_speed_from_percent").add("(");
+                    src.add("-(").add("deg_sec_to_mm_sec(get_deg_sec_from_percent").add("(");
                     motorDiffOnAction.power.accept(this);
-                    src.add("))");
+                    src.add(")))");
                     break;
                 case "FORWARD":
-                    src.add("get_speed_from_percent").add("(");
+                    src.add("deg_sec_to_mm_sec(get_deg_sec_from_percent").add("(");
                     motorDiffOnAction.power.accept(this);
-                    src.add(")");
+                    src.add("))");
                     break;
                 default:
                     throw new DbcException("Invalid direction: " + motorDiffOnAction.direction);
@@ -165,14 +166,14 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
             src.add("drive_base.drive(0,");
             switch ( motorDiffTurnAction.direction ) {
                 case "RIGHT":
-                    src.add("get_speed_from_percent").add("(");
+                    src.add(" get_deg_sec_from_percent").add("(");
                     motorDiffTurnAction.power.accept(this);
-                    src.add(")");
+                    src.add(") * (WHEEL_DIAMETER * math.pi) / (TRACKWIDTH * math.pi)");
                     break;
                 case "LEFT":
-                    src.add("-( get_speed_from_percent").add("(");
+                    src.add(" -( get_deg_sec_from_percent").add("(");
                     motorDiffTurnAction.power.accept(this);
-                    src.add(") )");
+                    src.add(")) * (WHEEL_DIAMETER * math.pi) / (TRACKWIDTH * math.pi)");
                     break;
                 default:
                     throw new DbcException("Invalid turn direction: " + motorDiffTurnAction.direction);
@@ -231,7 +232,7 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor ultrasonicSensor) {
         String sensorPort = ultrasonicSensor.getUserDefinedPort();
-        src.add("ultrasonic_sensor_").add(sensorPort).add(".distance()/10");
+        src.add("get_dist(ultrasonic_sensor_").add(sensorPort).add(")");
         return null;
     }
 
@@ -243,25 +244,25 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
                 src.add("color_sensor_").add(sensorPort).add(".reflection()");
                 break;
             case "AMBIENTLIGHT":
-                src.add("color_sensor_").add(sensorPort).add(".ambient()");
+                src.add("int(color_sensor_").add(sensorPort).add(".ambient())");
                 break;
             case "COLOUR":
                 src.add("get_color(color_sensor_").add(sensorPort).add(")");
                 break;
             case "REDCHANNEL":
-                src.add("hsv2rgb(");
+                src.add("int(hsv2rgb(");
                 src.add("color_sensor_").add(sensorPort).add(".hsv()");
-                src.add(")[0]/2.55");
+                src.add(")[0]/2.55)");
                 break;
             case "GREENCHANNEL":
-                src.add("hsv2rgb(");
+                src.add("int(hsv2rgb(");
                 src.add("color_sensor_").add(sensorPort).add(".hsv()");
-                src.add(")[1]/2.55");
+                src.add(")[1]/2.55)");
                 break;
             case "BLUECHANNEL":
-                src.add("hsv2rgb(");
+                src.add("int(hsv2rgb(");
                 src.add("color_sensor_").add(sensorPort).add(".hsv()");
-                src.add(")[2]/2.55");
+                src.add(")[2]/2.55)");
                 break;
             default:
                 throw new DbcException("Invalid color sensor mode: " + colorSensor.getMode());
@@ -278,8 +279,8 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
                 src.add(".pressed()");
                 break;
             case "FORCE":
-                src.add("min(touch_sensor_").add(sensorPort);
-                src.add(".force() * 10.0 , 100.0)");
+                src.add("int(min(touch_sensor_").add(sensorPort);
+                src.add(".force() * 10.0 , 100.0))");
                 break;
             default:
                 throw new DbcException("Invalid touch sensor mode: " + touchSensor.getMode());
@@ -297,7 +298,7 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
                 src.add("hub.imu.tilt()[1]");
                 break;
             case "Z":
-                src.add("hub.imu.heading()%180 if abs(hub.imu.heading()%360) < 180 else -abs(hub.imu.heading()%360 - 360)");
+                src.add("int(hub.imu.heading()%180 if abs(hub.imu.heading()%360) < 180 else -abs(hub.imu.heading()%360 - 360))");
                 break;
             default:
                 throw new DbcException("Invalid gyro sensor slot: " + gyroSensor.getSlot());
@@ -320,6 +321,7 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
             case "DOWN":
                 src.add("(hub.imu.up() == Side.BACK)");
                 break;
+            //TODO this is swaped becaues lego spike has this the wrong way
             case "LEFT":
                 src.add("(hub.imu.up() == Side.RIGHT)");
                 break;
@@ -426,7 +428,7 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
                 throw new DbcException("Invalid motor unit: " + motorOnForAction.unit);
         }
         motorOnForAction.value.accept(this);
-        src.add(", speed = get_speed_from_percent(");
+        src.add(", speed = get_deg_sec_from_percent(");
         motorOnForAction.power.accept(this);
         src.add("))");
 
@@ -438,7 +440,7 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
 
         src.add("motor").add(motorPort);
         if ( motorOnAction.regulation ) {
-            src.add(".run(get_speed_from_percent(");
+            src.add(".run(get_deg_sec_from_percent(");
             motorOnAction.power.accept(this);
             src.add("))");
         } else {
@@ -499,7 +501,7 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
 
     @Override
     public Void visitRgbLedOnHiddenAction(RgbLedOnHiddenAction rgbLedOnHiddenAction) {
-        src.add("hub.light.on(");
+        src.add("hub_light_on(");
         rgbLedOnHiddenAction.colour.accept(this);
         src.add(")");
         return null;
@@ -517,7 +519,7 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
             case "ANIMATION":
                 src.add("show_animation(list(");
                 displayImageAction.valuesToDisplay.accept(this);
-                src.add("))").nlI();
+                src.add("))");
                 break;
             case "IMAGE":
                 src.add("hub.display.icon(");
@@ -534,13 +536,13 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
     public Void visitDisplayTextAction(DisplayTextAction displayTextAction) {
         switch ( displayTextAction.displayTextMode ) {
             case "CHARACTER":
-                src.add("hub.display.text(str(");
+                src.add("display_text(str(");
                 displayTextAction.textToDisplay.accept(this);
                 src.add("))");
                 break;
             case "TEXT":
                 //TODO implement scrolling text ?
-                src.add("hub.display.text(str(");
+                src.add("display_text(str(");
                 displayTextAction.textToDisplay.accept(this);
                 src.add("))");
                 break;
@@ -601,8 +603,9 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
             case "#3590F5":
                 color = "Color.BLUE";
                 break;
-            //pybricks has more limited colors (no azure)
             case "#77E7FF":
+                color = "Color.AZURE";
+                break;
             case "#0FCB54":
                 color = "Color.CYAN";
                 break;
@@ -686,6 +689,7 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
         importTools();
         importMathFunctions();
         importRobotics();
+        changeColors();
         instantiateComponents();
         src.add("hub = PrimeHub()").nlI();
         prepareComponents();
@@ -791,7 +795,22 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
      */
     private void importMathFunctions() {
         src.add("import umath as math").nlI();
-        src.add("import urandom as random");
+        src.add("import urandom as random").nlI();
+    }
+
+    private void changeColors() {
+        if ( usedHardwareBean.isImportUsed(SC.COlOR_IMPORT) ){
+            nlIndent();
+            src.add("Color.MAGENTA = Color(315,50,15)").nlI();
+            src.add("Color.BLUE = Color(225,20,20)").nlI();
+            src.add("Color.AZURE = Color(200,20,20)").nlI();
+            src.add("Color.CYAN = Color(150,20,20)").nlI();
+            src.add("Color.YELLOW = Color(55,35,35)").nlI();
+            src.add("Color.RED = Color(350,35,35)").nlI();
+            src.add("Color.BLACK = Color(0,10,10)").nlI();
+            src.add("Color.WHITE = Color(0,0,70)").nlI();
+            //Color.NONE
+        }
     }
 
     private void instantiateComponents() {
@@ -819,14 +838,26 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
             src.add("TRACKWIDTH = ").add(diffDrive.getComponentProperties().get("BRICK_TRACK_WIDTH")).add(" * 10").nlI();
             src.add("WHEEL_DIAMETER = 56").nlI();
             src.add("drive_base = DriveBase(left_motor, right_motor, wheel_diameter=WHEEL_DIAMETER, axle_track=TRACKWIDTH)").nlI();
+            //accelerate to max speed within 0.1 seconds, this value is subject to change
+            src.add("drive_base.settings(straight_acceleration=810*10, turn_acceleration=810*10)").nlI();
         }
     }
 
     private void instantiateMotors() {
         if ( usedHardwareBean.isActorUsed(SC.MOTOR) ) {
             usedHardwareBean.getUsedActors().stream().filter(usedActor -> usedActor.getType().equals("MOTOR")).forEach(motor -> {
-                nlIndent();
-                src.add("motor").add(motor.getPort()).add(" = Motor(Port.").add(motor.getPort()).add(")");
+                AtomicBoolean componentLocked = new AtomicBoolean(false);
+                usedHardwareBean.getLockedComponent().forEach(
+                    (component, port) -> {
+                        if((motor.getPort()).equals(port)) {
+                            src.add("motor").add(motor.getPort()).add(" = left_motor").nlI();
+                            componentLocked.set(true);
+                        }
+                    }
+                );
+                if(!componentLocked.get()){
+                    src.add("motor").add(motor.getPort()).add(" = Motor(Port.").add(motor.getPort()).add(")").nlI();
+                }
             });
         }
     }
@@ -859,16 +890,7 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
                 if ( configurationAst.optConfigurationComponent(sensor.getPort()) != null ) {
                     nlIndent();
                     src.add("color_sensor_").add(sensor.getPort()).add(" = ColorSensor(Port.").add(getPortFromConfig(sensor.getPort())).add(")").nlI();
-                    src.add("Color.RED = Color(0,70,70)").nlI();
-                    src.add("Color.GREEN = Color(120,70,70)").nlI();
-                    src.add("Color.MAGENTA = Color(300,70,70)").nlI();
-                    src.add("Color.YELLOW = Color(60,70,70)").nlI();
-                    src.add("Color.ORANGE = Color(30,70,70)").nlI();
-                    src.add("Color.CYAN = Color(180,70,70)").nlI();
-                    src.add("Color.BLUE = Color(225,70,70)").nlI();
-                    src.add("Color.BLACK = Color(0,0,35)").nlI();
-                    src.add("Color.WHITE = Color(0,0,70)").nlI();
-                    src.add("color_sensor_").add(sensor.getPort()).add(".detectable_colors([Color.RED, Color.GREEN, Color.BLUE, Color.MAGENTA, Color.YELLOW, Color.ORANGE, Color.CYAN, Color.BLACK , Color.WHITE, Color.NONE])");
+                    src.add("color_sensor_").add(sensor.getPort()).add(".detectable_colors([Color.MAGENTA, Color.BLUE, Color.AZURE, Color.CYAN, Color.YELLOW, Color.RED, Color.BLACK, Color.WHITE, Color.NONE])");
                 }
             });
         }
@@ -884,6 +906,10 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
     private void prepareComponents() {
         if ( usedHardwareBean.isSensorUsed(SC.GYRO) ) {
             src.add("hub.imu.reset_heading(0)").nlI();
+        }
+        if ( usedHardwareBean.isActorUsed(SC.SPEAKER)){
+            //TODO make volume be settings controlled
+            src.add("hub.speaker.volume(15)").nlI();
         }
     }
 }

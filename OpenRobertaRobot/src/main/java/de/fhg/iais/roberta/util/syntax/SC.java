@@ -142,6 +142,5 @@ public interface SC {
     String COlOR_IMPORT = "COLOR_IMPORT";
     String WAIT = "WAIT";
     String PORT = "PORT";
-    String MATH = "MATH";
-
+    String SPEAKER = "SPEAKER";
 }
