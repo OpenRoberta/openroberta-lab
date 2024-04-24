@@ -27,6 +27,7 @@ function init(robot, extensions) {
     $.when(
         ROBOT.setRobot(robot, extensions, function (result) {
             if (result.rc == 'ok') {
+                GUISTATE_C.setExtensions(extensions);
                 GUISTATE_C.setRobot(robot, result, true);
             }
         })
@@ -331,14 +332,33 @@ function switchRobot(robot: string, extensions: object, opt_continue?: boolean, 
 
     let further;
     // no need to ask for saving programs if you switch the robot in between a group
-    if (!opt_continue && GUISTATE_C.findGroup(robot) == GUISTATE_C.getRobotGroup()) {
+    function hasSameRobotGroupAndExtensions(robot, extensions): boolean {
+        if (GUISTATE_C.findGroup(robot) != GUISTATE_C.getRobotGroup()) {
+            return false;
+        }
+        let oldExtensions = GUISTATE_C.getExtensions();
+        const newExtensionKeys = Object.keys(extensions);
+        const oldExtensionKeys = Object.keys(GUISTATE_C.getExtensions());
+        if (newExtensionKeys.length !== oldExtensionKeys.length) {
+            return false;
+        } else {
+            for (let key of newExtensionKeys) {
+                if (extensions[key] !== oldExtensions[key]) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    let sameRobotGroupAndExtensions = hasSameRobotGroupAndExtensions(robot, extensions);
+    if (!opt_continue && sameRobotGroupAndExtensions) {
         further = true;
     } else {
         further = opt_continue || false;
         Blockly.clipboardXml_ = null;
     }
     if (further || (GUISTATE_C.isProgramSaved() && GUISTATE_C.isConfigurationSaved())) {
-        if (robot === GUISTATE_C.getRobot()) {
+        if (robot === GUISTATE_C.getRobot() && sameRobotGroupAndExtensions) {
             typeof opt_callback === 'function' && opt_callback();
             return;
         }
@@ -347,16 +367,14 @@ function switchRobot(robot: string, extensions: object, opt_continue?: boolean, 
                 if ($('.rightMenuButton.rightActive').length > 0) {
                     $('.rightMenuButton.rightActive').clickWrap();
                 }
-                if (GUISTATE_C.findGroup(robot) != GUISTATE_C.getRobotGroup()) {
-                    GUISTATE_C.setRobot(robot, result);
+                let sameRobotGroupAndExtensions = hasSameRobotGroupAndExtensions(robot, extensions);
+                GUISTATE_C.setExtensions(extensions);
+                GUISTATE_C.setRobot(robot, result);
+                if (!sameRobotGroupAndExtensions) {
                     CONFIGURATION_C.resetView();
                     PROGRAM_C.resetView();
-                } else {
-                    GUISTATE_C.setRobot(robot, result);
                 }
-
                 CONNECTION_C.switchConnection(robot);
-
                 CONFIGURATION_C.changeRobotSvg();
                 if (GUISTATE_C.getView() == 'tabConfList') {
                     $('#confList>.bootstrap-table').find('button[name="refresh"]').clickWrap();

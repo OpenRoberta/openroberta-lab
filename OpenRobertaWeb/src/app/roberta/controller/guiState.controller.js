@@ -100,6 +100,10 @@ function setExtensions(extensions) {
     GUISTATE.robot.extentions = extensions;
 }
 
+export function getExtensions() {
+    return GUISTATE.robot.extentions;
+}
+
 function hasExtension(value) {
     var hasExtension = false;
     for (const extension in GUISTATE.robot.extentions) {

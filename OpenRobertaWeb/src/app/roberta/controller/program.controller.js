@@ -390,7 +390,6 @@ function initProgramEnvironment() {
     }
     var program = GUISTATE_C.getProgramProg();
     programToBlocklyWorkspace(program);
-
     var blocks = blocklyWorkspace.getTopBlocks(true);
     if (blocks[0]) {
         var coord = blocks[0].getRelativeToSurfaceXY();
@@ -590,7 +589,7 @@ function programToBlocklyWorkspace(xml, opt_fromShowSource) {
     var isNamedConfig = !GUISTATE_C.isConfigurationStandard() && !GUISTATE_C.isConfigurationAnonymous();
     var configName = isNamedConfig ? GUISTATE_C.getConfigurationName() : undefined;
     var xmlConfigText = GUISTATE_C.isConfigurationAnonymous() ? GUISTATE_C.getConfigurationXML() : undefined;
-
+    GUISTATE_C.setProgramSaved(true);
     var language = GUISTATE_C.getLanguage();
     if ($('#codeDiv').hasClass('rightActive') && opt_fromShowSource) {
         PROGRAM.showSourceProgram(GUISTATE_C.getProgramName(), configName, xmlProgram, xmlConfigText, language, getSSID(), getPassword(), function (result) {

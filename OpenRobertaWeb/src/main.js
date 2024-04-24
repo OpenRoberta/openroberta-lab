@@ -328,7 +328,6 @@ var mainCallbackCalled = false;
 function initProgramming(robot, extensions, opt_callback, opt_params) {
     let callback = opt_callback;
     let params = opt_params;
-    guiStateController.setExtensions(extensions);
     if (!mainCallbackCalled) {
         mainCallbackCalled = true;
         $.when(robotController.init(robot, extensions)).then(function () {
