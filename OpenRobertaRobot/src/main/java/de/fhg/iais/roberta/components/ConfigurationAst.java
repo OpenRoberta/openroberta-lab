@@ -56,6 +56,7 @@ public final class ConfigurationAst {
         this.componentTypes = new ArrayList<>();
         for ( ConfigurationComponent confComp : this.configurationComponents.values() ) {
             if ( hasSubComponents(confComp) ) {
+                this.componentTypes.add(confComp.componentType);
                 for ( List<ConfigurationComponent> ccList : confComp.getSubComponents().values() ) {
                     for ( ConfigurationComponent cc : ccList ) {
                         this.componentTypes.add(cc.componentType.split("_")[0]);
