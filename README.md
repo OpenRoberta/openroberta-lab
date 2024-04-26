@@ -63,23 +63,20 @@ to download them to a user-defined directory, such as `/opt/compilers/`, as this
 * EV3 c4ev3
     * `sudo apt-get install g++-arm-linux-gnueabi`
 * Bionics4Education
-    * download and unpack [xtensa-esp32-elf](https://dl.espressif.com/dl/xtensa-esp32-elf-linux64-1.22.0-61-gab8375a-5.2.0.tar.gz) to a directory of your
-      choice.
+    * download and unpack [xtensa-esp32-elf](https://dl.espressif.com/dl/xtensa-esp32-elf-linux64-1.22.0-61-gab8375a-5.2.0.tar.gz) to a directory of your choice.
+* Spike Prime / Robot Inventor using the Pybricks firmware:
+    * `pip3 install mpy-cross-v6`     
 
-Next, add all of the downloaded binaries to the `PATH`. The `<path-to-the-bin-folder>` should be replaced with the download directory (created earlier)
-followed by the path to the bin folder in each compiler folder:
+Next, in .profile (or in the file your shell consumes at login time) add all downloaded binaries to the `PATH`.
+The `<path-to-the-bin-folder>` should be replaced by one of the download directories (created earlier)
+followed by the path to the bin folder in each compiler folder, usually `/bin`:
 
 ```shell
-echo export 'PATH="$PATH:<path-to-the-bin-folder>"' >> ~/.profile
-source ~/.profile
+export PATH="$PATH:<path-to-the-bin-folder>:<path-to-the-next-bin-folder>:..."
 ```
 
-use `source ~/.profile` to execute your changes.
-use `echo $PATH` to verify that the `PATH` is updated correctly.
-
-Make sure to execute `source ~/.profile` again after closing your terminal for future uses.
-
-The compiler versions have to be as listed below, to check the compiler installations execute:
+After `source ~/.profile` check with `echo $PATH` to verify that the `PATH` is updated correctly.
+Check whether the versions of the compiler installed are correct:
 
 ```shell
 xtensa-esp32-elf-g++ --version 
@@ -88,11 +85,6 @@ arm-none-eabi-g++ --version
 #>> 10.3.1 
 avr-gcc --version 
 #>> 7.3.0
-```
-
-The other installed package versions should be similar or equal to the versions listed below, to check the other installed components execute:
-
-```shell
 dpkg -l | grep libusb-0.1-4 
 #>> 2:0.1.12-32build3
 dpkg -l | grep binutils-avr 
@@ -109,6 +101,8 @@ dpkg -l | grep srecord
 #>> 1.64-3
 dpkg -l | grep g++-arm-linux-gnueabi 
 #>> 4:11.2.0
+mpy-cross-v6 --version
+#>> MicroPython a327cfc on 2023-02-16; mpy-cross emitting mpy v6
 ```
 
 #### Resources
@@ -129,9 +123,9 @@ echo export robot_crosscompiler_resourcebase="<path-to-ora-cc-rsc-folder>" >> ~/
 
 #### Step 1: Clone the repository and compile
 
-The source of the OpenRoberta Lab is stored in the Github repository '[openroberta-lab](https://github.com/OpenRoberta/openroberta-lab)'. We use ``develop`` to
-the default branch of our repository. If you clone our repository, you'll get ``develop`` first. In general this is a stable version. You can deploy a local
-version as described below. If you want to run the currently deployed version, please checkout ``master`` before building.
+The source of the OpenRoberta Lab is stored in the Github repository '[openroberta-lab](https://github.com/OpenRoberta/openroberta-lab)'. We use ``develop`` as
+the default branch of our repository. If you clone our repository, you'll get ``develop`` first. In general this is a stable version.
+If you want to run the currently deployed version, checkout ``master`` before building.
 
 After a fresh git clone you get the **openroberta-lab** project folder. It includes almost everything you need to setup and extend your own openrobertalab
 server. License information is available in the **docs** folder. Btw: if you use many repositories, put all of them into a common directoy as ``~/git``.
@@ -139,7 +133,10 @@ server. License information is available in the **docs** folder. Btw: if you use
     git clone https://github.com/OpenRoberta/openroberta-lab.git # get the repository
     cd openroberta-lab                                           # cd into repository
     mvn clean install                                            # generate the server, at the end: build success
-    npm install && npm run build                                 # build the frontend, some lines, must show no error
+
+    cd OpenRobertaWeb
+    npm install && npm run build && npx gulp                     # build the frontend, check tsc and gulp, must succeed
+    cd ..
 
 Takes some time.
 

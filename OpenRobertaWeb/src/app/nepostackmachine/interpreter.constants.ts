@@ -1,4 +1,3 @@
-
 export const ADD: string = "ADD";
 export const ALWAYS: string = "always";
 export const AMBIENTLIGHT: string = "ambientlight";
