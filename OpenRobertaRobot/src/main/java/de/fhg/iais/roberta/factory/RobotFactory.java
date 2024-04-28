@@ -164,7 +164,7 @@ public class RobotFactory {
         return this.pluginProperties.getStringProperty("robot.announcement");
     }
 
-    public final String getVendorId() {
+    public final String getVendor() {
         return this.pluginProperties.getStringProperty("robot.vendor");
     }
 

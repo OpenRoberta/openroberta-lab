@@ -52,9 +52,6 @@ function init() {
     user.name = '';
     user.isAccountActivated = false;
 
-    //socket.portNames = [];
-    //socket.vendorIds = [];
-
     program.name = '';
     program.saved = true;
     program.shared = true;

@@ -48,9 +48,6 @@ function init(language, opt_data) {
         GUISTATE.robot.name = '';
         GUISTATE.robot.robotPort = '';
 
-        //GUISTATE.socket.portNames = [];
-        //GUISTATE.socket.vendorIds = [];
-
         GUISTATE.program.toolbox.level = 'beginner';
         setProgramOwnerName(null);
         setProgramAuthorName(null);

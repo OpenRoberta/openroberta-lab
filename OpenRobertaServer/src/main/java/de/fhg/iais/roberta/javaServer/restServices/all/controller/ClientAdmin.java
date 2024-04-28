@@ -207,7 +207,7 @@ public class ClientAdmin {
                     response.setNnActivations(robotFactory.getNNActivations());
                     response.setWebotsSim(robotFactory.hasWebotsSim());
                     response.setWebotsUrl(robotFactory.getWebotsUrl());
-                    response.setVendor(robotFactory.getVendorId());
+                    response.setVendor(robotFactory.getVendor());
                     response.setConfigurationUsed(robotFactory.hasConfiguration());
                     response.setCommandLine(robotFactory.getCommandline());
                     response.setSignature(robotFactory.getSignature());

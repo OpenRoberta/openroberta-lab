@@ -19,6 +19,153 @@ import * as IO from 'socket.io';
 import * as CONNECTION_C from 'connection.controller';
 import { Interpreter } from 'interpreter.interpreter';
 
+export class AudioConnection extends AbstractPromptConnection {
+    /**
+     * Creates the pop-up for robots that play sound inside the browser instead
+     * of downloading a file (f.e. Edison) This function is very similar to
+     * runForAutoConnection, but instead of a download link a Play button is
+     * created. Also, some parts of the autoConnection pop-up are hidden: - the
+     * "I've changed my download folder" checkbox - the "OK" button in the
+     * footer
+     *
+     * @param result
+     *            the result that is received from the server after sending the
+     *            program to it
+     */
+    protected run(result) {
+        if (result.rc !== 'ok') {
+            GUISTATE_C.setConnectionState('wait');
+            MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
+        } else {
+            let wavFileContent = UTIL.base64decode(result.compiledCode);
+            let audio: HTMLAudioElement;
+            $('#changedDownloadFolder').addClass('hidden');
+
+            //This detects IE11 (and IE11 only), see: https://developer.mozilla.org/en-US/docs/Web/API/Window/crypto
+            // @ts-ignore
+            if (window.msCrypto) {
+                //Internet Explorer (all ver.) does not support playing WAV files in the browser
+                //If the user uses IE11 the file will not be played, but downloaded instead
+                //See: https://caniuse.com/#feat=wav, https://www.w3schools.com/html/html5_audio.asp
+                this.createDownloadLink(GUISTATE_C.getProgramName() + '.wav', wavFileContent);
+            } else {
+                //All non-IE browsers can play WAV files in the browser, see: https://www.w3schools.com/html/html5_audio.asp
+                $('#OKButtonModalFooter').addClass('hidden');
+                let contentAsBlob = new Blob([wavFileContent], {
+                    type: 'audio/wav'
+                });
+                audio = new Audio(window.URL.createObjectURL(contentAsBlob));
+                this.createPlayButton(audio);
+            }
+
+            let textH = $('#popupDownloadHeader').text();
+            $('#popupDownloadHeader').text(textH.replace('$', $.trim(GUISTATE_C.getRobotRealName())));
+            for (let i = 1; Blockly.Msg['POPUP_DOWNLOAD_STEP_' + i]; i++) {
+                let step = $('<li class="typcn typcn-roberta">');
+                let a =
+                    Blockly.Msg['POPUP_DOWNLOAD_STEP_' + i + '_' + GUISTATE_C.getRobotGroup().toUpperCase()] ||
+                    Blockly.Msg['POPUP_DOWNLOAD_STEP_' + i] ||
+                    'POPUP_DOWNLOAD_STEP_' + i;
+                step.html('<span class="download-message">' + a + '</span>');
+                step.css('opacity', '0');
+                $('#download-instructions').append(step);
+            }
+
+            $('#save-client-compiled-program').oneWrap('shown.bs.modal', function(e) {
+                $('#download-instructions li').each(function(index) {
+                    $(this)
+                        .delay(750 * index)
+                        .animate(
+                            {
+                                opacity: 1
+                            },
+                            1000
+                        );
+                });
+            });
+
+            $('#save-client-compiled-program').oneWrap('hidden.bs.modal', function(e) {
+                // @ts-ignore
+                if (!window.msCrypto) {
+                    audio.pause();
+                    audio.load();
+                }
+                let textH = $('#popupDownloadHeader').text();
+                $('#popupDownloadHeader').text(textH.replace($.trim(GUISTATE_C.getRobotRealName()), '$'));
+                $('#programLink').remove();
+                $('#download-instructions').empty();
+                GUISTATE_C.setConnectionState('wait');
+                MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
+
+                //Un-hide the div if it was hidden before
+                $('#changedDownloadFolder').removeClass('hidden');
+                $('#OKButtonModalFooter').removeClass('hidden');
+            });
+
+            $('#save-client-compiled-program').modal('show');
+        }
+    }
+
+    public override terminate(): void {
+        super.terminate();
+        this.clearDownloadModal();
+    }
+
+    public setState(): void {}
+
+    /**
+     * Creates a Play button for an Audio object so that the sound can be played
+     * and paused/restarted inside the browser:
+     *
+     * <button type="button" class="btn btn-primary" style="font-size:36px">
+     * <span class="typcn typcn-media-play" style="color : black"></span>
+     * </button>
+     */
+    createPlayButton(audio: HTMLAudioElement) {
+        $('#trA').removeClass('hidden');
+        let playButton: HTMLButtonElement;
+        if ('Blob' in window) {
+            //Create a bootstrap button
+            playButton = document.createElement('button');
+            playButton.setAttribute('type', 'button');
+            playButton.setAttribute('class', 'btn btn-primary');
+
+            let playing: boolean = false;
+            playButton.onclick = function() {
+                if (playing == false) {
+                    audio.play();
+                    playIcon.setAttribute('class', 'typcn typcn-media-stop');
+                    playing = true;
+                    audio.addEventListener('ended', function() {
+                        $('#save-client-compiled-program').modal('hide');
+                    });
+                } else {
+                    playIcon.setAttribute('class', 'typcn typcn-media-play');
+                    audio.pause();
+                    audio.load();
+                    playing = false;
+                }
+            };
+
+            //Create the play icon inside the button
+            let playIcon = document.createElement('span');
+            playIcon.setAttribute('class', 'typcn typcn-media-play');
+            playIcon.setAttribute('style', 'color : black');
+            playButton.appendChild(playIcon);
+        }
+
+        if (playButton) {
+            let programLinkDiv = document.createElement('div');
+            programLinkDiv.setAttribute('id', 'programLink');
+            programLinkDiv.setAttribute('style', 'text-align: center;');
+            programLinkDiv.appendChild(document.createElement('br'));
+            programLinkDiv.appendChild(playButton);
+            playButton.setAttribute('style', 'font-size:36px');
+            $('#downloadLink').append(programLinkDiv);
+        }
+    }
+}
+
 class ThymioDeviceManagerConnection extends AbstractConnection {
     static readonly URL = 'ws://localhost:8597';
     // provide a stop program (see https://github.com/Mobsya/vpl-web/blob/master/thymio/index.js#L197) instead of using a stop function of TDM
@@ -134,7 +281,7 @@ class ThymioDeviceManagerConnection extends AbstractConnection {
                     MSG.displayInformation({ rc: 'error' }, null, err, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
                 }
             );
-            setTimeout(function () {
+            setTimeout(function() {
                 GUISTATE_C.setConnectionState('wait');
                 GUISTATE.robot.state = 'wait';
             }, 1000);
@@ -470,7 +617,7 @@ class SpikePybricksWebBleConnection extends AbstractPromptConnection {
         try {
             this.bleDevice = await navigator.bluetooth.requestDevice({
                 filters: [{ services: [SERVICE_UUIDS.PYBRICKS_SERVICE_UUID] }],
-                optionalServices: [SERVICE_UUIDS.PYBRICKS_SERVICE_UUID, SERVICE_UUIDS.DEVICE_INFORMATION_SERVICE_UUID, SERVICE_UUIDS.NORDIC_UART_SERVICE_UUID],
+                optionalServices: [SERVICE_UUIDS.PYBRICKS_SERVICE_UUID, SERVICE_UUIDS.DEVICE_INFORMATION_SERVICE_UUID, SERVICE_UUIDS.NORDIC_UART_SERVICE_UUID]
             });
         } catch (error) {
             throw new BleError(error, 'BLE_NO_DEVICE_SELECTED', BLE_ALERT_TYPES.ALERT);
@@ -732,11 +879,11 @@ class AutoConnection extends AbstractPromptConnection {
 
     public setState(): void {}
 
-    async connect(vendor: string, generatedCode: string): Promise<any> {
+    async connect(vendors: string, generatedCode: string): Promise<any> {
         try {
             if (this.device === undefined) {
                 this.device = await navigator.usb.requestDevice({
-                    filters: [{ vendorId: Number(vendor) }],
+                    filters: this.deviceFilters(vendors)
                 });
             }
             return await this.upload(generatedCode);
@@ -776,6 +923,14 @@ class AutoConnection extends AbstractPromptConnection {
             }
         }
         return 'done';
+    }
+
+    deviceFilters(vendors: string): Array<USBDeviceFilter> {
+        let usbDevFilterArray: Array<USBDeviceFilter> = new Array<USBDeviceFilter>();
+        for (const vendor of vendors.split(',')) {
+            usbDevFilterArray.push({ vendorId: +vendor });
+        }
+        return usbDevFilterArray;
     }
 
     stringToArrayBuffer(generatedcode: string): Uint8Array {
@@ -860,10 +1015,28 @@ class TokenConnection extends AbstractConnection {
     }
 
     public override stopProgram() {
-        PROGRAM.stopProgram(function () {
+        PROGRAM.stopProgram(function() {
             //TODO handle server result
         });
     }
+}
+
+/*
+ * from the server we get a list of vendorId's matching a robot plugin. This is stored in the GUISTATE_C.
+ * Check whether one of these ids match a connection candidates id (called portElement)
+ * Vendor and Product IDs for some robots Botnroll: /dev/ttyUSB0,
+ * VID: 0x10c4, PID: 0xea60 Mbot: /dev/ttyUSB0, VID: 0x1a86, PID:
+ * 0x7523 ArduinoUno: /dev/ttyACM0, VID: 0x2a03, PID: 0x0043
+ */
+function vendorIDfoundInVendorsFromGuiState(portElement: string) {
+    portElement = portElement.toLowerCase();
+    const vendorsFromGuiState: string = GUISTATE_C.getVendor().split(',');
+    for (const vendor of vendorsFromGuiState) {
+        if (vendor === portElement) {
+            return true;
+        }
+    }
+    return false;
 }
 
 class AgentOrTokenConnection extends TokenConnection {
@@ -885,7 +1058,7 @@ class AgentOrTokenConnection extends TokenConnection {
             CONNECTION_C.setSocket(robotSocket);
             CONNECTION_C.setIsAgent(true);
             $('#menuConnect').parent().addClass('disabled');
-            robotSocket.on('connect_error', function (err) {
+            robotSocket.on('connect_error', function(err) {
                 CONNECTION_C.setIsAgent(false);
             });
 
@@ -901,16 +1074,11 @@ class AgentOrTokenConnection extends TokenConnection {
                 }, 3000);
             });
 
-            /*
-             * Vendor and Product IDs for some robots Botnroll: /dev/ttyUSB0,
-             * VID: 0x10c4, PID: 0xea60 Mbot: /dev/ttyUSB0, VID: 0x1a86, PID:
-             * 0x7523 ArduinoUno: /dev/ttyACM0, VID: 0x2a03, PID: 0x0043
-             */
             robotSocket.on('message', (data) => {
                 if (data.includes('"Network": false')) {
                     let jsonObject = JSON.parse(data);
                     jsonObject['Ports'].forEach((port) => {
-                        if (GUISTATE_C.getVendor() === port['VendorID'].toLowerCase()) {
+                        if (vendorIDfoundInVendorsFromGuiState(port['VendorID'])) {
                             this.portList.push(port['Name']);
                             this.vendorList.push(port['VendorID']);
                             this.productList.push(port['ProductID']);
@@ -919,7 +1087,7 @@ class AgentOrTokenConnection extends TokenConnection {
                     });
                     CONNECTION_C.setIsAgent(true);
 
-                    robotSocket.on('connect_error', function (err) {
+                    robotSocket.on('connect_error', function(err) {
                         CONNECTION_C.setIsAgent(false);
                         $('#menuConnect').parent().removeClass('disabled');
                     });
@@ -939,9 +1107,9 @@ class AgentOrTokenConnection extends TokenConnection {
                 }
             });
 
-            robotSocket.on('disconnect', function () {});
+            robotSocket.on('disconnect', function() {});
 
-            robotSocket.on('error', function (err) {});
+            robotSocket.on('error', function(err) {});
         }
 
         this.listRobotStart();
@@ -963,7 +1131,7 @@ class AgentOrTokenConnection extends TokenConnection {
             let robots = this.getRobotList();
             $('#singleModalListInput').empty();
             let i = 0;
-            ports.forEach(function (port) {
+            ports.forEach(function(port) {
                 $('#singleModalListInput').append('<option value="' + port + '" selected>' + robots[i] + ' ' + port + '</option>');
                 i++;
             });
@@ -979,7 +1147,7 @@ class AgentOrTokenConnection extends TokenConnection {
         GUISTATE_C.setState(result);
         if (result.rc == 'ok') {
             this.uploadProgram(result.compiledCode, GUISTATE_C.getRobotPort());
-            setTimeout(function () {
+            setTimeout(function() {
                 GUISTATE_C.setConnectionState('error');
             }, 5000);
         } else {
@@ -1068,7 +1236,7 @@ class AgentOrTokenConnection extends TokenConnection {
         try {
             let jsonObject = JSON.parse(this.agentPortList);
             jsonObject.forEach((port) => {
-                if (GUISTATE_C.getVendor() === port['IdVendor'].toLowerCase()) {
+                if (vendorIDfoundInVendorsFromGuiState(port['IdVendor'])) {
                     this.portList.push(port['Name']);
                     this.vendorList.push(port['IdVendor']);
                     this.productList.push(port['IdProduct']);
@@ -1120,7 +1288,7 @@ class AgentOrTokenConnection extends TokenConnection {
     }
 
     uploadProgram(programHex, robotPort) {
-        COMM.sendProgramHexToAgent(programHex, robotPort, GUISTATE_C.getProgramName(), GUISTATE_C.getSignature(), GUISTATE_C.getCommandLine(), function () {
+        COMM.sendProgramHexToAgent(programHex, robotPort, GUISTATE_C.getProgramName(), GUISTATE_C.getSignature(), GUISTATE_C.getCommandLine(), function() {
             LOG.text('Create agent upload success');
             $('#menuRunProg').parent().removeClass('disabled');
             $('#runOnBrick').parent().removeClass('disabled');
@@ -1236,23 +1404,32 @@ class Calliope extends AutoConnection {
 }
 
 //ARDU
-export class Bob3Connection extends AgentOrTokenConnection {}
+export class Bob3Connection extends AgentOrTokenConnection {
+}
 
-export class BotnrollConnection extends AgentOrTokenConnection {}
+export class BotnrollConnection extends AgentOrTokenConnection {
+}
 
-export class FestobionicflowerConnection extends TokenConnection {}
+export class FestobionicflowerConnection extends TokenConnection {
+}
 
-export class FestobionicConnection extends TokenConnection {}
+export class FestobionicConnection extends TokenConnection {
+}
 
-export class MbotConnection extends TokenConnection {}
+export class MbotConnection extends TokenConnection {
+}
 
-export class MegaConnection extends TokenConnection {}
+export class MegaConnection extends TokenConnection {
+}
 
-export class NanoConnection extends TokenConnection {}
+export class NanoConnection extends TokenConnection {
+}
 
-export class Nano33bleConnection extends TokenConnection {}
+export class Nano33bleConnection extends TokenConnection {
+}
 
-export class Rob3rtaConnection extends AgentOrTokenConnection {}
+export class Rob3rtaConnection extends AgentOrTokenConnection {
+}
 
 export class SenseboxConnection extends AutoConnection {
     override init() {
@@ -1266,12 +1443,15 @@ export class SenseboxConnection extends AutoConnection {
     }
 }
 
-export class UnoConnection extends TokenConnection {}
+export class UnoConnection extends TokenConnection {
+}
 
-export class Unowifirev2Connection extends TokenConnection {}
+export class Unowifirev2Connection extends TokenConnection {
+}
 
 //cyberpi
-export class Mbot2Connection extends TokenConnection {}
+export class Mbot2Connection extends TokenConnection {
+}
 
 export class EdisonConnection extends AbstractPromptConnection {
     private static API_URL: string = 'https://api.edisonrobotics.net/';
@@ -1435,36 +1615,48 @@ export class EdisonConnection extends AbstractPromptConnection {
 //ev3
 export class Ev3c4ev3Connection extends AutoConnection {}
 
-export class Ev3devConnection extends TokenConnection {}
+export class Ev3devConnection extends TokenConnection {
+}
 
-export class Ev3lejosv0Connection extends TokenConnection {}
+export class Ev3lejosv0Connection extends TokenConnection {
+}
 
-export class Ev3lejosv1Connection extends TokenConnection {}
+export class Ev3lejosv1Connection extends TokenConnection {
+}
 
-export class XNNConnection extends TokenConnection {}
+export class XNNConnection extends TokenConnection {
+}
 
 //mbed
-export class Calliope2016Connection extends Calliope {}
+export class Calliope2016Connection extends Calliope {
+}
 
-export class Calliope2017Connection extends Calliope {}
+export class Calliope2017Connection extends Calliope {
+}
 
-export class Calliope2017NoBlueConnection extends Calliope {}
+export class Calliope2017NoBlueConnection extends Calliope {
+}
 
-export class JoycarConnection extends AutoConnection {}
+export class JoycarConnection extends AutoConnection {
+}
 
-export class MicrobitConnection extends AutoConnection {}
+export class MicrobitConnection extends AutoConnection {
+}
 
-export class Microbitv2Connection extends AutoConnection {}
+export class Microbitv2Connection extends AutoConnection {
+}
 
 export class Calliopev3Connection extends AutoConnection {
     // TODO CalliopeV3: partial flashing when available
 }
 
 //Nao
-export class NaoConnection extends TokenConnection {}
+export class NaoConnection extends TokenConnection {
+}
 
 //Nxt
-export class NxtConnection extends TokenConnection {}
+export class NxtConnection extends TokenConnection {
+}
 
 //Robotino
 export class RobotinoConnection extends TokenConnection {
@@ -1494,9 +1686,11 @@ export class RobotinoROSConnection extends TokenConnection {
 }
 
 //Spike
-export class SpikePybricksConnection extends SpikePybricksWebBleConnection {}
+export class SpikePybricksConnection extends SpikePybricksWebBleConnection {
+}
 
-export class SpikeConnection extends TokenConnection {}
+export class SpikeConnection extends TokenConnection {
+}
 
 export class Txt4Connection extends TokenConnection {
     public override showConnectionModal() {
@@ -1667,10 +1861,12 @@ export class Txt4Connection extends TokenConnection {
 }
 
 //Thymio
-export class ThymioConnection extends ThymioDeviceManagerConnection {}
+export class ThymioConnection extends ThymioDeviceManagerConnection {
+}
 
 //this is just a skeleton as of now
-export class WedoConnection extends WebViewConnection {}
+export class WedoConnection extends WebViewConnection {
+}
 
 //TODO this is not tested or finished, placeholder to not lose information on creating local connection
 export class LocalConnection extends AbstractConnection {
@@ -1691,7 +1887,7 @@ export class LocalConnection extends AbstractConnection {
             result.compiledCode = UTIL.base64decode(result.compiledCode);
         }
         UTIL.download(filename, result.compiledCode);
-        setTimeout(function () {
+        setTimeout(function() {
             GUISTATE_C.setConnectionState('wait');
         }, 5000);
         MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
