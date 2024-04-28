@@ -879,11 +879,11 @@ class AutoConnection extends AbstractPromptConnection {
 
     public setState(): void {}
 
-    async connect(vendor: string, generatedCode: string): Promise<any> {
+    async connect(vendors: string, generatedCode: string): Promise<any> {
         try {
             if (this.device === undefined) {
                 this.device = await navigator.usb.requestDevice({
-                    filters: [{ vendorId: Number(vendor) }],
+                    filters: this.deviceFilters(vendors),
                 });
             }
             return await this.upload(generatedCode);
@@ -923,6 +923,14 @@ class AutoConnection extends AbstractPromptConnection {
             }
         }
         return 'done';
+    }
+
+    deviceFilters(vendors: string): Array<USBDeviceFilter> {
+        let usbDevFilterArray: Array<USBDeviceFilter> = new Array<USBDeviceFilter>();
+        for (const vendor of vendors.split(',')) {
+            usbDevFilterArray.push({ vendorId: +vendor });
+        }
+        return usbDevFilterArray;
     }
 
     stringToArrayBuffer(generatedcode: string): Uint8Array {
