@@ -45,10 +45,10 @@ public class NEPOprog {
     private float ____h1n2;
     private float ____n2;
     private float ____n4;
-    private float ____b_h1n1 = 0.5f;
+    private float ____b_h1n1 = 1f;
     private float ____w_n1_h1n1 = 1f;
     private float ____w_n3_h1n1 = 2f;
-    private float ____b_h1n2 = 1.5f;
+    private float ____b_h1n2 = 2f;
     private float ____w_n1_h1n2 = 3f;
     private float ____w_n3_h1n2 = 4f;
     private float ____b_n2 = 0f;

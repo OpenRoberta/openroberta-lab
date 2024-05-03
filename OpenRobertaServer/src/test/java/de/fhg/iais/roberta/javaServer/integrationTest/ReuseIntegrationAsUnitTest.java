@@ -166,8 +166,8 @@ public class ReuseIntegrationAsUnitTest {
     @Ignore
     @Test
     public void testOneCommonProgrammAsUnitTest() throws Exception {
-        String programName = "mathAndLists";
-        String[] robotNames = {"ev3lejosv1"}; // set to null, if all robots should be tested; otherwise put the robots under test into the array
+        String programName = "neuralNetwork";
+        String[] robotNames = {"edison"}; // set to null, if all robots should be tested; otherwise put the robots under test into the array
         {
             List<String> pluginDefines = new ArrayList<>(); // maybe used later to add properties
             testFactory = Util.configureRobotPlugin(ROBOT_NAME_FOR_COMMON_TESTS, "", "", pluginDefines);

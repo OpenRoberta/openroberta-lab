@@ -75,7 +75,7 @@ followed by the path to the bin folder in each compiler folder, usually `/bin`:
 export PATH="$PATH:<path-to-the-bin-folder>:<path-to-the-next-bin-folder>:..."
 ```
 
-After `source ~/.profile` check with `echo $PATH` to verify that the `PATH` is updated correctly.
+After `source ~/.profile` verify with `echo $PATH` that the `PATH` is updated correctly.
 Check whether the versions of the compiler installed are correct:
 
 ```shell

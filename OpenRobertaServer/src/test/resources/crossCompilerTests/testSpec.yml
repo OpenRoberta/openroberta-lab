@@ -274,7 +274,6 @@ progs:
     exclude:
       bob3: "NN not supported"
       botnroll: "NN not supported"
-      edison: "NN not supported"
       nao: "NN not supported"
       rob3rta: "NN not supported"
     remark: "test all NN blocks"
