@@ -21,7 +21,7 @@ public class MicrobitV2PythonVisitor extends MbedV2PythonVisitor implements IMic
         List<List<Phrase>> programPhrases,
         ConfigurationAst robotConfiguration,
         ClassToInstanceMap<IProjectBean> beans) {
-        super(programPhrases, robotConfiguration, beans);
+        super(programPhrases, robotConfiguration, "microbit", beans);
     }
 
 }

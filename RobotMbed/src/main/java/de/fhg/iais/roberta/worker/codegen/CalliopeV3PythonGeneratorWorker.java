@@ -12,6 +12,5 @@ public class CalliopeV3PythonGeneratorWorker extends AbstractLanguageGeneratorWo
     @Override
     protected AbstractLanguageVisitor getVisitor(Project project, ClassToInstanceMap<IProjectBean> beans) {
         return new CalliopeV3PythonVisitor(project.getProgramAst().getTree(), project.getConfigurationAst(), beans);
-
     }
 }

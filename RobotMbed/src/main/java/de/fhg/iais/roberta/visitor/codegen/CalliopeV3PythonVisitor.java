@@ -46,7 +46,7 @@ public class CalliopeV3PythonVisitor extends MbedV2PythonVisitor implements ICal
         List<List<Phrase>> programPhrases,
         ConfigurationAst robotConfiguration,
         ClassToInstanceMap<IProjectBean> beans) {
-        super(programPhrases, robotConfiguration, beans);
+        super(programPhrases, robotConfiguration, "calliope", beans);
     }
 
     @Override

@@ -29,8 +29,9 @@ public class MbedV2PythonVisitor extends MbedPythonVisitor implements IMicrobitV
     public MbedV2PythonVisitor(
         List<List<Phrase>> programPhrases,
         ConfigurationAst robotConfiguration,
+        String boardName,
         ClassToInstanceMap<IProjectBean> beans) {
-        super(programPhrases, robotConfiguration, beans);
+        super(programPhrases, robotConfiguration, boardName, beans);
     }
 
     @Override

@@ -18,6 +18,6 @@ public class MicrobitPythonVisitor extends MbedPythonVisitor implements IMicrobi
      * @param beans
      */
     public MicrobitPythonVisitor(List<List<Phrase>> programPhrases, ConfigurationAst robotConfiguration, ClassToInstanceMap<IProjectBean> beans) {
-        super(programPhrases, robotConfiguration, beans);
+        super(programPhrases, robotConfiguration, "microbit", beans);
     }
 }
