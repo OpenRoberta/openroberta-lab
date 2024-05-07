@@ -171,15 +171,14 @@ export class CircuitVisualization {
     private renderBlockConnections(block: any) {
         if (block.id === 'robot') {
             return this.renderConnections(this.connections);
-        } else if (block.ports.length == 0) {
+        } else {
             let blockIds = [];
+            blockIds.push(block.id);
             while (block && block.getChildren().length > 0) {
                 block = block.getChildren()[0];
                 blockIds.push(block.id);
             }
             return this.renderConnections(this.connections.filter(({ blockId }) => blockIds.includes(blockId)));
-        } else {
-            return this.renderConnections(this.connections.filter(({ blockId }) => blockId === block.id));
         }
     }
 
