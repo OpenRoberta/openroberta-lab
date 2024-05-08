@@ -887,7 +887,7 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
             this.src.add("import random").nlI();
         }
         if ( usedHardwareBean.isActorUsed(SC.DISPLAY) ) {
-            this.src.add("from display import *").nlI();
+            this.src.add("from display import display").nlI();
         }
         if ( usedHardwareBean.isSensorUsed(SC.COLOUR) ) {
             this.src.add("from fischertechnik.models.Color import Color").nlI();

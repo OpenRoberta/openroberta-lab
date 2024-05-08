@@ -137,7 +137,11 @@ robots:
     dir: spikePybricks
     suffix: ".py"
     pylintIgnoredModules: [ "pybricks.hubs", "pybricks.pupdevices","pybricks.parameters","pybricks.tools","pybricks.robotics","umath","urandom" ]
- 
+  txt4:
+    template: txt4
+    dir: txt4
+    suffix: ".py"
+    pylintIgnoredModules: [ "fischertechnik.factories", "display", "fischertechnik.models.Color", "fischertechnik.controller.Motor" ]
 progs:
   assign:
     decl: default
