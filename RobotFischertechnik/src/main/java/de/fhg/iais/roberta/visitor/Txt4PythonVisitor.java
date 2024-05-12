@@ -32,6 +32,7 @@ import de.fhg.iais.roberta.syntax.action.light.RgbLedOffHiddenAction;
 import de.fhg.iais.roberta.syntax.action.light.RgbLedOnHiddenAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnForAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
+import de.fhg.iais.roberta.syntax.colour.ColourCompare;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
@@ -39,7 +40,6 @@ import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
-import de.fhg.iais.roberta.syntax.logic.ColourCompare;
 import de.fhg.iais.roberta.syntax.sensor.CameraBallSensor;
 import de.fhg.iais.roberta.syntax.sensor.CameraLineColourSensor;
 import de.fhg.iais.roberta.syntax.sensor.CameraLineInformationSensor;
@@ -891,6 +891,9 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
         }
         if ( usedHardwareBean.isSensorUsed(SC.COLOUR) ) {
             this.src.add("from fischertechnik.models.Color import Color").nlI();
+        }
+        if (usedHardwareBean.isSensorUsed(FischertechnikConstants.COLOURCOMPARE)){
+            this.src.add("import colorsys").nlI();
         }
 
         this.src.add("import math").nlI();

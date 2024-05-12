@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2024-05-08 15:27:00.975913",
+		"lastupdated": "2024-05-10 01:56:32.254437",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1069,7 +1069,7 @@
 	"SENSOR_GESTURE_COLOUR_GETSAMPLE_TOOLTIP": "Gets the current reading from the colour reading of the sensor.",
 	"SENSOR_GESTURE_GESTURE_GETSAMPLE_TOOLTIP": "Gets the current gesture reading of the sensor [1-6].",
 	"SENSOR_GESTURE_PROXIMITY_GETSAMPLE_TOOLTIP": "Gets the current proxmity reading of the sensor in percent.",
-	"LOGIC_COLOUR_COMPARE_TOOLTIP": "Compares two colors based on their hue values while considering a specified tolerance range [0°-360°].",
+	"COLOUR_COMPARE_TOOLTIP": "Compares two colors based on their hue values while considering a specified tolerance range [0°-360°].",
 	"TEMPERATURE_GETSAMPLE_TOOLTIP": "Gets the current reading from the temperature sensor in °C.",
 	"COMPASS_GETSAMPLE_TOOLTIP": "Gets the current reading from the compass sensor.",
 	"MICROPHONE_GETSAMPLE_TOOLTIP": "Gets the current reading from the microphone in % (mapped to 0 - 100). If the value is always low, the value has to be multiplied by 10, because the amplification is missing on the hardware.",

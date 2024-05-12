@@ -18,7 +18,7 @@ import de.fhg.iais.roberta.syntax.action.light.RgbLedOffHiddenAction;
 import de.fhg.iais.roberta.syntax.action.light.RgbLedOnHiddenAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnForAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
-import de.fhg.iais.roberta.syntax.logic.ColourCompare;
+import de.fhg.iais.roberta.syntax.colour.ColourCompare;
 import de.fhg.iais.roberta.syntax.sensor.CameraBallSensor;
 import de.fhg.iais.roberta.syntax.sensor.CameraLineColourSensor;
 import de.fhg.iais.roberta.syntax.sensor.CameraLineInformationSensor;

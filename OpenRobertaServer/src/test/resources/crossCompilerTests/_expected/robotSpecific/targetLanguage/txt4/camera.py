@@ -1,6 +1,7 @@
 import fischertechnik.factories as txt_factory
 from display import display
 from fischertechnik.models.Color import Color
+import colorsys
 import math
 import time
 
@@ -45,10 +46,18 @@ def get_camera_colour():
         return -1
 
 def compare_colour(hex1, hex2, tolerance):
-    hex_1_as_string = "#{:06x}".format(hex1 & 0xFFFFFF)
-    hex_2_as_string = "#{:06x}".format(hex2 & 0xFFFFFF)
-    color_1 = Color(hex=hex_1_as_string)
-    return color_1.compare(hex=hex_2_as_string, hue_tolerance=tolerance)
+    r1, g1, b1 = (hex1 >> i & 0xFF for i in (16, 8, 0))
+    r2, g2, b2 = (hex2 >> i & 0xFF for i in (16, 8, 0))
+    
+    hsv1 = colorsys.rgb_to_hsv(r1 / 255, g1 / 255, b1 / 255)
+    hsv2 = colorsys.rgb_to_hsv(r2 / 255, g2 / 255, b2 / 255)
+    
+    hue_diff = abs(hsv1[0] - hsv2[0])
+    if hue_diff > 0.5:
+        hue_diff = 1 - hue_diff
+    saturation_diff = abs(hsv1[1] - hsv2[1])
+    value_diff = abs(hsv1[2] - hsv2[2])
+    return (hue_diff <= (tolerance / 360) and saturation_diff <= 0.5 and value_diff <= 0.5)
 
 def get_line_colour(index):
     line = line_detector.get_line_by_index(index)

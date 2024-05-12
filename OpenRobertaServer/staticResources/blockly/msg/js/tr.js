@@ -171,6 +171,7 @@ Blockly.Msg.COLOUR_BLEND_RATIO = "oran";
 Blockly.Msg.COLOUR_BLEND_TITLE = "karıştır";
 Blockly.Msg.COLOUR_BLEND_TOOLTIP = "Verilen bir orana bağlı olarak iki rengi karıştırır. (0.0 - 1.0).";
 Blockly.Msg.COLOUR_COLOUR_GETSAMPLE_TOOLTIP = "Gets the current colour reading from the sensor.";  // untranslated
+Blockly.Msg.COLOUR_COMPARE_TOOLTIP = "Compares two colors based on their hue values while considering a specified tolerance range [0°-360°].";  // untranslated
 Blockly.Msg.COLOUR_GETSAMPLE_TOOLTIP = "Gets the current reading from the colour sensor.";  // untranslated
 Blockly.Msg.COLOUR_HSV_RANGE = "HSV range";  // untranslated
 Blockly.Msg.COLOUR_LIGHT_GETSAMPLE_TOOLTIP = "Gets the current brightness reading from the sensor.";  // untranslated
@@ -632,7 +633,6 @@ Blockly.Msg.LOGIC_BOOLEAN_FALSE = "false = Olumsuz";
 Blockly.Msg.LOGIC_BOOLEAN_HELPURL = "https://github.com/google/blockly/wiki/Logic#values";  // untranslated
 Blockly.Msg.LOGIC_BOOLEAN_TOOLTIP = "Ya 'True' yada 'False' değerini verir.";
 Blockly.Msg.LOGIC_BOOLEAN_TRUE = "Olumlu";
-Blockly.Msg.LOGIC_COLOUR_COMPARE_TOOLTIP = "Compares two colors based on their hue values while considering a specified tolerance range [0°-360°].";  // untranslated
 Blockly.Msg.LOGIC_COMPARE_HELPURL = "https://tr.wikipedia.org/wiki/E%C5%9Fitsizlikler";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_EQ = "Girilen iki değer birbirine eşitse \"True\" değerini verir.";
 Blockly.Msg.LOGIC_COMPARE_TOOLTIP_GT = "Girilen ilk değer ikinci değerden daha büyükse \"True\" değerini verir.";

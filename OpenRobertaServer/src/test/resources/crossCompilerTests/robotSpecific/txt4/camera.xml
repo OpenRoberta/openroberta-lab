@@ -90,7 +90,7 @@
                     <statement name="DO">
                         <block type="robActions_serial_print" id="hu8#.1HO7x1L;g3Qbe,h" intask="true">
                             <value name="OUT">
-                                <block type="logic_colour_compare" id="Zj}bq!DXe*l,0Ca`DSOt" intask="true">
+                                <block type="colour_compare" id="Zj}bq!DXe*l,0Ca`DSOt" intask="true">
                                     <field name="OP">EQ</field>
                                     <value name="COLOUR1">
                                         <block type="robSensors_colour_getSample" id="!12q!`;o|.HH]Sf?t7G9" intask="true">

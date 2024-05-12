@@ -1,4 +1,4 @@
-package de.fhg.iais.roberta.syntax.logic;
+package de.fhg.iais.roberta.syntax.colour;
 
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
@@ -8,7 +8,7 @@ import de.fhg.iais.roberta.transformer.forField.NepoValue;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 
-@NepoPhrase(category = "ACTOR", blocklyNames = {"logic_colour_compare"}, name = "LOGIC_COMPARE_COLOUR")
+@NepoPhrase(category = "ACTOR", blocklyNames = {"colour_compare"}, name = "COMPARE_COLOUR")
 public final class ColourCompare extends Action {
     @NepoField(name = "OP")
     public final String op;

@@ -29,10 +29,10 @@ import de.fhg.iais.roberta.syntax.action.light.RgbLedOffHiddenAction;
 import de.fhg.iais.roberta.syntax.action.light.RgbLedOnHiddenAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnForAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
+import de.fhg.iais.roberta.syntax.colour.ColourCompare;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
-import de.fhg.iais.roberta.syntax.logic.ColourCompare;
 import de.fhg.iais.roberta.syntax.sensor.CameraBallSensor;
 import de.fhg.iais.roberta.syntax.sensor.CameraLineColourSensor;
 import de.fhg.iais.roberta.syntax.sensor.CameraLineInformationSensor;
@@ -405,7 +405,7 @@ public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
 
     @Override
     public Void visitColourCompare(ColourCompare colourCompare) {
-        usedHardwareBuilder.addUsedSensor(new UsedSensor("", SC.COLOUR, SC.COLOUR));
+        usedHardwareBuilder.addUsedSensor(new UsedSensor("", FischertechnikConstants.COLOURCOMPARE, FischertechnikConstants.COLOURCOMPARE));
         usedMethodBuilder.addUsedMethod(Txt4Methods.COLOURCOMPARE);
         requiredComponentVisited(colourCompare, colourCompare.colour1, colourCompare.colour2, colourCompare.tolerance);
         return null;

@@ -1,5 +1,5 @@
 Sensors: 
-[UsedSensor [C, CAMERA, COLOUR], UsedSensor [C, COLOUR, COLOUR], UsedSensor [DISPLAY, BUTTON, PRESSED], UsedSensor [, COLOUR, COLOUR], UsedSensor [C, CAMERA, LINE], UsedSensor [C, LINE, LINE], UsedSensor [C, CAMERA, BALL], UsedSensor [C, BALL, BALL], UsedSensor [C, CAMERA, MOTION], UsedSensor [C, MOTION, MOTION]]
+[UsedSensor [C, CAMERA, COLOUR], UsedSensor [C, COLOUR, COLOUR], UsedSensor [DISPLAY, BUTTON, PRESSED], UsedSensor [, COLOURCOMPARE, COLOURCOMPARE], UsedSensor [C, CAMERA, LINE], UsedSensor [C, LINE, LINE], UsedSensor [C, CAMERA, BALL], UsedSensor [C, BALL, BALL], UsedSensor [C, CAMERA, MOTION], UsedSensor [C, MOTION, MOTION]]
 Actors: 
 [UsedActor [DISPLAY, DISPLAY]]
 Methods: 
