@@ -13,6 +13,7 @@ void ____move();
 void ____action();
 
 
+
 double ___n;
 
 int main()
@@ -64,3 +65,4 @@ void ____move() {
 void ____action() {
     ____move();
 }
+

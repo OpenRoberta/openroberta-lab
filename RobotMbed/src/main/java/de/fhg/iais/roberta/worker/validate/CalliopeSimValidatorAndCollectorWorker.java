@@ -11,7 +11,8 @@ public class CalliopeSimValidatorAndCollectorWorker extends CalliopeValidatorAnd
 
     @Override
     protected CommonNepoValidatorAndCollectorVisitor getVisitor(Project project, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
-        return new CalliopeValidatorAndCollectorVisitor(project.getConfigurationAst(), beanBuilders, true, false);
+        boolean hasBlueTooth = project.getRobotFactory().getPluginProperties().getBooleanProperty("robot.has.bluetooth");
+        return new CalliopeValidatorAndCollectorVisitor(project.getConfigurationAst(), beanBuilders, true, isDisplaySwitchUsed(project), hasBlueTooth);
     }
 
 }

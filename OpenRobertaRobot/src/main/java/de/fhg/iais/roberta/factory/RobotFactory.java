@@ -106,6 +106,10 @@ public class RobotFactory {
         return p != null && p.equals("true");
     }
 
+    public final String getPluginSim() {
+        return this.pluginProperties.getStringProperty("robot.pluginSim");
+    }
+
     public final String nnProperty() {
         String p = this.pluginProperties.getStringProperty("robot.nn");
         return p == null ? "never" : p;

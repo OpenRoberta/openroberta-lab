@@ -38,6 +38,8 @@ public class SetRobotResponse extends BaseResponse {
     protected String sourceCodeFileExtension;
     protected String binaryFileExtension;
     protected String firmwareDefault;
+    protected String pluginSim;
+    protected boolean pluginSimDefined;
 
     /**
      * the response for the /setRobot REST request
@@ -85,6 +87,7 @@ public class SetRobotResponse extends BaseResponse {
         boolean sim,
         boolean multipleSim,
         boolean markerSim,
+        String pluginSim,
         boolean nn,
         JSONArray nnActivations,
         boolean webotsSim,
@@ -120,6 +123,7 @@ public class SetRobotResponse extends BaseResponse {
         entity.setSim(sim);
         entity.setMultipleSim(multipleSim);
         entity.setMarkerSim(markerSim);
+        entity.setPluginSim(pluginSim);
         entity.setNn(nn);
         entity.setNnActivations(nnActivations);
         entity.setWebotsSim(webotsSim);
@@ -425,6 +429,29 @@ public class SetRobotResponse extends BaseResponse {
         }
         return this.markerSim;
     }
+
+    /**
+     * GET pluginSim. Object must be immutable. Never return null or an undefined/default value.
+     */
+    public String getPluginSim() {
+        if ( !this.immutable ) {
+            throw new RuntimeException("no pluginSim from an object under construction: " + toString());
+        }
+        return this.pluginSim;
+    }
+
+    /**
+     * SET pluginSim. Object must be mutable.
+     */
+    public SetRobotResponse setPluginSim(String pluginSim) {
+        if ( this.immutable ) {
+            throw new RuntimeException("pluginSim assigned to an immutable object: " + toString());
+        }
+        this.pluginSim = pluginSim;
+        this.pluginSimDefined = true;
+        return this;
+    }
+
 
     /**
      * SET markerSim. Object must be mutable.
@@ -768,6 +795,7 @@ public class SetRobotResponse extends BaseResponse {
             jsonO.put("sim", this.sim);
             jsonO.put("multipleSim", this.multipleSim);
             jsonO.put("markerSim", this.markerSim);
+            jsonO.put("pluginSim", this.pluginSim);
             jsonO.put("nn", this.nn);
             jsonO.put("nnActivations", this.nnActivations);
             jsonO.put("webotsSim", this.webotsSim);

@@ -51,6 +51,14 @@
                 <block type='robConf_ultrasonicc' intask='true' movable='false'>
                     <field name='NAME'>U</field>
                 </block>
+                <block type='robConf_keyc' intask='true' movable='false'>
+                    <field name='NAME'>K1</field>
+                    <field name='PORT'>KEY_FL</field>
+                </block>
+                <block type='robConf_keyc' intask='true' movable='false'>
+                    <field name='NAME'>K2</field>
+                    <field name='PORT'>KEY_FR</field>
+                </block>
                 <block type='robConf_servoc' intask='true' movable='false'>
                     <field name='NAME'>S</field>
                     <field name='PORT'>SERVO_S1</field>

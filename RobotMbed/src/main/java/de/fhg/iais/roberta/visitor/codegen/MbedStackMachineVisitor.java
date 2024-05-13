@@ -44,7 +44,7 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IMbedVisitor;
 import de.fhg.iais.roberta.visitor.lang.codegen.AbstractStackMachineVisitor;
 
-public class MbedStackMachineVisitor extends AbstractStackMachineVisitor implements IMbedVisitor<Void> {
+public abstract class MbedStackMachineVisitor extends AbstractStackMachineVisitor implements IMbedVisitor<Void> {
 
     public MbedStackMachineVisitor(ConfigurationAst configuration, List<List<Phrase>> phrases, UsedHardwareBean usedHardwareBean, NNBean nnBean) {
         super(configuration, usedHardwareBean, nnBean);

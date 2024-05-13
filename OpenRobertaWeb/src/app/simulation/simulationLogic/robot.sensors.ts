@@ -1890,7 +1890,13 @@ export class CalliopeLightSensor implements ISensor, ILabel, IDrawable {
     x: number = 342;
     y: number = 546;
 
-    constructor() {
+    constructor(rect?: Rectangle) {
+        if (rect) {
+            this.x = rect.x;
+            this.y = rect.y;
+            this.dx = rect.w;
+            this.dy = rect.h;
+        }
         $('#mbedButtons').append(
             '<div><label for="rangeLight" style="margin: 12px 8px 8px 0" lkey="Blockly.Msg.SENSOR_LIGHT">' +
                 Blockly.Msg.SENSOR_LIGHT +

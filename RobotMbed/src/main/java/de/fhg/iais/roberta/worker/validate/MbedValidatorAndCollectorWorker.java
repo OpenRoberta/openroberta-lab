@@ -51,9 +51,4 @@ public abstract class MbedValidatorAndCollectorWorker extends AbstractValidatorA
         mbedConfigurationValidatorWorker.validateConfiguration(freePins, defaultProperties, existingPins, mapCorrectConfigPins);
         super.execute(project);
     }
-
-    @Override
-    protected CommonNepoValidatorAndCollectorVisitor getVisitor(Project project, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
-        return new MbedValidatorAndCollectorVisitor(project.getConfigurationAst(), beanBuilders);
-    }
 }

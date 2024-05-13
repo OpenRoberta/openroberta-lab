@@ -18,7 +18,7 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.syntax.SC;
 import de.fhg.iais.roberta.visitor.IMicrobitV2Visitor;
 
-public class MbedV2PythonVisitor extends MbedPythonVisitor implements IMicrobitV2Visitor<Void> {
+public abstract class MbedV2PythonVisitor extends MbedPythonVisitor implements IMicrobitV2Visitor<Void> {
     /**
      * initialize the Python code generator visitor.
      *
@@ -29,14 +29,14 @@ public class MbedV2PythonVisitor extends MbedPythonVisitor implements IMicrobitV
     public MbedV2PythonVisitor(
         List<List<Phrase>> programPhrases,
         ConfigurationAst robotConfiguration,
-        String boardName,
+        String firmware,
         ClassToInstanceMap<IProjectBean> beans) {
-        super(programPhrases, robotConfiguration, boardName, beans);
+        super(programPhrases, robotConfiguration, firmware, beans);
     }
 
     @Override
     public Void visitSetVolumeAction(SetVolumeAction setVolumeAction) {
-        this.src.add("microbit.set_volume(int(2.55 * ");
+        this.src.add(this.firmware + ".set_volume(int(2.55 * ");
         setVolumeAction.volume.accept(this);
         this.src.add("))");
         return null;
@@ -45,34 +45,34 @@ public class MbedV2PythonVisitor extends MbedPythonVisitor implements IMicrobitV
     @Override
     public Void visitSoundToggleAction(SoundToggleAction soundToggleAction) {
         if ( soundToggleAction.mode.equals(SC.OFF) ) {
-            this.src.add("microbit.speaker.off()");
+            this.src.add(this.firmware + ".speaker.off()");
         } else {
-            this.src.add("microbit.speaker.on()");
+            this.src.add(this.firmware + ".speaker.on()");
         }
         return null;
     }
 
     @Override
     public Void visitSoundSensor(SoundSensor soundSensor) {
-        this.src.add("int((microbit.microphone.sound_level() / 255) * 100)");
+        this.src.add("int((" + this.firmware + ".microphone.sound_level() / 255) * 100)");
         return null;
     }
 
     @Override
     public Void visitLogoTouchSensor(LogoTouchSensor logoTouchSensor) {
-        this.src.add("microbit.pin_logo.is_touched()");
+        this.src.add(this.firmware + ".pin_logo.is_touched()");
         return null;
     }
 
     @Override
     public Void visitLogoSetTouchMode(LogoSetTouchMode logoSetTouchMode) {
-        this.src.add("microbit.pin_logo.set_touch_mode(microbit.pin_logo.", logoSetTouchMode.mode, ")");
+        this.src.add(this.firmware + ".pin_logo.set_touch_mode(" + this.firmware + ".pin_logo.", logoSetTouchMode.mode, ")");
         return null;
     }
 
     @Override
     public Void visitPinSetTouchMode(PinSetTouchMode pinSetTouchMode) {
-        this.src.add("microbit.pin", pinSetTouchMode.sensorport, ".set_touch_mode(microbit.pin", pinSetTouchMode.sensorport, ".", pinSetTouchMode.mode, ")");
+        this.src.add(this.firmware + ".pin", pinSetTouchMode.sensorport, ".set_touch_mode(" + this.firmware + ".pin", pinSetTouchMode.sensorport, ".", pinSetTouchMode.mode, ")");
         return null;
     }
 
@@ -113,7 +113,7 @@ public class MbedV2PythonVisitor extends MbedPythonVisitor implements IMicrobitV
             case "SPRING":
             case "TWINKLE":
             case "YAWN": {
-                this.src.add("microbit.audio.play(microbit.Sound.", playFileAction.fileName, ")");
+                this.src.add(this.firmware + ".audio.play(" + this.firmware + ".Sound.", playFileAction.fileName, ")");
                 break;
             }
             default:

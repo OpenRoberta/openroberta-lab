@@ -3,4 +3,4 @@ Sensors:
 Actors: 
 [UsedActor [M, MOTOR]]
 Methods: 
-[]
+[SET_MOTOR]

@@ -1449,7 +1449,9 @@ export class MicrobitConnection extends AutoConnection {}
 
 export class Microbitv2Connection extends AutoConnection {}
 
-export class Calliopev3Connection extends AutoConnection {}
+export class Calliopev3Connection extends AutoConnection {
+    // TODO CalliopeV3: partial flashing when available
+}
 
 //Nao
 export class NaoConnection extends TokenConnection {}

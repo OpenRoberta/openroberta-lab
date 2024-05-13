@@ -580,6 +580,7 @@
 	"SENSOR_FLAME": "",
 	"SENSOR_BATTERY": "",
 	"SENSOR_KEY": "",
+	"SENSOR_KEYC": "",
 	"SENSOR_TOUCHKEY": "",
 	"SENSOR_KEY_ENTER": "",
 	"SENSOR_KEY_UP": "",

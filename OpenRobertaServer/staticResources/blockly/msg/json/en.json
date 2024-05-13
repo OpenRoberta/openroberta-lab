@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2024-05-13 16:53:23.155520",
+		"lastupdated": "2024-06-12 14:09:54.682080",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -586,6 +586,7 @@
 	"SENSOR_FLAME": "flame sensor",
 	"SENSOR_BATTERY": "battery charge",
 	"SENSOR_KEY": "button",
+	"SENSOR_KEYC": "front button",
 	"SENSOR_TOUCHKEY": "display button",
 	"SENSOR_KEY_ENTER": "enter",
 	"SENSOR_KEY_UP": "up",

@@ -44,12 +44,15 @@ import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSetChannelAction;
 import de.fhg.iais.roberta.syntax.action.mbed.ServoSetAction;
 import de.fhg.iais.roberta.syntax.action.mbed.SwitchLedMatrixAction;
-import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
+import de.fhg.iais.roberta.syntax.action.mbed.calliopeV3.RgbLedsOffHiddenAction;
+import de.fhg.iais.roberta.syntax.action.mbed.calliopeV3.RgbLedsOnHiddenAction;
+import de.fhg.iais.roberta.syntax.action.mbed.microbitV2.SoundToggleAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
-import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
+import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
+import de.fhg.iais.roberta.syntax.action.sound.SetVolumeAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.expr.mbed.Image;
@@ -100,7 +103,11 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
+import de.fhg.iais.roberta.syntax.sensor.mbed.CallibotKeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.RadioRssiSensor;
+import de.fhg.iais.roberta.syntax.sensor.mbed.microbitV2.LogoSetTouchMode;
+import de.fhg.iais.roberta.syntax.sensor.mbed.microbitV2.LogoTouchSensor;
+import de.fhg.iais.roberta.syntax.sensor.mbed.microbitV2.PinSetTouchMode;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
@@ -152,6 +159,9 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
         CALLIBOT_TO_PIN_MAP.put("ULTRASONIC", "2");
         CALLIBOT_TO_PIN_MAP.put("SERVO_S1", "0x14");
         CALLIBOT_TO_PIN_MAP.put("SERVO_S2", "0x15");
+        CALLIBOT_TO_PIN_MAP.put("KEY_FL", "1");
+        CALLIBOT_TO_PIN_MAP.put("KEY_FR", "2");
+
     }
 
     private final ConfigurationAst robotConfiguration;
@@ -441,16 +451,6 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
     }
 
     @Override
-    public Void visitMotorSetPowerAction(MotorSetPowerAction motorSetPowerAction) {
-        return null;
-    }
-
-    @Override
-    public Void visitMotorGetPowerAction(MotorGetPowerAction motorGetPowerAction) {
-        return null;
-    }
-
-    @Override
     public Void visitMotorStopAction(MotorStopAction motorStopAction) {
         String port = motorStopAction.getUserDefinedPort();
         String pin;
@@ -542,8 +542,33 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
     }
 
     @Override
+    public Void visitSoundToggleAction(SoundToggleAction soundToggleAction) {
+        return null;
+    }
+
+    @Override
+    public Void visitSetVolumeAction(SetVolumeAction setVolumeAction) {
+        return null;
+    }
+
+    @Override
     public Void visitSoundSensor(SoundSensor microphoneSensor) {
         this.src.add("_uBit.io.P21.getMicrophoneValue()");
+        return null;
+    }
+
+    @Override
+    public Void visitLogoTouchSensor(LogoTouchSensor logoTouchSensor) {
+        return null;
+    }
+
+    @Override
+    public Void visitLogoSetTouchMode(LogoSetTouchMode logoSetTouchMode) {
+        return null;
+    }
+
+    @Override
+    public Void visitPinSetTouchMode(PinSetTouchMode pinSetTouchMode) {
         return null;
     }
 
@@ -1389,6 +1414,11 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
     }
 
     @Override
+    public Void visitPlayFileAction(PlayFileAction playFileAction) {
+        return null;
+    }
+
+    @Override
     public Void visitSwitchLedMatrixAction(SwitchLedMatrixAction switchLedMatrixAction) {
         if ( switchLedMatrixAction.activated.equals("ON") ) {
             this.src.add("_uBit.display.enable();");
@@ -1544,6 +1574,37 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
                 break;
             default:
                 throw new UnsupportedOperationException("Mode " + colorSensor.getMode() + " not supported!");
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitRgbLedsOnHiddenAction(RgbLedsOnHiddenAction rgbLedsOnHiddenAction) {
+        this.src.add("_uBit.rgb.setColour(");
+        rgbLedsOnHiddenAction.colour.accept(this);
+        this.src.add(");");
+        return null;
+    }
+
+    @Override
+    public Void visitRgbLedsOffHiddenAction(RgbLedsOffHiddenAction rgbLedsOffHiddenAction) {
+        this.src.add("_uBit.rgb.off();");
+        return null;
+    }
+
+    @Override
+    public Void visitCallibotKeysSensor(CallibotKeysSensor callibotKeysSensor) {
+        ConfigurationComponent confComp = this.robotConfiguration.optConfigurationComponentByType(SC.CALLIBOT);
+        if ( confComp != null ) {
+            String port = callibotKeysSensor.getUserDefinedPort();
+            String pin = getCallibotPin(confComp, port);
+            if ( pin.equals("1") || pin.contentEquals("2") ) {
+                this.src.add("_cbGetSampleBumperKey(_buf, &_i2c, ", pin, ")");
+            } else {
+                throw new DbcException("InfraredSensor; Key port: " + port);
+            }
+        } else {
+            throw new DbcException("Callibot key sensor only supported with Callibot block.");
         }
         return null;
     }

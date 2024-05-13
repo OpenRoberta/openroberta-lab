@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.visitor.validate;
 
-import java.util.Map;
+import java.util.Arrays;
+import java.util.List;
 
 import com.google.common.collect.ClassToInstanceMap;
 
@@ -25,7 +26,6 @@ import de.fhg.iais.roberta.syntax.expr.mbed.Image;
 import de.fhg.iais.roberta.syntax.expr.mbed.PredefinedImage;
 import de.fhg.iais.roberta.syntax.functions.mbed.ImageInvertFunction;
 import de.fhg.iais.roberta.syntax.functions.mbed.ImageShiftFunction;
-import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
@@ -39,16 +39,22 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.util.syntax.SC;
-import de.fhg.iais.roberta.util.syntax.WithUserDefinedPort;
 import de.fhg.iais.roberta.visitor.CalliopeMethods;
 import de.fhg.iais.roberta.visitor.IMbedVisitor;
 
-public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndCollectorVisitor implements IMbedVisitor<Void> {
+public abstract class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndCollectorVisitor implements IMbedVisitor<Void> {
 
     public static final double DOUBLE_EPS = 1E-7;
 
-    public MbedValidatorAndCollectorVisitor(ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
+    protected List<String> occupiedPins = Arrays.asList("3", "4", "5", "6", "7", "9", "10", "11", "12", "19", "20");
+    protected List<String> ledPins = Arrays.asList("3", "4", "6", "7", "9", "10");
+    final boolean displaySwitchUsed;
+
+    public MbedValidatorAndCollectorVisitor(
+        ConfigurationAst brickConfiguration, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders,
+        boolean displaySwitchUsed) {
         super(brickConfiguration, beanBuilders);
+        this.displaySwitchUsed = displaySwitchUsed;
     }
 
     @Override
@@ -149,6 +155,7 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
 
     @Override
     public Void visitPinGetValueSensor(PinGetValueSensor pinValueSensor) {
+        checkInternalPorts(pinValueSensor, pinValueSensor.getUserDefinedPort());
         checkSensorExists(pinValueSensor);
         usedHardwareBuilder.addUsedActor(new UsedActor(pinValueSensor.getUserDefinedPort(), SC.PIN_VALUE));
         return null;
@@ -161,15 +168,29 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
         return null;
     }
 
-
     @Override
     public Void visitMbedPinWriteValueAction(MbedPinWriteValueAction mbedPinWriteValueAction) {
+        checkInternalPorts(mbedPinWriteValueAction, mbedPinWriteValueAction.port);
         ConfigurationComponent configurationComponent = checkActorByPortExists(mbedPinWriteValueAction, mbedPinWriteValueAction.port);
         requiredComponentVisited(mbedPinWriteValueAction, mbedPinWriteValueAction.value);
         if ( configurationComponent != null ) {
             usedHardwareBuilder.addUsedActor(new UsedActor(configurationComponent.userDefinedPortName, configurationComponent.componentType));
         }
         return null;
+    }
+
+    private void checkInternalPorts(Phrase pinValueSensor, String port) {
+        ConfigurationComponent configurationComponent = this.robotConfiguration.optConfigurationComponent(port);
+        if ( configurationComponent != null ) {
+            String pin = configurationComponent.getProperty("PIN1");
+            if ( this.ledPins.contains(pin) ) {
+                if ( !this.displaySwitchUsed ) {
+                    addWarningToPhrase(pinValueSensor, "VALIDATION_PIN_TAKEN_BY_LED_MATRIX");
+                }
+            } else if ( this.occupiedPins.contains(pin) ) {
+                addWarningToPhrase(pinValueSensor, "VALIDATION_PIN_TAKEN_BY_INTERNAL_COMPONENT");
+            }
+        }
     }
 
 
@@ -307,51 +328,5 @@ public class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
             }
         }
         return usedSensor;
-    }
-
-    protected void checkForZeroSpeed(Phrase action, Expr speed) {
-        if ( speed.getKind().hasName("NUM_CONST") ) {
-            NumConst speedNumConst = (NumConst) speed;
-            if ( Math.abs(Double.parseDouble(speedNumConst.value)) < DOUBLE_EPS ) {
-                addWarningToPhrase(action, "MOTOR_SPEED_0");
-            }
-        }
-    }
-
-    protected Void addActorMaybeCallibot(WithUserDefinedPort phrase) {
-        final String userDefinedPort = phrase.getUserDefinedPort();
-        ConfigurationComponent configurationComponent = robotConfiguration.optConfigurationComponentByType(SC.CALLIBOT);
-        if ( configurationComponent != null ) {
-            usedHardwareBuilder.addUsedActor(new UsedActor("", SC.CALLIBOT));
-        } else {
-            configurationComponent = checkActorByPortExists((Phrase) phrase, userDefinedPort);
-            usedHardwareBuilder.addUsedActor(new UsedActor(userDefinedPort, configurationComponent.componentType));
-        }
-        return null;
-    }
-
-    protected Boolean isMotionKitPinsOverlapping() {
-        Map<String, ConfigurationComponent> usedConfig = robotConfiguration.getConfigurationComponents();
-        if ( robotConfiguration.optConfigurationComponentByType(SC.CALLIBOT) != null || robotConfiguration.isComponentTypePresent("LEDBAR") || robotConfiguration.isComponentTypePresent("FOURDIGITDISPLAY") || robotConfiguration.isComponentTypePresent(SC.ULTRASONIC) || robotConfiguration.isComponentTypePresent(SC.HUMIDITY) || robotConfiguration.isComponentTypePresent(SC.COLOUR) ) {
-            return true;
-        }
-        for ( Map.Entry<String, ConfigurationComponent> confComp : usedConfig.entrySet() ) {
-            String confType = confComp.getValue().componentType;
-            if ( confType.equals(SC.SERVOMOTOR) || confType.equals(SC.DIGITAL_INPUT) || confType.equals(SC.ANALOG_INPUT) ) {
-                String pin1 = confComp.getValue().getProperty("PIN1");
-                if ( pin1.equals("1") || pin1.equals("2") || pin1.equals("4") || pin1.equals("5") || pin1.equals("C16") || pin1.equals("C17") ) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    protected Void checkDifferentialDrive() {
-        int countMotors = (int) this.robotConfiguration.getConfigurationComponentsValues().stream().filter(comp -> comp.componentType.equals("MOTOR")).count();
-        if ( countMotors == 2 ) {
-            usedHardwareBuilder.addUsedActor(new UsedActor("", SC.DIFFERENTIALDRIVE));
-        }
-        return null;
     }
 }

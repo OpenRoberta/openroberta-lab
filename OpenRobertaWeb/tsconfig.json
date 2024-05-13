@@ -170,6 +170,9 @@
       "robot.calliope": [
         "app/simulation/simulationLogic/robot.calliope"
       ],
+      "robot.calliopev3": [
+        "app/simulation/simulationLogic/robot.calliopev3"
+      ],
       "robot.mbot": [
         "app/simulation/simulationLogic/robot.mbot"
       ],

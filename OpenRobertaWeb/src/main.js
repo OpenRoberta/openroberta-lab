@@ -74,6 +74,7 @@ require.config({
         'simulation.constants': 'js/app/simulation/simulationLogic/constants',
         'simulation.math': 'js/app/simulation/simulationLogic/math',
         'robot.calliope': 'js/app/simulation/simulationLogic/robot.calliope',
+        'robot.calliopev3': 'js/app/simulation/simulationLogic/robot.calliopev3',
         'robot.mbot': 'js/app/simulation/simulationLogic/robot.mbot',
         'robot.microbit': 'js/app/simulation/simulationLogic/robot.microbit',
         'robot.microbitv2': 'js/app/simulation/simulationLogic/robot.microbitv2',

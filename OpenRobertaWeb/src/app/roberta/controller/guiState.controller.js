@@ -231,6 +231,7 @@ function setRobot(robot, result, opt_init) {
     GUISTATE.gui.sim = result.sim;
     GUISTATE.gui.multipleSim = result.multipleSim;
     GUISTATE.gui.markerSim = result.markerSim;
+    GUISTATE.gui.pluginSim = result.pluginSim;
     GUISTATE.gui.nnActivations = result.nnActivations;
     GUISTATE.gui.webotsSim = result.webotsSim;
     GUISTATE.gui.webotsUrl = result.webotsUrl;
@@ -242,7 +243,7 @@ function setRobot(robot, result, opt_init) {
     GUISTATE.gui.binaryFileExtension = result.binaryFileExtension;
     GUISTATE.gui.firmwareDefault = result.firmwareDefault;
 
-    //TODO we default to auto selecting first connection option, only call this once the setRobot was used
+    // TODO CalliopeV3 add background image, Chris
 
     $('#blocklyDiv, #bricklyDiv').css('background', 'url(../../../../css/img/' + robotGroup + 'Background.jpg) repeat');
     $('#blocklyDiv, #bricklyDiv').css('background-size', '100%');
@@ -1074,6 +1075,10 @@ function hasMultiSim() {
 
 function hasMarkerSim() {
     return GUISTATE.gui.markerSim == true;
+}
+
+export function getPluginSim() {
+    return GUISTATE.gui.pluginSim || null;
 }
 
 function hasWebotsSim() {

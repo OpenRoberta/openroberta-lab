@@ -57,6 +57,7 @@ def hsv2rgb(color):
     x = c * (1 - abs(((h/60.0) % 2) - 1))
     m = v - c
 
+    rgb = (0, 0, 0)
     if 0.0 <= h < 60:
         rgb = (c, x, 0)
     elif 0.0 <= h < 120:

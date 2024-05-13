@@ -9,41 +9,43 @@
         </block>
         <block type="mbedActions_display_image">
             <value name="VALUE">
-                <block type="mbedImage_image"/>
+                <block type="mbedImage_image"></block>
             </value>
         </block>
         <block type="mbedActions_display_image">
             <value name="VALUE">
-                <block type="mbedImage_get_image"/>
+                <block type="mbedImage_get_image"></block>
             </value>
         </block>
-        <block type="mbedActions_display_clear"/>
-        <block type="actions_rgbLed_hidden_on_calliope">
+        <block type="mbedActions_display_clear"></block>
+        <block type="actions_rgbLeds_hidden_on_calliopev3">
             <value name="COLOUR">
                 <block type="mbedColour_picker">
                     <field name="COLOUR">#ff0000</field>
                 </block>
             </value>
         </block>
-        <block type="actions_rgbLed_hidden_off_calliope">
+        <block type="actions_rgbLeds_hidden_off_calliopev3">
         </block>
-        <block type="mbedActions_play_note"/>
+        <block type="mbedActions_play_note"></block>
     </category>
     <category name="TOOLBOX_SENSOR" svg="true">
-        <block type="robSensors_key_getSample"/>
-        <block type="robSensors_pintouch_getSample"/>
-        <block type="robSensors_gesture_getSample"/>
-        <block type="robSensors_compass_getSample"/>
-        <block type="robSensors_sound_getSample"/>
-        <block type="robSensors_timer_getSample"/>
-        <block type="mbedSensors_timer_reset"/>
-        <block type="robSensors_temperature_getSample"/>
-        <block type="robSensors_light_getSample"/>
+        <block type="robSensors_key_getSample"></block>
+        <block type="robSensors_pintouch_getSample"></block>
+        <block type='robSensors_logotouch_getSample'></block>
+        <block type="robSensors_gesture_getSample"></block>
+        <block type="robSensors_compass_getSample"></block>
+        <block type="robSensors_sound_getSample"></block>
+        <block type="robSensors_timer_getSample"></block>
+        <block type="mbedSensors_timer_reset"></block>
+        <block type="robSensors_temperature_getSample"></block>
+        <block type="robSensors_accelerometer_getSample"></block>
+        <block type="robSensors_light_getSample"></block>
     </category>
     <category name="TOOLBOX_CONTROL" svg="true">
-        <block type="robControls_if"/>
-        <block type="robControls_ifElse"/>
-        <block type="robControls_loopForever"/>
+        <block type="robControls_if"></block>
+        <block type="robControls_ifElse"></block>
+        <block type="robControls_loopForever"></block>
         <block type="controls_repeat_ext">
             <value name="TIMES">
                 <block type="math_number">
@@ -62,23 +64,23 @@
             <value name="WAIT0">
                 <block type="logic_compare">
                     <value name="A">
-                        <block type="robSensors_getSample"/>
+                        <block type="robSensors_getSample"></block>
                     </value>
                     <value name="B">
-                        <block type="logic_boolean"/>
+                        <block type="logic_boolean"></block>
                     </value>
                 </block>
             </value>
         </block>
     </category>
     <category name="TOOLBOX_LOGIC" svg="true">
-        <block type="logic_compare"/>
-        <block type="logic_operation"/>
-        <block type="logic_boolean"/>
+        <block type="logic_compare"></block>
+        <block type="logic_operation"></block>
+        <block type="logic_boolean"></block>
     </category>
     <category name="TOOLBOX_MATH" svg="true">
-        <block type="math_number"/>
-        <block type="math_arithmetic"/>
+        <block type="math_number"></block>
+        <block type="math_arithmetic"></block>
         <block type="math_random_int">
             <value name="FROM">
                 <block type="math_number">
@@ -92,16 +94,16 @@
             </value>
         </block>
     </category>
-    <!--
+    #ifdef nn
     <category name="TOOLBOX_NN" svg="true">
         <block type="robActions_NNstep"></block>
         <block type="robActions_set_inputneuron_val"></block>
         <block type="robSensors_get_outputneuron_val"></block>
     </category>
-    -->
+    #end
     <category name="TOOLBOX_TEXT" svg="true">
-        <block type="text"/>
-        <block type="text_comment"/>
+        <block type="text"></block>
+        <block type="text_comment"></block>
     </category>
     <category name="TOOLBOX_COLOUR" svg="true">
         <block type="mbedColour_picker">
@@ -130,7 +132,7 @@
         </block>
     </category>
     <category name="TOOLBOX_IMAGE" svg="true">
-        <block type="mbedImage_image"/>
+        <block type="mbedImage_image"></block>
         <block type="mbedImage_get_image">
             <field name="IMAGE">HEART</field>
         </block>
@@ -147,5 +149,5 @@
             <field name="IMAGE">UMBRELLA</field>
         </block>
     </category>
-    <category name="TOOLBOX_VARIABLE" custom="VARIABLE" svg="true"/>
+    <category name="TOOLBOX_VARIABLE" custom="VARIABLE" svg="true"></category>
 </toolbox_set>

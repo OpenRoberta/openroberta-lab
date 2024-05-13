@@ -18,12 +18,11 @@ import de.fhg.iais.roberta.util.basic.C;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IMicrobitV2Visitor;
 
-public class MicrobitV2StackMachineVisitor extends MicrobitStackMachineVisitor implements IMicrobitV2Visitor<Void> {
+public class MicrobitV2StackMachineVisitor extends MbedV2StackMachineVisitor {
 
     public MicrobitV2StackMachineVisitor(ConfigurationAst configuration, List<List<Phrase>> phrases, UsedHardwareBean usedHardwareBean, NNBean nnBean) {
         super(configuration, phrases, usedHardwareBean, nnBean);
         Assert.isTrue(!phrases.isEmpty());
-
     }
 
     @Override
@@ -35,7 +34,6 @@ public class MicrobitV2StackMachineVisitor extends MicrobitStackMachineVisitor i
     public Void visitLogoTouchSensor(LogoTouchSensor logoTouchSensor) {
         String port = logoTouchSensor.getUserDefinedPort();
         String mode = logoTouchSensor.getMode();
-
         JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.PIN + "LOGO").put(C.MODE, mode.toLowerCase());
         return add(o);
     }

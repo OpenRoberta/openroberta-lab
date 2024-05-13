@@ -39,6 +39,7 @@ function init() {
     gui.sim = false;
     gui.multipleSim = false;
     gui.markerSim = false;
+    gui.pluginSim = '';
     gui.nn = false;
     gui.nnActivations = {};
     gui.webotsSim = false;

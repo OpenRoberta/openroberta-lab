@@ -14,6 +14,7 @@ import WebotsSimulation from 'simulation.webots';
 import { SimulationRoberta } from 'simulation.roberta';
 import CONST from 'simulation.constants';
 import * as PROGLIST from 'progList.model';
+import { getPluginSim } from 'guiState.controller';
 
 const INITIAL_WIDTH = 0.5;
 
@@ -54,7 +55,7 @@ class ProgSimController {
         $('#simButton').off();
         $('#simButton').onWrap(
             'click touchend',
-            function(event, multi: boolean) {
+            function (event, multi: boolean) {
                 if (GUISTATE_C.hasWebotsSim()) {
                     C.SIM = WebotsSimulation;
                 } else {
@@ -77,16 +78,16 @@ class ProgSimController {
         let C = this;
         $('#simControl').onWrap(
             'click.sim',
-            function() {
+            function () {
                 if (!SIM.isInterpreterRunning()) {
-                    let myCallback = function(result) {
+                    let myCallback = function (result) {
                         if (result.rc == 'ok') {
                             MSG.displayMessage('MESSAGE_EDIT_START', 'TOAST', GUISTATE_C.getProgramName(), null, null);
                             $('#simControl').addClass('typcn-media-stop').removeClass('typcn-media-play-outline');
                             $('#simControl').attr('data-bs-original-title', Blockly.Msg.MENU_SIM_STOP_TOOLTIP);
                             result.savedName = GUISTATE_C.getProgramName();
                             result.updateNNView = true;
-                            SIM.run([result], function() {
+                            SIM.run([result], function () {
                                 $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-stop');
                                 $('#simControl').attr('data-bs-original-title', Blockly.Msg.MENU_SIM_START_TOOLTIP);
                             });
@@ -116,7 +117,7 @@ class ProgSimController {
             $('#simImport').hide();
         } else {
             $('#simImport').show();
-            $('#simImport').onWrap('click.sim', function() {
+            $('#simImport').onWrap('click.sim', function () {
                 SIM.importImage();
                 return false;
             });
@@ -124,7 +125,7 @@ class ProgSimController {
 
         $('#simRobot').onWrap(
             'click.sim',
-            function() {
+            function () {
                 let robot = GUISTATE_C.getRobot();
                 let position = $('#simDiv').position();
                 position.left += 48;
@@ -136,7 +137,7 @@ class ProgSimController {
 
         $('#simValues').onWrap(
             'click.sim',
-            function() {
+            function () {
                 let position = $('#simDiv').position();
                 position.left = $(window).width() - ($('#simValuesWindow').width() + 12);
                 $('#simValuesWindow').toggleSimPopup(position);
@@ -147,11 +148,11 @@ class ProgSimController {
 
         $('.simWindow .close').onWrap(
             'click.sim',
-            function() {
+            function () {
                 $($(this).parents('.simWindow:first')).animate(
                     {
                         opacity: 'hide',
-                        top: 'hide'
+                        top: 'hide',
                     },
                     300
                 );
@@ -162,7 +163,7 @@ class ProgSimController {
 
         $('#simResetPose').onWrap(
             'click.sim',
-            function() {
+            function () {
                 SIM.resetPose();
                 return false;
             },
@@ -171,7 +172,7 @@ class ProgSimController {
 
         $('.simAddMarker').onWrap(
             'click.sim',
-            function(e) {
+            function (e) {
                 let id = e.target.getAttribute('data-marker') || e.currentTarget.text;
                 (SIM as SimulationRoberta).addMarker && (SIM as SimulationRoberta).addMarker(id);
                 return false;
@@ -181,7 +182,7 @@ class ProgSimController {
 
         $('#simMarkerDeleteAll').onWrap(
             'click.sim',
-            function(e) {
+            function (e) {
                 (SIM as SimulationRoberta).deleteAllMarker && (SIM as SimulationRoberta).deleteAllMarker();
                 return false;
             },
@@ -190,7 +191,7 @@ class ProgSimController {
 
         $('#simAddObstacleRectangle').onWrap(
             'click.sim',
-            function() {
+            function () {
                 (SIM as SimulationRoberta).addObstacle && (SIM as SimulationRoberta).addObstacle(SimObjectShape.Rectangle);
                 return false;
             },
@@ -199,7 +200,7 @@ class ProgSimController {
 
         $('#simAddObstacleTriangle').onWrap(
             'click.sim',
-            function() {
+            function () {
                 (SIM as SimulationRoberta).addObstacle && (SIM as SimulationRoberta).addObstacle(SimObjectShape.Triangle);
                 return false;
             },
@@ -208,7 +209,7 @@ class ProgSimController {
 
         $('#simAddObstacleCircle').onWrap(
             'click.sim',
-            function() {
+            function () {
                 (SIM as SimulationRoberta).addObstacle && (SIM as SimulationRoberta).addObstacle(SimObjectShape.Circle);
                 return false;
             },
@@ -216,21 +217,21 @@ class ProgSimController {
         );
         $('#simObstacleDeleteAll').onWrap(
             'click.sim',
-            function() {
+            function () {
                 (SIM as SimulationRoberta).deleteAllObstacle && (SIM as SimulationRoberta).deleteAllObstacle();
                 return false;
             },
             'sim delete all obstacles clicked'
         );
 
-        $('#simAddAreaRectangle').onWrap('click.sim', function() {
+        $('#simAddAreaRectangle').onWrap('click.sim', function () {
             (SIM as SimulationRoberta).addColorArea && (SIM as SimulationRoberta).addColorArea(SimObjectShape.Rectangle);
             return false;
         });
 
         $('#simAddAreaTriangle').onWrap(
             'click.sim',
-            function() {
+            function () {
                 (SIM as SimulationRoberta).addColorArea && (SIM as SimulationRoberta).addColorArea(SimObjectShape.Triangle);
                 return false;
             },
@@ -239,7 +240,7 @@ class ProgSimController {
 
         $('#simAddAreaCircle').onWrap(
             'click.sim',
-            function() {
+            function () {
                 (SIM as SimulationRoberta).addColorArea && (SIM as SimulationRoberta).addColorArea(SimObjectShape.Circle);
                 return false;
             },
@@ -248,7 +249,7 @@ class ProgSimController {
 
         $('#simAreaDeleteAll').onWrap(
             'click.sim',
-            function() {
+            function () {
                 (SIM as SimulationRoberta).deleteAllColorArea && (SIM as SimulationRoberta).deleteAllColorArea();
                 return false;
             },
@@ -257,7 +258,7 @@ class ProgSimController {
 
         $('#simChangeObjectColor').onWrap(
             'click.sim',
-            function() {
+            function () {
                 if (!$('#simChangeObjectColor').hasClass('disabled')) {
                     (SIM as SimulationRoberta).toggleColorPicker && (SIM as SimulationRoberta).toggleColorPicker();
                 }
@@ -268,7 +269,7 @@ class ProgSimController {
 
         $('#simDeleteObject').onWrap(
             'click.sim',
-            function() {
+            function () {
                 if (!$('#simDeleteObject').hasClass('disabled')) {
                     (SIM as SimulationRoberta).deleteSelectedObject && (SIM as SimulationRoberta).deleteSelectedObject();
                 }
@@ -279,7 +280,7 @@ class ProgSimController {
 
         $('#simDownloadConfig').onWrap(
             'click.sim',
-            function() {
+            function () {
                 if ((SIM as SimulationRoberta).exportConfigData) {
                     let filename = GUISTATE_C.getProgramName() + '-sim_configuration.json';
                     UTIL.download(filename, JSON.stringify((SIM as SimulationRoberta).exportConfigData()));
@@ -292,7 +293,7 @@ class ProgSimController {
 
         $('#simUploadConfig').onWrap(
             'click.sim',
-            function() {
+            function () {
                 (SIM as SimulationRoberta).importConfigData && (SIM as SimulationRoberta).importConfigData();
                 return false;
             },
@@ -301,7 +302,7 @@ class ProgSimController {
 
         $('#simScene').onWrap(
             'click.sim',
-            function() {
+            function () {
                 (SIM as SimulationRoberta).setBackground && (SIM as SimulationRoberta).setBackground(-1);
                 return false;
             },
@@ -309,7 +310,7 @@ class ProgSimController {
         );
         $('#simTrail').onWrap(
             'click.sim',
-            function() {
+            function () {
                 $(this).toggleClass('typcn-chart-line-outline');
                 $(this).toggleClass('typcn-chart-line');
                 (SIM as SimulationRoberta).toggleTrail && (SIM as SimulationRoberta).toggleTrail();
@@ -341,10 +342,10 @@ class ProgSimController {
             this.removeControl();
             this.addControlEvents();
             this.addConfigEvents();
-            let myCallback = function(result) {
+            let myCallback = function (result) {
                 if (result.rc == 'ok') {
                     result.savedName = GUISTATE_C.getProgramName();
-                    C.SIM.init([result], true, null, GUISTATE_C.getRobotGroup());
+                    C.SIM.init([result], true, null, GUISTATE_C.getPluginSim() || GUISTATE_C.getRobotGroup());
                     $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-play');
                     if (TOUR_C.getInstance() && TOUR_C.getInstance().trigger) {
                         TOUR_C.getInstance().trigger('startSim');
@@ -396,7 +397,7 @@ class ProgSimDebugController extends ProgSimController {
         $('#simDebugButton').off();
         $('#simDebugButton').onWrap(
             'click touchend',
-            function(event, multi: boolean) {
+            function (event, multi: boolean) {
                 C.SIM = SimulationRoberta.Instance;
                 SimulationRoberta.Instance.updateDebugMode(true);
                 // Workaround for IOS speech synthesis, speech must be triggered once by a button click explicitly before it can be used programmatically
@@ -412,7 +413,7 @@ class ProgSimDebugController extends ProgSimController {
         let C = this;
         $('#simControl').onWrap(
             'click.sim',
-            function(event) {
+            function (event) {
                 C.toggleSimEvent(CONST.DEBUG_BREAKPOINT);
             },
             'sim control clicked'
@@ -420,7 +421,7 @@ class ProgSimDebugController extends ProgSimController {
 
         $('#simControlStepInto').onWrap(
             'click.sim',
-            function(event) {
+            function (event) {
                 C.toggleSimEvent(CONST.DEBUG_STEP_INTO);
             },
             'sim debug step into clicked'
@@ -428,7 +429,7 @@ class ProgSimDebugController extends ProgSimController {
 
         $('#simControlStepOver').onWrap(
             'click.sim',
-            function(event) {
+            function (event) {
                 C.toggleSimEvent(CONST.DEBUG_STEP_OVER);
             },
             'sim debug step over clicked'
@@ -436,7 +437,7 @@ class ProgSimDebugController extends ProgSimController {
 
         $('#simStop').onWrap(
             'click.sim',
-            function(event) {
+            function (event) {
                 $('#simStop').addClass('disabled');
                 $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-play');
                 C.SIM.stopProgram();
@@ -449,11 +450,11 @@ class ProgSimDebugController extends ProgSimController {
         let C = this;
         let SIM: SimulationRoberta = this.SIM as SimulationRoberta;
         if ($('#simControl').hasClass('typcn-media-play-outline')) {
-            let myCallback = function(result) {
+            let myCallback = function (result) {
                 if (result.rc == 'ok') {
                     result.savedName = GUISTATE_C.getProgramName();
                     result.updateNNView = true;
-                    SIM.run([result], function() {
+                    SIM.run([result], function () {
                         $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-play');
                         $('#simStop').addClass('disabled');
                     });
@@ -502,7 +503,7 @@ class ProgSimMultiController extends ProgSimController {
 
     override initEvents() {
         let C = this;
-        $('#head-navigation-program-edit').onWrap('click', '.dropdown-menu li:not(.disabled) a', function(event) {
+        $('#head-navigation-program-edit').onWrap('click', '.dropdown-menu li:not(.disabled) a', function (event) {
             let targetId = event.target.id || event.currentTarget.id;
             if (targetId === 'menuRunMulipleSim') {
                 C.SIM = SimulationRoberta.Instance;
@@ -514,7 +515,7 @@ class ProgSimMultiController extends ProgSimController {
         $('#loadMultipleSimPrograms').off();
         $('#loadMultipleSimPrograms').onWrap(
             'click',
-            function() {
+            function () {
                 window.speechSynthesis && window.speechSynthesis.speak && window.speechSynthesis.speak(new SpeechSynthesisUtterance(''));
                 C.selectedPrograms = [];
                 let dataList = $('#multipleRobotsTable').bootstrapTable('getData');
@@ -572,7 +573,7 @@ class ProgSimMultiController extends ProgSimController {
             if (item.blockly) {
                 myPromises.push(
                     new Promise<void>((resolve, reject) => {
-                        C.prepareProgram(function(result) {
+                        C.prepareProgram(function (result) {
                             C.loadStackMachineCode(item, resolve, reject, result);
                         });
                     })
@@ -580,7 +581,7 @@ class ProgSimMultiController extends ProgSimController {
             } else {
                 myPromises.push(
                     new Promise<void>((resolve, reject) => {
-                        PROGRAM_M.loadProgramFromListing(item.programName, item.owner, item.creator, function(result) {
+                        PROGRAM_M.loadProgramFromListing(item.programName, item.owner, item.creator, function (result) {
                             C.loadStackMachineCode(item, resolve, reject, result);
                         });
                     })
@@ -602,11 +603,11 @@ class ProgSimMultiController extends ProgSimController {
                     ? result.confXML
                         ? result.confXML
                         : GUISTATE_C.isConfigurationAnonymous()
-                            ? GUISTATE_C.getConfigurationXML()
-                            : undefined
+                        ? GUISTATE_C.getConfigurationXML()
+                        : undefined
                     : undefined;
             let language = GUISTATE_C.getLanguage();
-            PROGRAM_M.runInSim(result.programName, configName, xmlTextProgram, xmlConfigText, language, function(result) {
+            PROGRAM_M.runInSim(result.programName, configName, xmlTextProgram, xmlConfigText, language, function (result) {
                 if (result.rc === 'ok') {
                     let combinedResult = loadResult;
                     for (let resultProp in result) {
@@ -633,22 +634,22 @@ class ProgSimMultiController extends ProgSimController {
             creator: '',
             date: '',
             num: 0,
-            blockly: true
+            blockly: true,
         });
         if (GUISTATE_C.isUserLoggedIn()) {
-            PROGLIST.loadProgList(function(result) {
+            PROGLIST.loadProgList(function (result) {
                 if (result.rc === 'ok') {
                     C.progList = result;
                     $('#multipleRobotsTable').bootstrapTable('destroy'); //refreshing the table
                     let robotType = GUISTATE_C.getRobot();
-                    result.programNames.forEach(function(item, i, oriarray) {
+                    result.programNames.forEach(function (item, i, oriarray) {
                         dataList.push({
                             programName: item[0],
                             robot: robotType,
                             creator: item[1],
                             owner: item[3],
                             date: item[4],
-                            num: 0
+                            num: 0,
                         });
                     });
                 }
@@ -674,7 +675,7 @@ class ProgSimMultiController extends ProgSimController {
                 icons: {
                     paginationSwitchDown: 'typcn-document-text',
                     paginationSwitchUp: 'typcn-book',
-                    refresh: 'typcn-refresh'
+                    refresh: 'typcn-refresh',
                 },
                 pagination: 'true',
                 buttonsAlign: 'right',
@@ -684,23 +685,23 @@ class ProgSimMultiController extends ProgSimController {
                 columns: [
                     {
                         field: 'programName',
-                        title: '<span lkey=\'Blockly.Msg.DATATABLE_PROGRAM_NAME\'>' + (Blockly.Msg.DATATABLE_PROGRAM_NAME || 'Name des Programms') + '</span>',
-                        sortable: true
+                        title: "<span lkey='Blockly.Msg.DATATABLE_PROGRAM_NAME'>" + (Blockly.Msg.DATATABLE_PROGRAM_NAME || 'Name des Programms') + '</span>',
+                        sortable: true,
                     },
                     {
                         field: 'creator',
-                        title: '<span lkey=\'Blockly.Msg.DATATABLE_CREATED_BY\'>' + (Blockly.Msg.DATATABLE_CREATED_BY || 'Erzeugt von') + '</span>',
-                        sortable: true
+                        title: "<span lkey='Blockly.Msg.DATATABLE_CREATED_BY'>" + (Blockly.Msg.DATATABLE_CREATED_BY || 'Erzeugt von') + '</span>',
+                        sortable: true,
                     },
                     {
                         field: 'owner',
-                        visible: false
+                        visible: false,
                     },
                     {
                         field: 'date',
-                        title: '<span lkey=\'Blockly.Msg.DATATABLE_CREATED_ON\'>' + (Blockly.Msg.DATATABLE_CREATED_ON || 'Erzeugt am') + '</span>',
+                        title: "<span lkey='Blockly.Msg.DATATABLE_CREATED_ON'>" + (Blockly.Msg.DATATABLE_CREATED_ON || 'Erzeugt am') + '</span>',
                         sortable: true,
-                        formatter: UTIL.formatDate
+                        formatter: UTIL.formatDate,
                     },
                     {
                         field: 'num',
@@ -708,10 +709,10 @@ class ProgSimMultiController extends ProgSimController {
                         align: 'left',
                         valign: 'top',
                         formatter: C.formatTimesProgram,
-                        width: '117px'
-                    }
+                        width: '117px',
+                    },
                 ],
-                data: dataList
+                data: dataList,
             });
         $('#showMultipleSimPrograms').modal('show');
     }
@@ -733,7 +734,7 @@ class ProgSimMultiController extends ProgSimController {
     }
 
     private eventTimesProgram: object = {
-        'input .quantity-field': function(e, value, row, index) {
+        'input .quantity-field': function (e, value, row, index) {
             e.preventDefault();
             let parent = $(e.target).closest('div');
             let currentVal = parseInt(<string>parent.find('input[name=quantity]').val(), 10);
@@ -746,7 +747,7 @@ class ProgSimMultiController extends ProgSimController {
             parent.find('input[name=quantity]').val(newValue);
             $('#multipleRobotsTable').bootstrapTable('updateCell', { index: index, field: 'num', value: newValue });
         },
-        'click .input-group .button-plus': function(e, value, row, index) {
+        'click .input-group .button-plus': function (e, value, row, index) {
             e.preventDefault();
             let fieldName = $(e.target).data('field');
             let parent = $(e.target).closest('div');
@@ -762,7 +763,7 @@ class ProgSimMultiController extends ProgSimController {
             parent.find('input[name=quantity]').val(newValue);
             $('#multipleRobotsTable').bootstrapTable('updateCell', { index: index, field: 'num', value: newValue });
         },
-        'click .input-group .button-minus': function(e, value, row, index) {
+        'click .input-group .button-minus': function (e, value, row, index) {
             e.preventDefault();
             let fieldName = $(e.target).data('field');
             let parent = $(e.target).closest('div');
@@ -777,7 +778,7 @@ class ProgSimMultiController extends ProgSimController {
             }
             parent.find('input[name=quantity]').val(newValue);
             $('#multipleRobotsTable').bootstrapTable('updateCell', { index: index, field: 'num', value: newValue });
-        }
+        },
     };
 
     override addControlEvents() {
@@ -785,14 +786,14 @@ class ProgSimMultiController extends ProgSimController {
         let C = this;
         $('#simControl').onWrap(
             'click.sim',
-            function() {
+            function () {
                 if (!SIM.isInterpreterRunning()) {
                     $('#simControl').addClass('typcn-media-stop').removeClass('typcn-media-play-outline');
                     $('#simControl').attr('data-bs-original-title', Blockly.Msg.MENU_SIM_STOP_TOOLTIP);
                     C.loadProgramms().then((loadedPrograms) => {
                         Promise.all(loadedPrograms).then(
                             (values) => {
-                                SIM.run(C.getSortedExtractedPrograms(), function() {
+                                SIM.run(C.getSortedExtractedPrograms(), function () {
                                     $('#simControl').addClass('typcn-media-play-outline').removeClass('typcn-media-stop');
                                     $('#simControl').attr('data-bs-original-title', Blockly.Msg.MENU_SIM_START_TOOLTIP);
                                 });

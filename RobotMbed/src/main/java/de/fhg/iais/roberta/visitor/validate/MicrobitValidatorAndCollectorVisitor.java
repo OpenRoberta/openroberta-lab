@@ -24,10 +24,6 @@ import de.fhg.iais.roberta.visitor.IMicrobitVisitor;
 public class MicrobitValidatorAndCollectorVisitor extends MbedValidatorAndCollectorVisitor implements IMicrobitVisitor<Void> {
 
     private final boolean isSim;
-
-    protected List<String> occupiedPins = Arrays.asList("3", "4", "5", "6", "7", "9", "10", "11", "12", "19", "20");
-    protected List<String> ledPins = Arrays.asList("3", "4", "6", "7", "9", "10");
-
     private final boolean displaySwitchUsed;
 
     public MicrobitValidatorAndCollectorVisitor(
@@ -36,7 +32,7 @@ public class MicrobitValidatorAndCollectorVisitor extends MbedValidatorAndCollec
         boolean isSim,
         boolean displaySwitchUsed) //
     {
-        super(brickConfiguration, beanBuilders);
+        super(brickConfiguration, beanBuilders, displaySwitchUsed);
         this.isSim = isSim;
         this.displaySwitchUsed = displaySwitchUsed;
     }
@@ -51,32 +47,6 @@ public class MicrobitValidatorAndCollectorVisitor extends MbedValidatorAndCollec
     public Void visitRadioReceiveAction(RadioReceiveAction radioReceiveAction) {
         addToPhraseIfUnsupportedInSim(radioReceiveAction, true, isSim);
         return super.visitRadioReceiveAction(radioReceiveAction);
-    }
-
-    @Override
-    public Void visitPinGetValueSensor(PinGetValueSensor pinValueSensor) {
-        checkInternalPorts(pinValueSensor, pinValueSensor.getUserDefinedPort());
-        return super.visitPinGetValueSensor(pinValueSensor);
-    }
-
-    @Override
-    public Void visitMbedPinWriteValueAction(MbedPinWriteValueAction mbedPinWriteValueAction) {
-        checkInternalPorts(mbedPinWriteValueAction, mbedPinWriteValueAction.port);
-        return super.visitMbedPinWriteValueAction(mbedPinWriteValueAction);
-    }
-
-    private void checkInternalPorts(Phrase pinValueSensor, String port) {
-        ConfigurationComponent configurationComponent = this.robotConfiguration.optConfigurationComponent(port);
-        if ( configurationComponent != null ) {
-            String pin = configurationComponent.getProperty("PIN1");
-            if ( this.ledPins.contains(pin) ) {
-                if ( !this.displaySwitchUsed ) {
-                    addWarningToPhrase(pinValueSensor, "VALIDATION_PIN_TAKEN_BY_LED_MATRIX");
-                }
-            } else if ( this.occupiedPins.contains(pin) ) {
-                addWarningToPhrase(pinValueSensor, "VALIDATION_PIN_TAKEN_BY_INTERNAL_COMPONENT");
-            }
-        }
     }
 
     @Override

@@ -9,3 +9,90 @@ IS_GESTURE_SHAKE:
             || ( _uBit.accelerometer.getZ() > 1800 ));            
     }
 
+ULTRASONIC_GET_DISTANCE:
+  PYTHON: |
+    def measure_distance_cm(echo=calliopemini.pin_A1_RX, trigger=calliopemini.pin_A1_RX):
+        trigger.write_digital(1)
+        trigger.write_digital(0) 
+        msec = time_pulse_us(echo, 1)
+        echo_time = msec / 1000000
+        dist_cm = (echo_time / 2) * 34300
+        return dist_cm 
+
+LED_BAR_SET_LED:
+  PYTHON: |
+    def write16(di, dcki, data):
+      state = dcki.read_digital()
+      for i in range(15,-1,-1):
+        di.write_digital((data >> i) & 1)
+        state = not state
+        dcki.write_digital(state)
+    
+    def set_led(led_no, brightness):
+      di = calliopemini.pin_A1_RX
+      dcki = calliopemini.pin_A1_TX
+      di.write_digital(0)
+      dcki.write_digital(0)
+      if led_no < 0 or led_no >= 10:
+        raise ValueError("Led_no must be in the range [0, 9]")
+    
+      val = 1 << led_no
+      write16(di, dcki, 0)
+      for i in range(10):
+        write16(di, dcki, brightness if (val >> i) & 1 else 0)
+    
+      write16(di, dcki,0)
+      write16(di, dcki,0)
+      di.write_digital(0)
+      calliopemini.sleep(1)
+      for i in range(4):
+        di.write_digital(1)
+        di.write_digital(0)
+      calliopemini.sleep(1)
+
+
+SET_MATRIX_BRIGHTNESS:
+  PYTHON: |
+    def set_brightness(val):
+      global brightness
+      if val < 0 or val >= 10:
+        raise ValueError("Brightness must be in the range [0, 9]")
+      for y in range(5):
+        for x in range(5):
+            calliopemini.display.set_pixel(x,y,val)
+      brightness = val
+
+SET_BOTH_MOTORS:
+  PYTHON: |
+    def set_both_motors(speed_A, speed_B):
+        digit_0 = 0
+        digit_1 = 0
+        if (speed_A < 0):
+            digit_0 = 1
+            speed_A *= -1
+        if (speed_B < 0):
+            digit_1 = 1
+            speed_B *= -1
+        speed_A = int(speed_A * 10.23)
+        speed_B = int(speed_B * 10.23)
+        calliopemini.pin_M_MODE.write_digital(1)
+        calliopemini.pin_M0_DIR.write_digital(digit_0)
+        calliopemini.pin_M1_DIR.write_digital(digit_1)
+        calliopemini.pin_M0_SPEED.write_analog(speed_A)
+        calliopemini.pin_M1_SPEED.write_analog(speed_B)
+
+SET_MOTOR:
+  PYTHON: |
+    def set_motor(port, speed):
+        digit = 0
+        if (speed < 0):
+            digit = 1
+            speed *= -1
+        speed = int(speed * 10.23)
+        calliopemini.pin_M_MODE.write_digital(1)
+        if (port == "A"):
+            calliopemini.pin_M0_DIR.write_digital(digit)
+            calliopemini.pin_M0_SPEED.write_analog(speed)
+        else:
+            calliopemini.pin_M1_DIR.write_digital(digit)
+            calliopemini.pin_M1_SPEED.write_analog(speed)

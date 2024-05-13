@@ -9,6 +9,8 @@ import de.fhg.iais.roberta.syntax.action.mbed.DisplayTextAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSetChannelAction;
+import de.fhg.iais.roberta.syntax.action.mbed.SwitchLedMatrixAction;
+import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.expr.mbed.Image;
@@ -73,5 +75,9 @@ public interface IMbedVisitor<V> extends IVisitor<V> {
     V visitToneAction(ToneAction toneAction);
 
     V visitPlayNoteAction(PlayNoteAction playNoteAction);
+
+    V visitPlayFileAction(PlayFileAction playFileAction);
+
+    V visitSwitchLedMatrixAction(SwitchLedMatrixAction switchLedMatrixAction);
 
 }

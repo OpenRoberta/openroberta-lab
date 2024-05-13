@@ -2992,26 +2992,28 @@ export class RGBLed implements IUpdateAction, IDrawable, IReset {
     }
 
     updateAction(myRobot: RobotBase, dt: number, interpreterRunning: boolean): void {
-        let led = myRobot.interpreter.getRobotBehaviour().getActionState('led', this.toReset);
-        if (led) {
-            if (led[this.port]) {
-                led = led[this.port];
-                if (led.mode && led.mode === 'off') {
-                    this.color = this.resetColor;
-                } else if (led.color) {
-                    this.color = led.color;
+        if (interpreterRunning) {
+            let led = myRobot.interpreter.getRobotBehaviour().getActionState('led', this.toReset);
+            if (led) {
+                if (led[this.port]) {
+                    led = led[this.port];
+                    if (led.mode && led.mode === 'off') {
+                        this.color = this.resetColor;
+                    } else if (led.color) {
+                        this.color = led.color;
+                    }
+                } else if (!led.port) {
+                    if (led.mode && led.mode === 'off') {
+                        this.color = this.resetColor;
+                    } else if (led.color) {
+                        this.color = led.color;
+                    }
                 }
-            } else if (!led.port) {
-                if (led.mode && led.mode === 'off') {
-                    this.color = this.resetColor;
-                } else if (led.color) {
-                    this.color = led.color;
+                if (this.color === this.resetColor) {
+                    $('#' + this.port + '-' + myRobot.id).css({ fill: 'rgba(' + this.color[0] + ', ' + this.color[1] + ', ' + this.color[2] + ', 0)' });
+                } else {
+                    $('#' + this.port + '-' + myRobot.id).css({ fill: 'rgba(' + this.color[0] + ', ' + this.color[1] + ', ' + this.color[2] + ', 255)' });
                 }
-            }
-            if (this.color === this.resetColor) {
-                $('#' + this.port + '-' + myRobot.id).css({ fill: 'rgba(' + this.color[0] + ', ' + this.color[1] + ', ' + this.color[2] + ', 0)' });
-            } else {
-                $('#' + this.port + '-' + myRobot.id).css({ fill: 'rgba(' + this.color[0] + ', ' + this.color[1] + ', ' + this.color[2] + ', 255)' });
             }
         }
     }
@@ -3044,6 +3046,55 @@ export class Txt4RGBLed extends RGBLed {
         } else {
             $('#stopOn' + this.id).css({ 'stop-color': '#666666', 'stop-opacity': 1 });
             $('#stopOff' + this.id).css({ 'stop-color': '#666666', 'stop-opacity': 1 });
+        }
+    }
+}
+
+export class CalliopeV3RGBLeds implements IUpdateAction, IDrawable {
+    rgbLeds: RGBLed[] = [];
+    robotId: number;
+
+    constructor(positions: Point[], id: number) {
+        for (let i = 0; i < positions.length; i++) {
+            this.rgbLeds.push(new RGBLed(positions[i], true, i.toString(), 24));
+        }
+        this.robotId = id;
+    }
+
+    updateAction(myRobot: RobotBase, dt: number, interpreterRunning: boolean): void {
+        if (interpreterRunning) {
+            let led = myRobot.interpreter.getRobotBehaviour().getActionState('led', true);
+
+            if (led) {
+                if (led['ALL']) {
+                    if (led['ALL']['mode'] && led['ALL']['mode'] === 'off') {
+                        for (let i = 0; i < this.rgbLeds.length; i++) {
+                            this.rgbLeds[i].color = this.rgbLeds[i].resetColor;
+                        }
+                    } else {
+                        for (let i = 0; i < this.rgbLeds.length; i++) {
+                            this.rgbLeds[i].color = led['ALL']['color'];
+                        }
+                    }
+                } else {
+                    let that = this;
+                    Object.keys(led).forEach(function (key, index) {
+                        if (led[key]['mode'] && led[key]['mode'] === 'off') {
+                            that.rgbLeds[key].color = that.rgbLeds[key].resetColor;
+                        } else if (that.rgbLeds[key] && led[key].color) {
+                            that.rgbLeds[key].color = led[key].color;
+                        }
+                    });
+                }
+            }
+        }
+    }
+
+    drawPriority: number = 88;
+
+    draw(rCtx: CanvasRenderingContext2D, myRobot: RobotBase): void {
+        for (let i = 0; i < this.rgbLeds.length; i++) {
+            this.rgbLeds[i].draw(rCtx, myRobot);
         }
     }
 }

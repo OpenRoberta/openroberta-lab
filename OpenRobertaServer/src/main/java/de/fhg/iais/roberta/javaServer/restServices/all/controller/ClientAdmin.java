@@ -202,6 +202,7 @@ public class ClientAdmin {
                     response.setSim(robotFactory.hasSim());
                     response.setMultipleSim(robotFactory.hasMultipleSim());
                     response.setMarkerSim(robotFactory.hasMarkerSim());
+                    response.setPluginSim(robotFactory.getPluginSim());
                     response.setNn(true); // TODO: temporary fix
                     response.setNnActivations(robotFactory.getNNActivations());
                     response.setWebotsSim(robotFactory.hasWebotsSim());

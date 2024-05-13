@@ -13,6 +13,7 @@ import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.action.mbed.SwitchLedMatrixAction;
 import de.fhg.iais.roberta.syntax.action.mbed.joycar.RgbLedOffActionJoycar;
 import de.fhg.iais.roberta.syntax.action.mbed.joycar.RgbLedOnActionJoycar;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
@@ -21,6 +22,7 @@ import de.fhg.iais.roberta.syntax.action.motor.differential.CurveAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.DriveAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.MotorDriveStopAction;
 import de.fhg.iais.roberta.syntax.action.motor.differential.TurnAction;
+import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
@@ -33,7 +35,6 @@ import de.fhg.iais.roberta.visitor.IJoyCarVisitor;
 import de.fhg.iais.roberta.visitor.JoycarMethods;
 
 public class JoyCarValidatorAndCollectorVisitor extends MicrobitV2ValidatorAndCollectorVisitor implements IJoyCarVisitor<Void> {
-    private final boolean isSim;
 
     private static final Map<String, String> SENSOR_COMPONENT_TYPE_MAP = Collections.unmodifiableMap(new HashMap<String, String>() {{
         put("ULTRASONIC_SENSING", SC.ULTRASONIC);
@@ -43,14 +44,11 @@ public class JoyCarValidatorAndCollectorVisitor extends MicrobitV2ValidatorAndCo
         ConfigurationAst brickConfiguration,
         ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders,
         boolean isSim,
-        boolean displaySwitchUsed) //
-    {
+        boolean displaySwitchUsed) {
         super(brickConfiguration, beanBuilders, isSim, displaySwitchUsed);
-        this.isSim = isSim;
         this.occupiedPins = Arrays.asList("0", "1", "2", "3", "4", "5", "6", "7", "8", "10", "11", "12", "16", "19", "20");
         this.ledPins = Arrays.asList("3", "4", "6", "7", "10");
     }
-
 
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor ultrasonicSensor) {

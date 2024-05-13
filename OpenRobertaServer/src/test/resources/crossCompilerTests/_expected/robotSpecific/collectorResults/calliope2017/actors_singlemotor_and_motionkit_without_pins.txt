@@ -3,4 +3,4 @@ Sensors:
 Actors: 
 [UsedActor [m1, MOTOR], UsedActor [S, SERVOMOTOR], UsedActor [C17, MOTIONKIT], UsedActor [C16, MOTIONKIT], UsedActor [, MOTIONKIT]]
 Methods: 
-[]
+[SET_MOTOR]

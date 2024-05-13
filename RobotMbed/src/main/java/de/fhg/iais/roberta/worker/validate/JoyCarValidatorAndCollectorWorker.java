@@ -15,7 +15,7 @@ import de.fhg.iais.roberta.visitor.JoycarMethods;
 import de.fhg.iais.roberta.visitor.validate.CommonNepoValidatorAndCollectorVisitor;
 import de.fhg.iais.roberta.visitor.validate.JoyCarValidatorAndCollectorVisitor;
 
-public class JoyCarValidatorAndCollectorWorker extends MbedValidatorAndCollectorWorker {
+public class JoyCarValidatorAndCollectorWorker extends MbedV2ValidatorAndCollectorWorker {
     public static final List<String> FREE_PINS = Stream.of("P0", "P1", "P8", "P2", "P12", "P13", "P14", "P15", "P16", "P19", "P20", "E7").collect(Collectors.toList());
     public static final List<String> DEFAULT_PROPERTIES = Stream.of("KEY", "ACCELEROMETER", "COMPASS", "TEMPERATURE", "LIGHT", "ROBOT", "SOUND", "BUZZER", "LOGOTOUCH", "SERVOMOTOR", "ULTRASONIC", "RGBLED", "MOTOR", "DIFFERENTIALDRIVE", "ENCODER", "I2C_BUS", "INFRARED", "LINE").collect(Collectors.toList());
     public static final HashMap<String, String> MAP_CORRECT_CONFIG_PINS = new HashMap<String, String>() {{

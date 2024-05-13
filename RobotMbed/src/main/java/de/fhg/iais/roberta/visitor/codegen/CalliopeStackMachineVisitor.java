@@ -24,9 +24,9 @@ import de.fhg.iais.roberta.syntax.action.mbed.MotionKitDualSetAction;
 import de.fhg.iais.roberta.syntax.action.mbed.MotionKitSingleSetAction;
 import de.fhg.iais.roberta.syntax.action.mbed.ServoSetAction;
 import de.fhg.iais.roberta.syntax.action.mbed.SwitchLedMatrixAction;
-import de.fhg.iais.roberta.syntax.action.motor.MotorGetPowerAction;
+import de.fhg.iais.roberta.syntax.action.mbed.calliopeV3.RgbLedsOffHiddenAction;
+import de.fhg.iais.roberta.syntax.action.mbed.calliopeV3.RgbLedsOnHiddenAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
-import de.fhg.iais.roberta.syntax.action.motor.MotorSetPowerAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
@@ -35,22 +35,17 @@ import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
+import de.fhg.iais.roberta.syntax.sensor.mbed.CallibotKeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.RadioRssiSensor;
 import de.fhg.iais.roberta.util.basic.C;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.ICalliopeVisitor;
 
-public class CalliopeStackMachineVisitor extends MbedStackMachineVisitor implements ICalliopeVisitor<Void> {
+public class CalliopeStackMachineVisitor extends MbedV2StackMachineVisitor implements ICalliopeVisitor<Void> {
 
     public CalliopeStackMachineVisitor(ConfigurationAst configuration, List<List<Phrase>> phrases, UsedHardwareBean usedHardwareBean, NNBean nnBean) {
         super(configuration, phrases, usedHardwareBean, nnBean);
         Assert.isTrue(!phrases.isEmpty());
-
-    }
-
-    @Override
-    public Void visitMotorGetPowerAction(MotorGetPowerAction motorGetPowerAction) {
-        return null;
     }
 
     @Override
@@ -64,11 +59,6 @@ public class CalliopeStackMachineVisitor extends MbedStackMachineVisitor impleme
 
         JSONObject o = makeNode(C.MOTOR_ON_ACTION).put(C.PORT, pin1.toLowerCase()).put(C.NAME, pin1.toLowerCase());
         return add(o);
-    }
-
-    @Override
-    public Void visitMotorSetPowerAction(MotorSetPowerAction motorSetPowerAction) {
-        return null;
     }
 
     @Override
@@ -139,7 +129,6 @@ public class CalliopeStackMachineVisitor extends MbedStackMachineVisitor impleme
     public Void visitBothMotorsOnAction(BothMotorsOnAction bothMotorsOnAction) {
         bothMotorsOnAction.speedA.accept(this);
         bothMotorsOnAction.speedB.accept(this);
-
         String portA = bothMotorsOnAction.portA;
         ConfigurationComponent ccA = this.configuration.optConfigurationComponent(portA);
         String pin1A = ((ccA == null) || ccA.componentType.equals("CALLIBOT")) ? "0" : ccA.getProperty("PIN1");
@@ -150,6 +139,24 @@ public class CalliopeStackMachineVisitor extends MbedStackMachineVisitor impleme
         JSONObject o = makeNode(C.BOTH_MOTORS_ON_ACTION).put(C.PORT_A, pin1A.toLowerCase()).put(C.PORT_B, pin1B.toLowerCase());
 
         return add(o);
+    }
+
+    @Override
+    public Void visitRgbLedsOnHiddenAction(RgbLedsOnHiddenAction rgbLedsOnHiddenAction) {
+        rgbLedsOnHiddenAction.colour.accept(this);
+        JSONObject o = makeNode(C.RGBLED_ON_ACTION);
+        return add(o);
+    }
+
+    @Override
+    public Void visitRgbLedsOffHiddenAction(RgbLedsOffHiddenAction rgbLedsOffHiddenAction) {
+        JSONObject o = makeNode(C.RGBLED_OFF_ACTION).put(C.NAME, "calliope");
+        return add(o);
+    }
+
+    @Override
+    public Void visitCallibotKeysSensor(CallibotKeysSensor callibotKeysSensor) {
+        return null;
     }
 
     @Override

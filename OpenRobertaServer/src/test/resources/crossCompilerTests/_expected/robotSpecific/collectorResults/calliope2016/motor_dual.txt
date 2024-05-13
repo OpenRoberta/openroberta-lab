@@ -3,4 +3,4 @@ Sensors:
 Actors: 
 [UsedActor [, DIFFERENTIALDRIVE], UsedActor [MR, MOTOR], UsedActor [ML, MOTOR]]
 Methods: 
-[]
+[SET_BOTH_MOTORS]
