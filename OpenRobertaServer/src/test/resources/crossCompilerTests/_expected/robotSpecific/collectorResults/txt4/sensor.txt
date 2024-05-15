@@ -3,4 +3,4 @@ Sensors:
 Actors: 
 [UsedActor [DISPLAY, DISPLAY], UsedActor [M1, ENCODERMOTOR], UsedActor [M2, ENCODERMOTOR]]
 Methods: 
-[MOTORSTART]
+[MOTORSTART, SPEEDTOPWM]

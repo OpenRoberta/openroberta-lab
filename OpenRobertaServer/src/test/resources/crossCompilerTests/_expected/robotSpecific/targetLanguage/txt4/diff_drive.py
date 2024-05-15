@@ -28,7 +28,7 @@ def diffdrive_turn_degrees(speed, degrees):
     if degrees < 0:
         speed = -speed
         degrees = abs(degrees)
-    speed = int((speed / 100) * 512)
+    speed = speed_to_pwm(speed)
     arc_length = math.radians(degrees) * (TRACK_WIDTH / 2)
     rotations = arc_length / (WHEEL_DIAMETER * math.pi)
     steps_per_wheel = int(rotations * STEPS_PER_ROTATION)
@@ -43,7 +43,7 @@ def diffdrive_turn_degrees(speed, degrees):
     left_motor.stop_sync(right_motor)
 
 def diffdrive(speed):
-    speed = int((speed / 100) * 512)
+    speed = speed_to_pwm(speed)
     left_motor.set_speed(speed, Motor.CCW)
     right_motor.set_speed(speed, Motor.CCW)
     left_motor.start_sync(right_motor)
@@ -71,8 +71,12 @@ def diffdrive_distance(distance, speed_l, speed_r):
         time.sleep(0.010)
 
 def motor_start(motor, speed):
-    motor.set_speed(int((speed / 100) * 512), Motor.CCW)
+    motor.set_speed(speed_to_pwm(speed), Motor.CCW)
     motor.start()
+
+def speed_to_pwm(speed):
+    speed = max(min(speed, 100), -100)
+    return int((speed / 100) * 512)
 
 def run():
     print("Driving Forwards")

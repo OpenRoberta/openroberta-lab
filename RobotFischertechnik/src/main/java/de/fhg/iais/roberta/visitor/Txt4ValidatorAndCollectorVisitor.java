@@ -85,6 +85,7 @@ public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
             usedHardwareBuilder.addUsedActor(new UsedActor(motor.getOptProperty("PORT"), motor.componentType));
         }
         usedMethodBuilder.addUsedMethod(Txt4Methods.MOTORSTART);
+        usedMethodBuilder.addUsedMethod(Txt4Methods.SPEEDTOPWM);
         return null;
     }
 
@@ -96,6 +97,7 @@ public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
         usedHardwareBuilder.addUsedActor(new UsedActor(motorOnForAction.getUserDefinedPort(), FischertechnikConstants.ENCODERMOTOR));
         usedHardwareBuilder.addUsedSensor(new UsedSensor(motorOnForAction.getUserDefinedPort(), SC.ENCODER, FischertechnikConstants.ENCODERMOTOR));
         usedMethodBuilder.addUsedMethod(Txt4Methods.MOTORSTARTFOR);
+        usedMethodBuilder.addUsedMethod(Txt4Methods.SPEEDTOPWM);
 
         return null;
     }
@@ -113,6 +115,8 @@ public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
     public Void visitMotorOmniDiffOnAction(MotorOmniDiffOnAction motorOmniDiffOnAction) {
         requiredComponentVisited(motorOmniDiffOnAction, motorOmniDiffOnAction.power);
         checkDiffOrOmniDrive(motorOmniDiffOnAction);
+        
+        usedMethodBuilder.addUsedMethod(Txt4Methods.SPEEDTOPWM);
         usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniDiffOnAction.getUserDefinedPort(), FischertechnikConstants.ENCODERMOTOR));
         if ( configHasOmnidrive() ) {
             usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniDiffOnAction.getUserDefinedPort(), FischertechnikConstants.OMNIDRIVE));
@@ -133,6 +137,7 @@ public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
         usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniDiffOnForAction.getUserDefinedPort(), FischertechnikConstants.ENCODERMOTOR));
         usedHardwareBuilder.addUsedSensor(new UsedSensor(motorOmniDiffOnForAction.getUserDefinedPort(), SC.ENCODER, FischertechnikConstants.ENCODERMOTOR));
         usedMethodBuilder.addUsedMethod(Txt4Methods.MOTORSTART);
+        usedMethodBuilder.addUsedMethod(Txt4Methods.SPEEDTOPWM);
         if ( configHasOmnidrive() ) {
             usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniDiffOnForAction.getUserDefinedPort(), FischertechnikConstants.OMNIDRIVE));
             addOmnidriveDistanceMethods(motorOmniDiffOnForAction.direction);
@@ -151,7 +156,7 @@ public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
         checkDiffOrOmniDrive(motorOmniDiffCurveAction);
         usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniDiffCurveAction.getUserDefinedPort(), FischertechnikConstants.ENCODERMOTOR));
         usedMethodBuilder.addUsedMethod(Txt4Methods.MOTORSTART);
-
+        usedMethodBuilder.addUsedMethod(Txt4Methods.SPEEDTOPWM);
         if ( configHasOmnidrive() ) {
             usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniDiffCurveAction.getUserDefinedPort(), FischertechnikConstants.OMNIDRIVE));
             usedMethodBuilder.addUsedMethod(Txt4Methods.OMNIDRIVECURVE);
@@ -169,6 +174,7 @@ public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
         usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniDiffCurveForAction.getUserDefinedPort(), FischertechnikConstants.ENCODERMOTOR));
         usedHardwareBuilder.addUsedSensor(new UsedSensor(motorOmniDiffCurveForAction.getUserDefinedPort(), SC.ENCODER, FischertechnikConstants.ENCODERMOTOR));
         usedMethodBuilder.addUsedMethod(Txt4Methods.MOTORSTART);
+        usedMethodBuilder.addUsedMethod(Txt4Methods.SPEEDTOPWM);
         if ( configHasOmnidrive() ) {
             usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniDiffCurveForAction.getUserDefinedPort(), FischertechnikConstants.OMNIDRIVE));
             usedMethodBuilder.addUsedMethod(Txt4Methods.OMNIDRIVECURVE);
@@ -208,6 +214,7 @@ public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
         checkDiffOrOmniDrive(motorOmniDiffTurnAction);
         usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniDiffTurnAction.getUserDefinedPort(), FischertechnikConstants.ENCODERMOTOR));
         usedMethodBuilder.addUsedMethod(Txt4Methods.MOTORSTART);
+        usedMethodBuilder.addUsedMethod(Txt4Methods.SPEEDTOPWM);
 
         if ( configHasOmnidrive() ) {
             usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniDiffTurnAction.getUserDefinedPort(), FischertechnikConstants.OMNIDRIVE));
@@ -225,6 +232,7 @@ public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
         checkDiffOrOmniDrive(motorOmniDiffTurnForAction);
         usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniDiffTurnForAction.getUserDefinedPort(), FischertechnikConstants.ENCODERMOTOR));
         usedHardwareBuilder.addUsedSensor(new UsedSensor(motorOmniDiffTurnForAction.getUserDefinedPort(), SC.ENCODER, FischertechnikConstants.ENCODERMOTOR));
+        usedMethodBuilder.addUsedMethod(Txt4Methods.SPEEDTOPWM);
         if ( configHasOmnidrive() ) {
             usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniDiffTurnForAction.getUserDefinedPort(), FischertechnikConstants.OMNIDRIVE));
             usedMethodBuilder.addUsedMethod(Txt4Methods.OMNIDRIVETURNDEGREES);

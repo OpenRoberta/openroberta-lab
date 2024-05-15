@@ -34,7 +34,7 @@ STEPS_PER_ROTATION = 128
 
 
 def motor_start(motor, speed):
-    motor.set_speed(int((speed / 100) * 512), Motor.CCW)
+    motor.set_speed(speed_to_pwm(speed), Motor.CCW)
     motor.start()
 
 def omnidrive_curve(speed_fl, speed_fr, speed_rl, speed_rr):
@@ -69,10 +69,10 @@ def omnidrive_straight_distance(distance, speed_fl, speed_fr, speed_rl, speed_rr
     constant = WHEEL_DIAMETER / (2 * 4)
     distance_per_wheel = distance / constant / 4
     steps_per_wheel = int(distance_per_wheel / (2 * math.pi) * STEPS_PER_ROTATION)
-    front_left_motor.set_speed(int((direction * speed_fl / 100) * 512), Motor.CCW)
-    front_right_motor.set_speed(int((direction * speed_fr / 100) * 512), Motor.CCW)
-    rear_left_motor.set_speed(int((direction * speed_rl / 100) * 512), Motor.CCW)
-    rear_right_motor.set_speed(int((direction * speed_rr / 100) * 512), Motor.CCW)
+    front_left_motor.set_speed(speed_to_pwm(direction * speed_fl), Motor.CCW)
+    front_right_motor.set_speed(speed_to_pwm(direction * speed_fr), Motor.CCW)
+    rear_left_motor.set_speed(speed_to_pwm(direction * speed_rl), Motor.CCW)
+    rear_right_motor.set_speed(speed_to_pwm(direction * speed_rr), Motor.CCW)
     front_left_motor.set_distance(steps_per_wheel, front_right_motor, rear_left_motor, rear_right_motor)
     while True:
         if (not front_left_motor.is_running()
@@ -87,7 +87,7 @@ def omnidrive_turn_degrees(speed, degrees):
     if degrees < 0:
         speed = -speed
         degrees = abs(degrees)
-    speed = int((speed / 100) * 512)
+    speed = speed_to_pwm(speed)
     rotations = (WHEEL_DIAMETER * math.pi * degrees) / (360 * TRACK_WIDTH)
     steps_per_wheel = int(rotations * STEPS_PER_ROTATION)
 
@@ -104,6 +104,10 @@ def omnidrive_turn_degrees(speed, degrees):
             break
         time.sleep(0.010)
     front_left_motor.stop_sync(front_right_motor, rear_left_motor, rear_right_motor)
+
+def speed_to_pwm(speed):
+    speed = max(min(speed, 100), -100)
+    return int((speed / 100) * 512)
 
 def run():
     print("Driving Forwards")

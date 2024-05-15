@@ -28,18 +28,22 @@ STEPS_PER_ROTATION = 128
 
 
 def motor_start(motor, speed):
-    motor.set_speed(int((speed / 100) * 512), Motor.CCW)
+    motor.set_speed(speed_to_pwm(speed), Motor.CCW)
     motor.start()
 
 def motor_start_for(motor, speed, degrees):
     steps = int((degrees / 360) * STEPS_PER_ROTATION)
-    motor.set_speed(int((speed / 100) * 512), Motor.CCW)
+    motor.set_speed(speed_to_pwm(speed), Motor.CCW)
     motor.set_distance(steps)
     while True:
         if not motor.is_running():
             break
         time.sleep(0.010)
     motor.stop()
+
+def speed_to_pwm(speed):
+    speed = max(min(speed, 100), -100)
+    return int((speed / 100) * 512)
 
 def run():
     print("Moving Motors")

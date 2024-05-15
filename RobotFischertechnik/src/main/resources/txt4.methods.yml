@@ -2,17 +2,23 @@ include: "classpath:/common.methods.yml"
 
 ## FunctionNames
 
+SPEEDTOPWM:
+  PYTHON: |
+    def speed_to_pwm(speed):
+        speed = max(min(speed, 100), -100)
+        return int((speed / 100) * 512)
+    
 MOTORSTART:
   PYTHON: |
     def motor_start(motor, speed):
-        motor.set_speed(int((speed / 100) * 512), Motor.CCW)
+        motor.set_speed(speed_to_pwm(speed), Motor.CCW)
         motor.start()
 
 MOTORSTARTFOR:
   PYTHON: |
     def motor_start_for(motor, speed, degrees):
         steps = int((degrees / 360) * STEPS_PER_ROTATION)
-        motor.set_speed(int((speed / 100) * 512), Motor.CCW)
+        motor.set_speed(speed_to_pwm(speed), Motor.CCW)
         motor.set_distance(steps)
         while True:
             if not motor.is_running():
@@ -23,7 +29,7 @@ MOTORSTARTFOR:
 DIFFERENTIALDRIVE:
   PYTHON: |
     def diffdrive(speed):
-        speed = int((speed / 100) * 512)
+        speed = speed_to_pwm(speed)
         left_motor.set_speed(speed, Motor.CCW)
         right_motor.set_speed(speed, Motor.CCW)
         left_motor.start_sync(right_motor)
@@ -92,10 +98,10 @@ OMNIDRIVESTRAIGHTDISTANCE:
         constant = WHEEL_DIAMETER / (2 * 4)
         distance_per_wheel = distance / constant / 4
         steps_per_wheel = int(distance_per_wheel / (2 * math.pi) * STEPS_PER_ROTATION)
-        front_left_motor.set_speed(int((direction * speed_fl / 100) * 512), Motor.CCW)
-        front_right_motor.set_speed(int((direction * speed_fr / 100) * 512), Motor.CCW)
-        rear_left_motor.set_speed(int((direction * speed_rl / 100) * 512), Motor.CCW)
-        rear_right_motor.set_speed(int((direction * speed_rr / 100) * 512), Motor.CCW)
+        front_left_motor.set_speed(speed_to_pwm(direction * speed_fl), Motor.CCW)
+        front_right_motor.set_speed(speed_to_pwm(direction * speed_fr), Motor.CCW)
+        rear_left_motor.set_speed(speed_to_pwm(direction * speed_rl), Motor.CCW)
+        rear_right_motor.set_speed(speed_to_pwm(direction * speed_rr), Motor.CCW)
         front_left_motor.set_distance(steps_per_wheel, front_right_motor, rear_left_motor, rear_right_motor)
         while True:
             if (not front_left_motor.is_running()
@@ -112,7 +118,7 @@ OMNIDRIVEDIAGONALTLDISTANCE:
         if distance < 0:
             speed = -speed
             distance = abs(distance)
-        speed = int((speed / 100) * 512)
+        speed = speed_to_pwm(speed)
         constant = WHEEL_DIAMETER / (2 * 4)
         distance_per_wheel = math.sqrt(1 / 2 * math.pow(distance, 2)) / constant / 4
         steps_per_wheel = int(distance_per_wheel / (2 * math.pi) * STEPS_PER_ROTATION) * 2
@@ -133,7 +139,7 @@ OMNIDRIVEDIAGONALTRDISTANCE:
         if distance < 0:
             speed = -speed
             distance = abs(distance)
-        speed = int((speed / 100) * 512)
+        speed = speed_to_pwm(speed)
         constant = WHEEL_DIAMETER / (2 * 4)
         distance_per_wheel = math.sqrt(1 / 2 * math.pow(distance, 2)) / constant / 4
         steps_per_wheel = int(distance_per_wheel / (2 * math.pi) * STEPS_PER_ROTATION) * 2
@@ -154,7 +160,7 @@ OMNIDRIVETURNDEGREES:
         if degrees < 0:
             speed = -speed
             degrees = abs(degrees)
-        speed = int((speed / 100) * 512)
+        speed = speed_to_pwm(speed)
         rotations = (WHEEL_DIAMETER * math.pi * degrees) / (360 * TRACK_WIDTH)
         steps_per_wheel = int(rotations * STEPS_PER_ROTATION)
     
@@ -178,7 +184,7 @@ DIFFDRIVETURNDEGREES:
         if degrees < 0:
             speed = -speed
             degrees = abs(degrees)
-        speed = int((speed / 100) * 512)
+        speed = speed_to_pwm(speed)
         arc_length = math.radians(degrees) * (TRACK_WIDTH / 2)
         rotations = arc_length / (WHEEL_DIAMETER * math.pi)
         steps_per_wheel = int(rotations * STEPS_PER_ROTATION)

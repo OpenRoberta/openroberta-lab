@@ -31,8 +31,12 @@ _timer4 = time.time()
 _timer5 = time.time()
 
 def motor_start(motor, speed):
-    motor.set_speed(int((speed / 100) * 512), Motor.CCW)
+    motor.set_speed(speed_to_pwm(speed), Motor.CCW)
     motor.start()
+
+def speed_to_pwm(speed):
+    speed = max(min(speed, 100), -100)
+    return int((speed / 100) * 512)
 
 def run():
     global _timer1, _timer2, _timer3, _timer4, _timer5
