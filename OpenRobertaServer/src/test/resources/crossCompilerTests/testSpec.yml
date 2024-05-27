@@ -141,7 +141,7 @@ robots:
     template: txt4
     dir: txt4
     suffix: ".py"
-    pylintIgnoredModules: [ "fischertechnik.factories", "display", "fischertechnik.models.Color", "fischertechnik.controller.Motor" ]
+    pylintIgnoredModules: [ "fischertechnik.factories", "lib.display", "fischertechnik.models.Color", "fischertechnik.controller.Motor" ]
 progs:
   assign:
     decl: default

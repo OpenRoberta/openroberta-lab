@@ -6,6 +6,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
@@ -33,6 +37,33 @@ public final class ZipHelper {
                 File srcFile = path.toFile();
                 try (FileInputStream fis = new FileInputStream(srcFile)) {
                     ZipEntry zipEntry = new ZipEntry(srcFile.getName());
+                    zos.putNextEntry(zipEntry);
+                    byte[] bytes = new byte[BUFFER_SIZE];
+                    int length;
+                    while ( (length = fis.read(bytes)) >= 0 ) {
+                        zos.write(bytes, 0, length);
+                    }
+                }
+            }
+        }
+    }
+
+    public static void zipFilesWithDirectory(
+        Iterable<? extends Path> inputFiles,
+        Path outputFile,
+        ZipOutputStream zos,
+        String parrentDirectoryName) throws IOException {
+        for ( Path path : inputFiles ) {
+            File srcFile = path.toFile();
+            ZipEntry zipEntry = new ZipEntry(srcFile.getName());
+            if ( parrentDirectoryName != null && !parrentDirectoryName.isEmpty() ) {
+                zipEntry = new ZipEntry(parrentDirectoryName + "/" + srcFile.getName());
+            }
+            if ( srcFile.isDirectory() ) {
+                List<Path> toBeZipped = Arrays.stream(srcFile.listFiles()).map(f -> f.toPath()).collect(Collectors.toList());
+                zipFilesWithDirectory(toBeZipped, Paths.get(outputFile.toString(), srcFile.getName()), zos, zipEntry.getName());
+            } else {
+                try (FileInputStream fis = new FileInputStream(srcFile)) {
                     zos.putNextEntry(zipEntry);
                     byte[] bytes = new byte[BUFFER_SIZE];
                     int length;
@@ -72,6 +103,13 @@ public final class ZipHelper {
                 zipEntry = zis.getNextEntry();
             }
             zis.closeEntry();
+        }
+    }
+
+    public static void zipDirectory(File sourceDir, Path targetFile) throws IOException {
+        List<Path> toBeZipped = Arrays.stream(sourceDir.listFiles()).map(f -> f.toPath()).collect(Collectors.toList());
+        try (FileOutputStream fos = new FileOutputStream(targetFile.toFile()); ZipOutputStream zos = new ZipOutputStream(fos)) {
+            zipFilesWithDirectory(toBeZipped, targetFile, zos, null);
         }
     }
 }

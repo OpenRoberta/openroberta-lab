@@ -9,6 +9,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import de.fhg.iais.roberta.util.dbc.DbcException;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -46,60 +47,52 @@ public class RobotCommand {
     @Produces(MediaType.APPLICATION_JSON)
     public Response handle(JSONObject requestEntity) throws JSONException, InterruptedException {
         AliveData.rememberRobotCall(this.brickCommunicator.getRobotCommunicationDataSize());
-        String cmd = requestEntity.getString(CMD);
+        RequestEntityWrapper r = new RequestEntityWrapper(requestEntity);
+        String cmd = null;
         String token = null;
-        String firmwarename = null;
+        String pluginName = null;
         try {
-            token = requestEntity.getString("token");
-            firmwarename = requestEntity.getString("firmwarename");
-        } catch ( Exception e ) {
+            cmd = r.get("cmd");
+            token = r.get("token");
+            pluginName = r.get("pluginname", "firmwarename");
+        } catch (Exception e) {
             LOG.error("Robot request aborted. Robot uses a wrong JSON: " + requestEntity, e);
             return Response.serverError().build();
         }
-        // TODO: move robot to the requested properties for the next version
-        String robot = requestEntity.optString("robot", "ev3");
-        String macaddr = requestEntity.optString("macaddr", "usb");
-        String brickname = requestEntity.optString("brickname", robot);
-        String batteryvoltage = requestEntity.optString("battery", "");
-        String menuversion = requestEntity.optString("menuversion", "");
-        String runtimeVersion = requestEntity.optString("runtimeversion", "");
-        String firmwareversion = requestEntity.optString("firmwareversion");
-        firmwareversion = firmwareversion == null ? requestEntity.optString("lejosversion", "") : firmwareversion;
+
+        String robot = r.getWithDefault("?", "robot");
+        String macaddr = r.getWithDefault("?", "macaddr");
+        String robotName = r.getWithDefault("?", "robotname", "brickname");
+        String batteryvoltage = r.getWithDefault("?", "battery");
+        String menuversion = r.getWithDefault("?", "menuversion");
+        String runtimeVersion = r.getWithDefault("?", "runtimeversion");
+        String firmwareversion = r.getWithDefault("?", "firmwareversion", "lejosversion");
         int nepoExitValue = requestEntity.optInt("nepoexitvalue", 0);
-        // TODO: validate version here!
+
         JSONObject response;
-        switch ( cmd ) {
+        switch (cmd) {
             case CMD_REGISTER:
                 LOG.info("ROBOT_PROTOCOL: robot [" + macaddr + "] send token " + token + " for user approval");
                 RobotCommunicationData state =
-                    new RobotCommunicationData(token, robot, macaddr, brickname, batteryvoltage, menuversion, runtimeVersion, firmwarename, firmwareversion);
-                boolean result = this.brickCommunicator.brickWantsTokenToBeApproved(state);
+                        new RobotCommunicationData(token, robot, macaddr, robotName, batteryvoltage, menuversion, runtimeVersion, pluginName, firmwareversion);
+                boolean result = this.brickCommunicator.robotWantsTokenToBeApproved(state);
                 response = new JSONObject().put("response", result ? "ok" : "error").put("cmd", result ? CMD_REPEAT : CMD_ABORT);
                 return Response.ok(response.toString()).build();
             case CMD_PUSH:
                 int counter = pushRequestCounterForLogging.incrementAndGet();
                 boolean logPush = counter % EVERY_REQUEST == 0;
-                if ( logPush ) {
+                if (logPush) {
                     LOG.info("/pushcmd - push request for token " + token + " [count:" + counter + "]");
                 }
-                String command = this.brickCommunicator.brickWaitsForAServerPush(token, batteryvoltage, nepoExitValue);
+                String command = this.brickCommunicator.robotWaitsForAServerPush(token, batteryvoltage, nepoExitValue);
 
-                if ( command == null || this.brickCommunicator.getState(token) == null ) {
+                if (command == null || this.brickCommunicator.getState(token) == null) {
                     LOG.error("ROBOT_PROTOCOL: robot was already disconnected, when a /pushcmd for token " + token + " terminated. We return a server error");
                     return Response.serverError().build();
                 } else {
-                    if ( !command.equals(CMD_REPEAT) || logPush ) {
-                        LOG
-                            .info(
-                                "ROBOT_PROTOCOL: the command "
-                                    + command
-                                    + " is pushed to robot ["
-                                    + macaddr
-                                    + "] for token "
-                                    + token
-                                    + " [count: "
-                                    + counter
-                                    + "]");
+                    if (!command.equals(CMD_REPEAT) || logPush) {
+                        LOG.info("ROBOT_PROTOCOL: the command " + command + " is pushed to robot [" + macaddr
+                                + "] for token " + token + " [count: " + counter + "]");
                     }
                     response = new JSONObject().put(CMD, command);
                     response.put(SUBTYPE, this.brickCommunicator.getSubtype());
@@ -108,6 +101,52 @@ public class RobotCommand {
             default:
                 LOG.error("Robot request aborted. Robot uses an invalid \"cmd\" in JSON: " + requestEntity);
                 return Response.serverError().build();
+        }
+    }
+
+    private static class RequestEntityWrapper {
+        private final JSONObject json;
+
+        /**
+         * wrap a JSONObject to retrieve values for keys presented.
+         *
+         * @param json to be wrapped
+         */
+        public RequestEntityWrapper(JSONObject json) {
+            this.json = json;
+        }
+
+        /**
+         * look for the first key from a keys array, that has a value in the JSONObject wrapped. Return this value.<br>
+         * if no key is found at all, return the default value
+         *
+         * @param defaultValue if no keys are present in the JSONObject
+         * @param keys         the keys to lookup. The keys can be considered <i>synonyms</i>
+         * @return the value of the first key found or the default if no key matched
+         */
+        public String getWithDefault(String defaultValue, String... keys) {
+            for (String key : keys) {
+                if (json.has(key)) {
+                    return json.getString(key);
+                }
+            }
+            return defaultValue;
+        }
+
+        /**
+         * look for the first key from a keys array, that has a value in the JSONObject wrapped. Return this value.<br>
+         * if no key is found at all, throw an exception
+         *
+         * @param keys the keys to lookup. The keys can be considered <i>synonyms</i>
+         * @return the value of the first key found
+         */
+        public String get(String... keys) {
+            for (String key : keys) {
+                if (json.has(key)) {
+                    return json.getString(key);
+                }
+            }
+            throw new DbcException("json does not contain required key " + json.toString());
         }
     }
 }

@@ -65,7 +65,7 @@ public class RobotCommunicator {
         return true;
     }
 
-    public boolean brickWantsTokenToBeApproved(RobotCommunicationData newRobotCommunicationData) {
+    public boolean robotWantsTokenToBeApproved(RobotCommunicationData newRobotCommunicationData) {
         if ( addNewRegistration(newRobotCommunicationData) ) {
             return newRobotCommunicationData.robotTokenAgreementRequest(); // this will freeze the request until another thread issues a notifyAll()
         } else {
@@ -81,7 +81,7 @@ public class RobotCommunicator {
      * @param nepoExitValue the return value of the last user program, that was executed. Is 0 if no exitvalue is provided by the robot system.
      * @return a legal command for the robot (in 99% a "repeat" :)
      */
-    public String brickWaitsForAServerPush(String token, String batteryvoltage, int nepoExitValue) {
+    public String robotWaitsForAServerPush(String token, String batteryvoltage, int nepoExitValue) {
         RobotCommunicationData state = getState(token);
         if ( state != null ) {
             state.setBattery(batteryvoltage);

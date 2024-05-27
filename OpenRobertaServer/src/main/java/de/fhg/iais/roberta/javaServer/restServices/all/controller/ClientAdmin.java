@@ -234,7 +234,7 @@ public class ClientAdmin {
     }
 
     private static void addRobotUpdateInfo(SetTokenResponse response, String robotMenuVersion, String serverMenuVersion) throws JSONException {
-        if ( robotMenuVersion != null && serverMenuVersion != null ) {
+        if ( robotMenuVersion != null && !robotMenuVersion.isEmpty() && serverMenuVersion != null ) {
             response.setUpdate(Util.versionCompare(robotMenuVersion, serverMenuVersion));
             response.setServerVersion(serverMenuVersion);
         } else {

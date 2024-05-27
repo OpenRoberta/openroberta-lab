@@ -1,6 +1,6 @@
 import fischertechnik.factories as txt_factory
 from fischertechnik.controller.Motor import Motor
-from display import display
+from lib.display import display
 import math
 import time
 

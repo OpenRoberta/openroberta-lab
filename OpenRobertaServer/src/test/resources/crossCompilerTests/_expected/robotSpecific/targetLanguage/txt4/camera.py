@@ -1,5 +1,5 @@
 import fischertechnik.factories as txt_factory
-from display import display
+from lib.display import display
 from fischertechnik.models.Color import Color
 import colorsys
 import math

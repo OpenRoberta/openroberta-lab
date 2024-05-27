@@ -1,5 +1,5 @@
 import fischertechnik.factories as txt_factory
-from display import display
+from lib.display import display
 import math
 import time
 
