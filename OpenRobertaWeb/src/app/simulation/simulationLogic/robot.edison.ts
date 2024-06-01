@@ -30,7 +30,6 @@ export default class RobotEdison extends RobotBaseMobile {
         configuration['TRACKWIDTH'] = 7;
         configuration['WHEELDIAMETER'] = 3.7;
         this.chassis = new EdisonChassis(this.id, configuration, 3, this.pose);
-        this.configure(configuration);
     }
 
     protected configure(configuration: object): void {

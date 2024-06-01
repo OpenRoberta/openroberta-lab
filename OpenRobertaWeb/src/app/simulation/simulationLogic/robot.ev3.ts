@@ -16,7 +16,7 @@ export default class RobotEv3 extends RobotBaseMobile {
 
     constructor(id: number, configuration: object, interpreter: Interpreter, savedName: string, myListener: SelectionListener) {
         super(id, configuration, interpreter, savedName, myListener);
-        this.configure(configuration);
+        //this.configure(configuration);
         //M.display(M.maze(8, 8));
     }
 

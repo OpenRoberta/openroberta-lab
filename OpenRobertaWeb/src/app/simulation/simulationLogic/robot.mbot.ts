@@ -11,11 +11,6 @@ export default class RobotMbot extends RobotBaseMobile {
     private RGBLedRight: MbotRGBLed;
     private display: MbotDisplay;
 
-    constructor(id: number, configuration: object, interpreter: Interpreter, savedName: string, myListener: SelectionListener) {
-        super(id, configuration, interpreter, savedName, myListener);
-        this.configure(configuration);
-    }
-
     protected override configure(configuration: object): void {
         // due to no information from the configuration, track width and wheel diameter are fix:
         configuration['TRACKWIDTH'] = 11.5;

@@ -103,7 +103,7 @@ public class ProjectWorkflowRestController {
             return UtilForREST.responseWithFrontendInfo(response, httpSessionState, this.robotCommunicator);
         } catch ( Exception e ) {
             LOG.info("getSimulationVMCode failed", e);
-            Statistics.info("SimulationRun", "LoggedIn", httpSessionState.isUserLoggedIn(), "success", true);
+            Statistics.info("SimulationRun", "LoggedIn", httpSessionState.isUserLoggedIn(), "error", true);
             return UtilForREST.makeBaseResponseForError(Key.SERVER_ERROR, httpSessionState, this.robotCommunicator);
         } finally {
             if ( dbSession != null ) {

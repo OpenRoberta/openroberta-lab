@@ -78,6 +78,12 @@ type Rectangle = {
     h: number;
 };
 
+type Circle = {
+    x: number;
+    y: number;
+    r: number;
+};
+
 type Point4Rectangle = {
     p1: PointRobotWorld;
     p2: PointRobotWorld;

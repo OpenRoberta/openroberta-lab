@@ -4,7 +4,7 @@ import * as SIMATH from 'simulation.math';
 import * as UTIL from 'util.roberta';
 import { ChassisMobile, RobotinoChassis, WebAudio } from 'robot.actuators';
 import { IDrawable, ILabel, IReset, IUpdateAction, RobotBase } from 'robot.base';
-import { CircleSimulationObject, MarkerSimulationObject } from 'simulation.objects';
+import { CircleSimulationObject, ISimulationObstacle, MarkerSimulationObject } from 'simulation.objects';
 // @ts-ignore
 import * as Blockly from 'blockly';
 // @ts-ignore
@@ -21,7 +21,8 @@ export interface ISensor {
         uCtx: CanvasRenderingContext2D,
         udCtx: CanvasRenderingContext2D,
         personalObstacleList: any[],
-        markerList: MarkerSimulationObject[]
+        markerList: MarkerSimulationObject[],
+        collisionList: ISimulationObstacle[]
     ): void;
 }
 
@@ -190,7 +191,7 @@ export abstract class DistanceSensor implements IExternalSensor, IDrawable, ILab
         values: object,
         uCtx: CanvasRenderingContext2D,
         udCtx: CanvasRenderingContext2D,
-        personalObstacleList: any[]
+        personalObstacleList: any
     ): void {
         if (myRobot instanceof RobotBaseMobile) {
             let robot: RobotBaseMobile = myRobot as RobotBaseMobile;
@@ -302,7 +303,7 @@ export class UltrasonicSensor extends DistanceSensor {
         values: object,
         uCtx: CanvasRenderingContext2D,
         udCtx: CanvasRenderingContext2D,
-        personalObstacleList: any[]
+        personalObstacleList: any
     ): void {
         super.updateSensor(running, dt, myRobot, values, uCtx, udCtx, personalObstacleList);
         const distance = this.distance / 3.0;
@@ -351,7 +352,7 @@ export class InfraredSensor extends DistanceSensor {
         values: object,
         uCtx: CanvasRenderingContext2D,
         udCtx: CanvasRenderingContext2D,
-        personalObstacleList: any[]
+        personalObstacleList: any
     ): void {
         super.updateSensor(running, dt, myRobot, values, uCtx, udCtx, personalObstacleList);
         const distance = this.distance / 3.0;
@@ -398,7 +399,7 @@ export class ThymioInfraredSensor extends InfraredSensor {
         values: object,
         uCtx: CanvasRenderingContext2D,
         udCtx: CanvasRenderingContext2D,
-        personalObstacleList: any[]
+        personalObstacleList: any
     ): void {
         super.updateSensor(running, dt, myRobot, values, uCtx, udCtx, personalObstacleList);
         const distance = this.distance / 3.0;
@@ -429,7 +430,7 @@ export class EdisonInfraredSensor extends InfraredSensor {
         values: object,
         uCtx: CanvasRenderingContext2D,
         udCtx: CanvasRenderingContext2D,
-        personalObstacleList: any[]
+        personalObstacleList: any
     ): void {
         super.updateSensor(running, dt, myRobot, values, uCtx, udCtx, personalObstacleList);
         const distance = this.distance / 3.0;
@@ -1149,20 +1150,34 @@ export class ColorSensor implements IExternalSensor, IDrawable, ILabel {
             blue /= num;
             this.colorValue = SIMATH.getColor(SIMATH.rgbToHsv(red, green, blue));
             this.rgb = [UTIL.round(red, 0), UTIL.round(green, 0), UTIL.round(blue, 0)];
-            if (this.colorValue === COLOR_ENUM.NONE) {
+            if (this.colorValue[0] === COLOR_ENUM.NONE) {
                 this.color = 'grey';
             } else {
-                this.color = this.colorValue.toString().toLowerCase();
+                this.color = this.colorValue[0].toString().toLowerCase();
             }
             this.lightValue = (red + green + blue) / 3 / 2.55;
         } catch (e) {
             // this might happen during change of background image and is ok, we return the last valid sensor values
         }
-        values['color'][this.port].colorValue = this.colorValue;
-        values['color'][this.port].colour = this.colorValue;
+        values['color'][this.port].colorValue = this.colorValue[0];
+        values['color'][this.port].colorhex = this.colorValue[1];
+        values['color'][this.port].colour = this.colorValue[0];
         values['color'][this.port].light = this.lightValue;
         values['color'][this.port].rgb = this.rgb;
         values['color'][this.port].ambientlight = 0;
+    }
+}
+export class ColorSensorHex extends ColorSensor {
+    override updateSensor(
+        running: boolean,
+        dt: number,
+        myRobot: RobotBaseMobile,
+        values: object,
+        uCtx: CanvasRenderingContext2D,
+        udCtx: CanvasRenderingContext2D
+    ) {
+        super.updateSensor(running, dt, myRobot, values, uCtx, udCtx);
+        this.color = this.colorValue[1];
     }
 }
 
@@ -2065,15 +2080,7 @@ export class VolumeMeterSensor implements ISensor, ILabel {
         return '<div><label>' + Blockly.Msg['SENSOR_SOUND'] + '</label><span>' + UTIL.round(this.volume, 0) + ' %</span></div>';
     }
 
-    updateSensor(
-        running: boolean,
-        dt: number,
-        myRobot: RobotBase,
-        values: object,
-        uCtx: CanvasRenderingContext2D,
-        udCtx: CanvasRenderingContext2D,
-        personalObstacleList: any[]
-    ): void {
+    updateSensor(running: boolean, dt: number, myRobot: RobotBase, values: object, uCtx: CanvasRenderingContext2D, udCtx: CanvasRenderingContext2D): void {
         this.volume = this.sound ? UTIL.round(this.sound['volume'] * 100, 0) : 0;
         values['sound'] = {};
         values['sound']['volume'] = this.volume;
@@ -2111,8 +2118,7 @@ export class SoundSensor extends VolumeMeterSensor implements IExternalSensor {
         myRobot: RobotBase,
         values: object,
         uCtx: CanvasRenderingContext2D,
-        udCtx: CanvasRenderingContext2D,
-        personalObstacleList: any[]
+        udCtx: CanvasRenderingContext2D
     ): void {
         this.volume = this.sound ? UTIL.round(this.sound['volume'] * 100, 0) : 0;
         values['sound'] = {};
@@ -2132,10 +2138,9 @@ export class SoundSensorBoolean extends VolumeMeterSensor {
         myRobot: RobotBase,
         values: object,
         uCtx: CanvasRenderingContext2D,
-        udCtx: CanvasRenderingContext2D,
-        personalObstacleList: any[]
+        udCtx: CanvasRenderingContext2D
     ): void {
-        super.updateSensor(running, dt, myRobot, values, uCtx, udCtx, personalObstacleList);
+        super.updateSensor(running, dt, myRobot, values, uCtx, udCtx);
         values['sound']['volume'] = this.volume > 25;
     }
 }

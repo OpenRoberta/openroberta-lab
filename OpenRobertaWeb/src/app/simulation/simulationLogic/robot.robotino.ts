@@ -26,7 +26,6 @@ export default class RobotRobotino extends RobotBaseMobile {
             ry: 0,
             r: 70,
         };
-        this.configure(configuration);
     }
 
     override updateActions(robot: RobotBase, dt, interpreterRunning: boolean): void {

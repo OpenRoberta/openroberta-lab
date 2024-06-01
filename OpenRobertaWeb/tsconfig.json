@@ -191,6 +191,12 @@
       "robot.nxt": [
         "app/simulation/simulationLogic/robot.nxt"
       ],
+      "robot.rcj": [
+        "app/simulation/simulationLogic/robot.rcj"
+      ],
+      "robot.txt4": [
+        "app/simulation/simulationLogic/robot.txt4"
+      ],
       "robot.rob3rta": [
         "app/simulation/simulationLogic/robot.rob3rta"
       ],
