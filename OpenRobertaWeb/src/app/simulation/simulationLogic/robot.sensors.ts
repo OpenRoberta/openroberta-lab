@@ -4,7 +4,7 @@ import * as SIMATH from 'simulation.math';
 import * as UTIL from 'util.roberta';
 import { ChassisMobile, RobotinoChassis, WebAudio } from 'robot.actuators';
 import { IDrawable, ILabel, IReset, IUpdateAction, RobotBase } from 'robot.base';
-import { CircleSimulationObject, MarkerSimulationObject } from 'simulation.objects';
+import { CircleSimulationObject, ISimulationObstacle, MarkerSimulationObject } from 'simulation.objects';
 // @ts-ignore
 import * as Blockly from 'blockly';
 // @ts-ignore
@@ -21,7 +21,8 @@ export interface ISensor {
         uCtx: CanvasRenderingContext2D,
         udCtx: CanvasRenderingContext2D,
         personalObstacleList: any[],
-        markerList: MarkerSimulationObject[]
+        markerList: MarkerSimulationObject[],
+        collisionList: ISimulationObstacle[]
     ): void;
 }
 
@@ -190,7 +191,7 @@ export abstract class DistanceSensor implements IExternalSensor, IDrawable, ILab
         values: object,
         uCtx: CanvasRenderingContext2D,
         udCtx: CanvasRenderingContext2D,
-        personalObstacleList: any[]
+        personalObstacleList: any
     ): void {
         if (myRobot instanceof RobotBaseMobile) {
             let robot: RobotBaseMobile = myRobot as RobotBaseMobile;
@@ -302,7 +303,7 @@ export class UltrasonicSensor extends DistanceSensor {
         values: object,
         uCtx: CanvasRenderingContext2D,
         udCtx: CanvasRenderingContext2D,
-        personalObstacleList: any[]
+        personalObstacleList: any
     ): void {
         super.updateSensor(running, dt, myRobot, values, uCtx, udCtx, personalObstacleList);
         const distance = this.distance / 3.0;
@@ -351,7 +352,7 @@ export class InfraredSensor extends DistanceSensor {
         values: object,
         uCtx: CanvasRenderingContext2D,
         udCtx: CanvasRenderingContext2D,
-        personalObstacleList: any[]
+        personalObstacleList: any
     ): void {
         super.updateSensor(running, dt, myRobot, values, uCtx, udCtx, personalObstacleList);
         const distance = this.distance / 3.0;
@@ -398,7 +399,7 @@ export class ThymioInfraredSensor extends InfraredSensor {
         values: object,
         uCtx: CanvasRenderingContext2D,
         udCtx: CanvasRenderingContext2D,
-        personalObstacleList: any[]
+        personalObstacleList: any
     ): void {
         super.updateSensor(running, dt, myRobot, values, uCtx, udCtx, personalObstacleList);
         const distance = this.distance / 3.0;
@@ -429,7 +430,7 @@ export class EdisonInfraredSensor extends InfraredSensor {
         values: object,
         uCtx: CanvasRenderingContext2D,
         udCtx: CanvasRenderingContext2D,
-        personalObstacleList: any[]
+        personalObstacleList: any
     ): void {
         super.updateSensor(running, dt, myRobot, values, uCtx, udCtx, personalObstacleList);
         const distance = this.distance / 3.0;
@@ -961,12 +962,19 @@ export class TouchSensor implements IExternalSensor, IDrawable, ILabel {
     rx: number = 0;
     ry: number = 0;
     value: boolean = false;
+    position: string = '';
 
     constructor(port: string, x: number, y: number, color?: string) {
         this.port = port;
         this.labelPriority = Number(this.port.replace('ORT_', ''));
         this.x = x;
         this.y = y;
+        if (this.x > 0) {
+            this.position = 'front';
+        }
+        if (this.x < 0) {
+            this.position = 'back';
+        }
         this.color = color || this.color;
     }
 
@@ -980,7 +988,11 @@ export class TouchSensor implements IExternalSensor, IDrawable, ILabel {
         } else {
             rCtx.fillStyle = myRobot.chassis.geom.color;
         }
-        rCtx.fillRect(myRobot.chassis.frontLeft.x - 3.5, myRobot.chassis.frontLeft.y, 3.5, -myRobot.chassis.frontLeft.y + myRobot.chassis.frontRight.y);
+        if (this.position === 'front') {
+            rCtx.fillRect(myRobot.chassis.frontLeft.x - 3.5, myRobot.chassis.frontLeft.y, 3.5, -myRobot.chassis.frontLeft.y + myRobot.chassis.frontRight.y);
+        } else if (this.position === 'back') {
+            rCtx.fillRect(myRobot.chassis.backLeft.x, myRobot.chassis.backLeft.y, 3.5, -myRobot.chassis.backLeft.y + myRobot.chassis.backRight.y);
+        }
         rCtx.restore();
     }
 
@@ -1002,8 +1014,13 @@ export class TouchSensor implements IExternalSensor, IDrawable, ILabel {
         personalObstacleList: any[]
     ): void {
         values['touch'] = values['touch'] || {};
-        values['touch'][this.port] = this.value =
-            (myRobot as RobotBaseMobile).chassis.frontLeft.bumped || (myRobot as RobotBaseMobile).chassis.frontRight.bumped;
+        if (this.position === 'front') {
+            values['touch'][this.port] = this.value =
+                (myRobot as RobotBaseMobile).chassis.frontLeft.bumped || (myRobot as RobotBaseMobile).chassis.frontRight.bumped;
+        } else {
+            values['touch'][this.port] = this.value =
+                (myRobot as RobotBaseMobile).chassis.backLeft.bumped || (myRobot as RobotBaseMobile).chassis.backRight.bumped;
+        }
     }
 }
 
@@ -1149,20 +1166,35 @@ export class ColorSensor implements IExternalSensor, IDrawable, ILabel {
             blue /= num;
             this.colorValue = SIMATH.getColor(SIMATH.rgbToHsv(red, green, blue));
             this.rgb = [UTIL.round(red, 0), UTIL.round(green, 0), UTIL.round(blue, 0)];
-            if (this.colorValue === COLOR_ENUM.NONE) {
+            if (this.colorValue[0] === COLOR_ENUM.NONE) {
                 this.color = 'grey';
             } else {
-                this.color = this.colorValue.toString().toLowerCase();
+                this.color = this.colorValue[0].toString().toLowerCase();
             }
             this.lightValue = (red + green + blue) / 3 / 2.55;
         } catch (e) {
             // this might happen during change of background image and is ok, we return the last valid sensor values
         }
-        values['color'][this.port].colorValue = this.colorValue;
-        values['color'][this.port].colour = this.colorValue;
+        values['color'][this.port].colorValue = this.colorValue[0];
+        values['color'][this.port].colorhex = this.colorValue[1];
+        values['color'][this.port].colour = this.colorValue[0];
         values['color'][this.port].light = this.lightValue;
         values['color'][this.port].rgb = this.rgb;
         values['color'][this.port].ambientlight = 0;
+    }
+}
+
+export class ColorSensorHex extends ColorSensor {
+    override updateSensor(
+        running: boolean,
+        dt: number,
+        myRobot: RobotBaseMobile,
+        values: object,
+        uCtx: CanvasRenderingContext2D,
+        udCtx: CanvasRenderingContext2D
+    ) {
+        super.updateSensor(running, dt, myRobot, values, uCtx, udCtx);
+        this.color = this.colorValue[1];
     }
 }
 
@@ -1320,7 +1352,11 @@ export class GyroSensor implements ISensor, IReset, IUpdateAction {
     }
 
     updateAction(myRobot: RobotBase, dt: number, interpreterRunning: boolean): void {
-        //throw new Error('Method not implemented.');
+        let gyroReset = myRobot.interpreter.getRobotBehaviour().getActionState('gyroReset', false);
+        if (gyroReset) {
+            myRobot.interpreter.getRobotBehaviour().getActionState('gyroReset', true);
+            this.reset();
+        }
     }
 
     updateSensor(
@@ -1332,7 +1368,11 @@ export class GyroSensor implements ISensor, IReset, IUpdateAction {
         udCtx: CanvasRenderingContext2D,
         personalObstacleList: any[]
     ): void {
-        //throw new Error('Method not implemented.');
+        values['gyro'] = values['gyro'] || {};
+        this.angleValue += SIMATH.toDegree((myRobot as RobotBaseMobile).thetaDiff);
+        values['gyro'].angle = this.angleValue;
+        this.rateValue = dt * SIMATH.toDegree((myRobot as RobotBaseMobile).thetaDiff);
+        values['gyro'].rate = this.rateValue;
     }
 }
 
@@ -2065,15 +2105,7 @@ export class VolumeMeterSensor implements ISensor, ILabel {
         return '<div><label>' + Blockly.Msg['SENSOR_SOUND'] + '</label><span>' + UTIL.round(this.volume, 0) + ' %</span></div>';
     }
 
-    updateSensor(
-        running: boolean,
-        dt: number,
-        myRobot: RobotBase,
-        values: object,
-        uCtx: CanvasRenderingContext2D,
-        udCtx: CanvasRenderingContext2D,
-        personalObstacleList: any[]
-    ): void {
+    updateSensor(running: boolean, dt: number, myRobot: RobotBase, values: object, uCtx: CanvasRenderingContext2D, udCtx: CanvasRenderingContext2D): void {
         this.volume = this.sound ? UTIL.round(this.sound['volume'] * 100, 0) : 0;
         values['sound'] = {};
         values['sound']['volume'] = this.volume;
@@ -2111,8 +2143,7 @@ export class SoundSensor extends VolumeMeterSensor implements IExternalSensor {
         myRobot: RobotBase,
         values: object,
         uCtx: CanvasRenderingContext2D,
-        udCtx: CanvasRenderingContext2D,
-        personalObstacleList: any[]
+        udCtx: CanvasRenderingContext2D
     ): void {
         this.volume = this.sound ? UTIL.round(this.sound['volume'] * 100, 0) : 0;
         values['sound'] = {};
@@ -2132,10 +2163,9 @@ export class SoundSensorBoolean extends VolumeMeterSensor {
         myRobot: RobotBase,
         values: object,
         uCtx: CanvasRenderingContext2D,
-        udCtx: CanvasRenderingContext2D,
-        personalObstacleList: any[]
+        udCtx: CanvasRenderingContext2D
     ): void {
-        super.updateSensor(running, dt, myRobot, values, uCtx, udCtx, personalObstacleList);
+        super.updateSensor(running, dt, myRobot, values, uCtx, udCtx);
         values['sound']['volume'] = this.volume > 25;
     }
 }
@@ -2657,6 +2687,76 @@ export class CameraSensor implements ISensor, IUpdateAction, IDrawable, ILabel, 
             if (this.bB.h < 1) {
                 this.bB = null;
                 return;
+            }
+        }
+    }
+}
+
+export class InductiveSensor implements IExternalSensor, IDrawable, ILabel {
+    readonly color: string;
+    drawPriority: number;
+    labelPriority: number;
+    readonly port: string;
+    readonly theta: number;
+    readonly x: number;
+    readonly y: number;
+    rx: number;
+    ry: number;
+    value: boolean;
+    readonly MAX_DISTANCE: number;
+
+    constructor(port: string, x: number, y: number, distance: number) {
+        this.port = port;
+        this.x = x;
+        this.y = y;
+        this.MAX_DISTANCE = distance;
+    }
+
+    draw(rCtx: CanvasRenderingContext2D, myRobot: RobotBase): void {
+        rCtx.save();
+        //rCtx.rotate(-(myRobot as RobotBaseMobile).pose.theta);
+        //rCtx.translate(-(myRobot as RobotBaseMobile).pose.x, -(myRobot as RobotBaseMobile).pose.y);
+        rCtx.beginPath();
+        rCtx.fillStyle = this.value ? '#00ffff' : '#000000';
+        rCtx.rect(this.x - 1, this.y - 5, 2, 10); // Add a rectangle to the current path
+        rCtx.fill();
+        rCtx.restore();
+    }
+
+    getLabel(): string {
+        return '<div><label>' + this.port.replace('ORT_', '') + ' ' + Blockly.Msg['SENSOR_INDUCTIVE'] + '</label><span>' + this.value + '</span></div>';
+    }
+
+    updateSensor(
+        running: boolean,
+        dt: number,
+        myRobot: RobotBase,
+        values: object,
+        uCtx: CanvasRenderingContext2D,
+        udCtx: CanvasRenderingContext2D,
+        personalObstacleList: any[],
+        markerList: MarkerSimulationObject[],
+        collisionList: ISimulationObstacle[]
+    ): void {
+        if (myRobot instanceof RobotBaseMobile) {
+            values[C.INDUCTIVE] = {};
+            values[C.INDUCTIVE][this.port] = false;
+            this.value = false;
+            let robot: RobotBaseMobile = myRobot as RobotBaseMobile;
+            SIMATH.transform(robot.pose, this as PointRobotWorld);
+            for (let i = 0; i < personalObstacleList.length; i++) {
+                let myObstacle: any = personalObstacleList[i];
+                if (myObstacle instanceof ChassisMobile && myObstacle.id == robot.id) {
+                    continue;
+                }
+                if (myObstacle instanceof CircleSimulationObject && (myObstacle as CircleSimulationObject).color === '#33B8CA') {
+                    let v = SIMATH.getDistanceToCircle({ x: this.rx, y: this.ry }, myObstacle as Circle);
+                    let vLengthSquare = v.x * v.x + v.y * v.y;
+                    if (vLengthSquare < this.MAX_DISTANCE) {
+                        this.value = true;
+                        values[C.INDUCTIVE][this.port] = true;
+                    }
+                }
             }
         }
     }

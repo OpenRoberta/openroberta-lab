@@ -48,6 +48,7 @@ public class C {
     public static final String COLOR_CONST = "COLOR_CONST";
     public static final String CONDITIONAL = "conditional";
     public static final String COLOUR = "colorValue";
+    public static final String COLOUR_HEX = "colorHex";
     public static final String COMMENT = "comment";
     public static final String COMPASS = "compass";
     public static final String CONTINUE = "continue";
@@ -97,6 +98,7 @@ public class C {
     public static final String FOREVER = "FOREVER";
     public static final String FOREVER_ARDU = "FOREVER_ARDU";
     public static final String FOREWARD = "FOREWARD";
+    public static final String FORWARD = "FORWARD";
     public static final String FOR_EACH = "FOR_EACH";
     public static final String FREEFALL = "freefall";
     public static final String FREQUENCY = "frequency";
@@ -126,6 +128,7 @@ public class C {
     public static final String IMAGE_INVERT_ACTION = "ImageInvertAction";
     public static final String IMAGE_SHIFT_ACTION = "ImageShiftAction";
     public static final String IN = "in";
+    public static final String INDUCTIVE = "inductive";
     public static final String INFO = "info";
     public static final String INFRARED = "infrared";
     public static final String INITIATE_BLOCK = "INITIATE_BLOCK";

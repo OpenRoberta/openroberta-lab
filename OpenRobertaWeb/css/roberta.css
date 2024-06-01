@@ -542,8 +542,8 @@ canvas.border {
     z-index: 9;
 }
 
-#mbedContent,
-#valuesContent {
+.stationaryContent,
+.valuesContent {
     background-color: #fff;
     border: 2px solid #33b8ca;
     padding: 12px 14px 12px 12px;
@@ -551,7 +551,7 @@ canvas.border {
     display: inline-block;
 }
 
-#valuesContent {
+.valuesContent {
     min-width: 330px;
     overflow-y: auto;
 }
@@ -1098,7 +1098,7 @@ button#simCustomObstacle.typcn:before {
     display: none;
 }
 
-.simWindow#simValuesWindow button.close {
+.simWindow button.close {
     top: 4px;
     right: 14px;
     position: absolute;
@@ -3716,11 +3716,11 @@ pre code {
     cursor: default !important;
 }
 
-#valuesContent .panel-heading {
+.valuesContent .panel-heading {
     background-color: #dddddd;
 }
 
-#valuesContent .panel-group {
+.valuesContent .panel-group {
     margin: 20px 0 0 0;
 }
 
@@ -4381,4 +4381,18 @@ g.column rect {
 
 .downloadType:hover {
     background-color: #BACC1E;
+}
+
+#rcjScoringTable {
+    tr > td {
+        min-width: 150px;
+        max-width: 150px;
+        padding: 0 15px;
+    }
+
+    table-layout: fixed;
+}
+
+#rcjStartStop.running {
+    background-color: #e2001a;
 }

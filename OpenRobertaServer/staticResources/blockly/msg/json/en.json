@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2024-10-29 13:20:50.336506",
+		"lastupdated": "2024-11-04 09:12:37.186302",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -427,6 +427,7 @@
 	"COLOUR_AMBIENTLIGHT_GETSAMPLE_TOOLTIP": "Gets the current ambient light reading from the sensor.",
 	"COLOUR_RGB_GETSAMPLE_TOOLTIP": "Gets the current colour reading from the colour sensor. Values are in the range 0 to 255.",
 	"INFRARED_GETSAMPLE_TOOLTIP": "Gets the current reading from the infrared sensor.",
+	"SENSOR_INDUCTIVE_GETSAMPLE_TOOLTIP": "Gets the current reading from the inductive sensor.",
 	"INFRARED_GETSAMPLE_TOOLTIP_MBOT": "Gets the current reading from the light sensor -- if a black line is detected (true/false).",
 	"ENCODER_RESET_TOOLTIP": "Resets the motor encoder.",
 	"ENCODER_GETSAMPLE_TOOLTIP": "Gets the current reading from the motor encoder.",
@@ -442,7 +443,8 @@
 	"ULTRASONIC_TOOLTIP": "Represents an ultrasonic sensor.",
 	"COLOUR_TOOLTIP": "Represents a colour sensor.",
 	"HTCOLOUR_TOOLTIP": "Represents a HiTechnic NXT Color Sensor V2.",
-	"INFRARED_TOOLTIP": "Represents an infrared sensor.",
+	"SENSOR_INFRARED_TOOLTIP": "Represents an infrared sensor.",
+	"INDUCTIVE_TOOLTIP": "Represents an inductive sensor.",
 	"IRSEEKER_TOOLTIP": "Represents a HiTechnic NXT IRSeeker V2 sensor.",
 	"TOUCH_TOOLTIP": "Is the touch sensor pressed?",
 	"GYRO_TOOLTIP": "Represents a gyro sensor.",
@@ -567,6 +569,7 @@
 	"SENSOR_KEY_STOP": "stop",
 	"SENSOR_HTCOLOUR": "HT colour sensor",
 	"SENSOR_INFRARED": "infrared sensor",
+	"SENSOR_INDUCTIVE": "inductive sensor",
 	"SENSOR_INFRAREDOBSTACLE": "obstacle detection sensor",
 	"SENSOR_INFRAREDLINE": "line detection sensor",
 	"HUE_TOLERANCE": "hue tolerance",

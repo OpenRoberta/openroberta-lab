@@ -35,6 +35,9 @@ function importXml() {
     init(loadProgramFromXML);
     $('#fileSelector').attr('accept', '.xml');
     $('#fileSelector').clickWrap(); // opening dialog
+    if ($('.rightMenuButton.rightActive').length > 0) {
+        $('.rightMenuButton.rightActive').clickWrap();
+    }
 }
 
 export function importXmlFromStart(startCallback) {

@@ -6,20 +6,269 @@ import * as UTIL from 'util.roberta';
 import * as $ from 'jquery';
 import {
     BaseSimulationObject,
+    CircleSimulationObject,
     Ground,
+    IMovable,
     ISimulationObstacle,
     MarkerSimulationObject,
+    RcjSimulationLabel,
     RectangleSimulationObject,
     SimObjectFactory,
     SimObjectShape,
     SimObjectType,
 } from 'simulation.objects';
-import { SimulationRoberta } from 'simulation.roberta';
+import simulationRoberta, { SimulationRoberta } from 'simulation.roberta';
 import { IDestroyable, RobotBase, RobotFactory } from 'robot.base';
 import { Interpreter } from 'interpreter.interpreter';
 import { Pose, RobotBaseMobile } from 'robot.base.mobile';
+import RobotRcj from 'robot.rcj';
 
 const RESIZE_CONST: number = 3;
+
+export interface IObserver {
+    update(subject: RobotBaseMobile | CircleSimulationObject);
+}
+
+export interface IObservableSimulationObject {
+    addObserver(observer: IObserver): void;
+
+    removeObserver(observer: IObserver): void;
+
+    notifyObservers(): void;
+}
+
+export class RcjScoringTool implements IObserver {
+    private MAX_TIME = 8;
+    private configData: any;
+    private running: boolean = false;
+    private mins: number = 0;
+    private secs: number = 0;
+    private csecs: number = 0;
+    private stopWatch: any;
+    private pose: Pose;
+    private path: number = 0;
+    private lastPath: number = 0;
+    private lastCheckPoint = {};
+    private line: boolean = true;
+    private robot: RobotBaseMobile;
+    private initialPose: Pose;
+    private loPCounter: number;
+    private loPSum: number;
+    private section: number;
+    private prevCheckPointTile: {} = {};
+    private nextCheckPoint: {};
+    private prevNextCheckPoint: {};
+    private programPaused: boolean = true;
+    private victimsLocated: number = 0;
+
+    constructor(robot: RobotBase, configData: any) {
+        this.configData = configData;
+        let rcj = this;
+        $('#rcjStartStop')
+            .off()
+            .on('click', function () {
+                if ($(this).text().indexOf('Start') >= 0) {
+                    $(this).html('Stop<br>Scoring Run');
+                    rcj.init();
+                    $('#rcjStartStop').addClass('running');
+                    return false;
+                } else {
+                    $(this).html('Start<br>Scoring Run');
+                    clearInterval(rcj.stopWatch);
+                    $('#rcjStartStop').removeClass('running');
+                    $('#rcjLoP').addClass('disabled');
+                    $('#rcjNextCP').addClass('disabled');
+                    rcj.robot.interpreter.terminate();
+                    rcj.programPaused = true;
+                    return false;
+                }
+            });
+        $('#rcjLoP')
+            .off()
+            .on('click', function (e) {
+                rcj.robot.interpreter.terminate();
+                rcj.programPaused = true;
+                $('#rcjLoP').addClass('disabled');
+                $('#rcjNextCP').addClass('disabled');
+                let lastCheckPointPose = simulationRoberta.getTilePose(
+                    rcj.lastCheckPoint,
+                    configData['tiles'][rcj.lastCheckPoint['next']],
+                    rcj.prevCheckPointTile
+                );
+                rcj.robot.pose = new Pose(lastCheckPointPose.x, lastCheckPointPose.y, lastCheckPointPose.theta);
+                rcj.robot.initialPose = new Pose(lastCheckPointPose.x, lastCheckPointPose.y, lastCheckPointPose.theta);
+                rcj.path = rcj.lastCheckPoint['index'][0];
+                rcj.lastPath = rcj.path;
+                rcj.loPCounter += 1;
+                rcj.loPSum += 1;
+                if (rcj.nextCheckPoint && rcj.loPCounter >= 3) {
+                    $('#rcjNextCP').removeClass('disabled');
+                }
+                return false;
+            });
+        $('#rcjNextCP')
+            .off()
+            .on('click', function (e) {
+                rcj.robot.interpreter.terminate();
+                rcj.programPaused = true;
+                $('#rcjLoP').addClass('disabled');
+                $('#rcjNextCP').addClass('disabled');
+                if (rcj.nextCheckPoint) {
+                    let nextCheckPointPose = simulationRoberta.getTilePose(
+                        rcj.nextCheckPoint,
+                        configData['tiles'][rcj.nextCheckPoint['next']],
+                        rcj.prevNextCheckPoint
+                    );
+                    rcj.robot.pose = new Pose(nextCheckPointPose.x, nextCheckPointPose.y, nextCheckPointPose.theta);
+                    rcj.robot.initialPose = new Pose(nextCheckPointPose.x, nextCheckPointPose.y, nextCheckPointPose.theta);
+                    rcj.path = rcj.nextCheckPoint['index'][0];
+                    rcj.lastPath = rcj.path;
+                    rcj.loPCounter = 0;
+                    rcj.section += 1;
+                    rcj.lastCheckPoint = rcj.nextCheckPoint;
+                    rcj.setNextCheckPoint();
+                }
+            });
+        $('#rcjName').text(configData.name);
+        $('#rcjTeam').text(robot.interpreter.name);
+        $('#rcjTime').text('00:00:0');
+    }
+
+    private init() {
+        this.path = 0;
+        this.lastPath = 0;
+        this.line = true;
+        clearInterval(this.stopWatch);
+        this.mins = 0;
+        this.secs = 0;
+        this.csecs = 0;
+        this.running = true;
+        this.stopWatch = setInterval(this.timer.bind(this), 100);
+        if (this.robot && this.initialPose) {
+            this.robot.initialPose = this.initialPose;
+            this.robot.resetPose();
+        }
+        this.loPCounter = 0;
+        this.loPSum = 0;
+        this.section = 0;
+        this.victimsLocated = 0;
+    }
+
+    timer() {
+        if (this.running) {
+            this.csecs++;
+            if (this.csecs === 10) {
+                this.secs++;
+                this.csecs = 0;
+            }
+            if (this.secs === 60) {
+                this.mins++;
+                this.secs = 0;
+            }
+            $('#rcjTime').text(('00' + this.mins).slice(-2) + ':' + ('00' + this.secs).slice(-2) + ':' + this.csecs);
+            $('#rcjPath').text(this.path === -1 ? 'wrong' : 'correct');
+            $('#rcjLastPath').text(this.lastPath);
+            $('#rcjSection').text(this.section);
+            $('#rcjLoPpS').text(this.loPCounter);
+            $('#rcjLoPCount').text(this.loPSum);
+            $('#rcjLine').text(this.line ? 'yes' : 'no');
+            if (this.mins >= this.MAX_TIME) {
+                $('#rcjStartStop').trigger('click');
+            }
+            $('#rcjRescueMulti').text(this.victimsLocated);
+        }
+    }
+
+    update(simObject: RobotBaseMobile | CircleSimulationObject) {
+        if (!this.running) {
+            return;
+        }
+        if (simObject instanceof RobotBaseMobile) {
+            let robot: RobotBaseMobile = simObject;
+            if (this.robot != robot) {
+                this.robot = robot;
+                this.initialPose = this.robot.initialPose;
+            }
+            if (this.programPaused) {
+                this.programPaused = false;
+                $('#rcjLoP').removeClass('disabled');
+                $('#rcjNextCP').addClass('disabled');
+            }
+            this.pose = robot.pose;
+            let x = Math.floor((this.pose.x - 10) / 90);
+            let y = Math.floor((this.pose.y - 10) / 90);
+            let tile = this.configData.tiles['' + x + ',' + y + ',0'];
+            let path = tile && tile.index[0];
+            if (path == this.lastPath || path == this.lastPath + 1) {
+                this.path = path;
+                this.lastPath = path;
+                if ((tile && tile.checkPoint) || path == 0) {
+                    if (this.lastCheckPoint != tile) {
+                        // TODO calculate passed section's scoring
+                        this.loPCounter = 0;
+                        this.section += 1;
+                        this.lastCheckPoint = tile;
+                        this.setNextCheckPoint();
+                    }
+                } else {
+                    this.prevCheckPointTile = tile;
+                }
+            } else {
+                this.path = -1;
+            }
+            this.line = this.path >= 0 ? ((robot as RobotRcj)['F'].lightValue < 100 ? true : false) : false;
+        } else if (simObject instanceof CircleSimulationObject) {
+            let circle: CircleSimulationObject = simObject;
+            if (circle.inEvacuationZone && circle.color === '#33B8CA') {
+                circle.selected = true;
+                $('#simDeleteObject').trigger('click');
+                this.victimsLocated += 1;
+            }
+        }
+    }
+
+    setNextCheckPoint() {
+        let nextCP = this.configData['tiles'][this.lastCheckPoint['next']];
+        while (nextCP && this.configData['tiles'][nextCP['next']]) {
+            this.prevNextCheckPoint = nextCP;
+            nextCP = this.configData['tiles'][nextCP['next']];
+            if (nextCP['checkPoint']) {
+                break;
+            }
+        }
+        if (nextCP && nextCP['checkPoint']) {
+            this.nextCheckPoint = nextCP;
+        } else {
+            this.nextCheckPoint = null;
+            this.prevNextCheckPoint = null;
+        }
+    }
+
+    openClose() {
+        let position = $('#simDiv').position();
+        position.left = 12;
+        $('#rcjScoringWindow').toggleSimPopup(position);
+    }
+
+    destroy() {
+        $('#rcjStartStop').html('Start<br>Scoring Run');
+        $('#rcjStartStop').removeClass('running');
+        $('#rcjLoP').addClass('disabled');
+        $('#rcjNextCP').addClass('disabled');
+        clearInterval(this.stopWatch);
+        this.stopWatch = null;
+        $('#rcjPath').text('');
+        $('#rcjLastPath').text('');
+        $('#rcjSection').text('');
+        $('#rcjLoPpS').text('');
+        $('#rcjLoPCount').text('');
+        $('#rcjLine').text('');
+        $('#rcjName').text('');
+        $('#rcjTeam').text('');
+        $('#rcjTime').text('00:00:0');
+        $('#rcjRescueMulti').text('');
+    }
+}
 
 /**
  * Creates a new Scene.
@@ -27,6 +276,14 @@ const RESIZE_CONST: number = 3;
  * @constructor
  */
 export class SimulationScene {
+    get scoring(): boolean {
+        return this._scoring;
+    }
+
+    set scoring(value: boolean) {
+        this._scoring = value;
+    }
+
     private readonly DEFAULT_TRAIL_WIDTH: number = 10;
     private readonly DEFAULT_TRAIL_COLOR: string = '#000000';
     backgroundImg: any;
@@ -45,6 +302,7 @@ export class SimulationScene {
     sim: SimulationRoberta;
     private _colorAreaList: BaseSimulationObject[] = [];
     private _obstacleList: BaseSimulationObject[] = [];
+    private _rcjList: BaseSimulationObject[] = [];
     private _markerList: MarkerSimulationObject[] = [];
     private _redrawColorAreas: boolean = false;
     private _redrawObstacles: boolean = false;
@@ -58,11 +316,14 @@ export class SimulationScene {
     private readonly dCtx: CanvasRenderingContext2D;
     private readonly oCtx: CanvasRenderingContext2D;
     private readonly rCtx: CanvasRenderingContext2D;
+    private readonly rcjCtx: CanvasRenderingContext2D;
     private readonly uCtx: CanvasRenderingContext2D;
     private readonly udCtx: CanvasRenderingContext2D;
     private readonly aCtx: CanvasRenderingContext2D;
     private readonly udCanvas: HTMLCanvasElement;
     readonly uCanvas: HTMLCanvasElement;
+    private rcjScoringTool: RcjScoringTool;
+    private _scoring: boolean = false;
 
     constructor(sim: SimulationRoberta) {
         this.sim = sim;
@@ -75,6 +336,7 @@ export class SimulationScene {
         this.aCtx = ($('#arucoMarkerLayer')[0] as HTMLCanvasElement).getContext('2d'); // object context
         this.oCtx = ($('#objectLayer')[0] as HTMLCanvasElement).getContext('2d'); // object context
         this.rCtx = ($('#robotLayer')[0] as HTMLCanvasElement).getContext('2d'); // robot context
+        this.rcjCtx = ($('#rcjLayer')[0] as HTMLCanvasElement).getContext('2d'); // robot context
     }
 
     get uniqueObjectId(): number {
@@ -94,9 +356,19 @@ export class SimulationScene {
         return this._obstacleList;
     }
 
+    get rcjList(): BaseSimulationObject[] {
+        return this._rcjList;
+    }
+
     set obstacleList(value: BaseSimulationObject[]) {
         this.clearList(this._obstacleList);
         this._obstacleList = value;
+        this.redrawObstacles = true;
+    }
+
+    set rcjList(value: BaseSimulationObject[]) {
+        this.clearList(this._rcjList);
+        this._rcjList = value;
         this.redrawObstacles = true;
     }
 
@@ -185,6 +457,24 @@ export class SimulationScene {
             newObstacleList.push(newObject);
         });
         this.obstacleList = newObstacleList;
+    }
+
+    addImportRcjLabel(importRcjLabelList: any[]) {
+        let newRcjList = [];
+        importRcjLabelList.forEach((obj) => {
+            let newObject = new RcjSimulationLabel(
+                this.uniqueObjectId,
+                this,
+                this.sim.selectionListener,
+                SimObjectType.ColorArea,
+                obj.x,
+                obj.y,
+                obj.checkPoint ? 'checkPoint' : obj.start ? 'start' : null,
+                obj.index[0]
+            );
+            newRcjList.push(newObject);
+        });
+        this.rcjList = newRcjList;
     }
 
     addImportMarkerList(importMarkerList: any[]) {
@@ -345,6 +635,14 @@ export class SimulationScene {
         this.obstacleList.forEach((obstacle) => obstacle.draw(this.oCtx, this.uCtx));
     }
 
+    drawRcjLabel() {
+        this.rcjCtx.restore();
+        this.rcjCtx.save();
+        this.rcjCtx.scale(this.sim.scale, this.sim.scale);
+        this.rcjCtx.clearRect(this.ground.x - 10, this.ground.y - 10, this.ground.w + 20, this.ground.h + 20);
+        this.rcjList.forEach((label) => label.draw(this.rcjCtx, this.uCtx));
+    }
+
     drawMarkers() {
         this.aCtx.restore();
         this.aCtx.save();
@@ -402,6 +700,7 @@ export class SimulationScene {
             $('#canvasDiv').hide();
             $('#simDiv>.pace').show();
             this.robots = [];
+            this.removeRcjScoringTool();
             // run with a different robot type or different number of robots
             RobotFactory.createRobots(interpreters, configurations, savedNames, this.sim.selectionListener, this.robotType).then((result) => {
                 this.robots = result.robots;
@@ -474,6 +773,9 @@ export class SimulationScene {
         } else {
             // reassign the (updated) program
             this.robots.forEach((robot, index) => {
+                if (scene.rcjScoringTool) {
+                    (robot as RobotBaseMobile).addObserver(scene.rcjScoringTool);
+                }
                 robot.replaceState(interpreters[index]);
                 robot.reset();
             });
@@ -531,8 +833,8 @@ export class SimulationScene {
         let num = 0;
         $(window)
             .off('resize.sim')
-            .on('resize.sim', function (event, param) {
-                if (num > RESIZE_CONST) {
+            .on('resize.sim', function (e, custom) {
+                if (num > RESIZE_CONST || custom == 'loaded') {
                     that.centerBackground(false);
                     num = 0;
                 } else {
@@ -664,6 +966,8 @@ export class SimulationScene {
         }
         this.oCtx.canvas.width = w;
         this.oCtx.canvas.height = h;
+        this.rcjCtx.canvas.width = w;
+        this.rcjCtx.canvas.height = h;
         this.rCtx.canvas.width = w;
         this.rCtx.canvas.height = h;
         this.dCtx.canvas.width = w;
@@ -690,6 +994,7 @@ export class SimulationScene {
         this.drawColorAreas();
         this.drawObstacles();
         this.drawMarkers();
+        this.drawRcjLabel();
     }
 
     centerBackground(backgroundChanged: boolean) {
@@ -735,15 +1040,23 @@ export class SimulationScene {
             this.currentBackground = num;
         }
         workingScene = this.currentBackground == 2 && this.imgBackgroundList[2].currentSrc.includes('robertaBackground');
-        let configData = this.sim.getConfigData();
+        let configData = this.sim.configType === 'std' ? this.sim.getConfigData() : null;
         this.obstacleList = [];
         this.colorAreaList = [];
         this.markerList = [];
+        this.rcjList = [];
         this.ground.w = this.imgBackgroundList[this.currentBackground].width;
         this.ground.h = this.imgBackgroundList[this.currentBackground].height;
         this.backgroundImg = this.imgBackgroundList[this.currentBackground];
         this.centerBackground(true);
-        this.sim.setNewConfig(configData);
+        if (this.sim.configType === 'std') {
+            this.sim.setNewConfig(configData);
+        } else {
+            this.sim.configType = 'std';
+            $('#rcjScoringWindow').fadeOut();
+            this.removeRcjScoringTool();
+            this.imgBackgroundList.pop();
+        }
         if (workingScene) {
             let myObstacle: BaseSimulationObject = this.obstacleList.find((obstacle) => {
                 if ((obstacle as RectangleSimulationObject).type === SimObjectType.Obstacle) {
@@ -763,9 +1076,27 @@ export class SimulationScene {
         this.robots.forEach((robot) => personalObstacleList.push((robot as RobotBaseMobile).chassis as unknown as ISimulationObstacle));
         personalObstacleList.push(this.ground as ISimulationObstacle);
         this.robots.forEach((robot) => robot.updateActions(robot, dt, interpreterRunning));
-        this.robots.forEach((robot) =>
-            (robot as RobotBaseMobile).updateSensors(interpreterRunning, dt, this.uCtx, this.udCtx, personalObstacleList, this.markerList)
-        );
+        if (interpreterRunning) {
+            this.obstacleList.forEach((obstacle) => {
+                let movableObstacle: IMovable = obstacle as unknown as IMovable;
+                if (movableObstacle.updateAction) {
+                    movableObstacle.updateAction();
+                }
+            });
+        }
+        this.robots.forEach((robot) => {
+            let obstacleList: ISimulationObstacle[] = personalObstacleList.slice();
+            let collisionList: ISimulationObstacle[] = [];
+            (robot as RobotBaseMobile).updateSensors(interpreterRunning, dt, this.uCtx, this.udCtx, obstacleList, this.markerList, collisionList);
+            //if (interpreterRunning) {
+            while (collisionList.length > 0) {
+                let movableObstacle: IMovable = collisionList[0] as unknown as IMovable;
+                movableObstacle.updateSensor(this.uCtx, obstacleList, collisionList);
+                collisionList.shift();
+            }
+            //}
+        });
+
         this.draw(dt, interpreterRunning);
     }
 
@@ -781,10 +1112,36 @@ export class SimulationScene {
         this.robots.forEach((robot) => (robot as RobotBaseMobile).resetPose());
         this.dCtx.canvas.width = this.dCtx.canvas.width;
         this.udCtx.canvas.width = this.udCtx.canvas.width;
+        this.rcjCtx.canvas.width = this.rcjCtx.canvas.width;
     }
 
     addMarker(markerId: number) {
         this.addSimulationObject(this.markerList, SimObjectShape.Marker, SimObjectType.Marker, markerId);
         this._redrawMarkers = true;
+    }
+
+    setRcjScoringTool(robot: RobotBase, configData) {
+        this.rcjScoringTool = new RcjScoringTool(robot, configData);
+        this.scoring = true;
+        let scene = this;
+        $('#simCompetition').show();
+        $('#simCompetition').off();
+        $('#simCompetition').onWrap('click', function () {
+            scene.rcjScoringTool.openClose();
+        });
+        this.obstacleList.forEach((obstacle) => {
+            if (obstacle['addObserver'] && typeof obstacle['addObserver'] === 'function') {
+                (obstacle as CircleSimulationObject).addObserver(scene.rcjScoringTool);
+            }
+        });
+    }
+    removeRcjScoringTool() {
+        if (this.rcjScoringTool) {
+            this.rcjScoringTool.destroy();
+        }
+        this.rcjScoringTool = null;
+        this.scoring = false;
+        $('#simCompetition').hide();
+        $('#simCompetition').off();
     }
 }

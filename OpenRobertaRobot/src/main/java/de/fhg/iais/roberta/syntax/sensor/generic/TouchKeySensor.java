@@ -1,5 +1,6 @@
-package de.fhg.iais.roberta.syntax.sensor;
+package de.fhg.iais.roberta.syntax.sensor.generic;
 
+import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.transformer.forClass.F2M;
 import de.fhg.iais.roberta.transformer.forClass.NepoExpr;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;

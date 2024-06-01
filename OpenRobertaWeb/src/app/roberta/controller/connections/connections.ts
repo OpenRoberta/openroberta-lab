@@ -2115,3 +2115,24 @@ export class LocalConnection extends AbstractConnection {
 
     setState(): void {}
 }
+
+export class RcjConnection extends AbstractConnection {
+    override init(): void {
+        $('#head-navi-icon-robot').removeClass('error');
+        $('#head-navi-icon-robot').removeClass('busy');
+        $('#head-navi-icon-robot').removeClass('wait');
+        GUISTATE_C.setRunEnabled(false);
+        $('#runSourceCodeEditor').addClass('disabled');
+        $('#menuConnect').parent().addClass('disabled');
+        GUISTATE_C.setPingTime(GUISTATE_C.LONG);
+        GUISTATE_C.setPing(true);
+    }
+
+    isRobotConnected(): boolean {
+        return false;
+    }
+
+    protected run(result): void {}
+
+    setState(): void {}
+}

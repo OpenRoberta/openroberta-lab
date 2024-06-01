@@ -499,16 +499,20 @@ export class Interpreter {
                 case C.SHOW_TEXT_ACTION: {
                     const text = this.state.pop();
                     const name = stmt[C.NAME];
-                    if (name === 'ev3' || name === 'txt4') {
-                        let x = 0;
-                        if (name === 'ev3') {
-                            x = this.state.pop();
-                        }
-                        const y = this.state.pop();
-                        this.robotBehaviour.showTextActionPosition(text, x, y);
-                        return [0, true];
+                    switch (name) {
+                        case 'ev3':
+                        case 'txt4':
+                        case 'rcj':
+                            let x = 0;
+                            if (name === 'ev3') {
+                                x = this.state.pop();
+                            }
+                            const y = this.state.pop();
+                            this.robotBehaviour.showTextActionPosition(text, x, y);
+                            return [0, true];
+                        default:
+                            return [this.robotBehaviour.showTextAction(text, stmt[C.MODE]), true];
                     }
-                    return [this.robotBehaviour.showTextAction(text, stmt[C.MODE]), true];
                 }
                 case C.SHOW_IMAGE_ACTION: {
                     let image;

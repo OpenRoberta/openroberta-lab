@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg id="brick" width="300" height="370" viewBox="0 0 300 370" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient gradientUnits="userSpaceOnUse" x1="150.024" y1="25" x2="150.024" y2="185" id="gradient-0">
+      <stop offset="1" style="stop-color: #666666"/>
+      <stop offset="1" style="stop-color: #000000"/>
+    </linearGradient>
+  </defs>
+  <rect width="300" height="370" style="fill: rgb(208, 55, 80);"/>
+  <rect x="25.024" y="25" width="250" height="160" style="fill: rgb(216, 216, 216); stroke: url(#gradient-0);"/>
+  <g id="display" clip-path="url(#clipPath)" fill="#000" transform="translate(30, 30)" font-family="Courier New" letter-spacing="2px" font-size="12pt"/>
+  <defs>
+    <clipPath id="clipPath">
+      <rect x="0" y="0" width="240" height="150"/>
+    </clipPath>
+  </defs>
+  <ellipse style="fill: rgba(216, 216, 216, 0.506); stroke: rgb(128, 127, 127);" cx="150" cy="250" rx="35" ry="35" id="rgbLed       "/>
+  <g id="rcjButtonLeft" class="simKey">
+    <rect style="stroke: rgb(0, 0, 0); fill: rgb(109, 109, 109);" x="25" y="305" width="70" height="40" rx="5" ry="5"/>
+    <text style="fill: rgb(255, 255, 255); font-family: Arial, sans-serif; font-size: 24px; white-space: pre;" x="55" y="331.719">&lt;</text>
+  </g>
+  <g id="rcjButtonRight" class="simKey">
+    <rect style="fill: rgb(109, 109, 109); stroke: rgb(0, 0, 0);" x="205" y="305" width="70" height="40" rx="5" ry="5"/>
+    <text style="fill: rgb(255, 255, 255); font-family: Arial, sans-serif; font-size: 24px; white-space: pre;" x="235" y="331.719">&gt;</text>
+  </g>
+  <g id="rcjButtonStop" class="simKey">
+    <rect style="stroke: rgb(0, 0, 0); fill: rgb(109, 109, 109);" x="130" y="305" width="40" height="40" rx="20" ry="20"/>
+    <path fill="#fff" d="M 150 335.421 C 147.346 335.428 144.801 334.375 142.928 332.495 C 141.041 330.605 140 328.095 140 325.421 C 140 322.748 141.041 320.239 142.928 318.348 C 143.768 317.513 145.199 317.896 145.504 319.039 C 145.645 319.572 145.494 320.136 145.105 320.525 C 143.796 321.835 143.076 323.573 143.076 325.421 C 143.076 327.272 143.796 329.013 145.105 330.319 C 146.414 331.626 148.148 332.345 150 332.345 C 151.854 332.345 153.586 331.625 154.896 330.319 C 156.205 329.013 156.924 327.273 156.924 325.421 C 156.924 323.573 156.204 321.833 154.896 320.525 C 154.06 319.686 154.444 318.259 155.585 317.952 C 156.116 317.812 156.684 317.961 157.072 318.348 C 158.96 320.241 160 322.752 160 325.421 C 160 328.093 158.96 330.605 157.072 332.495 C 155.2 334.375 152.655 335.428 150 335.421 M 150 323.772 C 149.152 323.772 148.461 323.081 148.461 322.233 L 148.461 314.54 C 148.461 313.356 149.744 312.616 150.768 313.208 C 151.246 313.484 151.539 313.992 151.539 314.54 L 151.539 322.233 C 151.539 323.081 150.852 323.772 150 323.772"/>
+  </g>
+  <text style="fill: rgb(255, 255, 255); font-family: Arial, sans-serif; font-size: 28px; paint-order: fill; text-transform: uppercase; white-space: pre;" transform="matrix(1, 0, 0, 1, -4.571806, 50.026558)"><tspan x="7.229" y="50.604">A</tspan><tspan x="7.229" dy="1em">​</tspan><tspan x="7.229" dy="1em">​</tspan><tspan>C</tspan><tspan x="7.229" dy="1em">​</tspan><tspan x="7.229" dy="1em">​</tspan><tspan>E</tspan><tspan x="7.229" dy="1em">​</tspan><tspan x="7.229" dy="1em">​</tspan><tspan>G</tspan></text>
+  <text style="fill: rgb(255, 255, 255); font-family: Arial, sans-serif; font-size: 28px; white-space: pre;" transform="matrix(1, 0, 0, 1, -2.622009, 14.538555)"><tspan x="280.622" y="86.092">B</tspan><tspan x="280.622" dy="1em">​</tspan><tspan x="280.622" dy="1em">​</tspan><tspan>D</tspan><tspan x="280.622" dy="1em">​</tspan><tspan x="280.622" dy="1em">​</tspan><tspan>F</tspan><tspan x="280.622" dy="1em">​</tspan><tspan x="280.622" dy="1em">​</tspan><tspan>H</tspan></text>
+</svg>

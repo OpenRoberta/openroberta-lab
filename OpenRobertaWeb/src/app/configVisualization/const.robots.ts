@@ -648,4 +648,23 @@ export const ROBOTS = {
         width: '255px',
         height: '255px',
     },
+    rcj: {
+        ports: [
+            // ports
+            { name: 'A', position: { x: 23, y: 60 } },
+            { name: 'B', position: { x: 228, y: 60 } },
+            { name: 'C', position: { x: 23, y: 98 } },
+            { name: 'D', position: { x: 228, y: 98 } },
+            { name: 'E', position: { x: 23, y: 136 } },
+            { name: 'F', position: { x: 228, y: 136 } },
+            { name: 'G', position: { x: 23, y: 174 } },
+            { name: 'H', position: { x: 228, y: 174 } },
+            { name: 'buzzer', position: { x: 70, y: 174 } },
+            { name: 'rgbledh', position: { x: 126, y: 170 } },
+            { name: 'display', position: { x: 126, y: 72 } },
+            { name: 'gyro', position: { x: 180, y: 174 } },
+        ],
+        width: '255px',
+        height: '255px',
+    },
 };

@@ -80,7 +80,7 @@ public class SpikePybricksValidatorAndCollectorVisitor extends AbstractSpikeVali
     final public Void visitMotorDiffTurnAction(MotorDiffTurnAction motorDiffTurnAction) {
         super.visitMotorDiffTurnAction(motorDiffTurnAction);
         usedMethodBuilder.addUsedMethod(SpikePybricksMethods.DEG_SEC_FROM_PERCENT);
-        if(!motorDiffTurnAction.regulation)
+        if ( !motorDiffTurnAction.regulation )
             usedMethodBuilder.addUsedMethod(SpikePybricksMethods.DIFFDRIVE);
         return null;
     }
@@ -89,7 +89,7 @@ public class SpikePybricksValidatorAndCollectorVisitor extends AbstractSpikeVali
     final public Void visitMotorDiffOnAction(MotorDiffOnAction motorDiffOnAction) {
         super.visitMotorDiffOnAction(motorDiffOnAction);
         usedMethodBuilder.addUsedMethod(SpikePybricksMethods.DEG_SEC_FROM_PERCENT);
-        if(!motorDiffOnAction.regulation)
+        if ( !motorDiffOnAction.regulation )
             usedMethodBuilder.addUsedMethod(SpikePybricksMethods.DIFFDRIVE);
         else {
             usedMethodBuilder.addUsedMethod(SpikePybricksMethods.DEG_SEC_TO_MM_SEC);
@@ -132,7 +132,7 @@ public class SpikePybricksValidatorAndCollectorVisitor extends AbstractSpikeVali
     }
 
     @Override
-    final public Void visitRgbLedOnHiddenAction(RgbLedOnHiddenAction rgbLedOnHiddenAction){
+    final public Void visitRgbLedOnHiddenAction(RgbLedOnHiddenAction rgbLedOnHiddenAction) {
         super.visitRgbLedOnHiddenAction(rgbLedOnHiddenAction);
         usedMethodBuilder.addUsedMethod(SpikePybricksMethods.HUB_LIGHT);
         return null;
@@ -255,7 +255,7 @@ public class SpikePybricksValidatorAndCollectorVisitor extends AbstractSpikeVali
     }
 
     @Override
-    final public Void visitDisplayTextAction(DisplayTextAction displayTextAction){
+    public Void visitDisplayTextAction(DisplayTextAction displayTextAction) {
         super.visitDisplayTextAction(displayTextAction);
         usedMethodBuilder.addUsedMethod(SpikePybricksMethods.DISPLAY_TEXT);
         return null;

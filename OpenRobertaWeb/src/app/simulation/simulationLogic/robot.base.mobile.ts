@@ -8,6 +8,7 @@ import { Interpreter } from 'interpreter.interpreter';
 // @ts-ignore
 import * as Blockly from 'blockly';
 import { GyroSensorExt } from 'robot.sensors';
+import { IObservableSimulationObject, IObserver } from 'simulation.scene';
 
 export class Pose {
     xOld: number;
@@ -55,13 +56,14 @@ export class Pose {
     }
 }
 
-export abstract class RobotBaseMobile extends RobotBase {
+export abstract class RobotBaseMobile extends RobotBase implements IObservableSimulationObject {
     abstract chassis: ChassisMobile;
     private _initialPose: Pose;
     private _hasTrail: boolean = false;
     private _pose: Pose;
     private _thetaDiff: number = 0;
     private isDown: boolean = false;
+    private observers: IObserver[] = [];
     override readonly imgList = ['simpleBackground', 'drawBackground', 'robertaBackground', 'rescueBackground', 'blank', 'mathBackground'];
 
     protected mouse = {
@@ -72,11 +74,12 @@ export abstract class RobotBaseMobile extends RobotBase {
         r: 30,
     };
 
-    protected constructor(id: number, configuration: object, interpreter: Interpreter, savedName: string, mySelectionListener: SelectionListener) {
+    protected constructor(id: number, configuration: object, interpreter: Interpreter, savedName: string, mySelectionListener: SelectionListener, pose?: Pose) {
         super(id, configuration, interpreter, savedName, mySelectionListener);
         this.mobile = true;
-        this.pose = new Pose(150, 150, 0);
-        this.initialPose = new Pose(150, 150, 0);
+        this.pose = pose || new Pose(150, 150, 0);
+        this.initialPose = pose || new Pose(150, 150, 0);
+        this.configure(configuration);
     }
 
     get hasTrail(): boolean {
@@ -247,6 +250,28 @@ export abstract class RobotBaseMobile extends RobotBase {
             udCtx.stroke();
             this.pose.xOld = this.pose.x;
             this.pose.yOld = this.pose.y;
+        }
+    }
+
+    override updateActions(myRobot: RobotBase, dt: number, interpreterRunning: boolean) {
+        super.updateActions(myRobot, dt, interpreterRunning);
+        interpreterRunning && this.notifyObservers();
+    }
+
+    addObserver(observer: IObserver): void {
+        this.observers.push(observer);
+    }
+
+    notifyObservers(): void {
+        for (let observer of this.observers) {
+            observer.update(this);
+        }
+    }
+
+    removeObserver(observer: IObserver): void {
+        const removeIndex = this.observers.findIndex((obs) => observer === obs);
+        if (removeIndex !== -1) {
+            this.observers.splice(removeIndex, 1);
         }
     }
 }

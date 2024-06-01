@@ -25,8 +25,9 @@ import {
     MarkerSimulationObject,
     RectangleSimulationObject,
     SimObjectShape,
+    SimObjectType,
     TriangleSimulationObject,
-} from './simulation.objects';
+} from 'simulation.objects';
 import { Pose } from 'robot.base.mobile';
 import { Simulation } from 'progSim.controller';
 
@@ -56,6 +57,9 @@ export class SimulationRoberta implements Simulation {
     private storedPrograms: object[];
     private robotType: string;
     private callbackOnEnd: () => void;
+    private TILE_SIZE: number = 90;
+    private EV_WALL_SIZE: number = 10;
+    private _configType: string = 'std'; // to distinguish between "rcj" and "std"
 
     private constructor() {}
 
@@ -164,6 +168,14 @@ export class SimulationRoberta implements Simulation {
 
     set interpreterRunning(value: boolean) {
         this._interpreterRunning = value;
+    }
+
+    get configType(): string {
+        return this._configType;
+    }
+
+    set configType(value: string) {
+        this._configType = value;
     }
 
     addMarker(markerId: number) {
@@ -701,81 +713,104 @@ export class SimulationRoberta implements Simulation {
         this.scene.stepBackground(num);
     }
 
-    setNewConfig(relatives) {
-        let height: number = this.scene.uCanvas.height;
-        let width: number = this.scene.uCanvas.width;
-        let sim = this;
+    async setNewConfig(configData) {
+        if (configData.hasOwnProperty('tileSet')) {
+            await this.prepareRescueLine(configData).then(
+                function (result) {
+                    this.configType = 'rcj';
+                    setTimeout(function () {
+                        $(window).trigger('resize', 'loaded');
+                    }, 100);
+                }.bind(this),
+                function (result) {
+                    alert(result.message);
+                    // TODO with msg.keys: MSG.displayInformation(result, '', result.message, null, null);
+                }
+            );
+        } else {
+            let relatives = configData;
+            let height: number = this.scene.uCanvas.height;
+            let width: number = this.scene.uCanvas.width;
+            let sim = this;
 
-        function calculateShape(object) {
-            let newObject: any = {};
-            newObject.id = sim.scene.uniqueObjectId;
-            if (object.type === 'MARKER') {
-                newObject.shape = 'MARKER';
-                newObject.markerId = object.markerId;
-            } else {
-                newObject.shape = object.form.toUpperCase() as SimObjectShape;
-            }
-            newObject.color = object.color;
-            newObject.newObjecttype = object.type;
-            switch (object.form.toLowerCase()) {
-                case 'rectangle':
-                    newObject.p = { x: object.x * width, y: object.y * height };
-                    newObject.params = [object.w * width, object.h * height];
-                    break;
-                case 'triangle':
-                    newObject.p = { x: 0, y: 0 };
-                    newObject.params = [object.ax * width, object.ay * height, object.bx * width, object.by * height, object.cx * width, object.cy * height];
-                    break;
-                case 'circle':
-                    newObject.p = {
-                        x: object.x * width,
-                        y: object.y * height,
-                    };
-                    newObject.params = [object.r * height * width];
-                    break;
-            }
-            return newObject;
-        }
+            const calculateShape = (object) => {
+                let newObject: any = {};
+                newObject.id = sim.scene.uniqueObjectId;
+                if (object.type === 'MARKER') {
+                    newObject.shape = 'MARKER';
+                    newObject.markerId = object.markerId;
+                } else {
+                    newObject.shape = object.form.toUpperCase() as SimObjectShape;
+                }
+                newObject.color = object.color;
+                newObject.newObjecttype = object.type;
+                switch (object.form.toLowerCase()) {
+                    case 'rectangle':
+                        newObject.p = { x: object.x * width, y: object.y * height };
+                        newObject.params = [object.w * width, object.h * height];
+                        break;
+                    case 'triangle':
+                        newObject.p = { x: 0, y: 0 };
+                        newObject.params = [
+                            object.ax * width,
+                            object.ay * height,
+                            object.bx * width,
+                            object.by * height,
+                            object.cx * width,
+                            object.cy * height,
+                        ];
+                        break;
+                    case 'circle':
+                        newObject.p = {
+                            x: object.x * width,
+                            y: object.y * height,
+                        };
+                        newObject.params = [object.r * height * width];
+                        break;
+                }
+                return newObject;
+            };
 
-        this.importPoses = [];
-        relatives.robotPoses.forEach((pose) => {
-            if (Array.isArray(pose)) {
-                let myPose: any = {};
-                myPose.x = pose[0].x * width;
-                myPose.y = pose[0].y * height;
-                myPose.theta = pose[0].theta;
-                let myInitialPose: any = {};
-                myInitialPose.x = pose[1].x * width;
-                myInitialPose.y = pose[1].y * height;
-                myInitialPose.theta = pose[1].theta;
-                this.importPoses.push([myPose, myInitialPose]);
-            } else {
-                let myPose: any = {};
-                myPose.x = pose.x * width;
-                myPose.y = pose.y * height;
-                myPose.theta = pose.theta;
-                this.importPoses.push([myPose, myPose]);
-            }
-        });
-        this.scene.setRobotPoses(this.importPoses);
-        let importObstacles = [];
-        relatives.obstacles.forEach((obstacle) => {
-            importObstacles.push(calculateShape(obstacle));
-        });
-        this.scene.addImportObstacle(importObstacles);
-
-        let importColorAreas = [];
-        relatives.colorAreas.forEach((colorArea) => {
-            importColorAreas.push(calculateShape(colorArea));
-        });
-        this.scene.addImportColorAreaList(importColorAreas);
-
-        let importMarker = [];
-        relatives.marker &&
-            relatives.marker.forEach((marker) => {
-                importMarker.push(calculateShape(marker));
+            this.importPoses = [];
+            relatives.robotPoses.forEach((pose) => {
+                if (Array.isArray(pose)) {
+                    let myPose: any = {};
+                    myPose.x = pose[0].x * width;
+                    myPose.y = pose[0].y * height;
+                    myPose.theta = pose[0].theta;
+                    let myInitialPose: any = {};
+                    myInitialPose.x = pose[1].x * width;
+                    myInitialPose.y = pose[1].y * height;
+                    myInitialPose.theta = pose[1].theta;
+                    this.importPoses.push([myPose, myInitialPose]);
+                } else {
+                    let myPose: any = {};
+                    myPose.x = pose.x * width;
+                    myPose.y = pose.y * height;
+                    myPose.theta = pose.theta;
+                    this.importPoses.push([myPose, myPose]);
+                }
             });
-        this.scene.addImportMarkerList(importMarker);
+            this.scene.setRobotPoses(this.importPoses);
+            let importObstacles = [];
+            relatives.obstacles.forEach((obstacle) => {
+                importObstacles.push(calculateShape(obstacle));
+            });
+            this.scene.addImportObstacle(importObstacles);
+
+            let importColorAreas = [];
+            relatives.colorAreas.forEach((colorArea) => {
+                importColorAreas.push(calculateShape(colorArea));
+            });
+            this.scene.addImportColorAreaList(importColorAreas);
+
+            let importMarker = [];
+            relatives.marker &&
+                relatives.marker.forEach((marker) => {
+                    importMarker.push(calculateShape(marker));
+                });
+            this.scene.addImportMarkerList(importMarker);
+        }
     }
 
     setPause(value) {
@@ -870,6 +905,385 @@ export class SimulationRoberta implements Simulation {
         }
         this.updateBreakpointEvent();
     }
+
+    private async prepareRescueLine(configData): Promise<{ rc: string; message: string }> {
+        let sim = this;
+        return new Promise(function (resolve, reject) {
+            let result: { rc: string; message: string } = { rc: 'ok', message: '' };
+            let height: number = configData.length * sim.TILE_SIZE; // tile height/length is 25cm, 3 pixel = 1cm
+            let width: number = configData.width * sim.TILE_SIZE; // tile width is 25cm, 3 pixel = 1cm
+            let canvas = document.createElement('canvas');
+            canvas.id = 'tmp';
+            canvas.width = width;
+            canvas.height = height;
+            $('body').append(canvas);
+
+            const preload = function (src) {
+                return new Promise(function (resolve, reject) {
+                    var img = new Image();
+                    img.onload = function () {
+                        resolve(img);
+                    };
+                    img.onerror = function () {
+                        reject("Image couldn't be loaded: " + src['tileType'].image);
+                    };
+                    img.src = '/css/img/simulationRescue/tiles/' + src['tileType'].image;
+                });
+            };
+
+            let tile: keyof typeof configData.tiles;
+            let imgArray: any[] = [];
+            for (tile in configData.tiles) {
+                imgArray.push(configData.tiles[tile]);
+            }
+            let preloadAll = function (images) {
+                return Promise.all(images.map(preload));
+            };
+
+            let entrance: {};
+            let startTile: {} = configData.tiles[configData.startTile.x + ',' + configData.startTile.y + ',' + configData.startTile.z];
+            let startPose: any = {};
+            let rcjLabel = [];
+            let drawEntranceEvacuationZone = (tile, ctx: CanvasRenderingContext2D) => {
+                ctx.save();
+                ctx.translate(tile['x'] * sim.TILE_SIZE + sim.TILE_SIZE / 2, tile['y'] * sim.TILE_SIZE + sim.TILE_SIZE / 2);
+                let rot = 0;
+                switch (tile['dir']) {
+                    case 'top':
+                        break;
+                    case 'right':
+                        rot = Math.PI / 2;
+                        break;
+                    case 'bottom':
+                        rot = Math.PI;
+                        break;
+                    case 'left':
+                        rot = (270 * Math.PI) / 180;
+                        break;
+                }
+                ctx.rotate(rot);
+                ctx.fillStyle = '#33B8CA';
+                ctx.fillRect(-sim.TILE_SIZE / 2, -sim.TILE_SIZE / 2, sim.TILE_SIZE, sim.EV_WALL_SIZE);
+                ctx.restore();
+            };
+            let drawEvacuationZone = (tile, ctx: CanvasRenderingContext2D) => {
+                ctx.save();
+                ctx.translate(tile['x'] * sim.TILE_SIZE + sim.TILE_SIZE / 2, tile['y'] * sim.TILE_SIZE + sim.TILE_SIZE / 2);
+                let rot = 0;
+                switch (tile['rot']) {
+                    case 0:
+                        break;
+                    case 90:
+                        rot = Math.PI / 2;
+                        break;
+                    case 180:
+                        rot = Math.PI;
+                        break;
+                    case 270:
+                        rot = (270 * Math.PI) / 180;
+                        break;
+                }
+                ctx.rotate(rot);
+                ctx.beginPath();
+                ctx.moveTo(-sim.TILE_SIZE / 2, -sim.TILE_SIZE / 2);
+                ctx.lineTo(sim.TILE_SIZE / 2, -sim.TILE_SIZE / 2);
+                ctx.lineTo(sim.TILE_SIZE / 2, sim.TILE_SIZE / 2);
+                ctx.closePath();
+                ctx.fillStyle = '#000000';
+                ctx.fill();
+                ctx.restore();
+            };
+            let drawTileSeparator = (ctx: CanvasRenderingContext2D) => {
+                ctx.strokeStyle = '#dddddd';
+                ctx.lineWidth = 1;
+                for (let i = 1; i < height; i++) {
+                    ctx.moveTo(0, i * sim.TILE_SIZE);
+                    ctx.lineTo(width * sim.TILE_SIZE, i * sim.TILE_SIZE);
+                    ctx.stroke();
+                }
+                for (let j = 1; j < width; j++) {
+                    ctx.moveTo(j * sim.TILE_SIZE, 0);
+                    ctx.lineTo(j * sim.TILE_SIZE, sim.TILE_SIZE * height);
+                    ctx.stroke();
+                }
+            };
+            const getRcjVictims = (evacuationZone): any[] => {
+                let victims = configData.victims;
+                let rcjVictimsList = [];
+                let zone: Rectangle = {
+                    x: Math.min(evacuationZone[0], evacuationZone[2]) * sim.TILE_SIZE,
+                    y: Math.min(evacuationZone[1], evacuationZone[3]) * sim.TILE_SIZE,
+                    w: (Math.max(evacuationZone[0], evacuationZone[2]) - Math.min(evacuationZone[0], evacuationZone[2]) + 1) * sim.TILE_SIZE,
+                    h: (Math.max(evacuationZone[1], evacuationZone[3]) - Math.min(evacuationZone[1], evacuationZone[3]) + 1) * sim.TILE_SIZE,
+                };
+                const createVictim = (color) => {
+                    let victim = {
+                        id: sim.scene.uniqueObjectId,
+                        p: { x: zone.x + Math.random() * zone.w, y: zone.y + Math.random() * zone.h },
+                        params: [7, 1], // 7 is the radius, 1 is movable = true
+                        theta: 0,
+                        color: color,
+                        shape: SimObjectShape.Circle,
+                        type: SimObjectType.Obstacle,
+                    };
+                    rcjVictimsList.push(victim);
+                };
+                if (victims['live'] && victims['live'] > 0) {
+                    for (let i = 0; i < victims['live']; ++i) {
+                        createVictim('#33B8CA');
+                    }
+                }
+                if (victims['dead'] && victims['dead'] > 0) {
+                    for (let i = 0; i < victims['dead']; ++i) {
+                        createVictim('#000000');
+                    }
+                }
+                return rcjVictimsList;
+            };
+            const createBackgroundImage = (): HTMLImageElement => {
+                const image = new Image();
+                image.src = canvas.toDataURL();
+                image.width = canvas.width;
+                image.height = canvas.height;
+                return image;
+            };
+            preloadAll(imgArray).then(
+                function (images) {
+                    let ctx = canvas.getContext('2d');
+                    ctx.fillStyle = 'white';
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    let evacuationTop = [];
+                    let evacuationRight = [];
+                    let evacuationBottom = [];
+                    let evacuationLeft = [];
+                    let importObstacles = [];
+                    let evacuationVctimsZone = [];
+                    imgArray.forEach((img, index) => {
+                        if (img['tileType']['image'].startsWith('ev')) {
+                            let ev = img['tileType']['image'].replace('.png', '');
+                            switch (ev) {
+                                case 'ev1':
+                                    evacuationVctimsZone.push(img['x']);
+                                    evacuationVctimsZone.push(img['y']);
+                                    // evacuation zone tile without walls
+                                    break;
+                                case 'ev2': // one wall
+                                    let rot = img['rot'].toString();
+                                    switch (rot) {
+                                        case '0':
+                                            evacuationTop.push({ x: img['x'], y: img['y'] });
+                                            break;
+                                        case '90':
+                                            evacuationRight.push({ x: img['x'], y: img['y'] });
+                                            break;
+                                        case '180':
+                                            evacuationBottom.push({ x: img['x'], y: img['y'] });
+                                            break;
+                                        case '270':
+                                            evacuationLeft.push({ x: img['x'], y: img['y'] });
+                                            break;
+                                        default:
+                                            result.rc = 'error';
+                                            result.message = 'Unknown evacuation zone rotation';
+                                    }
+                                    break;
+                                case 'ev3': // two walls (edge)
+                                    rot = img['rot'].toString();
+                                    switch (rot) {
+                                        case '0':
+                                            evacuationTop.push({ x: img['x'], y: img['y'] });
+                                            evacuationRight.push({ x: img['x'], y: img['y'] });
+                                            break;
+                                        case '90':
+                                            evacuationRight.push({ x: img['x'], y: img['y'] });
+                                            evacuationBottom.push({ x: img['x'], y: img['y'] });
+                                            break;
+                                        case '180':
+                                            evacuationLeft.push({ x: img['x'], y: img['y'] });
+                                            evacuationBottom.push({ x: img['x'], y: img['y'] });
+                                            break;
+                                        case '270':
+                                            evacuationTop.push({ x: img['x'], y: img['y'] });
+                                            evacuationLeft.push({ x: img['x'], y: img['y'] });
+                                            break;
+                                        default:
+                                            result.rc = 'error';
+                                            result.message = 'Unknown evacuation zone rotation';
+                                    }
+                                    break;
+                                default:
+                                    result.rc = 'error';
+                                    result.message = 'Unknown evacuation zone type';
+                            }
+                            // check for entrance (unfortunately not labeled)
+                            let x = img['x'];
+                            let y = img['y'];
+                            let pTop: string = '' + x + ',' + (y - 1) + ',0';
+                            let pRight: string = '' + (x + 1) + ',' + y + ',0';
+                            let pBottom: string = '' + x + ',' + (y + 1) + ',0';
+                            let pLeft: string = '' + (x - 1) + ',' + y + ',0';
+                            if (configData['tiles'][pTop] && configData['tiles'][pTop]['tileType'].image.startsWith('tile-0')) {
+                                entrance = { x: x, y: y, dir: 'top' };
+                            } else if (configData['tiles'][pRight] && configData['tiles'][pRight]['tileType'].image.startsWith('tile-0')) {
+                                entrance = { x: x, y: y, dir: 'right' };
+                            } else if (configData['tiles'][pBottom] && configData['tiles'][pBottom]['tileType'].image.startsWith('tile-0')) {
+                                entrance = { x: x, y: y, dir: 'bottom' };
+                            } else if (configData['tiles'][pLeft] && configData['tiles'][pLeft]['tileType'].image.startsWith('tile-0')) {
+                                entrance = { x: x, y: y, dir: 'left' };
+                            }
+                        } else {
+                            ctx.save();
+                            ctx.translate(img['x'] * sim.TILE_SIZE + sim.TILE_SIZE / 2, img['y'] * sim.TILE_SIZE + sim.TILE_SIZE / 2);
+                            ctx.rotate((img['rot'] * Math.PI) / 180);
+                            ctx.drawImage(
+                                images[index],
+                                0,
+                                0,
+                                images[index]['width'],
+                                images[index]['height'],
+                                -sim.TILE_SIZE / 2,
+                                -sim.TILE_SIZE / 2,
+                                sim.TILE_SIZE,
+                                sim.TILE_SIZE
+                            );
+                            ctx.restore();
+                            if (img['index'].length > 0) {
+                                rcjLabel.push(img);
+                            }
+                            if (img['items'] && img['items']['obstacles'] && img['items']['obstacles'] > 0) {
+                                let obstacle: any = {};
+                                obstacle.id = sim.scene.uniqueObjectId;
+                                obstacle.shape = SimObjectShape.Rectangle;
+                                obstacle.color = '#ff0000';
+                                obstacle.newObjecttype = SimObjectType.Obstacle;
+                                obstacle.p = { x: img['x'] * sim.TILE_SIZE + sim.TILE_SIZE / 4 + 10, y: img['y'] * sim.TILE_SIZE + sim.TILE_SIZE / 4 + 10 };
+                                obstacle.params = [sim.TILE_SIZE * 0.5, sim.TILE_SIZE * 0.5];
+                                importObstacles.push(obstacle);
+                            }
+                        }
+                    });
+                    if (evacuationTop.length >= 2 && evacuationRight.length >= 2 && evacuationBottom.length >= 2 && evacuationLeft.length >= 2) {
+                        evacuationTop.sort(function (a, b) {
+                            return a.x - b.x;
+                        });
+                        evacuationRight.sort(function (a, b) {
+                            return a.y - b.y;
+                        });
+                        evacuationBottom.sort(function (a, b) {
+                            return a.x - b.x;
+                        });
+                        evacuationLeft.sort(function (a, b) {
+                            return a.y - b.y;
+                        });
+                        let wallTop = {
+                            id: sim.scene.uniqueObjectId,
+                            p: { x: evacuationTop[0]['x'] * sim.TILE_SIZE + 10, y: evacuationTop[0]['y'] * sim.TILE_SIZE + sim.EV_WALL_SIZE },
+                            params: [sim.TILE_SIZE * (evacuationTop[evacuationTop.length - 1]['x'] - evacuationTop[0]['x'] + 1), sim.EV_WALL_SIZE],
+                            theta: 0,
+                            color: '#ffffff',
+                            shape: SimObjectShape.Rectangle,
+                            type: SimObjectType.Obstacle,
+                        };
+                        let wallRight = {
+                            id: sim.scene.uniqueObjectId,
+                            p: { x: evacuationRight[0]['x'] * sim.TILE_SIZE + sim.TILE_SIZE, y: evacuationRight[0]['y'] * sim.TILE_SIZE + sim.EV_WALL_SIZE },
+                            params: [sim.EV_WALL_SIZE, sim.TILE_SIZE * (evacuationRight[evacuationRight.length - 1]['y'] - evacuationRight[0]['y'] + 1)],
+                            theta: 0,
+                            color: '#ffffff',
+                            shape: SimObjectShape.Rectangle,
+                            type: SimObjectType.Obstacle,
+                        };
+                        let wallBottom = {
+                            id: sim.scene.uniqueObjectId,
+                            p: { x: evacuationBottom[0]['x'] * sim.TILE_SIZE + 10, y: evacuationBottom[0]['y'] * sim.TILE_SIZE + sim.TILE_SIZE },
+                            params: [sim.TILE_SIZE * (evacuationBottom[evacuationBottom.length - 1]['x'] - evacuationBottom[0]['x'] + 1), sim.EV_WALL_SIZE],
+                            theta: 0,
+                            color: '#ffffff',
+                            shape: SimObjectShape.Rectangle,
+                            type: SimObjectType.Obstacle,
+                        };
+                        let wallLeft = {
+                            id: sim.scene.uniqueObjectId,
+                            p: { x: evacuationLeft[0]['x'] * sim.TILE_SIZE + 10, y: evacuationLeft[0]['y'] * sim.TILE_SIZE + sim.EV_WALL_SIZE },
+                            params: [sim.EV_WALL_SIZE, sim.TILE_SIZE * (evacuationLeft[evacuationLeft.length - 1]['y'] - evacuationLeft[0]['y'] + 1)],
+                            theta: 0,
+                            color: '#ffffff',
+                            shape: SimObjectShape.Rectangle,
+                            type: SimObjectType.Obstacle,
+                        };
+                        importObstacles.push(wallTop, wallRight, wallBottom, wallLeft);
+                        let evacuationEdges = imgArray.filter(function (tile) {
+                            return tile.tileType.image.startsWith('ev3');
+                        });
+                        let evacuationZoneTile = evacuationEdges[Math.floor(Math.random() * evacuationEdges.length)];
+                        drawEvacuationZone(evacuationZoneTile, ctx);
+                    }
+                    if (startTile) {
+                        startPose = sim.getTilePose(startTile, configData['tiles'][startTile['next']], {});
+                    } else {
+                        result.rc = 'error';
+                        result.message = 'Unknown start tile';
+                    }
+                    if (!entrance) {
+                        result.rc = 'error';
+                        result.message = 'Unknown evacuation zone entrance tile';
+                    }
+                    if (result.rc === 'ok') {
+                        sim.deleteAllColorArea();
+                        sim.deleteAllObstacle();
+                        drawEntranceEvacuationZone(entrance, ctx);
+                        drawTileSeparator(ctx);
+                        let image = createBackgroundImage();
+                        sim.scene.imgBackgroundList.push(image);
+                        sim.setBackground(sim.scene.imgBackgroundList.length - 1);
+                        sim.scene.addImportObstacle(importObstacles.concat(getRcjVictims(evacuationVctimsZone)));
+                        sim.scene.addImportRcjLabel(rcjLabel);
+                        sim.scene.drawRcjLabel();
+                        sim.importPoses = [[startPose, startPose]];
+                        sim.scene.setRobotPoses(sim.importPoses);
+                        sim.scene.setRcjScoringTool(sim.scene.robots[0], configData);
+                        $('#simCompetition').show();
+                        resolve(result);
+                    } else {
+                        reject(result);
+                    }
+                    $('#tmp').remove();
+                },
+                function (err) {
+                    $('#tmp').remove();
+                    result.rc = 'error';
+                    result.message = err;
+                    reject(result);
+                }
+            );
+        });
+    }
+
+    getTilePose(tile: {}, nextTile: {}, prevTile: {}): Pose {
+        let pose: Pose = <Pose>{};
+        pose.x = tile['x'] * this.TILE_SIZE + this.TILE_SIZE / 2 + this.EV_WALL_SIZE;
+        pose.y = tile['y'] * this.TILE_SIZE + this.TILE_SIZE / 2 + this.EV_WALL_SIZE;
+        let rot = 0;
+        if (nextTile != null && nextTile != undefined) {
+            if (tile['x'] - nextTile['x'] === 1) {
+                rot = Math.PI;
+            } else if (tile['y'] - nextTile['y'] === -1) {
+                rot = Math.PI / 2;
+            } else if (tile['y'] - nextTile['y'] === 1) {
+                rot = (Math.PI * 3) / 2;
+            }
+        } else if (prevTile != null && prevTile != undefined) {
+            if (tile['x'] - prevTile['x'] === -1) {
+                rot = Math.PI;
+            } else if (tile['y'] - prevTile['y'] === 1) {
+                rot = Math.PI / 2;
+            } else if (tile['y'] - prevTile['y'] === -1) {
+                rot = (Math.PI * 3) / 2;
+            }
+        }
+        pose.theta = rot;
+        return pose;
+    }
 }
 
 // requestAnimationFrame polyfill by Erik Möller.
@@ -903,3 +1317,6 @@ export class SimulationRoberta implements Simulation {
     }
 })();
 export default SimulationRoberta.Instance;
+function cloadImages(names: any, arg1: any, files: any, arg3: any, onAllLoaded: any, arg5: any, arg6: undefined) {
+    throw new Error('Function not implemented.');
+}

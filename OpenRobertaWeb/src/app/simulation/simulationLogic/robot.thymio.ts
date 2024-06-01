@@ -33,7 +33,6 @@ export default class RobotThymio extends RobotBaseMobile {
 
     constructor(id: number, configuration: object, interpreter: Interpreter, savedName: string, myListener: SelectionListener) {
         super(id, configuration, interpreter, savedName, myListener);
-        this.configure(configuration);
     }
 
     protected override configure(configuration: object): void {

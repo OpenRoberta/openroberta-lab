@@ -7,6 +7,15 @@
 import CONSTANTS from 'simulation.constants';
 import { CircleSimulationObject, RectangleSimulationObject, TriangleSimulationObject } from 'simulation.objects';
 
+export function getDotProduct(A: Point, B: Point): number {
+    let Alength = Math.sqrt(A.x * A.x + A.y * A.y);
+    let Blength = Math.sqrt(B.x * B.x + B.y * B.y);
+    if (Alength == 0 || Blength == 0) {
+        return null;
+    }
+    return (A.x / Alength) * (B.x / Blength) + (A.y / Alength) * (B.y / Blength);
+}
+
 /**
  * exports helper for calculations in ORsimulation
  *
@@ -52,10 +61,10 @@ export const getIntersectionPoint = function (line1: Line, line2: Line): Point {
     var xi = ((line2.x1 - line2.x2) * (line1.x1 * line1.y2 - line1.y1 * line1.x2) - (line1.x1 - line1.x2) * (line2.x1 * line2.y2 - line2.y1 * line2.x2)) / d;
     var yi = ((line2.y1 - line2.y2) * (line1.x1 * line1.y2 - line1.y1 * line1.x2) - (line1.y1 - line1.y2) * (line2.x1 * line2.y2 - line2.y1 * line2.x2)) / d;
 
-    if (!this.isLineAlignedToPoint({ x: xi, y: yi }, line1)) {
+    if (!isLineAlignedToPoint({ x: xi, y: yi }, line1)) {
         return null;
     }
-    if (!this.isLineAlignedToPoint({ x: xi, y: yi }, line2)) {
+    if (!isLineAlignedToPoint({ x: xi, y: yi }, line2)) {
         return null;
     }
     return {
@@ -73,7 +82,7 @@ export const getIntersectionPoint = function (line1: Line, line2: Line): Point {
  *              closest intersection point (coordinate)
  */
 export const getClosestIntersectionPointCircle = function (line: Line, circle): Point {
-    const intersections = this.getIntersectionPointsCircle(line, circle);
+    const intersections = getIntersectionPointsCircle(line, circle);
 
     if (intersections.length == 1) {
         return intersections[0]; // one intersection
@@ -92,8 +101,28 @@ export const getClosestIntersectionPointCircle = function (line: Line, circle): 
     return null; // no intersections at all
 };
 
-export const getMiddleIntersectionPointCircle = function (line: Line, circle): Point {
-    const intersections = this.getIntersectionPointsCircle(line, circle);
+export const getMiddleIntersectionPointCircles = function (circle1: Circle, circle2: Circle): Point {
+    /*let d = Math.sqrt(Math.pow(circle2.x - circle1.x, 2) + Math.pow(circle2.y - circle1.y, 2));
+    let a = circle1.r * circle1.r - circle2.r * circle2.r + (d * d) / (2 * d);
+    let h = Math.sqrt(Math.pow(circle1.r, 2) - a * a);
+    if (circle1.r * circle1.r - a * a <= 0) {
+        return null;
+    }
+    let aX = circle1.x + (a * (circle2.x - circle1.x)) / d;
+    let aY = circle1.y + (a * (circle2.y - circle1.y)) / d;
+    let bX = aX + (h * (circle2.y - circle1.y)) / d;
+    let bY = aY - (h * (circle2.x - circle1.x)) / d;*/
+    let dSq = (circle2.x - circle1.x) * (circle2.x - circle1.x) + (circle2.y - circle1.y) * (circle2.y - circle1.y);
+    if (dSq < (circle1.r + circle2.r) * (circle1.r + circle2.r)) {
+        return { x: (circle1.x + circle2.x) / 2, y: (circle1.y + circle2.y) / 2 }; // TODO this is only true if r1 and r2 are the same
+    }
+    return null;
+};
+
+export const getMiddleIntersectionPointCircle = function (line: Line, circle: Circle, tolerance?: number): Point {
+    tolerance = tolerance || 0;
+    let circleWTolerance = { x: circle.x, y: circle.y, r: circle.r + tolerance };
+    const intersections = getIntersectionPointsCircle(line, circleWTolerance);
 
     if (intersections.length == 1) {
         return intersections[0]; // one intersection
@@ -114,7 +143,7 @@ export const getMiddleIntersectionPointCircle = function (line: Line, circle): P
  * @return {{x, y}[]}
  *              array with point(s) of the intersection
  */
-export const getIntersectionPointsCircle = function (line, circle): Point[] {
+export const getIntersectionPointsCircle2 = function (line: Line, circle: Circle): Point[] {
     var dx, dy, A, B, C, det, t;
 
     dx = line.x2 - line.x1;
@@ -132,7 +161,7 @@ export const getIntersectionPointsCircle = function (line, circle): Point[] {
         t = -B / (2 * A);
         var intersection1 = { x: line.x1 + t * dx, y: line.y1 + t * dy };
 
-        if (this.isLineAlignedToPoint(intersection1, line)) return [intersection1];
+        if (isLineAlignedToPoint(intersection1, line)) return [intersection1];
 
         return [];
     } else {
@@ -142,10 +171,101 @@ export const getIntersectionPointsCircle = function (line, circle): Point[] {
         t = (-B - Math.sqrt(det)) / (2 * A);
         var intersection2 = { x: line.x1 + t * dx, y: line.y1 + t * dy };
 
-        if (this.isLineAlignedToPoint(intersection1, line) && this.isLineAlignedToPoint(intersection2, line)) return [intersection1, intersection2];
+        if (isLineAlignedToPoint(intersection1, line) && isLineAlignedToPoint(intersection2, line)) return [intersection1, intersection2];
 
         return [];
     }
+};
+
+export const getIntersectionPointsCircle = function (line: Line, circle: Circle): Point[] {
+    let pointA: Point = { x: line.x1, y: line.y1 };
+    let pointB: Point = { x: line.x2, y: line.y2 };
+    let center: Point = { x: circle.x, y: circle.y };
+    let radius: number = circle.r;
+
+    const onLine = function (p1: Point, p2: Point, p: Point): boolean {
+        if (epsilonEqual(Math.sqrt(getDistance(p1, p)) + Math.sqrt(getDistance(p2, p)), Math.sqrt(getDistance(p1, p2)), 2)) {
+            return true;
+        }
+        return false;
+    };
+
+    let baX = pointB.x - pointA.x;
+    let baY = pointB.y - pointA.y;
+    let caX = center.x - pointA.x;
+    let caY = center.y - pointA.y;
+
+    let a = baX * baX + baY * baY;
+    let bBy2 = baX * caX + baY * caY;
+    let c = caX * caX + caY * caY - radius * radius;
+
+    let pBy2 = bBy2 / a;
+    let q = c / a;
+
+    let disc = pBy2 * pBy2 - q;
+    if (disc < 0) {
+        return [];
+    }
+    // if disc == 0 ... dealt with later
+    let tmpSqrt = Math.sqrt(disc);
+    let abScalingFactor1 = -pBy2 + tmpSqrt;
+    let abScalingFactor2 = -pBy2 - tmpSqrt;
+
+    let p1: Point = { x: pointA.x - baX * abScalingFactor1, y: pointA.y - baY * abScalingFactor1 };
+    if (disc == 0) {
+        // abScalingFactor1 == abScalingFactor2
+        return onLine(pointA, pointB, p1) ? [p1] : [];
+    }
+    let p2: Point = { x: pointA.x - baX * abScalingFactor2, y: pointA.y - baY * abScalingFactor2 };
+    p1 = onLine(pointA, pointB, p1) ? p1 : null;
+    p2 = onLine(pointA, pointB, p2) ? p2 : null;
+    return p1 && p2 ? [p1, p2] : p1 ? [p1] : p2 ? [p2] : [];
+};
+
+export const inside = (circle: Circle, rect: Rectangle): boolean => {
+    if (circle.x - circle.r <= rect.x) {
+        return false;
+    }
+    if (circle.y - circle.r <= rect.y) {
+        return false;
+    }
+    if (circle.x + circle.r >= rect.x + rect.w) {
+        return false;
+    }
+    if (circle.y + circle.r >= rect.y + rect.w) {
+        return false;
+    }
+    return true;
+};
+export const getMiddleIntersectionCircleRect = (circle: Circle, rect: Rectangle, lines: Line[]): Point => {
+    if (intersects(circle, rect)) {
+        for (let i = 0; i < lines.length; i++) {
+            let p: Point = getMiddleIntersectionPointCircle(lines[i], circle);
+            if (p) {
+                return p;
+            }
+        }
+        return null;
+    } else {
+        return null;
+    }
+};
+
+export const intersects = (circle: Circle, rect: Rectangle): boolean => {
+    const clamp = function (value: number, min: number, max: number): number {
+        return value < min ? min : value > max ? max : value;
+    };
+    // Find the closest point to the circle within the rectangle
+    let closestX = clamp(circle.x, rect.x, rect.x + rect.w);
+    let closestY = clamp(circle.y, rect.y, rect.y + rect.h);
+
+    // Calculate the distance between the circle's center and this closest point
+    let distX = circle.x - closestX;
+    let distY = circle.y - closestY;
+
+    // If the distance is less than the circle's radius, an intersection occurs
+    let distSq = distX * distX + distY * distY;
+    return distSq < circle.r * circle.r;
 };
 
 /**
@@ -170,86 +290,13 @@ export function isLineAlignedToPoint(p: Point, line: Line): boolean {
     return true;
 }
 
-export const getLinesFromObj = function (obj) {
-    switch (obj.shape) {
-        case 'rectangle':
-            return [
-                {
-                    x1: obj.x,
-                    x2: obj.x,
-                    y1: obj.y,
-                    y2: obj.y + obj.h,
-                },
-                {
-                    x1: obj.x,
-                    x2: obj.x + obj.w,
-                    y1: obj.y,
-                    y2: obj.y,
-                },
-                {
-                    x1: obj.x + obj.w,
-                    x2: obj.x,
-                    y1: obj.y + obj.h,
-                    y2: obj.y + obj.h,
-                },
-                {
-                    x1: obj.x + obj.w,
-                    x2: obj.x + obj.w,
-                    y1: obj.y + obj.h,
-                    y2: obj.y,
-                },
-            ];
-        case 'robot':
-            return [
-                {
-                    x1: obj.backLeft.rx,
-                    x2: obj.frontLeft.rx,
-                    y1: obj.backLeft.ry,
-                    y2: obj.frontLeft.ry,
-                },
-                {
-                    x1: obj.frontLeft.rx,
-                    x2: obj.frontRight.rx,
-                    y1: obj.frontLeft.ry,
-                    y2: obj.frontRight.ry,
-                },
-                {
-                    x1: obj.frontRight.rx,
-                    x2: obj.backRight.rx,
-                    y1: obj.frontRight.ry,
-                    y2: obj.backRight.ry,
-                },
-                {
-                    x1: obj.backRight.rx,
-                    x2: obj.backLeft.rx,
-                    y1: obj.backRight.ry,
-                    y2: obj.backLeft.ry,
-                },
-            ];
-        case 'triangle':
-            return [
-                {
-                    x1: obj.ax,
-                    x2: obj.bx,
-                    y1: obj.ay,
-                    y2: obj.by,
-                },
-                {
-                    x1: obj.bx,
-                    x2: obj.cx,
-                    y1: obj.by,
-                    y2: obj.cy,
-                },
-                {
-                    x1: obj.ax,
-                    x2: obj.cx,
-                    y1: obj.ay,
-                    y2: obj.cy,
-                },
-            ];
-        default:
-            return false;
-    }
+export const getLinesFromRect = function (rect): Line[] {
+    return [
+        { x1: rect.x, y1: rect.y, x2: rect.x + rect.w, y2: rect.y },
+        { x1: rect.x + rect.w, y1: rect.y, x2: rect.x + rect.w, y2: rect.x + rect.h },
+        { x1: rect.x + rect.w, y1: rect.y + rect.h, x2: rect.x, y2: rect.y + rect.h },
+        { x1: rect.x, y1: rect.y + rect.h, x2: rect.x, y2: rect.y },
+    ];
 };
 
 /**
@@ -270,8 +317,8 @@ export const getDistanceToCircle = function (point, circle) {
     var aX = circle.x + (vX / magV) * circle.r;
     var aY = circle.y + (vY / magV) * circle.r;
     return {
-        x: aX,
-        y: aY,
+        x: point.x - aX,
+        y: point.y - aY,
     };
 };
 
@@ -485,27 +532,30 @@ export const rgbToHsv = function (r, g, b) {
  */
 export const getColor = function (hsv) {
     if (hsv[2] <= 10) {
-        return CONSTANTS.COLOR_ENUM.BLACK;
+        return [CONSTANTS.COLOR_ENUM.BLACK, '#000000'];
     }
     if ((hsv[0] < 10 || hsv[0] > 350) && hsv[1] > 90 && hsv[2] > 50) {
-        return CONSTANTS.COLOR_ENUM.RED;
+        return [CONSTANTS.COLOR_ENUM.RED, '#FA010C'];
     }
     if (hsv[0] > 40 && hsv[0] < 70 && hsv[1] > 90 && hsv[2] > 50) {
-        return CONSTANTS.COLOR_ENUM.YELLOW;
+        return [CONSTANTS.COLOR_ENUM.YELLOW, '#F7F700'];
     }
     if (hsv[0] < 50 && hsv[1] > 50 && hsv[1] < 100 && hsv[2] < 50) {
-        return CONSTANTS.COLOR_ENUM.BROWN;
+        return [CONSTANTS.COLOR_ENUM.BROWN, '#EBC300'];
     }
     if (hsv[1] < 10 && hsv[2] > 90) {
-        return CONSTANTS.COLOR_ENUM.WHITE;
+        return [CONSTANTS.COLOR_ENUM.WHITE, '#FFFFFF'];
     }
     if (hsv[0] > 70 && hsv[0] < 160 && hsv[1] > 80) {
-        return CONSTANTS.COLOR_ENUM.GREEN;
+        return [CONSTANTS.COLOR_ENUM.GREEN, '#00852a'];
+    }
+    if (hsv[0] > 165 && hsv[0] <= 200 && hsv[1] > 70 && hsv[2] > 75) {
+        return [CONSTANTS.COLOR_ENUM.NONE, '#33B8CA'];
     }
     if (hsv[0] > 200 && hsv[0] < 250 && hsv[1] > 90 && hsv[2] > 50) {
-        return CONSTANTS.COLOR_ENUM.BLUE;
+        return [CONSTANTS.COLOR_ENUM.BLUE, '#1e5aa8'];
     }
-    return CONSTANTS.COLOR_ENUM.NONE;
+    return [CONSTANTS.COLOR_ENUM.NONE, '#EBC300'];
 };
 
 // TODO type PointRobotWorld
