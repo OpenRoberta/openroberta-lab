@@ -22,11 +22,13 @@ import { SelectionListener } from 'robot.base';
 import {
     BaseSimulationObject,
     CircleSimulationObject,
+    Ground,
     MarkerSimulationObject,
     RectangleSimulationObject,
     SimObjectShape,
+    SimObjectType,
     TriangleSimulationObject,
-} from './simulation.objects';
+} from 'simulation.objects';
 import { Pose } from 'robot.base.mobile';
 import { Simulation } from 'progSim.controller';
 
@@ -691,81 +693,101 @@ export class SimulationRoberta implements Simulation {
         this.scene.stepBackground(num);
     }
 
-    setNewConfig(relatives) {
-        let height: number = this.scene.uCanvas.height;
-        let width: number = this.scene.uCanvas.width;
-        let sim = this;
+    async setNewConfig(configData) {
+        if (configData.hasOwnProperty('tileSet')) {
+            await this.prepareRescueLine(configData).then(
+                function (result) {
+                    console.log(result);
+                },
+                function (result) {
+                    alert(result.message);
+                    // TODO with msg.keys: MSG.displayInformation(result, '', result.message, null, null);
+                }
+            );
+        } else {
+            let relatives = configData;
+            let height: number = this.scene.uCanvas.height;
+            let width: number = this.scene.uCanvas.width;
+            let sim = this;
 
-        function calculateShape(object) {
-            let newObject: any = {};
-            newObject.id = sim.scene.uniqueObjectId;
-            if (object.type === 'MARKER') {
-                newObject.shape = 'MARKER';
-                newObject.markerId = object.markerId;
-            } else {
-                newObject.shape = object.form.toUpperCase() as SimObjectShape;
-            }
-            newObject.color = object.color;
-            newObject.newObjecttype = object.type;
-            switch (object.form.toLowerCase()) {
-                case 'rectangle':
-                    newObject.p = { x: object.x * width, y: object.y * height };
-                    newObject.params = [object.w * width, object.h * height];
-                    break;
-                case 'triangle':
-                    newObject.p = { x: 0, y: 0 };
-                    newObject.params = [object.ax * width, object.ay * height, object.bx * width, object.by * height, object.cx * width, object.cy * height];
-                    break;
-                case 'circle':
-                    newObject.p = {
-                        x: object.x * width,
-                        y: object.y * height,
-                    };
-                    newObject.params = [object.r * height * width];
-                    break;
-            }
-            return newObject;
-        }
+            const calculateShape = (object) => {
+                let newObject: any = {};
+                newObject.id = sim.scene.uniqueObjectId;
+                if (object.type === 'MARKER') {
+                    newObject.shape = 'MARKER';
+                    newObject.markerId = object.markerId;
+                } else {
+                    newObject.shape = object.form.toUpperCase() as SimObjectShape;
+                }
+                newObject.color = object.color;
+                newObject.newObjecttype = object.type;
+                switch (object.form.toLowerCase()) {
+                    case 'rectangle':
+                        newObject.p = { x: object.x * width, y: object.y * height };
+                        newObject.params = [object.w * width, object.h * height];
+                        break;
+                    case 'triangle':
+                        newObject.p = { x: 0, y: 0 };
+                        newObject.params = [
+                            object.ax * width,
+                            object.ay * height,
+                            object.bx * width,
+                            object.by * height,
+                            object.cx * width,
+                            object.cy * height,
+                        ];
+                        break;
+                    case 'circle':
+                        newObject.p = {
+                            x: object.x * width,
+                            y: object.y * height,
+                        };
+                        newObject.params = [object.r * height * width];
+                        break;
+                }
+                return newObject;
+            };
 
-        this.importPoses = [];
-        relatives.robotPoses.forEach((pose) => {
-            if (Array.isArray(pose)) {
-                let myPose: any = {};
-                myPose.x = pose[0].x * width;
-                myPose.y = pose[0].y * height;
-                myPose.theta = pose[0].theta;
-                let myInitialPose: any = {};
-                myInitialPose.x = pose[1].x * width;
-                myInitialPose.y = pose[1].y * height;
-                myInitialPose.theta = pose[1].theta;
-                this.importPoses.push([myPose, myInitialPose]);
-            } else {
-                let myPose: any = {};
-                myPose.x = pose.x * width;
-                myPose.y = pose.y * height;
-                myPose.theta = pose.theta;
-                this.importPoses.push([myPose, myPose]);
-            }
-        });
-        this.scene.setRobotPoses(this.importPoses);
-        let importObstacles = [];
-        relatives.obstacles.forEach((obstacle) => {
-            importObstacles.push(calculateShape(obstacle));
-        });
-        this.scene.addImportObstacle(importObstacles);
-
-        let importColorAreas = [];
-        relatives.colorAreas.forEach((colorArea) => {
-            importColorAreas.push(calculateShape(colorArea));
-        });
-        this.scene.addImportColorAreaList(importColorAreas);
-
-        let importMarker = [];
-        relatives.marker &&
-            relatives.marker.forEach((marker) => {
-                importMarker.push(calculateShape(marker));
+            this.importPoses = [];
+            relatives.robotPoses.forEach((pose) => {
+                if (Array.isArray(pose)) {
+                    let myPose: any = {};
+                    myPose.x = pose[0].x * width;
+                    myPose.y = pose[0].y * height;
+                    myPose.theta = pose[0].theta;
+                    let myInitialPose: any = {};
+                    myInitialPose.x = pose[1].x * width;
+                    myInitialPose.y = pose[1].y * height;
+                    myInitialPose.theta = pose[1].theta;
+                    this.importPoses.push([myPose, myInitialPose]);
+                } else {
+                    let myPose: any = {};
+                    myPose.x = pose.x * width;
+                    myPose.y = pose.y * height;
+                    myPose.theta = pose.theta;
+                    this.importPoses.push([myPose, myPose]);
+                }
             });
-        this.scene.addImportMarkerList(importMarker);
+            this.scene.setRobotPoses(this.importPoses);
+            let importObstacles = [];
+            relatives.obstacles.forEach((obstacle) => {
+                importObstacles.push(calculateShape(obstacle));
+            });
+            this.scene.addImportObstacle(importObstacles);
+
+            let importColorAreas = [];
+            relatives.colorAreas.forEach((colorArea) => {
+                importColorAreas.push(calculateShape(colorArea));
+            });
+            this.scene.addImportColorAreaList(importColorAreas);
+
+            let importMarker = [];
+            relatives.marker &&
+                relatives.marker.forEach((marker) => {
+                    importMarker.push(calculateShape(marker));
+                });
+            this.scene.addImportMarkerList(importMarker);
+        }
     }
 
     setPause(value) {
@@ -866,6 +888,377 @@ export class SimulationRoberta implements Simulation {
         }
         this.updateBreakpointEvent();
     }
+
+    private async prepareRescueLine(configData): Promise<{ rc: string; message: string }> {
+        let sim = this;
+        return new Promise(function (resolve, reject) {
+            let result: { rc: string; message: string } = { rc: 'ok', message: '' };
+            const TILE_SIZE: number = 75;
+            const EV_WALL_SIZE: number = 10;
+            let height: number = configData.length * TILE_SIZE; // tile height/length is 25cm, 3 pixel = 1cm
+            let width: number = configData.width * TILE_SIZE; // tile width is 25cm, 3 pixel = 1cm
+            let canvas = document.createElement('canvas');
+            canvas.id = 'tmp';
+            canvas.width = width;
+            canvas.height = height;
+            $('body').append(canvas);
+
+            const preload = function (src) {
+                return new Promise(function (resolve, reject) {
+                    var img = new Image();
+                    img.onload = function () {
+                        resolve(img);
+                    };
+                    img.onerror = function () {
+                        reject("Image couldn't be loaded: " + src['tileType'].image);
+                    };
+                    img.src = '/css/img/simulationRescue/tiles/' + src['tileType'].image;
+                });
+            };
+
+            let tile: keyof typeof configData.tiles;
+            let imgArray: any[] = [];
+            for (tile in configData.tiles) {
+                imgArray.push(configData.tiles[tile]);
+            }
+            let preloadAll = function (images) {
+                return Promise.all(images.map(preload));
+            };
+
+            let entrance: {};
+            let startTile: {} = configData.tiles[configData.startTile.x + ',' + configData.startTile.y + ',' + configData.startTile.z];
+            let startPose: any = {};
+            let rcjLabel = [];
+            let drawEntranceEvacuationZone = (tile, ctx: CanvasRenderingContext2D) => {
+                ctx.save();
+                ctx.translate(tile['x'] * TILE_SIZE + TILE_SIZE / 2, tile['y'] * TILE_SIZE + TILE_SIZE / 2);
+                let rot = 0;
+                switch (tile['dir']) {
+                    case 'top':
+                        break;
+                    case 'right':
+                        rot = Math.PI / 2;
+                        break;
+                    case 'bottom':
+                        rot = Math.PI;
+                        break;
+                    case 'left':
+                        rot = (270 * Math.PI) / 180;
+                        break;
+                }
+                ctx.rotate(rot);
+                ctx.fillStyle = '#33B8CA';
+                ctx.fillRect(-TILE_SIZE / 2, -TILE_SIZE / 2, TILE_SIZE, EV_WALL_SIZE);
+                ctx.restore();
+            };
+            let drawTileSeparator = (ctx: CanvasRenderingContext2D) => {
+                ctx.strokeStyle = '#dddddd';
+                ctx.lineWidth = 1;
+                for (let i = 1; i < height; i++) {
+                    ctx.moveTo(0, i * TILE_SIZE);
+                    ctx.lineTo(width * TILE_SIZE, i * TILE_SIZE);
+                    ctx.stroke();
+                }
+                for (let j = 1; j < width; j++) {
+                    ctx.moveTo(j * TILE_SIZE, 0);
+                    ctx.lineTo(j * TILE_SIZE, TILE_SIZE * height);
+                    ctx.stroke();
+                }
+            };
+            const getRcjVictims = (evacuationZone): any[] => {
+                let victims = configData.victims;
+                let rcjVictimsList = [];
+                let zone: Rectangle = {
+                    x: Math.min(evacuationZone[0], evacuationZone[2]) * TILE_SIZE,
+                    y: Math.min(evacuationZone[1], evacuationZone[3]) * TILE_SIZE,
+                    w: (Math.max(evacuationZone[0], evacuationZone[2]) - Math.min(evacuationZone[0], evacuationZone[2]) + 1) * TILE_SIZE,
+                    h: (Math.max(evacuationZone[1], evacuationZone[3]) - Math.min(evacuationZone[1], evacuationZone[3]) + 1) * TILE_SIZE,
+                };
+                const createVictim = (color) => {
+                    let victim = {
+                        id: sim.scene.uniqueObjectId,
+                        p: { x: zone.x + Math.random() * zone.w, y: zone.y + Math.random() * zone.h },
+                        params: [7, 1],
+                        theta: 0,
+                        color: color,
+                        shape: SimObjectShape.Circle,
+                        type: SimObjectType.Obstacle,
+                    };
+                    rcjVictimsList.push(victim);
+                };
+                if (victims['live'] && victims['live'] > 0) {
+                    for (let i = 0; i < victims['live']; ++i) {
+                        createVictim('#ff0000');
+                    }
+                }
+                if (victims['dead'] && victims['dead'] > 0) {
+                    for (let i = 0; i < victims['dead']; ++i) {
+                        createVictim('#000000');
+                    }
+                }
+                return rcjVictimsList;
+            };
+            const createBackgroundImage = (): HTMLImageElement => {
+                const image = new Image();
+                image.src = canvas.toDataURL();
+                image.width = canvas.width;
+                image.height = canvas.height;
+                return image;
+            };
+            preloadAll(imgArray).then(
+                function (images) {
+                    let ctx = canvas.getContext('2d');
+                    ctx.fillStyle = 'white';
+                    ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    let importObstacles = [];
+                    let evacuationZone = [];
+                    imgArray.forEach((img, index) => {
+                        if (img['tileType']['image'].startsWith('ev')) {
+                            let ev = img['tileType']['image'].replace('.png', '');
+                            switch (ev) {
+                                case 'ev1':
+                                    evacuationZone.push(img['x']);
+                                    evacuationZone.push(img['y']);
+                                    // evacuation zone tile without walls
+                                    break;
+                                case 'ev2':
+                                    let wall = {};
+                                    let rot = img['rot'].toString();
+                                    switch (rot) {
+                                        case '0':
+                                            wall = {
+                                                id: sim.scene.uniqueObjectId,
+                                                p: { x: img['x'] * TILE_SIZE + EV_WALL_SIZE, y: img['y'] * TILE_SIZE + EV_WALL_SIZE },
+                                                params: [TILE_SIZE, EV_WALL_SIZE],
+                                                theta: 0,
+                                                color: '#ffffff',
+                                                shape: SimObjectShape.Rectangle,
+                                                type: SimObjectType.Obstacle,
+                                            };
+                                            break;
+                                        case '90':
+                                            wall = {
+                                                id: sim.scene.uniqueObjectId,
+                                                p: { x: img['x'] * TILE_SIZE + TILE_SIZE, y: img['y'] * TILE_SIZE + EV_WALL_SIZE },
+                                                params: [EV_WALL_SIZE, TILE_SIZE],
+                                                theta: 0,
+                                                color: '#ffffff',
+                                                shape: SimObjectShape.Rectangle,
+                                                type: SimObjectType.Obstacle,
+                                            };
+                                            break;
+                                        case '180':
+                                            wall = {
+                                                id: sim.scene.uniqueObjectId,
+                                                p: { x: img['x'] * TILE_SIZE + EV_WALL_SIZE, y: img['y'] * TILE_SIZE + TILE_SIZE },
+                                                params: [TILE_SIZE, EV_WALL_SIZE],
+                                                theta: 0,
+                                                color: '#ffffff',
+                                                shape: SimObjectShape.Rectangle,
+                                                type: SimObjectType.Obstacle,
+                                            };
+                                            break;
+                                        case '270':
+                                            wall = {
+                                                id: sim.scene.uniqueObjectId,
+                                                p: { x: img['x'] * TILE_SIZE + EV_WALL_SIZE, y: img['y'] * TILE_SIZE + EV_WALL_SIZE },
+                                                params: [EV_WALL_SIZE, TILE_SIZE],
+                                                theta: 0,
+                                                color: '#ffffff',
+                                                shape: SimObjectShape.Rectangle,
+                                                type: SimObjectType.Obstacle,
+                                            };
+                                            break;
+                                        default:
+                                            result.rc = 'error';
+                                            result.message = 'Unknown evacuation zone rotation';
+                                    }
+                                    importObstacles.push(wall);
+                                    break;
+                                case 'ev3':
+                                    wall = {};
+                                    rot = img['rot'].toString();
+                                    switch (rot) {
+                                        case '0':
+                                            wall = {
+                                                id: sim.scene.uniqueObjectId,
+                                                p: { x: img['x'] * TILE_SIZE + EV_WALL_SIZE, y: img['y'] * TILE_SIZE + EV_WALL_SIZE },
+                                                params: [TILE_SIZE, EV_WALL_SIZE],
+                                                theta: 0,
+                                                color: '#ffffff',
+                                                shape: SimObjectShape.Rectangle,
+                                                type: SimObjectType.Obstacle,
+                                            };
+                                            importObstacles.push(wall);
+                                            wall = {
+                                                id: sim.scene.uniqueObjectId,
+                                                p: { x: img['x'] * TILE_SIZE + TILE_SIZE, y: img['y'] * TILE_SIZE + EV_WALL_SIZE },
+                                                params: [EV_WALL_SIZE, TILE_SIZE],
+                                                theta: 0,
+                                                color: '#ffffff',
+                                                shape: SimObjectShape.Rectangle,
+                                                type: SimObjectType.Obstacle,
+                                            };
+                                            break;
+                                        case '90':
+                                            wall = {
+                                                id: sim.scene.uniqueObjectId,
+                                                p: { x: img['x'] * TILE_SIZE + TILE_SIZE, y: img['y'] * TILE_SIZE + EV_WALL_SIZE },
+                                                params: [EV_WALL_SIZE, TILE_SIZE],
+                                                theta: 0,
+                                                color: '#ffffff',
+                                                shape: SimObjectShape.Rectangle,
+                                                type: SimObjectType.Obstacle,
+                                            };
+                                            importObstacles.push(wall);
+                                            wall = {
+                                                id: sim.scene.uniqueObjectId,
+                                                p: { x: img['x'] * TILE_SIZE + EV_WALL_SIZE, y: img['y'] * TILE_SIZE + TILE_SIZE },
+                                                params: [TILE_SIZE, EV_WALL_SIZE],
+                                                theta: 0,
+                                                color: '#ffffff',
+                                                shape: SimObjectShape.Rectangle,
+                                                type: SimObjectType.Obstacle,
+                                            };
+                                            break;
+                                        case '180':
+                                            wall = {
+                                                id: sim.scene.uniqueObjectId,
+                                                p: { x: img['x'] * TILE_SIZE + EV_WALL_SIZE, y: img['y'] * TILE_SIZE + TILE_SIZE },
+                                                params: [TILE_SIZE, EV_WALL_SIZE],
+                                                theta: 0,
+                                                color: '#ffffff',
+                                                shape: SimObjectShape.Rectangle,
+                                                type: SimObjectType.Obstacle,
+                                            };
+                                            importObstacles.push(wall);
+                                            wall = {
+                                                id: sim.scene.uniqueObjectId,
+                                                p: { x: img['x'] * TILE_SIZE + EV_WALL_SIZE, y: img['y'] * TILE_SIZE + EV_WALL_SIZE },
+                                                params: [EV_WALL_SIZE, TILE_SIZE],
+                                                theta: 0,
+                                                color: '#ffffff',
+                                                shape: SimObjectShape.Rectangle,
+                                                type: SimObjectType.Obstacle,
+                                            };
+                                            break;
+                                        case '270':
+                                            wall = {
+                                                id: sim.scene.uniqueObjectId,
+                                                p: { x: img['x'] * TILE_SIZE + EV_WALL_SIZE, y: img['y'] * TILE_SIZE + EV_WALL_SIZE },
+                                                params: [EV_WALL_SIZE, TILE_SIZE],
+                                                theta: 0,
+                                                color: '#ffffff',
+                                                shape: SimObjectShape.Rectangle,
+                                                type: SimObjectType.Obstacle,
+                                            };
+                                            importObstacles.push(wall);
+                                            wall = {
+                                                id: sim.scene.uniqueObjectId,
+                                                p: { x: img['x'] * TILE_SIZE + EV_WALL_SIZE, y: img['y'] * TILE_SIZE + EV_WALL_SIZE },
+                                                params: [TILE_SIZE, EV_WALL_SIZE],
+                                                theta: 0,
+                                                color: '#ffffff',
+                                                shape: SimObjectShape.Rectangle,
+                                                type: SimObjectType.Obstacle,
+                                            };
+                                            break;
+                                        default:
+                                            result.rc = 'error';
+                                            result.message = 'Unknown evacuation zone rotation';
+                                    }
+                                    importObstacles.push(wall);
+                                    break;
+                                default:
+                                    result.rc = 'error';
+                                    result.message = 'Unknown evacuation zone type';
+                            }
+                            // check for entrance (unfortunately not labeled)
+                            let x = img['x'];
+                            let y = img['y'];
+                            let pTop: string = '' + x + ',' + (y - 1) + ',0';
+                            let pRight: string = '' + (x + 1) + ',' + y + ',0';
+                            let pBottom: string = '' + x + ',' + (y + 1) + ',0';
+                            let pLeft: string = '' + (x - 1) + ',' + y + ',0';
+                            if (configData['tiles'][pTop] && configData['tiles'][pTop]['tileType'].image.startsWith('tile-0')) {
+                                entrance = { x: x, y: y, dir: 'top' };
+                            } else if (configData['tiles'][pRight] && configData['tiles'][pRight]['tileType'].image.startsWith('tile-0')) {
+                                entrance = { x: x, y: y, dir: 'right' };
+                            } else if (configData['tiles'][pBottom] && configData['tiles'][pBottom]['tileType'].image.startsWith('tile-0')) {
+                                entrance = { x: x, y: y, dir: 'bottom' };
+                            } else if (configData['tiles'][pLeft] && configData['tiles'][pLeft]['tileType'].image.startsWith('tile-0')) {
+                                entrance = { x: x, y: y, dir: 'left' };
+                            }
+                        } else {
+                            ctx.save();
+                            ctx.translate(img['x'] * TILE_SIZE + TILE_SIZE / 2, img['y'] * TILE_SIZE + TILE_SIZE / 2);
+                            ctx.rotate((img['rot'] * Math.PI) / 180);
+                            ctx.drawImage(
+                                images[index],
+                                0,
+                                0,
+                                images[index]['width'],
+                                images[index]['height'],
+                                -TILE_SIZE / 2,
+                                -TILE_SIZE / 2,
+                                TILE_SIZE,
+                                TILE_SIZE
+                            );
+                            ctx.restore();
+                            if (img['index'].length > 0) {
+                                rcjLabel.push(img);
+                            }
+                        }
+                    });
+                    if (startTile) {
+                        startPose.x = startTile['x'] * TILE_SIZE + TILE_SIZE / 2 + EV_WALL_SIZE;
+                        startPose.y = startTile['y'] * TILE_SIZE + TILE_SIZE / 2 + EV_WALL_SIZE;
+                        let rot = 0;
+                        let next = configData['tiles'][startTile['next']];
+                        if (startTile['x'] - next['x'] === 1) {
+                            rot = Math.PI;
+                        }
+                        if (startTile['y'] - next['y'] === -1) {
+                            rot = Math.PI / 2;
+                        } else if (startTile['y'] - next['y'] === 1) {
+                            rot = (Math.PI * 3) / 2;
+                        }
+                        startPose.theta = rot;
+                        //rcjLabel.push(startTile);
+                    } else {
+                        result.rc = 'error';
+                        result.message = 'Unknown start tile';
+                    }
+                    if (!entrance) {
+                        result.rc = 'error';
+                        result.message = 'Unknown evacuation zone entrance tile';
+                    }
+                    if (result.rc === 'ok') {
+                        sim.deleteAllColorArea();
+                        sim.deleteAllObstacle();
+                        drawEntranceEvacuationZone(entrance, ctx);
+                        drawTileSeparator(ctx);
+                        sim.scene.imgBackgroundList = [createBackgroundImage()];
+                        sim.setBackground(0);
+                        sim.scene.addImportObstacle(importObstacles.concat(getRcjVictims(evacuationZone)));
+                        sim.scene.addImportRcjLabel(rcjLabel);
+                        sim.scene.drawRcjLabel();
+                        sim.scene.setRobotPoses([[startPose, startPose]]);
+                        resolve(result);
+                    } else {
+                        reject(result);
+                    }
+                    $('#tmp').remove();
+                },
+                function (err) {
+                    $('#tmp').remove();
+                    result.rc = 'error';
+                    result.message = err;
+                    reject(result);
+                }
+            );
+        });
+    }
 }
 
 // requestAnimationFrame polyfill by Erik Möller.
@@ -899,3 +1292,6 @@ export class SimulationRoberta implements Simulation {
     }
 })();
 export default SimulationRoberta.Instance;
+function cloadImages(names: any, arg1: any, files: any, arg3: any, onAllLoaded: any, arg5: any, arg6: undefined) {
+    throw new Error('Function not implemented.');
+}

@@ -95,6 +95,7 @@ export const FOR: string = "FOR";
 export const FOREVER: string = "FOREVER";
 export const FOREVER_ARDU: string = "FOREVER_ARDU";
 export const FOREWARD: string = "FOREWARD";
+export const FORWARD: string = "FORWARD";
 export const FOR_EACH: string = "FOR_EACH";
 export const FREEFALL: string = "freefall";
 export const FREQUENCY: string = "frequency";

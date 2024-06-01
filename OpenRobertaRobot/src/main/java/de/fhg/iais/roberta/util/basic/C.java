@@ -97,6 +97,7 @@ public class C {
     public static final String FOREVER = "FOREVER";
     public static final String FOREVER_ARDU = "FOREVER_ARDU";
     public static final String FOREWARD = "FOREWARD";
+    public static final String FORWARD = "FORWARD";
     public static final String FOR_EACH = "FOR_EACH";
     public static final String FREEFALL = "freefall";
     public static final String FREQUENCY = "frequency";

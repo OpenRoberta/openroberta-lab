@@ -6,16 +6,17 @@ import * as GUISTATE_C from 'guiState.controller';
 import {
     CircleSimulationObject,
     Ground,
+    IMovable,
     ISimulationObstacle,
     MarkerSimulationObject,
     RectangleSimulationObject,
     TriangleSimulationObject,
-} from './simulation.objects';
+} from 'simulation.objects';
 import * as UTIL from 'util.roberta';
+import { ISensor } from 'robot.sensors';
 import * as $ from 'jquery';
 // @ts-ignore
 import * as Blockly from 'blockly';
-import { ISensor } from 'robot.sensors';
 
 export abstract class ChassisMobile implements IUpdateAction, ISensor, IDrawable, IReset, ISimulationObstacle {
     abstract backLeft: PointRobotWorldBumped;
@@ -83,10 +84,10 @@ export abstract class ChassisMobile implements IUpdateAction, ISensor, IDrawable
         udCtx: CanvasRenderingContext2D,
         personalObstacleList: any[]
     ): void {
-        this.checkCollisions(this.id, (myRobot as RobotBaseMobile).pose, dt, personalObstacleList);
+        this.checkCollisions(running, this.id, (myRobot as RobotBaseMobile).pose, dt, personalObstacleList);
     }
 
-    abstract checkCollisions(myId: number, myPose: Pose, dt: number, personalObstacleList: ISimulationObstacle[]): void;
+    abstract checkCollisions(running: boolean, myId: number, myPose: Pose, dt: number, personalObstacleList: ISimulationObstacle[]): void;
 
     getTolerance(): number {
         return 0;
@@ -96,8 +97,8 @@ export abstract class ChassisMobile implements IUpdateAction, ISensor, IDrawable
 }
 
 export abstract class ChassisDiffDrive extends ChassisMobile {
-    abstract backMiddle: PointRobotWorld;
-    abstract frontMiddle: PointRobotWorld;
+    abstract backMiddle: PointRobotWorldBumped;
+    abstract frontMiddle: PointRobotWorldBumped;
     left: Motor = { port: '', speed: 0 };
     right: Motor = { port: '', speed: 0 };
     abstract wheelBack: Geometry;
@@ -115,6 +116,7 @@ export abstract class ChassisDiffDrive extends ChassisMobile {
         rightAngle: 0,
         leftAngle: 0,
     };
+    protected manipulator: { port: string; speed: number; angle: number };
     protected readonly TRACKWIDTH: number;
     protected readonly WHEELDIAMETER: number;
 
@@ -131,6 +133,12 @@ export abstract class ChassisDiffDrive extends ChassisMobile {
                     this.right.speed = 0;
                     this.left.port = myConf['MOTOR_L'];
                     this.left.speed = 0;
+                }
+            }
+            for (const conf in configuration['ACTUATORS']) {
+                let myConf = configuration['ACTUATORS'][conf];
+                if (myConf['TYPE'] && myConf['TYPE'] === 'MOTOR' && myConf['PORT'] !== this.right.port && myConf['PORT'] !== this.left.port) {
+                    this.manipulator = { port: myConf['PORT'], speed: 0, angle: 0 };
                 }
             }
         } else {
@@ -240,17 +248,25 @@ export abstract class ChassisDiffDrive extends ChassisMobile {
                 if (motors[C.DISTANCE]) {
                     angle = (motors[C.DISTANCE] / Math.PI / this.WHEELDIAMETER / 360) * 3;
                 }
-                for (let myMotor in motors) {
-                    if (myMotor.toLowerCase() === this.left.port.toLowerCase()) {
-                        left = motors[myMotor];
+                for (let motor in motors) {
+                    if (motor.toLowerCase() === this.left.port.toLowerCase()) {
+                        left = motors[motor];
                         if (angle) {
                             this.encoder.leftAngle = angle;
                         }
                     }
-                    if (myMotor.toLowerCase() === this.right.port.toLowerCase()) {
-                        right = motors[myMotor];
+                    if (motor.toLowerCase() === this.right.port.toLowerCase()) {
+                        right = motors[motor];
                         if (angle) {
                             this.encoder.rightAngle = angle;
+                        }
+                    }
+                    if (this.manipulator) {
+                        if (motor.toLowerCase() === this.manipulator.port.toLowerCase()) {
+                            this.manipulator.speed = motors[motor];
+                            if (angle) {
+                                this.manipulator.angle = angle;
+                            }
                         }
                     }
                 }
@@ -309,7 +325,6 @@ export abstract class ChassisDiffDrive extends ChassisMobile {
             myRobot.thetaDiff = 0;
         } else {
             const R = (this.TRACKWIDTH / 2) * ((tempLeft + tempRight) / (tempLeft - tempRight));
-
             const rot = (tempLeft - tempRight) / this.TRACKWIDTH;
             const iccX = myRobot.pose.x - R * Math.sin(myRobot.pose.theta);
             const iccY = myRobot.pose.y + R * Math.cos(myRobot.pose.theta);
@@ -350,7 +365,7 @@ export abstract class ChassisDiffDrive extends ChassisMobile {
         }
         if (this.encoder.leftAngle) {
             let leftAngle = this.left.speed * dt * this.ENC;
-            this.encoder.leftAngle -= leftAngle;
+            this.encoder.leftAngle -= Math.abs(leftAngle);
             let div = Math.abs(this.left.speed); // TODO
             if (this.encoder.leftAngle < 0) {
                 this.encoder.leftAngle = null;
@@ -359,7 +374,7 @@ export abstract class ChassisDiffDrive extends ChassisMobile {
         }
         if (this.encoder.rightAngle) {
             let rightAngle = this.right.speed * dt * this.ENC;
-            this.encoder.rightAngle -= rightAngle;
+            this.encoder.rightAngle -= Math.abs(rightAngle);
             let div = Math.abs(this.right.speed); // TODO
             if (this.encoder.rightAngle < 0) {
                 this.encoder.rightAngle = null;
@@ -369,11 +384,13 @@ export abstract class ChassisDiffDrive extends ChassisMobile {
         this.transformNewPose(myRobot.pose, this);
     }
 
-    checkCollisions(myId: number, myPose: Pose, dt: number, personalObstacleList: ISimulationObstacle[]): void {
+    checkCollisions(running: boolean, myId: number, myPose: Pose, dt: number, personalObstacleList: ISimulationObstacle[]): void {
         let ground = personalObstacleList.slice(-1)[0] as any; // ground is always the last element in the personal obstacle list
+        let groundBumped = false;
         function checkGround(p: PointRobotWorldBumped): void {
             if (p.rx < ground.x || p.rx > ground.x + ground.w || p.ry < ground.y || p.ry > ground.y + ground.h) {
                 p.bumped = true;
+                groundBumped = true;
             }
         }
 
@@ -391,36 +408,78 @@ export abstract class ChassisDiffDrive extends ChassisMobile {
             checkPoint.bumped = false;
             checkGround(checkPoint);
         });
-        for (let i = 0; i < personalObstacleList.length - 1; i++) {
-            let myObstacle: any = personalObstacleList[i];
-            if (myObstacle instanceof ChassisMobile && myObstacle.id == myId) {
-                // never check if you are bumping yourself ;-)
-                continue;
-            }
-            let pointsInObstacle: boolean = myCheckPoints
-                .filter((checkPoint) => {
-                    return (checkPoint.bumped = checkPoint.bumped || SIMATH.checkInObstacle(myObstacle, checkPoint));
-                })
-                .map((checkPoint) => checkPoint.bumped)
-                .reduce((previous, current) => {
-                    return previous || current;
-                }, false);
-            if (!pointsInObstacle) {
-                let myCheckLines = [
-                    [this.frontLeft, this.frontRight, this.frontMiddle],
-                    [this.backLeft, this.backRight, this.backMiddle],
-                    [this.wheelFrontRight, this.wheelBackRight],
-                    [this.wheelFrontLeft, this.wheelBackLeft],
-                ];
-                let p: Point = { x: 0, y: 0 };
-                let thisTolerance = Math.max(Math.abs(this.right.speed), Math.abs(this.left.speed));
-                if (!(myObstacle instanceof CircleSimulationObject)) {
-                    const obstacleLines = myObstacle.getLines();
-                    myCheckLines.forEach((checkLine) => {
-                        for (let k = 0; k < obstacleLines.length; k++) {
-                            const interPoint = SIMATH.getIntersectionPoint(
+        let thetaDiff: number;
+        if (!groundBumped) {
+            for (let i = 0; i < personalObstacleList.length - 1; i++) {
+                let myObstacle: any = personalObstacleList[i];
+                if (myObstacle instanceof ChassisMobile && myObstacle.id == myId) {
+                    // never check if you are bumping yourself ;-)
+                    thetaDiff = myObstacle['thetaDiff'] || 0;
+                    continue;
+                }
+                let pointsInObstacle: PointRobotWorld[] = [];
+                pointsInObstacle = myCheckPoints.filter((checkPoint) => {
+                    if (SIMATH.checkInObstacle(myObstacle, checkPoint)) {
+                        checkPoint.bumped = true;
+                        return true;
+                    } else {
+                        return false;
+                    }
+                });
+                if (pointsInObstacle.length <= 0) {
+                    let myCheckLines = [
+                        [this.frontLeft, this.frontRight, this.frontMiddle],
+                        [this.backLeft, this.backRight, this.backMiddle],
+                        [this.wheelFrontRight, this.wheelBackRight],
+                        [this.wheelFrontLeft, this.wheelBackLeft],
+                    ];
+                    let p: Point = { x: 0, y: 0 };
+                    let thisTolerance = Math.max(Math.abs(this.right.speed), Math.abs(this.left.speed));
+                    if (!(myObstacle instanceof CircleSimulationObject)) {
+                        const obstacleLines = myObstacle.getLines();
+                        myCheckLines.forEach((checkLine) => {
+                            for (let k = 0; k < obstacleLines.length; k++) {
+                                const interPoint = SIMATH.getIntersectionPoint(
+                                    { x1: checkLine[0].rx, x2: checkLine[1].rx, y1: checkLine[0].ry, y2: checkLine[1].ry },
+                                    obstacleLines[k]
+                                );
+                                if (interPoint) {
+                                    if (Math.abs(checkLine[0].rx - interPoint.x) < Math.abs(checkLine[1].rx - interPoint.x)) {
+                                        checkLine[0].bumped = true;
+                                    } else {
+                                        checkLine[1].bumped = true;
+                                    }
+                                } else if (checkLine[2]) {
+                                    p = SIMATH.getDistanceToLine(
+                                        {
+                                            x: checkLine[2].rx,
+                                            y: checkLine[2].ry,
+                                        },
+                                        {
+                                            x: obstacleLines[k].x1,
+                                            y: obstacleLines[k].y1,
+                                        },
+                                        {
+                                            x: obstacleLines[k].x2,
+                                            y: obstacleLines[k].y2,
+                                        }
+                                    );
+                                    if (
+                                        SIMATH.sqr(checkLine[2].rx - p.x) + SIMATH.sqr(checkLine[2].ry - p.y) <
+                                        dt * (myObstacle.getTolerance() + thisTolerance)
+                                    ) {
+                                        checkLine[0].bumped = true;
+                                        checkLine[1].bumped = true;
+                                    }
+                                }
+                            }
+                        });
+                    } else {
+                        myCheckLines.forEach((checkLine) => {
+                            let interPoint: Point;
+                            interPoint = SIMATH.getMiddleIntersectionPointCircle(
                                 { x1: checkLine[0].rx, x2: checkLine[1].rx, y1: checkLine[0].ry, y2: checkLine[1].ry },
-                                obstacleLines[k]
+                                myObstacle as Circle
                             );
                             if (interPoint) {
                                 if (Math.abs(checkLine[0].rx - interPoint.x) < Math.abs(checkLine[1].rx - interPoint.x)) {
@@ -428,36 +487,42 @@ export abstract class ChassisDiffDrive extends ChassisMobile {
                                 } else {
                                     checkLine[1].bumped = true;
                                 }
-                            } else if (checkLine[2]) {
-                                p = SIMATH.getDistanceToLine(
-                                    {
-                                        x: checkLine[2].rx,
-                                        y: checkLine[2].ry,
-                                    },
-                                    {
-                                        x: obstacleLines[k].x1,
-                                        y: obstacleLines[k].y1,
-                                    },
-                                    {
-                                        x: obstacleLines[k].x2,
-                                        y: obstacleLines[k].y2,
+                                if (checkLine[2]) {
+                                    if (SIMATH.getDistanceToCircle(checkLine[2], myObstacle) <= myObstacle.r) {
+                                        checkLine[0].bumped = true;
+                                        checkLine[1].bumped = true;
                                     }
-                                );
-                                if (SIMATH.sqr(checkLine[2].rx - p.x) + SIMATH.sqr(checkLine[2].ry - p.y) < dt * (myObstacle.getTolerance() + thisTolerance)) {
-                                    checkLine[0].bumped = true;
-                                    checkLine[1].bumped = true;
+                                }
+                                if (running && myObstacle.movable && (checkLine[0].bumped || checkLine[1].bumped)) {
+                                    let distP: Point = SIMATH.getDistanceToCircle(interPoint, myObstacle as Circle);
+                                    let x = myObstacle.x + distP.x;
+                                    let y = myObstacle.y + distP.y;
+                                    if ((myObstacle as IMovable).moveObstacleTo({ x: x, y: y }, personalObstacleList)) {
+                                        checkLine[0].bumped = false;
+                                        checkLine[1].bumped = false;
+                                    }
                                 }
                             }
+                        });
+                    }
+                } else {
+                    if (running && myObstacle.movable) {
+                        let distP: Point = SIMATH.getDistanceToCircle({ x: pointsInObstacle[0].rx, y: pointsInObstacle[0].ry }, myObstacle as Circle);
+                        let x = myObstacle.x + distP.x;
+                        let y = myObstacle.y + distP.y;
+                        if ((myObstacle as IMovable).moveObstacleTo({ x: x, y: y }, personalObstacleList)) {
+                            myCheckPoints.forEach((checkPoint) => {
+                                checkPoint.bumped = false;
+                            });
                         }
-                    });
+                    }
                 }
-            } else {
-                this.frontLeft.bumped = this.frontLeft.bumped || this.frontMiddle.bumped;
-                this.frontRight.bumped = this.frontRight.bumped || this.frontMiddle.bumped;
-                this.backLeft.bumped = this.backLeft.bumped || this.backMiddle.bumped || this.wheelBackLeft.bumped;
-                this.backRight.bumped = this.backRight.bumped || this.backMiddle.bumped || this.wheelBackRight.bumped;
             }
         }
+        this.frontLeft.bumped = this.frontLeft.bumped || this.frontMiddle.bumped;
+        this.frontRight.bumped = this.frontRight.bumped || this.frontMiddle.bumped;
+        this.backLeft.bumped = this.backLeft.bumped || this.backMiddle.bumped || this.wheelBackLeft.bumped;
+        this.backRight.bumped = this.backRight.bumped || this.backMiddle.bumped || this.wheelBackRight.bumped;
     }
 }
 
@@ -533,7 +598,7 @@ export class RobotinoChassis extends ChassisMobile {
         $('#display' + this.id).html('');
     }
 
-    checkCollisions(myId: number, myPose: Pose, dt: number, personalObstacleList: ISimulationObstacle[]): void {
+    checkCollisions(running: boolean, myId: number, myPose: Pose, dt: number, personalObstacleList: ISimulationObstacle[]): void {
         this.bumpedAngle = [];
         for (let i = 0; i < personalObstacleList.length; i++) {
             let myObstacle: any = personalObstacleList[i];
@@ -858,11 +923,12 @@ export abstract class LegoChassis extends EncoderChassisDiffDrive implements ILa
         ry: 0,
         bumped: false,
     };
-    backMiddle: PointRobotWorld = {
+    backMiddle: PointRobotWorldBumped = {
         x: -30,
         y: 0,
         rx: 0,
         ry: 0,
+        bumped: false,
     };
     backRight: PointRobotWorldBumped = {
         x: -30,
@@ -878,11 +944,12 @@ export abstract class LegoChassis extends EncoderChassisDiffDrive implements ILa
         ry: 0,
         bumped: false,
     };
-    frontMiddle: PointRobotWorld = {
+    frontMiddle: PointRobotWorldBumped = {
         x: 25,
         y: 0,
         rx: 0,
         ry: 0,
+        bumped: false,
     };
     frontRight: PointRobotWorldBumped = {
         x: 25,
@@ -1152,7 +1219,221 @@ export class NXTChassis extends LegoChassis {
         }
     }
 }
+export class RCJChassis extends ChassisDiffDrive implements ILabel {
+    axisDiff: number;
+    geom: Geometry = {
+        x: -32,
+        y: -18,
+        w: 46,
+        h: 36,
+        radius: 1.5,
+        color: '#D03750',
+    };
+    backLeft: PointRobotWorldBumped = {
+        x: this.geom.x,
+        y: this.geom.y,
+        rx: 0,
+        ry: 0,
+        bumped: false,
+    };
+    backMiddle: PointRobotWorldBumped = {
+        x: this.geom.x,
+        y: 0,
+        rx: 0,
+        ry: 0,
+        bumped: false,
+    };
+    backRight: PointRobotWorldBumped = {
+        x: this.geom.x,
+        y: this.geom.y * -1,
+        rx: 0,
+        ry: 0,
+        bumped: false,
+    };
+    frontLeft: PointRobotWorldBumped = {
+        x: this.geom.w + this.geom.x,
+        y: this.geom.y,
+        rx: 0,
+        ry: 0,
+        bumped: false,
+    };
+    frontMiddle: PointRobotWorldBumped = {
+        x: this.geom.w + this.geom.x,
+        y: 0,
+        rx: 0,
+        ry: 0,
+        bumped: false,
+    };
+    frontRight: PointRobotWorldBumped = {
+        x: this.geom.w + this.geom.x,
+        y: this.geom.y * -1,
+        rx: 0,
+        ry: 0,
+        bumped: false,
+    };
+    GRABBER_LINE_WIDTH = 4;
+    grabber: Geometry = {
+        x: 1,
+        y: -16,
+        w: -31,
+        h: 32,
+        radius: 0,
+        color: '#666666',
+    };
+    grabberAngle: number = 0;
+    grabberWidth: number = this.grabber.w;
+    grabberClosed: boolean = false;
 
+    labelPriority: number;
+    topView: string =
+        '<svg id="brick' +
+        this.id +
+        '"  width="300" height="370"  viewBox="0 0 300 370" xmlns="http://www.w3.org/2000/svg">' +
+        '  <defs>' +
+        '    <linearGradient gradientUnits="userSpaceOnUse" x1="150.024" y1="25" x2="150.024" y2="185" id="gradient-0">' +
+        '      <stop offset="1" style="stop-color: #666666"/>' +
+        '      <stop offset="0" style="stop-color: #000000"/>' +
+        '    </linearGradient>' +
+        '  </defs>' +
+        '  <rect width="300" height="370" style="fill: rgb(208, 55, 80);"/>' +
+        '  <rect x="25.024" y="25" width="250" height="160" style="fill: rgb(216, 216, 216); stroke: url(#gradient-0);" id="display' +
+        this.id +
+        '"/>' +
+        '  <ellipse style="fill: rgba(216, 216, 216, 0.506); stroke: rgb(128, 127, 127);" cx="150" cy="250" rx="35" ry="35" id="rgbLed' +
+        this.id +
+        '"/>' +
+        '  <g id="buttonLeft' +
+        this.id +
+        '" class="simKey">' +
+        '    <rect style="stroke: rgb(0, 0, 0); fill: rgb(109, 109, 109);" x="25" y="305" width="70" height="40" rx="5" ry="5"/>' +
+        '    <text style="fill: rgb(255, 255, 255); font-family: Arial, sans-serif; font-size: 24px; white-space: pre;" x="55" y="331.719">&lt;</text>' +
+        '  </g>' +
+        '  <g id="buttonRight' +
+        this.id +
+        '" class="simKey">' +
+        '    <rect style="fill: rgb(109, 109, 109); stroke: rgb(0, 0, 0);" x="205" y="305" width="70" height="40" rx="5" ry="5"/>' +
+        '    <text style="fill: rgb(255, 255, 255); font-family: Arial, sans-serif; font-size: 24px; white-space: pre;" x="235" y="331.719">&gt;</text>' +
+        '  </g>' +
+        '  <g id="buttonStop' +
+        this.id +
+        '" class="simKey">' +
+        '    <rect style="stroke: rgb(0, 0, 0); fill: rgb(109, 109, 109);" x="130" y="305" width="40" height="40" rx="20" ry="20"/>' +
+        '    <path fill="#fff" d="M 150 335.421 C 147.346 335.428 144.801 334.375 142.928 332.495 C 141.041 330.605 140 328.095 140 325.421 C 140 322.748 141.041 320.239 142.928 318.348 C 143.768 317.513 145.199 317.896 145.504 319.039 C 145.645 319.572 145.494 320.136 145.105 320.525 C 143.796 321.835 143.076 323.573 143.076 325.421 C 143.076 327.272 143.796 329.013 145.105 330.319 C 146.414 331.626 148.148 332.345 150 332.345 C 151.854 332.345 153.586 331.625 154.896 330.319 C 156.205 329.013 156.924 327.273 156.924 325.421 C 156.924 323.573 156.204 321.833 154.896 320.525 C 154.06 319.686 154.444 318.259 155.585 317.952 C 156.116 317.812 156.684 317.961 157.072 318.348 C 158.96 320.241 160 322.752 160 325.421 C 160 328.093 158.96 330.605 157.072 332.495 C 155.2 334.375 152.655 335.428 150 335.421 M 150 323.772 C 149.152 323.772 148.461 323.081 148.461 322.233 L 148.461 314.54 C 148.461 313.356 149.744 312.616 150.768 313.208 C 151.246 313.484 151.539 313.992 151.539 314.54 L 151.539 322.233 C 151.539 323.081 150.852 323.772 150 323.772"/>' +
+        '  </g>' +
+        '</svg>';
+    wheelBack: Geometry = {
+        x: -34,
+        y: -2,
+        w: 2,
+        h: 4,
+        color: '#000000',
+    };
+    wheelLeft: Geometry = {
+        x: 0,
+        y: 0,
+        w: 0,
+        h: 6,
+        color: '#000000',
+    };
+    wheelRight: Geometry = {
+        x: 0,
+        y: 0,
+        w: 0,
+        h: 6,
+        color: '#000000',
+    };
+
+    constructor(id: number, configuration: {}, maxRotation: number, pose: Pose) {
+        super(id, configuration, maxRotation);
+        this.transformNewPose(pose, this);
+        this.wheelLeft.w = this.WHEELDIAMETER * 3;
+        this.wheelLeft.x = -this.wheelLeft.w / 2;
+        this.wheelRight.w = this.WHEELDIAMETER * 3;
+        this.wheelRight.x = -this.wheelRight.w / 2;
+        this.wheelLeft.y = -this.TRACKWIDTH / 2 - 3;
+        this.wheelRight.y = this.TRACKWIDTH / 2 - 3;
+        this.wheelFrontRight.x = this.wheelRight.x + this.wheelRight.w;
+        this.wheelFrontRight.y = this.wheelRight.y + this.wheelRight.h;
+        this.wheelBackRight.x = this.wheelRight.x;
+        this.wheelBackRight.y = this.wheelRight.y + this.wheelRight.h;
+        this.wheelFrontLeft.x = this.wheelLeft.x + this.wheelLeft.w;
+        this.wheelFrontLeft.y = this.wheelLeft.y;
+        this.wheelBackLeft.x = this.wheelLeft.x;
+        this.wheelBackLeft.y = this.wheelLeft.y;
+        SIMATH.transform(pose, this.wheelFrontRight);
+        SIMATH.transform(pose, this.wheelBackRight);
+        SIMATH.transform(pose, this.wheelFrontLeft);
+        SIMATH.transform(pose, this.wheelBackLeft);
+        $('#simRobotContent').append(this.topView);
+        $('#simRobotWindow button').addClass('btn-close-white');
+        $('#brick' + this.id).hide();
+    }
+
+    override draw(rCtx: CanvasRenderingContext2D, myRobot: RobotBaseMobile) {
+        super.draw(rCtx, myRobot);
+        rCtx.save();
+        rCtx.lineWidth = this.GRABBER_LINE_WIDTH;
+        rCtx.strokeStyle = '#666666';
+        rCtx.beginPath();
+        rCtx.moveTo(this.grabber.x, this.grabber.y);
+        rCtx.lineTo(this.grabber.x + this.grabberWidth, this.grabber.y);
+        rCtx.lineTo(this.grabber.x + this.grabberWidth, -this.grabber.y);
+        rCtx.lineTo(this.grabber.x, -this.grabber.y);
+        rCtx.stroke();
+        rCtx.closePath();
+        rCtx.restore();
+    }
+
+    override updateAction(myRobot: RobotBaseMobile, dt: number, interpreterRunning: boolean) {
+        super.updateAction(myRobot, dt, interpreterRunning);
+        if (interpreterRunning) {
+            if (this.manipulator.speed !== 0) {
+                let diff: number = ((this.manipulator.speed * 6 * Math.PI) / 180) * dt;
+                if (this.manipulator.speed > 0) {
+                    this.grabberAngle += diff;
+                    this.grabberAngle = this.grabberAngle > Math.PI ? Math.PI : this.grabberAngle;
+                } else if (this.manipulator.speed < 0) {
+                    this.grabberAngle += diff;
+                    this.grabberAngle = this.grabberAngle < 0 ? 0 : this.grabberAngle;
+                }
+                if (this.manipulator.angle && this.manipulator.angle > 0) {
+                    this.manipulator.angle -= Math.abs((diff * 180) / Math.PI);
+                    if (this.manipulator.angle < 0) {
+                        this.manipulator.angle = null;
+                        this.manipulator.speed = 0;
+                        myRobot.interpreter.getRobotBehaviour().setBlocking(false);
+                    }
+                }
+                this.grabberWidth = this.grabber.w * Math.cos(this.grabberAngle);
+                let robotChassis = myRobot.chassis as RCJChassis;
+                if (this.grabberWidth > myRobot.chassis.geom.w / 2) {
+                    robotChassis.frontLeft.x = this.grabber.x + this.grabberWidth;
+                    robotChassis.frontRight.x = this.grabber.x + this.grabberWidth;
+                } else {
+                    robotChassis.frontLeft.x = robotChassis.geom.w + robotChassis.geom.x;
+                    robotChassis.frontMiddle.x = robotChassis.geom.w + robotChassis.geom.x;
+                    robotChassis.frontRight.x = robotChassis.geom.w + robotChassis.geom.x;
+                }
+                if (SIMATH.epsilonEqual(this.grabberWidth, -this.grabber.w, 2)) {
+                    this.grabberClosed = true;
+                } else {
+                    this.grabberClosed = false;
+                }
+            }
+        }
+    }
+
+    getLabel(): string {
+        return '';
+    }
+
+    reset(): void {
+        this.grabberAngle = 0;
+        this.grabberWidth = this.grabber.w;
+        this.manipulator.speed = 0;
+        this.manipulator.angle = 0;
+    }
+}
 export class Txt4Chassis extends EncoderChassisDiffDrive implements ILabel {
     geom: Geometry = {
         x: -28,
@@ -1455,11 +1736,12 @@ export class Txt4Chassis extends EncoderChassisDiffDrive implements ILabel {
         ry: 0,
         bumped: false,
     };
-    backMiddle: PointRobotWorld = {
+    backMiddle: PointRobotWorldBumped = {
         x: -30,
         y: 0,
         rx: 0,
         ry: 0,
+        bumped: false,
     };
     backRight: PointRobotWorldBumped = {
         x: -30,
@@ -1475,11 +1757,12 @@ export class Txt4Chassis extends EncoderChassisDiffDrive implements ILabel {
         ry: 0,
         bumped: false,
     };
-    frontMiddle: PointRobotWorld = {
+    frontMiddle: PointRobotWorldBumped = {
         x: 25,
         y: 0,
         rx: 0,
         ry: 0,
+        bumped: false,
     };
     frontRight: PointRobotWorldBumped = {
         x: 25,
@@ -1628,11 +1911,12 @@ export class EdisonChassis extends ChassisDiffDrive {
         ry: 0,
         bumped: false,
     };
-    backMiddle: PointRobotWorld = {
+    backMiddle: PointRobotWorldBumped = {
         x: -5.5,
         y: 0,
         rx: 0,
         ry: 0,
+        bumped: false,
     };
     backRight: PointRobotWorldBumped = {
         x: -5.5,
@@ -1648,11 +1932,12 @@ export class EdisonChassis extends ChassisDiffDrive {
         ry: 0,
         bumped: false,
     };
-    frontMiddle: PointRobotWorld = {
+    frontMiddle: PointRobotWorldBumped = {
         x: 18.5,
         y: 0,
         rx: 0,
         ry: 0,
+        bumped: false,
     };
     frontRight: PointRobotWorldBumped = {
         x: 18.5,
@@ -1829,11 +2114,12 @@ export class ThymioChassis extends ChassisDiffDrive {
         ry: 0,
         bumped: false,
     };
-    backMiddle: PointRobotWorld = {
+    backMiddle: PointRobotWorldBumped = {
         x: -9,
         y: 0,
         rx: 0,
         ry: 0,
+        bumped: false,
     };
     backRight: PointRobotWorldBumped = {
         x: -9,
@@ -1849,11 +2135,12 @@ export class ThymioChassis extends ChassisDiffDrive {
         ry: 0,
         bumped: false,
     };
-    frontMiddle: PointRobotWorld = {
+    frontMiddle: PointRobotWorldBumped = {
         x: 26,
         y: 0,
         rx: 0,
         ry: 0,
+        bumped: false,
     };
     frontRight: PointRobotWorldBumped = {
         x: 25,
@@ -2159,11 +2446,12 @@ export class MbotChassis extends ChassisDiffDrive {
         ry: 0,
         bumped: false,
     };
-    backMiddle: PointRobotWorld = {
+    backMiddle: PointRobotWorldBumped = {
         x: -10,
         y: 0,
         rx: 0,
         ry: 0,
+        bumped: false,
     };
     backRight: PointRobotWorldBumped = {
         x: -10,
@@ -2179,11 +2467,12 @@ export class MbotChassis extends ChassisDiffDrive {
         ry: 0,
         bumped: false,
     };
-    frontMiddle: PointRobotWorld = {
+    frontMiddle: PointRobotWorldBumped = {
         x: 29,
         y: 0,
         rx: 0,
         ry: 0,
+        bumped: false,
     };
     frontRight: PointRobotWorldBumped = {
         x: 29,

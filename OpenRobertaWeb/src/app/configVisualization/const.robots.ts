@@ -639,4 +639,9 @@ export const ROBOTS = {
         width: '255px',
         height: '255px',
     },
+    rcj: {
+        ports: [],
+        width: '255px',
+        height: '255px',
+    },
 };
