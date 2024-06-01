@@ -988,7 +988,7 @@ export class SimulationRoberta implements Simulation {
                 };
                 if (victims['live'] && victims['live'] > 0) {
                     for (let i = 0; i < victims['live']; ++i) {
-                        createVictim('#ff0000');
+                        createVictim('#33B8CA');
                     }
                 }
                 if (victims['dead'] && victims['dead'] > 0) {
