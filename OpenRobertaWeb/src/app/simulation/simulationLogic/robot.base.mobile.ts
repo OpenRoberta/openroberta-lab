@@ -72,11 +72,12 @@ export abstract class RobotBaseMobile extends RobotBase {
         r: 30,
     };
 
-    protected constructor(id: number, configuration: object, interpreter: Interpreter, savedName: string, mySelectionListener: SelectionListener) {
+    protected constructor(id: number, configuration: object, interpreter: Interpreter, savedName: string, mySelectionListener: SelectionListener, pose?: Pose) {
         super(id, configuration, interpreter, savedName, mySelectionListener);
         this.mobile = true;
-        this.pose = new Pose(150, 150, 0);
-        this.initialPose = new Pose(150, 150, 0);
+        this.pose = pose || new Pose(150, 150, 0);
+        this.initialPose = pose || new Pose(150, 150, 0);
+        this.configure(configuration);
     }
 
     get hasTrail(): boolean {
