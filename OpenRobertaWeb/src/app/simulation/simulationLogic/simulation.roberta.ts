@@ -1224,7 +1224,6 @@ export class SimulationRoberta implements Simulation {
                             rot = (Math.PI * 3) / 2;
                         }
                         startPose.theta = rot;
-                        //rcjLabel.push(startTile);
                     } else {
                         result.rc = 'error';
                         result.message = 'Unknown start tile';
