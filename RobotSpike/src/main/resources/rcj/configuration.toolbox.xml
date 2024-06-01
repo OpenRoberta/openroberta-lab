@@ -1,0 +1,11 @@
+<toolbox_set id="toolbox-Configuration" style="display: none">
+    <category name="TOOLBOX_ACTION" svg="true">
+        <block type="robConf_motor"></block>
+        <block type="robConf_differentialdrive"></block>
+    </category>
+    <category name="TOOLBOX_SENSOR" svg="true">
+        <block type="robConf_colour"></block>
+        <block type="robConf_ultrasonic"></block>
+        <block type="robConf_touch"></block>
+    </category>
+</toolbox_set>

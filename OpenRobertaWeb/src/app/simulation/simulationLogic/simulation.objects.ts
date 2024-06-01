@@ -1,13 +1,18 @@
-import { IDestroyable, ISelectable, SelectionListener } from 'robot.base';
+import { IDestroyable, ISelectable, RobotBase, SelectionListener } from 'robot.base';
 import * as $ from 'jquery';
 import * as UTIL from 'util.roberta';
 import { SimulationRoberta } from 'simulation.roberta';
 import { SimulationScene } from 'simulation.scene';
 import * as SIMATH from 'simulation.math';
+import { intersects } from 'simulation.math';
+import { ChassisMobile } from 'robot.actuators';
+
+export interface IMovable {
+    moveObstacleTo(newPosition: Point, obstacleList: any[]): boolean;
+}
 
 export interface ISimulationObstacle {
     getLines(): Line[];
-
     getTolerance(): number;
 }
 
@@ -18,6 +23,7 @@ export abstract class BaseSimulationObject implements ISelectable, ISimulationOb
     myScene: SimulationScene;
     mySelectionListener: SelectionListener;
     type: SimObjectType;
+    private _movable: boolean = false;
     private _color: string;
     private _hsv: number[];
     abstract corners: Corner[];
@@ -77,6 +83,14 @@ export abstract class BaseSimulationObject implements ISelectable, ISimulationOb
 
     get hsv(): number[] {
         return this._hsv;
+    }
+
+    get movable(): boolean {
+        return this._movable;
+    }
+
+    set movable(value: boolean) {
+        this._movable = value;
     }
 
     abstract draw(rCtx: CanvasRenderingContext2D, uCtx: CanvasRenderingContext2D): void;
@@ -192,7 +206,7 @@ export class SimObjectFactory {
                 object.type,
                 {
                     x: -1000,
-                    y: -1000
+                    y: -1000,
                 },
                 null,
                 object.color,
@@ -207,7 +221,7 @@ export class SimObjectFactory {
                 object.type,
                 {
                     x: -1000,
-                    y: -1000
+                    y: -1000,
                 },
                 null,
                 object.color,
@@ -222,7 +236,7 @@ export class SimObjectFactory {
                 object.type,
                 {
                     x: -1000,
-                    y: -1000
+                    y: -1000,
                 },
                 null,
                 object.color,
@@ -634,7 +648,7 @@ export class MarkerSimulationObject extends RectangleSimulationObject {
     }
 }
 
-export class CircleSimulationObject extends BaseSimulationObject {
+export class CircleSimulationObject extends BaseSimulationObject implements IMovable {
     x: number;
     y: number;
     r: number = 50;
@@ -656,8 +670,11 @@ export class CircleSimulationObject extends BaseSimulationObject {
         if (maxSize) {
             this.r = maxSize / 18;
         }
-        if (params.length == 1) {
+        if (params.length >= 1) {
             this.r = params[0];
+        }
+        if (params.length >= 2) {
+            this.movable = params[1] > 0;
         }
         this.updateCorners();
     }
@@ -761,7 +778,7 @@ export class CircleSimulationObject extends BaseSimulationObject {
             $('#robotLayer').css('cursor', 'pointer');
             this.selected = true;
             //TODO redraw ?
-        } else if (this.selected) {
+        } else if (this.selected && !this.movable) {
             this.corners.forEach((corner) => {
                 corner.isDown = UTIL.checkInCircle(myEvent.startX, myEvent.startY, corner.x, corner.y, 15);
             });
@@ -803,10 +820,12 @@ export class CircleSimulationObject extends BaseSimulationObject {
             }
         }
         let myOnCornerIndex = -1;
-        for (let i = 0; i < this.corners.length; i++) {
-            if (UTIL.checkInCircle(myEvent.startX, myEvent.startY, this.corners[i].x, this.corners[i].y, 15)) {
-                myOnCornerIndex = i;
-                break;
+        if (!this.movable) {
+            for (let i = 0; i < this.corners.length; i++) {
+                if (UTIL.checkInCircle(myEvent.startX, myEvent.startY, this.corners[i].x, this.corners[i].y, 15)) {
+                    myOnCornerIndex = i;
+                    break;
+                }
             }
         }
         if (myOnCornerIndex > -1 && this.selected) {
@@ -876,6 +895,38 @@ export class CircleSimulationObject extends BaseSimulationObject {
             this.corners[3] = { x: this.x - this.r, y: this.y + this.r, isDown: this.corners[3].isDown };
         }
         this.redraw();
+    }
+
+    moveObstacleTo(newP: Point, obstacleList: any[]): boolean {
+        if (!this.movable) {
+            return false;
+        }
+        let ground: Rectangle = obstacleList.slice(-1)[0] as any; // ground is always the last element in the personal obstacle list
+        if (SIMATH.intersects(this as Circle, ground)) {
+            return false;
+        }
+        let thetaDiff: number;
+        let thisNewPosition: Circle = this as Circle;
+        thisNewPosition.x = newP.x;
+        thisNewPosition.y = newP.y;
+        let moveTo: boolean = true;
+        for (let i = 0; i < obstacleList.length - 1; i++) {
+            let myObstacle: any = obstacleList[i];
+            if (myObstacle instanceof ChassisMobile) {
+                continue;
+            }
+            if (myObstacle instanceof RectangleSimulationObject) {
+                if (SIMATH.intersects(thisNewPosition, myObstacle as Rectangle)) {
+                    moveTo = false;
+                }
+            }
+        }
+        if (moveTo) {
+            this.moveTo(newP);
+            return true;
+        } else {
+            return false;
+        }
     }
 }
 
@@ -1106,20 +1157,20 @@ export class TriangleSimulationObject extends BaseSimulationObject {
                 x1: this.ax,
                 x2: this.bx,
                 y1: this.ay,
-                y2: this.by
+                y2: this.by,
             },
             {
                 x1: this.bx,
                 x2: this.cx,
                 y1: this.by,
-                y2: this.cy
+                y2: this.cy,
             },
             {
                 x1: this.ax,
                 x2: this.cx,
                 y1: this.ay,
-                y2: this.cy
-            }
+                y2: this.cy,
+            },
         ];
     }
 
@@ -1172,35 +1223,52 @@ export class Ground implements ISimulationObstacle {
 
     getLines(): Line[] {
         return UTIL.getLinesFromRectangle(this);
-        return [
-            {
-                x1: this.x,
-                x2: this.x,
-                y1: this.y,
-                y2: this.y + this.h
-            },
-            {
-                x1: this.x,
-                x2: this.x + this.w,
-                y1: this.y,
-                y2: this.y
-            },
-            {
-                x1: this.x + this.w,
-                x2: this.x,
-                y1: this.y + this.h,
-                y2: this.y + this.h
-            },
-            {
-                x1: this.x + this.w,
-                x2: this.x + this.w,
-                y1: this.y + this.h,
-                y2: this.y
-            }
-        ];
     }
 
     getTolerance(): number {
         return 0;
+    }
+}
+
+export class RcjSimulationLabel extends RectangleSimulationObject {
+    rcjType: string;
+    index: string;
+    constructor(myId: number, myScene: any, mySelectionListener: SelectionListener, type: SimObjectType, x: number, y: number, rcjType: string, index: number) {
+        super(myId, myScene, mySelectionListener, type, { x: x * 75 + 10, y: y * 75 + 10 });
+        this.w = 75;
+        this.h = 75;
+        this.type = type;
+        this.rcjType = rcjType;
+        this.index = String(index);
+        switch (this.rcjType) {
+            case 'checkPoint':
+                this.color = '#FFA500';
+                break;
+            case 'start':
+                this.color = '#81E881';
+                break;
+            default:
+            //
+        }
+        //this.updateCorners();
+    }
+
+    override draw(ctx: CanvasRenderingContext2D, uCtx: CanvasRenderingContext2D): void {
+        ctx.save();
+        if (this.rcjType) {
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = this.color;
+            ctx.strokeRect(this.x, this.y, this.w, this.h);
+        }
+        ctx.fillText(this.index, this.x + 60, this.y + 15);
+        ctx.restore();
+    }
+
+    override handleMouseDown(e: JQuery.TouchEventBase): void {
+        // nothing to do
+    }
+
+    override handleMouseMove(e: JQuery.TouchEventBase): void {
+        // nothing to do
     }
 }

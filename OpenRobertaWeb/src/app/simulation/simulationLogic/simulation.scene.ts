@@ -9,6 +9,7 @@ import {
     Ground,
     ISimulationObstacle,
     MarkerSimulationObject,
+    RcjSimulationLabel,
     RectangleSimulationObject,
     SimObjectFactory,
     SimObjectShape,
@@ -18,6 +19,7 @@ import { SimulationRoberta } from 'simulation.roberta';
 import { IDestroyable, RobotBase, RobotFactory } from 'robot.base';
 import { Interpreter } from 'interpreter.interpreter';
 import { Pose, RobotBaseMobile } from 'robot.base.mobile';
+import { ISensor } from 'robot.sensors';
 
 const RESIZE_CONST: number = 3;
 
@@ -45,6 +47,7 @@ export class SimulationScene {
     sim: SimulationRoberta;
     private _colorAreaList: BaseSimulationObject[] = [];
     private _obstacleList: BaseSimulationObject[] = [];
+    private _rcjList: BaseSimulationObject[] = [];
     private _markerList: MarkerSimulationObject[] = [];
     private _redrawColorAreas: boolean = false;
     private _redrawObstacles: boolean = false;
@@ -58,6 +61,7 @@ export class SimulationScene {
     private readonly dCtx: CanvasRenderingContext2D;
     private readonly oCtx: CanvasRenderingContext2D;
     private readonly rCtx: CanvasRenderingContext2D;
+    private readonly rcjCtx: CanvasRenderingContext2D;
     private readonly uCtx: CanvasRenderingContext2D;
     private readonly udCtx: CanvasRenderingContext2D;
     private readonly aCtx: CanvasRenderingContext2D;
@@ -75,6 +79,7 @@ export class SimulationScene {
         this.aCtx = ($('#arucoMarkerLayer')[0] as HTMLCanvasElement).getContext('2d'); // object context
         this.oCtx = ($('#objectLayer')[0] as HTMLCanvasElement).getContext('2d'); // object context
         this.rCtx = ($('#robotLayer')[0] as HTMLCanvasElement).getContext('2d'); // robot context
+        this.rcjCtx = ($('#rcjLayer')[0] as HTMLCanvasElement).getContext('2d'); // robot context
     }
 
     get uniqueObjectId(): number {
@@ -94,9 +99,19 @@ export class SimulationScene {
         return this._obstacleList;
     }
 
+    get rcjList(): BaseSimulationObject[] {
+        return this._rcjList;
+    }
+
     set obstacleList(value: BaseSimulationObject[]) {
         this.clearList(this._obstacleList);
         this._obstacleList = value;
+        this.redrawObstacles = true;
+    }
+
+    set rcjList(value: BaseSimulationObject[]) {
+        this.clearList(this._rcjList);
+        this._rcjList = value;
         this.redrawObstacles = true;
     }
 
@@ -185,6 +200,24 @@ export class SimulationScene {
             newObstacleList.push(newObject);
         });
         this.obstacleList = newObstacleList;
+    }
+
+    addImportRcjLabel(importRcjLabelList: any[]) {
+        let newRcjList = [];
+        importRcjLabelList.forEach((obj) => {
+            let newObject = new RcjSimulationLabel(
+                this.uniqueObjectId,
+                this,
+                this.sim.selectionListener,
+                SimObjectType.ColorArea,
+                obj.x,
+                obj.y,
+                obj.checkPoint ? 'checkPoint' : obj.start ? 'start' : null,
+                obj.index[0]
+            );
+            newRcjList.push(newObject);
+        });
+        this.rcjList = newRcjList;
     }
 
     addImportMarkerList(importMarkerList: any[]) {
@@ -343,6 +376,14 @@ export class SimulationScene {
         this.oCtx.scale(this.sim.scale, this.sim.scale);
         this.oCtx.clearRect(this.ground.x - 10, this.ground.y - 10, this.ground.w + 20, this.ground.h + 20);
         this.obstacleList.forEach((obstacle) => obstacle.draw(this.oCtx, this.uCtx));
+    }
+
+    drawRcjLabel() {
+        this.rcjCtx.restore();
+        this.rcjCtx.save();
+        this.rcjCtx.scale(this.sim.scale, this.sim.scale);
+        this.rcjCtx.clearRect(this.ground.x - 10, this.ground.y - 10, this.ground.w + 20, this.ground.h + 20);
+        this.rcjList.forEach((label) => label.draw(this.rcjCtx, this.uCtx));
     }
 
     drawMarkers() {
@@ -664,6 +705,8 @@ export class SimulationScene {
         }
         this.oCtx.canvas.width = w;
         this.oCtx.canvas.height = h;
+        this.rcjCtx.canvas.width = w;
+        this.rcjCtx.canvas.height = h;
         this.rCtx.canvas.width = w;
         this.rCtx.canvas.height = h;
         this.dCtx.canvas.width = w;
@@ -690,6 +733,7 @@ export class SimulationScene {
         this.drawColorAreas();
         this.drawObstacles();
         this.drawMarkers();
+        this.drawRcjLabel();
     }
 
     centerBackground(backgroundChanged: boolean) {

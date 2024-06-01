@@ -92,7 +92,7 @@ export const getClosestIntersectionPointCircle = function (line: Line, circle): 
     return null; // no intersections at all
 };
 
-export const getMiddleIntersectionPointCircle = function (line: Line, circle): Point {
+export const getMiddleIntersectionPointCircle = function (line: Line, circle: Circle): Point {
     const intersections = this.getIntersectionPointsCircle(line, circle);
 
     if (intersections.length == 1) {
@@ -114,7 +114,7 @@ export const getMiddleIntersectionPointCircle = function (line: Line, circle): P
  * @return {{x, y}[]}
  *              array with point(s) of the intersection
  */
-export const getIntersectionPointsCircle = function (line, circle): Point[] {
+export const getIntersectionPointsCircle = function (line: Line, circle: Circle): Point[] {
     var dx, dy, A, B, C, det, t;
 
     dx = line.x2 - line.x1;
@@ -146,6 +146,30 @@ export const getIntersectionPointsCircle = function (line, circle): Point[] {
 
         return [];
     }
+};
+
+export const intersects = (circle: Circle, rect: Rectangle): boolean => {
+    let circleDistance: Point = { x: 0, y: 0 };
+    circleDistance.x = Math.abs(circle.x - (rect.x + rect.w / 2));
+    circleDistance.y = Math.abs(circle.y - (rect.y - rect.h / 2));
+
+    if (circleDistance.x > rect.w / 2 + circle.r) {
+        return false;
+    }
+    if (circleDistance.y > rect.h / 2 + circle.r) {
+        return false;
+    }
+
+    if (circleDistance.x <= rect.w / 2) {
+        return true;
+    }
+    if (circleDistance.y <= rect.h / 2) {
+        return true;
+    }
+
+    let distSq: number = (circleDistance.x - rect.w / 2) ^ (2 + (circleDistance.y - rect.h / 2)) ^ 2;
+
+    return distSq <= (circle.r ^ 2);
 };
 
 /**
@@ -270,8 +294,8 @@ export const getDistanceToCircle = function (point, circle) {
     var aX = circle.x + (vX / magV) * circle.r;
     var aY = circle.y + (vY / magV) * circle.r;
     return {
-        x: aX,
-        y: aY,
+        x: point.x - aX,
+        y: point.y - aY,
     };
 };
 
