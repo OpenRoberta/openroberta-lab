@@ -4,7 +4,6 @@ import * as UTIL from 'util.roberta';
 import { SimulationRoberta } from 'simulation.roberta';
 import { SimulationScene } from 'simulation.scene';
 import * as SIMATH from 'simulation.math';
-import { intersects } from 'simulation.math';
 import { ChassisMobile } from 'robot.actuators';
 
 export interface IMovable {
@@ -901,15 +900,11 @@ export class CircleSimulationObject extends BaseSimulationObject implements IMov
         if (!this.movable) {
             return false;
         }
+        let thisNewPosition: Circle = { x: newP.x, y: newP.y, r: this.r };
         let ground: Rectangle = obstacleList.slice(-1)[0] as any; // ground is always the last element in the personal obstacle list
-        if (SIMATH.intersects(this as Circle, ground)) {
+        if (!SIMATH.inside(this as Circle, ground)) {
             return false;
         }
-        let thetaDiff: number;
-        let thisNewPosition: Circle = this as Circle;
-        thisNewPosition.x = newP.x;
-        thisNewPosition.y = newP.y;
-        let moveTo: boolean = true;
         for (let i = 0; i < obstacleList.length - 1; i++) {
             let myObstacle: any = obstacleList[i];
             if (myObstacle instanceof ChassisMobile) {
@@ -917,16 +912,12 @@ export class CircleSimulationObject extends BaseSimulationObject implements IMov
             }
             if (myObstacle instanceof RectangleSimulationObject) {
                 if (SIMATH.intersects(thisNewPosition, myObstacle as Rectangle)) {
-                    moveTo = false;
+                    return false;
                 }
             }
         }
-        if (moveTo) {
-            this.moveTo(newP);
-            return true;
-        } else {
-            return false;
-        }
+        this.moveTo(newP);
+        return true;
     }
 }
 

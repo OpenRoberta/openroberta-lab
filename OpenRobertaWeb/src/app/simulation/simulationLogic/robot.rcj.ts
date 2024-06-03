@@ -11,17 +11,11 @@ export default class RobotRcj extends RobotBaseMobile {
     override timer: Timer = new Timer(5);
     buttons: EV3Keys;
 
-    constructor(id: number, configuration: object, interpreter: Interpreter, savedName: string, myListener: SelectionListener) {
-        super(id, configuration, interpreter, savedName, myListener);
-        this.configure(configuration);
-    }
-
     protected configure(configuration: object): void {
         let rcj = this;
         this.chassis = new RCJChassis(this.id, configuration, 1.75, this.pose);
         this.led = new RGBLed({ x: 0, y: 0 }, true, null, 6);
         let sensors: object = configuration['SENSORS'];
-        console.log(configuration);
         for (const c in sensors) {
             switch (sensors[c]['TYPE']) {
                 case 'COLOUR':

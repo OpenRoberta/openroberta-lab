@@ -92,8 +92,10 @@ export const getClosestIntersectionPointCircle = function (line: Line, circle): 
     return null; // no intersections at all
 };
 
-export const getMiddleIntersectionPointCircle = function (line: Line, circle: Circle): Point {
-    const intersections = this.getIntersectionPointsCircle(line, circle);
+export const getMiddleIntersectionPointCircle = function (line: Line, circle: Circle, tolerance?: number): Point {
+    tolerance = tolerance || 0;
+    let circleWTolerance = { x: circle.x, y: circle.y, r: circle.r + tolerance };
+    const intersections = this.getIntersectionPointsCircle(line, circleWTolerance);
 
     if (intersections.length == 1) {
         return intersections[0]; // one intersection
@@ -148,6 +150,22 @@ export const getIntersectionPointsCircle = function (line: Line, circle: Circle)
     }
 };
 
+export const inside = (circle: Circle, rect: Rectangle): boolean => {
+    if (circle.x - circle.r <= rect.x) {
+        return false;
+    }
+    if (circle.y - circle.r <= rect.y) {
+        return false;
+    }
+    if (circle.x + circle.r >= rect.x + rect.w) {
+        return false;
+    }
+    if (circle.y + circle.r >= rect.y + rect.w) {
+        return false;
+    }
+    return true;
+};
+
 export const intersects = (circle: Circle, rect: Rectangle): boolean => {
     let circleDistance: Point = { x: 0, y: 0 };
     circleDistance.x = Math.abs(circle.x - (rect.x + rect.w / 2));
@@ -167,9 +185,9 @@ export const intersects = (circle: Circle, rect: Rectangle): boolean => {
         return true;
     }
 
-    let distSq: number = (circleDistance.x - rect.w / 2) ^ (2 + (circleDistance.y - rect.h / 2)) ^ 2;
-
-    return distSq <= (circle.r ^ 2);
+    var dx = circleDistance.x - rect.w / 2;
+    var dy = circleDistance.y - rect.h / 2;
+    return dx * dx + dy * dy <= circle.r * circle.r;
 };
 
 /**
