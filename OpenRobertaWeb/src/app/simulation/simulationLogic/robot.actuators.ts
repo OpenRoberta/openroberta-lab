@@ -414,7 +414,6 @@ export abstract class ChassisDiffDrive extends ChassisMobile {
                 let myObstacle: any = personalObstacleList[i];
                 if (myObstacle instanceof ChassisMobile && myObstacle.id == myId) {
                     // never check if you are bumping yourself ;-)
-                    thetaDiff = myObstacle['thetaDiff'] || 0;
                     continue;
                 }
                 let pointsInObstacle: PointRobotWorld[] = [];
@@ -479,7 +478,8 @@ export abstract class ChassisDiffDrive extends ChassisMobile {
                             let interPoint: Point;
                             interPoint = SIMATH.getMiddleIntersectionPointCircle(
                                 { x1: checkLine[0].rx, x2: checkLine[1].rx, y1: checkLine[0].ry, y2: checkLine[1].ry },
-                                myObstacle as Circle
+                                myObstacle as Circle,
+                                dt * thisTolerance
                             );
                             if (interPoint) {
                                 if (Math.abs(checkLine[0].rx - interPoint.x) < Math.abs(checkLine[1].rx - interPoint.x)) {
@@ -1405,7 +1405,7 @@ export class RCJChassis extends ChassisDiffDrive implements ILabel {
                     }
                 }
                 this.grabberWidth = this.grabber.w * Math.cos(this.grabberAngle);
-                let robotChassis = myRobot.chassis as RCJChassis;
+                /*let robotChassis = myRobot.chassis as RCJChassis;
                 if (this.grabberWidth > myRobot.chassis.geom.w / 2) {
                     robotChassis.frontLeft.x = this.grabber.x + this.grabberWidth;
                     robotChassis.frontRight.x = this.grabber.x + this.grabberWidth;
@@ -1413,7 +1413,7 @@ export class RCJChassis extends ChassisDiffDrive implements ILabel {
                     robotChassis.frontLeft.x = robotChassis.geom.w + robotChassis.geom.x;
                     robotChassis.frontMiddle.x = robotChassis.geom.w + robotChassis.geom.x;
                     robotChassis.frontRight.x = robotChassis.geom.w + robotChassis.geom.x;
-                }
+                }*/
                 if (SIMATH.epsilonEqual(this.grabberWidth, -this.grabber.w, 2)) {
                     this.grabberClosed = true;
                 } else {

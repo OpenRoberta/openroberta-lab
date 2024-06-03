@@ -697,7 +697,7 @@ export class SimulationRoberta implements Simulation {
         if (configData.hasOwnProperty('tileSet')) {
             await this.prepareRescueLine(configData).then(
                 function (result) {
-                    console.log(result);
+                    // TODO
                 },
                 function (result) {
                     alert(result.message);
@@ -1242,7 +1242,8 @@ export class SimulationRoberta implements Simulation {
                         sim.scene.addImportObstacle(importObstacles.concat(getRcjVictims(evacuationZone)));
                         sim.scene.addImportRcjLabel(rcjLabel);
                         sim.scene.drawRcjLabel();
-                        sim.scene.setRobotPoses([[startPose, startPose]]);
+                        sim.importPoses = [[startPose, startPose]];
+                        sim.scene.setRobotPoses(sim.importPoses);
                         resolve(result);
                     } else {
                         reject(result);
