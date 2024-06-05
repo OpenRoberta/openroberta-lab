@@ -896,27 +896,67 @@ export class CircleSimulationObject extends BaseSimulationObject implements IMov
         this.redraw();
     }
 
-    moveObstacleTo(newP: Point, obstacleList: any[]): boolean {
+    moveObstacleTo(distP: Point, obstacleList: any[], optPreviousObstacle?: BaseSimulationObject): boolean {
         if (!this.movable) {
             return false;
         }
-        let thisNewPosition: Circle = { x: newP.x, y: newP.y, r: this.r };
+        let thisNewPosition: Circle = { x: this.x + distP.x, y: this.y + distP.y, r: this.r };
         let ground: Rectangle = obstacleList.slice(-1)[0] as any; // ground is always the last element in the personal obstacle list
-        if (!SIMATH.inside(this as Circle, ground)) {
+        let interP: Point = SIMATH.getMiddleIntersectionCircleRect(thisNewPosition, ground as Rectangle, SIMATH.getLinesFromRect(ground));
+        if (interP) {
+            let distP: Point = SIMATH.getDistanceToCircle(interP, this as Circle);
+            let x = 2 * distP.x;
+            let y = 2 * distP.y;
+            distP.x += x;
+            distP.y += y;
+            //if (SIMATH.epsilonEqual(distP.x, 0, 0.1) && SIMATH.epsilonEqual(distP.y, 0, 0.1)) {
             return false;
+            //}
         }
         for (let i = 0; i < obstacleList.length - 1; i++) {
             let myObstacle: any = obstacleList[i];
+            if (optPreviousObstacle && myObstacle.myId === optPreviousObstacle.myId) {
+                continue;
+            }
+            if (myObstacle.myId === this.myId) {
+                continue;
+            }
             if (myObstacle instanceof ChassisMobile) {
                 continue;
             }
             if (myObstacle instanceof RectangleSimulationObject) {
-                if (SIMATH.intersects(thisNewPosition, myObstacle as Rectangle)) {
+                let interP: Point = SIMATH.getMiddleIntersectionCircleRect(thisNewPosition, myObstacle as Rectangle, myObstacle.getLines());
+                if (interP) {
+                    let distP: Point = SIMATH.getDistanceToCircle(interP, this as Circle);
+                    let x = 2 * distP.x;
+                    let y = 2 * distP.y;
+                    distP.x += x;
+                    distP.y += y;
+                    if (SIMATH.epsilonEqual(distP.x, 0, 0.1) && SIMATH.epsilonEqual(distP.y, 0, 0.1)) {
+                        return false;
+                    }
+                } else {
+                    continue;
+                }
+                /*if (SIMATH.intersects(thisNewPosition, myObstacle as Rectangle)) {
+                    return false;
+                }*/
+            }
+            if (myObstacle instanceof CircleSimulationObject) {
+                let interPoint: Point = SIMATH.getMiddleIntersectionPointCircles(thisNewPosition, myObstacle as Circle);
+                if (interPoint && myObstacle.movable) {
+                    let distP: Point = SIMATH.getDistanceToCircle(interPoint, myObstacle as Circle);
+                    let x = 2 * distP.x;
+                    let y = 2 * distP.y;
+                    if (!myObstacle.moveObstacleTo({ x: x, y: y }, obstacleList, this)) {
+                        return false;
+                    }
+                } else {
                     return false;
                 }
             }
         }
-        this.moveTo(newP);
+        this.moveTo({ x: this.x + distP.x, y: this.y + distP.y });
         return true;
     }
 }
@@ -1225,9 +1265,9 @@ export class RcjSimulationLabel extends RectangleSimulationObject {
     rcjType: string;
     index: string;
     constructor(myId: number, myScene: any, mySelectionListener: SelectionListener, type: SimObjectType, x: number, y: number, rcjType: string, index: number) {
-        super(myId, myScene, mySelectionListener, type, { x: x * 75 + 10, y: y * 75 + 10 });
-        this.w = 75;
-        this.h = 75;
+        super(myId, myScene, mySelectionListener, type, { x: x * 90 + 10, y: y * 90 + 10 });
+        this.w = 90;
+        this.h = 90;
         this.type = type;
         this.rcjType = rcjType;
         this.index = String(index);

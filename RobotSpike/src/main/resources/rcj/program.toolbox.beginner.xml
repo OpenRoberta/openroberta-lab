@@ -84,8 +84,8 @@
         <block type="actions_play_note"></block>
         <block type='actions_rgbLed_hidden_on'>
             <value name='COLOUR'>
-                <block type='colour_picker_spike'>
-
+                <block type="robColour_picker">
+                    <field name="COLOUR">#FFFFFF</field>
                 </block>
             </value>
         </block>
@@ -152,42 +152,30 @@
         <block type="text"/>
         <block type="text_comment"/>
     </category>
-    <category name='TOOLBOX_COLOUR' svg='true'>
-        <block type='colour_picker_spike'>
-            <field name='COLOUR'>#EBC300</field>
+    <category name="TOOLBOX_COLOUR" svg="true">
+        <block type="robColour_picker">
+            <field name="COLOUR">#585858</field>
         </block>
-        <block type='colour_picker_spike'>
-            <field name='COLOUR'>#E701A7</field>
+        <block type="robColour_picker">
+            <field name="COLOUR">#000000</field>
         </block>
-        <block type='colour_picker_spike'>
-            <field name='COLOUR'>#571CC1</field>
+        <block type="robColour_picker">
+            <field name="COLOUR">#0057a6</field>
         </block>
-        <block type='colour_picker_spike'>
-            <field name='COLOUR'>#3590F5</field>
+        <block type="robColour_picker">
+            <field name="COLOUR">#00642e</field>
         </block>
-        <block type='colour_picker_spike'>
-            <field name='COLOUR'>#77E7FF</field>
+        <block type="robColour_picker">
+            <field name="COLOUR">#f7d117</field>
         </block>
-        <block type='colour_picker_spike'>
-            <field name='COLOUR'>#0FCB54</field>
+        <block type="robColour_picker">
+            <field name="COLOUR">#b30006</field>
         </block>
-        <block type='colour_picker_spike'>
-            <field name='COLOUR'>#0BA845</field>
+        <block type="robColour_picker">
+            <field name="COLOUR">#FFFFFF</field>
         </block>
-        <block type='colour_picker_spike'>
-            <field name='COLOUR'>#F7F700</field>
-        </block>
-        <block type='colour_picker_spike'>
-            <field name='COLOUR'>#FAAC01</field>
-        </block>
-        <block type='colour_picker_spike'>
-            <field name='COLOUR'>#FA010C</field>
-        </block>
-        <block type='colour_picker_spike'>
-            <field name='COLOUR'>#000000</field>
-        </block>
-        <block type='colour_picker_spike'>
-            <field name='COLOUR'>#FFFFFF</field>
+        <block type="robColour_picker">
+            <field name="COLOUR">#532115</field>
         </block>
     </category>
     <category name="TOOLBOX_IMAGE" svg="true">

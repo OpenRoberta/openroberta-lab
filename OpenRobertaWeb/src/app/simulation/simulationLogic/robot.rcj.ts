@@ -1,20 +1,18 @@
 import { Pose, RobotBaseMobile } from 'robot.base.mobile';
 import { ColorSensor, DistanceSensor, EV3Keys, Timer, UltrasonicSensor } from 'robot.sensors';
-import { ChassisDiffDrive, RCJChassis, RGBLed } from 'robot.actuators';
-import { RobotBase, SelectionListener } from 'robot.base';
-import { Interpreter } from 'interpreter.interpreter';
+import { ChassisDiffDrive, RCJChassis, RGBLed, StatusLed } from 'robot.actuators';
 import * as $ from 'jquery';
 
 export default class RobotRcj extends RobotBaseMobile {
     chassis: ChassisDiffDrive;
-    led: RGBLed;
+    led: StatusLed;
     override timer: Timer = new Timer(5);
     buttons: EV3Keys;
 
     protected configure(configuration: object): void {
         let rcj = this;
         this.chassis = new RCJChassis(this.id, configuration, 1.75, this.pose);
-        this.led = new RGBLed({ x: 0, y: 0 }, true, null, 6);
+        this.led = new StatusLed({ x: -5, y: 0 }, this.chassis.geom.color);
         let sensors: object = configuration['SENSORS'];
         for (const c in sensors) {
             switch (sensors[c]['TYPE']) {
