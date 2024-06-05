@@ -495,8 +495,8 @@ export abstract class ChassisDiffDrive extends ChassisMobile {
                                 }
                                 if (running && myObstacle.movable && (checkLine[0].bumped || checkLine[1].bumped)) {
                                     let distP: Point = SIMATH.getDistanceToCircle(interPoint, myObstacle as Circle);
-                                    let x = myObstacle.x + distP.x;
-                                    let y = myObstacle.y + distP.y;
+                                    let x = distP.x;
+                                    let y = distP.y;
                                     if ((myObstacle as IMovable).moveObstacleTo({ x: x, y: y }, personalObstacleList)) {
                                         checkLine[0].bumped = false;
                                         checkLine[1].bumped = false;
@@ -508,8 +508,8 @@ export abstract class ChassisDiffDrive extends ChassisMobile {
                 } else {
                     if (running && myObstacle.movable) {
                         let distP: Point = SIMATH.getDistanceToCircle({ x: pointsInObstacle[0].rx, y: pointsInObstacle[0].ry }, myObstacle as Circle);
-                        let x = myObstacle.x + distP.x;
-                        let y = myObstacle.y + distP.y;
+                        let x = distP.x;
+                        let y = distP.y;
                         if ((myObstacle as IMovable).moveObstacleTo({ x: x, y: y }, personalObstacleList)) {
                             myCheckPoints.forEach((checkPoint) => {
                                 checkPoint.bumped = false;

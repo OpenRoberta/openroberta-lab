@@ -52,10 +52,10 @@ export const getIntersectionPoint = function (line1: Line, line2: Line): Point {
     var xi = ((line2.x1 - line2.x2) * (line1.x1 * line1.y2 - line1.y1 * line1.x2) - (line1.x1 - line1.x2) * (line2.x1 * line2.y2 - line2.y1 * line2.x2)) / d;
     var yi = ((line2.y1 - line2.y2) * (line1.x1 * line1.y2 - line1.y1 * line1.x2) - (line1.y1 - line1.y2) * (line2.x1 * line2.y2 - line2.y1 * line2.x2)) / d;
 
-    if (!this.isLineAlignedToPoint({ x: xi, y: yi }, line1)) {
+    if (!isLineAlignedToPoint({ x: xi, y: yi }, line1)) {
         return null;
     }
-    if (!this.isLineAlignedToPoint({ x: xi, y: yi }, line2)) {
+    if (!isLineAlignedToPoint({ x: xi, y: yi }, line2)) {
         return null;
     }
     return {
@@ -73,7 +73,7 @@ export const getIntersectionPoint = function (line1: Line, line2: Line): Point {
  *              closest intersection point (coordinate)
  */
 export const getClosestIntersectionPointCircle = function (line: Line, circle): Point {
-    const intersections = this.getIntersectionPointsCircle(line, circle);
+    const intersections = getIntersectionPointsCircle(line, circle);
 
     if (intersections.length == 1) {
         return intersections[0]; // one intersection
@@ -92,10 +92,28 @@ export const getClosestIntersectionPointCircle = function (line: Line, circle): 
     return null; // no intersections at all
 };
 
+export const getMiddleIntersectionPointCircles = function (circle1: Circle, circle2: Circle): Point {
+    /*let d = Math.sqrt(Math.pow(circle2.x - circle1.x, 2) + Math.pow(circle2.y - circle1.y, 2));
+    let a = circle1.r * circle1.r - circle2.r * circle2.r + (d * d) / (2 * d);
+    let h = Math.sqrt(Math.pow(circle1.r, 2) - a * a);
+    if (circle1.r * circle1.r - a * a <= 0) {
+        return null;
+    }
+    let aX = circle1.x + (a * (circle2.x - circle1.x)) / d;
+    let aY = circle1.y + (a * (circle2.y - circle1.y)) / d;
+    let bX = aX + (h * (circle2.y - circle1.y)) / d;
+    let bY = aY - (h * (circle2.x - circle1.x)) / d;*/
+    let dSq = (circle2.x - circle1.x) * (circle2.x - circle1.x) + (circle2.y - circle1.y) * (circle2.y - circle1.y);
+    if (dSq < (circle1.r + circle2.r) * (circle1.r + circle2.r)) {
+        return { x: (circle1.x + circle2.x) / 2, y: (circle1.y + circle2.y) / 2 }; // TODO this is only true if r1 and r2 are the same
+    }
+    return null;
+};
+
 export const getMiddleIntersectionPointCircle = function (line: Line, circle: Circle, tolerance?: number): Point {
     tolerance = tolerance || 0;
     let circleWTolerance = { x: circle.x, y: circle.y, r: circle.r + tolerance };
-    const intersections = this.getIntersectionPointsCircle(line, circleWTolerance);
+    const intersections = getIntersectionPointsCircle(line, circleWTolerance);
 
     if (intersections.length == 1) {
         return intersections[0]; // one intersection
@@ -134,7 +152,7 @@ export const getIntersectionPointsCircle = function (line: Line, circle: Circle)
         t = -B / (2 * A);
         var intersection1 = { x: line.x1 + t * dx, y: line.y1 + t * dy };
 
-        if (this.isLineAlignedToPoint(intersection1, line)) return [intersection1];
+        if (isLineAlignedToPoint(intersection1, line)) return [intersection1];
 
         return [];
     } else {
@@ -144,7 +162,7 @@ export const getIntersectionPointsCircle = function (line: Line, circle: Circle)
         t = (-B - Math.sqrt(det)) / (2 * A);
         var intersection2 = { x: line.x1 + t * dx, y: line.y1 + t * dy };
 
-        if (this.isLineAlignedToPoint(intersection1, line) && this.isLineAlignedToPoint(intersection2, line)) return [intersection1, intersection2];
+        if (isLineAlignedToPoint(intersection1, line) && isLineAlignedToPoint(intersection2, line)) return [intersection1, intersection2];
 
         return [];
     }
@@ -165,29 +183,35 @@ export const inside = (circle: Circle, rect: Rectangle): boolean => {
     }
     return true;
 };
+export const getMiddleIntersectionCircleRect = (circle: Circle, rect: Rectangle, lines: Line[]): Point => {
+    if (intersects(circle, rect)) {
+        for (let i = 0; i < lines.length; i++) {
+            let p: Point = getMiddleIntersectionPointCircle(lines[i], circle);
+            if (p) {
+                return p;
+            }
+        }
+        return null;
+    } else {
+        return null;
+    }
+};
 
 export const intersects = (circle: Circle, rect: Rectangle): boolean => {
-    let circleDistance: Point = { x: 0, y: 0 };
-    circleDistance.x = Math.abs(circle.x - (rect.x + rect.w / 2));
-    circleDistance.y = Math.abs(circle.y - (rect.y - rect.h / 2));
+    const clamp = function (value: number, min: number, max: number): number {
+        return value < min ? min : value > max ? max : value;
+    };
+    // Find the closest point to the circle within the rectangle
+    let closestX = clamp(circle.x, rect.x, rect.x + rect.w);
+    let closestY = clamp(circle.y, rect.y, rect.y + rect.h);
 
-    if (circleDistance.x > rect.w / 2 + circle.r) {
-        return false;
-    }
-    if (circleDistance.y > rect.h / 2 + circle.r) {
-        return false;
-    }
+    // Calculate the distance between the circle's center and this closest point
+    let distX = circle.x - closestX;
+    let distY = circle.y - closestY;
 
-    if (circleDistance.x <= rect.w / 2) {
-        return true;
-    }
-    if (circleDistance.y <= rect.h / 2) {
-        return true;
-    }
-
-    var dx = circleDistance.x - rect.w / 2;
-    var dy = circleDistance.y - rect.h / 2;
-    return dx * dx + dy * dy <= circle.r * circle.r;
+    // If the distance is less than the circle's radius, an intersection occurs
+    let distSq = distX * distX + distY * distY;
+    return distSq < circle.r * circle.r;
 };
 
 /**
@@ -212,86 +236,13 @@ export function isLineAlignedToPoint(p: Point, line: Line): boolean {
     return true;
 }
 
-export const getLinesFromObj = function (obj) {
-    switch (obj.shape) {
-        case 'rectangle':
-            return [
-                {
-                    x1: obj.x,
-                    x2: obj.x,
-                    y1: obj.y,
-                    y2: obj.y + obj.h,
-                },
-                {
-                    x1: obj.x,
-                    x2: obj.x + obj.w,
-                    y1: obj.y,
-                    y2: obj.y,
-                },
-                {
-                    x1: obj.x + obj.w,
-                    x2: obj.x,
-                    y1: obj.y + obj.h,
-                    y2: obj.y + obj.h,
-                },
-                {
-                    x1: obj.x + obj.w,
-                    x2: obj.x + obj.w,
-                    y1: obj.y + obj.h,
-                    y2: obj.y,
-                },
-            ];
-        case 'robot':
-            return [
-                {
-                    x1: obj.backLeft.rx,
-                    x2: obj.frontLeft.rx,
-                    y1: obj.backLeft.ry,
-                    y2: obj.frontLeft.ry,
-                },
-                {
-                    x1: obj.frontLeft.rx,
-                    x2: obj.frontRight.rx,
-                    y1: obj.frontLeft.ry,
-                    y2: obj.frontRight.ry,
-                },
-                {
-                    x1: obj.frontRight.rx,
-                    x2: obj.backRight.rx,
-                    y1: obj.frontRight.ry,
-                    y2: obj.backRight.ry,
-                },
-                {
-                    x1: obj.backRight.rx,
-                    x2: obj.backLeft.rx,
-                    y1: obj.backRight.ry,
-                    y2: obj.backLeft.ry,
-                },
-            ];
-        case 'triangle':
-            return [
-                {
-                    x1: obj.ax,
-                    x2: obj.bx,
-                    y1: obj.ay,
-                    y2: obj.by,
-                },
-                {
-                    x1: obj.bx,
-                    x2: obj.cx,
-                    y1: obj.by,
-                    y2: obj.cy,
-                },
-                {
-                    x1: obj.ax,
-                    x2: obj.cx,
-                    y1: obj.ay,
-                    y2: obj.cy,
-                },
-            ];
-        default:
-            return false;
-    }
+export const getLinesFromRect = function (rect): Line[] {
+    return [
+        { x1: rect.x, y1: rect.y, x2: rect.x + rect.w, y2: rect.y },
+        { x1: rect.x + rect.w, y1: rect.y, x2: rect.x + rect.w, y2: rect.x + rect.h },
+        { x1: rect.x + rect.w, y1: rect.y + rect.h, x2: rect.x, y2: rect.y + rect.h },
+        { x1: rect.x, y1: rect.y + rect.h, x2: rect.x, y2: rect.y },
+    ];
 };
 
 /**

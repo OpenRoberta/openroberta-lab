@@ -32,8 +32,10 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
+import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.util.basic.C;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.lang.codegen.AbstractStackMachineVisitor;
 
 public class RCJStackMachineVisitor extends AbstractStackMachineVisitor implements IRCJVisitor<Void> {
@@ -45,10 +47,37 @@ public class RCJStackMachineVisitor extends AbstractStackMachineVisitor implemen
 
     @Override
     public Void visitColorConst(ColorConst colorConst) {
-        int r = colorConst.getRedChannelInt();
-        int g = colorConst.getGreenChannelInt();
-        int b = colorConst.getBlueChannelInt();
-        JSONObject o = makeNode(C.EXPR).put(C.EXPR, "COLOR_CONST").put(C.VALUE, new JSONArray(Arrays.asList(r, g, b)));
+        String color = "";
+        switch ( colorConst.getHexValueAsString().toUpperCase() ) {
+            case "#000000":
+                color = "BLACK";
+                break;
+            case "#0057A6":
+                color = "BLUE";
+                break;
+            case "#00642E":
+                color = "GREEN";
+                break;
+            case "#F7D117":
+                color = "YELLOW";
+                break;
+            case "#B30006":
+                color = "RED";
+                break;
+            case "#FFFFFF":
+                color = "WHITE";
+                break;
+            case "#532115":
+                color = "BROWN";
+                break;
+            case "#585858":
+                color = "NONE";
+                break;
+            default:
+                colorConst.addInfo(NepoInfo.error("SIM_BLOCK_NOT_SUPPORTED"));
+                throw new DbcException("Invalid color constant: " + colorConst.getHexValueAsString());
+        }
+        JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.COLOR_CONST).put(C.VALUE, color);
         return add(o);
     }
 
@@ -171,7 +200,7 @@ public class RCJStackMachineVisitor extends AbstractStackMachineVisitor implemen
     public Void visitMotorDiffOnAction(MotorDiffOnAction motorDiffOnAction) {
         motorDiffOnAction.power.accept(this);
         JSONObject o =
-            makeNode(C.DRIVE_ACTION).put(C.DRIVE_DIRECTION, motorDiffOnAction.direction.toLowerCase()).put(C.SPEED_ONLY, true);
+            makeNode(C.DRIVE_ACTION).put(C.DRIVE_DIRECTION, motorDiffOnAction.direction).put(C.SPEED_ONLY, true);
         return add(o);
     }
 
@@ -201,9 +230,8 @@ public class RCJStackMachineVisitor extends AbstractStackMachineVisitor implemen
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor ultrasonicSensor) {
         String mode = ultrasonicSensor.getMode().toLowerCase();
-        String port = ultrasonicSensor.getUserDefinedPort().toLowerCase();
-        JSONObject o;
-        o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.ULTRASONIC).put(C.MODE, mode).put(C.PORT, port);
+        String port = ultrasonicSensor.getUserDefinedPort();
+        JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.ULTRASONIC).put(C.MODE, mode).put(C.PORT, port);
         return add(o);
     }
 

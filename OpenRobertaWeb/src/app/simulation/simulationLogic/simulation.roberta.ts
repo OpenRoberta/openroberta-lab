@@ -906,7 +906,7 @@ export class SimulationRoberta implements Simulation {
         let sim = this;
         return new Promise(function (resolve, reject) {
             let result: { rc: string; message: string } = { rc: 'ok', message: '' };
-            const TILE_SIZE: number = 75;
+            const TILE_SIZE: number = 90;
             const EV_WALL_SIZE: number = 10;
             let height: number = configData.length * TILE_SIZE; // tile height/length is 25cm, 3 pixel = 1cm
             let width: number = configData.width * TILE_SIZE; // tile width is 25cm, 3 pixel = 1cm
@@ -962,6 +962,33 @@ export class SimulationRoberta implements Simulation {
                 ctx.rotate(rot);
                 ctx.fillStyle = '#33B8CA';
                 ctx.fillRect(-TILE_SIZE / 2, -TILE_SIZE / 2, TILE_SIZE, EV_WALL_SIZE);
+                ctx.restore();
+            };
+            let drawEvacuationZone = (tile, ctx: CanvasRenderingContext2D) => {
+                ctx.save();
+                ctx.translate(tile['x'] * TILE_SIZE + TILE_SIZE / 2, tile['y'] * TILE_SIZE + TILE_SIZE / 2);
+                let rot = 0;
+                switch (tile['rot']) {
+                    case 0:
+                        break;
+                    case 90:
+                        rot = Math.PI / 2;
+                        break;
+                    case 180:
+                        rot = Math.PI;
+                        break;
+                    case 270:
+                        rot = (270 * Math.PI) / 180;
+                        break;
+                }
+                ctx.rotate(rot);
+                ctx.beginPath();
+                ctx.moveTo(-TILE_SIZE / 2, -TILE_SIZE / 2);
+                ctx.lineTo(TILE_SIZE / 2, -TILE_SIZE / 2);
+                ctx.lineTo(TILE_SIZE / 2, TILE_SIZE / 2);
+                ctx.closePath();
+                ctx.fillStyle = '#000000';
+                ctx.fill();
                 ctx.restore();
             };
             let drawTileSeparator = (ctx: CanvasRenderingContext2D) => {
@@ -1023,164 +1050,64 @@ export class SimulationRoberta implements Simulation {
                     let ctx = canvas.getContext('2d');
                     ctx.fillStyle = 'white';
                     ctx.fillRect(0, 0, canvas.width, canvas.height);
+                    let evacuationTop = [];
+                    let evacuationRight = [];
+                    let evacuationBottom = [];
+                    let evacuationLeft = [];
                     let importObstacles = [];
-                    let evacuationZone = [];
+                    let evacuationVctimsZone = [];
                     imgArray.forEach((img, index) => {
                         if (img['tileType']['image'].startsWith('ev')) {
                             let ev = img['tileType']['image'].replace('.png', '');
                             switch (ev) {
                                 case 'ev1':
-                                    evacuationZone.push(img['x']);
-                                    evacuationZone.push(img['y']);
+                                    evacuationVctimsZone.push(img['x']);
+                                    evacuationVctimsZone.push(img['y']);
                                     // evacuation zone tile without walls
                                     break;
-                                case 'ev2':
-                                    let wall = {};
+                                case 'ev2': // one wall
                                     let rot = img['rot'].toString();
                                     switch (rot) {
                                         case '0':
-                                            wall = {
-                                                id: sim.scene.uniqueObjectId,
-                                                p: { x: img['x'] * TILE_SIZE + EV_WALL_SIZE, y: img['y'] * TILE_SIZE + EV_WALL_SIZE },
-                                                params: [TILE_SIZE, EV_WALL_SIZE],
-                                                theta: 0,
-                                                color: '#ffffff',
-                                                shape: SimObjectShape.Rectangle,
-                                                type: SimObjectType.Obstacle,
-                                            };
+                                            evacuationTop.push({ x: img['x'], y: img['y'] });
                                             break;
                                         case '90':
-                                            wall = {
-                                                id: sim.scene.uniqueObjectId,
-                                                p: { x: img['x'] * TILE_SIZE + TILE_SIZE, y: img['y'] * TILE_SIZE + EV_WALL_SIZE },
-                                                params: [EV_WALL_SIZE, TILE_SIZE],
-                                                theta: 0,
-                                                color: '#ffffff',
-                                                shape: SimObjectShape.Rectangle,
-                                                type: SimObjectType.Obstacle,
-                                            };
+                                            evacuationRight.push({ x: img['x'], y: img['y'] });
                                             break;
                                         case '180':
-                                            wall = {
-                                                id: sim.scene.uniqueObjectId,
-                                                p: { x: img['x'] * TILE_SIZE + EV_WALL_SIZE, y: img['y'] * TILE_SIZE + TILE_SIZE },
-                                                params: [TILE_SIZE, EV_WALL_SIZE],
-                                                theta: 0,
-                                                color: '#ffffff',
-                                                shape: SimObjectShape.Rectangle,
-                                                type: SimObjectType.Obstacle,
-                                            };
+                                            evacuationBottom.push({ x: img['x'], y: img['y'] });
                                             break;
                                         case '270':
-                                            wall = {
-                                                id: sim.scene.uniqueObjectId,
-                                                p: { x: img['x'] * TILE_SIZE + EV_WALL_SIZE, y: img['y'] * TILE_SIZE + EV_WALL_SIZE },
-                                                params: [EV_WALL_SIZE, TILE_SIZE],
-                                                theta: 0,
-                                                color: '#ffffff',
-                                                shape: SimObjectShape.Rectangle,
-                                                type: SimObjectType.Obstacle,
-                                            };
+                                            evacuationLeft.push({ x: img['x'], y: img['y'] });
                                             break;
                                         default:
                                             result.rc = 'error';
                                             result.message = 'Unknown evacuation zone rotation';
                                     }
-                                    importObstacles.push(wall);
                                     break;
-                                case 'ev3':
-                                    wall = {};
+                                case 'ev3': // two walls (edge)
                                     rot = img['rot'].toString();
                                     switch (rot) {
                                         case '0':
-                                            wall = {
-                                                id: sim.scene.uniqueObjectId,
-                                                p: { x: img['x'] * TILE_SIZE + EV_WALL_SIZE, y: img['y'] * TILE_SIZE + EV_WALL_SIZE },
-                                                params: [TILE_SIZE, EV_WALL_SIZE],
-                                                theta: 0,
-                                                color: '#ffffff',
-                                                shape: SimObjectShape.Rectangle,
-                                                type: SimObjectType.Obstacle,
-                                            };
-                                            importObstacles.push(wall);
-                                            wall = {
-                                                id: sim.scene.uniqueObjectId,
-                                                p: { x: img['x'] * TILE_SIZE + TILE_SIZE, y: img['y'] * TILE_SIZE + EV_WALL_SIZE },
-                                                params: [EV_WALL_SIZE, TILE_SIZE],
-                                                theta: 0,
-                                                color: '#ffffff',
-                                                shape: SimObjectShape.Rectangle,
-                                                type: SimObjectType.Obstacle,
-                                            };
+                                            evacuationTop.push({ x: img['x'], y: img['y'] });
+                                            evacuationRight.push({ x: img['x'], y: img['y'] });
                                             break;
                                         case '90':
-                                            wall = {
-                                                id: sim.scene.uniqueObjectId,
-                                                p: { x: img['x'] * TILE_SIZE + TILE_SIZE, y: img['y'] * TILE_SIZE + EV_WALL_SIZE },
-                                                params: [EV_WALL_SIZE, TILE_SIZE],
-                                                theta: 0,
-                                                color: '#ffffff',
-                                                shape: SimObjectShape.Rectangle,
-                                                type: SimObjectType.Obstacle,
-                                            };
-                                            importObstacles.push(wall);
-                                            wall = {
-                                                id: sim.scene.uniqueObjectId,
-                                                p: { x: img['x'] * TILE_SIZE + EV_WALL_SIZE, y: img['y'] * TILE_SIZE + TILE_SIZE },
-                                                params: [TILE_SIZE, EV_WALL_SIZE],
-                                                theta: 0,
-                                                color: '#ffffff',
-                                                shape: SimObjectShape.Rectangle,
-                                                type: SimObjectType.Obstacle,
-                                            };
+                                            evacuationRight.push({ x: img['x'], y: img['y'] });
+                                            evacuationBottom.push({ x: img['x'], y: img['y'] });
                                             break;
                                         case '180':
-                                            wall = {
-                                                id: sim.scene.uniqueObjectId,
-                                                p: { x: img['x'] * TILE_SIZE + EV_WALL_SIZE, y: img['y'] * TILE_SIZE + TILE_SIZE },
-                                                params: [TILE_SIZE, EV_WALL_SIZE],
-                                                theta: 0,
-                                                color: '#ffffff',
-                                                shape: SimObjectShape.Rectangle,
-                                                type: SimObjectType.Obstacle,
-                                            };
-                                            importObstacles.push(wall);
-                                            wall = {
-                                                id: sim.scene.uniqueObjectId,
-                                                p: { x: img['x'] * TILE_SIZE + EV_WALL_SIZE, y: img['y'] * TILE_SIZE + EV_WALL_SIZE },
-                                                params: [EV_WALL_SIZE, TILE_SIZE],
-                                                theta: 0,
-                                                color: '#ffffff',
-                                                shape: SimObjectShape.Rectangle,
-                                                type: SimObjectType.Obstacle,
-                                            };
+                                            evacuationLeft.push({ x: img['x'], y: img['y'] });
+                                            evacuationBottom.push({ x: img['x'], y: img['y'] });
                                             break;
                                         case '270':
-                                            wall = {
-                                                id: sim.scene.uniqueObjectId,
-                                                p: { x: img['x'] * TILE_SIZE + EV_WALL_SIZE, y: img['y'] * TILE_SIZE + EV_WALL_SIZE },
-                                                params: [EV_WALL_SIZE, TILE_SIZE],
-                                                theta: 0,
-                                                color: '#ffffff',
-                                                shape: SimObjectShape.Rectangle,
-                                                type: SimObjectType.Obstacle,
-                                            };
-                                            importObstacles.push(wall);
-                                            wall = {
-                                                id: sim.scene.uniqueObjectId,
-                                                p: { x: img['x'] * TILE_SIZE + EV_WALL_SIZE, y: img['y'] * TILE_SIZE + EV_WALL_SIZE },
-                                                params: [TILE_SIZE, EV_WALL_SIZE],
-                                                theta: 0,
-                                                color: '#ffffff',
-                                                shape: SimObjectShape.Rectangle,
-                                                type: SimObjectType.Obstacle,
-                                            };
+                                            evacuationTop.push({ x: img['x'], y: img['y'] });
+                                            evacuationLeft.push({ x: img['x'], y: img['y'] });
                                             break;
                                         default:
                                             result.rc = 'error';
                                             result.message = 'Unknown evacuation zone rotation';
                                     }
-                                    importObstacles.push(wall);
                                     break;
                                 default:
                                     result.rc = 'error';
@@ -1223,6 +1150,63 @@ export class SimulationRoberta implements Simulation {
                             }
                         }
                     });
+                    if (evacuationTop.length >= 2 && evacuationRight.length >= 2 && evacuationBottom.length >= 2 && evacuationLeft.length >= 2) {
+                        evacuationTop.sort(function (a, b) {
+                            return a.x - b.x;
+                        });
+                        evacuationRight.sort(function (a, b) {
+                            return a.y - b.y;
+                        });
+                        evacuationBottom.sort(function (a, b) {
+                            return a.x - b.x;
+                        });
+                        evacuationLeft.sort(function (a, b) {
+                            return a.y - b.y;
+                        });
+                        let wallTop = {
+                            id: sim.scene.uniqueObjectId,
+                            p: { x: evacuationTop[0]['x'] * TILE_SIZE + 10, y: evacuationTop[0]['y'] * TILE_SIZE + EV_WALL_SIZE },
+                            params: [TILE_SIZE * (evacuationTop[evacuationTop.length - 1]['x'] - evacuationTop[0]['x'] + 1), EV_WALL_SIZE],
+                            theta: 0,
+                            color: '#ffffff',
+                            shape: SimObjectShape.Rectangle,
+                            type: SimObjectType.Obstacle,
+                        };
+                        let wallRight = {
+                            id: sim.scene.uniqueObjectId,
+                            p: { x: evacuationRight[0]['x'] * TILE_SIZE + TILE_SIZE, y: evacuationRight[0]['y'] * TILE_SIZE + EV_WALL_SIZE },
+                            params: [EV_WALL_SIZE, TILE_SIZE * (evacuationRight[evacuationRight.length - 1]['y'] - evacuationRight[0]['y'] + 1)],
+                            theta: 0,
+                            color: '#ffffff',
+                            shape: SimObjectShape.Rectangle,
+                            type: SimObjectType.Obstacle,
+                        };
+                        let wallBottom = {
+                            id: sim.scene.uniqueObjectId,
+                            p: { x: evacuationBottom[0]['x'] * TILE_SIZE + 10, y: evacuationBottom[0]['y'] * TILE_SIZE + TILE_SIZE },
+                            params: [TILE_SIZE * (evacuationBottom[evacuationBottom.length - 1]['x'] - evacuationBottom[0]['x'] + 1), EV_WALL_SIZE],
+                            theta: 0,
+                            color: '#ffffff',
+                            shape: SimObjectShape.Rectangle,
+                            type: SimObjectType.Obstacle,
+                        };
+                        let wallLeft = {
+                            id: sim.scene.uniqueObjectId,
+                            p: { x: evacuationLeft[0]['x'] * TILE_SIZE + 10, y: evacuationLeft[0]['y'] * TILE_SIZE + EV_WALL_SIZE },
+                            params: [EV_WALL_SIZE, TILE_SIZE * (evacuationLeft[evacuationLeft.length - 1]['y'] - evacuationLeft[0]['y'] + 1)],
+                            theta: 0,
+                            color: '#ffffff',
+                            shape: SimObjectShape.Rectangle,
+                            type: SimObjectType.Obstacle,
+                        };
+                        importObstacles.push(wallTop, wallRight, wallBottom, wallLeft);
+                        let evacuationEdges = imgArray.filter(function (tile) {
+                            return tile.tileType.image.startsWith('ev3');
+                        });
+                        let evacuationZoneTile = evacuationEdges[Math.floor(Math.random() * evacuationEdges.length)];
+                        console.log(evacuationZoneTile);
+                        drawEvacuationZone(evacuationZoneTile, ctx);
+                    }
                     if (startTile) {
                         startPose.x = startTile['x'] * TILE_SIZE + TILE_SIZE / 2 + EV_WALL_SIZE;
                         startPose.y = startTile['y'] * TILE_SIZE + TILE_SIZE / 2 + EV_WALL_SIZE;
@@ -1252,11 +1236,13 @@ export class SimulationRoberta implements Simulation {
                         drawTileSeparator(ctx);
                         sim.scene.imgBackgroundList = [createBackgroundImage()];
                         sim.setBackground(0);
-                        sim.scene.addImportObstacle(importObstacles.concat(getRcjVictims(evacuationZone)));
+                        sim.scene.addImportObstacle(importObstacles.concat(getRcjVictims(evacuationVctimsZone)));
                         sim.scene.addImportRcjLabel(rcjLabel);
                         sim.scene.drawRcjLabel();
                         sim.importPoses = [[startPose, startPose]];
                         sim.scene.setRobotPoses(sim.importPoses);
+                        sim.scene.setRcjScoringTool(configData);
+                        $('#simCompetition').show();
                         resolve(result);
                     } else {
                         reject(result);

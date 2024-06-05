@@ -19,9 +19,100 @@ import { SimulationRoberta } from 'simulation.roberta';
 import { IDestroyable, RobotBase, RobotFactory } from 'robot.base';
 import { Interpreter } from 'interpreter.interpreter';
 import { Pose, RobotBaseMobile } from 'robot.base.mobile';
-import { ISensor } from 'robot.sensors';
+import RobotRcj from 'robot.rcj';
 
 const RESIZE_CONST: number = 3;
+export interface IObserver {
+    update(robot: RobotBaseMobile);
+}
+
+export interface IObservableRobot {
+    addObserver(observer: IObserver): void;
+    removeObserver(observer: IObserver): void;
+    notifyObservers(): void;
+}
+
+export class RcjScoringTool implements IObserver {
+    private configData: any;
+    private running: boolean = false;
+    private mins: number = 0;
+    private secs: number = 0;
+    private msecs: number = 0;
+    private stopWatch: any;
+    private pose: Pose;
+    private path: number = 0;
+    private lastPath: number = 0;
+    private line: boolean = true;
+    private robot: RobotBaseMobile;
+
+    constructor(configData) {
+        this.configData = configData;
+        let rcj = this;
+        $('#rcjStart').on('click', function () {
+            rcj.init();
+        });
+        $('#rcjStop').on('click', function () {
+            clearInterval(rcj.stopWatch);
+        });
+        $('#rcjName').val(configData.name);
+    }
+
+    private init() {
+        this.path = 0;
+        this.lastPath = 0;
+        this.line = true;
+        clearInterval(this.stopWatch);
+        this.mins = 0;
+        this.secs = 0;
+        this.msecs = 0;
+        this.running = true;
+        this.stopWatch = setInterval(this.timer.bind(this), 100);
+        this.robot && this.robot.resetPose();
+        $('#simControl').trigger('click');
+    }
+
+    timer() {
+        if (this.running) {
+            this.msecs++;
+            if (this.msecs === 10) {
+                this.secs++;
+                this.msecs = 0;
+            }
+            if (this.secs === 60) {
+                this.mins++;
+                this.secs = 0;
+            }
+            $('#rcjTime').val(this.mins + ':' + this.secs + ':' + this.msecs);
+            $('#rcjPose').val(Math.round(this.pose.x) + ', ' + Math.round(this.pose.y) + ', ' + Math.round((this.pose.theta * 180) / Math.PI));
+            $('#rcjPath').val(this.path);
+            $('#rcjLastPath').val(this.lastPath);
+            $('#rcjLine').val(this.line ? 'true' : 'false');
+            $('#rcjTeam').val(this.robot.name);
+        }
+    }
+
+    update(robot: RobotBaseMobile) {
+        //TODO calculate scoring
+        this.pose = robot.pose;
+        this.robot = robot;
+        let x = Math.floor((this.pose.x - 10) / 90);
+        let y = Math.floor((this.pose.y - 10) / 90);
+        let tile = this.configData.tiles['' + x + ',' + y + ',0'];
+        let path = tile && tile.index[0];
+        if (path == this.lastPath || path == this.lastPath + 1) {
+            this.path = path;
+            this.lastPath = path;
+        } else {
+            this.path = -1;
+        }
+        this.line = this.path >= 0 ? ((robot as RobotRcj)['F'].lightValue < 100 ? true : false) : false;
+    }
+    openClose() {
+        let position = $('#simDiv').position();
+        position.left = 12;
+        $('#rcjScoringWindow').toggleSimPopup(position);
+    }
+}
 
 /**
  * Creates a new Scene.
@@ -29,6 +120,13 @@ const RESIZE_CONST: number = 3;
  * @constructor
  */
 export class SimulationScene {
+    get scoring(): boolean {
+        return this._scoring;
+    }
+
+    set scoring(value: boolean) {
+        this._scoring = value;
+    }
     private readonly DEFAULT_TRAIL_WIDTH: number = 10;
     private readonly DEFAULT_TRAIL_COLOR: string = '#000000';
     backgroundImg: any;
@@ -67,6 +165,8 @@ export class SimulationScene {
     private readonly aCtx: CanvasRenderingContext2D;
     private readonly udCanvas: HTMLCanvasElement;
     readonly uCanvas: HTMLCanvasElement;
+    private rcjScoringTool: RcjScoringTool;
+    private _scoring: boolean = false;
 
     constructor(sim: SimulationRoberta) {
         this.sim = sim;
@@ -515,6 +615,9 @@ export class SimulationScene {
         } else {
             // reassign the (updated) program
             this.robots.forEach((robot, index) => {
+                if (scene.rcjScoringTool) {
+                    (robot as RobotBaseMobile).addObserver(scene.rcjScoringTool);
+                }
                 robot.replaceState(interpreters[index]);
                 robot.reset();
             });
@@ -830,5 +933,16 @@ export class SimulationScene {
     addMarker(markerId: number) {
         this.addSimulationObject(this.markerList, SimObjectShape.Marker, SimObjectType.Marker, markerId);
         this._redrawMarkers = true;
+    }
+
+    setRcjScoringTool(configData) {
+        this.rcjScoringTool = new RcjScoringTool(configData);
+        this.scoring = true;
+        let scene = this;
+        $('#simCompetition').show();
+        $('#simCompetition').off();
+        $('#simCompetition').onWrap('click', function () {
+            scene.rcjScoringTool.openClose();
+        });
     }
 }

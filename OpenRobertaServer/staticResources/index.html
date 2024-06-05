@@ -790,6 +790,8 @@ limitations under the License.
                         lkey='Blockly.Msg.MENU_SIM_DELETE_OBJECT_TOOLTIP' rel='tooltip' type='button'></button>
                 </div>
                 <div class='bottomLeftButtons' id='simButtons'>
+                    <button class='blbtn typcn typcn-stopwatch' style='display: none;' data-bs-original-title='' id='simCompetition'
+                        lkey='Blockly.Msg.MENU_SIM_START_TOOLTIP' rel='tooltip' title='' type='button'></button>
                     <button class='blbtn typcn typcn-media-play-outline' data-bs-original-title='' id='simControl' lkey='Blockly.Msg.MENU_SIM_START_TOOLTIP'
                         rel='tooltip' title='' type='button'></button>
                     <button class='blbtn typcn typcn-arrow-forward-outline debug' data-bs-original-title='' id='simControlStepOver'
@@ -2084,7 +2086,7 @@ limitations under the License.
     <div class='simWindow slide-in' data-bs-backdrop='false' id='simValuesWindow'>
         <button aria-label='Close' class='btn-close close' data-bs-dismiss='modal' type='button'></button>
         <div id='simValuesContent'>
-            <div id='valuesContent'>
+            <div class='valuesContent'>
                 <div aria-multiselectable='true' class='panel-group' id='accordion' role='tablist'>
                     <div class='panel'>
                         <div class='panel-heading' id='headingOne' role='tab'>
@@ -2138,6 +2140,31 @@ limitations under the License.
             </div>
         </div>
     </div>
+
+    <div class='simWindow slide-in' data-bs-backdrop='false' id='rcjScoringWindow'>
+        <button aria-label='Close' class='btn-close close' data-bs-dismiss='modal' type='button'></button>
+        <div class='valuesContent'>
+            <form>
+                <label for='rcjName'>Name</label> <input disabled type='text' id='rcjName' /> <label for='rcjTeam'>Team</label> <input disabled type='text'
+                id='rcjTeam' />
+            </form>
+            <form>
+                <label for='rcjTime'>Time</label> <input disabled value='0' type='text' id='rcjTime' /><label for='rcjPose'>Pose</label><input disabled type='text'
+                id='rcjPose' />
+            </form>
+            <form>
+                <label for='rcjPath'>Path</label><input disabled type='text' id='rcjPath' /><label for='rcjLastPath'>Last Path</label><input disabled type='text'
+                id='rcjLastPath' /></form>
+            <form>
+                <label for='rcjLine'>Line</label><input disabled type='text' id='rcjLine' />
+            </form>
+            <div class='modal-footer'>
+                <button id='rcjStart' class='btn' type='button'>Start</button>
+                <button id='rcjStop' class='btn' type='button'>Stop</button>
+            </div>
+        </div>
+    </div>
+
 
     <!--  Popup to show downloads for mbed -->
     <div class='modal fade' id='save-client-compiled-program'>
