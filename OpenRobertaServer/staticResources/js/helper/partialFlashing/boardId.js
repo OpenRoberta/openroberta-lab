@@ -1,0 +1,3 @@
+define(["require","exports"],(function(t,i){Object.defineProperty(i,"__esModule",{value:!0}),i.BoardId=void 0;var r=function(){function t(t){if(this.id=t,!this.isV1()&&!this.isV2())throw new Error("Could not recognise the Board ID ".concat(t.toString(16)))}return t.parse=function(i){return new t(parseInt(i,16))},t.prototype.isV1=function(){return 39168===this.id||39169===this.id},t.prototype.isV2=function(){return 39171===this.id||39172===this.id||39173===this.id||39174===this.id},t.prototype.normalize=function(){return this.isV1()?t.v1Normalized:t.v2Normalized},t.prototype.toString=function(){return this.id.toString(16)},t.v1Normalized=new t(39168),t.v2Normalized=new t(39171),t}();i.BoardId=r}));
+//# sourceMappingURL=boardId.js.map
+//# sourceMappingURL=boardId.js.map

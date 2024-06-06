@@ -30,23 +30,23 @@ public abstract class MbedCompilerWorker implements ICompilerWorker {
      * run the build and create the complied hex file
      */
     private Key runBuild(Project project) {
-        CompilerSetupBean compilerWorkflowBean = project.getWorkerResult(CompilerSetupBean.class);
-        String compilerBinDir = compilerWorkflowBean.getCompilerBinDir();
-        String compilerResourcesDir = compilerWorkflowBean.getCompilerResourcesDir();
+//        CompilerSetupBean compilerWorkflowBean = project.getWorkerResult(CompilerSetupBean.class);
+//        String compilerBinDir = compilerWorkflowBean.getCompilerBinDir();
+//        String compilerResourcesDir = compilerWorkflowBean.getCompilerResourcesDir();
+//
+//        String scriptName = compilerResourcesDir + "/compile.py";
+//        String runtimeHexDir = compilerResourcesDir + "/runtimeHex";
+//
+//        String[] executableWithParameters =
+//            {
+//                compilerBinDir + "python",
+//                scriptName,
+//                sourceCode,
+//                runtimeHexDir,
+//                robotType
+//            };
         String sourceCode = project.getSourceCode().toString();
-
-        String scriptName = compilerResourcesDir + "/compile.py";
-        String runtimeHexDir = compilerResourcesDir + "/runtimeHex";
-
-        String[] executableWithParameters =
-            {
-                compilerBinDir + "python",
-                scriptName,
-                sourceCode,
-                runtimeHexDir,
-                robotType
-            };
-        project.setCompiledHex(this.getBinaryFromCrossCompiler(executableWithParameters));
+        project.setCompiledHex(sourceCode);
         if ( project.getCompiledHex() != null ) {
             return Key.COMPILERWORKFLOW_SUCCESS;
         } else {

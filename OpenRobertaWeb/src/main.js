@@ -24,6 +24,8 @@ require.config({
         'webots.enum': 'libs/webots/enum',
         'webots.wren': 'libs/webots/wrenjs',
         dapjs: 'libs/dapjs/dap.umd',
+        'microbit-fs': 'libs/microbit-fs/microbit-fs.umd',
+        'microbit-universal-hex': 'libs/microbit-universal-hex/microbit-uh.umd',
 
         'startView.controller': 'js/app/roberta/controller/startView.controller',
         'confDelete.controller': 'js/app/roberta/controller/confDelete.controller',
@@ -96,6 +98,13 @@ require.config({
         'simulation.scene': 'js/app/simulation/simulationLogic/simulation.scene',
         'simulation.roberta': 'js/app/simulation/simulationLogic/simulation.roberta',
         'simulation.webots': 'js/app/simulation/simulationLogic/simulation.webots',
+        partialFlashing: 'js/helper/partialFlashing/partialFlashing',
+        partialFlashingUtils: 'js/helper/partialFlashing/partialFlashingUtils',
+        asyncUtil: 'js/helper/partialFlashing/asyncUtil',
+        microbitConstants: 'js/helper/partialFlashing/microbitConstants',
+        micropython: 'js/helper/partialFlashing/micropython',
+        boardId: 'js/helper/partialFlashing/boardId',
+        boardSerialInfo: 'js/helper/partialFlashing/boardSerialInfo',
         maze: 'js/app/simulation/simulationLogic/maze',
 
         comm: 'js/helper/comm',
@@ -240,6 +249,13 @@ require([
     'abstract.connections',
     'connections',
     'connection.controller',
+    'partialFlashing',
+    'partialFlashingUtils',
+    'asyncUtil',
+    'microbitConstants',
+    'micropython',
+    'boardId',
+    'boardSerialInfo'
     //end connections
 ], function (require) {
     //window.Popper = require('popper.js').default;
@@ -282,6 +298,13 @@ require([
     robotBlock = require('robotBlock');
     startViewController = require('startView.controller');
     connectionController = require('connection.controller');
+    partialFlashing = require('partialFlashing');
+    partialFlashingUtils = require('partialFlashingUtils');
+    asyncUtil = require('asyncUtil');
+    microbitConstants = require('microbitConstants');
+    micropython = require('micropython');
+    boardId = require('boardId');
+    boardSerialInfo = require('boardSerialInfo');
 
     $(document).ready(WRAP.wrapTotal(init, 'page init'));
 });

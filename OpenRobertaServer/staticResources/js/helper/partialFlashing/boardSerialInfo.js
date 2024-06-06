@@ -1,0 +1,3 @@
+define(["require","exports","boardId"],(function(e,r,i){Object.defineProperty(r,"__esModule",{value:!0}),r.BoardSerialInfo=void 0;var n=function(){function e(e,r,i){this.id=e,this.familyId=r,this.hic=i}return e.parse=function(r){var n=r.serialNumber;if(!n)throw new Error("Could not detected ID from connected board.");48!==n.length&&console.log("USB serial number unexpected length: ".concat(n.length));var t=n.substring(0,4),o=n.substring(4,8),d=n.slice(-8);return new e(i.BoardId.parse(t),o,d)},e.prototype.eq=function(e){return e.id===this.id&&e.familyId===this.familyId&&e.hic===this.hic},e}();r.BoardSerialInfo=n}));
+//# sourceMappingURL=boardSerialInfo.js.map
+//# sourceMappingURL=boardSerialInfo.js.map
