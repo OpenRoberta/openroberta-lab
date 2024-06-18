@@ -157,7 +157,7 @@ public class CalliopeV3PythonVisitor extends MbedV2PythonVisitor implements ICal
                 }
                 break;
             default:
-                //TODO calliopeV3 other servo motors
+                //TODO calliopeV3 other servo motors Beate
         }
         return null;
     }
@@ -236,7 +236,7 @@ public class CalliopeV3PythonVisitor extends MbedV2PythonVisitor implements ICal
 
     @Override
     public Void visitGyroSensor(GyroSensor gyroSensor) {
-        // TODO CalliopeV3 Beate
+        // TODO CalliopeV3 Marcel
         return null;
     }
 
@@ -328,7 +328,7 @@ public class CalliopeV3PythonVisitor extends MbedV2PythonVisitor implements ICal
 
     @Override
     public Void visitRadioRssiSensor(RadioRssiSensor radioRssiSensor) {
-        // TODO CalliopeV3 ???
+        // TODO CalliopeV3 ??? radio strength geht nicht
         return null;
     }
 
@@ -465,7 +465,7 @@ public class CalliopeV3PythonVisitor extends MbedV2PythonVisitor implements ICal
 
     @Override
     public Void visitHumiditySensor(HumiditySensor humiditySensor) {
-        // TODO CalliopeV3 ???
+        // TODO CalliopeV3 Beate
         return null;
     }
 
@@ -485,7 +485,7 @@ public class CalliopeV3PythonVisitor extends MbedV2PythonVisitor implements ICal
             this.src.add(pin);
             this.src.add(", ");
         } else {
-            //TODO calliopeV3 external servo no callibot
+            //TODO calliopeV3 external servo Beate
         }
         servoSetAction.value.accept(this);
         this.src.add(");");
@@ -494,13 +494,13 @@ public class CalliopeV3PythonVisitor extends MbedV2PythonVisitor implements ICal
 
     @Override
     public Void visitMotionKitSingleSetAction(MotionKitSingleSetAction motionKitSingleSetAction) {
-        // TODO CalliopeV3 ???
+        // TODO CalliopeV3 Beate
         return null;
     }
 
     @Override
     public Void visitMotionKitDualSetAction(MotionKitDualSetAction motionKitDualSetAction) {
-        // TODO CalliopeV3 ???
+        // TODO CalliopeV3 Beate
         return null;
     }
 

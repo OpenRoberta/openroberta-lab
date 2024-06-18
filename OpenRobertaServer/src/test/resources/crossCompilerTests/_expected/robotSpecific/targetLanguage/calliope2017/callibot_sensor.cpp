@@ -12,6 +12,7 @@ uint8_t _cbLedState = 0x00;
 
 bool ___line;
 double ___dist;
+bool ___key;
 
 int main()
 {
@@ -19,10 +20,13 @@ int main()
     _cbInit(_buf, &_i2c, &_uBit);
     ___line = true;
     ___dist = 0;
+    ___key = true;
 
     ___line = _cbGetSampleInfrared(_buf, &_i2c, 2);
     ___line = _cbGetSampleInfrared(_buf, &_i2c, 1);
     ___dist = _cbGetSampleUltrasonic(_buf, &_i2c);
+    ___key = _cbGetSampleBumperKey(_buf, &_i2c, 1);
+    ___key = _cbGetSampleBumperKey(_buf, &_i2c, 2);
     _cbStop(_buf, &_i2c);
     release_fiber();
 }

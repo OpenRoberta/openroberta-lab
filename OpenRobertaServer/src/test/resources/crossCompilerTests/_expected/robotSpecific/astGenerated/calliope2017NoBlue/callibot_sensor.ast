@@ -7,3 +7,9 @@ Var [line] := SensorExpr [InfraredSensor [I2, LINE, - EMPTY_SLOT -]]
 
 Var [dist] := SensorExpr [UltrasonicSensor [U, DISTANCE, - EMPTY_SLOT -]]
 
+
+Var [key] := SensorExpr [CallibotKeysSensor [K1, PRESSED, - EMPTY_SLOT -]]
+
+
+Var [key] := SensorExpr [CallibotKeysSensor [K2, PRESSED, - EMPTY_SLOT -]]
+
