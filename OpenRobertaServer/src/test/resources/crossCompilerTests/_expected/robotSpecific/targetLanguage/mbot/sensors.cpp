@@ -23,12 +23,12 @@ const std::vector<uint8_t> __ledMatrix3 = {0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x
 double ___numVar;
 bool ___boolVar;
 String ___stringVar;
-unsigned int ___colourVar;
+uint32_t ___colourVar;
 std::vector<uint8_t> ___imageVar;
 std::list<double> ___numList;
 std::list<bool> ___boolList;
 std::list<String> ___stringList;
-std::list<unsigned int> ___colourList;
+std::list<uint32_t> ___colourList;
 std::list<std::vector<uint8_t>> ___imageList;
 
 unsigned long __time_1 = millis();

@@ -20,11 +20,11 @@ void ____lights();
 double ___numberVar;
 bool ___booleanVar;
 String ___stringVar;
-unsigned int ___colourVar;
+uint32_t ___colourVar;
 std::list<double> ___numberList;
 std::list<bool> ___booleanList;
 std::list<String> ___stringList;
-std::list<unsigned int> ___colourList;
+std::list<uint32_t> ___colourList;
 
 void ____action() {
     ____drive();

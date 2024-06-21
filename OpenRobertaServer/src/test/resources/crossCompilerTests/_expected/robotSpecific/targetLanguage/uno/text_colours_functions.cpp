@@ -6,24 +6,24 @@
 
 void ____text();
 void ____colours();
-void ____function_parameter(double ___x, bool ___x2, String ___x3, unsigned int ___x4, std::list<double> ___x5, std::list<bool> ___x6, std::list<String> ___x7, std::list<unsigned int> ___x8);
+void ____function_parameter(double ___x, bool ___x2, String ___x3, uint32_t ___x4, std::list<double> ___x5, std::list<bool> ___x6, std::list<String> ___x7, std::list<uint32_t> ___x8);
 double ____function_return_numberVar();
 bool ____function_return_booleanVar();
 String ____function_return_stringVar();
-unsigned int ____function_return_colourVar();
+uint32_t ____function_return_colourVar();
 std::list<double> ____function_return_numberList();
 std::list<bool> ____function_return_booleanList();
 std::list<String> ____function_return_stringList();
-std::list<unsigned int> ____function_return_colourList();
+std::list<uint32_t> ____function_return_colourList();
 
 double ___numberVar;
 bool ___booleanVar;
 String ___stringVar;
-unsigned int ___colourVar;
+uint32_t ___colourVar;
 std::list<double> ___numberList;
 std::list<bool> ___booleanList;
 std::list<String> ___stringList;
-std::list<unsigned int> ___colourList;
+std::list<uint32_t> ___colourList;
 int _led_L = 13;
 int _led_red_R = 5;
 int _led_green_R = 6;
@@ -75,7 +75,7 @@ void ____colours() {
 
 }
 
-void ____function_parameter(double ___x, bool ___x2, String ___x3, unsigned int ___x4, std::list<double> ___x5, std::list<bool> ___x6, std::list<String> ___x7, std::list<unsigned int> ___x8) {
+void ____function_parameter(double ___x, bool ___x2, String ___x3, uint32_t ___x4, std::list<double> ___x5, std::list<bool> ___x6, std::list<String> ___x7, std::list<uint32_t> ___x8) {
     if (___booleanVar) return ;
 }
 
@@ -91,7 +91,7 @@ String ____function_return_stringVar() {
     return ___stringVar;
 }
 
-unsigned int ____function_return_colourVar() {
+uint32_t ____function_return_colourVar() {
     return ___colourVar;
 }
 
@@ -107,7 +107,7 @@ std::list<String> ____function_return_stringList() {
     return ___stringList;
 }
 
-std::list<unsigned int> ____function_return_colourList() {
+std::list<uint32_t> ____function_return_colourList() {
     return ___colourList;
 }
 

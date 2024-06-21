@@ -129,7 +129,7 @@ public final class MbotCppVisitor extends NepoArduinoCppVisitor implements IMbot
             case ARRAY_BOOLEAN:
                 return "std::list<bool>";
             case ARRAY_COLOUR:
-                return "std::list<unsigned int>";
+                return "std::list<uint32_t>";
             case ARRAY_IMAGE:
                 return "std::list<std::vector<uint8_t>>";
             case BOOLEAN:
@@ -143,7 +143,7 @@ public final class MbotCppVisitor extends NepoArduinoCppVisitor implements IMbot
             case VOID:
                 return "void";
             case COLOR:
-                return "unsigned int";
+                return "uint32_t";
             case CONNECTION:
                 return "int";
             case IMAGE:

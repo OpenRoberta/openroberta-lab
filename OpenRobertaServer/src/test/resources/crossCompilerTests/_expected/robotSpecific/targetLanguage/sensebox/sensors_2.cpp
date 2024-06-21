@@ -17,11 +17,11 @@ void ____sensors();
 double ___numVar;
 bool ___boolVar;
 String ___stringVar;
-unsigned int ___colourVar;
+uint32_t ___colourVar;
 std::list<double> ___numList;
 std::list<bool> ___boolList;
 std::list<String> ___stringList;
-std::list<unsigned int> ___colourList;
+std::list<uint32_t> ___colourList;
 Ultrasonic _hcsr04_U(1, 2);
 Bsec _iaqSensor_E;
 

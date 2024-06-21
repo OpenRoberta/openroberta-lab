@@ -16,16 +16,16 @@ void ____text();
 void ____images();
 void ____colour();
 void ____messages();
-void ____doSomething(double ___x, bool ___x2, String ___x3, unsigned int ___x4, std::vector<uint8_t> ___x5, std::list<double> ___x6, std::list<bool> ___x7, std::list<String> ___x8, std::list<unsigned int> ___x9, std::list<std::vector<uint8_t>> ___x10);
+void ____doSomething(double ___x, bool ___x2, String ___x3, uint32_t ___x4, std::vector<uint8_t> ___x5, std::list<double> ___x6, std::list<bool> ___x7, std::list<String> ___x8, std::list<uint32_t> ___x9, std::list<std::vector<uint8_t>> ___x10);
 double ____function_return_numberVar();
 bool ____function_return_booleanVar();
 String ____function_return_stringVar();
-unsigned int ____function_return_colourVar();
+uint32_t ____function_return_colourVar();
 std::vector<uint8_t> ____function_return_imageVar();
 std::list<double> ____function_return_numberList();
 std::list<bool> ____function_return_booleanList();
 std::list<String> ____function_return_stringList();
-std::list<unsigned int> ____function_return_colourList();
+std::list<uint32_t> ____function_return_colourList();
 std::list<std::vector<uint8_t>> ____function_return_imageList();
 const std::vector<uint8_t> __ledMatrix0 = {0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0};
 const std::vector<uint8_t> __ledMatrix1 = {0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0};
@@ -36,12 +36,12 @@ const std::vector<uint8_t> __ledMatrix4 = {0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x
 double ___numVar;
 bool ___boolVar;
 String ___stringVar;
-unsigned int ___colourVar;
+uint32_t ___colourVar;
 std::vector<uint8_t> ___imageVar;
 std::list<double> ___numList;
 std::list<bool> ___boolList;
 std::list<String> ___stringList;
-std::list<unsigned int> ___colourList;
+std::list<uint32_t> ___colourList;
 std::list<std::vector<uint8_t>> ___imageList;
 
 
@@ -137,7 +137,7 @@ void ____messages() {
     drawStrLEDMatrix(&__meLEDMatrix_1, String(_meIr.getString()), 100);
 }
 
-void ____doSomething(double ___x, bool ___x2, String ___x3, unsigned int ___x4, std::vector<uint8_t> ___x5, std::list<double> ___x6, std::list<bool> ___x7, std::list<String> ___x8, std::list<unsigned int> ___x9, std::list<std::vector<uint8_t>> ___x10) {
+void ____doSomething(double ___x, bool ___x2, String ___x3, uint32_t ___x4, std::vector<uint8_t> ___x5, std::list<double> ___x6, std::list<bool> ___x7, std::list<String> ___x8, std::list<uint32_t> ___x9, std::list<std::vector<uint8_t>> ___x10) {
     if (___boolVar) return ;
 }
 
@@ -153,7 +153,7 @@ String ____function_return_stringVar() {
     return ___stringVar;
 }
 
-unsigned int ____function_return_colourVar() {
+uint32_t ____function_return_colourVar() {
     return ___colourVar;
 }
 
@@ -173,7 +173,7 @@ std::list<String> ____function_return_stringList() {
     return ___stringList;
 }
 
-std::list<unsigned int> ____function_return_colourList() {
+std::list<uint32_t> ____function_return_colourList() {
     return ___colourList;
 }
 

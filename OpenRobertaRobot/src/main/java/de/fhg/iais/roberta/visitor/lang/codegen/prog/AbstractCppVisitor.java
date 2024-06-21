@@ -819,7 +819,7 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
             case ARRAY_BOOLEAN:
                 return "std::list<bool>";
             case ARRAY_COLOUR:
-                return "std::list<unsigned int>";
+                return "std::list<uint32_t>";
             case BOOLEAN:
                 return "bool";
             case NUMBER:
@@ -831,7 +831,7 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
             case VOID:
                 return "void";
             case COLOR:
-                return "unsigned int";
+                return "uint32_t";
             case CONNECTION:
                 return "int";
             default:
