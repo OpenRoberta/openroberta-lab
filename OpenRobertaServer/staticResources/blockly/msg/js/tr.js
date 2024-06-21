@@ -1193,7 +1193,7 @@ Blockly.Msg.OMNIDRIVE_TOOLTIP = "Represents an omnidirectional drive system.";  
 Blockly.Msg.ON = "açık";
 Blockly.Msg.OPTICAL_TOOLTIP = "Represent an optical sensor also called reflected light sensor.";  // untranslated
 Blockly.Msg.OPTION_FILE_DOWNLOAD = "Download your program as a file";  // untranslated
-Blockly.Msg.OPTION_WEBUSB = "Connect your micro:bit device to the computer<br><small>select it in the next popup and click »Connect«</small>";  // untranslated
+Blockly.Msg.OPTION_WEBUSB = "Connect your device to the computer<br><small>select it in the next popup and click »Connect«</small>";  // untranslated
 Blockly.Msg.ORA_ACCESS_RIGHT_CHANGED = "The shared right for user »$« is updated!";  // untranslated
 Blockly.Msg.ORA_ACCESS_RIGHT_DELETED = "The shared right for user »$« is deleted!";  // untranslated
 Blockly.Msg.ORA_ACCOUNT_NOT_ACTIVATED_TO_SHARE = "Your are not allowed to share. Please activate your account! <br><a href='https://www.roberta-home.de/index.php?id=138&L=1' target='_blank'>Further information ...</a>";  // untranslated
@@ -1657,7 +1657,7 @@ Blockly.Msg.SENSOR_LINE = "bottom infrared sensor";  // untranslated
 Blockly.Msg.SENSOR_LINE_COLOUR_TOOLTIP = "Returns the colour of at the specified index (0-3).";  // untranslated
 Blockly.Msg.SENSOR_LINE_INFORMATION_TOOLTIP = "Returns a list [position [-100;100], width] of the line at the specified index (0-3).";  // untranslated
 Blockly.Msg.SENSOR_LINE_JOYCAR = "line sensor";  // untranslated
-Blockly.Msg.SENSOR_LOGOTOUCH = "logo sensor";  // untranslated
+Blockly.Msg.SENSOR_LOGOTOUCH = "logo touch sensor";  // untranslated
 Blockly.Msg.SENSOR_LOGOTOUCH_GETSAMPLE_TOOLTIP = "Is the logo touched?";  // untranslated
 Blockly.Msg.SENSOR_LOGO_MODE_TOOLTIP = "Change the touch mode of the logo! In resistive mode, touch the ground and the logo together. In capacitive mode, just touch the logo! The default mode is capacitive touch.";  // untranslated
 Blockly.Msg.SENSOR_LPS22HB = "LPS22HB";  // untranslated

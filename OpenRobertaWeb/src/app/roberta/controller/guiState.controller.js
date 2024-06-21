@@ -243,8 +243,6 @@ function setRobot(robot, result, opt_init) {
     GUISTATE.gui.binaryFileExtension = result.binaryFileExtension;
     GUISTATE.gui.firmwareDefault = result.firmwareDefault;
 
-    // TODO CalliopeV3 add background image, Chris
-
     $('#blocklyDiv, #bricklyDiv').css('background', 'url(../../../../css/img/' + robotGroup + 'Background.jpg) repeat');
     $('#blocklyDiv, #bricklyDiv').css('background-size', '100%');
     $('#blocklyDiv, #bricklyDiv').css('background-position', 'initial');

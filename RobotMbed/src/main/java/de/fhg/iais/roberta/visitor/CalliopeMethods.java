@@ -6,5 +6,6 @@ public enum CalliopeMethods {
     LED_BAR_SET_LED,
     SET_MATRIX_BRIGHTNESS,
     SET_BOTH_MOTORS,
-    SET_MOTOR
+    SET_MOTOR,
+    SERVO_GET_ANGLE
 }

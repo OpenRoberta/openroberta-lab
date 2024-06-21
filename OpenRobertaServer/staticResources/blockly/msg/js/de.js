@@ -1193,7 +1193,7 @@ Blockly.Msg.OMNIDRIVE_TOOLTIP = "Block für das omnidirektionale Antriebssystem 
 Blockly.Msg.ON = "an";
 Blockly.Msg.OPTICAL_TOOLTIP = "Block für den optischen Sensor auch Reflexlichttaster genannt.";
 Blockly.Msg.OPTION_FILE_DOWNLOAD = "Laden dein Programm als Datei herunter";
-Blockly.Msg.OPTION_WEBUSB = "Verbinde deinen micro:bit mit dem Computer,<br><small>wähle ihn im nächsten Popup aus und klicke auf »Verbinden«</small>";
+Blockly.Msg.OPTION_WEBUSB = "Verbinde dein System mit dem Computer,<br><small>wähle es im nächsten Popup aus und klicke auf »Verbinden«</small>";
 Blockly.Msg.ORA_ACCESS_RIGHT_CHANGED = "Das Programm wurde mit »$« geteilt.";
 Blockly.Msg.ORA_ACCESS_RIGHT_DELETED = "Das Programm wird nun nicht mehr mit »$« geteilt!";
 Blockly.Msg.ORA_ACCOUNT_NOT_ACTIVATED_TO_SHARE = "Du kannst Programme nur teilen oder in die Gallerie hochladen, wenn dein Benutzerkonto verifiziert wurde.<br><a href='https://www.roberta-home.de/index.php?id=138' target='_blank'>Mehr Infos ...</a>";
@@ -1657,7 +1657,7 @@ Blockly.Msg.SENSOR_LINE = "bottom infrared sensor";  // untranslated
 Blockly.Msg.SENSOR_LINE_COLOUR_TOOLTIP = "Gibt die Farbe der Linie angegebenen Index (0-3).";
 Blockly.Msg.SENSOR_LINE_INFORMATION_TOOLTIP = "Gibt eine Liste [position [-100;100] , Breite] zurück der Linie am angegebenen Index (0-3).";
 Blockly.Msg.SENSOR_LINE_JOYCAR = "Liniensensor";
-Blockly.Msg.SENSOR_LOGOTOUCH = "Logosensor";
+Blockly.Msg.SENSOR_LOGOTOUCH = "Logo-Touch-Sensor";
 Blockly.Msg.SENSOR_LOGOTOUCH_GETSAMPLE_TOOLTIP = "Gibt »wahr« zurück, wenn das Logo gedrückt wird.";
 Blockly.Msg.SENSOR_LOGO_MODE_TOOLTIP = "Ändere den Touch-Modus des Logos! Im resistiven Modus berühre das Logo und die Masse (GND) gleichzeitig. Im kapazitiven Modus reicht es, nur das Logo zu berühren! Der Standardmodus ist kapazitiv.";
 Blockly.Msg.SENSOR_LPS22HB = "LPS22HB";  // untranslated

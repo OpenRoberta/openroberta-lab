@@ -39,7 +39,6 @@
         <block type="robSensors_timer_getSample"></block>
         <block type="mbedSensors_timer_reset"></block>
         <block type="robSensors_temperature_getSample"></block>
-        <block type="robSensors_accelerometer_getSample"></block>
         <block type="robSensors_light_getSample"></block>
     </category>
     <category name="TOOLBOX_CONTROL" svg="true">

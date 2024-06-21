@@ -11,9 +11,11 @@ import com.google.common.collect.ClassToInstanceMap;
 
 import de.fhg.iais.roberta.bean.CodeGeneratorSetupBean;
 import de.fhg.iais.roberta.bean.IProjectBean;
+import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.mode.action.MotorStopMode;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.action.generic.MbedPinWriteValueAction;
 import de.fhg.iais.roberta.syntax.action.light.LedAction;
 import de.fhg.iais.roberta.syntax.action.light.RgbLedOffAction;
 import de.fhg.iais.roberta.syntax.action.light.RgbLedOffHiddenAction;
@@ -49,9 +51,31 @@ import de.fhg.iais.roberta.visitor.CalliopeMethods;
 import de.fhg.iais.roberta.visitor.ICalliopeVisitor;
 
 public class CalliopeV3PythonVisitor extends MbedV2PythonVisitor implements ICalliopeVisitor<Void> {
+    private static final Map<String, String> PIN_MAP = new HashMap<>(); // TODO better?
     private static final Map<String, String> CALLIBOT_TO_PIN_MAP = new HashMap<>();
 
     static {
+        PIN_MAP.put("0", "pin0");
+        PIN_MAP.put("1", "pin1");
+        PIN_MAP.put("2", "pin2");
+        PIN_MAP.put("3", "pin3");
+        PIN_MAP.put("4", "pin_A0_SCL");
+        PIN_MAP.put("5", "pin_A1_RX");
+        PIN_MAP.put("6", "pin_A1_TX");
+        PIN_MAP.put("C04", "pin4");
+        PIN_MAP.put("C05", "pin5");
+        PIN_MAP.put("C06", "pin6");
+        PIN_MAP.put("C07", "pin7");
+        PIN_MAP.put("C08", "pin8");
+        PIN_MAP.put("C09", "pin9");
+        PIN_MAP.put("C10", "pin10");
+        PIN_MAP.put("C11", "pin11");
+        PIN_MAP.put("C12", "pin12");
+        PIN_MAP.put("C16", "pin16");
+        PIN_MAP.put("C17", "pin17");
+        PIN_MAP.put("C18", "pin18");
+        PIN_MAP.put("C19", "pin19");
+
         CALLIBOT_TO_PIN_MAP.put("MOTOR_L", "0");
         CALLIBOT_TO_PIN_MAP.put("MOTOR_R", "2");
         CALLIBOT_TO_PIN_MAP.put("RGBLED_LF", "1");
@@ -78,6 +102,25 @@ public class CalliopeV3PythonVisitor extends MbedV2PythonVisitor implements ICal
         ConfigurationAst robotConfiguration,
         ClassToInstanceMap<IProjectBean> beans) {
         super(programPhrases, robotConfiguration, "calliopemini", beans);
+    }
+
+    @Override
+    protected void generateProgramPrefix(boolean withWrapping) {
+        super.generateProgramPrefix(withWrapping);
+        if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.SERVOMOTOR) ) {
+            Map<String, ConfigurationComponent> a = robotConfiguration.getAllConfigurationComponentByType(SC.SERVOMOTOR);
+            a.forEach((s, configurationComponent) -> {
+                String port = configurationComponent.getComponentProperties().get("PIN1");
+                this.src.add(this.firmware, ".", PIN_MAP.get(port), ".set_analog_period(20)");
+                nlIndent();
+            });
+        }
+        if ( this.getBean(UsedHardwareBean.class).isActorUsed("MOTIONKIT") ) {
+            this.src.add(this.firmware, ".", PIN_MAP.get("5"), ".set_analog_period(20)");
+            nlIndent();
+            this.src.add(this.firmware, ".", PIN_MAP.get("6"), ".set_analog_period(20)");
+            nlIndent();
+        }
     }
 
     @Override
@@ -157,7 +200,7 @@ public class CalliopeV3PythonVisitor extends MbedV2PythonVisitor implements ICal
                 }
                 break;
             default:
-                //TODO calliopeV3 other servo motors Beate
+                throw new DbcException("visitMotorStopAction; Invalide motor port: " + pin);
         }
         return null;
     }
@@ -236,7 +279,6 @@ public class CalliopeV3PythonVisitor extends MbedV2PythonVisitor implements ICal
 
     @Override
     public Void visitGyroSensor(GyroSensor gyroSensor) {
-        // TODO CalliopeV3 Marcel
         return null;
     }
 
@@ -328,7 +370,20 @@ public class CalliopeV3PythonVisitor extends MbedV2PythonVisitor implements ICal
 
     @Override
     public Void visitRadioRssiSensor(RadioRssiSensor radioRssiSensor) {
-        // TODO CalliopeV3 ??? radio strength geht nicht
+        // radio strength not available
+        return null;
+    }
+
+    @Override
+    public Void visitMbedPinWriteValueAction(MbedPinWriteValueAction mbedPinWriteValueAction) {
+        String port = mbedPinWriteValueAction.port;
+        ConfigurationComponent configurationComponent = this.robotConfiguration.getConfigurationComponent(port);
+        String pin1 = configurationComponent.getProperty("PIN1");
+        this.src.add(this.firmware, ".", PIN_MAP.get(pin1));
+        String valueType = mbedPinWriteValueAction.pinValue.equals(SC.DIGITAL) ? "digital(" : "analog(";
+        this.src.add(".write_", valueType);
+        mbedPinWriteValueAction.value.accept(this);
+        this.src.add(");");
         return null;
     }
 
@@ -348,11 +403,11 @@ public class CalliopeV3PythonVisitor extends MbedV2PythonVisitor implements ICal
 
     @Override
     public Void visitFourDigitDisplayShowAction(FourDigitDisplayShowAction fourDigitDisplayShowAction) {
-        this.src.add("fdd.show(\"");
+        this.src.add("fdd.show(str(int(");
         fourDigitDisplayShowAction.value.accept(this);
-        this.src.add("\",");
+        this.src.add(")), ");
         fourDigitDisplayShowAction.position.accept(this);
-        this.src.add(",");
+        this.src.add(", ");
         fourDigitDisplayShowAction.colon.accept(this);
         this.src.add(")");
         return null;
@@ -465,7 +520,15 @@ public class CalliopeV3PythonVisitor extends MbedV2PythonVisitor implements ICal
 
     @Override
     public Void visitHumiditySensor(HumiditySensor humiditySensor) {
-        // TODO CalliopeV3 Beate
+        this.src.add("sht31.get_temp_humi(\"");
+        if ( humiditySensor.getMode().equals(SC.HUMIDITY) ) {
+            this.src.add("h");
+        } else if ( humiditySensor.getMode().equals(SC.TEMPERATURE) ) {
+            this.src.add("t");
+        } else {
+            throw new UnsupportedOperationException("Mode " + humiditySensor.getMode() + " not supported!");
+        }
+        this.src.add("\")");
         return null;
     }
 
@@ -481,32 +544,127 @@ public class CalliopeV3PythonVisitor extends MbedV2PythonVisitor implements ICal
             this.src.add("callibot.servo(");
             String pin = getCallibotPin(confCompCallibot, port);
             pin = pin.replace("SERVO_S", "");
-
-            this.src.add(pin);
-            this.src.add(", ");
+            this.src.add(pin, ", ");
+            servoSetAction.value.accept(this);
+            this.src.add(");");
         } else {
-            //TODO calliopeV3 external servo Beate
+            String pin = PIN_MAP.get(confComp.getProperty("PIN1"));
+            this.src.add(this.firmware, ".", pin, ".write_analog(servo_get_angle(");
+            servoSetAction.value.accept(this);
+            this.src.add("));");
         }
-        servoSetAction.value.accept(this);
-        this.src.add(");");
         return null;
     }
 
     @Override
     public Void visitMotionKitSingleSetAction(MotionKitSingleSetAction motionKitSingleSetAction) {
-        // TODO CalliopeV3 Beate
+        String userDefinedName = motionKitSingleSetAction.port;
+        if ( userDefinedName.equals("C16") ) {
+            userDefinedName = "5";
+        } else if ( userDefinedName.equals("C17") ) {
+            userDefinedName = "6";
+        } else {
+            throw new DbcException("Invalid port!");
+        }
+        String currentPort = PIN_MAP.get(userDefinedName);
+        String rightMotorPort = PIN_MAP.get("5"); // C16 is the right motor
+        String leftMotorPort = PIN_MAP.get("6"); // C17 is the left motor
+        String direction = motionKitSingleSetAction.direction;
+        // for the right motor (5) 0 is forwards and 180 is backwards
+        // for the left  motor (6) 180 is forwards and 0 is backwards
+        if ( userDefinedName.equals(SC.BOTH) ) {
+            switch ( direction ) {
+                case SC.FOREWARD:
+                    this.src.add(this.firmware, ".", rightMotorPort, ".write_analog(servo_get_angle(0))");
+                    nlIndent();
+                    this.src.add(this.firmware, ".", leftMotorPort, ".write_analog(servo_get_angle(180))");
+                    break;
+                case SC.BACKWARD:
+                    this.src.add(this.firmware, ".", rightMotorPort, ".write_analog(servo_get_angle(180))");
+                    nlIndent();
+                    this.src.add(this.firmware, ".", leftMotorPort, ".write_analog(servo_get_angle(0))");
+                    break;
+                case SC.OFF:
+                    this.src.add(this.firmware, ".", rightMotorPort, ".write_analog(servo_get_angle(0))");
+                    nlIndent();
+                    this.src.add(this.firmware, ".", leftMotorPort, ".write_analog(servo_get_angle(0))");
+                    break;
+                default:
+                    throw new DbcException("Invalid direction!");
+            }
+        } else {
+            switch ( motionKitSingleSetAction.direction ) {
+                case SC.FOREWARD:
+                    this.src.add(this.firmware, ".", currentPort, ".write_analog(servo_get_angle(");
+                    this.src.add(currentPort.equals(rightMotorPort) ? 0 : 180);
+                    this.src.add("));");
+                    break;
+                case SC.BACKWARD:
+                    this.src.add(this.firmware, ".", currentPort, ".write_analog(servo_get_angle(");
+                    this.src.add(currentPort.equals(rightMotorPort) ? 180 : 0);
+                    this.src.add("));");
+                    break;
+                case SC.OFF:
+                    this.src.add(this.firmware, ".", currentPort, ".write_analog(0)");
+                    break;
+                default:
+                    throw new DbcException("Invalid direction!");
+            }
+        }
         return null;
     }
 
     @Override
     public Void visitMotionKitDualSetAction(MotionKitDualSetAction motionKitDualSetAction) {
-        // TODO CalliopeV3 Beate
+        String rightMotorPort = PIN_MAP.get("5"); // 5 is the right motor
+        String leftMotorPort = PIN_MAP.get("6"); // 6 is the left motor
+        // for the right motor (5) 0 is forwards and 180 is backwards
+        // for the left  motor (6) 180 is forwards and 0 is backwards
+        switch ( motionKitDualSetAction.directionRight ) {
+            case SC.FOREWARD:
+                this.src.add(this.firmware, ".", rightMotorPort, ".write_analog(servo_get_angle(0))");
+                break;
+            case SC.BACKWARD:
+                this.src.add(this.firmware, ".", rightMotorPort, ".write_analog(servo_get_angle(180))");
+                break;
+            case SC.OFF:
+                this.src.add(this.firmware, ".", rightMotorPort, ".write_analog(0)");
+                break;
+            default:
+                throw new DbcException("Invalid direction!");
+        }
+        nlIndent();
+        switch ( motionKitDualSetAction.directionLeft ) {
+            case SC.FOREWARD:
+                this.src.add(this.firmware, ".", leftMotorPort, ".write_analog(servo_get_angle(180))");
+                break;
+            case SC.BACKWARD:
+                this.src.add(this.firmware, ".", leftMotorPort, ".write_analog(servo_get_angle(0))");
+                break;
+            case SC.OFF:
+                this.src.add(this.firmware, ".", leftMotorPort, ".write_analog(0)");
+                break;
+            default:
+                throw new DbcException("Invalid direction!");
+        }
         return null;
     }
 
     @Override
     public Void visitColorSensor(ColorSensor colorSensor) {
-        // TODO CalliopeV3, work in progress, Beate
+        switch ( colorSensor.getMode() ) {
+            case SC.COLOUR:
+                this.src.add("color_sensor.rgb()");
+                break;
+            case SC.LIGHT:
+                this.src.add("int( color_sensor.light() / LIGHT_CONST)");
+                break;
+            case SC.RGB:
+                this.src.add("list(color_sensor.rgb())");
+                break;
+            default:
+                throw new UnsupportedOperationException("Mode " + colorSensor.getMode() + " not supported!");
+        }
         return null;
     }
 

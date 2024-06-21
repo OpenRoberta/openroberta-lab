@@ -298,6 +298,15 @@ public abstract class MbedPythonVisitor extends AbstractPythonVisitor implements
         nlIndent();
         this.src.add("raise");
         decrIndentation();
+        if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.CALLIBOT) ) {
+            nlIndent();
+            this.src.add("finally:");
+            incrIndentation();
+            nlIndent();
+            this.src.add("callibot.stop()");
+            nlIndent();
+            decrIndentation();
+        }
         decrIndentation();
         nlIndent();
 
@@ -438,9 +447,16 @@ public abstract class MbedPythonVisitor extends AbstractPythonVisitor implements
                 this.src.add("from tm1637 import TM1637");
                 nlIndent();
             }
-            if (this.getBean(UsedHardwareBean.class).isActorUsed(SC.CALLIBOT)){
+            if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.CALLIBOT) ) {
                 this.src.add("from callibot2 import Callibot2");
                 nlIndent();
+            }
+            if ( this.getBean(UsedHardwareBean.class).isSensorUsed(SC.COLOR) ) {
+                this.src.add("from tcs3472 import tcs3472");
+                nlIndent();
+            }
+            if ( this.getBean(UsedHardwareBean.class).isSensorUsed(SC.HUMIDITY) ) {
+                this.src.add("from sht31 import SHT31");
             }
         }
         nlIndent();
@@ -462,9 +478,20 @@ public abstract class MbedPythonVisitor extends AbstractPythonVisitor implements
             }
             if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.DISPLAY_GRAYSCALE) ) {
                 this.src.add("brightness = 9");
+                nlIndent();
             }
-            if (this.getBean(UsedHardwareBean.class).isActorUsed(SC.CALLIBOT)){
+            if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.CALLIBOT) ) {
                 this.src.add("callibot = Callibot2()");
+                nlIndent();
+            }
+            if ( this.getBean(UsedHardwareBean.class).isSensorUsed(SC.COLOR) ) {
+                this.src.add("color_sensor = tcs3472()");
+                nlIndent();
+                this.src.add("LIGHT_CONST = 40");
+                nlIndent();
+            }
+            if ( this.getBean(UsedHardwareBean.class).isSensorUsed(SC.HUMIDITY) ) {
+                this.src.add("sht31 = SHT31()");
                 nlIndent();
             }
         }
@@ -533,9 +560,9 @@ public abstract class MbedPythonVisitor extends AbstractPythonVisitor implements
     @Override
     public Void visitSwitchLedMatrixAction(SwitchLedMatrixAction switchLedMatrixAction) {
         if ( switchLedMatrixAction.activated.equals("ON") ) {
-            this.src.add("microbit.display.on()");
+            this.src.add(this.firmware, ".display.on()");
         } else {
-            this.src.add("microbit.display.off()");
+            this.src.add(this.firmware, ".display.off()");
         }
         return null;
     }

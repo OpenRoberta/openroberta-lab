@@ -27,8 +27,7 @@ export default class RobotCalliope extends RobotBaseStationary {
     motors: Motors;
     gestureSensor: GestureSensor;
     display: MatrixDisplay;
-    topView: string =
-        '<div id="mbedContent"><form id="mbed-form"><div id="mbedButtons" class="btn-group btn-group-vertical" data-bs-toggle="buttons"></div></form></div>';
+    topView: string = '<div id="mbedContent"><form id="mbed-form"><div id="mbedButtons" class="btn-group btn-group-vertical"></div></form></div>';
 
     constructor(id: number, configuration: object, interpreter: Interpreter, savedName: string, myListener: SelectionListener) {
         super(id, configuration, interpreter, savedName, myListener);

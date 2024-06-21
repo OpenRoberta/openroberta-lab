@@ -1797,27 +1797,35 @@ export class GestureSensor implements ISensor, ILabel {
             '<label style="margin: 12px 8px 8px 0" lkey="Blockly.Msg.SENSOR_GESTURE">' +
                 Blockly.Msg.SENSOR_GESTURE +
                 '</label>' + //
-                '<label class="btn simbtn active" lkey="Blockly.Msg.SENSOR_GESTURE_UP"><input type="radio" id="up" name="options" autocomplete="off">' +
+                '<button type="button" class="btn simbtn active" id="up" lkey="Blockly.Msg.SENSOR_GESTURE_UP">' +
                 Blockly.Msg.SENSOR_GESTURE_UP +
-                '</label>' + //
-                '<label class="btn simbtn" lkey="Blockly.Msg.SENSOR_GESTURE_DOWN"><input type="radio" id="down" name="options" autocomplete="off" >' +
+                '</button>' +
+                '<button type="button" class="btn simbtn"  id="down" lkey="Blockly.Msg.SENSOR_GESTURE_DOWN">' +
                 Blockly.Msg.SENSOR_GESTURE_DOWN +
-                '</label>' + //
-                '<label class="btn simbtn" lkey="Blockly.Msg.SENSOR_GESTURE_FACE_DOWN"><input type="radio" id="face_down" name="options" autocomplete="off" >' +
+                '</button>' + //
+                '<button type="button" class="btn simbtn" id="face_down" lkey="Blockly.Msg.SENSOR_GESTURE_FACE_DOWN">' +
                 Blockly.Msg.SENSOR_GESTURE_FACE_DOWN +
-                '</label>' + //
-                '<label class="btn simbtn" lkey="Blockly.Msg.SENSOR_GESTURE_FACE_UP"><input type="radio" id="face_up" name="options" autocomplete="off" >' +
+                '</button>' + //
+                '<button type="button" class="btn simbtn" id="face_up" lkey="Blockly.Msg.SENSOR_GESTURE_FACE_UP">' +
                 Blockly.Msg.SENSOR_GESTURE_FACE_UP +
-                '</label>' + //
-                '<label class="btn simbtn" lkey="Blockly.Msg.SENSOR_GESTURE_SHAKE"><input type="radio" id="shake" name="options" autocomplete="off" >' +
+                '</button>' + //
+                '<button type="button" class="btn simbtn" id="shake" lkey="Blockly.Msg.SENSOR_GESTURE_SHAKE">' +
                 Blockly.Msg.SENSOR_GESTURE_SHAKE +
-                '</label>' + //
-                '<label class="btn simbtn" lkey="Blockly.Msg.SENSOR_GESTURE_FREEFALL"><input type="radio" id="freefall" name="options" autocomplete="off" >' +
+                '</button>' + //
+                '<button type="button" class="btn simbtn" id="freefall" lkey="Blockly.Msg.SENSOR_GESTURE_FREEFALL">' +
                 Blockly.Msg.SENSOR_GESTURE_FREEFALL +
-                '</label>'
+                '</button>'
         );
         let gestureSensor = this;
-        $('input[name="options"]').on('change', function (e) {
+        $('#mbedButtons>.simbtn').on('click', function (e) {
+            let $that = $(this);
+            $('#mbedButtons>.simbtn').each(function () {
+                if (this.id == $that[0].id) {
+                    $(this).addClass('active');
+                } else {
+                    $(this).removeClass('active');
+                }
+            });
             gestureSensor.gesture = {};
             gestureSensor.gesture[e.currentTarget.id] = true;
         });

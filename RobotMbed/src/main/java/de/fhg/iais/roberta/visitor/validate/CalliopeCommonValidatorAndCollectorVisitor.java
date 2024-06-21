@@ -96,6 +96,7 @@ public class CalliopeCommonValidatorAndCollectorVisitor extends MbedV2ValidatorA
 
     @Override
     public Void visitCallibotKeysSensor(CallibotKeysSensor callibotKeysSensor) {
+        addToPhraseIfUnsupportedInSim(callibotKeysSensor, true, isSim);
         addActorMaybeCallibot(callibotKeysSensor);
         return null;
     }
@@ -132,6 +133,7 @@ public class CalliopeCommonValidatorAndCollectorVisitor extends MbedV2ValidatorA
 
     @Override
     public Void visitInfraredSensor(InfraredSensor infraredSensor) {
+        addToPhraseIfUnsupportedInSim(infraredSensor, true, isSim);
         addActorMaybeCallibot(infraredSensor);
         return null;
     }
@@ -142,6 +144,7 @@ public class CalliopeCommonValidatorAndCollectorVisitor extends MbedV2ValidatorA
         checkActorByTypeExists(ledBarSetAction, "LEDBAR");
         requiredComponentVisited(ledBarSetAction, ledBarSetAction.x, ledBarSetAction.brightness);
         usedHardwareBuilder.addUsedActor(new UsedActor("", SC.LED_BAR));
+        usedMethodBuilder.addUsedMethod(CalliopeMethods.LED_BAR_SET_LED);
         return null;
     }
 
@@ -239,6 +242,7 @@ public class CalliopeCommonValidatorAndCollectorVisitor extends MbedV2ValidatorA
             addErrorToPhrase(motionKitDualSetAction, "MOTIONKIT_PIN_OVERLAP_WARNING");
         } else {
             usedHardwareBuilder.addUsedActor(new UsedActor("", "MOTIONKIT"));
+            usedMethodBuilder.addUsedMethod(CalliopeMethods.SERVO_GET_ANGLE);
         }
         return null;
     }
@@ -250,6 +254,7 @@ public class CalliopeCommonValidatorAndCollectorVisitor extends MbedV2ValidatorA
             addErrorToPhrase(motionKitSingleSetAction, "MOTIONKIT_PIN_OVERLAP_WARNING");
         } else {
             usedHardwareBuilder.addUsedActor(new UsedActor(motionKitSingleSetAction.port, "MOTIONKIT"));
+            usedMethodBuilder.addUsedMethod(CalliopeMethods.SERVO_GET_ANGLE);
         }
         return null;
     }
@@ -291,7 +296,10 @@ public class CalliopeCommonValidatorAndCollectorVisitor extends MbedV2ValidatorA
     public Void visitServoSetAction(ServoSetAction servoSetAction) {
         addToPhraseIfUnsupportedInSim(servoSetAction, false, isSim);
         requiredComponentVisited(servoSetAction, servoSetAction.value);
-        addActorMaybeCallibot(servoSetAction);
+        if ( !addActorMaybeCallibot(servoSetAction) ) {
+            usedHardwareBuilder.addUsedActor(new UsedActor("", SC.SERVOMOTOR));
+            usedMethodBuilder.addUsedMethod(CalliopeMethods.SERVO_GET_ANGLE);
+        }
         return null;
     }
 

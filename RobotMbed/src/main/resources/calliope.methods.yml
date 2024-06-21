@@ -22,45 +22,45 @@ ULTRASONIC_GET_DISTANCE:
 LED_BAR_SET_LED:
   PYTHON: |
     def write16(di, dcki, data):
-      state = dcki.read_digital()
-      for i in range(15,-1,-1):
-        di.write_digital((data >> i) & 1)
-        state = not state
-        dcki.write_digital(state)
+        state = dcki.read_digital()
+        for i in range(15,-1,-1):
+          di.write_digital((data >> i) & 1)
+          state = not state
+          dcki.write_digital(state)
     
     def set_led(led_no, brightness):
-      di = calliopemini.pin_A1_RX
-      dcki = calliopemini.pin_A1_TX
-      di.write_digital(0)
-      dcki.write_digital(0)
-      if led_no < 0 or led_no >= 10:
-        raise ValueError("Led_no must be in the range [0, 9]")
-    
-      val = 1 << led_no
-      write16(di, dcki, 0)
-      for i in range(10):
-        write16(di, dcki, brightness if (val >> i) & 1 else 0)
-    
-      write16(di, dcki,0)
-      write16(di, dcki,0)
-      di.write_digital(0)
-      calliopemini.sleep(1)
-      for i in range(4):
-        di.write_digital(1)
+        di = calliopemini.pin_A1_RX
+        dcki = calliopemini.pin_A1_TX
         di.write_digital(0)
-      calliopemini.sleep(1)
+        dcki.write_digital(0)
+        if led_no < 0 or led_no >= 10:
+            raise ValueError("Led_no must be in the range [0, 9]")
+    
+        val = 1 << led_no
+        write16(di, dcki, 0)
+        for i in range(10):
+            write16(di, dcki, brightness if (val >> i) & 1 else 0)
+    
+        write16(di, dcki,0)
+        write16(di, dcki,0)
+        di.write_digital(0)
+        calliopemini.sleep(1)
+        for i in range(4):
+            di.write_digital(1)
+            di.write_digital(0)
+        calliopemini.sleep(1)
 
 
 SET_MATRIX_BRIGHTNESS:
   PYTHON: |
     def set_brightness(val):
-      global brightness
-      if val < 0 or val >= 10:
-        raise ValueError("Brightness must be in the range [0, 9]")
-      for y in range(5):
-        for x in range(5):
-            calliopemini.display.set_pixel(x,y,val)
-      brightness = val
+        global brightness
+        if val < 0 or val >= 10:
+            raise ValueError("Brightness must be in the range [0, 9]")
+        for y in range(5):
+            for x in range(5):
+                calliopemini.display.set_pixel(x,y,val)
+        brightness = val
 
 SET_BOTH_MOTORS:
   PYTHON: |
@@ -96,3 +96,12 @@ SET_MOTOR:
         else:
             calliopemini.pin_M1_DIR.write_digital(digit)
             calliopemini.pin_M1_SPEED.write_analog(speed)
+
+SERVO_GET_ANGLE:
+  PYTHON: |
+    def servo_get_angle(angle):
+        if (angle < 0): 
+            angle = 0
+        if (angle > 180): 
+            angle = 180
+        return round(0.55 * angle) + 25

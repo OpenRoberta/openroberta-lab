@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2024-06-12 14:09:54.682080",
+		"lastupdated": "2024-06-25 18:01:29.809117",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1479,7 +1479,7 @@
 	"INFRARED_PRESENCE_GETSAMPLE_TOOLTIP": "Returns an array of measurements for the presence of a beacon.",
 	"SENSOR_ACCELEROMETER": "accelerometer",
 	"SENSOR_PINTOUCH": "pin",
-	"SENSOR_LOGOTOUCH": "logo sensor",
+	"SENSOR_LOGOTOUCH": "logo touch sensor",
 	"MODE_ANALOG": "analog value",
 	"MODE_DIGITAL": "digital value",
 	"MODE_PULSELOW": "pulse time LOW",
@@ -2147,7 +2147,7 @@
 	"START_ALL_ROBOTS": "All systems and filter options",
 	"TITLE_GOAL": "Learning objective",
 	"TITLE_PREVIOUS": "Previous knowledge",
-	"OPTION_WEBUSB": "Connect your micro:bit device to the computer<br><small>select it in the next popup and click »Connect«</small>",
+	"OPTION_WEBUSB": "Connect your device to the computer<br><small>select it in the next popup and click »Connect«</small>",
 	"OPTION_FILE_DOWNLOAD": "Download your program as a file",
 	"START_RESULTS": "results",
 	"START_OPTIONS": "More options",

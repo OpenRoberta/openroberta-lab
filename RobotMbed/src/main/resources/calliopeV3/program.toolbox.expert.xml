@@ -199,14 +199,12 @@
         <block type="robSensors_timer_getSample"></block>
         <block type="mbedSensors_timer_reset"></block>
         <block type="robSensors_temperature_getSample"></block>
-        <block type="robSensors_rssi_getSample"></block>
         <block type="robSensors_light_getSample"></block>
         <block type="robSensors_pin_getSample"></block>
         <block type="robSensors_pin_getSample">
             <mutation mode="DIGITAL"/>
             <field name="MODE">DIGITAL</field>
         </block>
-        <block type="robSensors_gyro_getSample"></block>
         <block type="robSensors_accelerometer_getSample"></block>
         <block type="robSensors_humidity_getSample"></block>
         <block type="robSensors_ultrasonic_getSample"></block>
