@@ -1,6 +1,6 @@
 Sensors: 
 []
 Actors: 
-[UsedActor [m1, MOTOR], UsedActor [S, SERVOMOTOR], UsedActor [C17, MOTIONKIT], UsedActor [C16, MOTIONKIT], UsedActor [, MOTIONKIT]]
+[UsedActor [m1, MOTOR], UsedActor [S, SERVOMOTOR], UsedActor [, SERVOMOTOR], UsedActor [C17, MOTIONKIT], UsedActor [C16, MOTIONKIT], UsedActor [, MOTIONKIT]]
 Methods: 
-[SET_MOTOR]
+[SERVO_GET_ANGLE, SET_MOTOR]

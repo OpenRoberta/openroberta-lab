@@ -1,6 +1,6 @@
 Sensors: 
 []
 Actors: 
-[UsedActor [, DIFFERENTIALDRIVE], UsedActor [m1, MOTOR], UsedActor [m2, MOTOR], UsedActor [S, SERVOMOTOR]]
+[UsedActor [, DIFFERENTIALDRIVE], UsedActor [m1, MOTOR], UsedActor [m2, MOTOR], UsedActor [S, SERVOMOTOR], UsedActor [, SERVOMOTOR]]
 Methods: 
-[SET_BOTH_MOTORS, SET_MOTOR]
+[SERVO_GET_ANGLE, SET_BOTH_MOTORS, SET_MOTOR]

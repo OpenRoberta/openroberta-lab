@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -41,6 +42,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.CallibotKeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.RadioRssiSensor;
@@ -61,7 +63,6 @@ public class CalliopeV3PythonVisitor extends MbedV2PythonVisitor implements ICal
         PIN_MAP.put("3", "pin3");
         PIN_MAP.put("4", "pin_A0_SCL");
         PIN_MAP.put("5", "pin_A1_RX");
-        PIN_MAP.put("6", "pin_A1_TX");
         PIN_MAP.put("C04", "pin4");
         PIN_MAP.put("C05", "pin5");
         PIN_MAP.put("C06", "pin6");
@@ -71,8 +72,8 @@ public class CalliopeV3PythonVisitor extends MbedV2PythonVisitor implements ICal
         PIN_MAP.put("C10", "pin10");
         PIN_MAP.put("C11", "pin11");
         PIN_MAP.put("C12", "pin12");
-        PIN_MAP.put("C16", "pin16");
-        PIN_MAP.put("C17", "pin17");
+        PIN_MAP.put("C16", "pin_A1_RX");
+        PIN_MAP.put("C17", "pin_A1_TX");
         PIN_MAP.put("C18", "pin18");
         PIN_MAP.put("C19", "pin19");
 
@@ -383,7 +384,31 @@ public class CalliopeV3PythonVisitor extends MbedV2PythonVisitor implements ICal
         String valueType = mbedPinWriteValueAction.pinValue.equals(SC.DIGITAL) ? "digital(" : "analog(";
         this.src.add(".write_", valueType);
         mbedPinWriteValueAction.value.accept(this);
-        this.src.add(");");
+        this.src.add(")");
+        return null;
+    }
+
+    @Override
+    public Void visitPinGetValueSensor(PinGetValueSensor pinValueSensor) {
+        String port = pinValueSensor.getUserDefinedPort();
+        ConfigurationComponent configurationComponent = this.robotConfiguration.getConfigurationComponent(port);
+        String pin1 = configurationComponent.getProperty("PIN1");
+        String valueType = pinValueSensor.getMode().toLowerCase(Locale.ENGLISH);
+        if ( valueType.equalsIgnoreCase(SC.PULSEHIGH) ) {
+            this.src.add("machine.time_pulse_us(" + this.firmware + ".");
+            this.src.add(PIN_MAP.get(pin1));
+            this.src.add(", 1)");
+        } else if ( valueType.equalsIgnoreCase(SC.PULSELOW) ) {
+            this.src.add("machine.time_pulse_us(", this.firmware, ".");
+            this.src.add(PIN_MAP.get(pin1));
+            this.src.add(", 0)");
+        } else {
+            this.src.add(this.firmware, ".");
+            this.src.add(PIN_MAP.get(pin1));
+            this.src.add(".read_");
+            this.src.add(valueType);
+            this.src.add("()");
+        }
         return null;
     }
 
@@ -450,7 +475,7 @@ public class CalliopeV3PythonVisitor extends MbedV2PythonVisitor implements ICal
                 this.src.add(", ");
                 bothMotorsOnAction.speedA.accept(this);
             }
-            this.src.add(");");
+            this.src.add(")");
         } else {
             this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(CalliopeMethods.SET_BOTH_MOTORS), "(");
             if ( confCompA.getProperty("PIN1").equals("A") ) {
@@ -546,12 +571,12 @@ public class CalliopeV3PythonVisitor extends MbedV2PythonVisitor implements ICal
             pin = pin.replace("SERVO_S", "");
             this.src.add(pin, ", ");
             servoSetAction.value.accept(this);
-            this.src.add(");");
+            this.src.add(")");
         } else {
             String pin = PIN_MAP.get(confComp.getProperty("PIN1"));
             this.src.add(this.firmware, ".", pin, ".write_analog(servo_get_angle(");
             servoSetAction.value.accept(this);
-            this.src.add("));");
+            this.src.add("))");
         }
         return null;
     }
@@ -597,12 +622,12 @@ public class CalliopeV3PythonVisitor extends MbedV2PythonVisitor implements ICal
                 case SC.FOREWARD:
                     this.src.add(this.firmware, ".", currentPort, ".write_analog(servo_get_angle(");
                     this.src.add(currentPort.equals(rightMotorPort) ? 0 : 180);
-                    this.src.add("));");
+                    this.src.add("))");
                     break;
                 case SC.BACKWARD:
                     this.src.add(this.firmware, ".", currentPort, ".write_analog(servo_get_angle(");
                     this.src.add(currentPort.equals(rightMotorPort) ? 180 : 0);
-                    this.src.add("));");
+                    this.src.add("))");
                     break;
                 case SC.OFF:
                     this.src.add(this.firmware, ".", currentPort, ".write_analog(0)");

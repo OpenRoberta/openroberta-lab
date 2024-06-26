@@ -94,4 +94,3 @@ def sum(list):
     for i in range(listLength): 
         listSum = (listSum + list[i])
     return listSum
-
