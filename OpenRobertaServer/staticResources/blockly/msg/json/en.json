@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2024-06-26 08:32:49.529183",
+		"lastupdated": "2024-06-27 14:00:31.206144",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1609,6 +1609,7 @@
 	"PLAY_TOOLTIP": "Represents a buzzer.",
 	"RELAY_TOOLTIP": "Represents a relay.",
 	"RGBLED_TOOLTIP": "Represents an RGB LED.",
+	"RGBLEDH_TOOLTIP": "Represents an inbuilt RGB LED.",
 	"LED_TOOLTIP": "Represents an LED.",
 	"MOTOR_TOOLTIP": "Represents a motor.",
 	"STEPMOTOR_TOOLTIP": "Represents a step motor.",

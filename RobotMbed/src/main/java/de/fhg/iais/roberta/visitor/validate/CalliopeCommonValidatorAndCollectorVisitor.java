@@ -43,6 +43,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.MoistureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
@@ -98,6 +99,13 @@ public class CalliopeCommonValidatorAndCollectorVisitor extends MbedV2ValidatorA
     public Void visitCallibotKeysSensor(CallibotKeysSensor callibotKeysSensor) {
         addToPhraseIfUnsupportedInSim(callibotKeysSensor, true, isSim);
         addActorMaybeCallibot(callibotKeysSensor);
+        return null;
+    }
+
+    @Override
+    public Void visitMoistureSensor(MoistureSensor moistureSensor) {
+        addToPhraseIfUnsupportedInSim(moistureSensor, true, isSim);
+        checkSensorExists(moistureSensor);
         return null;
     }
 

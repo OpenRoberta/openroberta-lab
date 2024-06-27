@@ -51,24 +51,27 @@
             <field name="NAME">_S</field>
         </block>
     </instance>
-    <instance x="80" y="445">
-        <block type="robConf_rgbledh" id="lgi%C3,J!smR:47" intask="true" deletable="false">
-            <field name="NAME">_0</field>
-        </block>
-    </instance>
     <instance x="630" y="447">
         <block type="robConf_buzzer" id="}%d2_68IJd*7Oy{qrMR," intask="true" deletable="false">
             <field name="NAME">_B</field>
         </block>
     </instance>
-    <instance x="80" y="478">
-        <block type="robConf_rgbledh" id="lgi%C3,J!smR:48" intask="true" deletable="false">
-            <field name="NAME">_1</field>
+    <instance x="80" y="445">
+        <block type="robConf_rgbLedhp" id="lgi%C3,J!smR:47" intask="true" deletable="false">
+            <field name="NAME">_0</field>
+            <field name="PIN1">LED_L</field>
         </block>
     </instance>
-    <instance x="80" y="514">
-        <block type="robConf_rgbledh" id="lgi%C3,J!smR:49" intask="true" deletable="false">
+    <instance x="80" y="498">
+        <block type="robConf_rgbLedhp" id="lgi%C3,J!smR:48" intask="true" deletable="false">
+            <field name="NAME">_1</field>
+            <field name="PIN1">LED_C</field>
+        </block>
+    </instance>
+    <instance x="80" y="551">
+        <block type="robConf_rgbLedhp" id="lgi%C3,J!smR:49" intask="true" deletable="false">
             <field name="NAME">_2</field>
+            <field name="PIN1">LED_R</field>
         </block>
     </instance>
 </block_set>

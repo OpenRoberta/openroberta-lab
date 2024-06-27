@@ -43,6 +43,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.MoistureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.CallibotKeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.RadioRssiSensor;
@@ -262,6 +263,12 @@ public class CalliopeV3PythonVisitor extends MbedV2PythonVisitor implements ICal
             port = "2";
         }
         this.src.add("callibot.get_bumper_sensor(", port, ")");
+        return null;
+    }
+
+    @Override
+    public Void visitMoistureSensor(MoistureSensor moistureSensor) {
+        this.src.add("((calliopemini.pin_A1_RX.read_analog() / 950) * 100)");
         return null;
     }
 

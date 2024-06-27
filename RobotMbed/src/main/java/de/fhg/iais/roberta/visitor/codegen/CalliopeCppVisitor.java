@@ -96,6 +96,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.MoistureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinTouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
@@ -1606,6 +1607,12 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
         } else {
             throw new DbcException("Callibot key sensor only supported with Callibot block.");
         }
+        return null;
+    }
+
+    @Override
+    public Void visitMoistureSensor(MoistureSensor moistureSensor) {
+        this.src.add("(((float) _uBit.io.P2.getAnalogValue() / 950) * 100)");
         return null;
     }
 
