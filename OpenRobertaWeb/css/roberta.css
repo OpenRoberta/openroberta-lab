@@ -3314,7 +3314,7 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 
 #tutorialOverview .modal-dialog {
     border: 2px solid #33B8CA;
-    font-size: 18px;
+    font-size: 16px;
 }
 
 #tutorial-navigation, #tutorialEnd {
@@ -3456,7 +3456,7 @@ ul#tutorial-close {
     height: 100%;
     margin: 10px;
     padding: 16px;
-    font-size: 18px;
+    font-size: 16px;
     overflow-y: auto;
 }
 

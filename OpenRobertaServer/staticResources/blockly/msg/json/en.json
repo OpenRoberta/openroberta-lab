@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2024-06-27 14:00:31.206144",
+		"lastupdated": "2024-06-27 15:00:09.751393",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -2161,5 +2161,15 @@
 	"START_FORMATSEARCH": "search robots/systems",
 	"START_BOOKMARK_TOOLTIP": "Create a bookmark directly to your favourite robot/system.",
 	"START_STARTUP_TITLE": "Welcome to Open Roberta Lab",
-	"PROGRAM_IMPORT_ERROR_MISSING_ROBOT_TYPE": "You have tried to import a program that is suitable for »$«, a group of robots/systems.<br>Please first select the desired robot/system here on the start page."
+	"PROGRAM_IMPORT_ERROR_MISSING_ROBOT_TYPE": "You have tried to import a program that is suitable for »$«, a group of robots/systems.<br>Please first select the desired robot/system here on the start page.",
+	"BLE_NOT_SUPPORTED": "Your browser does not support Web Bluetooth.<br>Check out the <a href='https://wiki.open-roberta.org/' target='_blank'>Open Roberta Wiki</a> for more information under: Spike Prime / Robot Inventor -> Pybricks -> Set Up.",
+	"BLE_FEATURE_DISABLED": "Looks like Web Bluetooth is not enabled.<br>Check out the <a href='https://wiki.open-roberta.org/' target='_blank'>Open Roberta Wiki</a> for more information under: Spike Prime / Robot Inventor -> Pybricks -> Set Up.",
+	"BLE_ADAPTER_DISABLED": "There is no Bluetooth adapter on your device.<br>Check out the <a href='https://wiki.open-roberta.org/' target='_blank'>Open Roberta Wiki</a> for more information under: Spike Prime / Robot Inventor -> Pybricks -> Set Up.",
+	"BLE_NO_DEVICE_SELECTED": "Looks like you didn't select a device.<br>If your hub was not listed, check out the <a href='https://wiki.open-roberta.org/' target='_blank'>Open Roberta Wiki</a> for more information under: Spike Prime / Robot Inventor -> Pybricks -> Set Up.",
+	"BLE_DOWNLOAD_IN_PROGRESS": "The system is busy uploading your program to the robot. Wait a couple of seconds before uploading again.",
+	"BLE_ERROR_PROGRAM_SIZE": "The program is too long for the Spike Prime. Check out the <a href='https://wiki.open-roberta.org/' target='_blank'>Open Roberta Wiki</a> for more information under: Spike Prime / Robot Inventor -> Pybricks",
+	"BLE_ERROR_COMMUNICATION": "Whoops something went wrong. Try restarting your robot and upload the program again.",
+	"BLE_ERROR_DEVICE_BUSY": "Looks like your robot is already connected to another instance of the Open Roberta Lab (in another browser tab?).<br> Try to restart your robot or close the other tab.",
+	"BLE_ERROR_CAPABILITIES": "Looks like the firmware version of your robot is not compatible with the Open Roberta Lab. Check out the <a href='https://wiki.open-roberta.org/' target='_blank'>Open Roberta Wiki</a> for more information under: Spike Prime / Robot Inventor -> Pybricks -> Set Up.",
+	"BLE_ERROR_STOP": "Stopping the program execution does not work, your robot is maybe disconnected?<br>You can always use the Center Button on the hub to stop the program yourself."
 }
