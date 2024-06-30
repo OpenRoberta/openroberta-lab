@@ -10,7 +10,7 @@ on:
       oraccrsctag:
         description: 'Tag/version for the crosscompiler resources'
         required: true
-        default: 'tag # from ora-cc-rsc repo, e.g. latest or 35'
+        default: ${{ BASE_VERSION_MESSAGE }}
 
 jobs:
   integration-test:
