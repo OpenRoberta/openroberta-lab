@@ -31,6 +31,7 @@ import de.fhg.iais.roberta.syntax.action.mbed.FourDigitDisplayShowAction;
 import de.fhg.iais.roberta.syntax.action.mbed.LedBarSetAction;
 import de.fhg.iais.roberta.syntax.action.mbed.MotionKitDualSetAction;
 import de.fhg.iais.roberta.syntax.action.mbed.MotionKitSingleSetAction;
+import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.ServoSetAction;
 import de.fhg.iais.roberta.syntax.action.mbed.calliopeV3.RgbLedsOffHiddenAction;
 import de.fhg.iais.roberta.syntax.action.mbed.calliopeV3.RgbLedsOnHiddenAction;
@@ -377,8 +378,14 @@ public class CalliopeV3PythonVisitor extends MbedV2PythonVisitor implements ICal
     }
 
     @Override
+    public Void visitRadioReceiveAction(RadioReceiveAction radioReceiveAction) {
+        this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(CalliopeMethods.RECEIVE_MESSAGE), "()");
+        return null;
+    }
+
+    @Override
     public Void visitRadioRssiSensor(RadioRssiSensor radioRssiSensor) {
-        // radio strength not available
+        this.src.add("rssi");
         return null;
     }
 

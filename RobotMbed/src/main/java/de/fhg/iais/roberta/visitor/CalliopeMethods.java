@@ -7,5 +7,6 @@ public enum CalliopeMethods {
     SET_MATRIX_BRIGHTNESS,
     SET_BOTH_MOTORS,
     SET_MOTOR,
-    SERVO_GET_ANGLE
+    SERVO_GET_ANGLE,
+    RECEIVE_MESSAGE
 }

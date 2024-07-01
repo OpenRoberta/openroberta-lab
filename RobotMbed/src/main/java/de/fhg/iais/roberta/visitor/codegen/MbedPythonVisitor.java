@@ -494,6 +494,10 @@ public abstract class MbedPythonVisitor extends AbstractPythonVisitor implements
                 this.src.add("sht31 = SHT31()");
                 nlIndent();
             }
+            if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.RADIO) ) {
+                this.src.add("rssi = 0");
+                nlIndent();
+            }
         }
         if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.RADIO) ) {
             nlIndent();

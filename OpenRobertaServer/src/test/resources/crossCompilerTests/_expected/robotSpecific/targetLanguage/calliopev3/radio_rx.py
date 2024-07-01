@@ -11,6 +11,7 @@ class ContinueLoop(Exception): pass
 timer1 = calliopemini.running_time()
 np = neopixel.NeoPixel(calliopemini.pin_RGB, 3)
 brightness = 9
+rssi = 0
 
 radio.on()
 
@@ -42,7 +43,7 @@ def run():
         if calliopemini.button_b.is_pressed() == True:
             break
     calliopemini.sleep(100)
-    calliopemini.display.scroll(str(radio.receive()))
+    calliopemini.display.scroll(str(receive_message()))
     calliopemini.display.clear()
     calliopemini.display.show(calliopemini.Image.YES)
 
@@ -51,6 +52,13 @@ def main():
         run()
     except Exception as e:
         raise
+
+def receive_message():
+    global rssi
+    details = radio.receive_full()
+    if details:
+        msg, rssi, timestamp = details
+        return msg.decode('utf-8')[3:]
 
 if __name__ == "__main__":
     main()

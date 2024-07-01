@@ -105,3 +105,27 @@ SERVO_GET_ANGLE:
         if (angle > 180): 
             angle = 180
         return round(0.55 * angle) + 25
+
+RECEIVE_MESSAGE:
+  PYTHON: |
+    def receive_message():
+        global rssi
+        details = radio.receive_full()
+        if details:
+            msg, rssi, timestamp = details
+            return msg.decode('utf-8')[3:]
+
+GET_ROTATION:
+  PYTHON: |
+    def get_Rotation(dim):
+        x = -calliopemini.accelerometer.get_y()
+        y = calliopemini.accelerometer.get_x()
+        z = -calliopemini.accelerometer.get_z()
+        roll = math.atan2(y, z)
+        if (dim == "roll"):
+            return math.floor((-360*roll)/(2*math.pi))
+        elif (dim == "pitch"):
+            factor = y * math.sin(roll) + z * math.cos(roll)
+            if factor != 0:
+                pitch = math.atan(-x / (factor))            
+                return math.floor((360*pitch)/(2*math.pi))

@@ -4,8 +4,11 @@ import com.google.common.collect.ClassToInstanceMap;
 
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
+import de.fhg.iais.roberta.components.UsedActor;
+import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
-import de.fhg.iais.roberta.syntax.sensor.mbed.RadioRssiSensor;
+import de.fhg.iais.roberta.util.syntax.SC;
+import de.fhg.iais.roberta.visitor.CalliopeMethods;
 import de.fhg.iais.roberta.visitor.ICalliopeVisitor;
 
 public class CalliopeV3ValidatorAndCollectorVisitor extends CalliopeCommonValidatorAndCollectorVisitor implements ICalliopeVisitor<Void> {
@@ -31,8 +34,14 @@ public class CalliopeV3ValidatorAndCollectorVisitor extends CalliopeCommonValida
     }
 
     @Override
-    public Void visitRadioRssiSensor(RadioRssiSensor radioRssiSensor) {
-        addErrorToPhrase(radioRssiSensor, "BLOCK_NOT_SUPPORTED");
-        return null;
+    public Void visitRadioReceiveAction(RadioReceiveAction radioReceiveAction) {
+        if ( hasBlueTooth ) {
+            addErrorToPhrase(radioReceiveAction, "BLOCK_NOT_SUPPORTED");
+        } else {
+            addToPhraseIfUnsupportedInSim(radioReceiveAction, true, isSim);
+            usedHardwareBuilder.addUsedActor(new UsedActor("", SC.RADIO));
+            usedMethodBuilder.addUsedMethod(CalliopeMethods.RECEIVE_MESSAGE);
+        }
+        return super.visitRadioReceiveAction(radioReceiveAction);
     }
 }

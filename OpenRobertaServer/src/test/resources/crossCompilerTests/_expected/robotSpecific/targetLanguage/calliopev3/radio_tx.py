@@ -11,6 +11,7 @@ class ContinueLoop(Exception): pass
 timer1 = calliopemini.running_time()
 np = neopixel.NeoPixel(calliopemini.pin_RGB, 3)
 brightness = 9
+rssi = 0
 
 radio.on()
 
