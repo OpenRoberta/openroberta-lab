@@ -42,8 +42,8 @@ import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
-import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.MoistureSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.CallibotKeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.RadioRssiSensor;
@@ -118,9 +118,9 @@ public class CalliopeV3PythonVisitor extends MbedV2PythonVisitor implements ICal
             });
         }
         if ( this.getBean(UsedHardwareBean.class).isActorUsed("MOTIONKIT") ) {
-            this.src.add(this.firmware, ".", PIN_MAP.get("5"), ".set_analog_period(20)");
+            this.src.add(this.firmware, ".", PIN_MAP.get("C16"), ".set_analog_period(20)");
             nlIndent();
-            this.src.add(this.firmware, ".", PIN_MAP.get("6"), ".set_analog_period(20)");
+            this.src.add(this.firmware, ".", PIN_MAP.get("C17"), ".set_analog_period(20)");
             nlIndent();
         }
     }
@@ -591,16 +591,10 @@ public class CalliopeV3PythonVisitor extends MbedV2PythonVisitor implements ICal
     @Override
     public Void visitMotionKitSingleSetAction(MotionKitSingleSetAction motionKitSingleSetAction) {
         String userDefinedName = motionKitSingleSetAction.port;
-        if ( userDefinedName.equals("C16") ) {
-            userDefinedName = "5";
-        } else if ( userDefinedName.equals("C17") ) {
-            userDefinedName = "6";
-        } else {
-            throw new DbcException("Invalid port!");
-        }
         String currentPort = PIN_MAP.get(userDefinedName);
-        String rightMotorPort = PIN_MAP.get("5"); // C16 is the right motor
-        String leftMotorPort = PIN_MAP.get("6"); // C17 is the left motor
+        String rightMotorPort = PIN_MAP.get("C16"); // C16 is the right motor
+        String leftMotorPort = PIN_MAP.get("C17"); // C17 is the left motor
+
         String direction = motionKitSingleSetAction.direction;
         // for the right motor (5) 0 is forwards and 180 is backwards
         // for the left  motor (6) 180 is forwards and 0 is backwards
@@ -648,8 +642,9 @@ public class CalliopeV3PythonVisitor extends MbedV2PythonVisitor implements ICal
 
     @Override
     public Void visitMotionKitDualSetAction(MotionKitDualSetAction motionKitDualSetAction) {
-        String rightMotorPort = PIN_MAP.get("5"); // 5 is the right motor
-        String leftMotorPort = PIN_MAP.get("6"); // 6 is the left motor
+        String rightMotorPort = PIN_MAP.get("C16"); // C16 is the right motor
+        String leftMotorPort = PIN_MAP.get("C17"); // C17 is the left motor
+
         // for the right motor (5) 0 is forwards and 180 is backwards
         // for the left  motor (6) 180 is forwards and 0 is backwards
         switch ( motionKitDualSetAction.directionRight ) {

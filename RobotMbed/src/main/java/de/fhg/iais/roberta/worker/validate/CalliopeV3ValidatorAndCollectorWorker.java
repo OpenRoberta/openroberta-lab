@@ -11,6 +11,6 @@ public class CalliopeV3ValidatorAndCollectorWorker extends CalliopeValidatorAndC
 
     @Override
     protected CommonNepoValidatorAndCollectorVisitor getVisitor(Project project, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
-        return new CalliopeV3ValidatorAndCollectorVisitor(project.getConfigurationAst(), beanBuilders, false, isDisplaySwitchUsed(project), true);
+        return new CalliopeV3ValidatorAndCollectorVisitor(project.getConfigurationAst(), beanBuilders, false, isDisplaySwitchUsed(project), false);
     }
 }

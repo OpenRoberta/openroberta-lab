@@ -16,7 +16,10 @@ robots:
     template: calliope
     dir: calliope
     suffix: ".cpp"
-    exclude: [ math ]
+    exclude: [ 
+        math,
+        v3_logotouch_and_sound
+     ]
   calliope2017:
     template: calliope
     dir: calliope
@@ -27,13 +30,26 @@ robots:
         math,
         messages,
         radio_rx,
-        radio_tx
+        radio_tx,
+        v3_logotouch_and_sound
       ]
   calliope2016:
     template: calliope
     dir: calliope
     suffix: ".cpp"
-    exclude: [ math ]
+    exclude: [ 
+        math,
+         v3_logotouch_and_sound
+         ]
+  calliopev3:
+    template: calliope
+    dir: calliope
+    suffix: ".py"
+    exclude: [ 
+        messages,
+        sensor_gyro
+    ]
+    pylintIgnoredModules: ["calliopemini", "callibot2", "tm1637", "music", "neopixel", "radio", "machine", "sht31", "tcs3472"]
   edison:
     template: edison
     dir: edison

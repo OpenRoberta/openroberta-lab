@@ -148,4 +148,3 @@ inline bool _isPrime(double d) {
     }
     return true;
 }
-

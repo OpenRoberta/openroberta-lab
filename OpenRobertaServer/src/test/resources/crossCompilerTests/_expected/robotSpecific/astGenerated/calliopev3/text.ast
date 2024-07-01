@@ -1,0 +1,6 @@
+DisplayTextAction[mode: TEXT, msg: StringConst[value: test]]
+StmtTextComment[textComment: test]
+DisplayTextAction[mode: TEXT, msg: FunctionExpr [TextJoinFunct [StringConst[value: test], StringConst[value: test]]]]
+DisplayTextAction[mode: TEXT, msg: StringConst[value: Hallo]]
+TextAppendStmt[var: Var [Element2], text: StringConst[value: test]]
+DisplayTextAction[mode: TEXT, msg: FunctionExpr [TextCharCastNumberFunct[value: StringConst[value: test], atIndex: NumConst[value: 0]]]]

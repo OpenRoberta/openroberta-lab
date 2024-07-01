@@ -1,0 +1,161 @@
+<export xmlns="http://de.fhg.iais.roberta.blockly">
+    <program>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="3.1" description="" tags="">
+            <instance x="91" y="72">
+                <block type="robControls_start" id="l[Z{dz}N~E#vke^k.AT5" intask="true" deletable="false">
+                    <mutation declare="false"></mutation>
+                    <field name="DEBUG"></field>
+                </block>
+                <block type="robActions_serial_print" id="7@QAu%2r!k5i};k_RMc5" intask="true">
+                    <value name="OUT">
+                        <block type="text" id="c|2?^SUGS}zct@hKkTvw" intask="true">
+                            <field name="TEXT">Gyro test. Press A to step through</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robControls_loopForever" id="zzn4Eb,hr@d8TQW-BDTV" intask="true">
+                    <statement name="DO">
+                        <block type="robActions_serial_print" id="IozB/Wf{}oe=b*]daPxt" intask="true">
+                            <value name="OUT">
+                                <block type="robSensors_gyro_getSample" id="}.8S!h~d6_mEpI!r;x^l" intask="true">
+                                    <mutation mode="ANGLE"></mutation>
+                                    <field name="MODE">ANGLE</field>
+                                    <field name="SLOT">X</field>
+                                    <field name="SENSORPORT">_G</field>
+                                    <hide name="SENSORPORT" value="_G"></hide>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robControls_wait_time" id="~0,#S@U}DG.jF)M8]xfm" intask="true">
+                            <value name="WAIT">
+                                <block type="math_number" id="y;nS6;uI`wZ7ZsEPkDv+" intask="true">
+                                    <field name="NUM">100</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robControls_if" id="R8]JneLuiez-:?-!=reD" intask="true">
+                            <value name="IF0">
+                                <block type="robSensors_key_getSample" id="MP@.I87Q+w;4K}ePl7B`" intask="true">
+                                    <mutation mode="PRESSED"></mutation>
+                                    <field name="MODE">PRESSED</field>
+                                    <field name="SENSORPORT">A</field>
+                                    <field name="SLOT"></field>
+                                </block>
+                            </value>
+                            <statement name="DO0">
+                                <block type="controls_flow_statements" id=":E#NH@f1C-VURL,xR*!1" intask="true">
+                                    <field name="FLOW">BREAK</field>
+                                </block>
+                            </statement>
+                        </block>
+                    </statement>
+                </block>
+                <block type="robControls_loopForever" id="zjgNutn9e%Ck,l~)-;nL" intask="true">
+                    <statement name="DO">
+                        <block type="robActions_serial_print" id="{u{:XP2FdwrX*1/KHw@C" intask="true">
+                            <value name="OUT">
+                                <block type="robSensors_gyro_getSample" id="E6+_:)L.}r|@DR5)YG%^" intask="true">
+                                    <mutation mode="ANGLE"></mutation>
+                                    <field name="MODE">ANGLE</field>
+                                    <field name="SLOT">Y</field>
+                                    <field name="SENSORPORT">_G</field>
+                                    <hide name="SENSORPORT" value="_G"></hide>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robControls_wait_time" id="]TLD`5?7k~il~q]D;]7Q" intask="true">
+                            <value name="WAIT">
+                                <block type="math_number" id="V/9Jml4R)wER,q,^#PY?" intask="true">
+                                    <field name="NUM">100</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robControls_if" id="L*#VQMRQ2^1*_{O!4Jz," intask="true">
+                            <value name="IF0">
+                                <block type="robSensors_key_getSample" id="7v%xGZ2l~O{FG^7lu]ux" intask="true">
+                                    <mutation mode="PRESSED"></mutation>
+                                    <field name="MODE">PRESSED</field>
+                                    <field name="SENSORPORT">A</field>
+                                    <field name="SLOT"></field>
+                                </block>
+                            </value>
+                            <statement name="DO0">
+                                <block type="controls_flow_statements" id=",bBL`0OB44Fw-8%s|)j." intask="true">
+                                    <field name="FLOW">BREAK</field>
+                                </block>
+                            </statement>
+                        </block>
+                    </statement>
+                </block>
+                <block type="robActions_serial_print" id="vj{bP+E5Gq{aT],E?N}D" intask="true">
+                    <value name="OUT">
+                        <block type="text" id="tBkTc=H.[Pac^{D)}A8u" intask="true">
+                            <field name="TEXT">DONE</field>
+                        </block>
+                    </value>
+                </block>
+            </instance>
+        </block_set>
+    </program>
+    <config>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="3.1" description="" tags="">
+            <instance x="-34" y="120">
+                <block type="robConf_key" id="~wk*JZQvB.fj=I`N#NWp" intask="true" deletable="false">
+                    <field name="NAME">B</field>
+                    <field name="PIN1">B</field>
+                </block>
+            </instance>
+            <instance x="197" y="162">
+                <block type="robConf_sound" id="e:4V0FcDx%9,.7xO,Ns@" intask="true" deletable="false">
+                    <field name="NAME">_S</field>
+                </block>
+            </instance>
+            <instance x="197" y="190">
+                <block type="robConf_light" id="9Ktt(7_4+XmKC0]5Zha?" intask="true" deletable="false">
+                    <field name="NAME">_L</field>
+                </block>
+            </instance>
+            <instance x="80" y="211">
+                <block type="robConf_gyro" id="lIT?C5y|(7FWCQIUn~pc" intask="true" deletable="false">
+                    <field name="NAME">_G</field>
+                </block>
+            </instance>
+            <instance x="80" y="239">
+                <block type="robConf_compass" id="O%Oi0Tq`hGEvrgHGPYY=" intask="true" deletable="false">
+                    <field name="NAME">_C</field>
+                </block>
+            </instance>
+            <instance x="250" y="250">
+                <block type="robConf_robot" id="robot" intask="false" deletable="false">
+                    <field name="ROBOT">undefined</field>
+                </block>
+            </instance>
+            <instance x="-34" y="270">
+                <block type="robConf_key" id="Kbp:=x@gw@n.b~NH|1|e" intask="true" deletable="false">
+                    <field name="NAME">A</field>
+                    <field name="PIN1">A</field>
+                </block>
+            </instance>
+            <instance x="80" y="268">
+                <block type="robConf_accelerometer" id="#(ufvG,s^FcqI,aFn/A{" intask="true" deletable="false">
+                    <field name="NAME">_A</field>
+                </block>
+            </instance>
+            <instance x="80" y="378">
+                <block type="robConf_temperature" id="0y].dnS)P)~Jjzeu3/0C" intask="true" deletable="false">
+                    <field name="NAME">_T</field>
+                </block>
+            </instance>
+            <instance x="-34" y="422">
+                <block type="robConf_rgbledh" id="lgi%C3,J!smR:eP0aal_" intask="true" deletable="false">
+                    <field name="NAME">_R</field>
+                </block>
+            </instance>
+            <instance x="-34" y="450">
+                <block type="robConf_buzzer" id="}%d2_68IJd*7Oy{qrMR," intask="true" deletable="false">
+                    <field name="NAME">_B</field>
+                </block>
+            </instance>
+        </block_set>
+    </config>
+</export>

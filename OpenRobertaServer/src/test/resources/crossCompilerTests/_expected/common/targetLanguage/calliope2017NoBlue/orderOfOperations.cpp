@@ -79,4 +79,3 @@ void ____divisionOperations(double ___item5) {
     ___item5 = ( (int) ( ((double) rand() / (RAND_MAX)) / ((float) 5) ) % (int) ( 5 ) );
 }
 
-

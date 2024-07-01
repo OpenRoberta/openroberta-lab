@@ -1,0 +1,16 @@
+SerialWriteAction[value: StringConst[value: Gyro test. Press A to step through]]
+
+(repeat [FOREVER, BoolConst[value: true]]
+AktionStmt [SerialWriteAction[value: SensorExpr [GyroSensor [_G, ANGLE, X]]]]WaitTimeStmt[time: NumConst[value: 100]]
+if SensorExpr [KeysSensor [A, PRESSED, - EMPTY_SLOT -]]
+,thenStmtFlowCon[flow: BREAK]
+
+)
+
+(repeat [FOREVER, BoolConst[value: true]]
+AktionStmt [SerialWriteAction[value: SensorExpr [GyroSensor [_G, ANGLE, Y]]]]WaitTimeStmt[time: NumConst[value: 100]]
+if SensorExpr [KeysSensor [A, PRESSED, - EMPTY_SLOT -]]
+,thenStmtFlowCon[flow: BREAK]
+
+)
+SerialWriteAction[value: StringConst[value: DONE]]

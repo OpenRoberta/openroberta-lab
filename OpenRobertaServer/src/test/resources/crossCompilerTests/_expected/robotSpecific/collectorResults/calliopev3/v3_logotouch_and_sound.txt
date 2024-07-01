@@ -1,0 +1,6 @@
+Sensors: 
+[UsedSensor [_LO, LOGOTOUCH, - EMPTY_SLOT -]]
+Actors: 
+[UsedActor [, BUZZER], UsedActor [, MUSIC], UsedActor [, DISPLAY], UsedActor [, KEY]]
+Methods: 
+[]

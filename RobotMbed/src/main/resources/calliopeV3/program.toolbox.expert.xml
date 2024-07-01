@@ -207,6 +207,7 @@
         </block>
         <block type="robSensors_accelerometer_getSample"></block>
         <block type="robSensors_humidity_getSample"></block>
+        <block type='robSensors_moisture_getSample'></block>
         <block type="robSensors_ultrasonic_getSample"></block>
         <block type="robSensors_infrared_getSample"></block>
         <block type="robSensors_colourtcs3472_getSample"></block>

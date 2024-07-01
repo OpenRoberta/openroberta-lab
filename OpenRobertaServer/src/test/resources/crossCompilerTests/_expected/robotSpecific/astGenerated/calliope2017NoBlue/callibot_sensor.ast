@@ -1,15 +1,30 @@
+SerialWriteAction[value: StringConst[value: callibiot sensor tests press a to go through]]
+WaitTimeStmt[time: NumConst[value: 500]]
+SerialWriteAction[value: StringConst[value: line ]]
 
-Var [line] := SensorExpr [InfraredSensor [I, LINE, - EMPTY_SLOT -]]
+(repeat [FOREVER, BoolConst[value: true]]
+AktionStmt [SerialWriteAction[value: FunctionExpr [TextJoinFunct [StringConst[value: I1: ], SensorExpr [InfraredSensor [I, LINE, - EMPTY_SLOT -]]]]]]
+AktionStmt [SerialWriteAction[value: FunctionExpr [TextJoinFunct [StringConst[value: I2: ], SensorExpr [InfraredSensor [I2, LINE, - EMPTY_SLOT -]]]]]]
+if SensorExpr [KeysSensor [A, PRESSED, - EMPTY_SLOT -]]
+,thenStmtFlowCon[flow: BREAK]
 
+)
+WaitTimeStmt[time: NumConst[value: 500]]
+SerialWriteAction[value: StringConst[value: distance ultrasonic]]
 
-Var [line] := SensorExpr [InfraredSensor [I2, LINE, - EMPTY_SLOT -]]
+(repeat [FOREVER, BoolConst[value: true]]
+AktionStmt [SerialWriteAction[value: SensorExpr [UltrasonicSensor [U, DISTANCE, - EMPTY_SLOT -]]]]
+if SensorExpr [KeysSensor [A, PRESSED, - EMPTY_SLOT -]]
+,thenStmtFlowCon[flow: BREAK]
 
+)
+WaitTimeStmt[time: NumConst[value: 500]]
+SerialWriteAction[value: StringConst[value: front key]]
 
-Var [dist] := SensorExpr [UltrasonicSensor [U, DISTANCE, - EMPTY_SLOT -]]
+(repeat [FOREVER, BoolConst[value: true]]
+AktionStmt [SerialWriteAction[value: FunctionExpr [TextJoinFunct [StringConst[value: K1: ], SensorExpr [CallibotKeysSensor [K1, PRESSED, - EMPTY_SLOT -]]]]]]
+AktionStmt [SerialWriteAction[value: FunctionExpr [TextJoinFunct [StringConst[value: K2: ], SensorExpr [CallibotKeysSensor [K1, PRESSED, - EMPTY_SLOT -]]]]]]
+if SensorExpr [KeysSensor [A, PRESSED, - EMPTY_SLOT -]]
+,thenStmtFlowCon[flow: BREAK]
 
-
-Var [key] := SensorExpr [CallibotKeysSensor [K1, PRESSED, - EMPTY_SLOT -]]
-
-
-Var [key] := SensorExpr [CallibotKeysSensor [K2, PRESSED, - EMPTY_SLOT -]]
-
+)

@@ -1,0 +1,481 @@
+<export xmlns="http://de.fhg.iais.roberta.blockly">
+    <program>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="3.1" description="" tags="">
+            <instance x="335" y="71">
+                <block type="robControls_start" id="@;}!wYElwrKe?,[~rutn" intask="true" deletable="false">
+                    <mutation declare="false"></mutation>
+                    <field name="DEBUG"></field>
+                </block>
+                <block type="robActions_serial_print" id="{5:syJ)#/RLL42c,V|C[" intask="true">
+                    <value name="OUT">
+                        <block type="text" id="XMl=prAZVdN}P|lFAum:" intask="true">
+                            <field name="TEXT">Rotating through LEDs press A to continue</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robActions_serial_print" id="q%U~*!u,O(?SVqwt;RME" intask="true">
+                    <value name="OUT">
+                        <block type="text" id="O#H#|yOBZM2}q/3L*^jI" intask="true">
+                            <field name="TEXT">Left LED RED</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robControls_wait_for" id="BxL/rKUc#PD%;7Y/![Qs" intask="true">
+                    <value name="WAIT0">
+                        <block type="logic_compare" id="Z;W`rb6oLPzsvom3R]zH" intask="true">
+                            <field name="OP">EQ</field>
+                            <value name="A">
+                                <block type="robSensors_getSample" id="@Pry|IdD:1tsJBqpLu-P" intask="true">
+                                    <mutation input="KEY_PRESSED"></mutation>
+                                    <field name="SENSORTYPE">KEY_PRESSED</field>
+                                    <field name="SENSORPORT">A</field>
+                                    <field name="SLOT"></field>
+                                </block>
+                            </value>
+                            <value name="B">
+                                <block type="logic_boolean" id="r%,HL}-Gw|zqWx:/y|oV" intask="true">
+                                    <field name="BOOL">TRUE</field>
+                                </block>
+                            </value>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_rgbLeds_hidden_on_calliopev3" id="s36/@GyxQOeh.--L4*}0" intask="true">
+                    <field name="SLOT">0</field>
+                    <hide name="ACTORPORT" value="NO PORT"></hide>
+                    <value name="COLOUR">
+                        <block type="mbedColour_picker" id="[l3cDsa;.sm6?!VXljoG" intask="true">
+                            <field name="COLOUR">#ff0000</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robActions_serial_print" id="v2sxNs~6geYD0GEDQshc" intask="true">
+                    <value name="OUT">
+                        <block type="text" id="`=Mq[otfKmOE6Xoma3Lb" intask="true">
+                            <field name="TEXT">Left LED OFF</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robControls_wait_for" id="9I5VQebsRGS4U@5f]plP" intask="true">
+                    <value name="WAIT0">
+                        <block type="logic_compare" id="mPJ`;gCtH`VUp0dU;JS;" intask="true">
+                            <field name="OP">EQ</field>
+                            <value name="A">
+                                <block type="robSensors_getSample" id="+gYh5J.MIwD#`s%R^k|C" intask="true">
+                                    <mutation input="KEY_PRESSED"></mutation>
+                                    <field name="SENSORTYPE">KEY_PRESSED</field>
+                                    <field name="SENSORPORT">A</field>
+                                    <field name="SLOT"></field>
+                                </block>
+                            </value>
+                            <value name="B">
+                                <block type="logic_boolean" id="_rDRP_d^_+Lc#6YI1I|=" intask="true">
+                                    <field name="BOOL">TRUE</field>
+                                </block>
+                            </value>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_rgbLeds_hidden_off_calliopev3" id="p)YYpSD@#rEK:*0*Yl:?" intask="true">
+                    <field name="SLOT">0</field>
+                    <hide name="ACTORPORT" value="NO PORT"></hide>
+                </block>
+                <block type="robActions_serial_print" id="6NbRtMS(:;^V76ZvMrAx" intask="true">
+                    <value name="OUT">
+                        <block type="text" id="lE#AL,Zkd{h,-kkgzZN8" intask="true">
+                            <field name="TEXT">center LED RED</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robControls_wait_for" id="}xL1@NS3c}1UmjtCLTc5" intask="true">
+                    <value name="WAIT0">
+                        <block type="logic_compare" id="9t;DR/[7,oCUDGf{)s5D" intask="true">
+                            <field name="OP">EQ</field>
+                            <value name="A">
+                                <block type="robSensors_getSample" id="^T,)=d:55`V]nJ1/:Xo=" intask="true">
+                                    <mutation input="KEY_PRESSED"></mutation>
+                                    <field name="SENSORTYPE">KEY_PRESSED</field>
+                                    <field name="SENSORPORT">A</field>
+                                    <field name="SLOT"></field>
+                                </block>
+                            </value>
+                            <value name="B">
+                                <block type="logic_boolean" id=";MMl|B#`Lu2Ik^aS+`*K" intask="true">
+                                    <field name="BOOL">TRUE</field>
+                                </block>
+                            </value>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_rgbLeds_hidden_on_calliopev3" id="~P]f6ok4FS+fHE3Zmgn~" intask="true">
+                    <field name="SLOT">1</field>
+                    <hide name="ACTORPORT" value="NO PORT"></hide>
+                    <value name="COLOUR">
+                        <block type="mbedColour_picker" id="[J:y_#+O#_0vI!=^7U48" intask="true">
+                            <field name="COLOUR">#ff0000</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robActions_serial_print" id="}c0P/x-ScUxI|c~?dH)%" intask="true">
+                    <value name="OUT">
+                        <block type="text" id="uk%(sFI9wuimAjSsWg2p" intask="true">
+                            <field name="TEXT">center LED OFF</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robControls_wait_for" id="lkz{J.^N!%ov~vD}ATPJ" intask="true">
+                    <value name="WAIT0">
+                        <block type="logic_compare" id="8Q[3-xR4v:K{.6N)-[/w" intask="true">
+                            <field name="OP">EQ</field>
+                            <value name="A">
+                                <block type="robSensors_getSample" id="Dmw0?/%|Aw%XUG9=ro0_" intask="true">
+                                    <mutation input="KEY_PRESSED"></mutation>
+                                    <field name="SENSORTYPE">KEY_PRESSED</field>
+                                    <field name="SENSORPORT">A</field>
+                                    <field name="SLOT"></field>
+                                </block>
+                            </value>
+                            <value name="B">
+                                <block type="logic_boolean" id="=JQv,{z3Ml9@rX*,g?UL" intask="true">
+                                    <field name="BOOL">TRUE</field>
+                                </block>
+                            </value>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_rgbLeds_hidden_off_calliopev3" id="Woe`Jp;P#nkx6DWrt~72" intask="true">
+                    <field name="SLOT">1</field>
+                    <hide name="ACTORPORT" value="NO PORT"></hide>
+                </block>
+                <block type="robActions_serial_print" id="(k/+0sYi.+`r!bxlBXOs" intask="true">
+                    <value name="OUT">
+                        <block type="text" id="95aZvD|2n/iW-t=w=pxe" intask="true">
+                            <field name="TEXT">right LED RED</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robControls_wait_for" id="/Z7,DfbB:o}nyGfJm.MN" intask="true">
+                    <value name="WAIT0">
+                        <block type="logic_compare" id="JeqtByaoSqx|J[rVABqk" intask="true">
+                            <field name="OP">EQ</field>
+                            <value name="A">
+                                <block type="robSensors_getSample" id="hTal]1x6s)]7p[+vd5x{" intask="true">
+                                    <mutation input="KEY_PRESSED"></mutation>
+                                    <field name="SENSORTYPE">KEY_PRESSED</field>
+                                    <field name="SENSORPORT">A</field>
+                                    <field name="SLOT"></field>
+                                </block>
+                            </value>
+                            <value name="B">
+                                <block type="logic_boolean" id="e;;w]:HDUqOk/abJ@1Wt" intask="true">
+                                    <field name="BOOL">TRUE</field>
+                                </block>
+                            </value>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_rgbLeds_hidden_on_calliopev3" id="nUoO+1I,UsYKE{Gxo})Y" intask="true">
+                    <field name="SLOT">2</field>
+                    <hide name="ACTORPORT" value="NO PORT"></hide>
+                    <value name="COLOUR">
+                        <block type="mbedColour_picker" id="VUOPw#aMj#;sgyCv|rD`" intask="true">
+                            <field name="COLOUR">#ff0000</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robActions_serial_print" id="txwM2Nm,L@=pG%/MJ5ng" intask="true">
+                    <value name="OUT">
+                        <block type="text" id="{PIB,#tzXSY%U8T^D|[F" intask="true">
+                            <field name="TEXT">right LED OFF</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robControls_wait_for" id="464~uKv2([;DtR52i(70" intask="true">
+                    <value name="WAIT0">
+                        <block type="logic_compare" id="TEPX:.mFByioSbn3Ugvf" intask="true">
+                            <field name="OP">EQ</field>
+                            <value name="A">
+                                <block type="robSensors_getSample" id="i22lu~@!XqA86MyiKwGX" intask="true">
+                                    <mutation input="KEY_PRESSED"></mutation>
+                                    <field name="SENSORTYPE">KEY_PRESSED</field>
+                                    <field name="SENSORPORT">A</field>
+                                    <field name="SLOT"></field>
+                                </block>
+                            </value>
+                            <value name="B">
+                                <block type="logic_boolean" id="O7JVBP9ZH%LYc-vsOS*8" intask="true">
+                                    <field name="BOOL">TRUE</field>
+                                </block>
+                            </value>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_rgbLeds_hidden_off_calliopev3" id="?Uce62T?|3aH.nT57MvU" intask="true">
+                    <field name="SLOT">2</field>
+                    <hide name="ACTORPORT" value="NO PORT"></hide>
+                </block>
+                <block type="robActions_serial_print" id="R:nj.!tf=]%KO0TJG6TC" intask="true">
+                    <value name="OUT">
+                        <block type="text" id="qnlUk/2JpZ0qi*B,SB-6" intask="true">
+                            <field name="TEXT">all LEDs RED</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robControls_wait_for" id="}s^Rw;BxBF:uQrn=!FWt" intask="true">
+                    <value name="WAIT0">
+                        <block type="logic_compare" id="aW.FAyhhUwVHH8.k|/?1" intask="true">
+                            <field name="OP">EQ</field>
+                            <value name="A">
+                                <block type="robSensors_getSample" id="j`rJ55^2VrsTnjfy{[O#" intask="true">
+                                    <mutation input="KEY_PRESSED"></mutation>
+                                    <field name="SENSORTYPE">KEY_PRESSED</field>
+                                    <field name="SENSORPORT">A</field>
+                                    <field name="SLOT"></field>
+                                </block>
+                            </value>
+                            <value name="B">
+                                <block type="logic_boolean" id="q#^,W?cwV8YhgB-Kf_by" intask="true">
+                                    <field name="BOOL">TRUE</field>
+                                </block>
+                            </value>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_rgbLeds_hidden_on_calliopev3" id="3JrbTL)n@+vb1;j0:gYu" intask="true">
+                    <field name="SLOT">ALL</field>
+                    <hide name="ACTORPORT" value="NO PORT"></hide>
+                    <value name="COLOUR">
+                        <block type="mbedColour_picker" id="^t5=_nKB}kGGy)HMNU2D" intask="true">
+                            <field name="COLOUR">#ff0000</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robActions_serial_print" id="12Ly4vT6xvD5Tv:;d::w" intask="true">
+                    <value name="OUT">
+                        <block type="text" id="9P`!o4k%fg(]pIgRiCHE" intask="true">
+                            <field name="TEXT">all LEDs OFF</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robControls_wait_for" id="Q1nSU27rv=~i|U4,)%E;" intask="true">
+                    <value name="WAIT0">
+                        <block type="logic_compare" id="(ccV{6XqF^x%FnCy1e(w" intask="true">
+                            <field name="OP">EQ</field>
+                            <value name="A">
+                                <block type="robSensors_getSample" id="z9hcB!A*wlqym4EC0X`o" intask="true">
+                                    <mutation input="KEY_PRESSED"></mutation>
+                                    <field name="SENSORTYPE">KEY_PRESSED</field>
+                                    <field name="SENSORPORT">A</field>
+                                    <field name="SLOT"></field>
+                                </block>
+                            </value>
+                            <value name="B">
+                                <block type="logic_boolean" id="VXL{!W=G07uF;%{(kn-1" intask="true">
+                                    <field name="BOOL">TRUE</field>
+                                </block>
+                            </value>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_rgbLeds_hidden_off_calliopev3" id="8}5-#W-*rw3P6)|Jt#ZV" intask="true">
+                    <field name="SLOT">ALL</field>
+                    <hide name="ACTORPORT" value="NO PORT"></hide>
+                </block>
+                <block type="robActions_serial_print" id="RKq?u#3Rs`h{#[6D{x2b" intask="true">
+                    <value name="OUT">
+                        <block type="text" id="2-1,|LgM|U(|#VPCgs~T" intask="true">
+                            <field name="TEXT">right LED green</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robControls_wait_for" id="m=FysJf,BG856HASy:ds" intask="true">
+                    <value name="WAIT0">
+                        <block type="logic_compare" id="7[H.W#!.llef8t#F(;uL" intask="true">
+                            <field name="OP">EQ</field>
+                            <value name="A">
+                                <block type="robSensors_getSample" id="xldO9a@2)0CwiLG9+])e" intask="true">
+                                    <mutation input="KEY_PRESSED"></mutation>
+                                    <field name="SENSORTYPE">KEY_PRESSED</field>
+                                    <field name="SENSORPORT">A</field>
+                                    <field name="SLOT"></field>
+                                </block>
+                            </value>
+                            <value name="B">
+                                <block type="logic_boolean" id="s620F?4[,lw@3A/Rb`4y" intask="true">
+                                    <field name="BOOL">TRUE</field>
+                                </block>
+                            </value>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_rgbLeds_hidden_on_calliopev3" id="RFq^Mrz=3fc[h,aB+K1!" intask="true">
+                    <field name="SLOT">2</field>
+                    <hide name="ACTORPORT" value="NO PORT"></hide>
+                    <value name="COLOUR">
+                        <block type="mbedColour_picker" id="NZ{kL|N-X*_2mNgYCiz@" intask="true">
+                            <field name="COLOUR">#33cc00</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robActions_serial_print" id="@={%4[xz)[sCxM5([%I7" intask="true">
+                    <value name="OUT">
+                        <block type="text" id="1v%]ZeH.~z4cwW]eBfk0" intask="true">
+                            <field name="TEXT">left LED white</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robControls_wait_for" id="{hXXeVj%SGfV?N(tmHZ=" intask="true">
+                    <value name="WAIT0">
+                        <block type="logic_compare" id=".?FhSk.+m{+zjW]oo(AG" intask="true">
+                            <field name="OP">EQ</field>
+                            <value name="A">
+                                <block type="robSensors_getSample" id="U`msqH1/=%o8:e.#LSma" intask="true">
+                                    <mutation input="KEY_PRESSED"></mutation>
+                                    <field name="SENSORTYPE">KEY_PRESSED</field>
+                                    <field name="SENSORPORT">A</field>
+                                    <field name="SLOT"></field>
+                                </block>
+                            </value>
+                            <value name="B">
+                                <block type="logic_boolean" id="x*[G|L,HU4*_35Z(;fT2" intask="true">
+                                    <field name="BOOL">TRUE</field>
+                                </block>
+                            </value>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_rgbLeds_hidden_on_calliopev3" id="Lq|0ckx/ZNeUSa[e+a(/" intask="true">
+                    <field name="SLOT">2</field>
+                    <hide name="ACTORPORT" value="NO PORT"></hide>
+                    <value name="COLOUR">
+                        <block type="mbedColour_picker" id="Cqo[F!OukRMPW0ZfCwMC" intask="true">
+                            <field name="COLOUR">#ffffff</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robActions_serial_print" id="lr-Ti-9oyT.jRkFvi3_+" intask="true">
+                    <value name="OUT">
+                        <block type="text" id="[DF_UdI.rlqri3cwUo!b" intask="true">
+                            <field name="TEXT">centre LED black</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robControls_wait_for" id="Z8,l?n@EQ=#LqQu(e5~W" intask="true">
+                    <value name="WAIT0">
+                        <block type="logic_compare" id="!t~6rt4hT?UCbL2Ww4M(" intask="true">
+                            <field name="OP">EQ</field>
+                            <value name="A">
+                                <block type="robSensors_getSample" id="?+y?re)N)xVG;_}!Gm*p" intask="true">
+                                    <mutation input="KEY_PRESSED"></mutation>
+                                    <field name="SENSORTYPE">KEY_PRESSED</field>
+                                    <field name="SENSORPORT">A</field>
+                                    <field name="SLOT"></field>
+                                </block>
+                            </value>
+                            <value name="B">
+                                <block type="logic_boolean" id="XMr]C~Ux@|,/SZAZ-u0." intask="true">
+                                    <field name="BOOL">TRUE</field>
+                                </block>
+                            </value>
+                        </block>
+                    </value>
+                </block>
+                <block type="actions_rgbLeds_hidden_on_calliopev3" id=";M=:OA|cUg`Bgp5u88#4" intask="true">
+                    <field name="SLOT">1</field>
+                    <hide name="ACTORPORT" value="NO PORT"></hide>
+                    <value name="COLOUR">
+                        <block type="mbedColour_picker" id="G[#BF4oM=/ah+tyakeZ4" intask="true">
+                            <field name="COLOUR">#000000</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robActions_serial_print" id="/No_4}v?SPI-LoC}Dw2?" intask="true">
+                    <value name="OUT">
+                        <block type="text" id="QR-3Qh@0U[n~Af(T[^M%" intask="true">
+                            <field name="TEXT">DONE</field>
+                        </block>
+                    </value>
+                </block>
+            </instance>
+        </block_set>
+    </program>
+    <config>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="3.1" description="" tags="">
+            <instance x="80" y="211">
+                <block type="robConf_gyro" id="lIT?C5y|(7FWCQIUn~pc" intask="true" deletable="false">
+                    <field name="NAME">_G</field>
+                </block>
+            </instance>
+            <instance x="80" y="239">
+                <block type="robConf_compass" id="O%Oi0Tq`hGEvrgHGPYY=" intask="true" deletable="false">
+                    <field name="NAME">_C</field>
+                </block>
+            </instance>
+            <instance x="630" y="225">
+                <block type="robConf_light" id="9Ktt(7_4+XmKC0]5Zha?" intask="true" deletable="false">
+                    <field name="NAME">_L</field>
+                </block>
+            </instance>
+            <instance x="250" y="250">
+                <block type="robConf_robot" id="robot" intask="false" deletable="false">
+                    <field name="ROBOT">undefined</field>
+                </block>
+            </instance>
+            <instance x="80" y="268">
+                <block type="robConf_accelerometer" id="#(ufvG,s^FcqI,aFn/A{" intask="true" deletable="false">
+                    <field name="NAME">_A</field>
+                </block>
+            </instance>
+            <instance x="630" y="299">
+                <block type="robConf_logotouch" id="?ybc9g.wQa:_7M,%d=~g" intask="true" deletable="false">
+                    <field name="NAME">_LO</field>
+                </block>
+            </instance>
+            <instance x="80" y="349">
+                <block type="robConf_key" id="Kbp:=x@gw@n.b~NH|1|e" intask="true" deletable="false">
+                    <field name="NAME">A</field>
+                    <field name="PIN1">A</field>
+                </block>
+            </instance>
+            <instance x="630" y="351">
+                <block type="robConf_key" id="~wk*JZQvB.fj=I`N#NWp" intask="true" deletable="false">
+                    <field name="NAME">B</field>
+                    <field name="PIN1">B</field>
+                </block>
+            </instance>
+            <instance x="80" y="414">
+                <block type="robConf_temperature" id="0y].dnS)P)~Jjzeu3/0C" intask="true" deletable="false">
+                    <field name="NAME">_T</field>
+                </block>
+            </instance>
+            <instance x="630" y="410">
+                <block type="robConf_sound" id="e:4V0FcDx%9,.7xO,Ns@" intask="true" deletable="false">
+                    <field name="NAME">_S</field>
+                </block>
+            </instance>
+            <instance x="80" y="445">
+                <block type="robConf_rgbLedhp" id="lgi%C3,J!smR:47" intask="true" deletable="false">
+                    <field name="NAME">_0</field>
+                    <field name="PIN1">LED_L</field>
+                </block>
+            </instance>
+            <instance x="630" y="447">
+                <block type="robConf_buzzer" id="}%d2_68IJd*7Oy{qrMR," intask="true" deletable="false">
+                    <field name="NAME">_B</field>
+                </block>
+            </instance>
+            <instance x="80" y="498">
+                <block type="robConf_rgbLedhp" id="lgi%C3,J!smR:48" intask="true" deletable="false">
+                    <field name="NAME">_1</field>
+                    <field name="PIN1">LED_C</field>
+                </block>
+            </instance>
+            <instance x="80" y="551">
+                <block type="robConf_rgbLedhp" id="lgi%C3,J!smR:49" intask="true" deletable="false">
+                    <field name="NAME">_2</field>
+                    <field name="PIN1">LED_R</field>
+                </block>
+            </instance>
+        </block_set>
+    </config>
+</export>

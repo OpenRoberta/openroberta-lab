@@ -1,425 +1,174 @@
-<export xmlns="http://de.fhg.iais.roberta.blockly">
-    <program>
-        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="3.1" description="" tags="">
-            <instance x="-487" y="-46">
-                <block type="robControls_start" id="SRhyqr`97V.~KiRhwz2?" intask="true" deletable="false">
-                    <mutation declare="true"></mutation>
-                    <field name="DEBUG"></field>
-                    <statement name="ST">
-                        <block type="robGlobalVariables_declare" id="8p#^SLp?EU)P#Ze?#6Zm" intask="true" deletable="false" movable="false">
-                            <mutation next="false" declaration_type="Number"></mutation>
-                            <field name="VAR">numberVar</field>
-                            <field name="TYPE">Number</field>
-                            <value name="VALUE">
-                                <block type="math_number" id="4hD=zA4RwS/05kN,-,RV" intask="true">
-                                    <field name="NUM">0</field>
-                                </block>
-                            </value>
-                        </block>
-                    </statement>
-                </block>
-                <block type="robProcedures_callnoreturn" id="r*mhR,IT`4X5LlQT4:h)" intask="true">
-                    <mutation name="pin"></mutation>
-                </block>
-            </instance>
-            <instance x="-89" y="-34">
-                <block type="robProcedures_defnoreturn" id="ryY`}AVmaT1A1;cV{*-." intask="true">
-                    <mutation declare="false"></mutation>
-                    <field name="NAME">pin</field>
-                    <statement name="STACK">
-                        <block type="mbedActions_write_to_pin" id="o/8BqajXwx{GRqxVGyOt" intask="true">
-                            <mutation protocol="ANALOG"></mutation>
-                            <field name="VALUETYPE">ANALOG</field>
-                            <field name="PIN">P1_A</field>
-                            <value name="VALUE">
-                                <block type="variables_get" id="[?jnrVBc/XR8!@7=Mo/u" intask="true">
-                                    <mutation datatype="Number"></mutation>
-                                    <field name="VAR">numberVar</field>
-                                </block>
-                            </value>
-                        </block>
-                        <block type="mbedActions_write_to_pin" id="1dku-X9nCrY.vL+S#PJc" intask="true">
-                            <mutation protocol="ANALOG"></mutation>
-                            <field name="VALUETYPE">ANALOG</field>
-                            <field name="PIN">P2_A</field>
-                            <value name="VALUE">
-                                <block type="variables_get" id="Xt*UFuynN0s2(mC,ocQY" intask="true">
-                                    <mutation datatype="Number"></mutation>
-                                    <field name="VAR">numberVar</field>
-                                </block>
-                            </value>
-                        </block>
-                        <block type="mbedActions_write_to_pin" id="`;5EIr:p*Jfd1/yQxR1*" intask="true">
-                            <mutation protocol="ANALOG"></mutation>
-                            <field name="VALUETYPE">ANALOG</field>
-                            <field name="PIN">A1_A</field>
-                            <value name="VALUE">
-                                <block type="variables_get" id="Hn5mnaoj7lg^2wu47j}~" intask="true">
-                                    <mutation datatype="Number"></mutation>
-                                    <field name="VAR">numberVar</field>
-                                </block>
-                            </value>
-                        </block>
-                        <block type="mbedActions_write_to_pin" id="`@2Ik1Q+16=NE2MP`qDk" intask="true">
-                            <mutation protocol="ANALOG"></mutation>
-                            <field name="VALUETYPE">ANALOG</field>
-                            <field name="PIN">C04_A</field>
-                            <value name="VALUE">
-                                <block type="variables_get" id="dx:lDDf(]0BE-(2::L9{" intask="true">
-                                    <mutation datatype="Number"></mutation>
-                                    <field name="VAR">numberVar</field>
-                                </block>
-                            </value>
-                        </block>
-                        <block type="mbedActions_write_to_pin" id="q2IQk6aW=d/7%{=aif-C" intask="true">
-                            <mutation protocol="ANALOG"></mutation>
-                            <field name="VALUETYPE">ANALOG</field>
-                            <field name="PIN">C05_A</field>
-                            <value name="VALUE">
-                                <block type="variables_get" id="3||8uwd*O)=ILQ[V54Bj" intask="true">
-                                    <mutation datatype="Number"></mutation>
-                                    <field name="VAR">numberVar</field>
-                                </block>
-                            </value>
-                        </block>
-                        <block type="mbedActions_write_to_pin" id="q/Yi!eleyQ`hF7aA6Qb!" intask="true">
-                            <mutation protocol="ANALOG"></mutation>
-                            <field name="VALUETYPE">ANALOG</field>
-                            <field name="PIN">C06_A</field>
-                            <value name="VALUE">
-                                <block type="variables_get" id="}k@^nd^O/fzlCZT{@3+y" intask="true">
-                                    <mutation datatype="Number"></mutation>
-                                    <field name="VAR">numberVar</field>
-                                </block>
-                            </value>
-                        </block>
-                        <block type="mbedActions_write_to_pin" id="Q1_#k(t+ePMl`T1_hu9a" intask="true">
-                            <mutation protocol="ANALOG"></mutation>
-                            <field name="VALUETYPE">ANALOG</field>
-                            <field name="PIN">C16_A</field>
-                            <value name="VALUE">
-                                <block type="variables_get" id="oIEIeE#pQaQ-F:mC(_)!" intask="true">
-                                    <mutation datatype="Number"></mutation>
-                                    <field name="VAR">numberVar</field>
-                                </block>
-                            </value>
-                        </block>
-                        <block type="mbedActions_write_to_pin" id="+*UG5O0~2cm*ii9aNScq" intask="true">
-                            <mutation protocol="ANALOG"></mutation>
-                            <field name="VALUETYPE">ANALOG</field>
-                            <field name="PIN">C17_A</field>
-                            <value name="VALUE">
-                                <block type="variables_get" id="+iZ[,^vZcn60vXsAzE=S" intask="true">
-                                    <mutation datatype="Number"></mutation>
-                                    <field name="VAR">numberVar</field>
-                                </block>
-                            </value>
-                        </block>
-                        <block type="mbedActions_write_to_pin" id="yYx(%{=d~|qvbo?3{95Y" intask="true">
-                            <mutation protocol="DIGITAL"></mutation>
-                            <field name="VALUETYPE">DIGITAL</field>
-                            <field name="PIN">P0_D</field>
-                            <value name="VALUE">
-                                <block type="variables_get" id="acCrkbc%o_WA(lDs2ywr" intask="true">
-                                    <mutation datatype="Number"></mutation>
-                                    <field name="VAR">numberVar</field>
-                                </block>
-                            </value>
-                        </block>
-                        <block type="mbedActions_write_to_pin" id="dVv^O*jeM#rNbGvE3Fd6" intask="true">
-                            <mutation protocol="DIGITAL"></mutation>
-                            <field name="VALUETYPE">DIGITAL</field>
-                            <field name="PIN">P3_D</field>
-                            <value name="VALUE">
-                                <block type="variables_get" id="2D_FdC~Tk[(JBD)43./]" intask="true">
-                                    <mutation datatype="Number"></mutation>
-                                    <field name="VAR">numberVar</field>
-                                </block>
-                            </value>
-                        </block>
-                        <block type="mbedActions_write_to_pin" id="P}1qHkLvmA6yv6gu)%kq" intask="true">
-                            <mutation protocol="DIGITAL"></mutation>
-                            <field name="VALUETYPE">DIGITAL</field>
-                            <field name="PIN">A0_D</field>
-                            <value name="VALUE">
-                                <block type="variables_get" id="H#,YCi!bgF;(*+#lIveQ" intask="true">
-                                    <mutation datatype="Number"></mutation>
-                                    <field name="VAR">numberVar</field>
-                                </block>
-                            </value>
-                        </block>
-                        <block type="mbedActions_write_to_pin" id="Du!wxNQ/7m_85T1Jf#[#" intask="true">
-                            <mutation protocol="DIGITAL"></mutation>
-                            <field name="VALUETYPE">DIGITAL</field>
-                            <field name="PIN">C07_D</field>
-                            <value name="VALUE">
-                                <block type="variables_get" id="~{,)BLa~?0%zI2R8P3hU" intask="true">
-                                    <mutation datatype="Number"></mutation>
-                                    <field name="VAR">numberVar</field>
-                                </block>
-                            </value>
-                        </block>
-                        <block type="mbedActions_write_to_pin" id="}*~0|VQ|L}c3akSF{;Wo" intask="true">
-                            <mutation protocol="DIGITAL"></mutation>
-                            <field name="VALUETYPE">DIGITAL</field>
-                            <field name="PIN">C08_D</field>
-                            <value name="VALUE">
-                                <block type="variables_get" id="I87vG_DRRcr3/j~pW!zh" intask="true">
-                                    <mutation datatype="Number"></mutation>
-                                    <field name="VAR">numberVar</field>
-                                </block>
-                            </value>
-                        </block>
-                        <block type="mbedActions_write_to_pin" id="2zgQLIBkl8_%vM[PhY29" intask="true">
-                            <mutation protocol="DIGITAL"></mutation>
-                            <field name="VALUETYPE">DIGITAL</field>
-                            <field name="PIN">C09_D</field>
-                            <value name="VALUE">
-                                <block type="variables_get" id="6_TG{hxh|E!AYRwbQnhb" intask="true">
-                                    <mutation datatype="Number"></mutation>
-                                    <field name="VAR">numberVar</field>
-                                </block>
-                            </value>
-                        </block>
-                        <block type="mbedActions_write_to_pin" id="q!j5A(2jG[zI9!bh)CjA" intask="true">
-                            <mutation protocol="DIGITAL"></mutation>
-                            <field name="VALUETYPE">DIGITAL</field>
-                            <field name="PIN">C10_D</field>
-                            <value name="VALUE">
-                                <block type="variables_get" id=",@qf.iv)@%~M[=.pvFj/" intask="true">
-                                    <mutation datatype="Number"></mutation>
-                                    <field name="VAR">numberVar</field>
-                                </block>
-                            </value>
-                        </block>
-                        <block type="mbedActions_write_to_pin" id="muH`@w#oFTP1Yeijk#E!" intask="true">
-                            <mutation protocol="DIGITAL"></mutation>
-                            <field name="VALUETYPE">DIGITAL</field>
-                            <field name="PIN">C11_D</field>
-                            <value name="VALUE">
-                                <block type="variables_get" id="+X`4%AY?2k,Po*BR@h+?" intask="true">
-                                    <mutation datatype="Number"></mutation>
-                                    <field name="VAR">numberVar</field>
-                                </block>
-                            </value>
-                        </block>
-                        <block type="mbedActions_write_to_pin" id="[1?tU]~miu5AWg*2:)W@" intask="true">
-                            <mutation protocol="DIGITAL"></mutation>
-                            <field name="VALUETYPE">DIGITAL</field>
-                            <field name="PIN">C12_D</field>
-                            <value name="VALUE">
-                                <block type="variables_get" id="[s4km?bX~V6]b?pc]s#g" intask="true">
-                                    <mutation datatype="Number"></mutation>
-                                    <field name="VAR">numberVar</field>
-                                </block>
-                            </value>
-                        </block>
-                        <block type="mbedActions_write_to_pin" id="Dmg2JYy-J^FWFm.o/Tax" intask="true">
-                            <mutation protocol="DIGITAL"></mutation>
-                            <field name="VALUETYPE">DIGITAL</field>
-                            <field name="PIN">C18_D</field>
-                            <value name="VALUE">
-                                <block type="variables_get" id=",EV28Q?kgW.~0s^1A4qt" intask="true">
-                                    <mutation datatype="Number"></mutation>
-                                    <field name="VAR">numberVar</field>
-                                </block>
-                            </value>
-                        </block>
-                        <block type="mbedActions_write_to_pin" id="H2?Fq)PA*)3{iA^LV5a#" intask="true">
-                            <mutation protocol="DIGITAL"></mutation>
-                            <field name="VALUETYPE">DIGITAL</field>
-                            <field name="PIN">C19_D</field>
-                            <value name="VALUE">
-                                <block type="variables_get" id="/inh!dz0}NL4:uK1.e))" intask="true">
-                                    <mutation datatype="Number"></mutation>
-                                    <field name="VAR">numberVar</field>
-                                </block>
-                            </value>
-                        </block>
-                        <block type="mbedActions_switch_led_matrix" id="9+YJ^z2M}*Wm_`LdH,5*" intask="true">
-                            <field name="STATE">ON</field>
-                        </block>
-                        <block type="mbedActions_switch_led_matrix" id="W=U.sTD=mkulVuN9l(aP" intask="true">
-                            <field name="STATE">OFF</field>
-                        </block>
-                    </statement>
-                </block>
-            </instance>
-        </block_set>
-    </program>
-    <config>
-        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="3.1" description="" tags="">
-            <instance x="1088" y="-1259">
-                <block type="robConf_digitalin" id="avYpNgU+nh7ro//zlU/[" intask="true">
-                    <field name="NAME">P0_D</field>
-                    <field name="PIN1">0</field>
-                </block>
-            </instance>
-            <instance x="1281" y="-1258">
-                <block type="robConf_analogin" id="7l?{cn;g_Tw#Y[6oum=A" intask="true">
-                    <field name="NAME">P1_A</field>
-                    <field name="PIN1">1</field>
-                </block>
-            </instance>
-            <instance x="1085" y="-1191">
-                <block type="robConf_digitalin" id="gb}3l|%g})okb7G,K|z7" intask="true">
-                    <field name="NAME">P3_D</field>
-                    <field name="PIN1">3</field>
-                </block>
-            </instance>
-            <instance x="1281" y="-1191">
-                <block type="robConf_analogin" id="uTyM},fZeH4-V~t#]=Ls" intask="true">
-                    <field name="NAME">P2_A</field>
-                    <field name="PIN1">2</field>
-                </block>
-            </instance>
-            <instance x="1085" y="-1127">
-                <block type="robConf_digitalin" id="zQG9/8z4XXeI=P..(^d," intask="true">
-                    <field name="NAME">A0_D</field>
-                    <field name="PIN1">4</field>
-                </block>
-            </instance>
-            <instance x="1280" y="-1126">
-                <block type="robConf_analogin" id="mJ)0*l2._dT=m2bHZI{_" intask="true">
-                    <field name="NAME">A1_A</field>
-                    <field name="PIN1">5</field>
-                </block>
-            </instance>
-            <instance x="1076" y="-1065">
-                <block type="robConf_digitalin" id="O_6RIIQvInoSFKevFC;9" intask="true">
-                    <field name="NAME">C07_D</field>
-                    <field name="PIN1">C07</field>
-                </block>
-            </instance>
-            <instance x="1279" y="-1064">
-                <block type="robConf_analogin" id="ErNqNhj+,:./7JVk6_Za" intask="true">
-                    <field name="NAME">C04_A</field>
-                    <field name="PIN1">C04</field>
-                </block>
-            </instance>
-            <instance x="1077" y="-1000">
-                <block type="robConf_digitalin" id="tFM)JuDAg+GqGiFkKkrA" intask="true">
-                    <field name="NAME">C08_D</field>
-                    <field name="PIN1">C08</field>
-                </block>
-            </instance>
-            <instance x="1277" y="-1001">
-                <block type="robConf_analogin" id="q/[/j/T!pD`}brZ5)M``" intask="true">
-                    <field name="NAME">C05_A</field>
-                    <field name="PIN1">C05</field>
-                </block>
-            </instance>
-            <instance x="1076" y="-937">
-                <block type="robConf_digitalin" id="7R[g?+y6oH0tJ?4TZ`~*" intask="true">
-                    <field name="NAME">C09_D</field>
-                    <field name="PIN1">C09</field>
-                </block>
-            </instance>
-            <instance x="1278" y="-937">
-                <block type="robConf_analogin" id="bUHR0h-S*fCM%]SJ?yXP" intask="true">
-                    <field name="NAME">C06_A</field>
-                    <field name="PIN1">C06</field>
-                </block>
-            </instance>
-            <instance x="1072" y="-875">
-                <block type="robConf_digitalin" id="cZc/-U?`zKX.^~9LUsNl" intask="true">
-                    <field name="NAME">C10_D</field>
-                    <field name="PIN1">C10</field>
-                </block>
-            </instance>
-            <instance x="1274" y="-874">
-                <block type="robConf_analogin" id="hBtJ3wmT=/+ydi,^9g@z" intask="true">
-                    <field name="NAME">C16_A</field>
-                    <field name="PIN1">C16</field>
-                </block>
-            </instance>
-            <instance x="1073" y="-805">
-                <block type="robConf_digitalin" id="Rd.OsId-zsvr0UOy)lgE" intask="true">
-                    <field name="NAME">C11_D</field>
-                    <field name="PIN1">C11</field>
-                </block>
-            </instance>
-            <instance x="1274" y="-805">
-                <block type="robConf_analogin" id="5B^.p-:JZ68TP7B:AHF6" intask="true">
-                    <field name="NAME">C17_A</field>
-                    <field name="PIN1">C17</field>
-                </block>
-            </instance>
-            <instance x="1077" y="-731">
-                <block type="robConf_digitalin" id="mU9oP9:7+K6~a!hlGO3U" intask="true">
-                    <field name="NAME">C12_D</field>
-                    <field name="PIN1">C12</field>
-                </block>
-            </instance>
-            <instance x="226" y="-649">
-                <block type="robConf_key" id="Kbp:=x@gw@n.b~NH|1|e" intask="true">
-                    <field name="NAME">A</field>
-                    <field name="PIN1">A</field>
-                </block>
-            </instance>
-            <instance x="1081" y="-663">
-                <block type="robConf_digitalin" id="cLk8il}WJPS.eZejejNk" intask="true">
-                    <field name="NAME">C18_D</field>
-                    <field name="PIN1">C18</field>
-                </block>
-            </instance>
-            <instance x="213" y="-577">
-                <block type="robConf_light" id="9Ktt(7_4+XmKC0]5Zha?" intask="true">
-                    <field name="NAME">L</field>
-                </block>
-            </instance>
-            <instance x="1085" y="-593">
-                <block type="robConf_digitalin" id="_f8/X1SggkAc]!t/e/S6" intask="true">
-                    <field name="NAME">C19_D</field>
-                    <field name="PIN1">C19</field>
-                </block>
-            </instance>
-            <instance x="225" y="-540">
-                <block type="robConf_key" id="~wk*JZQvB.fj=I`N#NWp" intask="true">
-                    <field name="NAME">B</field>
-                    <field name="PIN1">B</field>
-                </block>
-            </instance>
-            <instance x="416" y="-517">
-                <block type="robConf_robot" id="robot" intask="true">
-                    <field name="ROBOT">undefined</field>
-                </block>
-            </instance>
-            <instance x="221" y="-471">
-                <block type="robConf_compass" id="O%Oi0Tq`hGEvrgHGPYY=" intask="true">
-                    <field name="NAME">C</field>
-                </block>
-            </instance>
-            <instance x="220" y="-428">
-                <block type="robConf_sound" id="e:4V0FcDx%9,.7xO,Ns@" intask="true">
-                    <field name="NAME">M</field>
-                </block>
-            </instance>
-            <instance x="225" y="-379">
-                <block type="robConf_temperature" id="0y].dnS)P)~Jjzeu3/0C" intask="true">
-                    <field name="NAME">TM</field>
-                </block>
-            </instance>
-            <instance x="221" y="-331">
-                <block type="robConf_gyro" id="lIT?C5y|(7FWCQIUn~pc" intask="true">
-                    <field name="NAME">G</field>
-                </block>
-            </instance>
-            <instance x="220" y="-290">
-                <block type="robConf_accelerometer" id="#(ufvG,s^FcqI,aFn/A{" intask="true">
-                    <field name="NAME">Acc</field>
-                </block>
-            </instance>
-            <instance x="226" y="-237">
-                <block type="robConf_rgbled" id="lgi%C3,J!smR:eP0aal_" intask="true">
-                    <field name="NAME">R</field>
-                </block>
-            </instance>
-            <instance x="227" y="-195">
-                <block type="robConf_buzzer" id="}%d2_68IJd*7Oy{qrMR," intask="true">
-                    <field name="NAME">BZ</field>
-                </block>
-            </instance>
-        </block_set>
-    </config>
-</export>
+<export xmlns="http://de.fhg.iais.roberta.blockly"><program><block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="3.1" description="" tags=""><instance x="-487" y="-46"><block type="robControls_start" id="SRhyqr`97V.~KiRhwz2?" intask="true" deletable="false"><mutation declare="true"></mutation><field name="DEBUG"></field><data>{"learningRate":0.03,"regularizationRate":0,"noise":0,"batchSize":10,"discretize":false,"percTrainData":50,"activationKey":"linear","activation":{},"regularization":null,"initUntil":null,"collectStats":false,"numHiddenLayers":0,"networkShape":[],"weights":[[["1"]],[[]]],"biases":[["0"],["0"]],"precision":"2","weightArcMaxSize":8,"weightSuppressMultOp":true,"inputs":["n1"],"outputs":["n2"],"hiddenNeurons":[]}</data><statement name="ST"><block type="robGlobalVariables_declare" id="8p#^SLp?EU)P#Ze?#6Zm" intask="true" deletable="false" movable="false"><mutation next="true" declaration_type="Number"></mutation><field name="VAR">off</field><field name="TYPE">Number</field><value name="VALUE"><block type="math_number" id="4hD=zA4RwS/05kN,-,RV" intask="true"><field name="NUM">0</field></block></value></block><block type="robGlobalVariables_declare" id="u~}hq88Tb(eQwCUA{6!_" intask="true" deletable="false" movable="false"><mutation next="true" declaration_type="Number"></mutation><field name="VAR">on</field><field name="TYPE">Number</field><value name="VALUE"><block type="math_number" id="y.dwLo*NS0Q3p0y%pWM;" intask="true"><field name="NUM">1</field></block></value></block><block type="robGlobalVariables_declare" id=".e)/K9xM%7/N0pLiAC0W" intask="true" deletable="false" movable="false"><mutation next="false" declaration_type="Number"></mutation><field name="VAR">analogon</field><field name="TYPE">Number</field><value name="VALUE"><block type="math_number" id="lf(~.AZGdxnN.5?/.*Zb" intask="true"><field name="NUM">255</field></block></value></block></statement></block><block type="robProcedures_callnoreturn" id="r*mhR,IT`4X5LlQT4:h)" intask="true"><mutation name="pin"></mutation></block></instance><instance x="-92" y="-54"><block type="robProcedures_defnoreturn" id="ryY`}AVmaT1A1;cV{*-." intask="true"><mutation declare="false"></mutation><field name="NAME">pin</field><statement name="STACK"><block type="mbedActions_write_to_pin" id="o/8BqajXwx{GRqxVGyOt" intask="true"><mutation protocol="ANALOG"></mutation><field name="VALUETYPE">ANALOG</field><field name="PIN">P1_A</field><value name="VALUE"><block type="variables_get" id="[?jnrVBc/XR8!@7=Mo/u" intask="true"><mutation datatype="Number"></mutation><field name="VAR">analogon</field></block></value></block><block type="robProcedures_callnoreturn" id="%)k);6z9S=M@vdOm):IM" intask="true"><mutation name="wait"></mutation></block><block type="mbedActions_write_to_pin" id="FRUCnxY6GIP[n+sw3o[y" intask="true"><mutation protocol="ANALOG"></mutation><field name="VALUETYPE">ANALOG</field><field name="PIN">P1_A</field><value name="VALUE"><block type="variables_get" id="(ofK5%M^;-D!u~,u~sNE" intask="true"><mutation datatype="Number"></mutation><field name="VAR">analogon</field></block></value></block><block type="robProcedures_callnoreturn" id="]_62mkUAIZII7Rk^?4k[" intask="true"><mutation name="wait"></mutation></block><block type="mbedActions_write_to_pin" id="?Uhu#FhLG4H-TS(jT=P8" intask="true"><mutation protocol="ANALOG"></mutation><field name="VALUETYPE">ANALOG</field><field name="PIN">P2_A</field><value name="VALUE"><block type="variables_get" id="S+|T#/pfC/DuR77AvW?a" intask="true"><mutation datatype="Number"></mutation><field name="VAR">analogon</field></block></value></block><block type="robProcedures_callnoreturn" id="QQT07sx^d)~PoCAjc_5d" intask="true"><mutation name="wait"></mutation></block><block type="mbedActions_write_to_pin" id="1dku-X9nCrY.vL+S#PJc" intask="true"><mutation protocol="ANALOG"></mutation><field name="VALUETYPE">ANALOG</field><field name="PIN">P2_A</field><value name="VALUE"><block type="variables_get" id="Xt*UFuynN0s2(mC,ocQY" intask="true"><mutation datatype="Number"></mutation><field name="VAR">off</field></block></value></block><block type="robProcedures_callnoreturn" id="U!{{8:O`nd]N21^}!,9h" intask="true"><mutation name="wait"></mutation></block><block type="mbedActions_write_to_pin" id="`;5EIr:p*Jfd1/yQxR1*" intask="true"><mutation protocol="ANALOG"></mutation><field name="VALUETYPE">ANALOG</field><field name="PIN">A1_A</field><value name="VALUE"><block type="variables_get" id="Hn5mnaoj7lg^2wu47j}~" intask="true"><mutation datatype="Number"></mutation><field name="VAR">analogon</field></block></value></block><block type="robProcedures_callnoreturn" id="0z}ksAu9U%HEAH)ImojM" intask="true"><mutation name="wait"></mutation></block><block type="mbedActions_write_to_pin" id="Jaij|=6[?U1XnS07a-7Q" intask="true"><mutation protocol="ANALOG"></mutation><field name="VALUETYPE">ANALOG</field><field name="PIN">A1_A</field><value name="VALUE"><block type="variables_get" id="A5?SOR^x4r|05eC9Q[e;" intask="true"><mutation datatype="Number"></mutation><field name="VAR">off</field></block></value></block><block type="robProcedures_callnoreturn" id="P:PHTZ]YqiUeXcv;Yy=A" intask="true"><mutation name="wait"></mutation></block><block type="mbedActions_write_to_pin" id="`@2Ik1Q+16=NE2MP`qDk" intask="true"><mutation protocol="ANALOG"></mutation><field name="VALUETYPE">ANALOG</field><field name="PIN">C04_A</field><value name="VALUE"><block type="variables_get" id="dx:lDDf(]0BE-(2::L9{" intask="true"><mutation datatype="Number"></mutation><field name="VAR">analogon</field></block></value></block><block type="robProcedures_callnoreturn" id="cx_Ex=iGfOpU_|]CO?AE" intask="true"><mutation name="wait"></mutation></block><block type="mbedActions_write_to_pin" id="Pm*o|bykmhL#6`/gQ20W" intask="true"><mutation protocol="ANALOG"></mutation><field name="VALUETYPE">ANALOG</field><field name="PIN">C04_A</field><value name="VALUE"><block type="variables_get" id="E:|NW9HQDis;?KOrSn3r" intask="true"><mutation datatype="Number"></mutation><field name="VAR">off</field></block></value></block><block type="robProcedures_callnoreturn" id="j?Ep`eKv=[1GL!gt]jrG" intask="true"><mutation name="wait"></mutation></block><block type="mbedActions_write_to_pin" id="q2IQk6aW=d/7%{=aif-C" intask="true"><mutation protocol="ANALOG"></mutation><field name="VALUETYPE">ANALOG</field><field name="PIN">C05_A</field><value name="VALUE"><block type="variables_get" id="3||8uwd*O)=ILQ[V54Bj" intask="true"><mutation datatype="Number"></mutation><field name="VAR">analogon</field></block></value></block><block type="robProcedures_callnoreturn" id="3wv8cdOtFNq5/3Ep7^ta" intask="true"><mutation name="wait"></mutation></block><block type="mbedActions_write_to_pin" id="T-v1CCQ;{H)Ih`9p*#[t" intask="true"><mutation protocol="ANALOG"></mutation><field name="VALUETYPE">ANALOG</field><field name="PIN">C05_A</field><value name="VALUE"><block type="variables_get" id="tGv61gd|pZ^8B0p*Q*GG" intask="true"><mutation datatype="Number"></mutation><field name="VAR">off</field></block></value></block><block type="robProcedures_callnoreturn" id="Su9pK#!xe^dJAoJ)::CR" intask="true"><mutation name="wait"></mutation></block><block type="mbedActions_write_to_pin" id="q/Yi!eleyQ`hF7aA6Qb!" intask="true"><mutation protocol="ANALOG"></mutation><field name="VALUETYPE">ANALOG</field><field name="PIN">C06_A</field><value name="VALUE"><block type="variables_get" id="}k@^nd^O/fzlCZT{@3+y" intask="true"><mutation datatype="Number"></mutation><field name="VAR">analogon</field></block></value></block><block type="robProcedures_callnoreturn" id="ca?2Xeev.4hvSF@)R2O#" intask="true"><mutation name="wait"></mutation></block><block type="mbedActions_write_to_pin" id="*N+,hd!%#}.n({3:[uT*" intask="true"><mutation protocol="ANALOG"></mutation><field name="VALUETYPE">ANALOG</field><field name="PIN">C06_A</field><value name="VALUE"><block type="variables_get" id="Gy_5}FU-=H`Jh+T2lc2#" intask="true"><mutation datatype="Number"></mutation><field name="VAR">off</field></block></value></block><block type="robProcedures_callnoreturn" id="la{erTbzY[tG*fw}EZF(" intask="true"><mutation name="wait"></mutation></block><block type="mbedActions_write_to_pin" id="Q1_#k(t+ePMl`T1_hu9a" intask="true"><mutation protocol="ANALOG"></mutation><field name="VALUETYPE">ANALOG</field><field name="PIN">C16_A</field><value name="VALUE"><block type="variables_get" id="oIEIeE#pQaQ-F:mC(_)!" intask="true"><mutation datatype="Number"></mutation><field name="VAR">analogon</field></block></value></block><block type="robProcedures_callnoreturn" id="~00b2m7-~e4Yd=D:U#7w" intask="true"><mutation name="wait"></mutation></block><block type="mbedActions_write_to_pin" id="Iqm8L}Wr7Kx%8mJ7O;C%" intask="true"><mutation protocol="ANALOG"></mutation><field name="VALUETYPE">ANALOG</field><field name="PIN">C16_A</field><value name="VALUE"><block type="variables_get" id="kxJ4qJ39BIoBCm1(]c#[" intask="true"><mutation datatype="Number"></mutation><field name="VAR">off</field></block></value></block><block type="robProcedures_callnoreturn" id="]3#%0F=I`?#~cO0;CBOJ" intask="true"><mutation name="wait"></mutation></block><block type="mbedActions_write_to_pin" id="+*UG5O0~2cm*ii9aNScq" intask="true"><mutation protocol="ANALOG"></mutation><field name="VALUETYPE">ANALOG</field><field name="PIN">C17_A</field><value name="VALUE"><block type="variables_get" id="+iZ[,^vZcn60vXsAzE=S" intask="true"><mutation datatype="Number"></mutation><field name="VAR">analogon</field></block></value></block><block type="robProcedures_callnoreturn" id="}!r/-8EflchX;E:Vf1zk" intask="true"><mutation name="wait"></mutation></block><block type="mbedActions_write_to_pin" id="S]GJ.*r]VT7]SKq)LbTY" intask="true"><mutation protocol="ANALOG"></mutation><field name="VALUETYPE">ANALOG</field><field name="PIN">C17_A</field><value name="VALUE"><block type="variables_get" id="v-QI61WT^rl0:T}@ilUo" intask="true"><mutation datatype="Number"></mutation><field name="VAR">off</field></block></value></block><block type="robProcedures_callnoreturn" id="7(kC;LeFgb5HWHOq:@v1" intask="true"><mutation name="wait"></mutation></block><block type="mbedActions_write_to_pin" id="yYx(%{=d~|qvbo?3{95Y" intask="true"><mutation protocol="DIGITAL"></mutation><field name="VALUETYPE">DIGITAL</field><field name="PIN">P0_D</field><value name="VALUE"><block type="variables_get" id="acCrkbc%o_WA(lDs2ywr" intask="true"><mutation datatype="Number"></mutation><field name="VAR">on</field></block></value></block><block type="robProcedures_callnoreturn" id="U;96`d!4/iP]9np6WlVO" intask="true"><mutation name="wait"></mutation></block><block type="mbedActions_write_to_pin" id="I7?cGEn46y|tsRZ~fAZp" intask="true"><mutation protocol="DIGITAL"></mutation><field name="VALUETYPE">DIGITAL</field><field name="PIN">P0_D</field><value name="VALUE"><block type="variables_get" id="|fneA(u(k?2u0q4)Bl=)" intask="true"><mutation datatype="Number"></mutation><field name="VAR">off</field></block></value></block><block type="robProcedures_callnoreturn" id="`GPn[:nWkX}DzXeYP+6~" intask="true"><mutation name="wait"></mutation></block><block type="mbedActions_write_to_pin" id="dVv^O*jeM#rNbGvE3Fd6" intask="true"><mutation protocol="DIGITAL"></mutation><field name="VALUETYPE">DIGITAL</field><field name="PIN">P3_D</field><value name="VALUE"><block type="variables_get" id="2D_FdC~Tk[(JBD)43./]" intask="true"><mutation datatype="Number"></mutation><field name="VAR">on</field></block></value></block><block type="robProcedures_callnoreturn" id="t,76*_iO#GNDUxniXMC/" intask="true"><mutation name="wait"></mutation></block><block type="mbedActions_write_to_pin" id="wat(+UO/,ThY,z_r0arZ" intask="true"><mutation protocol="DIGITAL"></mutation><field name="VALUETYPE">DIGITAL</field><field name="PIN">P3_D</field><value name="VALUE"><block type="variables_get" id="Gx=8N3(u*_dkrs3`[HJM" intask="true"><mutation datatype="Number"></mutation><field name="VAR">off</field></block></value></block><block type="robProcedures_callnoreturn" id="haqZV*o=2T](9.at]Z5f" intask="true"><mutation name="wait"></mutation></block><block type="mbedActions_write_to_pin" id="P}1qHkLvmA6yv6gu)%kq" intask="true"><mutation protocol="DIGITAL"></mutation><field name="VALUETYPE">DIGITAL</field><field name="PIN">A0_D</field><value name="VALUE"><block type="variables_get" id="H#,YCi!bgF;(*+#lIveQ" intask="true"><mutation datatype="Number"></mutation><field name="VAR">on</field></block></value></block><block type="robProcedures_callnoreturn" id="8yOPMU_sZ|}mMf%.#h8)" intask="true"><mutation name="wait"></mutation></block><block type="mbedActions_write_to_pin" id="Cst*_3?zPC7l%gNJT3/X" intask="true"><mutation protocol="DIGITAL"></mutation><field name="VALUETYPE">DIGITAL</field><field name="PIN">A0_D</field><value name="VALUE"><block type="variables_get" id="r9vD8Q[ynrk)?lz^~=3%" intask="true"><mutation datatype="Number"></mutation><field name="VAR">off</field></block></value></block><block type="robProcedures_callnoreturn" id="NV.D=?3nRvlR;bG%e(5Z" intask="true"><mutation name="wait"></mutation></block><block type="mbedActions_write_to_pin" id="Du!wxNQ/7m_85T1Jf#[#" intask="true"><mutation protocol="DIGITAL"></mutation><field name="VALUETYPE">DIGITAL</field><field name="PIN">C07_D</field><value name="VALUE"><block type="variables_get" id="~{,)BLa~?0%zI2R8P3hU" intask="true"><mutation datatype="Number"></mutation><field name="VAR">on</field></block></value></block><block type="robProcedures_callnoreturn" id="EiLF{^VE+}a!9V+)~JTq" intask="true"><mutation name="wait"></mutation></block><block type="mbedActions_write_to_pin" id="/;9EsIE3qul)m)K]~g;h" intask="true"><mutation protocol="DIGITAL"></mutation><field name="VALUETYPE">DIGITAL</field><field name="PIN">C07_D</field><value name="VALUE"><block type="variables_get" id="1p=nj8]]1**T;:aNXl8Z" intask="true"><mutation datatype="Number"></mutation><field name="VAR">off</field></block></value></block><block type="robProcedures_callnoreturn" id="_61RH_hKy)KwW3cbjHTO" intask="true"><mutation name="wait"></mutation></block><block type="mbedActions_write_to_pin" id="}*~0|VQ|L}c3akSF{;Wo" intask="true"><mutation protocol="DIGITAL"></mutation><field name="VALUETYPE">DIGITAL</field><field name="PIN">C08_D</field><value name="VALUE"><block type="variables_get" id="I87vG_DRRcr3/j~pW!zh" intask="true"><mutation datatype="Number"></mutation><field name="VAR">on</field></block></value></block><block type="robProcedures_callnoreturn" id="?L~:wo/JC)Sdl+%vGl:)" intask="true"><mutation name="wait"></mutation></block><block type="mbedActions_write_to_pin" id="FGX^IC`?|VtI`Y:Y`#zL" intask="true"><mutation protocol="DIGITAL"></mutation><field name="VALUETYPE">DIGITAL</field><field name="PIN">C08_D</field><value name="VALUE"><block type="variables_get" id="PIR[vk!_`#E|CU!q4cFL" intask="true"><mutation datatype="Number"></mutation><field name="VAR">off</field></block></value></block><block type="robProcedures_callnoreturn" id="o|zK((e`o%4Ag^%Bqvgh" intask="true"><mutation name="wait"></mutation></block><block type="mbedActions_write_to_pin" id="{g~d[%r^1HVG`xhDR9~;" intask="true"><mutation protocol="DIGITAL"></mutation><field name="VALUETYPE">DIGITAL</field><field name="PIN">C09_D</field><value name="VALUE"><block type="variables_get" id="GVCOq#uD?@Z]`M#Wg6HH" intask="true"><mutation datatype="Number"></mutation><field name="VAR">on</field></block></value></block><block type="robProcedures_callnoreturn" id="P/rMT?EPYY)?ph7/a]bV" intask="true"><mutation name="wait"></mutation></block><block type="mbedActions_write_to_pin" id="2zgQLIBkl8_%vM[PhY29" intask="true"><mutation protocol="DIGITAL"></mutation><field name="VALUETYPE">DIGITAL</field><field name="PIN">C09_D</field><value name="VALUE"><block type="variables_get" id="6_TG{hxh|E!AYRwbQnhb" intask="true"><mutation datatype="Number"></mutation><field name="VAR">off</field></block></value></block><block type="robProcedures_callnoreturn" id="`l}OGZD^.24eg9a^l+5j" intask="true"><mutation name="wait"></mutation></block><block type="mbedActions_write_to_pin" id="q!j5A(2jG[zI9!bh)CjA" intask="true"><mutation protocol="DIGITAL"></mutation><field name="VALUETYPE">DIGITAL</field><field name="PIN">C10_D</field><value name="VALUE"><block type="variables_get" id=",@qf.iv)@%~M[=.pvFj/" intask="true"><mutation datatype="Number"></mutation><field name="VAR">on</field></block></value></block><block type="robProcedures_callnoreturn" id="vhjXPazl29ze23Gzx/H;" intask="true"><mutation name="wait"></mutation></block><block type="mbedActions_write_to_pin" id="6cl4-VUkajj{1Bj/C_#s" intask="true"><mutation protocol="DIGITAL"></mutation><field name="VALUETYPE">DIGITAL</field><field name="PIN">C10_D</field><value name="VALUE"><block type="variables_get" id="5gVU#~/vC)|e;kG8sL,1" intask="true"><mutation datatype="Number"></mutation><field name="VAR">off</field></block></value></block><block type="robProcedures_callnoreturn" id="i0R;jm:(+j*WQ(-RLp1;" intask="true"><mutation name="wait"></mutation></block><block type="mbedActions_write_to_pin" id="muH`@w#oFTP1Yeijk#E!" intask="true"><mutation protocol="DIGITAL"></mutation><field name="VALUETYPE">DIGITAL</field><field name="PIN">C11_D</field><value name="VALUE"><block type="variables_get" id="+X`4%AY?2k,Po*BR@h+?" intask="true"><mutation datatype="Number"></mutation><field name="VAR">on</field></block></value></block><block type="robProcedures_callnoreturn" id="I}Ua*}4(=I1bT+jgN9r-" intask="true"><mutation name="wait"></mutation></block><block type="mbedActions_write_to_pin" id="xHT/2/|WL+wzWCQ?V/,l" intask="true"><mutation protocol="DIGITAL"></mutation><field name="VALUETYPE">DIGITAL</field><field name="PIN">C11_D</field><value name="VALUE"><block type="variables_get" id="Am~9N;!AdhI_7_P#pv,^" intask="true"><mutation datatype="Number"></mutation><field name="VAR">off</field></block></value></block><block type="robProcedures_callnoreturn" id="rmcd!l.L{Ug}tam?!kz," intask="true"><mutation name="wait"></mutation></block><block type="mbedActions_write_to_pin" id="[1?tU]~miu5AWg*2:)W@" intask="true"><mutation protocol="DIGITAL"></mutation><field name="VALUETYPE">DIGITAL</field><field name="PIN">C12_D</field><value name="VALUE"><block type="variables_get" id="[s4km?bX~V6]b?pc]s#g" intask="true"><mutation datatype="Number"></mutation><field name="VAR">on</field></block></value></block><block type="robProcedures_callnoreturn" id="J3gfN7C{~:QwQUnzJSx3" intask="true"><mutation name="wait"></mutation></block><block type="mbedActions_write_to_pin" id="GeC)?!cgTN8;|lBmDHta" intask="true"><mutation protocol="DIGITAL"></mutation><field name="VALUETYPE">DIGITAL</field><field name="PIN">C12_D</field><value name="VALUE"><block type="variables_get" id="T9m5jgd,hw%0/zw1Ng|`" intask="true"><mutation datatype="Number"></mutation><field name="VAR">off</field></block></value></block><block type="robProcedures_callnoreturn" id="oGi{`#aV3bLBq];KVi0t" intask="true"><mutation name="wait"></mutation></block><block type="mbedActions_write_to_pin" id="Dmg2JYy-J^FWFm.o/Tax" intask="true"><mutation protocol="DIGITAL"></mutation><field name="VALUETYPE">DIGITAL</field><field name="PIN">C18_D</field><value name="VALUE"><block type="variables_get" id=",EV28Q?kgW.~0s^1A4qt" intask="true"><mutation datatype="Number"></mutation><field name="VAR">on</field></block></value></block><block type="robProcedures_callnoreturn" id="~2UVjmegIlTA_X{emSY*" intask="true"><mutation name="wait"></mutation></block><block type="mbedActions_write_to_pin" id="t/sQ;:gNXy]7vZW9Y`H?" intask="true"><mutation protocol="DIGITAL"></mutation><field name="VALUETYPE">DIGITAL</field><field name="PIN">C18_D</field><value name="VALUE"><block type="variables_get" id="j|^H3[X#~WOd1^t*js`^" intask="true"><mutation datatype="Number"></mutation><field name="VAR">off</field></block></value></block><block type="robProcedures_callnoreturn" id="gGwoBxqi9kyX.4-*[,Y|" intask="true"><mutation name="wait"></mutation></block><block type="mbedActions_write_to_pin" id="H2?Fq)PA*)3{iA^LV5a#" intask="true"><mutation protocol="DIGITAL"></mutation><field name="VALUETYPE">DIGITAL</field><field name="PIN">C19_D</field><value name="VALUE"><block type="variables_get" id="/inh!dz0}NL4:uK1.e))" intask="true"><mutation datatype="Number"></mutation><field name="VAR">on</field></block></value></block><block type="robProcedures_callnoreturn" id="Q-1tNbGKqR~#R!4}kPh#" intask="true"><mutation name="wait"></mutation></block><block type="mbedActions_write_to_pin" id="U3pF(=/B!!)@k8daxx-[" intask="true"><mutation protocol="DIGITAL"></mutation><field name="VALUETYPE">DIGITAL</field><field name="PIN">C19_D</field><value name="VALUE"><block type="variables_get" id="yB^GRJ2I9C==;T[PNY=S" intask="true"><mutation datatype="Number"></mutation><field name="VAR">off</field></block></value></block><block type="robProcedures_callnoreturn" id=",i03z/xYX-5,Lu5V/ti;" intask="true"><mutation name="wait"></mutation></block><block type="mbedActions_switch_led_matrix" id="9+YJ^z2M}*Wm_`LdH,5*" intask="true"><field name="STATE">ON</field></block><block type="robProcedures_callnoreturn" id="r~OIrP8odkw*vD}kzsO[" intask="true"><mutation name="wait"></mutation></block><block type="mbedActions_switch_led_matrix" id="W=U.sTD=mkulVuN9l(aP" intask="true"><field name="STATE">OFF</field></block></statement></block></instance><instance x="303" y="-56"><block type="robProcedures_defnoreturn" id="yK`DTM]3i/tsbK:Ecla@" intask="true"><mutation declare="false"></mutation><field name="NAME">wait</field><statement name="STACK"><block type="robControls_wait_for" id="[ro-0(~XEti`%9F=O1H9" intask="true"><value name="WAIT0"><block type="logic_compare" id="n6Ftk[fF-fRNR5zY`T,+" intask="true"><field name="OP">EQ</field><value name="A"><block type="robSensors_getSample" id="pPTe2x(/9*?Z_kVf%U8)" intask="true"><mutation input="KEY_PRESSED"></mutation><field name="SENSORTYPE">KEY_PRESSED</field><field name="SENSORPORT">A</field><field name="SLOT"></field></block></value><value name="B"><block type="logic_boolean" id="/N7A=dfp^vIkas[xa+Al" intask="true"><field name="BOOL">TRUE</field></block></value></block></value></block><block type="robControls_wait_time" id="SR3WDGW_zjy2a!C4ht^4" intask="true"><value name="WAIT"><block type="math_number" id="gA5tOq/A-_DlV]PcLl^." intask="true"><field name="NUM">800</field></block></value></block></statement></block></instance></block_set></program><config><block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="3.1" description="" tags="">
+    <instance x="1088" y="-1259">
+        <block type="robConf_digitalin" id="avYpNgU+nh7ro//zlU/[" intask="true">
+            <field name="NAME">P0_D</field>
+            <field name="PIN1">0</field>
+        </block>
+    </instance>
+    <instance x="1281" y="-1258">
+        <block type="robConf_analogin" id="7l?{cn;g_Tw#Y[6oum=A" intask="true">
+            <field name="NAME">P1_A</field>
+            <field name="PIN1">1</field>
+        </block>
+    </instance>
+    <instance x="1085" y="-1191">
+        <block type="robConf_digitalin" id="gb}3l|%g})okb7G,K|z7" intask="true">
+            <field name="NAME">P3_D</field>
+            <field name="PIN1">3</field>
+        </block>
+    </instance>
+    <instance x="1281" y="-1191">
+        <block type="robConf_analogin" id="uTyM},fZeH4-V~t#]=Ls" intask="true">
+            <field name="NAME">P2_A</field>
+            <field name="PIN1">2</field>
+        </block>
+    </instance>
+    <instance x="1085" y="-1127">
+        <block type="robConf_digitalin" id="zQG9/8z4XXeI=P..(^d," intask="true">
+            <field name="NAME">A0_D</field>
+            <field name="PIN1">4</field>
+        </block>
+    </instance>
+    <instance x="1280" y="-1126">
+        <block type="robConf_analogin" id="mJ)0*l2._dT=m2bHZI{_" intask="true">
+            <field name="NAME">A1_A</field>
+            <field name="PIN1">5</field>
+        </block>
+    </instance>
+    <instance x="1076" y="-1065">
+        <block type="robConf_digitalin" id="O_6RIIQvInoSFKevFC;9" intask="true">
+            <field name="NAME">C07_D</field>
+            <field name="PIN1">C07</field>
+        </block>
+    </instance>
+    <instance x="1279" y="-1064">
+        <block type="robConf_analogin" id="ErNqNhj+,:./7JVk6_Za" intask="true">
+            <field name="NAME">C04_A</field>
+            <field name="PIN1">C04</field>
+        </block>
+    </instance>
+    <instance x="1077" y="-1000">
+        <block type="robConf_digitalin" id="tFM)JuDAg+GqGiFkKkrA" intask="true">
+            <field name="NAME">C08_D</field>
+            <field name="PIN1">C08</field>
+        </block>
+    </instance>
+    <instance x="1277" y="-1001">
+        <block type="robConf_analogin" id="q/[/j/T!pD`}brZ5)M``" intask="true">
+            <field name="NAME">C05_A</field>
+            <field name="PIN1">C05</field>
+        </block>
+    </instance>
+    <instance x="1076" y="-937">
+        <block type="robConf_digitalin" id="7R[g?+y6oH0tJ?4TZ`~*" intask="true">
+            <field name="NAME">C09_D</field>
+            <field name="PIN1">C09</field>
+        </block>
+    </instance>
+    <instance x="1278" y="-937">
+        <block type="robConf_analogin" id="bUHR0h-S*fCM%]SJ?yXP" intask="true">
+            <field name="NAME">C06_A</field>
+            <field name="PIN1">C06</field>
+        </block>
+    </instance>
+    <instance x="1072" y="-875">
+        <block type="robConf_digitalin" id="cZc/-U?`zKX.^~9LUsNl" intask="true">
+            <field name="NAME">C10_D</field>
+            <field name="PIN1">C10</field>
+        </block>
+    </instance>
+    <instance x="1274" y="-874">
+        <block type="robConf_analogin" id="hBtJ3wmT=/+ydi,^9g@z" intask="true">
+            <field name="NAME">C16_A</field>
+            <field name="PIN1">C16</field>
+        </block>
+    </instance>
+    <instance x="1073" y="-805">
+        <block type="robConf_digitalin" id="Rd.OsId-zsvr0UOy)lgE" intask="true">
+            <field name="NAME">C11_D</field>
+            <field name="PIN1">C11</field>
+        </block>
+    </instance>
+    <instance x="1274" y="-805">
+        <block type="robConf_analogin" id="5B^.p-:JZ68TP7B:AHF6" intask="true">
+            <field name="NAME">C17_A</field>
+            <field name="PIN1">C17</field>
+        </block>
+    </instance>
+    <instance x="1077" y="-731">
+        <block type="robConf_digitalin" id="mU9oP9:7+K6~a!hlGO3U" intask="true">
+            <field name="NAME">C12_D</field>
+            <field name="PIN1">C12</field>
+        </block>
+    </instance>
+    <instance x="226" y="-649">
+        <block type="robConf_key" id="Kbp:=x@gw@n.b~NH|1|e" intask="true">
+            <field name="NAME">A</field>
+            <field name="PIN1">A</field>
+        </block>
+    </instance>
+    <instance x="1081" y="-663">
+        <block type="robConf_digitalin" id="cLk8il}WJPS.eZejejNk" intask="true">
+            <field name="NAME">C18_D</field>
+            <field name="PIN1">C18</field>
+        </block>
+    </instance>
+    <instance x="213" y="-577">
+        <block type="robConf_light" id="9Ktt(7_4+XmKC0]5Zha?" intask="true">
+            <field name="NAME">L</field>
+        </block>
+    </instance>
+    <instance x="1085" y="-593">
+        <block type="robConf_digitalin" id="_f8/X1SggkAc]!t/e/S6" intask="true">
+            <field name="NAME">C19_D</field>
+            <field name="PIN1">C19</field>
+        </block>
+    </instance>
+    <instance x="225" y="-540">
+        <block type="robConf_key" id="~wk*JZQvB.fj=I`N#NWp" intask="true">
+            <field name="NAME">B</field>
+            <field name="PIN1">B</field>
+        </block>
+    </instance>
+    <instance x="416" y="-517">
+        <block type="robConf_robot" id="robot" intask="true">
+            <field name="ROBOT">undefined</field>
+        </block>
+    </instance>
+    <instance x="221" y="-471">
+        <block type="robConf_compass" id="O%Oi0Tq`hGEvrgHGPYY=" intask="true">
+            <field name="NAME">C</field>
+        </block>
+    </instance>
+    <instance x="220" y="-428">
+        <block type="robConf_sound" id="e:4V0FcDx%9,.7xO,Ns@" intask="true">
+            <field name="NAME">M</field>
+        </block>
+    </instance>
+    <instance x="225" y="-379">
+        <block type="robConf_temperature" id="0y].dnS)P)~Jjzeu3/0C" intask="true">
+            <field name="NAME">TM</field>
+        </block>
+    </instance>
+    <instance x="221" y="-331">
+        <block type="robConf_gyro" id="lIT?C5y|(7FWCQIUn~pc" intask="true">
+            <field name="NAME">G</field>
+        </block>
+    </instance>
+    <instance x="220" y="-290">
+        <block type="robConf_accelerometer" id="#(ufvG,s^FcqI,aFn/A{" intask="true">
+            <field name="NAME">Acc</field>
+        </block>
+    </instance>
+    <instance x="226" y="-237">
+        <block type="robConf_rgbledh" id="lgi%C3,J!smR:eP0aal_" intask="true">
+            <field name="NAME">R</field>
+        </block>
+    </instance>
+    <instance x="227" y="-195">
+        <block type="robConf_buzzer" id="}%d2_68IJd*7Oy{qrMR," intask="true">
+            <field name="NAME">BZ</field>
+        </block>
+    </instance>
+</block_set>
+</config></export>

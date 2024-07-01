@@ -73,6 +73,7 @@
     <category name="TOOLBOX_SENSOR" svg="true">
         <block type="robConf_ultrasonic"/>
         <block type="robConf_humidity"/>
+        <block type='robConf_moisture'/>
         <block type="robConf_digitalout"/>
         <block type="robConf_analogout"/>
         <block type="robConf_colourtcs3472"/>

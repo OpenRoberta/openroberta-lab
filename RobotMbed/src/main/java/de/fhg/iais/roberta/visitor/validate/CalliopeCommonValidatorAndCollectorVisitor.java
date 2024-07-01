@@ -275,11 +275,8 @@ public class CalliopeCommonValidatorAndCollectorVisitor extends MbedV2ValidatorA
             checkForZeroSpeed(motorOnAction, motorOnAction.param.getSpeed());
             requiredComponentVisited(motorOnAction, duration.getValue());
         }
-        boolean differentialDrive = checkDifferentialDrive();
         boolean callibot = addActorMaybeCallibot(motorOnAction);
-        if ( differentialDrive && !callibot ) {
-            usedMethodBuilder.addUsedMethod(CalliopeMethods.SET_BOTH_MOTORS);
-        } else if ( !callibot ) {
+        if ( !callibot ) {
             usedMethodBuilder.addUsedMethod(CalliopeMethods.SET_MOTOR);
         }
         return null;

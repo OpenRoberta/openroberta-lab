@@ -1,0 +1,57 @@
+SerialWriteAction[value: StringConst[value: Rotating through LEDs press A to continue]]
+SerialWriteAction[value: StringConst[value: Left LED RED]]
+WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [KeysSensor [A, PRESSED, - EMPTY_SLOT -]]], BoolConst[value: true]]]
+)]
+RgbLedsOnHiddenAction[colour: ColorConst[hexValue: #ff0000], slot: 0]
+SerialWriteAction[value: StringConst[value: Left LED OFF]]
+WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [KeysSensor [A, PRESSED, - EMPTY_SLOT -]]], BoolConst[value: true]]]
+)]
+RgbLedsOffHiddenAction[slot: 0]
+SerialWriteAction[value: StringConst[value: center LED RED]]
+WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [KeysSensor [A, PRESSED, - EMPTY_SLOT -]]], BoolConst[value: true]]]
+)]
+RgbLedsOnHiddenAction[colour: ColorConst[hexValue: #ff0000], slot: 1]
+SerialWriteAction[value: StringConst[value: center LED OFF]]
+WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [KeysSensor [A, PRESSED, - EMPTY_SLOT -]]], BoolConst[value: true]]]
+)]
+RgbLedsOffHiddenAction[slot: 1]
+SerialWriteAction[value: StringConst[value: right LED RED]]
+WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [KeysSensor [A, PRESSED, - EMPTY_SLOT -]]], BoolConst[value: true]]]
+)]
+RgbLedsOnHiddenAction[colour: ColorConst[hexValue: #ff0000], slot: 2]
+SerialWriteAction[value: StringConst[value: right LED OFF]]
+WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [KeysSensor [A, PRESSED, - EMPTY_SLOT -]]], BoolConst[value: true]]]
+)]
+RgbLedsOffHiddenAction[slot: 2]
+SerialWriteAction[value: StringConst[value: all LEDs RED]]
+WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [KeysSensor [A, PRESSED, - EMPTY_SLOT -]]], BoolConst[value: true]]]
+)]
+RgbLedsOnHiddenAction[colour: ColorConst[hexValue: #ff0000], slot: ALL]
+SerialWriteAction[value: StringConst[value: all LEDs OFF]]
+WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [KeysSensor [A, PRESSED, - EMPTY_SLOT -]]], BoolConst[value: true]]]
+)]
+RgbLedsOffHiddenAction[slot: ALL]
+SerialWriteAction[value: StringConst[value: right LED green]]
+WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [KeysSensor [A, PRESSED, - EMPTY_SLOT -]]], BoolConst[value: true]]]
+)]
+RgbLedsOnHiddenAction[colour: ColorConst[hexValue: #33cc00], slot: 2]
+SerialWriteAction[value: StringConst[value: left LED white]]
+WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [KeysSensor [A, PRESSED, - EMPTY_SLOT -]]], BoolConst[value: true]]]
+)]
+RgbLedsOnHiddenAction[colour: ColorConst[hexValue: #ffffff], slot: 2]
+SerialWriteAction[value: StringConst[value: centre LED black]]
+WaitStmt [
+(repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [KeysSensor [A, PRESSED, - EMPTY_SLOT -]]], BoolConst[value: true]]]
+)]
+RgbLedsOnHiddenAction[colour: ColorConst[hexValue: #000000], slot: 1]
+SerialWriteAction[value: StringConst[value: DONE]]

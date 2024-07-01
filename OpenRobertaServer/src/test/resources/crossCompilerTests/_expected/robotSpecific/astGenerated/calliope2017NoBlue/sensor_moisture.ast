@@ -1,0 +1,5 @@
+SerialWriteAction[value: StringConst[value: Moisture sensor test]]
+
+(repeat [FOREVER, BoolConst[value: true]]
+AktionStmt [SerialWriteAction[value: SensorExpr [MoistureSensor [M, VALUE, - EMPTY_SLOT -]]]]WaitTimeStmt[time: NumConst[value: 150]]
+)

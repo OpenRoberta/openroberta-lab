@@ -198,6 +198,7 @@
         <block type="robSensors_gyro_getSample"></block>
         <block type="robSensors_accelerometer_getSample"></block>
         <block type="robSensors_humidity_getSample"></block>
+        <block type='robSensors_moisture_getSample'></block>
         <block type="robSensors_ultrasonic_getSample"></block>
         <block type="robSensors_infrared_getSample"></block>
         <block type='robSensors_keyc_getSample'></block>
