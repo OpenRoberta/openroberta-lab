@@ -208,13 +208,37 @@ public class ExprlyBaseListener implements ExprlyListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterMicrobitV2SensorExpression(ExprlyParser.MicrobitV2SensorExpressionContext ctx) { }
+	@Override public void enterRobotSensorExpression(ExprlyParser.RobotSensorExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitMicrobitV2SensorExpression(ExprlyParser.MicrobitV2SensorExpressionContext ctx) { }
+	@Override public void exitRobotSensorExpression(ExprlyParser.RobotSensorExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterRobotActuatorExpression(ExprlyParser.RobotActuatorExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitRobotActuatorExpression(ExprlyParser.RobotActuatorExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterRobotSpecificExpression(ExprlyParser.RobotSpecificExpressionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitRobotSpecificExpression(ExprlyParser.RobotSpecificExpressionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -376,13 +400,13 @@ public class ExprlyBaseListener implements ExprlyListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterMicrobitV2SensorStatement(ExprlyParser.MicrobitV2SensorStatementContext ctx) { }
+	@Override public void enterRobotSensorStatement(ExprlyParser.RobotSensorStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitMicrobitV2SensorStatement(ExprlyParser.MicrobitV2SensorStatementContext ctx) { }
+	@Override public void exitRobotSensorStatement(ExprlyParser.RobotSensorStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

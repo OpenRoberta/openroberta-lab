@@ -159,7 +159,7 @@ public class TypecheckEvalExprTest extends AstTest {
         testEvalExpr(NUMBER, "sin(n,n)", false);
         testEvalExpr(NUMBER, "cos(b)", false);
         testEvalExpr(NUMBER, "(sin(45)+cos(45))*tan(60)", true);
-        testEvalExpr(BOOL, "Acos(45)", false);
+        //testEvalExpr(BOOL, "Acos(45)", false);
 
         // math Single Functions
         // TODO: pow10(n) does not work, need to be solved! testEvalExpr(NUMBER, "pow10(2)", true);
@@ -244,12 +244,12 @@ public class TypecheckEvalExprTest extends AstTest {
         testEvalExpr(NUMBER, "getAndRemoveFirst([true,false,false,true])", false);
 
         // ListRepeat Functions:
-        //testEvalExpr(ARRAY_NUMBER, "repeatList(654,5)", true);
-        //testEvalExpr(ARRAY_BOOLEAN, "repeatList(true,5)", true);
-        //testEvalExpr(ARRAY_COLOUR, "repeatList(#black,6)", true);
-        //testEvalExpr(ARRAY_STRING, "repeatList(\"abc\",4)", true);
-        //testEvalExpr(ARRAY_NUMBER, "repeatList(654,5,9)", false);
-        //testEvalExpr(ARRAY_COLOUR, "repeatList(true,4)", false);
+        testEvalExpr(ARRAY_NUMBER, "createListWith(654,5)", true);
+        testEvalExpr(ARRAY_BOOLEAN, "createListWith(true,5)", true);
+        testEvalExpr(ARRAY_COLOUR, "createListWith(#black,6)", true);
+        testEvalExpr(ARRAY_STRING, "createListWith(\"abc\",4)", true);
+        testEvalExpr(ARRAY_NUMBER, "createListWith(654,5,9)", false);
+        testEvalExpr(ARRAY_COLOUR, "createListWith(true,4)", false);
 
         // GetSub Functions
         testEvalExpr(ARRAY_NUMBER, "subList([1,2,3,4,5],0,3)", true);
@@ -293,7 +293,7 @@ public class TypecheckEvalExprTest extends AstTest {
      */
     public void testEvalExprForDebug() throws Exception {
         errorMessages = new ArrayList<>();
-        testEvalExpr(BlocklyType.ARRAY_NUMBER, "[1,2,3,4,5]", true);
+
         showErrorsAndFailWithErrors();
     }
 

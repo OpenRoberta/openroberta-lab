@@ -195,17 +195,41 @@ public interface ExprlyListener extends ParseTreeListener {
 	 */
 	void exitRobotExpr(ExprlyParser.RobotExprContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code MicrobitV2SensorExpression}
+	 * Enter a parse tree produced by the {@code RobotSensorExpression}
 	 * labeled alternative in {@link ExprlyParser#robotSensorExpr}.
 	 * @param ctx the parse tree
 	 */
-	void enterMicrobitV2SensorExpression(ExprlyParser.MicrobitV2SensorExpressionContext ctx);
+	void enterRobotSensorExpression(ExprlyParser.RobotSensorExpressionContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code MicrobitV2SensorExpression}
+	 * Exit a parse tree produced by the {@code RobotSensorExpression}
 	 * labeled alternative in {@link ExprlyParser#robotSensorExpr}.
 	 * @param ctx the parse tree
 	 */
-	void exitMicrobitV2SensorExpression(ExprlyParser.MicrobitV2SensorExpressionContext ctx);
+	void exitRobotSensorExpression(ExprlyParser.RobotSensorExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code RobotActuatorExpression}
+	 * labeled alternative in {@link ExprlyParser#robotActuatorExpr}.
+	 * @param ctx the parse tree
+	 */
+	void enterRobotActuatorExpression(ExprlyParser.RobotActuatorExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code RobotActuatorExpression}
+	 * labeled alternative in {@link ExprlyParser#robotActuatorExpr}.
+	 * @param ctx the parse tree
+	 */
+	void exitRobotActuatorExpression(ExprlyParser.RobotActuatorExpressionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code RobotSpecificExpression}
+	 * labeled alternative in {@link ExprlyParser#robotSpecificExpr}.
+	 * @param ctx the parse tree
+	 */
+	void enterRobotSpecificExpression(ExprlyParser.RobotSpecificExpressionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code RobotSpecificExpression}
+	 * labeled alternative in {@link ExprlyParser#robotSpecificExpr}.
+	 * @param ctx the parse tree
+	 */
+	void exitRobotSpecificExpression(ExprlyParser.RobotSpecificExpressionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link ExprlyParser#statementList}.
 	 * @param ctx the parse tree
@@ -359,17 +383,17 @@ public interface ExprlyListener extends ParseTreeListener {
 	 */
 	void exitRobotStmt(ExprlyParser.RobotStmtContext ctx);
 	/**
-	 * Enter a parse tree produced by the {@code MicrobitV2SensorStatement}
+	 * Enter a parse tree produced by the {@code RobotSensorStatement}
 	 * labeled alternative in {@link ExprlyParser#robotSensorStmt}.
 	 * @param ctx the parse tree
 	 */
-	void enterMicrobitV2SensorStatement(ExprlyParser.MicrobitV2SensorStatementContext ctx);
+	void enterRobotSensorStatement(ExprlyParser.RobotSensorStatementContext ctx);
 	/**
-	 * Exit a parse tree produced by the {@code MicrobitV2SensorStatement}
+	 * Exit a parse tree produced by the {@code RobotSensorStatement}
 	 * labeled alternative in {@link ExprlyParser#robotSensorStmt}.
 	 * @param ctx the parse tree
 	 */
-	void exitMicrobitV2SensorStatement(ExprlyParser.MicrobitV2SensorStatementContext ctx);
+	void exitRobotSensorStatement(ExprlyParser.RobotSensorStatementContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link ExprlyParser#program}.
 	 * @param ctx the parse tree

@@ -19,8 +19,6 @@ Var [initialEmptyBoolean] := ListCreate [BOOLEAN, BoolConst[value: true], BoolCo
 Var [item] := FunctionExpr [LengthOfListFunct[value: Var [initialEmptyBoolean]]]
 
 Var [item] := FunctionExpr [IndexOfFunct[location: FIRST, value: Var [initialEmptyBoolean], find: Var [bool]]]
-
-Var [item] := FunctionExpr [IndexOfFunct[location: FIRST, value: Var [initialEmptyBoolean], find: NullConst[]]]
 FunctionStmt [ListSetIndex [INSERT, LAST, [Var [initialEmptyBoolean], BoolConst[value: true]]]]
 
 

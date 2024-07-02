@@ -40,7 +40,6 @@ int main()
         ___initialEmptyBoolean = {true, false};
         ___item = ((int) ___initialEmptyBoolean.size());
         ___item = _getFirstOccuranceOfElement(___initialEmptyBoolean, ___bool);
-        ___item = _getFirstOccuranceOfElement(___initialEmptyBoolean, NULL);
         ___initialEmptyBoolean.push_back(true);;
     }
     if ( ___initialEmptyStrings.empty() ) {

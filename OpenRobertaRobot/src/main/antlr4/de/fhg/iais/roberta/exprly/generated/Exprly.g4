@@ -34,9 +34,10 @@ robotExpr:      robotSensorExpr
          //|      robotSpecificExpr
          ;
 
-robotSensorExpr: 'microbitV2' '.' MICROBITV2_SENSORSEXPR '(' (expr (',' expr)*)? ')'                                                 #MicrobitV2SensorExpression
-                 //| 'ev3' '.'ev3Func
-                 ;
+robotSensorExpr: ROBOT '.' SENSOR_EXPR '(' (expr (',' expr)*)? ')' # RobotSensorExpression;
+robotActuatorExpr: ROBOT '.' ACTUATOR_EXPR '(' (expr (',' expr)*)? ')' # RobotActuatorExpression;
+robotSpecificExpr: ROBOT '.' SPECIFIC_EXPR '(' (expr (',' expr)*)? ')' # RobotSpecificExpression;
+
 
 
 statementList: (stmt';')*
@@ -60,7 +61,7 @@ robotStmt:  robotSensorStmt
        //|      robotSpecificStmt
          ;
 
-robotSensorStmt: 'microbitV2' '.' MICROBITV2_SENSORSTMT                                                                              #MicrobitV2SensorStatement
+robotSensorStmt: ROBOT '.' SENSOR_STMT '(' (expr (',' expr)*)? ')' # RobotSensorStatement
                  ;
 
 
@@ -87,9 +88,8 @@ funCall  : FNAME '(' ( expr (',' expr)* )? ')'                      # Func
 		 ;
 
 // LEXER RULES
+ROBOT: 'microbitV2' | 'wedo';
 
-MICROBIT_STMT: 'showImage';
-EV3_STMT: 'moveForward';
 
 IF              :   'if';
 ELSEIF          :   'else' [ \t]+ 'if';

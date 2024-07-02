@@ -31,4 +31,26 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.antlr</groupId>
+                <artifactId>antlr4-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>antlr4</goal>
+                        </goals>
+                        <configuration>
+                            <listener>true</listener>
+                            <visitor>true</visitor>
+                            <sourceDirectory>${project.basedir}/src/main/antlr4WeDo</sourceDirectory>
+                            <outputDirectory>${project.build.directory}/generated-sources/antlr4/de/fhg/iais/roberta</outputDirectory>
+                            <libDirectory>${basedir}/../OpenRobertaRobot/src/main/antlr4/de/fhg/iais/roberta/exprly/generated</libDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>

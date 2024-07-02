@@ -105,7 +105,7 @@ public abstract class BaseVisitor<V> implements ILanguageVisitor<V> {
      * delegates visiting to the embedded expression.<br>
      * <b>TODO: rework! Cannot be final, because typechecking is not yet finalized</b>
      *
-     * @param exprStmt
+     * @param evalExpr
      * @return
      */
     public V visitEvalExpr(EvalExpr evalExpr) {
@@ -114,9 +114,9 @@ public abstract class BaseVisitor<V> implements ILanguageVisitor<V> {
 
     /**
      * delegates visiting to the embedded stmt list.<br>
-     * <b>TODO: rework! Cannot be final, because typechecking is not yet finalized</b>
+     * <b>TODO: textly - rework! Cannot be final, because typechecking is not yet finalized</b>
      *
-     * @param exprStmt
+     * @param evalStmts
      * @return
      */
     public V visitEvalStmts(EvalStmts evalStmts) {

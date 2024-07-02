@@ -207,28 +207,6 @@
 				</block>
 			</value>
 		</block>
-		<block type="variables_set" id="]?TKf+I%.aOO*I!{Q^F="
-			intask="true">
-			<mutation datatype="Number"></mutation>
-			<field name="VAR">item</field>
-			<value name="VALUE">
-				<block type="robLists_indexOf" id=")buVYIKxov7Uy)pwpcjL"
-					intask="true">
-					<field name="END">FIRST</field>
-					<value name="VALUE">
-						<block type="variables_get" id="HRLB?kmw=~2AVi3ZP-/o"
-							intask="true">
-							<mutation datatype="Array_Boolean"></mutation>
-							<field name="VAR">initialEmptyBoolean</field>
-						</block>
-					</value>
-					<value name="FIND">
-						<block type="logic_null" id="Zq)aK`-pzb9sR_XYZmzF"
-							intask="true"></block>
-					</value>
-				</block>
-			</value>
-		</block>
 		<block type="robLists_setIndex" id="m?zcv(G3?L5+=sG@sx=d"
 			intask="true">
 			<mutation at="false"></mutation>

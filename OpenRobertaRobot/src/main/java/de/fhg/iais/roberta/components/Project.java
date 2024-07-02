@@ -99,8 +99,8 @@ public final class Project {
                     instance.setY(((Location) phrase).y);
                 }
                 List<Block> blockList = phrase.ast2xml();
-                if ( blockList != null ) {
-                    instance.getBlock().addAll(phrase.ast2xml());
+                if ( blockList != null ) { // TODO: textly - ast2xml should never return null, but does (e.g. Location)
+                    instance.getBlock().addAll(blockList);
                 }
             }
         }

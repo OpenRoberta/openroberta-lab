@@ -14,14 +14,14 @@ public final class PlayFileAction extends Action {
 
     @NepoField(name = "ACTORPORT", value = BlocklyConstants.EMPTY_PORT)
     public final String port;
-    
+
     @NepoField(name = BlocklyConstants.FILE)
     public final String fileName;
 
     @NepoHide
     public final Hide hide;
-    
-    public PlayFileAction(BlocklyProperties properties,String port, String fileName, Hide hide) {
+
+    public PlayFileAction(BlocklyProperties properties, String port, String fileName, Hide hide) {
         super(properties);
         Assert.isTrue(!fileName.equals(""));
         this.fileName = fileName;

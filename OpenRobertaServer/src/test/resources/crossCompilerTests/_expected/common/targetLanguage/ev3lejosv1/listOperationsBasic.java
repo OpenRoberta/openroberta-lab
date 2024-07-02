@@ -62,7 +62,6 @@ public class NEPOprog {
             ___initialEmptyBoolean = new ArrayList<>(Arrays.<Boolean>asList(true, false));
             ___item = ___initialEmptyBoolean.size();
             ___item = ___initialEmptyBoolean.indexOf(___bool);
-            ___item = ___initialEmptyBoolean.indexOf(null);
             ___initialEmptyBoolean.add(true);;
         }
         if ( ___initialEmptyStrings.isEmpty() ) {

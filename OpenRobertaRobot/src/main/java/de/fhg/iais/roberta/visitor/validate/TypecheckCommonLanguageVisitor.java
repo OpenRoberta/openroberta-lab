@@ -201,7 +201,7 @@ public abstract class TypecheckCommonLanguageVisitor extends BaseVisitor<Blockly
     @Override
     public BlocklyType visitLengthOfListFunct(LengthOfListFunct lengthOfListFunct) {
         BlocklyType actualArrayType = lengthOfListFunct.value.accept(this);
-        Set<BlocklyType> validTypes = new HashSet<>(Arrays.asList(
+        Set<BlocklyType> validTypes = new HashSet<>(Arrays.asList( // TODO: textly - bad design, make constant
             BlocklyType.ARRAY_BOOLEAN,
             BlocklyType.ARRAY_COLOUR,
             BlocklyType.ARRAY_CONNECTION,
@@ -229,8 +229,12 @@ public abstract class TypecheckCommonLanguageVisitor extends BaseVisitor<Blockly
     @Override
     public BlocklyType visitListCreate(ListCreate listCreate) {
         BlocklyType expectedType = BlocklyType.CAPTURED_TYPE;
-        for ( Phrase phrase : listCreate.exprList.get() ) {
-            expectedType = this.typeCheckPhrase(listCreate, phrase, expectedType);
+        if ( listCreate.exprList.el.size() == 0 ) {
+            expectedType = listCreate.getBlocklyType();
+        } else {
+            for ( Phrase phrase : listCreate.exprList.get() ) {
+                expectedType = this.typeCheckPhrase(listCreate, phrase, expectedType);
+            }
         }
         return expectedType.getMatchingArrayTypeForElementType();
     }
@@ -430,7 +434,7 @@ public abstract class TypecheckCommonLanguageVisitor extends BaseVisitor<Blockly
                     }
                 }
                 break;
-            case "UNTIL":
+            case "UNTIL": // TODO: textly - rm dedundant lines
                 typeCheckPhrase(repeatStmt, repeatStmt.expr, BlocklyType.BOOLEAN);
                 break;
             case "WHILE":

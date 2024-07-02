@@ -8,8 +8,6 @@ import java.util.List;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.RuleNode;
 
-import de.fhg.iais.roberta.blockly.generated.Hide;
-import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.exprly.generated.ExprlyBaseVisitor;
 import de.fhg.iais.roberta.exprly.generated.ExprlyParser;
 import de.fhg.iais.roberta.exprly.generated.ExprlyParser.ExpressionContext;
@@ -31,7 +29,6 @@ import de.fhg.iais.roberta.syntax.lang.expr.MathConst;
 import de.fhg.iais.roberta.syntax.lang.expr.NullConst;
 import de.fhg.iais.roberta.syntax.lang.expr.NumConst;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
-import de.fhg.iais.roberta.syntax.lang.expr.SensorExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.StringConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Unary;
 import de.fhg.iais.roberta.syntax.lang.expr.Var;
@@ -64,13 +61,11 @@ import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.TernaryExpr;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
-import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.transformer.AnnotationHelper;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.typecheck.Sig;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyRegion;
-import de.fhg.iais.roberta.util.ast.ExternalSensorBean;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.syntax.FunctionNames;
 
@@ -411,7 +406,7 @@ public class TextlyVisitor<T> extends ExprlyBaseVisitor<T> {
         } else if ( "createTextWith".equals(f) ) {
             return (T) new FunctionExpr(new TextJoinFunct(list, mkInlineProperty(ctx, "robText_join")));
         }
-        Expr result = new ExprList();
+        Expr result = new EmptyExpr(BlocklyType.NOTHING);
         result.addTcError("number of parameters don't match", true);
         return (T) result;
     }
@@ -882,35 +877,6 @@ public class TextlyVisitor<T> extends ExprlyBaseVisitor<T> {
         phrases.add(statements);
         //return (T) main;
         return (T) phrases;
-    }
-
-    @Override
-    public T visitMicrobitV2SensorExpression(ExprlyParser.MicrobitV2SensorExpressionContext ctx) {
-        String sensor = ctx.MICROBITV2_SENSORSEXPR().toString();
-        ExprList parameters = new ExprList();
-        for ( ExprlyParser.ExprContext expr : ctx.expr() ) {
-            Expr param = (Expr) visit(expr);
-            parameters.addExpr(param);
-            param.setReadOnly();
-        }
-        parameters.setReadOnly();
-
-        switch ( sensor ) {
-            case "accelerometerSensor":
-
-                Hide hide = new Hide();
-                hide.setName("SENSORPORT");
-                hide.setValue("_A");
-                List<Hide> listHide = new LinkedList();
-                listHide.add(hide);
-                Mutation mutation = new Mutation();
-                mutation.setMode("VALUE");
-
-                ExternalSensorBean externalSensorBean = new ExternalSensorBean("_A", "VALUE", "X", mutation, listHide);
-                return (T) new SensorExpr(new AccelerometerSensor(mkInlineProperty(ctx, "robSensors_accelerometer_getSample"), externalSensorBean));
-//
-        }
-        return null;
     }
 
     private static BlocklyProperties mknullProperty(ParserRuleContext ctx, String type) {

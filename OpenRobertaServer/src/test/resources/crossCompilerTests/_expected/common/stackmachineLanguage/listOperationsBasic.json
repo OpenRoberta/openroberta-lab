@@ -55,42 +55,38 @@
   54:            expr            expr: Var, name: bool,                                      > +: ["/BDpTth#H:9{~G5L%^BX"], -: ["/BDpTth#H:9{~G5L%^BX"], 
   55:            expr            expr: list_operation, op: list_find_item, position: first,  > -: [":X-5ugpt{m;X`:v|IR!l"], 
   56:            AssignStmt      name: item,                                                 > -: ["AS*Ivq+=eNG82T!kDFy7"], 
-  57:            expr            expr: Var, name: initialEmptyBoolean,                       > +: [")buVYIKxov7Uy)pwpcjL","]?TKf+I%.aOO*I!{Q^F=","HRLB?kmw=~2AVi3ZP-/o"], -: ["HRLB?kmw=~2AVi3ZP-/o"], possibleDebugStop: ["]?TKf+I%.aOO*I!{Q^F="], 
-  58:            expr            expr: null,                                                 > +: ["Zq)aK`-pzb9sR_XYZmzF"], -: ["Zq)aK`-pzb9sR_XYZmzF"], 
-  59:            expr            expr: list_operation, op: list_find_item, position: first,  > -: [")buVYIKxov7Uy)pwpcjL"], 
-  60:            AssignStmt      name: item,                                                 > -: ["]?TKf+I%.aOO*I!{Q^F="], 
-  61:            expr            expr: Var, name: initialEmptyBoolean,                       > +: ["m?zcv(G3?L5+=sG@sx=d","*5^o6X^7x*qlL%YPhoOY"], -: ["*5^o6X^7x*qlL%YPhoOY"], possibleDebugStop: ["m?zcv(G3?L5+=sG@sx=d"], 
-  62:            expr            expr: BOOL_CONST, value: true,                              > +: ["u|Lq|DD!PA(E?7h%fMsT"], -: ["u|Lq|DD!PA(E?7h%fMsT"], 
-  63:            list_operation  op: insert, position: last,                                 > -: ["m?zcv(G3?L5+=sG@sx=d"], 
-  64:            jump            conditional: always, target: i_e_2,                         > 
-  65: i_1_2      comment         text: IfStatement,                                          > 
-  66: i_e_2      comment         text: IfStatement, type: end,                               > -: [",Xmkn|*Z1lkPlIV2WgMU"], 
-  67:            comment         n: 3, text: IfStatement, type: start,                       > +: ["4p1WV:MoMW*V9U[wiQpw"], possibleDebugStop: ["4p1WV:MoMW*V9U[wiQpw"], 
-  68: i_0_3      comment         text: IfStatement,                                          > 
-  69:            expr            expr: Var, name: initialEmptyStrings,                       > +: ["qhTAkkQV7_//22AFyiqJ","teLW@-In(_ZJ7T/hKaJq"], -: ["teLW@-In(_ZJ7T/hKaJq"], 
-  70:            expr            expr: list_operation, op: list_is_empty,                    > -: ["qhTAkkQV7_//22AFyiqJ"], 
-  71:            jump            conditional: false, target: i_1_3,                          > 
-  72:            expr            expr: STRING_CONST, value: a,                               > +: [")s/|9,`|Z!U=Q|E(Q!),","%`dhn1_]%tk/k654jXO3","f[em_1/~SV4pu)q*Pp=C"], -: ["%`dhn1_]%tk/k654jXO3"], possibleDebugStop: [")s/|9,`|Z!U=Q|E(Q!),"], 
-  73:            expr            expr: STRING_CONST, value: b,                               > +: ["mk@C+nZE--Y+@L~?ezT?"], -: ["mk@C+nZE--Y+@L~?ezT?"], 
-  74:            expr            NUMBER: 2, expr: createList,                                > -: ["f[em_1/~SV4pu)q*Pp=C"], 
-  75:            AssignStmt      name: initialEmptyStrings,                                  > -: [")s/|9,`|Z!U=Q|E(Q!),"], 
-  76:            expr            expr: Var, name: initialEmptyStrings,                       > +: ["XweoOj6.AEa}^f^X{S]P","kL}edsC.aq_0rJ7-Fr5?","o_OADG*+K7dad},].d6#"], -: ["kL}edsC.aq_0rJ7-Fr5?"], possibleDebugStop: ["XweoOj6.AEa}^f^X{S]P"], 
-  77:            expr            expr: list_operation, op: list_length,                      > -: ["o_OADG*+K7dad},].d6#"], 
-  78:            AssignStmt      name: item,                                                 > -: ["XweoOj6.AEa}^f^X{S]P"], 
-  79:            expr            expr: Var, name: initialEmptyStrings,                       > +: ["gv8.-S_i^t!.Gc;R?U[K","9(#HWR6X4Z1oF/yZ`Jyn","CT]AlcQjdXezL|kit%KA"], -: ["gv8.-S_i^t!.Gc;R?U[K"], possibleDebugStop: ["9(#HWR6X4Z1oF/yZ`Jyn"], 
-  80:            expr            expr: STRING_CONST, value: a,                               > +: ["~;CATa|c]H9Bq21rF[^O"], -: ["~;CATa|c]H9Bq21rF[^O"], 
-  81:            expr            expr: list_operation, op: list_find_item, position: first,  > -: ["CT]AlcQjdXezL|kit%KA"], 
-  82:            AssignStmt      name: item,                                                 > -: ["9(#HWR6X4Z1oF/yZ`Jyn"], 
-  83:            expr            expr: Var, name: initialEmptyStrings,                       > +: ["s3)!k|~,K}b?O@}%#4O@","J|6]vIK8MRYx,s}Zm]j|"], -: ["J|6]vIK8MRYx,s}Zm]j|"], possibleDebugStop: ["s3)!k|~,K}b?O@}%#4O@"], 
-  84:            expr            expr: STRING_CONST, value: c,                               > +: ["ny+rpChpsBAIq+(cae]y"], -: ["ny+rpChpsBAIq+(cae]y"], 
-  85:            expr            expr: NUM_CONST, value: 2,                                  > +: ["M)nRV9gIY(_HH^UeE*0|"], -: ["M)nRV9gIY(_HH^UeE*0|"], 
-  86:            list_operation  op: set, position: from_end,                                > -: ["s3)!k|~,K}b?O@}%#4O@"], 
-  87:            expr            expr: Var, name: initialEmptyStrings,                       > +: ["MUq)qF@S.`DK|}Px#jDZ","0]E^)yd`2:+BV0cV{,I7"], -: ["0]E^)yd`2:+BV0cV{,I7"], possibleDebugStop: ["MUq)qF@S.`DK|}Px#jDZ"], 
-  88:            expr            expr: STRING_CONST, value: d,                               > +: ["F|R#Sl(alO*y|=J-[enu"], -: ["F|R#Sl(alO*y|=J-[enu"], 
-  89:            expr            expr: NUM_CONST, value: 1,                                  > +: ["}d0-nA.{q@xP=Y3kfDRN"], -: ["}d0-nA.{q@xP=Y3kfDRN"], 
-  90:            list_operation  op: insert, position: from_end,                             > -: ["MUq)qF@S.`DK|}Px#jDZ"], 
-  91:            jump            conditional: always, target: i_e_3,                         > 
-  92: i_1_3      comment         text: IfStatement,                                          > 
-  93: i_e_3      comment         text: IfStatement, type: end,                               > -: ["4p1WV:MoMW*V9U[wiQpw"], 
-  94:            comment         value: Basis List Operations END,                           > +: ["q@5l{Ufiz^DSW:)_2y2W"], -: ["q@5l{Ufiz^DSW:)_2y2W"], possibleDebugStop: ["q@5l{Ufiz^DSW:)_2y2W"], 
-  95:            stop                                                                        > 
+  57:            expr            expr: Var, name: initialEmptyBoolean,                       > +: ["m?zcv(G3?L5+=sG@sx=d","*5^o6X^7x*qlL%YPhoOY"], -: ["*5^o6X^7x*qlL%YPhoOY"], possibleDebugStop: ["m?zcv(G3?L5+=sG@sx=d"],
+  58:            expr            expr: BOOL_CONST, value: true,                              > +: ["u|Lq|DD!PA(E?7h%fMsT"], -: ["u|Lq|DD!PA(E?7h%fMsT"],
+  59:            list_operation  op: insert, position: last,                                 > -: ["m?zcv(G3?L5+=sG@sx=d"],
+  60:            jump            conditional: always, target: i_e_2,                         >
+  61: i_1_2      comment         text: IfStatement,                                          >
+  62: i_e_2      comment         text: IfStatement, type: end,                               > -: [",Xmkn|*Z1lkPlIV2WgMU"],
+  63:            comment         n: 3, text: IfStatement, type: start,                       > +: ["4p1WV:MoMW*V9U[wiQpw"], possibleDebugStop: ["4p1WV:MoMW*V9U[wiQpw"],
+  64: i_0_3      comment         text: IfStatement,                                          >
+  65:            expr            expr: Var, name: initialEmptyStrings,                       > +: ["qhTAkkQV7_//22AFyiqJ","teLW@-In(_ZJ7T/hKaJq"], -: ["teLW@-In(_ZJ7T/hKaJq"],
+  66:            expr            expr: list_operation, op: list_is_empty,                    > -: ["qhTAkkQV7_//22AFyiqJ"],
+  67:            jump            conditional: false, target: i_1_3,                          >
+  68:            expr            expr: STRING_CONST, value: a,                               > +: [")s/|9,`|Z!U=Q|E(Q!),","%`dhn1_]%tk/k654jXO3","f[em_1/~SV4pu)q*Pp=C"], -: ["%`dhn1_]%tk/k654jXO3"], possibleDebugStop: [")s/|9,`|Z!U=Q|E(Q!),"],
+  69:            expr            expr: STRING_CONST, value: b,                               > +: ["mk@C+nZE--Y+@L~?ezT?"], -: ["mk@C+nZE--Y+@L~?ezT?"],
+  70:            expr            NUMBER: 2, expr: createList,                                > -: ["f[em_1/~SV4pu)q*Pp=C"],
+  71:            AssignStmt      name: initialEmptyStrings,                                  > -: [")s/|9,`|Z!U=Q|E(Q!),"],
+  72:            expr            expr: Var, name: initialEmptyStrings,                       > +: ["XweoOj6.AEa}^f^X{S]P","kL}edsC.aq_0rJ7-Fr5?","o_OADG*+K7dad},].d6#"], -: ["kL}edsC.aq_0rJ7-Fr5?"], possibleDebugStop: ["XweoOj6.AEa}^f^X{S]P"],
+  73:            expr            expr: list_operation, op: list_length,                      > -: ["o_OADG*+K7dad},].d6#"],
+  74:            AssignStmt      name: item,                                                 > -: ["XweoOj6.AEa}^f^X{S]P"],
+  75:            expr            expr: Var, name: initialEmptyStrings,                       > +: ["gv8.-S_i^t!.Gc;R?U[K","9(#HWR6X4Z1oF/yZ`Jyn","CT]AlcQjdXezL|kit%KA"], -: ["gv8.-S_i^t!.Gc;R?U[K"], possibleDebugStop: ["9(#HWR6X4Z1oF/yZ`Jyn"],
+  76:            expr            expr: STRING_CONST, value: a,                               > +: ["~;CATa|c]H9Bq21rF[^O"], -: ["~;CATa|c]H9Bq21rF[^O"],
+  77:            expr            expr: list_operation, op: list_find_item, position: first,  > -: ["CT]AlcQjdXezL|kit%KA"],
+  78:            AssignStmt      name: item,                                                 > -: ["9(#HWR6X4Z1oF/yZ`Jyn"],
+  79:            expr            expr: Var, name: initialEmptyStrings,                       > +: ["s3)!k|~,K}b?O@}%#4O@","J|6]vIK8MRYx,s}Zm]j|"], -: ["J|6]vIK8MRYx,s}Zm]j|"], possibleDebugStop: ["s3)!k|~,K}b?O@}%#4O@"],
+  80:            expr            expr: STRING_CONST, value: c,                               > +: ["ny+rpChpsBAIq+(cae]y"], -: ["ny+rpChpsBAIq+(cae]y"],
+  81:            expr            expr: NUM_CONST, value: 2,                                  > +: ["M)nRV9gIY(_HH^UeE*0|"], -: ["M)nRV9gIY(_HH^UeE*0|"],
+  82:            list_operation  op: set, position: from_end,                                > -: ["s3)!k|~,K}b?O@}%#4O@"],
+  83:            expr            expr: Var, name: initialEmptyStrings,                       > +: ["MUq)qF@S.`DK|}Px#jDZ","0]E^)yd`2:+BV0cV{,I7"], -: ["0]E^)yd`2:+BV0cV{,I7"], possibleDebugStop: ["MUq)qF@S.`DK|}Px#jDZ"],
+  84:            expr            expr: STRING_CONST, value: d,                               > +: ["F|R#Sl(alO*y|=J-[enu"], -: ["F|R#Sl(alO*y|=J-[enu"],
+  85:            expr            expr: NUM_CONST, value: 1,                                  > +: ["}d0-nA.{q@xP=Y3kfDRN"], -: ["}d0-nA.{q@xP=Y3kfDRN"],
+  86:            list_operation  op: insert, position: from_end,                             > -: ["MUq)qF@S.`DK|}Px#jDZ"],
+  87:            jump            conditional: always, target: i_e_3,                         >
+  88: i_1_3      comment         text: IfStatement,                                          >
+  89: i_e_3      comment         text: IfStatement, type: end,                               > -: ["4p1WV:MoMW*V9U[wiQpw"],
+  90:            comment         value: Basis List Operations END,                           > +: ["q@5l{Ufiz^DSW:)_2y2W"], -: ["q@5l{Ufiz^DSW:)_2y2W"], possibleDebugStop: ["q@5l{Ufiz^DSW:)_2y2W"],
+  91:            stop                                                                        >

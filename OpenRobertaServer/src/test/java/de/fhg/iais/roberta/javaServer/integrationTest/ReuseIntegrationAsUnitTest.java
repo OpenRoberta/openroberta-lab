@@ -79,7 +79,8 @@ public class ReuseIntegrationAsUnitTest {
             "ev3lejosv1",
             "calliope2017NoBlue",
             "ev3dev",
-            "wedo"
+            "wedo",
+            "microbitv2"
         };
 
     private static final String COMMON = "common/";
@@ -166,8 +167,8 @@ public class ReuseIntegrationAsUnitTest {
     @Ignore
     @Test
     public void testOneCommonProgrammAsUnitTest() throws Exception {
-        String programName = "neuralNetwork";
-        String[] robotNames = {"edison"}; // set to null, if all robots should be tested; otherwise put the robots under test into the array
+        String programName = "listOperations";
+        String[] robotNames = {"microbitv2"}; // set to null, if all robots should be tested; otherwise put the robots under test into the array
         {
             List<String> pluginDefines = new ArrayList<>(); // maybe used later to add properties
             testFactory = Util.configureRobotPlugin(ROBOT_NAME_FOR_COMMON_TESTS, "", "", pluginDefines);
@@ -644,17 +645,20 @@ public class ReuseIntegrationAsUnitTest {
     }
 
     private void checkAndShowTestResult() {
+        if (errorCountRegeneration + errorCountCodeGeneration + errorCountCollectorTest == 0) {
+            LOG.error("OK - test was successful");
+        }
         LOG.info("succeeding regeneration tests: " + successCountRegeneration);
         if ( errorCountRegeneration > 0 ) {
-            LOG.error("regeneration ERRORS found: " + errorCountRegeneration);
+            LOG.error("FAIL - regeneration ERRORS found: " + errorCountRegeneration);
         }
         LOG.info("succeeding code generation tests: " + successCountCodeGeneration);
         if ( errorCountCodeGeneration > 0 ) {
-            LOG.error("code generation ERRORS found: " + errorCountCodeGeneration);
+            LOG.error("FAIL - code generation ERRORS found: " + errorCountCodeGeneration);
         }
         LOG.info("succeeding collector tests: " + successCountCollectorTest);
         if ( errorCountCollectorTest > 0 ) {
-            LOG.error("collector ERRORS found: " + errorCountCollectorTest);
+            LOG.error("FAIL - collector ERRORS found: " + errorCountCollectorTest);
         }
         boolean regenerationSucceeds = errorCountRegeneration == 0 || TEST_SUCCEEDS_EVEN_IF_REGENERATION_FAILS;
         boolean codeGenerationSucceeds = errorCountCodeGeneration == 0 || TEST_SUCCEEDS_EVEN_IF_CODE_GENERATION_FAILS;

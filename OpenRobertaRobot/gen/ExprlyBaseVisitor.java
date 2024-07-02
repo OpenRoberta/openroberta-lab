@@ -129,7 +129,21 @@ public class ExprlyBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitMicrobitV2SensorExpression(ExprlyParser.MicrobitV2SensorExpressionContext ctx) { return visitChildren(ctx); }
+	@Override public T visitRobotSensorExpression(ExprlyParser.RobotSensorExpressionContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitRobotActuatorExpression(ExprlyParser.RobotActuatorExpressionContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitRobotSpecificExpression(ExprlyParser.RobotSpecificExpressionContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -227,7 +241,7 @@ public class ExprlyBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitMicrobitV2SensorStatement(ExprlyParser.MicrobitV2SensorStatementContext ctx) { return visitChildren(ctx); }
+	@Override public T visitRobotSensorStatement(ExprlyParser.RobotSensorStatementContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *

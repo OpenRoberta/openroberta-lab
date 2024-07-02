@@ -120,12 +120,26 @@ public interface ExprlyVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitRobotExpr(ExprlyParser.RobotExprContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code MicrobitV2SensorExpression}
+	 * Visit a parse tree produced by the {@code RobotSensorExpression}
 	 * labeled alternative in {@link ExprlyParser#robotSensorExpr}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitMicrobitV2SensorExpression(ExprlyParser.MicrobitV2SensorExpressionContext ctx);
+	T visitRobotSensorExpression(ExprlyParser.RobotSensorExpressionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code RobotActuatorExpression}
+	 * labeled alternative in {@link ExprlyParser#robotActuatorExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRobotActuatorExpression(ExprlyParser.RobotActuatorExpressionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code RobotSpecificExpression}
+	 * labeled alternative in {@link ExprlyParser#robotSpecificExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRobotSpecificExpression(ExprlyParser.RobotSpecificExpressionContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link ExprlyParser#statementList}.
 	 * @param ctx the parse tree
@@ -216,12 +230,12 @@ public interface ExprlyVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitRobotStmt(ExprlyParser.RobotStmtContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code MicrobitV2SensorStatement}
+	 * Visit a parse tree produced by the {@code RobotSensorStatement}
 	 * labeled alternative in {@link ExprlyParser#robotSensorStmt}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitMicrobitV2SensorStatement(ExprlyParser.MicrobitV2SensorStatementContext ctx);
+	T visitRobotSensorStatement(ExprlyParser.RobotSensorStatementContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link ExprlyParser#program}.
 	 * @param ctx the parse tree

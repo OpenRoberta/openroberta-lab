@@ -77,7 +77,7 @@ public final class GetSubFunct extends Function {
         mutation.setAt2(false);
         Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.WHERE1, this.strParam.get(0).toString());
         Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.WHERE2, this.strParam.get(1).toString());
-        if ( this.functName == FunctionNames.GET_SUBLIST  ) {
+        if ( this.functName == FunctionNames.GET_SUBLIST ) {
             Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.LIST, this.param.get(0));
         } else {
             Ast2Jaxb.addValue(jaxbDestination, BlocklyConstants.STRING, this.param.get(0));

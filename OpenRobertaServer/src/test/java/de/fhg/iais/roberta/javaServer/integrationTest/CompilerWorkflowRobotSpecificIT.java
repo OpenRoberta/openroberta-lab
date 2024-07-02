@@ -202,9 +202,12 @@ public class CompilerWorkflowRobotSpecificIT {
 
     @Ignore
     @Test
-    public void testSingleNepoProgram() throws Exception {
-        final String robotName = "calliope2017NoBlue";
-        final String programFileName = "actors_all_without_pins_and_callibot";
+    /**
+     * test (and debug) a single robot specific program
+     */
+    public void testSingleRobotSpecificProgram() throws Exception {
+        final String robotName = "microbitv2";
+        final String programFileName = "wait_until";
         final String robotDir = robotsFromTestSpec.getJSONObject(robotName).getString("dir");
         final boolean evalGeneratedProgram = true;
         setRobotTo(robotName);

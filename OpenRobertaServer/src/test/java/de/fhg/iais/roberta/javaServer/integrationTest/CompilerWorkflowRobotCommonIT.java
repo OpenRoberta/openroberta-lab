@@ -220,18 +220,17 @@ public class CompilerWorkflowRobotCommonIT {
     }
 
     /**
-     * generate and compile a program for some robots given. May help testing ... . Usually @Ignore-d<br>
+     * generate and compile a program for some robots given. May help to test and debug ... . Usually @Ignore-d<br>
      * <br>
      * - supply the program name<br>
      * - supply the list of robots (you may copy from the console output)<br>
      * - decide whether to generate only or to generate and compile
      */
-    @Ignore
     @Test
     public void testCompileOneProgram() {
-        String progName = "controlFlowDecisons";
-        Collection<String> robots = Arrays.asList("wedo");
-        boolean generateOnly = true;
+        String progName = "listOperations";
+        Collection<String> robots = Arrays.asList("microbitv2");
+        boolean generateOnly = false;
         for ( String robotName : robots ) {
             LOG.info("********** crosscompilation for program " + progName + " and robot " + robotName + " **********");
             String robotDir = robotsFromTestSpec.getJSONObject(robotName).getString("template");
