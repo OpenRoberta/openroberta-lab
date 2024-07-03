@@ -8,5 +8,6 @@ public enum CalliopeMethods {
     SET_BOTH_MOTORS,
     SET_MOTOR,
     SERVO_GET_ANGLE,
-    RECEIVE_MESSAGE
+    RECEIVE_MESSAGE,
+    GET_ROTATION
 }

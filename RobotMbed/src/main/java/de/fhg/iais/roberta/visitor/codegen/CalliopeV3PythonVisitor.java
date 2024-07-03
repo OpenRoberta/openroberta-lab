@@ -288,6 +288,14 @@ public class CalliopeV3PythonVisitor extends MbedV2PythonVisitor implements ICal
 
     @Override
     public Void visitGyroSensor(GyroSensor gyroSensor) {
+        String slot = gyroSensor.getSlot();
+        if ( slot.equals("X") ) {
+            this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(CalliopeMethods.GET_ROTATION), "(\"pitch\")");
+        } else if ( slot.equals("Y") ) {
+            this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(CalliopeMethods.GET_ROTATION), "(\"roll\")");
+        } else {
+            throw new DbcException("Slot " + slot + " is not valid!");
+        }
         return null;
     }
 

@@ -29,7 +29,7 @@ public class CalliopeV3ValidatorAndCollectorVisitor extends CalliopeCommonValida
 
     @Override
     public Void visitGyroSensor(GyroSensor gyroSensor) {
-        addErrorToPhrase(gyroSensor, "BLOCK_NOT_SUPPORTED");
+        usedMethodBuilder.addUsedMethod(CalliopeMethods.GET_ROTATION);
         return null;
     }
 

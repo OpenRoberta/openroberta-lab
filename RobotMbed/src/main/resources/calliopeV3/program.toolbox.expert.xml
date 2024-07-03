@@ -206,6 +206,7 @@
             <field name="MODE">DIGITAL</field>
         </block>
         <block type="robSensors_rssi_getSample"></block>
+        <block type="robSensors_gyro_getSample"></block>
         <block type="robSensors_accelerometer_getSample"></block>
         <block type="robSensors_humidity_getSample"></block>
         <block type='robSensors_moisture_getSample'></block>
