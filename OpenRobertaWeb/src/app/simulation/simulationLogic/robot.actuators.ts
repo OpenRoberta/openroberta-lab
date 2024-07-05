@@ -82,12 +82,21 @@ export abstract class ChassisMobile implements IUpdateAction, ISensor, IDrawable
         values: object,
         uCtx: CanvasRenderingContext2D,
         udCtx: CanvasRenderingContext2D,
-        personalObstacleList: any[]
+        personalObstacleList: any[],
+        markerList: MarkerSimulationObject[],
+        collisionList: ISimulationObstacle[]
     ): void {
-        this.checkCollisions(running, this.id, (myRobot as RobotBaseMobile).pose, dt, personalObstacleList);
+        this.checkCollisions(running, this.id, (myRobot as RobotBaseMobile).pose, dt, personalObstacleList, collisionList);
     }
 
-    abstract checkCollisions(running: boolean, myId: number, myPose: Pose, dt: number, personalObstacleList: ISimulationObstacle[]): void;
+    abstract checkCollisions(
+        running: boolean,
+        myId: number,
+        myPose: Pose,
+        dt: number,
+        personalObstacleList: ISimulationObstacle[],
+        collisionList: ISimulationObstacle[]
+    ): void;
 
     getTolerance(): number {
         return 0;
@@ -384,7 +393,14 @@ export abstract class ChassisDiffDrive extends ChassisMobile {
         this.transformNewPose(myRobot.pose, this);
     }
 
-    checkCollisions(running: boolean, myId: number, myPose: Pose, dt: number, personalObstacleList: ISimulationObstacle[]): void {
+    checkCollisions(
+        running: boolean,
+        myId: number,
+        myPose: Pose,
+        dt: number,
+        personalObstacleList: ISimulationObstacle[],
+        collisionList: ISimulationObstacle[]
+    ): void {
         let ground = personalObstacleList.slice(-1)[0] as any; // ground is always the last element in the personal obstacle list
         let groundBumped = false;
         function checkGround(p: PointRobotWorldBumped): void {
@@ -409,77 +425,41 @@ export abstract class ChassisDiffDrive extends ChassisMobile {
             checkGround(checkPoint);
         });
         let thetaDiff: number;
-        if (!groundBumped) {
-            for (let i = 0; i < personalObstacleList.length - 1; i++) {
-                let myObstacle: any = personalObstacleList[i];
-                if (myObstacle instanceof ChassisMobile && myObstacle.id == myId) {
-                    // never check if you are bumping yourself ;-)
-                    continue;
-                }
-                let pointsInObstacle: PointRobotWorld[] = [];
-                pointsInObstacle = myCheckPoints.filter((checkPoint) => {
-                    if (SIMATH.checkInObstacle(myObstacle, checkPoint)) {
-                        checkPoint.bumped = true;
-                        return true;
-                    } else {
+        let thisTolerance = Math.max(Math.abs(this.right.speed), Math.abs(this.left.speed));
+        for (let i = 0; i < personalObstacleList.length - 1; i++) {
+            let myObstacle: any = personalObstacleList[i];
+            if (myObstacle instanceof ChassisMobile && myObstacle.id == myId) {
+                // never check if you are bumping yourself ;-)
+                personalObstacleList.splice(i, 1);
+                continue;
+            }
+            let pointsInObstacle: PointRobotWorld[] = [];
+            pointsInObstacle = myCheckPoints.filter((checkPoint) => {
+                if (SIMATH.checkInObstacle(myObstacle, checkPoint)) {
+                    if (running && myObstacle instanceof CircleSimulationObject && myObstacle.movable) {
                         return false;
                     }
-                });
-                if (pointsInObstacle.length <= 0) {
-                    let myCheckLines = [
-                        [this.frontLeft, this.frontRight, this.frontMiddle],
-                        [this.backLeft, this.backRight, this.backMiddle],
-                        [this.wheelFrontRight, this.wheelBackRight],
-                        [this.wheelFrontLeft, this.wheelBackLeft],
-                    ];
-                    let p: Point = { x: 0, y: 0 };
-                    let thisTolerance = Math.max(Math.abs(this.right.speed), Math.abs(this.left.speed));
-                    if (!(myObstacle instanceof CircleSimulationObject)) {
-                        const obstacleLines = myObstacle.getLines();
-                        myCheckLines.forEach((checkLine) => {
-                            for (let k = 0; k < obstacleLines.length; k++) {
-                                const interPoint = SIMATH.getIntersectionPoint(
-                                    { x1: checkLine[0].rx, x2: checkLine[1].rx, y1: checkLine[0].ry, y2: checkLine[1].ry },
-                                    obstacleLines[k]
-                                );
-                                if (interPoint) {
-                                    if (Math.abs(checkLine[0].rx - interPoint.x) < Math.abs(checkLine[1].rx - interPoint.x)) {
-                                        checkLine[0].bumped = true;
-                                    } else {
-                                        checkLine[1].bumped = true;
-                                    }
-                                } else if (checkLine[2]) {
-                                    p = SIMATH.getDistanceToLine(
-                                        {
-                                            x: checkLine[2].rx,
-                                            y: checkLine[2].ry,
-                                        },
-                                        {
-                                            x: obstacleLines[k].x1,
-                                            y: obstacleLines[k].y1,
-                                        },
-                                        {
-                                            x: obstacleLines[k].x2,
-                                            y: obstacleLines[k].y2,
-                                        }
-                                    );
-                                    if (
-                                        SIMATH.sqr(checkLine[2].rx - p.x) + SIMATH.sqr(checkLine[2].ry - p.y) <
-                                        dt * (myObstacle.getTolerance() + thisTolerance)
-                                    ) {
-                                        checkLine[0].bumped = true;
-                                        checkLine[1].bumped = true;
-                                    }
-                                }
-                            }
-                        });
-                    } else {
-                        myCheckLines.forEach((checkLine) => {
-                            let interPoint: Point;
-                            interPoint = SIMATH.getMiddleIntersectionPointCircle(
+                    checkPoint.bumped = true;
+                    return true;
+                } else {
+                    return false;
+                }
+            });
+            if (pointsInObstacle.length <= 0) {
+                let myCheckLines = [
+                    [this.frontLeft, this.frontRight, this.frontMiddle],
+                    [this.backLeft, this.backRight, this.backMiddle],
+                    [this.wheelFrontRight, this.wheelBackRight],
+                    [this.wheelFrontLeft, this.wheelBackLeft],
+                ];
+                let p: Point = { x: 0, y: 0 };
+                if (!(myObstacle instanceof CircleSimulationObject)) {
+                    const obstacleLines = myObstacle.getLines();
+                    myCheckLines.forEach((checkLine) => {
+                        for (let k = 0; k < obstacleLines.length; k++) {
+                            const interPoint = SIMATH.getIntersectionPoint(
                                 { x1: checkLine[0].rx, x2: checkLine[1].rx, y1: checkLine[0].ry, y2: checkLine[1].ry },
-                                myObstacle as Circle,
-                                dt * thisTolerance
+                                obstacleLines[k]
                             );
                             if (interPoint) {
                                 if (Math.abs(checkLine[0].rx - interPoint.x) < Math.abs(checkLine[1].rx - interPoint.x)) {
@@ -487,35 +467,60 @@ export abstract class ChassisDiffDrive extends ChassisMobile {
                                 } else {
                                     checkLine[1].bumped = true;
                                 }
-                                if (checkLine[2]) {
-                                    if (SIMATH.getDistanceToCircle(checkLine[2], myObstacle) <= myObstacle.r) {
-                                        checkLine[0].bumped = true;
-                                        checkLine[1].bumped = true;
+                            } else if (checkLine[2]) {
+                                p = SIMATH.getDistanceToLine(
+                                    {
+                                        x: checkLine[2].rx,
+                                        y: checkLine[2].ry,
+                                    },
+                                    {
+                                        x: obstacleLines[k].x1,
+                                        y: obstacleLines[k].y1,
+                                    },
+                                    {
+                                        x: obstacleLines[k].x2,
+                                        y: obstacleLines[k].y2,
                                     }
-                                }
-                                if (running && myObstacle.movable && (checkLine[0].bumped || checkLine[1].bumped)) {
-                                    let distP: Point = SIMATH.getDistanceToCircle(interPoint, myObstacle as Circle);
-                                    let x = distP.x;
-                                    let y = distP.y;
-                                    if ((myObstacle as IMovable).moveObstacleTo({ x: x, y: y }, personalObstacleList)) {
-                                        checkLine[0].bumped = false;
-                                        checkLine[1].bumped = false;
-                                    }
+                                );
+                                if (SIMATH.sqr(checkLine[2].rx - p.x) + SIMATH.sqr(checkLine[2].ry - p.y) < dt * (myObstacle.getTolerance() + thisTolerance)) {
+                                    checkLine[0].bumped = true;
+                                    checkLine[1].bumped = true;
                                 }
                             }
-                        });
-                    }
-                } else {
-                    if (running && myObstacle.movable) {
-                        let distP: Point = SIMATH.getDistanceToCircle({ x: pointsInObstacle[0].rx, y: pointsInObstacle[0].ry }, myObstacle as Circle);
-                        let x = distP.x;
-                        let y = distP.y;
-                        if ((myObstacle as IMovable).moveObstacleTo({ x: x, y: y }, personalObstacleList)) {
-                            myCheckPoints.forEach((checkPoint) => {
-                                checkPoint.bumped = false;
-                            });
                         }
-                    }
+                    });
+                } else {
+                    myCheckLines.forEach((checkLine) => {
+                        let interPoint: Point;
+                        interPoint = SIMATH.getMiddleIntersectionPointCircle(
+                            { x1: checkLine[0].rx, x2: checkLine[1].rx, y1: checkLine[0].ry, y2: checkLine[1].ry },
+                            myObstacle as Circle,
+                            0
+                        );
+                        if (interPoint) {
+                            let bumped = true;
+                            if (running && myObstacle.movable) {
+                                let circle = { x: myObstacle.x, y: myObstacle.y, r: myObstacle.r + dt * thisTolerance };
+                                let distP: Point = SIMATH.getDistanceToCircle(interPoint, circle);
+                                if ((myObstacle as IMovable).moveObstacleTo(distP)) {
+                                    collisionList.push(myObstacle);
+                                    bumped = false;
+                                }
+                            }
+                            if (bumped) {
+                                let dist0 = SIMATH.getDistance({ x: checkLine[0].rx, y: checkLine[0].ry }, interPoint);
+                                let dist1 = SIMATH.getDistance({ x: checkLine[1].rx, y: checkLine[1].ry }, interPoint);
+                                if (dist0 + 30 < dist1) {
+                                    checkLine[0].bumped = true;
+                                } else if (dist1 + 30 < dist0) {
+                                    checkLine[1].bumped = true;
+                                } else {
+                                    checkLine[0].bumped = true;
+                                    checkLine[1].bumped = true;
+                                }
+                            }
+                        }
+                    });
                 }
             }
         }
@@ -890,9 +895,11 @@ export abstract class EncoderChassisDiffDrive extends ChassisDiffDrive {
         values: object,
         uCtx: CanvasRenderingContext2D,
         udCtx: CanvasRenderingContext2D,
-        personalObstacleList: any[]
+        personalObstacleList: any[],
+        markerList: MarkerSimulationObject[],
+        collisionList: ISimulationObstacle[]
     ): void {
-        super.updateSensor(running, dt, myRobot, values, uCtx, udCtx, personalObstacleList);
+        super.updateSensor(running, dt, myRobot, values, uCtx, udCtx, personalObstacleList, markerList, collisionList);
         if (running) {
             this.updateEncoders(running, values);
         }
@@ -3159,7 +3166,8 @@ export class MbedDisplay extends MatrixDisplay implements ISensor {
         uCtx: CanvasRenderingContext2D,
         udCtx: CanvasRenderingContext2D,
         personalObstacleList: any[],
-        markerList: MarkerSimulationObject[]
+        markerList: MarkerSimulationObject[],
+        collisionList: ISimulationObstacle[]
     ): void {
         values['display'] = values['display'] || {};
         values['display']['pixel'] = this.leds.map((col) => col.map((row) => Math.round(row / C.BRIGHTNESS_MULTIPLIER)));

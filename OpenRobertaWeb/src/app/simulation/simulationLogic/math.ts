@@ -7,6 +7,15 @@
 import CONSTANTS from 'simulation.constants';
 import { CircleSimulationObject, RectangleSimulationObject, TriangleSimulationObject } from 'simulation.objects';
 
+export function getDotProduct(A: Point, B: Point): number {
+    let Alength = Math.sqrt(A.x * A.x + A.y * A.y);
+    let Blength = Math.sqrt(B.x * B.x + B.y * B.y);
+    if (Alength == 0 || Blength == 0) {
+        return null;
+    }
+    return (A.x / Alength) * (B.x / Blength) + (A.y / Alength) * (B.y / Blength);
+}
+
 /**
  * exports helper for calculations in ORsimulation
  *
@@ -134,7 +143,7 @@ export const getMiddleIntersectionPointCircle = function (line: Line, circle: Ci
  * @return {{x, y}[]}
  *              array with point(s) of the intersection
  */
-export const getIntersectionPointsCircle = function (line: Line, circle: Circle): Point[] {
+export const getIntersectionPointsCircle2 = function (line: Line, circle: Circle): Point[] {
     var dx, dy, A, B, C, det, t;
 
     dx = line.x2 - line.x1;
@@ -166,6 +175,51 @@ export const getIntersectionPointsCircle = function (line: Line, circle: Circle)
 
         return [];
     }
+};
+
+export const getIntersectionPointsCircle = function (line: Line, circle: Circle): Point[] {
+    let pointA: Point = { x: line.x1, y: line.y1 };
+    let pointB: Point = { x: line.x2, y: line.y2 };
+    let center: Point = { x: circle.x, y: circle.y };
+    let radius: number = circle.r;
+
+    const onLine = function (p1: Point, p2: Point, p: Point): boolean {
+        if (epsilonEqual(Math.sqrt(getDistance(p1, p)) + Math.sqrt(getDistance(p2, p)), Math.sqrt(getDistance(p1, p2)), 2)) {
+            return true;
+        }
+        return false;
+    };
+
+    let baX = pointB.x - pointA.x;
+    let baY = pointB.y - pointA.y;
+    let caX = center.x - pointA.x;
+    let caY = center.y - pointA.y;
+
+    let a = baX * baX + baY * baY;
+    let bBy2 = baX * caX + baY * caY;
+    let c = caX * caX + caY * caY - radius * radius;
+
+    let pBy2 = bBy2 / a;
+    let q = c / a;
+
+    let disc = pBy2 * pBy2 - q;
+    if (disc < 0) {
+        return [];
+    }
+    // if disc == 0 ... dealt with later
+    let tmpSqrt = Math.sqrt(disc);
+    let abScalingFactor1 = -pBy2 + tmpSqrt;
+    let abScalingFactor2 = -pBy2 - tmpSqrt;
+
+    let p1: Point = { x: pointA.x - baX * abScalingFactor1, y: pointA.y - baY * abScalingFactor1 };
+    if (disc == 0) {
+        // abScalingFactor1 == abScalingFactor2
+        return onLine(pointA, pointB, p1) ? [p1] : [];
+    }
+    let p2: Point = { x: pointA.x - baX * abScalingFactor2, y: pointA.y - baY * abScalingFactor2 };
+    p1 = onLine(pointA, pointB, p1) ? p1 : null;
+    p2 = onLine(pointA, pointB, p2) ? p2 : null;
+    return p1 && p2 ? [p1, p2] : p1 ? [p1] : p2 ? [p2] : [];
 };
 
 export const inside = (circle: Circle, rect: Rectangle): boolean => {

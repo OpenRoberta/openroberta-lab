@@ -4,7 +4,7 @@ import * as SIMATH from 'simulation.math';
 import * as UTIL from 'util.roberta';
 import { ChassisMobile, RobotinoChassis, WebAudio } from 'robot.actuators';
 import { IDrawable, ILabel, IReset, IUpdateAction, RobotBase } from 'robot.base';
-import { CircleSimulationObject, MarkerSimulationObject } from 'simulation.objects';
+import { CircleSimulationObject, ISimulationObstacle, MarkerSimulationObject } from 'simulation.objects';
 // @ts-ignore
 import * as Blockly from 'blockly';
 // @ts-ignore
@@ -21,7 +21,8 @@ export interface ISensor {
         uCtx: CanvasRenderingContext2D,
         udCtx: CanvasRenderingContext2D,
         personalObstacleList: any[],
-        markerList: MarkerSimulationObject[]
+        markerList: MarkerSimulationObject[],
+        collisionList: ISimulationObstacle[]
     ): void;
 }
 
@@ -190,7 +191,7 @@ export abstract class DistanceSensor implements IExternalSensor, IDrawable, ILab
         values: object,
         uCtx: CanvasRenderingContext2D,
         udCtx: CanvasRenderingContext2D,
-        personalObstacleList: any[]
+        personalObstacleList: any
     ): void {
         if (myRobot instanceof RobotBaseMobile) {
             let robot: RobotBaseMobile = myRobot as RobotBaseMobile;
@@ -302,7 +303,7 @@ export class UltrasonicSensor extends DistanceSensor {
         values: object,
         uCtx: CanvasRenderingContext2D,
         udCtx: CanvasRenderingContext2D,
-        personalObstacleList: any[]
+        personalObstacleList: any
     ): void {
         super.updateSensor(running, dt, myRobot, values, uCtx, udCtx, personalObstacleList);
         const distance = this.distance / 3.0;
@@ -351,7 +352,7 @@ export class InfraredSensor extends DistanceSensor {
         values: object,
         uCtx: CanvasRenderingContext2D,
         udCtx: CanvasRenderingContext2D,
-        personalObstacleList: any[]
+        personalObstacleList: any
     ): void {
         super.updateSensor(running, dt, myRobot, values, uCtx, udCtx, personalObstacleList);
         const distance = this.distance / 3.0;
@@ -398,7 +399,7 @@ export class ThymioInfraredSensor extends InfraredSensor {
         values: object,
         uCtx: CanvasRenderingContext2D,
         udCtx: CanvasRenderingContext2D,
-        personalObstacleList: any[]
+        personalObstacleList: any
     ): void {
         super.updateSensor(running, dt, myRobot, values, uCtx, udCtx, personalObstacleList);
         const distance = this.distance / 3.0;
@@ -429,7 +430,7 @@ export class EdisonInfraredSensor extends InfraredSensor {
         values: object,
         uCtx: CanvasRenderingContext2D,
         udCtx: CanvasRenderingContext2D,
-        personalObstacleList: any[]
+        personalObstacleList: any
     ): void {
         super.updateSensor(running, dt, myRobot, values, uCtx, udCtx, personalObstacleList);
         const distance = this.distance / 3.0;
@@ -2065,15 +2066,7 @@ export class VolumeMeterSensor implements ISensor, ILabel {
         return '<div><label>' + Blockly.Msg['SENSOR_SOUND'] + '</label><span>' + UTIL.round(this.volume, 0) + ' %</span></div>';
     }
 
-    updateSensor(
-        running: boolean,
-        dt: number,
-        myRobot: RobotBase,
-        values: object,
-        uCtx: CanvasRenderingContext2D,
-        udCtx: CanvasRenderingContext2D,
-        personalObstacleList: any[]
-    ): void {
+    updateSensor(running: boolean, dt: number, myRobot: RobotBase, values: object, uCtx: CanvasRenderingContext2D, udCtx: CanvasRenderingContext2D): void {
         this.volume = this.sound ? UTIL.round(this.sound['volume'] * 100, 0) : 0;
         values['sound'] = {};
         values['sound']['volume'] = this.volume;
@@ -2111,8 +2104,7 @@ export class SoundSensor extends VolumeMeterSensor implements IExternalSensor {
         myRobot: RobotBase,
         values: object,
         uCtx: CanvasRenderingContext2D,
-        udCtx: CanvasRenderingContext2D,
-        personalObstacleList: any[]
+        udCtx: CanvasRenderingContext2D
     ): void {
         this.volume = this.sound ? UTIL.round(this.sound['volume'] * 100, 0) : 0;
         values['sound'] = {};
@@ -2132,10 +2124,9 @@ export class SoundSensorBoolean extends VolumeMeterSensor {
         myRobot: RobotBase,
         values: object,
         uCtx: CanvasRenderingContext2D,
-        udCtx: CanvasRenderingContext2D,
-        personalObstacleList: any[]
+        udCtx: CanvasRenderingContext2D
     ): void {
-        super.updateSensor(running, dt, myRobot, values, uCtx, udCtx, personalObstacleList);
+        super.updateSensor(running, dt, myRobot, values, uCtx, udCtx);
         values['sound']['volume'] = this.volume > 25;
     }
 }

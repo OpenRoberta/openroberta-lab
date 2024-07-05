@@ -7,6 +7,7 @@ import * as $ from 'jquery';
 import {
     BaseSimulationObject,
     Ground,
+    IMovable,
     ISimulationObstacle,
     MarkerSimulationObject,
     RcjSimulationLabel,
@@ -20,6 +21,7 @@ import { IDestroyable, RobotBase, RobotFactory } from 'robot.base';
 import { Interpreter } from 'interpreter.interpreter';
 import { Pose, RobotBaseMobile } from 'robot.base.mobile';
 import RobotRcj from 'robot.rcj';
+import { ISensor } from 'robot.sensors';
 
 const RESIZE_CONST: number = 3;
 export interface IObserver {
@@ -910,9 +912,27 @@ export class SimulationScene {
         this.robots.forEach((robot) => personalObstacleList.push((robot as RobotBaseMobile).chassis as unknown as ISimulationObstacle));
         personalObstacleList.push(this.ground as ISimulationObstacle);
         this.robots.forEach((robot) => robot.updateActions(robot, dt, interpreterRunning));
-        this.robots.forEach((robot) =>
-            (robot as RobotBaseMobile).updateSensors(interpreterRunning, dt, this.uCtx, this.udCtx, personalObstacleList, this.markerList)
-        );
+        if (interpreterRunning) {
+            this.obstacleList.forEach((obstacle) => {
+                let movableObstacle: IMovable = obstacle as unknown as IMovable;
+                if (movableObstacle.updateAction) {
+                    movableObstacle.updateAction();
+                }
+            });
+        }
+        this.robots.forEach((robot) => {
+            let obstacleList: ISimulationObstacle[] = personalObstacleList.slice();
+            let collisionList: ISimulationObstacle[] = [];
+            (robot as RobotBaseMobile).updateSensors(interpreterRunning, dt, this.uCtx, this.udCtx, obstacleList, this.markerList, collisionList);
+            //if (interpreterRunning) {
+            while (collisionList.length > 0) {
+                let movableObstacle: IMovable = collisionList[0] as unknown as IMovable;
+                movableObstacle.updateSensor(obstacleList, collisionList);
+                collisionList.shift();
+            }
+            //}
+        });
+
         this.draw(dt, interpreterRunning);
     }
 
