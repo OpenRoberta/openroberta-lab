@@ -1135,6 +1135,16 @@ export class SimulationRoberta implements Simulation {
                             if (img['index'].length > 0) {
                                 rcjLabel.push(img);
                             }
+                            if (img['items'] && img['items']['obstacles'] && img['items']['obstacles'] > 0) {
+                                let obstacle: any = {};
+                                obstacle.id = sim.scene.uniqueObjectId;
+                                obstacle.shape = SimObjectShape.Rectangle;
+                                obstacle.color = '#ff0000';
+                                obstacle.newObjecttype = SimObjectType.Obstacle;
+                                obstacle.p = { x: img['x'] * TILE_SIZE + TILE_SIZE / 4 + 10, y: img['y'] * TILE_SIZE + TILE_SIZE / 4 + 10 };
+                                obstacle.params = [TILE_SIZE * 0.5, TILE_SIZE * 0.5];
+                                importObstacles.push(obstacle);
+                            }
                         }
                     });
                     if (evacuationTop.length >= 2 && evacuationRight.length >= 2 && evacuationBottom.length >= 2 && evacuationLeft.length >= 2) {
@@ -1191,7 +1201,6 @@ export class SimulationRoberta implements Simulation {
                             return tile.tileType.image.startsWith('ev3');
                         });
                         let evacuationZoneTile = evacuationEdges[Math.floor(Math.random() * evacuationEdges.length)];
-                        console.log(evacuationZoneTile);
                         drawEvacuationZone(evacuationZoneTile, ctx);
                     }
                     if (startTile) {

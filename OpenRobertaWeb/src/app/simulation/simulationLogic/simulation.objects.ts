@@ -1,4 +1,4 @@
-import { IDestroyable, ISelectable, RobotBase, SelectionListener } from 'robot.base';
+import { IDestroyable, ISelectable, SelectionListener } from 'robot.base';
 import * as $ from 'jquery';
 import * as UTIL from 'util.roberta';
 import { SimulationRoberta } from 'simulation.roberta';
@@ -7,7 +7,10 @@ import * as SIMATH from 'simulation.math';
 import { ChassisMobile } from 'robot.actuators';
 
 export interface IMovable {
-    moveObstacleTo(newPosition: Point, obstacleList: any[]): boolean;
+    moveObstacleTo(dist: Point): boolean;
+
+    updateSensor(obstacleList: ISimulationObstacle[], collisionList: ISimulationObstacle[]);
+    updateAction();
 }
 
 export interface ISimulationObstacle {
@@ -652,6 +655,9 @@ export class CircleSimulationObject extends BaseSimulationObject implements IMov
     y: number;
     r: number = 50;
     corners: Corner[] = [];
+    private collisions: Point[] = [];
+    private lastMoveBumped: boolean = false;
+    private lastMove: Point;
 
     constructor(
         myId: number,
@@ -896,68 +902,86 @@ export class CircleSimulationObject extends BaseSimulationObject implements IMov
         this.redraw();
     }
 
-    moveObstacleTo(distP: Point, obstacleList: any[], optPreviousObstacle?: BaseSimulationObject): boolean {
+    override getTolerance(): number {
+        return 1.01;
+    }
+
+    moveObstacleTo(dist: Point): boolean {
         if (!this.movable) {
             return false;
         }
-        let thisNewPosition: Circle = { x: this.x + distP.x, y: this.y + distP.y, r: this.r };
+        this.collisions.push(dist);
+        if (this.lastMoveBumped) {
+            //this.lastMoveBumped = false;
+            return false;
+        }
+        return true;
+    }
+
+    updateSensor(obstacleList: ISimulationObstacle[], collisionList: ISimulationObstacle[]) {
+        if (!this.movable) {
+            return;
+        }
+        let thisCircle: Circle = { x: this.x, y: this.y, r: this.r * this.getTolerance() };
         let ground: Rectangle = obstacleList.slice(-1)[0] as any; // ground is always the last element in the personal obstacle list
-        let interP: Point = SIMATH.getMiddleIntersectionCircleRect(thisNewPosition, ground as Rectangle, SIMATH.getLinesFromRect(ground));
+        let interP: Point = SIMATH.getMiddleIntersectionCircleRect(thisCircle, ground as Rectangle, SIMATH.getLinesFromRect(ground));
         if (interP) {
             let distP: Point = SIMATH.getDistanceToCircle(interP, this as Circle);
-            let x = 2 * distP.x;
-            let y = 2 * distP.y;
-            distP.x += x;
-            distP.y += y;
-            //if (SIMATH.epsilonEqual(distP.x, 0, 0.1) && SIMATH.epsilonEqual(distP.y, 0, 0.1)) {
-            return false;
-            //}
+            this.collisions.push(distP);
+            this.lastMoveBumped = true;
         }
         for (let i = 0; i < obstacleList.length - 1; i++) {
             let myObstacle: any = obstacleList[i];
-            if (optPreviousObstacle && myObstacle.myId === optPreviousObstacle.myId) {
-                continue;
-            }
-            if (myObstacle.myId === this.myId) {
-                continue;
-            }
-            if (myObstacle instanceof ChassisMobile) {
-                continue;
-            }
             if (myObstacle instanceof RectangleSimulationObject) {
-                let interP: Point = SIMATH.getMiddleIntersectionCircleRect(thisNewPosition, myObstacle as Rectangle, myObstacle.getLines());
+                let interP: Point = SIMATH.getMiddleIntersectionCircleRect(thisCircle, myObstacle as Rectangle, myObstacle.getLines());
                 if (interP) {
                     let distP: Point = SIMATH.getDistanceToCircle(interP, this as Circle);
-                    let x = 2 * distP.x;
-                    let y = 2 * distP.y;
-                    distP.x += x;
-                    distP.y += y;
-                    if (SIMATH.epsilonEqual(distP.x, 0, 0.1) && SIMATH.epsilonEqual(distP.y, 0, 0.1)) {
-                        return false;
-                    }
-                } else {
-                    continue;
+                    this.collisions.push(distP); //{ x: -distP.x, y: -distP.y });
+                    this.lastMoveBumped = true;
                 }
-                /*if (SIMATH.intersects(thisNewPosition, myObstacle as Rectangle)) {
-                    return false;
-                }*/
             }
             if (myObstacle instanceof CircleSimulationObject) {
-                let interPoint: Point = SIMATH.getMiddleIntersectionPointCircles(thisNewPosition, myObstacle as Circle);
-                if (interPoint && myObstacle.movable) {
+                if ((myObstacle as CircleSimulationObject).myId == this.myId) {
+                    obstacleList.splice(i, 1);
+                    continue;
+                }
+                let interPoint: Point = SIMATH.getMiddleIntersectionPointCircles(thisCircle, myObstacle as Circle);
+                if (interPoint) {
                     let distP: Point = SIMATH.getDistanceToCircle(interPoint, myObstacle as Circle);
-                    let x = 2 * distP.x;
-                    let y = 2 * distP.y;
-                    if (!myObstacle.moveObstacleTo({ x: x, y: y }, obstacleList, this)) {
-                        return false;
+                    if (myObstacle.movable) {
+                        if (!myObstacle.moveObstacleTo(distP)) {
+                            this.lastMoveBumped = true;
+                            this.collisions.push({ x: -distP.x, y: -distP.y });
+                        }
+                        collisionList.push(myObstacle);
+                    } else {
+                        this.lastMoveBumped = true;
+                        this.collisions.push({ x: -distP.x, y: -distP.y });
                     }
-                } else {
-                    return false;
                 }
             }
         }
-        this.moveTo({ x: this.x + distP.x, y: this.y + distP.y });
-        return true;
+    }
+
+    updateAction(): void {
+        let diffP: Point = { x: 0, y: 0 };
+        this.collisions.forEach((diff) => {
+            diffP.x += diff.x;
+            diffP.y += diff.y;
+        });
+        if (this.collisions.length > 0) {
+            let dotProduct = SIMATH.getDotProduct(diffP, this.lastMove);
+            if (this.lastMoveBumped) {
+                if (dotProduct && (dotProduct < -0.9 || (dotProduct && dotProduct > 0.9))) {
+                    this.moveTo({ x: this.x + diffP.x, y: this.y + diffP.y });
+                }
+            } else {
+                this.lastMoveBumped = false;
+                this.moveTo({ x: this.x + diffP.x, y: this.y + diffP.y });
+            }
+        }
+        this.lastMove = diffP;
+        this.collisions = [];
     }
 }
 

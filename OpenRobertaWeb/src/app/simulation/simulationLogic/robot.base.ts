@@ -6,7 +6,7 @@ import { RobotBaseMobile } from 'robot.base.mobile';
 import * as UTIL from 'util.roberta';
 // @ts-ignore
 import * as Blockly from 'blockly';
-import { MarkerSimulationObject } from 'simulation.objects';
+import { ISimulationObstacle, MarkerSimulationObject } from 'simulation.objects';
 
 const MAX_SIM_ROBOTS: number = 10;
 
@@ -263,12 +263,13 @@ export abstract class RobotBase implements IRobot, ISelectable {
         uCtx: CanvasRenderingContext2D,
         udCtx: CanvasRenderingContext2D,
         personalObstacleList: any[],
-        markerList: MarkerSimulationObject[]
+        markerList: MarkerSimulationObject[],
+        collisionList: ISimulationObstacle[]
     ): void {
         let values = this.interpreter.getRobotBehaviour().hardwareState.sensors;
         for (const item in this) {
             if (this[item] && (this[item] as unknown as ISensor).updateSensor) {
-                (this[item] as unknown as ISensor).updateSensor(running, dt, this, values, uCtx, udCtx, personalObstacleList, markerList);
+                (this[item] as unknown as ISensor).updateSensor(running, dt, this, values, uCtx, udCtx, personalObstacleList, markerList, collisionList);
             }
         }
     }
