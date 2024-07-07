@@ -1,5 +1,5 @@
 import { Pose, RobotBaseMobile } from 'robot.base.mobile';
-import { ColorSensor, DistanceSensor, EV3Keys, Timer, UltrasonicSensor } from 'robot.sensors';
+import { ColorSensor, ColorSensorHex, DistanceSensor, EV3Keys, Timer, UltrasonicSensor } from 'robot.sensors';
 import { ChassisDiffDrive, RCJChassis, RGBLed, StatusLed } from 'robot.actuators';
 import * as $ from 'jquery';
 
@@ -12,7 +12,7 @@ export default class RobotRcj extends RobotBaseMobile {
     protected configure(configuration: object): void {
         let rcj = this;
         this.chassis = new RCJChassis(this.id, configuration, 1.75, this.pose);
-        this.led = new StatusLed({ x: -5, y: 0 }, this.chassis.geom.color);
+        this.led = new StatusLed({ x: -5, y: 0 }, this.chassis.geom.color, '#EBC300');
         let sensors: object = configuration['SENSORS'];
         for (const c in sensors) {
             switch (sensors[c]['TYPE']) {
@@ -26,7 +26,7 @@ export default class RobotRcj extends RobotBaseMobile {
                     const ord = myColorSensors.length + 1;
                     const id = Object.keys(sensors).filter((port) => sensors[port]['TYPE'] == 'COLOUR').length;
                     let y = ord * 10 - 5 * (id + 1);
-                    this[c] = new ColorSensor(c, 9, y, 0, 5);
+                    this[c] = new ColorSensorHex(c, 9, y, 0, 5);
                     break;
                 case 'ULTRASONIC': {
                     let mySensors = [];

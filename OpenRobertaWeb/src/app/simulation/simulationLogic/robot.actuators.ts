@@ -2548,16 +2548,18 @@ export class StatusLed implements IUpdateAction, IDrawable, IReset {
     blinkColor: string = 'LIGHTGREY';
     color: string = 'LIGHTGREY';
     backColor: string;
+    noneColor: string;
     mode: string;
     r: number = 7;
     timer: number = 0;
     x: number;
     y: number;
 
-    constructor(location: Point, geomColor: string) {
+    constructor(location: Point, geomColor: string, noneColor?: string) {
         this.x = location.x;
         this.y = location.y;
         this.backColor = geomColor;
+        this.noneColor = noneColor || null;
     }
 
     draw(rCtx: CanvasRenderingContext2D, myRobot: RobotBaseMobile): void {
@@ -2589,6 +2591,9 @@ export class StatusLed implements IUpdateAction, IDrawable, IReset {
             let mode = led.mode;
             if (color) {
                 this.color = color.toUpperCase();
+                if (this.noneColor && this.noneColor == this.color) {
+                    mode = C.OFF;
+                }
                 this.blinkColor = color.toUpperCase();
             }
             switch (mode) {
