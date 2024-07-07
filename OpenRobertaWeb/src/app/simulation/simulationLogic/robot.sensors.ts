@@ -1150,20 +1150,34 @@ export class ColorSensor implements IExternalSensor, IDrawable, ILabel {
             blue /= num;
             this.colorValue = SIMATH.getColor(SIMATH.rgbToHsv(red, green, blue));
             this.rgb = [UTIL.round(red, 0), UTIL.round(green, 0), UTIL.round(blue, 0)];
-            if (this.colorValue === COLOR_ENUM.NONE) {
+            if (this.colorValue[0] === COLOR_ENUM.NONE) {
                 this.color = 'grey';
             } else {
-                this.color = this.colorValue.toString().toLowerCase();
+                this.color = this.colorValue[0].toString().toLowerCase();
             }
             this.lightValue = (red + green + blue) / 3 / 2.55;
         } catch (e) {
             // this might happen during change of background image and is ok, we return the last valid sensor values
         }
-        values['color'][this.port].colorValue = this.colorValue;
-        values['color'][this.port].colour = this.colorValue;
+        values['color'][this.port].colorValue = this.colorValue[0];
+        values['color'][this.port].colorHex = this.colorValue[1];
+        values['color'][this.port].colour = this.colorValue[0];
         values['color'][this.port].light = this.lightValue;
         values['color'][this.port].rgb = this.rgb;
         values['color'][this.port].ambientlight = 0;
+    }
+}
+export class ColorSensorHex extends ColorSensor {
+    override updateSensor(
+        running: boolean,
+        dt: number,
+        myRobot: RobotBaseMobile,
+        values: object,
+        uCtx: CanvasRenderingContext2D,
+        udCtx: CanvasRenderingContext2D
+    ) {
+        super.updateSensor(running, dt, myRobot, values, uCtx, udCtx);
+        this.color = this.colorValue[1];
     }
 }
 

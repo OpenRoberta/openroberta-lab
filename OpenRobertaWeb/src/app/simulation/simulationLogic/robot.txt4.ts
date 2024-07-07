@@ -12,11 +12,6 @@ export default class RobotTxt4 extends RobotBaseMobile {
     buttons: Keys;
     private cameraSensor: Txt4CameraSensor;
 
-    constructor(id: number, configuration: object, interpreter: Interpreter, savedName: string, myListener: SelectionListener) {
-        super(id, configuration, interpreter, savedName, myListener);
-        this.configure(configuration);
-    }
-
     override updateActions(robot: RobotBase, dt, interpreterRunning: boolean): void {
         super.updateActions(robot, dt, interpreterRunning);
         /*let volume = this.interpreter.getRobotBehaviour().getActionState('volume', true);

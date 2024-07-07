@@ -532,27 +532,30 @@ export const rgbToHsv = function (r, g, b) {
  */
 export const getColor = function (hsv) {
     if (hsv[2] <= 10) {
-        return CONSTANTS.COLOR_ENUM.BLACK;
+        return [CONSTANTS.COLOR_ENUM.BLACK, '#000000'];
     }
     if ((hsv[0] < 10 || hsv[0] > 350) && hsv[1] > 90 && hsv[2] > 50) {
-        return CONSTANTS.COLOR_ENUM.RED;
+        return [CONSTANTS.COLOR_ENUM.RED, '#FA010C'];
     }
     if (hsv[0] > 40 && hsv[0] < 70 && hsv[1] > 90 && hsv[2] > 50) {
-        return CONSTANTS.COLOR_ENUM.YELLOW;
+        return [CONSTANTS.COLOR_ENUM.YELLOW, '#F7F700'];
     }
     if (hsv[0] < 50 && hsv[1] > 50 && hsv[1] < 100 && hsv[2] < 50) {
-        return CONSTANTS.COLOR_ENUM.BROWN;
+        return [CONSTANTS.COLOR_ENUM.BROWN, '#EBC300'];
     }
     if (hsv[1] < 10 && hsv[2] > 90) {
-        return CONSTANTS.COLOR_ENUM.WHITE;
+        return [CONSTANTS.COLOR_ENUM.WHITE, '#FFFFFF'];
     }
     if (hsv[0] > 70 && hsv[0] < 160 && hsv[1] > 80) {
-        return CONSTANTS.COLOR_ENUM.GREEN;
+        return [CONSTANTS.COLOR_ENUM.GREEN, '#00852a'];
+    }
+    if (hsv[0] > 165 && hsv[0] <= 200 && hsv[1] > 70 && hsv[2] > 75) {
+        return [CONSTANTS.COLOR_ENUM.NONE, '#33B8CA'];
     }
     if (hsv[0] > 200 && hsv[0] < 250 && hsv[1] > 90 && hsv[2] > 50) {
-        return CONSTANTS.COLOR_ENUM.BLUE;
+        return [CONSTANTS.COLOR_ENUM.BLUE, '#1e5aa8'];
     }
-    return CONSTANTS.COLOR_ENUM.NONE;
+    return [CONSTANTS.COLOR_ENUM.NONE, '#EBC300'];
 };
 
 // TODO type PointRobotWorld

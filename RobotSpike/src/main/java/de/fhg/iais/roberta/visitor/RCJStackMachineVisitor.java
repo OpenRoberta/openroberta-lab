@@ -40,6 +40,8 @@ import de.fhg.iais.roberta.visitor.lang.codegen.AbstractStackMachineVisitor;
 
 public class RCJStackMachineVisitor extends AbstractStackMachineVisitor implements IRCJVisitor<Void> {
 
+    private boolean noColor = false;
+
     public RCJStackMachineVisitor(ConfigurationAst configuration, List<List<Phrase>> phrases, UsedHardwareBean usedHardwareBean, NNBean nnBean) {
         super(configuration, usedHardwareBean, nnBean);
         Assert.isTrue(!phrases.isEmpty());
@@ -47,35 +49,22 @@ public class RCJStackMachineVisitor extends AbstractStackMachineVisitor implemen
 
     @Override
     public Void visitColorConst(ColorConst colorConst) {
-        String color = "";
-        switch ( colorConst.getHexValueAsString().toUpperCase() ) {
+        this.noColor = false;
+        String color = colorConst.getHexValueAsString().toUpperCase();
+        switch (color) {
+            case "#1E5AA8":
+            case "#00852A":
+            case "#F7F700":
+            case "#FA010C":
             case "#000000":
-                color = "BLACK";
-                break;
-            case "#0057A6":
-                color = "BLUE";
-                break;
-            case "#00642E":
-                color = "GREEN";
-                break;
-            case "#F7D117":
-                color = "YELLOW";
-                break;
-            case "#B30006":
-                color = "RED";
-                break;
             case "#FFFFFF":
-                color = "WHITE";
+            case "#33B8CA":
                 break;
-            case "#532115":
-                color = "BROWN";
-                break;
-            case "#585858":
-                color = "NONE";
-                break;
+            case "#EBC300":
+                this.noColor = true;
+                return null;
             default:
-                colorConst.addInfo(NepoInfo.error("SIM_BLOCK_NOT_SUPPORTED"));
-                throw new DbcException("Invalid color constant: " + colorConst.getHexValueAsString());
+                throw new DbcException("Invalid color constant: " + color);
         }
         JSONObject o = makeNode(C.EXPR).put(C.EXPR, C.COLOR_CONST).put(C.VALUE, color);
         return add(o);
@@ -91,7 +80,12 @@ public class RCJStackMachineVisitor extends AbstractStackMachineVisitor implemen
     @Override
     public Void visitRgbLedOnHiddenAction(RgbLedOnHiddenAction rgbLedOnHiddenAction) {
         rgbLedOnHiddenAction.colour.accept(this);
-        JSONObject o = makeNode(C.RGBLED_ON_ACTION);
+        JSONObject o;
+        if (this.noColor) {
+            o = makeNode(C.RGBLED_OFF_ACTION);
+        } else {
+            o = makeNode(C.RGBLED_ON_ACTION);
+        }
         return add(o);
     }
 
@@ -119,8 +113,11 @@ public class RCJStackMachineVisitor extends AbstractStackMachineVisitor implemen
     @Override
     public Void visitColorSensor(ColorSensor colorSensor) {
         String mode = colorSensor.getMode();
+        if (mode.equals("COLOUR")) {
+            mode = C.COLOUR_HEX;
+        }
         String port = colorSensor.getUserDefinedPort();
-        JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.COLOR).put(C.PORT, port).put(C.MODE, mode.toLowerCase());
+        JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.COLOR).put(C.PORT, port).put(C.MODE, mode);
         return add(o);
     }
 
@@ -131,7 +128,7 @@ public class RCJStackMachineVisitor extends AbstractStackMachineVisitor implemen
         String name = motorOnForAction.getUserDefinedPort();
         String port = this.configuration.getConfigurationComponent(name).componentProperties.get("PORT");
         String unit = motorOnForAction.unit.toLowerCase();
-        if ( unit.equals("degrees") ) {
+        if (unit.equals("degrees")) {
             unit = "degree";
         }
         JSONObject o = makeNode(C.MOTOR_ON_ACTION).put(C.PORT, port.toLowerCase()).put(C.NAME, port.toLowerCase()).put(C.SPEED_ONLY, false).put(C.MOTOR_DURATION, unit);
@@ -160,7 +157,7 @@ public class RCJStackMachineVisitor extends AbstractStackMachineVisitor implemen
         motorDiffOnForAction.power.accept(this);
         motorDiffOnForAction.distance.accept(this);
         JSONObject o =
-            makeNode(C.DRIVE_ACTION).put(C.DRIVE_DIRECTION, motorDiffOnForAction.direction).put(C.SPEED_ONLY, false);
+                makeNode(C.DRIVE_ACTION).put(C.DRIVE_DIRECTION, motorDiffOnForAction.direction).put(C.SPEED_ONLY, false);
         add(o);
         return add(makeNode(C.STOP_DRIVE));
     }
@@ -170,9 +167,9 @@ public class RCJStackMachineVisitor extends AbstractStackMachineVisitor implemen
         motorDiffTurnForAction.power.accept(this);
         motorDiffTurnForAction.degrees.accept(this);
         JSONObject o =
-            makeNode(C.TURN_ACTION)
-                .put(C.TURN_DIRECTION, motorDiffTurnForAction.direction.toLowerCase())
-                .put(C.SPEED_ONLY, false);
+                makeNode(C.TURN_ACTION)
+                        .put(C.TURN_DIRECTION, motorDiffTurnForAction.direction.toLowerCase())
+                        .put(C.SPEED_ONLY, false);
         return add(o);
     }
 
@@ -182,7 +179,7 @@ public class RCJStackMachineVisitor extends AbstractStackMachineVisitor implemen
         motorDiffCurveForAction.powerRight.accept(this);
         motorDiffCurveForAction.distance.accept(this);
         JSONObject o =
-            makeNode(C.CURVE_ACTION).put(C.DRIVE_DIRECTION, motorDiffCurveForAction.direction).put(C.SPEED_ONLY, false);
+                makeNode(C.CURVE_ACTION).put(C.DRIVE_DIRECTION, motorDiffCurveForAction.direction).put(C.SPEED_ONLY, false);
         add(o);
         return add(makeNode(C.STOP_DRIVE));
     }
@@ -192,7 +189,7 @@ public class RCJStackMachineVisitor extends AbstractStackMachineVisitor implemen
         motorDiffCurveAction.powerLeft.accept(this);
         motorDiffCurveAction.powerRight.accept(this);
         JSONObject o =
-            makeNode(C.CURVE_ACTION).put(C.DRIVE_DIRECTION, motorDiffCurveAction.direction).put(C.SPEED_ONLY, true);
+                makeNode(C.CURVE_ACTION).put(C.DRIVE_DIRECTION, motorDiffCurveAction.direction).put(C.SPEED_ONLY, true);
         return add(o);
     }
 
@@ -200,7 +197,7 @@ public class RCJStackMachineVisitor extends AbstractStackMachineVisitor implemen
     public Void visitMotorDiffOnAction(MotorDiffOnAction motorDiffOnAction) {
         motorDiffOnAction.power.accept(this);
         JSONObject o =
-            makeNode(C.DRIVE_ACTION).put(C.DRIVE_DIRECTION, motorDiffOnAction.direction).put(C.SPEED_ONLY, true);
+                makeNode(C.DRIVE_ACTION).put(C.DRIVE_DIRECTION, motorDiffOnAction.direction).put(C.SPEED_ONLY, true);
         return add(o);
     }
 
@@ -208,9 +205,9 @@ public class RCJStackMachineVisitor extends AbstractStackMachineVisitor implemen
     public Void visitMotorDiffTurnAction(MotorDiffTurnAction motorDiffTurnAction) {
         motorDiffTurnAction.power.accept(this);
         JSONObject o =
-            makeNode(C.TURN_ACTION)
-                .put(C.TURN_DIRECTION, motorDiffTurnAction.direction.toLowerCase())
-                .put(C.SPEED_ONLY, true);
+                makeNode(C.TURN_ACTION)
+                        .put(C.TURN_DIRECTION, motorDiffTurnAction.direction.toLowerCase())
+                        .put(C.SPEED_ONLY, true);
         return add(o);
     }
 
