@@ -117,7 +117,7 @@ public class RCJStackMachineVisitor extends AbstractStackMachineVisitor implemen
             mode = C.COLOUR_HEX;
         }
         String port = colorSensor.getUserDefinedPort();
-        JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.COLOR).put(C.PORT, port).put(C.MODE, mode);
+        JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.COLOR).put(C.PORT, port).put(C.MODE, mode.toLowerCase());
         return add(o);
     }
 
