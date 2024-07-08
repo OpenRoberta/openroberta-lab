@@ -255,7 +255,7 @@ export abstract class RobotBaseMobile extends RobotBase implements IObservableRo
 
     override updateActions(myRobot: RobotBase, dt: number, interpreterRunning: boolean) {
         super.updateActions(myRobot, dt, interpreterRunning);
-        this.notifyObservers();
+        interpreterRunning && this.notifyObservers();
     }
 
     addObserver(observer: IObserver): void {

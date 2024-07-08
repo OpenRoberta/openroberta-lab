@@ -58,6 +58,8 @@ export class SimulationRoberta implements Simulation {
     private storedPrograms: object[];
     private robotType: string;
     private callbackOnEnd: () => void;
+    private TILE_SIZE: number = 90;
+    private EV_WALL_SIZE: number = 10;
 
     private constructor() {}
 
@@ -906,10 +908,8 @@ export class SimulationRoberta implements Simulation {
         let sim = this;
         return new Promise(function (resolve, reject) {
             let result: { rc: string; message: string } = { rc: 'ok', message: '' };
-            const TILE_SIZE: number = 90;
-            const EV_WALL_SIZE: number = 10;
-            let height: number = configData.length * TILE_SIZE; // tile height/length is 25cm, 3 pixel = 1cm
-            let width: number = configData.width * TILE_SIZE; // tile width is 25cm, 3 pixel = 1cm
+            let height: number = configData.length * sim.TILE_SIZE; // tile height/length is 25cm, 3 pixel = 1cm
+            let width: number = configData.width * sim.TILE_SIZE; // tile width is 25cm, 3 pixel = 1cm
             let canvas = document.createElement('canvas');
             canvas.id = 'tmp';
             canvas.width = width;
@@ -944,7 +944,7 @@ export class SimulationRoberta implements Simulation {
             let rcjLabel = [];
             let drawEntranceEvacuationZone = (tile, ctx: CanvasRenderingContext2D) => {
                 ctx.save();
-                ctx.translate(tile['x'] * TILE_SIZE + TILE_SIZE / 2, tile['y'] * TILE_SIZE + TILE_SIZE / 2);
+                ctx.translate(tile['x'] * sim.TILE_SIZE + sim.TILE_SIZE / 2, tile['y'] * sim.TILE_SIZE + sim.TILE_SIZE / 2);
                 let rot = 0;
                 switch (tile['dir']) {
                     case 'top':
@@ -961,12 +961,12 @@ export class SimulationRoberta implements Simulation {
                 }
                 ctx.rotate(rot);
                 ctx.fillStyle = '#33B8CA';
-                ctx.fillRect(-TILE_SIZE / 2, -TILE_SIZE / 2, TILE_SIZE, EV_WALL_SIZE);
+                ctx.fillRect(-sim.TILE_SIZE / 2, -sim.TILE_SIZE / 2, sim.TILE_SIZE, sim.EV_WALL_SIZE);
                 ctx.restore();
             };
             let drawEvacuationZone = (tile, ctx: CanvasRenderingContext2D) => {
                 ctx.save();
-                ctx.translate(tile['x'] * TILE_SIZE + TILE_SIZE / 2, tile['y'] * TILE_SIZE + TILE_SIZE / 2);
+                ctx.translate(tile['x'] * sim.TILE_SIZE + sim.TILE_SIZE / 2, tile['y'] * sim.TILE_SIZE + sim.TILE_SIZE / 2);
                 let rot = 0;
                 switch (tile['rot']) {
                     case 0:
@@ -983,9 +983,9 @@ export class SimulationRoberta implements Simulation {
                 }
                 ctx.rotate(rot);
                 ctx.beginPath();
-                ctx.moveTo(-TILE_SIZE / 2, -TILE_SIZE / 2);
-                ctx.lineTo(TILE_SIZE / 2, -TILE_SIZE / 2);
-                ctx.lineTo(TILE_SIZE / 2, TILE_SIZE / 2);
+                ctx.moveTo(-sim.TILE_SIZE / 2, -sim.TILE_SIZE / 2);
+                ctx.lineTo(sim.TILE_SIZE / 2, -sim.TILE_SIZE / 2);
+                ctx.lineTo(sim.TILE_SIZE / 2, sim.TILE_SIZE / 2);
                 ctx.closePath();
                 ctx.fillStyle = '#000000';
                 ctx.fill();
@@ -995,13 +995,13 @@ export class SimulationRoberta implements Simulation {
                 ctx.strokeStyle = '#dddddd';
                 ctx.lineWidth = 1;
                 for (let i = 1; i < height; i++) {
-                    ctx.moveTo(0, i * TILE_SIZE);
-                    ctx.lineTo(width * TILE_SIZE, i * TILE_SIZE);
+                    ctx.moveTo(0, i * sim.TILE_SIZE);
+                    ctx.lineTo(width * sim.TILE_SIZE, i * sim.TILE_SIZE);
                     ctx.stroke();
                 }
                 for (let j = 1; j < width; j++) {
-                    ctx.moveTo(j * TILE_SIZE, 0);
-                    ctx.lineTo(j * TILE_SIZE, TILE_SIZE * height);
+                    ctx.moveTo(j * sim.TILE_SIZE, 0);
+                    ctx.lineTo(j * sim.TILE_SIZE, sim.TILE_SIZE * height);
                     ctx.stroke();
                 }
             };
@@ -1009,10 +1009,10 @@ export class SimulationRoberta implements Simulation {
                 let victims = configData.victims;
                 let rcjVictimsList = [];
                 let zone: Rectangle = {
-                    x: Math.min(evacuationZone[0], evacuationZone[2]) * TILE_SIZE,
-                    y: Math.min(evacuationZone[1], evacuationZone[3]) * TILE_SIZE,
-                    w: (Math.max(evacuationZone[0], evacuationZone[2]) - Math.min(evacuationZone[0], evacuationZone[2]) + 1) * TILE_SIZE,
-                    h: (Math.max(evacuationZone[1], evacuationZone[3]) - Math.min(evacuationZone[1], evacuationZone[3]) + 1) * TILE_SIZE,
+                    x: Math.min(evacuationZone[0], evacuationZone[2]) * sim.TILE_SIZE,
+                    y: Math.min(evacuationZone[1], evacuationZone[3]) * sim.TILE_SIZE,
+                    w: (Math.max(evacuationZone[0], evacuationZone[2]) - Math.min(evacuationZone[0], evacuationZone[2]) + 1) * sim.TILE_SIZE,
+                    h: (Math.max(evacuationZone[1], evacuationZone[3]) - Math.min(evacuationZone[1], evacuationZone[3]) + 1) * sim.TILE_SIZE,
                 };
                 const createVictim = (color) => {
                     let victim = {
@@ -1131,7 +1131,7 @@ export class SimulationRoberta implements Simulation {
                             }
                         } else {
                             ctx.save();
-                            ctx.translate(img['x'] * TILE_SIZE + TILE_SIZE / 2, img['y'] * TILE_SIZE + TILE_SIZE / 2);
+                            ctx.translate(img['x'] * sim.TILE_SIZE + sim.TILE_SIZE / 2, img['y'] * sim.TILE_SIZE + sim.TILE_SIZE / 2);
                             ctx.rotate((img['rot'] * Math.PI) / 180);
                             ctx.drawImage(
                                 images[index],
@@ -1139,10 +1139,10 @@ export class SimulationRoberta implements Simulation {
                                 0,
                                 images[index]['width'],
                                 images[index]['height'],
-                                -TILE_SIZE / 2,
-                                -TILE_SIZE / 2,
-                                TILE_SIZE,
-                                TILE_SIZE
+                                -sim.TILE_SIZE / 2,
+                                -sim.TILE_SIZE / 2,
+                                sim.TILE_SIZE,
+                                sim.TILE_SIZE
                             );
                             ctx.restore();
                             if (img['index'].length > 0) {
@@ -1154,8 +1154,8 @@ export class SimulationRoberta implements Simulation {
                                 obstacle.shape = SimObjectShape.Rectangle;
                                 obstacle.color = '#ff0000';
                                 obstacle.newObjecttype = SimObjectType.Obstacle;
-                                obstacle.p = { x: img['x'] * TILE_SIZE + TILE_SIZE / 4 + 10, y: img['y'] * TILE_SIZE + TILE_SIZE / 4 + 10 };
-                                obstacle.params = [TILE_SIZE * 0.5, TILE_SIZE * 0.5];
+                                obstacle.p = { x: img['x'] * sim.TILE_SIZE + sim.TILE_SIZE / 4 + 10, y: img['y'] * sim.TILE_SIZE + sim.TILE_SIZE / 4 + 10 };
+                                obstacle.params = [sim.TILE_SIZE * 0.5, sim.TILE_SIZE * 0.5];
                                 importObstacles.push(obstacle);
                             }
                         }
@@ -1175,8 +1175,8 @@ export class SimulationRoberta implements Simulation {
                         });
                         let wallTop = {
                             id: sim.scene.uniqueObjectId,
-                            p: { x: evacuationTop[0]['x'] * TILE_SIZE + 10, y: evacuationTop[0]['y'] * TILE_SIZE + EV_WALL_SIZE },
-                            params: [TILE_SIZE * (evacuationTop[evacuationTop.length - 1]['x'] - evacuationTop[0]['x'] + 1), EV_WALL_SIZE],
+                            p: { x: evacuationTop[0]['x'] * sim.TILE_SIZE + 10, y: evacuationTop[0]['y'] * sim.TILE_SIZE + sim.EV_WALL_SIZE },
+                            params: [sim.TILE_SIZE * (evacuationTop[evacuationTop.length - 1]['x'] - evacuationTop[0]['x'] + 1), sim.EV_WALL_SIZE],
                             theta: 0,
                             color: '#ffffff',
                             shape: SimObjectShape.Rectangle,
@@ -1184,8 +1184,8 @@ export class SimulationRoberta implements Simulation {
                         };
                         let wallRight = {
                             id: sim.scene.uniqueObjectId,
-                            p: { x: evacuationRight[0]['x'] * TILE_SIZE + TILE_SIZE, y: evacuationRight[0]['y'] * TILE_SIZE + EV_WALL_SIZE },
-                            params: [EV_WALL_SIZE, TILE_SIZE * (evacuationRight[evacuationRight.length - 1]['y'] - evacuationRight[0]['y'] + 1)],
+                            p: { x: evacuationRight[0]['x'] * sim.TILE_SIZE + sim.TILE_SIZE, y: evacuationRight[0]['y'] * sim.TILE_SIZE + sim.EV_WALL_SIZE },
+                            params: [sim.EV_WALL_SIZE, sim.TILE_SIZE * (evacuationRight[evacuationRight.length - 1]['y'] - evacuationRight[0]['y'] + 1)],
                             theta: 0,
                             color: '#ffffff',
                             shape: SimObjectShape.Rectangle,
@@ -1193,8 +1193,8 @@ export class SimulationRoberta implements Simulation {
                         };
                         let wallBottom = {
                             id: sim.scene.uniqueObjectId,
-                            p: { x: evacuationBottom[0]['x'] * TILE_SIZE + 10, y: evacuationBottom[0]['y'] * TILE_SIZE + TILE_SIZE },
-                            params: [TILE_SIZE * (evacuationBottom[evacuationBottom.length - 1]['x'] - evacuationBottom[0]['x'] + 1), EV_WALL_SIZE],
+                            p: { x: evacuationBottom[0]['x'] * sim.TILE_SIZE + 10, y: evacuationBottom[0]['y'] * sim.TILE_SIZE + sim.TILE_SIZE },
+                            params: [sim.TILE_SIZE * (evacuationBottom[evacuationBottom.length - 1]['x'] - evacuationBottom[0]['x'] + 1), sim.EV_WALL_SIZE],
                             theta: 0,
                             color: '#ffffff',
                             shape: SimObjectShape.Rectangle,
@@ -1202,8 +1202,8 @@ export class SimulationRoberta implements Simulation {
                         };
                         let wallLeft = {
                             id: sim.scene.uniqueObjectId,
-                            p: { x: evacuationLeft[0]['x'] * TILE_SIZE + 10, y: evacuationLeft[0]['y'] * TILE_SIZE + EV_WALL_SIZE },
-                            params: [EV_WALL_SIZE, TILE_SIZE * (evacuationLeft[evacuationLeft.length - 1]['y'] - evacuationLeft[0]['y'] + 1)],
+                            p: { x: evacuationLeft[0]['x'] * sim.TILE_SIZE + 10, y: evacuationLeft[0]['y'] * sim.TILE_SIZE + sim.EV_WALL_SIZE },
+                            params: [sim.EV_WALL_SIZE, sim.TILE_SIZE * (evacuationLeft[evacuationLeft.length - 1]['y'] - evacuationLeft[0]['y'] + 1)],
                             theta: 0,
                             color: '#ffffff',
                             shape: SimObjectShape.Rectangle,
@@ -1217,19 +1217,7 @@ export class SimulationRoberta implements Simulation {
                         drawEvacuationZone(evacuationZoneTile, ctx);
                     }
                     if (startTile) {
-                        startPose.x = startTile['x'] * TILE_SIZE + TILE_SIZE / 2 + EV_WALL_SIZE;
-                        startPose.y = startTile['y'] * TILE_SIZE + TILE_SIZE / 2 + EV_WALL_SIZE;
-                        let rot = 0;
-                        let next = configData['tiles'][startTile['next']];
-                        if (startTile['x'] - next['x'] === 1) {
-                            rot = Math.PI;
-                        }
-                        if (startTile['y'] - next['y'] === -1) {
-                            rot = Math.PI / 2;
-                        } else if (startTile['y'] - next['y'] === 1) {
-                            rot = (Math.PI * 3) / 2;
-                        }
-                        startPose.theta = rot;
+                        startPose = sim.getTilePose(startTile, configData['tiles'][startTile['next']]);
                     } else {
                         result.rc = 'error';
                         result.message = 'Unknown start tile';
@@ -1266,6 +1254,23 @@ export class SimulationRoberta implements Simulation {
                 }
             );
         });
+    }
+
+    getTilePose(tile: {}, nextTile: {}): Pose {
+        let pose: Pose = <Pose>{};
+        pose.x = tile['x'] * this.TILE_SIZE + this.TILE_SIZE / 2 + this.EV_WALL_SIZE;
+        pose.y = tile['y'] * this.TILE_SIZE + this.TILE_SIZE / 2 + this.EV_WALL_SIZE;
+        let rot = 0;
+        if (tile['x'] - nextTile['x'] === 1) {
+            rot = Math.PI;
+        }
+        if (tile['y'] - nextTile['y'] === -1) {
+            rot = Math.PI / 2;
+        } else if (tile['y'] - nextTile['y'] === 1) {
+            rot = (Math.PI * 3) / 2;
+        }
+        pose.theta = rot;
+        return pose;
     }
 }
 
