@@ -226,6 +226,10 @@ export abstract class ChassisDiffDrive extends ChassisMobile {
         SIMATH.transform(pose, chassis.wheelBackRight);
         SIMATH.transform(pose, chassis.wheelFrontLeft);
         SIMATH.transform(pose, chassis.wheelBackLeft);
+        if (this['grabberLeft'] && this['grabberRight']) {
+            SIMATH.transform(pose, this['grabberLeft']);
+            SIMATH.transform(pose, this['grabberRight']);
+        }
     }
 
     updateAction(myRobot: RobotBaseMobile, dt: number, interpreterRunning: boolean): void {
@@ -420,6 +424,10 @@ export abstract class ChassisDiffDrive extends ChassisMobile {
             this.wheelBackLeft,
             this.wheelBackRight,
         ];
+        if (this['grabberLeft'] && this['grabberRight']) {
+            myCheckPoints.push(this['grabberLeft']);
+            myCheckPoints.push(this['grabberRight']);
+        }
         myCheckPoints.forEach((checkPoint) => {
             checkPoint.bumped = false;
             checkGround(checkPoint);
@@ -452,6 +460,11 @@ export abstract class ChassisDiffDrive extends ChassisMobile {
                     [this.wheelFrontRight, this.wheelBackRight],
                     [this.wheelFrontLeft, this.wheelBackLeft],
                 ];
+                if (this['grabberLeft'] && this['grabberRight']) {
+                    myCheckLines.push([this['grabberLeft'], this['grabberRight']]);
+                    myCheckLines.push([this.frontLeft, this['grabberLeft']]);
+                    myCheckLines.push([this.frontRight, this['grabberRight']]);
+                }
                 let p: Point = { x: 0, y: 0 };
                 if (!(myObstacle instanceof CircleSimulationObject)) {
                     const obstacleLines = myObstacle.getLines();
@@ -524,8 +537,8 @@ export abstract class ChassisDiffDrive extends ChassisMobile {
                 }
             }
         }
-        this.frontLeft.bumped = this.frontLeft.bumped || this.frontMiddle.bumped;
-        this.frontRight.bumped = this.frontRight.bumped || this.frontMiddle.bumped;
+        this.frontLeft.bumped = this.frontLeft.bumped || this.frontMiddle.bumped || (this['grabberLeft'] && this['grabberLeft'].bumped);
+        this.frontRight.bumped = this.frontRight.bumped || this.frontMiddle.bumped || (this['grabberRight'] && this['grabberRight'].bumped);
         this.backLeft.bumped = this.backLeft.bumped || this.backMiddle.bumped || this.wheelBackLeft.bumped;
         this.backRight.bumped = this.backRight.bumped || this.backMiddle.bumped || this.wheelBackRight.bumped;
     }
@@ -1290,6 +1303,8 @@ export class RCJChassis extends ChassisDiffDrive implements ILabel {
     grabberAngle: number = 0;
     grabberWidth: number = this.grabber.w;
     grabberClosed: boolean = false;
+    grabberLeft: PointRobotWorldBumped;
+    grabberRight: PointRobotWorldBumped;
 
     labelPriority: number;
     topView: string =
@@ -1412,15 +1427,10 @@ export class RCJChassis extends ChassisDiffDrive implements ILabel {
                     }
                 }
                 this.grabberWidth = this.grabber.w * Math.cos(this.grabberAngle);
-                /*let robotChassis = myRobot.chassis as RCJChassis;
                 if (this.grabberWidth > myRobot.chassis.geom.w / 2) {
-                    robotChassis.frontLeft.x = this.grabber.x + this.grabberWidth;
-                    robotChassis.frontRight.x = this.grabber.x + this.grabberWidth;
-                } else {
-                    robotChassis.frontLeft.x = robotChassis.geom.w + robotChassis.geom.x;
-                    robotChassis.frontMiddle.x = robotChassis.geom.w + robotChassis.geom.x;
-                    robotChassis.frontRight.x = robotChassis.geom.w + robotChassis.geom.x;
-                }*/
+                    this.grabberLeft = { bumped: false, rx: 0, ry: 0, x: this.grabber.x + this.grabberWidth, y: this.frontLeft.y };
+                    this.grabberRight = { bumped: false, rx: 0, ry: 0, x: this.grabber.x + this.grabberWidth, y: this.frontRight.y };
+                }
                 if (SIMATH.epsilonEqual(this.grabberWidth, -this.grabber.w, 2)) {
                     this.grabberClosed = true;
                 } else {
@@ -1439,10 +1449,8 @@ export class RCJChassis extends ChassisDiffDrive implements ILabel {
         this.grabberWidth = this.grabber.w;
         this.manipulator.speed = 0;
         this.manipulator.angle = 0;
-        /* this.frontLeft.x = this.geom.w + this.geom.x;
-        this.frontMiddle.x = this.geom.w + this.geom.x;
-        this.frontRight.x = this.geom.w + this.geom.x;
-        this.frontRight.x = this.geom.w + this.geom.x;*/
+        this.grabberLeft = null;
+        this.grabberRight = null;
     }
 }
 export class Txt4Chassis extends EncoderChassisDiffDrive implements ILabel {
