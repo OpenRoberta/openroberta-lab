@@ -1439,6 +1439,10 @@ export class RCJChassis extends ChassisDiffDrive implements ILabel {
         this.grabberWidth = this.grabber.w;
         this.manipulator.speed = 0;
         this.manipulator.angle = 0;
+        /* this.frontLeft.x = this.geom.w + this.geom.x;
+        this.frontMiddle.x = this.geom.w + this.geom.x;
+        this.frontRight.x = this.geom.w + this.geom.x;
+        this.frontRight.x = this.geom.w + this.geom.x;*/
     }
 }
 export class Txt4Chassis extends EncoderChassisDiffDrive implements ILabel {
