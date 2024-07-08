@@ -1160,7 +1160,7 @@ export class ColorSensor implements IExternalSensor, IDrawable, ILabel {
             // this might happen during change of background image and is ok, we return the last valid sensor values
         }
         values['color'][this.port].colorValue = this.colorValue[0];
-        values['color'][this.port].colorHex = this.colorValue[1];
+        values['color'][this.port].colorhex = this.colorValue[1];
         values['color'][this.port].colour = this.colorValue[0];
         values['color'][this.port].light = this.lightValue;
         values['color'][this.port].rgb = this.rgb;
