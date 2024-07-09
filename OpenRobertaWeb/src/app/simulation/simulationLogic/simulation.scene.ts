@@ -52,6 +52,7 @@ export class RcjScoringTool implements IObserver {
     private robot: RobotBaseMobile;
     private initialPose: Pose;
     private loPCounter: number[][];
+    private prevCheckPointTile: {} = {};
 
     constructor(configData) {
         this.configData = configData;
@@ -66,7 +67,7 @@ export class RcjScoringTool implements IObserver {
         $('#rcjLoP').on('click', function (e) {
             $('#rcjLoP').addClass('disabled');
             rcj.robot.interpreter.terminate();
-            let lastCheckPointPose = simulationRoberta.getTilePose(rcj.lastCheckPoint, configData['tiles'][rcj.lastCheckPoint['next']]);
+            let lastCheckPointPose = simulationRoberta.getTilePose(rcj.lastCheckPoint, configData['tiles'][rcj.lastCheckPoint['next']], rcj.prevCheckPointTile);
             rcj.robot.pose = new Pose(lastCheckPointPose.x, lastCheckPointPose.y, lastCheckPointPose.theta);
             rcj.robot.initialPose = new Pose(lastCheckPointPose.x, lastCheckPointPose.y, lastCheckPointPose.theta);
             rcj.loPCounter.forEach((tuple) => {
@@ -145,6 +146,8 @@ export class RcjScoringTool implements IObserver {
                     this.loPCounter.push([path, 0]);
                     this.lastCheckPoint = tile;
                 }
+            } else {
+                this.prevCheckPointTile = tile;
             }
         } else {
             this.path = -1;
