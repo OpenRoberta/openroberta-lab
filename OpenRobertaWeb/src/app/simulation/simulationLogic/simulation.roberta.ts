@@ -1217,7 +1217,7 @@ export class SimulationRoberta implements Simulation {
                         drawEvacuationZone(evacuationZoneTile, ctx);
                     }
                     if (startTile) {
-                        startPose = sim.getTilePose(startTile, configData['tiles'][startTile['next']]);
+                        startPose = sim.getTilePose(startTile, configData['tiles'][startTile['next']], {});
                     } else {
                         result.rc = 'error';
                         result.message = 'Unknown start tile';
@@ -1256,18 +1256,27 @@ export class SimulationRoberta implements Simulation {
         });
     }
 
-    getTilePose(tile: {}, nextTile: {}): Pose {
+    getTilePose(tile: {}, nextTile: {}, prevTile: {}): Pose {
         let pose: Pose = <Pose>{};
         pose.x = tile['x'] * this.TILE_SIZE + this.TILE_SIZE / 2 + this.EV_WALL_SIZE;
         pose.y = tile['y'] * this.TILE_SIZE + this.TILE_SIZE / 2 + this.EV_WALL_SIZE;
         let rot = 0;
-        if (tile['x'] - nextTile['x'] === 1) {
-            rot = Math.PI;
-        }
-        if (tile['y'] - nextTile['y'] === -1) {
-            rot = Math.PI / 2;
-        } else if (tile['y'] - nextTile['y'] === 1) {
-            rot = (Math.PI * 3) / 2;
+        if (nextTile != null && nextTile != undefined) {
+            if (tile['x'] - nextTile['x'] === 1) {
+                rot = Math.PI;
+            } else if (tile['y'] - nextTile['y'] === -1) {
+                rot = Math.PI / 2;
+            } else if (tile['y'] - nextTile['y'] === 1) {
+                rot = (Math.PI * 3) / 2;
+            }
+        } else if (prevTile != null && prevTile != undefined) {
+            if (tile['x'] - prevTile['x'] === -1) {
+                rot = Math.PI;
+            } else if (tile['y'] - prevTile['y'] === 1) {
+                rot = Math.PI / 2;
+            } else if (tile['y'] - prevTile['y'] === -1) {
+                rot = (Math.PI * 3) / 2;
+            }
         }
         pose.theta = rot;
         return pose;
