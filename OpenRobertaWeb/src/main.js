@@ -45,6 +45,7 @@ require.config({
         'notification.model': 'js/app/roberta/models/notification.model',
         'nn.controller': 'js/app/roberta/controller/nn.controller',
         'progCode.controller': 'js/app/roberta/controller/progCode.controller',
+        'textCode.controller': 'js/app/roberta/controller/textCode.controller',
         'progDelete.controller': 'js/app/roberta/controller/progDelete.controller',
         'progHelp.controller': 'js/app/roberta/controller/progHelp.controller',
         'progInfo.controller': 'js/app/roberta/controller/progInfo.controller',
@@ -74,7 +75,6 @@ require.config({
         'simulation.constants': 'js/app/simulation/simulationLogic/constants',
         'simulation.math': 'js/app/simulation/simulationLogic/math',
         'robot.calliope': 'js/app/simulation/simulationLogic/robot.calliope',
-        'robot.calliopev3': 'js/app/simulation/simulationLogic/robot.calliopev3',
         'robot.mbot': 'js/app/simulation/simulationLogic/robot.mbot',
         'robot.microbit': 'js/app/simulation/simulationLogic/robot.microbit',
         'robot.microbitv2': 'js/app/simulation/simulationLogic/robot.microbitv2',
@@ -219,6 +219,7 @@ require([
     'progSim.controller',
     'notification.controller',
     'progCode.controller',
+    'textCode.controller',
     'progDelete.controller',
     'progHelp.controller',
     'legal.controller',
@@ -267,6 +268,7 @@ require([
     progInfoController = require('progInfo.controller');
     notificationController = require('notification.controller');
     progCodeController = require('progCode.controller');
+    textCodeController = require('textCode.controller');
     progSimController = require('progSim.controller');
     progRunController = require('progRun.controller');
     progShareController = require('progShare.controller');
@@ -341,6 +343,7 @@ function initProgramming(robot, extensions, opt_callback, opt_params) {
             progHelpController.init();
             progInfoController.init();
             progCodeController.init();
+            textCodeController.init();
             progSimController.createProgSimInstance();
             progSimController.createProgSimDebugInstance();
             progSimController.createProgSimMultiInstance();
