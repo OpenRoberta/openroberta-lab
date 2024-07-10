@@ -445,6 +445,19 @@ function resetProgram(successFn) {
     COMM.json('/projectWorkflow/reset', {}, successFn, 'reset');
 }
 
+function processUserCode(xmlProgram, language, programName, xmlConfigText, programText, successFn) {
+    COMM.json(
+        '/projectWorkflow/processUserCode',
+        {
+            progText: programText,
+            programName: programName,
+            progXML: xmlProgram,
+            confXML: xmlConfigText,
+            language: language,
+        },
+        successFn
+    );
+}
 export {
     saveAsProgramToServer,
     saveProgramToServer,
@@ -466,4 +479,5 @@ export {
     checkProgramCompatibility,
     likeProgram,
     resetProgram,
+    processUserCode,
 };

@@ -1,5 +1,14 @@
 package de.fhg.iais.roberta.javaServer.restServices.all.controller;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -7,6 +16,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CommonTokenStream;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -14,7 +26,12 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 
+import de.fhg.iais.roberta.components.ProgramAst;
 import de.fhg.iais.roberta.components.Project;
+import de.fhg.iais.roberta.exprEvaluator.EvalExprErrorListener;
+import de.fhg.iais.roberta.exprEvaluator.TextlyVisitor;
+import de.fhg.iais.roberta.exprly.generated.ExprlyLexer;
+import de.fhg.iais.roberta.exprly.generated.ExprlyParser;
 import de.fhg.iais.roberta.generated.restEntities.BaseResponse;
 import de.fhg.iais.roberta.generated.restEntities.FullRestRequest;
 import de.fhg.iais.roberta.generated.restEntities.ProjectNativeResponse;
@@ -29,6 +46,11 @@ import de.fhg.iais.roberta.persistence.ConfigurationProcessor;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
+import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.lang.blocksequence.Location;
+import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
+import de.fhg.iais.roberta.syntax.lang.blocksequence.Task;
+import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.Statistics;
 import de.fhg.iais.roberta.util.UtilForREST;
@@ -302,6 +324,77 @@ public class ProjectWorkflowRestController {
             Statistics.info("ProgramReset", "LoggedIn", httpSessionState.isUserLoggedIn(), "success", false);
             return UtilForREST.makeBaseResponseForError(Key.SERVER_ERROR, httpSessionState, this.robotCommunicator);
         }
+    }
+
+    @POST
+    @Path("/processUserCode")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response processUserCode(@OraData DbSession dbSession, FullRestRequest fullRequest) {
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(dbSession, LOG, fullRequest, true);
+
+        try {
+            JSONObject data = fullRequest.getData();
+            String textProg = data.get("progText").toString();
+
+            Iterator<String> keys = data.keys();
+
+            if ( keys.hasNext() ) {
+                String firstKey = keys.next();
+                data.remove(firstKey);
+            }
+            ProjectWorkflowRequest wfRequest = ProjectWorkflowRequest.make(fullRequest.getData());
+            ProjectSourceSimulationResponse response = ProjectSourceSimulationResponse.make();
+            Project project = request2project(wfRequest, dbSession, httpSessionState, this.robotCommunicator, true, false);
+
+            ExprlyParser parser = mkParser(textProg);
+            EvalExprErrorListener err = new EvalExprErrorListener();
+            parser.removeErrorListeners();
+            parser.addErrorListener(err);
+
+            ExprlyParser.ProgramContext program = parser.program();
+            TextlyVisitor<List<Phrase>> exprlyStatements = new TextlyVisitor();
+            List<Phrase> mainPart = (List<Phrase>) exprlyStatements.visitProgram(program);
+
+            Task mainTask = (MainTask) mainPart.get(0);
+            StmtList stmtList = (StmtList) mainPart.get(1);
+
+            List<Phrase> phrases = new ArrayList<>(Arrays.asList(new Location("0", "0"), mainTask));
+            phrases.add(stmtList);
+            ProgramAst programAst = new ProgramAst.Builder()
+                .addToTree(phrases)
+                .build();
+
+            project.setProgramAst(programAst);
+            ProjectService.executeWorkflow("getsimulationcode", project);
+            response.setCmd("runPSim");
+            response.setJavaScriptProgram(project.getSourceCode().toString());
+            response.setFileExtension(project.getSourceCodeFileExtension());
+            response.setProgXML(project.getAnnotatedProgramAsXml());
+            response.setConfAnnos(new JSONObject(project.getConfAnnotationList()));
+            response.setConfiguration(project.getConfigurationJSON());
+            response.setProgramName(project.getProgramName());
+            addProjectResultToResponse(response, project);
+            Statistics.info("ProcessUserCode", "LoggedIn", httpSessionState.isUserLoggedIn(), "success", project.hasSucceeded());
+            return UtilForREST.responseWithFrontendInfo(response, httpSessionState, this.robotCommunicator);
+        } catch ( Exception e ) {
+            LOG.info("processUserCode failed", e);
+            Statistics.info("ProcessUserCode", "LoggedIn", httpSessionState.isUserLoggedIn(), "success", false);
+            return UtilForREST.makeBaseResponseForError(Key.SERVER_ERROR, httpSessionState, this.robotCommunicator);
+        } finally {
+            if ( dbSession != null ) {
+                dbSession.close();
+            }
+        }
+    }
+
+    private static ExprlyParser mkParser(String expr) throws UnsupportedEncodingException, IOException {
+        InputStream inputStream = new ByteArrayInputStream(expr.getBytes("UTF-8"));
+        CharStream input = CharStreams.fromStream(inputStream);
+        ExprlyLexer lexer = new ExprlyLexer(input);
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
+        ExprlyParser parser = new ExprlyParser(tokens);
+        return parser;
     }
 
     private static <T extends BaseResponse> void addProjectResultToResponse(T response, Project project) {
