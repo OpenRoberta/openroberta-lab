@@ -1,5 +1,10 @@
 package de.fhg.iais.roberta.javaServer.restServices.all.controller;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -7,6 +12,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.antlr.v4.runtime.CharStream;
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CommonTokenStream;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -15,6 +23,8 @@ import org.slf4j.LoggerFactory;
 import com.google.inject.Inject;
 
 import de.fhg.iais.roberta.components.Project;
+import de.fhg.iais.roberta.exprly.generated.ExprlyLexer;
+import de.fhg.iais.roberta.exprly.generated.ExprlyParser;
 import de.fhg.iais.roberta.generated.restEntities.BaseResponse;
 import de.fhg.iais.roberta.generated.restEntities.FullRestRequest;
 import de.fhg.iais.roberta.generated.restEntities.ProjectNativeResponse;
@@ -305,6 +315,50 @@ public class ProjectWorkflowRestController {
         }
     }
 
+    @POST
+    @Path("/processUserCode")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response processUserCode(@OraData DbSession dbSession, FullRestRequest fullRequest) {
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(dbSession, LOG, fullRequest, true);
+
+        try {
+
+            ProjectWorkflowRequest wfRequest = ProjectWorkflowRequest.make(fullRequest.getData());
+            ProjectSourceSimulationResponse response = ProjectSourceSimulationResponse.make();
+            Project project = request2project(wfRequest, dbSession, httpSessionState, this.robotCommunicator, true, false);
+
+            ProjectService.executeWorkflow("textlyToAst", project);
+            response.setCmd("runPSim");
+            response.setJavaScriptProgram(project.getSourceCode().toString());
+            response.setFileExtension(project.getSourceCodeFileExtension());
+            response.setProgXML(project.getAnnotatedProgramAsXml());
+            response.setConfAnnos(new JSONObject(project.getConfAnnotationList()));
+            response.setConfiguration(project.getConfigurationJSON());
+            response.setProgramName(project.getProgramName());
+            addProjectResultToResponse(response, project);
+            Statistics.info("ProcessUserCode", "LoggedIn", httpSessionState.isUserLoggedIn(), "success", project.hasSucceeded());
+            return UtilForREST.responseWithFrontendInfo(response, httpSessionState, this.robotCommunicator);
+        } catch ( Exception e ) {
+            LOG.info("processUserCode failed", e);
+            Statistics.info("ProcessUserCode", "LoggedIn", httpSessionState.isUserLoggedIn(), "success", false);
+            return UtilForREST.makeBaseResponseForError(Key.SERVER_ERROR, httpSessionState, this.robotCommunicator);
+        } finally {
+            if ( dbSession != null ) {
+                dbSession.close();
+            }
+        }
+    }
+
+    private static ExprlyParser mkParser(String expr) throws UnsupportedEncodingException, IOException {
+        InputStream inputStream = new ByteArrayInputStream(expr.getBytes("UTF-8"));
+        CharStream input = CharStreams.fromStream(inputStream);
+        ExprlyLexer lexer = new ExprlyLexer(input);
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
+        ExprlyParser parser = new ExprlyParser(tokens);
+        return parser;
+    }
+
     private static <T extends BaseResponse> void addProjectResultToResponse(T response, Project project) {
         response.setRc(project.hasSucceeded() ? "ok" : "error");
         response.setMessage(project.getResult().getKey());
@@ -329,7 +383,8 @@ public class ProjectWorkflowRestController {
                 .setToken(httpSessionState.getToken())
                 .setRobot(robot)
                 .setFactory(httpSessionState.getRobotFactory())
-                .setRobotCommunicator(robotCommunicator);
+                .setRobotCommunicator(robotCommunicator)
+                .setProgText(wfRequest.getProgText());
         String progXml;
         String confXml;
         if ( isExportXml ) {

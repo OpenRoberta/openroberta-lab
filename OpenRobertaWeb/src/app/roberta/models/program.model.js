@@ -449,6 +449,19 @@ export function externAPIRequest(urlAPI, data, successFn, errorFn) {
     COMM.externPost(urlAPI, data, successFn, errorFn);
 }
 
+function processUserCode(xmlProgram, language, programName, xmlConfigText, programText, successFn) {
+    COMM.json(
+        '/projectWorkflow/processUserCode',
+        {
+            progText: programText,
+            programName: programName,
+            progXML: xmlProgram,
+            confXML: xmlConfigText,
+            language: language,
+        },
+        successFn
+    );
+}
 export {
     saveAsProgramToServer,
     saveProgramToServer,

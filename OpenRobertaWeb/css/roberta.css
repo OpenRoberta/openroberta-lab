@@ -388,7 +388,19 @@ canvas.border {
     height: 100%;
 }
 
+#textContainer {
+    overflow-y: auto;
+    height: 100%;
+}
+
 #codeContent {
+    overflow-y: auto;
+    padding-bottom: 60px;
+    padding-top: 12px;
+    background-color: #eee;
+}
+
+#textlyContent {
     overflow-y: auto;
     padding-bottom: 60px;
     padding-top: 12px;
@@ -818,6 +830,17 @@ button#simCustomObstacle.typcn:before {
 }
 
 #codeButtons {
+    left: 12px;
+    bottom: 0;
+    position: absolute;
+    z-index: 99;
+    width: 100%;
+    background-color: #EEE;
+    height: 70px;
+    padding-top: 10px;
+}
+
+#textButtons {
     left: 12px;
     bottom: 0;
     position: absolute;
@@ -3324,7 +3347,7 @@ li.L0, li.L1, li.L2, li.L3, li.L5, li.L6, li.L7, li.L8 {
 
 #tutorialOverview .modal-dialog {
     border: 2px solid #33B8CA;
-    font-size: 16px;
+    font-size: 18px;
 }
 
 #tutorial-navigation, #tutorialEnd {
@@ -3466,7 +3489,7 @@ ul#tutorial-close {
     height: 100%;
     margin: 10px;
     padding: 16px;
-    font-size: 16px;
+    font-size: 18px;
     overflow-y: auto;
 }
 
@@ -3738,6 +3761,22 @@ td[lkey="Blockly.Msg.POPUP_DOWNLOAD_STEP_A_SENSEBOX"] {
     padding: 0;
 }
 
+#textDiv pre {
+    position: absolute;
+    background-color: transparent;
+    border: 0 solid #ccc;
+    border-radius: 0;
+    color: #000;
+    font-family: 'Roboto', sans-serif;
+    background-image: linear-gradient(transparent 50%, rgba(247, 247, 247, 1) 0%);
+    background-size: 100% 2.77em;
+    background-repeat: repeat;
+    width: 100%;
+    margin-top: 0;
+    line-height: 18px;
+    padding: 0;
+}
+
 #sourceCodeEditor .codeflask__flatten {
     padding-top: 0 !important;
     line-height: 18px;
@@ -3753,13 +3792,34 @@ td[lkey="Blockly.Msg.POPUP_DOWNLOAD_STEP_A_SENSEBOX"] {
     padding: 0;
 }
 
+#textDiv textarea {
+    position: absolute;
+    z-index: 8;
+    color: rgba(255, 255, 255, 0) !important;
+    height: calc(100% - 82px);
+    margin-top: 0;
+    line-height: 18px;
+    padding: 0;
+}
+
 #codeDiv .codeflask__flatten {
     background-color: #FFF0;
     padding-top: 0 !important;
     line-height: 18px;
 }
 
+#textDiv .codeflask__flatten {
+    background-color: #FFF0;
+    padding-top: 0 !important;
+    line-height: 18px;
+}
+
 #codeDiv .codeflask__lines {
+    background-color: #EEE;
+    z-index: 5 !important;
+}
+
+#textDiv .codeflask__lines {
     background-color: #EEE;
     z-index: 5 !important;
 }

@@ -64,6 +64,7 @@ public final class Project {
     private String programAsBlocklyXML = null;
     private String configurationAsBlocklyXML = null;
     private List<String> errorAndWarningMessages = null;
+    private String textlyProgram;
 
     private Project() {
     }
@@ -75,6 +76,8 @@ public final class Project {
     public String getRobot() {
         return this.robot;
     }
+
+    public String getTextlyProgram() { return this.textlyProgram; }
 
     public String getProgramName() {
         return this.programName;
@@ -297,6 +300,11 @@ public final class Project {
 
         public Builder setLanguage(ILanguage language) {
             this.project.language = language;
+            return this;
+        }
+
+        public Builder setProgText(String textlyProgram) {
+            this.project.textlyProgram = textlyProgram;
             return this;
         }
 

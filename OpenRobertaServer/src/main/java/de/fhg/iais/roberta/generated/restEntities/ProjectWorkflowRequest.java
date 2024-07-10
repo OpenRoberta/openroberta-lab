@@ -22,6 +22,7 @@ public class ProjectWorkflowRequest extends BaseRequest {
     protected String password;
     protected String language;
     protected String robot;
+    protected String textly;
 
     /**
      * the request description for the /projectWorkflow/* REST request
@@ -54,7 +55,8 @@ public class ProjectWorkflowRequest extends BaseRequest {
         String SSID,
         String password,
         String language,
-        String robot) {
+        String robot,
+        String textly) {
         ProjectWorkflowRequest entity = new ProjectWorkflowRequest();
         entity.setCmd(cmd);
         entity.setProgramName(programName);
@@ -64,6 +66,7 @@ public class ProjectWorkflowRequest extends BaseRequest {
         entity.setSSID(SSID);
         entity.setPassword(password);
         entity.setLanguage(language);
+        entity.setProgText(textly);
         entity.setRobot(robot);
         entity.immutable();
         return entity;
@@ -103,6 +106,8 @@ public class ProjectWorkflowRequest extends BaseRequest {
                     setLanguage(jsonO.optString(key));
                 } else if ( "robot".equals(key) ) {
                     setRobot(jsonO.optString(key));
+                } else if ( "progText".equals(key) ) {
+                    setProgText(jsonO.optString(key));
                 } else {
                     throw new RuntimeException("JSON parse error. Found invalid key: " + key + " in " + jsonO);
                 }
@@ -329,6 +334,7 @@ public class ProjectWorkflowRequest extends BaseRequest {
         return this.language != null;
     }
 
+
     /**
      * SET language. Object must be mutable.
      */
@@ -337,6 +343,27 @@ public class ProjectWorkflowRequest extends BaseRequest {
             throw new RuntimeException("language assigned to an immutable object: " + toString());
         }
         this.language = language;
+        return this;
+    }
+
+    /**
+     * GET language. Object must be immutable. Never return null or an undefined/default value.
+     */
+    public String getProgText() {
+        if ( !this.immutable ) {
+            throw new RuntimeException("no Textly program from an object under construction: " + toString());
+        }
+        return this.textly;
+    }
+
+    /**
+     * SET Textly program. Object must be mutable.
+     */
+    public ProjectWorkflowRequest setProgText(String textly) {
+        if ( this.immutable ) {
+            throw new RuntimeException("Textly program assigned to an immutable object: " + toString());
+        }
+        this.textly = textly;
         return this;
     }
 
