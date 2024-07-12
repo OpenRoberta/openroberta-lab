@@ -18,6 +18,7 @@ TXT_M_I2C_3_combined_sensor_6pin.init_gyrometer(250, 12.5)
 TXT_M_I2C_3_gesture_sensor.enable_proximity()
 TXT_M_I2C_3_gesture_sensor.enable_gesture()
 TXT_M_I2C_3_gesture_sensor.enable_light()
+time.sleep(0.1)
 
 
 def ____environmentalSensor():

@@ -24,6 +24,7 @@ TXT_M_M1_motor = txt_factory.motor_factory.create_encodermotor(TXT_M, 1)
 TXT_M_C1_motor_step_counter = txt_factory.counter_factory.create_encodermotor_counter(TXT_M, 1)
 TXT_M_C1_motor_step_counter.set_motor(TXT_M_M1_motor)
 txt_factory.initialized()
+time.sleep(0.1)
 STEPS_PER_ROTATION = 128
 
 

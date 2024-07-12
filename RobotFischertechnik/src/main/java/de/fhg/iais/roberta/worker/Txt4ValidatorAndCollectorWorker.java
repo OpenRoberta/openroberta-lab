@@ -23,16 +23,18 @@ import de.fhg.iais.roberta.visitor.validate.CommonNepoValidatorAndCollectorVisit
 
 public class Txt4ValidatorAndCollectorWorker extends AbstractValidatorAndCollectorWorker {
 
-    private static final List<String> NON_BLOCKING_PROPERTIES = Collections.unmodifiableList(Arrays.asList("MOTOR_FL", "MOTOR_FR", "MOTOR_RL", "MOTOR_RR", "MOTOR_L", "MOTOR_R", "BRICK_WHEEL_DIAMETER", "BRICK_TRACK_WIDTH", "WHEEL_BASE", "VCC"));
+    private static final List<String> NON_BLOCKING_PROPERTIES = Collections.unmodifiableList(Arrays.asList("MOTOR_FL", "MOTOR_FR", "MOTOR_RL", "MOTOR_RR", "MOTOR_L", "MOTOR_R", "BRICK_WHEEL_DIAMETER", "BRICK_TRACK_WIDTH", "WHEEL_BASE", "VCC", "GND"));
+    private List<String> takenPins;
 
     @Override
     public void execute(Project project) {
         validateConfig(project);
         super.execute(project);
     }
+
     @Override
     protected CommonNepoValidatorAndCollectorVisitor getVisitor(
-        Project project, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
+            Project project, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders) {
         return new Txt4ValidatorAndCollectorVisitor(project.getConfigurationAst(), beanBuilders, false);
     }
 
@@ -42,8 +44,8 @@ public class Txt4ValidatorAndCollectorWorker extends AbstractValidatorAndCollect
     }
 
     private void validateConfig(Project project) {
-        List<String> takenPins = new ArrayList<>();
-        project.getConfigurationAst().getConfigurationComponents().forEach((k, v) -> checkIfPortTaken(project, v, takenPins));
+        this.takenPins = new ArrayList<>();
+        project.getConfigurationAst().getConfigurationComponents().forEach((k, v) -> checkIfPortTaken(project, v));
         checkDiffDrive(project);
         checkOmniDrive(project);
     }
@@ -51,7 +53,7 @@ public class Txt4ValidatorAndCollectorWorker extends AbstractValidatorAndCollect
     private boolean isEncoderMissing(ConfigurationComponent motor) {
         try {
             motor.getSubComponents();
-        } catch ( Exception e ) {
+        } catch (Exception e) {
             return true;
         }
         return false;
@@ -64,42 +66,42 @@ public class Txt4ValidatorAndCollectorWorker extends AbstractValidatorAndCollect
             boolean rightMotorMissing = true;
             boolean leftMotorMissing = true;
             boolean encoderMissing = false;
-            for ( ConfigurationComponent configComp : project.getConfigurationAst().getConfigurationComponents().values() ) {
-                if ( configComp.componentType.equals("ENCODERMOTOR") ) {
-                    if ( configComp.getProperty("PORT").equals(diffDrive.getProperty("MOTOR_R")) ) {
+            for (ConfigurationComponent configComp : project.getConfigurationAst().getConfigurationComponents().values()) {
+                if (configComp.componentType.equals("ENCODERMOTOR")) {
+                    if (configComp.getProperty("PORT").equals(diffDrive.getProperty("MOTOR_R"))) {
                         rightMotorMissing = false;
-                        if ( isEncoderMissing(configComp) ) {
+                        if (isEncoderMissing(configComp)) {
                             encoderMissing = true;
                         }
                     }
-                    if ( configComp.getProperty("PORT").equals(diffDrive.getProperty("MOTOR_L")) ) {
+                    if (configComp.getProperty("PORT").equals(diffDrive.getProperty("MOTOR_L"))) {
                         leftMotorMissing = false;
-                        if ( isEncoderMissing(configComp) ) {
+                        if (isEncoderMissing(configComp)) {
                             encoderMissing = true;
                         }
                     }
 
                 }
             }
-            if ( rightMotorMissing || leftMotorMissing || !diffDriveCompUnique || encoderMissing ) {
+            if (rightMotorMissing || leftMotorMissing || !diffDriveCompUnique || encoderMissing) {
                 BlocklyProperties blocklyProperties = diffDrive.getProperty();
                 String blockId = blocklyProperties.blocklyId;
                 project.setResult(Key.PROGRAM_INVALID_STATEMETNS);
                 project.addToErrorCounter(1, null);
-                if ( leftMotorMissing ) {
+                if (leftMotorMissing) {
                     project.addToConfAnnotationList(blockId, NepoInfo.error("CONFIGURATION_ERROR_MOTOR_LEFT_MISSING"));
                 }
-                if ( rightMotorMissing ) {
+                if (rightMotorMissing) {
                     project.addToConfAnnotationList(blockId, NepoInfo.error("CONFIGURATION_ERROR_MOTOR_RIGHT_MISSING"));
                 }
-                if ( !diffDriveCompUnique ) {
+                if (!diffDriveCompUnique) {
                     project.addToConfAnnotationList(blockId, NepoInfo.error("CONFIGURATION_ERROR_DIFFDRIVE_NOT_UNIQUE"));
                 }
-                if ( encoderMissing ) {
+                if (encoderMissing) {
                     project.addToConfAnnotationList(blockId, NepoInfo.error("CONFIGURATION_ERROR_SENSOR_MISSING"));
                 }
             }
-            if ( diffDrive.getProperty("MOTOR_L").equals(diffDrive.getProperty(("MOTOR_R"))) ) {
+            if (diffDrive.getProperty("MOTOR_L").equals(diffDrive.getProperty(("MOTOR_R")))) {
                 BlocklyProperties blocklyProperties = diffDrive.getProperty();
                 String blockId = blocklyProperties.blocklyId;
                 project.addToErrorCounter(1, null);
@@ -118,47 +120,47 @@ public class Txt4ValidatorAndCollectorWorker extends AbstractValidatorAndCollect
             boolean rlMotorMissing = true;
             boolean rrMotorMissing = true;
             boolean encoderMissing = false;
-            for ( ConfigurationComponent configComp : project.getConfigurationAst().getConfigurationComponents().values() ) {
-                if ( configComp.componentType.equals("ENCODERMOTOR") ) {
-                    if ( configComp.getProperty("PORT").equals(omnidrive.getProperty("MOTOR_FL")) ) {
+            for (ConfigurationComponent configComp : project.getConfigurationAst().getConfigurationComponents().values()) {
+                if (configComp.componentType.equals("ENCODERMOTOR")) {
+                    if (configComp.getProperty("PORT").equals(omnidrive.getProperty("MOTOR_FL"))) {
                         flMotorMissing = false;
-                        if ( isEncoderMissing(configComp) ) {
+                        if (isEncoderMissing(configComp)) {
                             encoderMissing = true;
                         }
                     }
-                    if ( configComp.getProperty("PORT").equals(omnidrive.getProperty("MOTOR_FR")) ) {
+                    if (configComp.getProperty("PORT").equals(omnidrive.getProperty("MOTOR_FR"))) {
                         frMotorMissing = false;
-                        if ( isEncoderMissing(configComp) ) {
+                        if (isEncoderMissing(configComp)) {
                             encoderMissing = true;
                         }
                     }
-                    if ( configComp.getProperty("PORT").equals(omnidrive.getProperty("MOTOR_RL")) ) {
+                    if (configComp.getProperty("PORT").equals(omnidrive.getProperty("MOTOR_RL"))) {
                         rlMotorMissing = false;
-                        if ( isEncoderMissing(configComp) ) {
+                        if (isEncoderMissing(configComp)) {
                             encoderMissing = true;
                         }
                     }
-                    if ( configComp.getProperty("PORT").equals(omnidrive.getProperty("MOTOR_RR")) ) {
+                    if (configComp.getProperty("PORT").equals(omnidrive.getProperty("MOTOR_RR"))) {
                         rrMotorMissing = false;
-                        if ( isEncoderMissing(configComp) ) {
+                        if (isEncoderMissing(configComp)) {
                             encoderMissing = true;
                         }
                     }
                 }
             }
             boolean aMotorIsMissing = flMotorMissing || frMotorMissing || rlMotorMissing || rrMotorMissing || encoderMissing;
-            if ( aMotorIsMissing || !omniDriveCompUnique ) {
+            if (aMotorIsMissing || !omniDriveCompUnique) {
                 BlocklyProperties blocklyProperties = omnidrive.getProperty();
                 String blockId = blocklyProperties.blocklyId;
                 project.setResult(Key.PROGRAM_INVALID_STATEMETNS);
                 project.addToErrorCounter(1, null);
-                if ( aMotorIsMissing ) {
+                if (aMotorIsMissing) {
                     project.addToConfAnnotationList(blockId, NepoInfo.error("CONFIGURATION_ERROR_MOTOR_MISSING"));
                 }
-                if ( !omniDriveCompUnique ) {
+                if (!omniDriveCompUnique) {
                     project.addToConfAnnotationList(blockId, NepoInfo.error("CONFIGURATION_ERROR_DIFFDRIVE_NOT_UNIQUE"));
                 }
-                if ( encoderMissing ) {
+                if (encoderMissing) {
                     project.addToConfAnnotationList(blockId, NepoInfo.error("CONFIGURATION_ERROR_SENSOR_MISSING"));
                 }
             }
@@ -166,13 +168,13 @@ public class Txt4ValidatorAndCollectorWorker extends AbstractValidatorAndCollect
             HashSet<String> set = new HashSet<>();
             boolean foundDuplicate = false;
 
-            for ( String str : motorProperties ) {
-                if ( !set.add(str) ) {
+            for (String str : motorProperties) {
+                if (!set.add(str)) {
                     foundDuplicate = true;
                     break;
                 }
             }
-            if ( foundDuplicate ) {
+            if (foundDuplicate) {
                 BlocklyProperties blocklyProperties = omnidrive.getProperty();
                 String blockId = blocklyProperties.blocklyId;
                 project.addToErrorCounter(1, null);
@@ -183,47 +185,54 @@ public class Txt4ValidatorAndCollectorWorker extends AbstractValidatorAndCollect
     }
 
 
-    private void checkIfPortTaken(Project project, ConfigurationComponent configurationComponent, List<String> takenPins) {
+    private void checkIfPortTaken(Project project, ConfigurationComponent configurationComponent) {
         Map<String, String> componentProperties = configurationComponent.getComponentProperties();
         try {
-            for ( Map.Entry<String, List<ConfigurationComponent>> entry : configurationComponent.getSubComponents().entrySet() ) {
-                for ( ConfigurationComponent subComponent : entry.getValue() ) {
-                    checkIfPortTaken(project, subComponent, takenPins);
+            for (Map.Entry<String, List<ConfigurationComponent>> entry : configurationComponent.getSubComponents().entrySet()) {
+                for (ConfigurationComponent subComponent : entry.getValue()) {
+                    checkIfPortTaken(project, subComponent);
                 }
             }
-        } catch ( UnsupportedOperationException ignore ) {
+        } catch (UnsupportedOperationException ignore) {
 
         }
-        for ( Map.Entry<String, String> property : componentProperties.entrySet() ) {
-            if ( NON_BLOCKING_PROPERTIES.contains(property.getKey()) ) {
+        for (Map.Entry<String, String> property : componentProperties.entrySet()) {
+            if (NON_BLOCKING_PROPERTIES.contains(property.getKey())) {
                 continue;
             }
-            if ( takenPins.contains(property.getValue()) ) {
-                BlocklyProperties blocklyProperties = configurationComponent.getProperty();
-                String blockId = blocklyProperties.blocklyId;
-                project.addToErrorCounter(1, null);
-                project.setResult(Key.PROGRAM_INVALID_STATEMETNS);
-                project.addToConfAnnotationList(blockId, NepoInfo.error("CONFIGURATION_ERROR_OVERLAPPING_PORTS"));
-                break;
+            if (property.getKey().equals("PORT") && property.getValue().equals("EXT")) {
+                continue;
             }
-            takenPins.add(property.getValue());
-            ifMotorPortAddOutputPin(property.getValue(), takenPins);
+            addErrorIfTaken(configurationComponent, property.getValue(), project);
+            ifMotorPortAddOutputPin(configurationComponent, property.getValue(), project);
         }
     }
 
-    private void ifMotorPortAddOutputPin(String port, List<String> takenPins) {
-        if ( port.equals("M1") ) {
-            takenPins.add("O1");
-            takenPins.add("O2");
-        } else if ( port.equals("M2") ) {
-            takenPins.add("O3");
-            takenPins.add("O4");
-        } else if ( port.equals("M3") ) {
-            takenPins.add("O5");
-            takenPins.add("O6");
-        } else if ( port.equals("M4") ) {
-            takenPins.add("O7");
-            takenPins.add("O8");
+    private void ifMotorPortAddOutputPin(ConfigurationComponent configurationComponent, String port, Project project) {
+        if (port.equals("M1")) {
+            addErrorIfTaken(configurationComponent, "O1", project);
+            addErrorIfTaken(configurationComponent, "O2", project);
+        } else if (port.equals("M2")) {
+            addErrorIfTaken(configurationComponent, "O3", project);
+            addErrorIfTaken(configurationComponent, "O4", project);
+        } else if (port.equals("M3")) {
+            addErrorIfTaken(configurationComponent, "O5", project);
+            addErrorIfTaken(configurationComponent, "O6", project);
+        } else if (port.equals("M4")) {
+            addErrorIfTaken(configurationComponent, "O7", project);
+            addErrorIfTaken(configurationComponent, "O8", project);
         }
+    }
+
+    private void addErrorIfTaken(ConfigurationComponent configurationComponent, String port, Project project) {
+        if (this.takenPins.contains(port)) {
+            BlocklyProperties blocklyProperties = configurationComponent.getProperty();
+            String blockId = blocklyProperties.blocklyId;
+            project.addToErrorCounter(1, null);
+            project.setResult(Key.PROGRAM_INVALID_STATEMETNS);
+            project.addToConfAnnotationList(blockId, NepoInfo.error("CONFIGURATION_ERROR_OVERLAPPING_PORTS"));
+            return;
+        }
+        this.takenPins.add(port);
     }
 }

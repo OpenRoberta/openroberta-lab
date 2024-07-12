@@ -8,6 +8,7 @@ txt_factory.init_output_factory()
 TXT_M = txt_factory.controller_factory.create_graphical_controller()
 TXT_M_O5_led = txt_factory.output_factory.create_led(TXT_M, 5)
 txt_factory.initialized()
+time.sleep(0.1)
 
 
 def run():

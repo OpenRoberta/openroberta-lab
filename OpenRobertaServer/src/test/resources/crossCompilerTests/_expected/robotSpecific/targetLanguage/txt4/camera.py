@@ -29,6 +29,7 @@ TXT_M_USB1_1_camera.add_detector(line_detector)
 ball_detector = txt_factory.camera_factory.create_ball_detector(0, 0, 320, 240, 10, 100, -100, 100, [255, 165, 0], 20)
 TXT_M_USB1_1_camera.add_detector(ball_detector)
 txt_factory.initialized()
+time.sleep(0.1)
 
 
 def get_ball_information():

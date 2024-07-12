@@ -145,7 +145,7 @@ export class CircuitVisualization {
                 this.renderBlockConnections(block);
                 break;
             case (<any>window).Blockly.Events.DELETE:
-                this.deleteConnections(event.blockId);
+                this.deleteConnections(event.ids);
                 if (block && block.ports) {
                     block.ports.forEach((port) => port.element.remove());
                 }
@@ -350,9 +350,9 @@ export class CircuitVisualization {
         this.connections = [...this.connections, ...connections];
     };
 
-    deleteConnections = (blockId) => {
+    deleteConnections = (blockIds) => {
         this.connections = this.connections.filter((connection) => {
-            if (connection.blockId === blockId) {
+            if (blockIds.includes(connection.blockId)) {
                 connection.wireSvg.remove();
                 return false;
             }

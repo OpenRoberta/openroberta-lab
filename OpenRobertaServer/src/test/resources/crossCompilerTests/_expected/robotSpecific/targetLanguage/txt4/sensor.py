@@ -22,6 +22,7 @@ TXT_M_I2_trail_follower = txt_factory.input_factory.create_trail_follower(TXT_M,
 TXT_M_I5_color_sensor = txt_factory.input_factory.create_color_sensor(TXT_M, 5)
 TXT_M_I4_mini_switch = txt_factory.input_factory.create_mini_switch(TXT_M, 4)
 txt_factory.initialized()
+time.sleep(0.1)
 STEPS_PER_ROTATION = 128
 
 _timer1 = time.time()

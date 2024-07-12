@@ -926,6 +926,7 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
         initCamera(usedHardwareBean);
         this.src.add("txt_factory.initialized()").nlI();
         enableSensors();
+        this.src.add("time.sleep(0.1)").nlI();
         generateVariables(usedHardwareBean);
         generateTimerVariables();
     }

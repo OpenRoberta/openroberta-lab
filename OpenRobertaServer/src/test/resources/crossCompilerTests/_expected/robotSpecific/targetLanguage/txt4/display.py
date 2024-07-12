@@ -8,6 +8,7 @@ txt_factory.init_input_factory()
 TXT_M = txt_factory.controller_factory.create_graphical_controller()
 
 txt_factory.initialized()
+time.sleep(0.1)
 current_led = "redLed"
 led_colors = {
     "red": 0xcc0000,
