@@ -36,8 +36,8 @@ function init(language, opt_data) {
             });
         }
 
-        GUISTATE.gui.view = 'tabProgram';
-        GUISTATE.gui.prevView = 'tabProgram';
+        GUISTATE.gui.view = 'start';
+        GUISTATE.gui.prevView = 'start';
         GUISTATE.gui.language = language;
         GUISTATE.gui.startWithoutPopup = false;
 
@@ -973,7 +973,7 @@ function setLogout() {
     GUISTATE.user.userGroup = '';
     GUISTATE.user.userGroupOwner = '';
     if (getView() === 'tabUserGroupList') {
-        $('#tabProgram').tabWrapShow();
+        $('#' + getPrevView()).tabWrapShow();
     }
     setProgramName('NEPOprog');
     setProgramOwnerName(null);
