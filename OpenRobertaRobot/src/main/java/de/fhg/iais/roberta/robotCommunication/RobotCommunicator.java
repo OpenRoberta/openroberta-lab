@@ -47,14 +47,20 @@ public class RobotCommunicator {
             if ( existingIdentificator == null
                 || !existingIdentificator.equals(newIdentificator)
                 || existingIdentificator.equals("usb")
-                || existingIdentificator.equals("unknown") ) {
+                || existingIdentificator.equals("unknown")
+                || existingIdentificator.equals("?") ) //
+            {
                 LOG.info("ROBOT_RC: token already used. New token required");
                 return false;
             }
         }
         for ( String storedToken : this.allStates.keySet() ) {
             RobotCommunicationData storedState = this.allStates.get(storedToken);
-            if ( newIdentificator.equals(storedState.getRobotIdentificator()) && !newIdentificator.equals("usb") && !newIdentificator.equals("unknown") ) {
+            if ( newIdentificator.equals(storedState.getRobotIdentificator())
+                && !newIdentificator.equals("usb")
+                && !newIdentificator.equals("unknown")
+                && !newIdentificator.equals("?") ) //
+            {
                 LOG.info("ROBOT_RC: token approval request for robot [" + newIdentificator + "], but an old request is pending. Start abort old request");
                 this.allStates.remove(storedToken);
                 storedState.abort(); // notifyAll() executed
