@@ -24,7 +24,7 @@ motion_detector = txt_factory.camera_factory.create_motion_detector(0, 0, CAMERA
 TXT_M_USB1_1_camera.add_detector(motion_detector)
 color_detector = txt_factory.camera_factory.create_color_detector(112, 84, 96, 72, 1)
 TXT_M_USB1_1_camera.add_detector(color_detector)
-line_detector = txt_factory.camera_factory.create_line_detector(60, 45, 200, 150, 5, 100, -100, 100, 2)
+line_detector = txt_factory.camera_factory.create_line_detector(60, 45, 200, 150, 5, 100, -100, 100, 6)
 TXT_M_USB1_1_camera.add_detector(line_detector)
 ball_detector = txt_factory.camera_factory.create_ball_detector(0, 0, 320, 240, 10, 100, -100, 100, [255, 165, 0], 20)
 TXT_M_USB1_1_camera.add_detector(ball_detector)

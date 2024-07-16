@@ -45,6 +45,7 @@ import de.fhg.iais.roberta.syntax.sensor.CameraLineColourSensor;
 import de.fhg.iais.roberta.syntax.sensor.CameraLineInformationSensor;
 import de.fhg.iais.roberta.syntax.sensor.CameraLineSensor;
 import de.fhg.iais.roberta.syntax.sensor.EnvironmentalCalibrate;
+import de.fhg.iais.roberta.syntax.sensor.Phototransistor;
 import de.fhg.iais.roberta.syntax.sensor.TouchKeySensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
@@ -58,6 +59,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.MotionSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
@@ -749,6 +751,24 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
     }
 
     @Override
+    public Void visitTemperatureSensor(TemperatureSensor temperatureSensor) {
+        String port = getPortFromConfig(temperatureSensor.getUserDefinedPort());
+        if ( temperatureSensor.getMode().equals(SC.TEMPERATURE) ) {
+            this.src.add("TXT_M_", port, "_ntc_resistor.get_temperature()");
+        } else {
+            this.src.add("TXT_M_", port, "_ntc_resistor.get_resistance()");
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitPhototransistor(Phototransistor phototransistor) {
+        String port = getPortFromConfig(phototransistor.getUserDefinedPort());
+        this.src.add("TXT_M_", port, "_photo_transistor.is_bright()");
+        return null;
+    }
+
+    @Override
     public Void visitGyroSensor(GyroSensor gyroSensor) {
         int index = getSensorNumber("TXT_IMU");
         this.src.add("TXT_M_I2C_", index, "_combined_sensor_6pin.get_rotation_", gyroSensor.getSlot().toLowerCase(), "()");
@@ -998,15 +1018,21 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
             } else if ( component.componentType.equals(SC.LIGHT) && usedHardwareBean.isSensorUsed(SC.LIGHT) ) {
                 String port = component.getOptProperty("PORT").substring(1);
                 this.src.add("TXT_M_I", port, "_color_sensor = txt_factory.input_factory.create_color_sensor(TXT_M, ", port, ")").nlI();
+            } else if ( component.componentType.equals(SC.TEMPERATURE) && usedHardwareBean.isSensorUsed(SC.TEMPERATURE) ) {
+                String port = component.getOptProperty("PORT").substring(1);
+                this.src.add("TXT_M_I", port, "_ntc_resistor = txt_factory.input_factory.create_ntc_resistor(TXT_M, ", port, ")").nlI();
+            } else if ( component.componentType.equals(FischertechnikConstants.PHOTOTRANSISTOR) && usedHardwareBean.isSensorUsed(FischertechnikConstants.PHOTOTRANSISTOR) ) {
+                String port = component.getOptProperty("PORT").substring(1);
+                this.src.add("TXT_M_I", port, "_photo_transistor = txt_factory.input_factory.create_photo_transistor(TXT_M, ", port, ")").nlI();
             } else if ( component.componentType.equals("I2C") && usedHardwareBean.isSensorUsed("I2C") ) {
                 if ( usedHardwareBean.isSensorUsed("IMU") ) {
                     int index = getSensorNumber("TXT_IMU");
-                    IMU = "TXT_M_I2C_" + index + "_combined_sensor_6pin";
+                    this.IMU = "TXT_M_I2C_" + index + "_combined_sensor_6pin";
                     this.src.add(IMU, " = txt_factory.i2c_factory.create_combined_sensor_6pin(TXT_M, ", index, ")").nlI();
                 }
-                if ( usedHardwareBean.isSensorUsed("GESTURE") ) {
-                    int index = getSensorNumber("GESTURE");
-                    gesture = "TXT_M_I2C_" + index + "_gesture_sensor";
+                if ( usedHardwareBean.isSensorUsed(FischertechnikConstants.GESTURE) ) {
+                    int index = getSensorNumber(FischertechnikConstants.GESTURE);
+                    this.gesture = "TXT_M_I2C_" + index + "_gesture_sensor";
                     this.src.add(gesture, " = txt_factory.i2c_factory.create_gesture_sensor(TXT_M, ", index, ")").nlI();
                 }
                 if ( usedHardwareBean.isSensorUsed(SC.ENVIRONMENTAL) ) {
@@ -1020,16 +1046,27 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
         }
     }
 
+    private boolean gestureModeIsUsed(String mode) {
+        return this.getBean(UsedHardwareBean.class).getUsedSensors().stream()
+            .anyMatch(usedSensor -> usedSensor.getType().equals(FischertechnikConstants.GESTURE) && usedSensor.getMode().equals(mode));
+    }
+
     private void enableSensors() {
-        if ( !IMU.isEmpty() ) {
+        if ( !this.IMU.isEmpty() ) {
             this.src.add(IMU, ".init_accelerometer(2, 1.5625)").nlI();
             this.src.add(IMU, ".init_magnetometer(25)").nlI();
             this.src.add(IMU, ".init_gyrometer(250, 12.5)").nlI();
         }
-        if ( !gesture.isEmpty() ) {
-            this.src.add(gesture, ".enable_proximity()").nlI();
-            this.src.add(gesture, ".enable_gesture()").nlI();
-            this.src.add(gesture, ".enable_light()").nlI();
+        if ( !this.gesture.isEmpty() ) {
+            if ( gestureModeIsUsed(FischertechnikConstants.GESTURE) ) {
+                this.src.add(gesture, ".enable_gesture()").nlI();
+            }
+            if ( gestureModeIsUsed(SC.AMBIENTLIGHT) || gestureModeIsUsed(SC.COLOUR) || gestureModeIsUsed(SC.RGB) ) {
+                this.src.add(gesture, ".enable_light()").nlI();
+            }
+            if ( gestureModeIsUsed("PROXIMITY") ) {
+                this.src.add(gesture, ".enable_proximity()").nlI();
+            }
         }
     }
 
@@ -1070,7 +1107,7 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
                 this.src.add(cameraVariable, ".add_detector(color_detector)").nlI();
             }
             if ( usedHardwareBean.isSensorUsed(FischertechnikConstants.LINE) ) {
-                this.src.add("line_detector = txt_factory.camera_factory.create_line_detector(60, 45, 200, 150, 5, 100, -100, 100, 2)").nlI();
+                this.src.add("line_detector = txt_factory.camera_factory.create_line_detector(60, 45, 200, 150, 5, 100, -100, 100, 6)").nlI();
                 this.src.add(cameraVariable, ".add_detector(line_detector)").nlI();
             }
             if ( usedHardwareBean.isSensorUsed(FischertechnikConstants.BALL) ) {

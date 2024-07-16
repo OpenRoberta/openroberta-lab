@@ -1,5 +1,5 @@
 Sensors: 
-[UsedSensor [DISPLAY, BUTTON, PRESSED], UsedSensor [U, ULTRASONIC, DISTANCE], UsedSensor [I, INFRARED, LINE], UsedSensor [EL, ENCODER, DEGREE], UsedSensor [ER, ENCODER, ROTATION], UsedSensor [EL, ENCODER, RESET], UsedSensor [1, TIMER, VALUE], UsedSensor [2, TIMER, VALUE], UsedSensor [3, TIMER, VALUE], UsedSensor [4, TIMER, VALUE], UsedSensor [5, TIMER, VALUE], UsedSensor [1, TIMER, DEFAULT], UsedSensor [M, KEY, PRESSED], UsedSensor [L, LIGHT, DEFAULT]]
+[UsedSensor [DISPLAY, BUTTON, PRESSED], UsedSensor [U, ULTRASONIC, DISTANCE], UsedSensor [I, INFRARED, LINE], UsedSensor [EL, ENCODER, DEGREE], UsedSensor [ER, ENCODER, ROTATION], UsedSensor [EL, ENCODER, RESET], UsedSensor [1, TIMER, VALUE], UsedSensor [2, TIMER, VALUE], UsedSensor [3, TIMER, VALUE], UsedSensor [4, TIMER, VALUE], UsedSensor [5, TIMER, VALUE], UsedSensor [1, TIMER, DEFAULT], UsedSensor [M, KEY, PRESSED], UsedSensor [L, LIGHT, DEFAULT], UsedSensor [P, PHOTOTRANSISTOR, DEFAULT], UsedSensor [N, TEMPERATURE, DEFAULT]]
 Actors: 
 [UsedActor [DISPLAY, DISPLAY], UsedActor [M1, ENCODERMOTOR], UsedActor [M2, ENCODERMOTOR]]
 Methods: 

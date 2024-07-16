@@ -1,0 +1,6 @@
+Sensors: 
+[UsedSensor [DISPLAY, BUTTON, PRESSED], UsedSensor [I2, I2C, DEFAULT], UsedSensor [C2, IMU, ACCELEROMETER], UsedSensor [C2, IMU, COMPASS], UsedSensor [C2, IMU, GYRO]]
+Actors: 
+[UsedActor [DISPLAY, DISPLAY]]
+Methods: 
+[]

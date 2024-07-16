@@ -16,11 +16,13 @@ TXT_M_C2_motor_step_counter.set_motor(TXT_M_M2_motor)
 TXT_M_M1_motor = txt_factory.motor_factory.create_encodermotor(TXT_M, 1)
 TXT_M_C1_motor_step_counter = txt_factory.counter_factory.create_encodermotor_counter(TXT_M, 1)
 TXT_M_C1_motor_step_counter.set_motor(TXT_M_M1_motor)
-TXT_M_I3_ultrasonic_distance_meter = txt_factory.input_factory.create_ultrasonic_distance_meter(TXT_M, 3)
 TXT_M_I1_trail_follower = txt_factory.input_factory.create_trail_follower(TXT_M, 1)
 TXT_M_I2_trail_follower = txt_factory.input_factory.create_trail_follower(TXT_M, 2)
 TXT_M_I5_color_sensor = txt_factory.input_factory.create_color_sensor(TXT_M, 5)
 TXT_M_I4_mini_switch = txt_factory.input_factory.create_mini_switch(TXT_M, 4)
+TXT_M_I7_ntc_resistor = txt_factory.input_factory.create_ntc_resistor(TXT_M, 7)
+TXT_M_I6_photo_transistor = txt_factory.input_factory.create_photo_transistor(TXT_M, 6)
+TXT_M_I3_ultrasonic_distance_meter = txt_factory.input_factory.create_ultrasonic_distance_meter(TXT_M, 3)
 txt_factory.initialized()
 time.sleep(0.1)
 STEPS_PER_ROTATION = 128
@@ -118,7 +120,19 @@ def run():
             break
         print(((TXT_M_I5_color_sensor.get_voltage() / 2000) * 100))
         time.sleep(500/1000)
-    print("DONE")
+    print("phototransistor on I6")
+    while True:
+        if display.get_attr("buttonRight.pressed"):
+            break
+        print(TXT_M_I6_photo_transistor.is_bright())
+        time.sleep(500/1000)
+    print("NTC Resistor on I7")
+    while True:
+        if display.get_attr("buttonRight.pressed"):
+            break
+        print("".join(str(arg) for arg in ["Temperature:", TXT_M_I7_ntc_resistor.get_temperature()]))
+        print("".join(str(arg) for arg in ["Resistance:", TXT_M_I7_ntc_resistor.get_resistance()]))
+        time.sleep(500/1000)
 
 def main():
     try:

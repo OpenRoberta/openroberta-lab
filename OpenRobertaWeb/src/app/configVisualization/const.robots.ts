@@ -612,7 +612,8 @@ export const ROBOTS = {
     txt4: {
         ports: [
             // ports
-            { name: 'EXT', position: { x: 2, y: 65 } },
+            { name: 'EXT1', position: { x: 2, y: 65 } },
+            { name: 'EXT2', position: { x: 248, y: 65 } },
             { name: 'I1', position: { x: 22, y: 77 } },
             { name: 'I2', position: { x: 22, y: 98 } },
             { name: 'I3', position: { x: 22, y: 119 } },

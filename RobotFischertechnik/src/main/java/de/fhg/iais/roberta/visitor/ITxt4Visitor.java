@@ -24,6 +24,7 @@ import de.fhg.iais.roberta.syntax.sensor.CameraLineColourSensor;
 import de.fhg.iais.roberta.syntax.sensor.CameraLineInformationSensor;
 import de.fhg.iais.roberta.syntax.sensor.CameraLineSensor;
 import de.fhg.iais.roberta.syntax.sensor.EnvironmentalCalibrate;
+import de.fhg.iais.roberta.syntax.sensor.Phototransistor;
 import de.fhg.iais.roberta.syntax.sensor.TouchKeySensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
@@ -37,6 +38,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.MotionSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
@@ -121,5 +123,7 @@ public interface ITxt4Visitor<V> extends IVisitor<V> {
 
     V visitPlayFileAction(PlayFileAction playFileAction);
 
+    V visitTemperatureSensor(TemperatureSensor temperatureSensor);
 
+    V visitPhototransistor(Phototransistor phototransistor);
 }

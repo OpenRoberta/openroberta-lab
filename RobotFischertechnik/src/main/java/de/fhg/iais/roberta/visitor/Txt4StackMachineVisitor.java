@@ -34,6 +34,7 @@ import de.fhg.iais.roberta.syntax.sensor.CameraLineColourSensor;
 import de.fhg.iais.roberta.syntax.sensor.CameraLineInformationSensor;
 import de.fhg.iais.roberta.syntax.sensor.CameraLineSensor;
 import de.fhg.iais.roberta.syntax.sensor.EnvironmentalCalibrate;
+import de.fhg.iais.roberta.syntax.sensor.Phototransistor;
 import de.fhg.iais.roberta.syntax.sensor.TouchKeySensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
@@ -47,6 +48,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.MotionSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
@@ -350,6 +352,16 @@ public final class Txt4StackMachineVisitor extends AbstractStackMachineVisitor i
 
     @Override
     public Void visitPlayFileAction(PlayFileAction playFileAction) {
+        return null;
+    }
+
+    @Override
+    public Void visitTemperatureSensor(TemperatureSensor temperatureSensor) {
+        return null;
+    }
+
+    @Override
+    public Void visitPhototransistor(Phototransistor phototransistor) {
         return null;
     }
 }

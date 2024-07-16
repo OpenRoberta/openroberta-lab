@@ -8,7 +8,7 @@ public class FischertechnikConstants {
     public static final String LINE = "LINE";
     public static final String BALL = "BALL";
     public static final String COLOURCOMPARE = "COLOURCOMPARE";
-
     public static final String ENCODERMOTOR = "ENCODERMOTOR";
-
+    public static final String PHOTOTRANSISTOR = "PHOTOTRANSISTOR";
+    public static final String GESTURE = "GESTURE";
 }

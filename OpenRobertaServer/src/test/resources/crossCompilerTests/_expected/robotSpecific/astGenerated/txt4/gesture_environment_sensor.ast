@@ -1,4 +1,3 @@
 SerialWriteAction[value: StringConst[value: I2C Sensors Test Press the right display button to go to next sensor]]
 MethodCall [environmentalSensor, , , VOID]
-MethodCall [combiSensor, , , VOID]
 MethodCall [rgbGesture, , , VOID]

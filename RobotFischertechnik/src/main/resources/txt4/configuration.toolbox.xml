@@ -19,6 +19,8 @@
             </value>
         </block>
         <block type='robConf_light'></block>
+        <block type='robConf_phototransistor'></block>
+        <block type='robConf_temperature'></block>
         <block type='robConf_i2c_port_txt4'></block>
         <block type='robConf_environmental'></block>
         <block type='robConf_gesture'></block>

@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.google.common.collect.ClassToInstanceMap;
 
@@ -25,6 +26,7 @@ public class Txt4ValidatorAndCollectorWorker extends AbstractValidatorAndCollect
 
     private static final List<String> NON_BLOCKING_PROPERTIES = Collections.unmodifiableList(Arrays.asList("MOTOR_FL", "MOTOR_FR", "MOTOR_RL", "MOTOR_RR", "MOTOR_L", "MOTOR_R", "BRICK_WHEEL_DIAMETER", "BRICK_TRACK_WIDTH", "WHEEL_BASE", "VCC", "GND"));
     private List<String> takenPins;
+    private List<String> usedI2CSensors;
 
     @Override
     public void execute(Project project) {
@@ -45,9 +47,48 @@ public class Txt4ValidatorAndCollectorWorker extends AbstractValidatorAndCollect
 
     private void validateConfig(Project project) {
         this.takenPins = new ArrayList<>();
-        project.getConfigurationAst().getConfigurationComponents().forEach((k, v) -> checkIfPortTaken(project, v));
+        for ( ConfigurationComponent configurationComponent : project.getConfigurationAst().getConfigurationComponents().values() ) {
+            checkIfPortTaken(project, configurationComponent);
+            if ( configurationComponent.componentType.equals("I2C") ) {
+                checkI2CSensors(project, configurationComponent);
+            }
+        }
         checkDiffDrive(project);
         checkOmniDrive(project);
+    }
+
+    private void checkI2CSensors(Project project, ConfigurationComponent configurationComponent) {
+        try {
+            List<ConfigurationComponent> i2cSensors = configurationComponent.getSubComponents().get("BUS");
+            if ( i2cSensors.size() > 2 ) {
+                BlocklyProperties blocklyProperties = configurationComponent.getProperty();
+                String blockId = blocklyProperties.blocklyId;
+                project.addToErrorCounter(1, null);
+                project.setResult(Key.PROGRAM_INVALID_STATEMETNS);
+                project.addToConfAnnotationList(blockId, NepoInfo.error("CONFIGURATION_ERROR_TOO_MANY_SUB_SENSORS"));
+            }
+            checkBusConnections(project, i2cSensors);
+        } catch ( Exception e ) {
+        }
+    }
+
+    private void checkBusConnections(Project project, List<ConfigurationComponent> i2cSensors) {
+        Set<String> usedI2CSensors = new HashSet<>();
+        for ( ConfigurationComponent i2cSensor : i2cSensors ) {
+            BlocklyProperties blocklyProperties = i2cSensor.getProperty();
+            String blockId = blocklyProperties.blocklyId;
+            if ( !usedI2CSensors.contains(i2cSensor.componentType) && !i2cSensor.componentType.equals(SC.ENCODER) ) {
+                usedI2CSensors.add(i2cSensor.componentType);
+            } else {
+                project.addToErrorCounter(1, null);
+                project.setResult(Key.PROGRAM_INVALID_STATEMETNS);
+                if ( i2cSensor.componentType.equals(SC.ENCODER) ) {
+                    project.addToConfAnnotationList(blockId, NepoInfo.error("CONFIGURATION_ERROR_SENSOR_WRONG"));
+                } else {
+                    project.addToConfAnnotationList(blockId, NepoInfo.error("CONFIGURATION_ERROR_DIFFDRIVE_NOT_UNIQUE"));
+                }
+            }
+        }
     }
 
     private boolean isEncoderMissing(ConfigurationComponent motor) {
@@ -198,9 +239,6 @@ public class Txt4ValidatorAndCollectorWorker extends AbstractValidatorAndCollect
         }
         for (Map.Entry<String, String> property : componentProperties.entrySet()) {
             if (NON_BLOCKING_PROPERTIES.contains(property.getKey())) {
-                continue;
-            }
-            if (property.getKey().equals("PORT") && property.getValue().equals("EXT")) {
                 continue;
             }
             addErrorIfTaken(configurationComponent, property.getValue(), project);

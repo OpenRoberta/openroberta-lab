@@ -39,6 +39,7 @@ import de.fhg.iais.roberta.syntax.sensor.CameraLineInformationSensor;
 import de.fhg.iais.roberta.syntax.sensor.CameraLineSensor;
 import de.fhg.iais.roberta.syntax.sensor.EnvironmentalCalibrate;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
+import de.fhg.iais.roberta.syntax.sensor.Phototransistor;
 import de.fhg.iais.roberta.syntax.sensor.TouchKeySensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
@@ -52,6 +53,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.MotionSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
@@ -69,7 +71,8 @@ public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
     private static final Map<String, String> SENSOR_COMPONENT_TYPE_MAP = Collections.unmodifiableMap(new HashMap<String, String>() {{
     }});
     private boolean driveWasChecked;
-
+    private GestureSensor gestureSensorInGestureMode;
+    private boolean nonGestureModeUsed;
     public Txt4ValidatorAndCollectorVisitor(ConfigurationAst robotConfiguration, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders, boolean isSim) {
         super(robotConfiguration, beanBuilders);
         driveWasChecked = false;
@@ -433,6 +436,20 @@ public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
     }
 
     @Override
+    public Void visitTemperatureSensor(TemperatureSensor temperatureSensor) {
+        checkSensorPort(temperatureSensor);
+        usedHardwareBuilder.addUsedSensor(new UsedSensor(temperatureSensor.getUserDefinedPort(), SC.TEMPERATURE, SC.DEFAULT));
+        return null;
+    }
+
+    @Override
+    public Void visitPhototransistor(Phototransistor phototransistor) {
+        checkSensorPort(phototransistor);
+        usedHardwareBuilder.addUsedSensor(new UsedSensor(phototransistor.getUserDefinedPort(), FischertechnikConstants.PHOTOTRANSISTOR, SC.DEFAULT));
+        return null;
+    }
+
+    @Override
     public Void visitGyroSensor(GyroSensor gyroSensor) {
         addI2C(gyroSensor);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(gyroSensor.getUserDefinedPort(), "IMU", SC.GYRO));
@@ -460,6 +477,18 @@ public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
         addI2C(gestureSensor);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(gestureSensor.getUserDefinedPort(), "GESTURE", gestureSensor.getMode()));
         addToPhraseIfUnsupportedInSim(gestureSensor, true, isSim);
+        if ( gestureSensor.getMode().equals(FischertechnikConstants.GESTURE) ) {
+            this.gestureSensorInGestureMode = gestureSensor;
+            if ( this.nonGestureModeUsed ) {
+                addErrorToPhrase(gestureSensor, "PROGRAM_ERROR_GESTURE_MODE_INCOMPATIBLE");
+            }
+        } else {
+            this.nonGestureModeUsed = true;
+            if ( this.gestureSensorInGestureMode != null ) {
+                addErrorToPhrase(this.gestureSensorInGestureMode, "PROGRAM_ERROR_GESTURE_MODE_INCOMPATIBLE");
+            }
+        }
+
         return null;
     }
 

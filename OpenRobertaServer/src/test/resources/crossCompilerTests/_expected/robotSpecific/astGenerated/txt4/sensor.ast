@@ -88,4 +88,20 @@ if SensorExpr [TouchKeySensor [RIGHT, PRESSED, - EMPTY_SLOT -]]
 
 AktionStmt [SerialWriteAction[value: SensorExpr [LightSensor [L, VALUE, - EMPTY_SLOT -]]]]WaitTimeStmt[time: NumConst[value: 500]]
 )
-SerialWriteAction[value: StringConst[value: DONE]]
+SerialWriteAction[value: StringConst[value: phototransistor on I6]]
+
+(repeat [FOREVER, BoolConst[value: true]]
+if SensorExpr [TouchKeySensor [RIGHT, PRESSED, - EMPTY_SLOT -]]
+,thenStmtFlowCon[flow: BREAK]
+
+AktionStmt [SerialWriteAction[value: SensorExpr [Phototransistor [P, OPENING, - EMPTY_SLOT -]]]]WaitTimeStmt[time: NumConst[value: 500]]
+)
+SerialWriteAction[value: StringConst[value: NTC Resistor on I7]]
+
+(repeat [FOREVER, BoolConst[value: true]]
+if SensorExpr [TouchKeySensor [RIGHT, PRESSED, - EMPTY_SLOT -]]
+,thenStmtFlowCon[flow: BREAK]
+
+AktionStmt [SerialWriteAction[value: FunctionExpr [TextJoinFunct [StringConst[value: Temperature:], SensorExpr [TemperatureSensor [N, TEMPERATURE, - EMPTY_SLOT -]]]]]]
+AktionStmt [SerialWriteAction[value: FunctionExpr [TextJoinFunct [StringConst[value: Resistance:], SensorExpr [TemperatureSensor [N, RESISTANCE, - EMPTY_SLOT -]]]]]]WaitTimeStmt[time: NumConst[value: 500]]
+)

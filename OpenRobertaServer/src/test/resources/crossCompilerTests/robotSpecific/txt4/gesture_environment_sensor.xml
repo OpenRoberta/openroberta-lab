@@ -5,6 +5,9 @@
                 <block type="robControls_start" id="1" intask="true" deletable="false">
                     <mutation declare="false"></mutation>
                     <field name="DEBUG"></field>
+                    <data>
+                        {"learningRate":0.03,"regularizationRate":0,"noise":0,"batchSize":10,"discretize":false,"percTrainData":50,"activationKey":"linear","activation":{},"regularization":null,"initUntil":null,"collectStats":false,"numHiddenLayers":0,"networkShape":[],"weights":[[["1"]],[[]]],"biases":[["0"],["0"]],"precision":"2","weightArcMaxSize":8,"weightSuppressMultOp":true,"inputs":["n1"],"outputs":["n2"],"hiddenNeurons":[]}
+                    </data>
                 </block>
                 <block type="robActions_serial_print" id="#*nf:})]K7GbPZSwzcY8" intask="true">
                     <value name="OUT">
@@ -15,9 +18,6 @@
                 </block>
                 <block type="robProcedures_callnoreturn" id="+e7prJN,#G6[*R7Z%K/K" intask="true">
                     <mutation name="environmentalSensor"></mutation>
-                </block>
-                <block type="robProcedures_callnoreturn" id="UzOce3[utFfyiW*p5~0y" intask="true">
-                    <mutation name="combiSensor"></mutation>
                 </block>
                 <block type="robProcedures_callnoreturn" id="E#v1?@;1@0g26])-=I`%" intask="true">
                     <mutation name="rgbGesture"></mutation>
@@ -302,409 +302,7 @@
                     </statement>
                 </block>
             </instance>
-            <instance x="757" y="150">
-                <block type="robProcedures_defnoreturn" id="R(k*0*/Th;e6s23vjuFd" intask="true">
-                    <mutation declare="false"></mutation>
-                    <field name="NAME">combiSensor</field>
-                    <statement name="STACK">
-                        <block type="robActions_serial_print" id="B8UYg=[U~Tw|*;6CR;D+" intask="true">
-                            <value name="OUT">
-                                <block type="text" id="^eYx`Tf3MT/[BSV.ysJi" intask="true">
-                                    <field name="TEXT">CombiSensor aka IMU</field>
-                                </block>
-                            </value>
-                        </block>
-                        <block type="robActions_serial_print" id=";Wc`o{hdyvRo~-9S*ONp" intask="true">
-                            <value name="OUT">
-                                <block type="text" id="{PuHtyj/rBoUX%tbexbH" intask="true">
-                                    <field name="TEXT">Acceleration X</field>
-                                </block>
-                            </value>
-                        </block>
-                        <block type="robControls_loopForever" id="z3mJ7(a)|369.Fz282Jd" intask="true">
-                            <statement name="DO">
-                                <block type="robControls_if" id="xhiltOe|)~TW6QPI5+Bl" intask="true">
-                                    <value name="IF0">
-                                        <block type="robSensors_getSample" id="HlSWAGCKuv{j7#_SW7Ws" intask="true">
-                                            <mutation input="TOUCHKEY_PRESSED"></mutation>
-                                            <field name="SENSORTYPE">TOUCHKEY_PRESSED</field>
-                                            <field name="SENSORPORT">RIGHT</field>
-                                            <field name="SLOT"></field>
-                                        </block>
-                                    </value>
-                                    <statement name="DO0">
-                                        <block type="controls_flow_statements" id="OFWd7`EUD5^w`k.vU5q7" intask="true">
-                                            <field name="FLOW">BREAK</field>
-                                        </block>
-                                    </statement>
-                                </block>
-                                <block type="robActions_serial_print" id="}ORvZrBG`%QV9@KuRms?" intask="true">
-                                    <value name="OUT">
-                                        <block type="robSensors_accelerometer_getSample" id="A[PBezUfWv,Y4J=9ZIr(" intask="true">
-                                            <mutation mode="ACCELERATION"></mutation>
-                                            <field name="MODE">ACCELERATION</field>
-                                            <field name="SENSORPORT">C2</field>
-                                            <field name="SLOT">X</field>
-                                        </block>
-                                    </value>
-                                </block>
-                                <block type="robControls_wait_time" id="qQ~n-i8YJ!r#eWRZ(]vL" intask="true">
-                                    <value name="WAIT">
-                                        <block type="math_number" id="n4L2/Eo?h3dP=3zc)oQ(" intask="true">
-                                            <field name="NUM">500</field>
-                                        </block>
-                                    </value>
-                                </block>
-                            </statement>
-                        </block>
-                        <block type="robActions_serial_print" id="}qUgg5mXJAV3[@dJX;kH" intask="true">
-                            <value name="OUT">
-                                <block type="text" id=",t8Ypwxoqge;|@wH]lq," intask="true">
-                                    <field name="TEXT">Acceleration Y</field>
-                                </block>
-                            </value>
-                        </block>
-                        <block type="robControls_loopForever" id="D~@fR+({xg}[K3kp0!E?" intask="true">
-                            <statement name="DO">
-                                <block type="robControls_if" id="!d~BP!?uk9V0Ul7qIm4f" intask="true">
-                                    <value name="IF0">
-                                        <block type="robSensors_getSample" id="?~/fp+Q~wmilA]]C6TJY" intask="true">
-                                            <mutation input="TOUCHKEY_PRESSED"></mutation>
-                                            <field name="SENSORTYPE">TOUCHKEY_PRESSED</field>
-                                            <field name="SENSORPORT">RIGHT</field>
-                                            <field name="SLOT"></field>
-                                        </block>
-                                    </value>
-                                    <statement name="DO0">
-                                        <block type="controls_flow_statements" id="y{|EP^OQ?[_^XP]TTJtK" intask="true">
-                                            <field name="FLOW">BREAK</field>
-                                        </block>
-                                    </statement>
-                                </block>
-                                <block type="robActions_serial_print" id="mq0;+}Foo:0xCP{}}u#3" intask="true">
-                                    <value name="OUT">
-                                        <block type="robSensors_accelerometer_getSample" id="Q)Ry~pJ=!a2;%4efMC7+" intask="true">
-                                            <mutation mode="ACCELERATION"></mutation>
-                                            <field name="MODE">ACCELERATION</field>
-                                            <field name="SENSORPORT">C2</field>
-                                            <field name="SLOT">Y</field>
-                                        </block>
-                                    </value>
-                                </block>
-                                <block type="robControls_wait_time" id="8m(fA27D=X)rH-Y!8NOc" intask="true">
-                                    <value name="WAIT">
-                                        <block type="math_number" id="?xO9Xg.FTQ~PZ7G]e4c{" intask="true">
-                                            <field name="NUM">500</field>
-                                        </block>
-                                    </value>
-                                </block>
-                            </statement>
-                        </block>
-                        <block type="robActions_serial_print" id="MviB9ez=A.b;a[1{qYn~" intask="true">
-                            <value name="OUT">
-                                <block type="text" id="g~cbeLe~O=]@|rA8+M`)" intask="true">
-                                    <field name="TEXT">Acceleration Z</field>
-                                </block>
-                            </value>
-                        </block>
-                        <block type="robControls_loopForever" id="mdOAn,lpcq.I?Fh%]s2{" intask="true">
-                            <statement name="DO">
-                                <block type="robControls_if" id="Lk0e~Oj7q;aCX.n*lBdL" intask="true">
-                                    <value name="IF0">
-                                        <block type="robSensors_getSample" id="]uw%!NVj]YQR)!m_=[}-" intask="true">
-                                            <mutation input="TOUCHKEY_PRESSED"></mutation>
-                                            <field name="SENSORTYPE">TOUCHKEY_PRESSED</field>
-                                            <field name="SENSORPORT">RIGHT</field>
-                                            <field name="SLOT"></field>
-                                        </block>
-                                    </value>
-                                    <statement name="DO0">
-                                        <block type="controls_flow_statements" id="LuQXf~}/8+EoTm%j4;_j" intask="true">
-                                            <field name="FLOW">BREAK</field>
-                                        </block>
-                                    </statement>
-                                </block>
-                                <block type="robActions_serial_print" id="3OA?8Wf^HT~4#!+V]xr`" intask="true">
-                                    <value name="OUT">
-                                        <block type="robSensors_accelerometer_getSample" id="?[lXp{q[.g%-jc6vpDu-" intask="true">
-                                            <mutation mode="ACCELERATION"></mutation>
-                                            <field name="MODE">ACCELERATION</field>
-                                            <field name="SENSORPORT">C2</field>
-                                            <field name="SLOT">Z</field>
-                                        </block>
-                                    </value>
-                                </block>
-                                <block type="robControls_wait_time" id="0niaZG]]+^qAjT@l31Bb" intask="true">
-                                    <value name="WAIT">
-                                        <block type="math_number" id="bu@`u5RQFEZs*FX+stu%" intask="true">
-                                            <field name="NUM">500</field>
-                                        </block>
-                                    </value>
-                                </block>
-                            </statement>
-                        </block>
-                        <block type="robActions_serial_print" id="Nn85)5fmmsX4wHJM46r-" intask="true">
-                            <value name="OUT">
-                                <block type="text" id="!4|ip)VJD}4cC??GxA@:" intask="true">
-                                    <field name="TEXT">Compass X</field>
-                                </block>
-                            </value>
-                        </block>
-                        <block type="robControls_loopForever" id="xPKLaJtYQVh@FA4dSf.h" intask="true">
-                            <statement name="DO">
-                                <block type="robControls_if" id="DabPb;66u~UlLeIpsNAC" intask="true">
-                                    <value name="IF0">
-                                        <block type="robSensors_getSample" id="2s*gOtlGhZ!%vwV|v!qx" intask="true">
-                                            <mutation input="TOUCHKEY_PRESSED"></mutation>
-                                            <field name="SENSORTYPE">TOUCHKEY_PRESSED</field>
-                                            <field name="SENSORPORT">RIGHT</field>
-                                            <field name="SLOT"></field>
-                                        </block>
-                                    </value>
-                                    <statement name="DO0">
-                                        <block type="controls_flow_statements" id="sTntQbg4L=hWcbjYmGBs" intask="true">
-                                            <field name="FLOW">BREAK</field>
-                                        </block>
-                                    </statement>
-                                </block>
-                                <block type="robActions_serial_print" id="[6a`cEf^|x;*1c=[lA5?" intask="true">
-                                    <value name="OUT">
-                                        <block type="robSensors_compass_getSample" id="jEjD[v!}j*-cd|`/sQCc" intask="true">
-                                            <mutation mode="MAGNETICFLUX"></mutation>
-                                            <field name="MODE">MAGNETICFLUX</field>
-                                            <field name="SENSORPORT">C2</field>
-                                            <field name="SLOT">X</field>
-                                        </block>
-                                    </value>
-                                </block>
-                                <block type="robControls_wait_time" id="iP,Wr9GwYkjURkYrxI-Q" intask="true">
-                                    <value name="WAIT">
-                                        <block type="math_number" id="0s2UvuKIqC-Ot))QmT)O" intask="true">
-                                            <field name="NUM">500</field>
-                                        </block>
-                                    </value>
-                                </block>
-                            </statement>
-                        </block>
-                        <block type="robActions_serial_print" id="6Qr4zR56sV:T!-H5qf.]" intask="true">
-                            <value name="OUT">
-                                <block type="text" id="3|MOvO,z?w;mv/{tc*t{" intask="true">
-                                    <field name="TEXT">Compass Y</field>
-                                </block>
-                            </value>
-                        </block>
-                        <block type="robControls_loopForever" id="lZf93tIN``Bzqf7LpoYf" intask="true">
-                            <statement name="DO">
-                                <block type="robControls_if" id="@+`U:2XcYqNF!R|MnsyF" intask="true">
-                                    <value name="IF0">
-                                        <block type="robSensors_getSample" id="?-nbp2r3baFd*V1:vS5E" intask="true">
-                                            <mutation input="TOUCHKEY_PRESSED"></mutation>
-                                            <field name="SENSORTYPE">TOUCHKEY_PRESSED</field>
-                                            <field name="SENSORPORT">RIGHT</field>
-                                            <field name="SLOT"></field>
-                                        </block>
-                                    </value>
-                                    <statement name="DO0">
-                                        <block type="controls_flow_statements" id="l4H(xso5pu/E/N/bf169" intask="true">
-                                            <field name="FLOW">BREAK</field>
-                                        </block>
-                                    </statement>
-                                </block>
-                                <block type="robActions_serial_print" id="O-?UlEz)RS42KE@v(dvt" intask="true">
-                                    <value name="OUT">
-                                        <block type="robSensors_compass_getSample" id="syO}TKA,4_12)kc(1-GJ" intask="true">
-                                            <mutation mode="MAGNETICFLUX"></mutation>
-                                            <field name="MODE">MAGNETICFLUX</field>
-                                            <field name="SENSORPORT">C2</field>
-                                            <field name="SLOT">Y</field>
-                                        </block>
-                                    </value>
-                                </block>
-                                <block type="robControls_wait_time" id="S/Dz!/dYW=AwO{/7Pqp|" intask="true">
-                                    <value name="WAIT">
-                                        <block type="math_number" id="ARIKLB5g{m3Q*2ok_eW-" intask="true">
-                                            <field name="NUM">500</field>
-                                        </block>
-                                    </value>
-                                </block>
-                            </statement>
-                        </block>
-                        <block type="robActions_serial_print" id="Nhp9qK)8?!VpdW!RpC2=" intask="true">
-                            <value name="OUT">
-                                <block type="text" id="x}pp*RaIHg{l:H4uV:5|" intask="true">
-                                    <field name="TEXT">Compass Z</field>
-                                </block>
-                            </value>
-                        </block>
-                        <block type="robControls_loopForever" id="Bge_~CAm]_2F5_Q3YM,}" intask="true">
-                            <statement name="DO">
-                                <block type="robControls_if" id="~T}/l-FX*@koR;{b1yu:" intask="true">
-                                    <value name="IF0">
-                                        <block type="robSensors_getSample" id="5*bkcukc=YQkVa3ZD-yG" intask="true">
-                                            <mutation input="TOUCHKEY_PRESSED"></mutation>
-                                            <field name="SENSORTYPE">TOUCHKEY_PRESSED</field>
-                                            <field name="SENSORPORT">RIGHT</field>
-                                            <field name="SLOT"></field>
-                                        </block>
-                                    </value>
-                                    <statement name="DO0">
-                                        <block type="controls_flow_statements" id=".1x1.rQbb!,A2,:(d(IE" intask="true">
-                                            <field name="FLOW">BREAK</field>
-                                        </block>
-                                    </statement>
-                                </block>
-                                <block type="robActions_serial_print" id="aX45W5-OemR?8p*Au.9W" intask="true">
-                                    <value name="OUT">
-                                        <block type="robSensors_compass_getSample" id="P(y3~)}u6ueKA)aPArKl" intask="true">
-                                            <mutation mode="MAGNETICFLUX"></mutation>
-                                            <field name="MODE">MAGNETICFLUX</field>
-                                            <field name="SENSORPORT">C2</field>
-                                            <field name="SLOT">Z</field>
-                                        </block>
-                                    </value>
-                                </block>
-                                <block type="robControls_wait_time" id="iQTTQm)=v9IEX}v!uD9C" intask="true">
-                                    <value name="WAIT">
-                                        <block type="math_number" id="Q4-vYFz90,m+t=v=EG[s" intask="true">
-                                            <field name="NUM">500</field>
-                                        </block>
-                                    </value>
-                                </block>
-                            </statement>
-                        </block>
-                        <block type="robActions_serial_print" id="bq]b7fp3zzNV-0_E2[Nv" intask="true">
-                            <value name="OUT">
-                                <block type="text" id="kJoPXN4?^+7y=N;H49TF" intask="true">
-                                    <field name="TEXT">Gyro X</field>
-                                </block>
-                            </value>
-                        </block>
-                        <block type="robControls_loopForever" id="]z/81y6fw-Kn@#4t~T`*" intask="true">
-                            <statement name="DO">
-                                <block type="robControls_if" id="yq}M-feQ4vSe%w+eM^`p" intask="true">
-                                    <value name="IF0">
-                                        <block type="robSensors_getSample" id="#Kf-?=rDa#r7CLyQ`4Rx" intask="true">
-                                            <mutation input="TOUCHKEY_PRESSED"></mutation>
-                                            <field name="SENSORTYPE">TOUCHKEY_PRESSED</field>
-                                            <field name="SENSORPORT">RIGHT</field>
-                                            <field name="SLOT"></field>
-                                        </block>
-                                    </value>
-                                    <statement name="DO0">
-                                        <block type="controls_flow_statements" id="gTT-GXJ#mkEEGXUk6q+k" intask="true">
-                                            <field name="FLOW">BREAK</field>
-                                        </block>
-                                    </statement>
-                                </block>
-                                <block type="robActions_serial_print" id="Cb*44Dxu13W|sK|RL0xD" intask="true">
-                                    <value name="OUT">
-                                        <block type="robSensors_gyro_getSample" id="h-Wb-7eAOE2dz,O/RO1z" intask="true">
-                                            <mutation mode="GYRO"></mutation>
-                                            <field name="MODE">GYRO</field>
-                                            <field name="SENSORPORT">C2</field>
-                                            <field name="SLOT">X</field>
-                                        </block>
-                                    </value>
-                                </block>
-                                <block type="robControls_wait_time" id="PWH_v@37A2ALQ|V^t^_t" intask="true">
-                                    <value name="WAIT">
-                                        <block type="math_number" id="^_icc76xA)~6FIeK9u2;" intask="true">
-                                            <field name="NUM">500</field>
-                                        </block>
-                                    </value>
-                                </block>
-                            </statement>
-                        </block>
-                        <block type="robActions_serial_print" id=",WqCF#@lFFbnI_cx|Br," intask="true">
-                            <value name="OUT">
-                                <block type="text" id="[Jr)PIT,[ZK7wG=r2Pan" intask="true">
-                                    <field name="TEXT">Gyro Y</field>
-                                </block>
-                            </value>
-                        </block>
-                        <block type="robControls_loopForever" id="*[H]Ixn:wv=2i69W}y9a" intask="true">
-                            <statement name="DO">
-                                <block type="robControls_if" id="-;Xly^3mKe6%qybfIzWZ" intask="true">
-                                    <value name="IF0">
-                                        <block type="robSensors_getSample" id="|b.0rig=EGjDUC!Dvr0r" intask="true">
-                                            <mutation input="TOUCHKEY_PRESSED"></mutation>
-                                            <field name="SENSORTYPE">TOUCHKEY_PRESSED</field>
-                                            <field name="SENSORPORT">RIGHT</field>
-                                            <field name="SLOT"></field>
-                                        </block>
-                                    </value>
-                                    <statement name="DO0">
-                                        <block type="controls_flow_statements" id="z%N.ryzrgo|TrNI.55y[" intask="true">
-                                            <field name="FLOW">BREAK</field>
-                                        </block>
-                                    </statement>
-                                </block>
-                                <block type="robActions_serial_print" id="pTMQMFs?=_7Msm-DNgw`" intask="true">
-                                    <value name="OUT">
-                                        <block type="robSensors_gyro_getSample" id="Be+S[n*Y)oEwWOf3Xs^8" intask="true">
-                                            <mutation mode="GYRO"></mutation>
-                                            <field name="MODE">GYRO</field>
-                                            <field name="SENSORPORT">C2</field>
-                                            <field name="SLOT">Y</field>
-                                        </block>
-                                    </value>
-                                </block>
-                                <block type="robControls_wait_time" id="E(#P2hUi*gHi_;#si-z%" intask="true">
-                                    <value name="WAIT">
-                                        <block type="math_number" id="8z9%[G)M[sAXwMo~SM@5" intask="true">
-                                            <field name="NUM">500</field>
-                                        </block>
-                                    </value>
-                                </block>
-                            </statement>
-                        </block>
-                        <block type="robActions_serial_print" id="/jM4Ei#R:LyB(M8IthqN" intask="true">
-                            <value name="OUT">
-                                <block type="text" id="TURtjNs-};9%Q{|5Br~Z" intask="true">
-                                    <field name="TEXT">Gyro Z</field>
-                                </block>
-                            </value>
-                        </block>
-                        <block type="robControls_loopForever" id="SM5^Z?WDZ7+tqtQ:j1JU" intask="true">
-                            <statement name="DO">
-                                <block type="robControls_if" id="(fRJr5YTR(FZ.6?VFAE8" intask="true">
-                                    <value name="IF0">
-                                        <block type="robSensors_getSample" id="yjfD)Wb[35#T:.sbCG#C" intask="true">
-                                            <mutation input="TOUCHKEY_PRESSED"></mutation>
-                                            <field name="SENSORTYPE">TOUCHKEY_PRESSED</field>
-                                            <field name="SENSORPORT">RIGHT</field>
-                                            <field name="SLOT"></field>
-                                        </block>
-                                    </value>
-                                    <statement name="DO0">
-                                        <block type="controls_flow_statements" id="5u,2S!/w/3:nf_/+-sNP" intask="true">
-                                            <field name="FLOW">BREAK</field>
-                                        </block>
-                                    </statement>
-                                </block>
-                                <block type="robActions_serial_print" id="2t){qYv-DKJ#bR}I:)wu" intask="true">
-                                    <value name="OUT">
-                                        <block type="robSensors_gyro_getSample" id="}X}?mzuTtKsAv+rTsWMv" intask="true">
-                                            <mutation mode="GYRO"></mutation>
-                                            <field name="MODE">GYRO</field>
-                                            <field name="SENSORPORT">C2</field>
-                                            <field name="SLOT">Z</field>
-                                        </block>
-                                    </value>
-                                </block>
-                                <block type="robControls_wait_time" id="*^B9*~WqExPi1i^^x8S^" intask="true">
-                                    <value name="WAIT">
-                                        <block type="math_number" id="p2fEb4pM7+8!xOkh]Y;d" intask="true">
-                                            <field name="NUM">500</field>
-                                        </block>
-                                    </value>
-                                </block>
-                            </statement>
-                        </block>
-                    </statement>
-                </block>
-            </instance>
-            <instance x="1364" y="138">
+            <instance x="825" y="145">
                 <block type="robProcedures_defnoreturn" id="VA%U`58AY/x7QE/Ns/Hk" intask="true">
                     <mutation declare="false"></mutation>
                     <field name="NAME">rgbGesture</field>
@@ -978,10 +576,11 @@
                     </statement>
                 </block>
             </instance>
-            <instance x="630" y="278">
+            <instance x="1010" y="209">
                 <block type="robConf_i2c_port_txt4" id="5So!qKO[i(`h|YRgp(l." intask="true">
                     <field name="NAME">I2</field>
-                    <field name="PORT">EXT</field>
+                    <field name="PORT1">EXT1</field>
+                    <field name="PORT2">EXT2</field>
                     <statement name="BUS">
                         <block type="robConf_environmental" id="b`/VLL(/k03:9zhWWyzN" intask="true">
                             <field name="NAME">E</field>
@@ -989,10 +588,12 @@
                         <block type="robConf_gesture" id="R0=z:%B[{iPHP#X%ISLe" intask="true">
                             <field name="NAME">R</field>
                         </block>
-                        <block type="robConf_imu" id="_|(h#UH.}eFP*y7/22vn" intask="true">
-                            <field name="NAME">C2</field>
-                        </block>
                     </statement>
+                </block>
+            </instance>
+            <instance x="660" y="277">
+                <block type="robConf_robot" id="robot" intask="true">
+                    <field name="ROBOT">undefined</field>
                 </block>
             </instance>
             <instance x="350" y="310">

@@ -542,9 +542,118 @@
                 <block type="robActions_serial_print" id="tMiiT.cQ]q19{DG4G82)" intask="true">
                     <value name="OUT">
                         <block type="text" id="3%0cj{(Luy)IwJh}/=p:" intask="true">
-                            <field name="TEXT">DONE</field>
+                            <field name="TEXT">phototransistor on I6</field>
                         </block>
                     </value>
+                </block>
+                <block type="robControls_loopForever" id="YJxAM6X`a(y,,+mc:[EV" intask="true">
+                    <statement name="DO">
+                        <block type="robControls_if" id="/%WQWf@g+!HvVz}9AL=a" intask="true">
+                            <value name="IF0">
+                                <block type="robSensors_touchkey_getSample" id="!hScUnXm?`_.={#Ro)!/" intask="true">
+                                    <mutation mode="PRESSED"/>
+                                    <field name="MODE">PRESSED</field>
+                                    <field name="SENSORPORT">RIGHT</field>
+                                    <field name="SLOT"/>
+                                </block>
+                            </value>
+                            <statement name="DO0">
+                                <block type="controls_flow_statements" id="0]dl#cu~AUW#+/.{]vMy" intask="true">
+                                    <field name="FLOW">BREAK</field>
+                                </block>
+                            </statement>
+                        </block>
+                        <block type="robActions_serial_print" id="g3-7]^]YGf2Cof*s6zj(" intask="true">
+                            <value name="OUT">
+                                <block type="robSensors_phototransistor_getSample" id="p9m0^RMlt5{D(}l@:+oB" intask="true">
+                                    <mutation mode="OPENING"/>
+                                    <field name="MODE">OPENING</field>
+                                    <field name="SENSORPORT">P</field>
+                                    <field name="SLOT"/>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robControls_wait_time" id="OcmuguRG8~K?n*)/7!;)" intask="true">
+                            <value name="WAIT">
+                                <block type="math_number" id="^26A?gKrZ1gpvJ28YTGl" intask="true">
+                                    <field name="NUM">500</field>
+                                </block>
+                            </value>
+                        </block>
+                    </statement>
+                </block>
+                <block type="robActions_serial_print" id="2-H}rr|vhOf.kbiQ3jo7" intask="true">
+                    <value name="OUT">
+                        <block type="text" id=".[ZoSIAbux67}wi#~;y:" intask="true">
+                            <field name="TEXT">NTC Resistor on I7</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robControls_loopForever" id="I%/.OsHiGyc6L6Buhnh/" intask="true">
+                    <statement name="DO">
+                        <block type="robControls_if" id=".?R_wTbq*rea:,EXxyxx" intask="true">
+                            <value name="IF0">
+                                <block type="robSensors_touchkey_getSample" id="Y`pI5ASd8Fb6/6i#V}{5" intask="true">
+                                    <mutation mode="PRESSED"/>
+                                    <field name="MODE">PRESSED</field>
+                                    <field name="SENSORPORT">RIGHT</field>
+                                    <field name="SLOT"/>
+                                </block>
+                            </value>
+                            <statement name="DO0">
+                                <block type="controls_flow_statements" id="Lzje:{(TPgXR=dH6hN@P" intask="true">
+                                    <field name="FLOW">BREAK</field>
+                                </block>
+                            </statement>
+                        </block>
+                        <block type="robActions_serial_print" id="}rn11cvq5B|5wQw2_GXd" intask="true">
+                            <value name="OUT">
+                                <block type="robText_join" id="/hIuQTQhZ0bQ+@+rr#;z" intask="true">
+                                    <mutation items="2"/>
+                                    <value name="ADD0">
+                                        <block type="text" id="V.D#vq,MY}r?I4GHS%K," intask="true">
+                                            <field name="TEXT">Temperature:</field>
+                                        </block>
+                                    </value>
+                                    <value name="ADD1">
+                                        <block type="robSensors_temperature_getSample" id="kG4nLq8sUXl,adBnhWZ!" intask="true">
+                                            <mutation mode="TEMPERATURE"/>
+                                            <field name="MODE">TEMPERATURE</field>
+                                            <field name="SENSORPORT">N</field>
+                                            <field name="SLOT"/>
+                                        </block>
+                                    </value>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robActions_serial_print" id="}#_%51SnTtInD4M}lb{2" intask="true">
+                            <value name="OUT">
+                                <block type="robText_join" id="+Xb=0+:]!5V`zy5qBJmj" intask="true">
+                                    <mutation items="2"/>
+                                    <value name="ADD0">
+                                        <block type="text" id="{G3`4O[T?eXvglUm9=EV" intask="true">
+                                            <field name="TEXT">Resistance:</field>
+                                        </block>
+                                    </value>
+                                    <value name="ADD1">
+                                        <block type="robSensors_temperature_getSample" id="oXjyF;R]%79J-mpMa1|*" intask="true">
+                                            <mutation mode="RESISTANCE"/>
+                                            <field name="MODE">RESISTANCE</field>
+                                            <field name="SENSORPORT">N</field>
+                                            <field name="SLOT"/>
+                                        </block>
+                                    </value>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robControls_wait_time" id="cNL(M|Sfeq[=x;rSJ#}T" intask="true">
+                            <value name="WAIT">
+                                <block type="math_number" id="L#xZG2%UvI{%W@=6~:5g" intask="true">
+                                    <field name="NUM">500</field>
+                                </block>
+                            </value>
+                        </block>
+                    </statement>
                 </block>
             </instance>
         </block_set>
@@ -584,6 +693,11 @@
                     </statement>
                 </block>
             </instance>
+            <instance x="250" y="250">
+                <block type="robConf_robot" id="robot" intask="true">
+                    <field name="ROBOT">undefined</field>
+                </block>
+            </instance>
             <instance x="669" y="265">
                 <block type="robConf_key" id="8[T{tqN2w?Ir~Ay~r^#a" intask="true">
                     <field name="NAME">M</field>
@@ -595,7 +709,7 @@
                     <field name="NAME">_B</field>
                 </block>
             </instance>
-            <instance x="70" y="360">
+            <instance x="-62" y="367">
                 <block type="robConf_camera_txt4" id="CAM" intask="true">
                     <field name="NAME">C</field>
                     <field name="COLOURSIZE">30</field>
@@ -622,10 +736,24 @@
                     <field name="VCC">9V</field>
                 </block>
             </instance>
-            <instance x="350" y="460">
+            <instance x="645" y="502">
+                <block type="robConf_phototransistor" id="Q-0#~clFr?JE[)?jyV!S" intask="true">
+                    <field name="NAME">P</field>
+                    <field name="PORT">I6</field>
+                    <field name="VCC">9V</field>
+                </block>
+            </instance>
+            <instance x="359" y="549">
                 <block type="robConf_ultrasonic" id="U" intask="true">
                     <field name="NAME">U</field>
                     <field name="PORT">I3</field>
+                    <field name="VCC">9V</field>
+                </block>
+            </instance>
+            <instance x="648" y="597">
+                <block type="robConf_temperature" id=";l)+!TKaV^7vp8[[}uaX" intask="true">
+                    <field name="NAME">N</field>
+                    <field name="PORT">I7</field>
                     <field name="VCC">9V</field>
                 </block>
             </instance>

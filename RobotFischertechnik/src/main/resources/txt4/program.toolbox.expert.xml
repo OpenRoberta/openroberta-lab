@@ -181,6 +181,8 @@
         <block type='robSensors_motion_getSample'></block>
         <block type='robSensors_key_getSample'></block>
         <block type='robSensors_light_getSample'></block>
+        <block type='robSensors_phototransistor_getSample'></block>
+        <block type='robSensors_temperature_getSample'></block>
         <block type='robSensors_environmental_getSample'></block>
         <block type='robSensors_environmental_calibrate'></block>
         <block type='robSensors_gesture_getSample'></block>
