@@ -49,8 +49,8 @@ export function getLinesFromRectangle(myObj: any): {
 /**
  * @return the (unique) start block from the program. Must exist.
  */
-export function getTheStartBlock(): Blockly.Block {
-    let startBlock: Blockly.Block = null;
+export function getTheStartBlock(): any {
+    let startBlock: any = null;
     for (const block of Blockly.Workspace.getByContainer('blocklyDiv').getTopBlocks()) {
         if (!block.isDeletable()) {
             return block;
@@ -62,7 +62,7 @@ export function getTheStartBlock(): Blockly.Block {
 /**
  * @return all block from the program.
  */
-export function getAllBlocks(): Blockly.Block[] {
+export function getAllBlocks(): any[] {
     return Blockly.Workspace.getByContainer('blocklyDiv').getAllBlocks();
 }
 
@@ -75,13 +75,13 @@ export function getAllBlocks(): Blockly.Block[] {
  *            newName New configuration name.
  */
 export function renameNeuron(oldName: string, newName: string): void {
-    let blocks: Blockly.Block[] = getAllBlocks();
+    let blocks: any[] = getAllBlocks();
     for (let x: number = 0; x < blocks.length; x++) {
-        let block: Blockly.Block = blocks[x];
+        let block: any = blocks[x];
         if (!block.dependNeuron) {
             continue;
         }
-        let dependNeuron: Blockly.DependNeuron;
+        let dependNeuron: any;
         if (typeof block.dependNeuron === 'function') {
             dependNeuron = block.dependNeuron();
         } else {
@@ -876,7 +876,7 @@ $(window).on('resize', function (): void {
     if (diff != 0) {
         $('#blocklyDiv').outerWidth(leftWidth + diff);
     }
-    let workspace: Blockly.Workspace = Blockly.getMainWorkspace();
+    let workspace: any = Blockly.getMainWorkspace();
     if (workspace) {
         Blockly.svgResize(workspace);
     }
@@ -890,13 +890,13 @@ $(window).on('resize', function (): void {
  * @param {workspacee}
  *            workspace
  */
-export function clearAnnotations(workspace?: Blockly.Workspace): void {
-    if (workspace && workspace instanceof Blockly.Workspace) {
-        let allBlocks: Blockly.Block[] = workspace.getAllBlocks();
+export function clearAnnotations(workspace?: any): void {
+    if (workspace) {
+        let allBlocks: any[] = workspace.getAllBlocks();
         for (let i: number = 0; i < allBlocks.length; i++) {
             let icons = allBlocks[i].getIcons();
             for (let k: number = 0; k < icons.length; k++) {
-                let block: Blockly.Block = icons[k].block_;
+                let block: any = icons[k].block_;
                 if (block.error) {
                     block.error.dispose();
                     block.render();
@@ -916,9 +916,9 @@ export function clearAnnotations(workspace?: Blockly.Workspace): void {
  * @param {object}
  *            confAnnos - {block id, {type of annotation, message key}}
  */
-export function annotateBlocks(workspace: Blockly.Workspace, annotations: any[]): void {
+export function annotateBlocks(workspace: any, annotations: any[]): void {
     for (let annoId in annotations) {
-        let block: Blockly.Block = workspace.getBlockById(annoId);
+        let block: any = workspace.getBlockById(annoId);
         if (block) {
             let anno = annotations[annoId];
             for (let annoType in anno) {
@@ -1176,7 +1176,7 @@ export function cleanUri(): void {
 }
 
 //TODO: Robot group names exists in plugin properties
-export function getRobotGroupsPrettyPrint(opt_robotGroup): string | object {
+export function getRobotGroupsPrettyPrint(opt_robotGroup?): string | object {
     let robots = GUISTATE_C.getRobots();
     let groups: object = {};
 
