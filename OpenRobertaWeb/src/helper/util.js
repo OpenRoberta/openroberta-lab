@@ -1013,6 +1013,14 @@ function isIOS() {
     return navigator.userAgent.toLowerCase().match(/iPad|iPhone/i) !== null;
 }
 
+export function isWindowsOS() {
+    return navigator.userAgent.indexOf('Windows') != -1;
+}
+
+export function isChromeOS() {
+    return navigator.userAgent.indexOf('CrOS') != -1;
+}
+
 export function isWebUsbSupported() {
     //webUSB is currently only supported by chromium browsers like google chrome, Edge, Microsoft Edge, etc.
     //webUSB is currently not supported on any IOS device
@@ -1185,7 +1193,6 @@ export {
     showMsgOnTop,
     response,
     round,
-    roundUltraSound,
     sgn,
     getBasename,
     download,

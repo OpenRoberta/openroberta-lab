@@ -195,10 +195,7 @@ export abstract class AbstractPromptConnection extends AbstractConnection {
     }
 
     createDownloadLink(fileName: string, content) {
-        if (!('msSaveOrOpenBlob' in navigator)) {
-            $('#trA').removeClass('hidden');
-        } else {
-            $('#trA').addClass('hidden');
+        if ('msSaveOrOpenBlob' in navigator) {
             UTIL.download(fileName, content);
             GUISTATE_C.setConnectionState('error');
         }

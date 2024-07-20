@@ -445,6 +445,10 @@ function resetProgram(successFn) {
     COMM.json('/projectWorkflow/reset', {}, successFn, 'reset');
 }
 
+export function externAPIRequest(urlAPI, data, successFn, errorFn) {
+    COMM.externPost(urlAPI, data, successFn, errorFn);
+}
+
 export {
     saveAsProgramToServer,
     saveProgramToServer,

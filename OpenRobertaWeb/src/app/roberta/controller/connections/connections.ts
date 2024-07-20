@@ -19,153 +19,6 @@ import * as IO from 'socket.io';
 import * as CONNECTION_C from 'connection.controller';
 import { Interpreter } from 'interpreter.interpreter';
 
-export class AudioConnection extends AbstractPromptConnection {
-    /**
-     * Creates the pop-up for robots that play sound inside the browser instead
-     * of downloading a file (f.e. Edison) This function is very similar to
-     * runForAutoConnection, but instead of a download link a Play button is
-     * created. Also, some parts of the autoConnection pop-up are hidden: - the
-     * "I've changed my download folder" checkbox - the "OK" button in the
-     * footer
-     *
-     * @param result
-     *            the result that is received from the server after sending the
-     *            program to it
-     */
-    protected run(result) {
-        if (result.rc !== 'ok') {
-            GUISTATE_C.setConnectionState('wait');
-            MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
-        } else {
-            let wavFileContent = UTIL.base64decode(result.compiledCode);
-            let audio: HTMLAudioElement;
-            $('#changedDownloadFolder').addClass('hidden');
-
-            //This detects IE11 (and IE11 only), see: https://developer.mozilla.org/en-US/docs/Web/API/Window/crypto
-            // @ts-ignore
-            if (window.msCrypto) {
-                //Internet Explorer (all ver.) does not support playing WAV files in the browser
-                //If the user uses IE11 the file will not be played, but downloaded instead
-                //See: https://caniuse.com/#feat=wav, https://www.w3schools.com/html/html5_audio.asp
-                this.createDownloadLink(GUISTATE_C.getProgramName() + '.wav', wavFileContent);
-            } else {
-                //All non-IE browsers can play WAV files in the browser, see: https://www.w3schools.com/html/html5_audio.asp
-                $('#OKButtonModalFooter').addClass('hidden');
-                let contentAsBlob = new Blob([wavFileContent], {
-                    type: 'audio/wav',
-                });
-                audio = new Audio(window.URL.createObjectURL(contentAsBlob));
-                this.createPlayButton(audio);
-            }
-
-            let textH = $('#popupDownloadHeader').text();
-            $('#popupDownloadHeader').text(textH.replace('$', $.trim(GUISTATE_C.getRobotRealName())));
-            for (let i = 1; Blockly.Msg['POPUP_DOWNLOAD_STEP_' + i]; i++) {
-                let step = $('<li class="typcn typcn-roberta">');
-                let a =
-                    Blockly.Msg['POPUP_DOWNLOAD_STEP_' + i + '_' + GUISTATE_C.getRobotGroup().toUpperCase()] ||
-                    Blockly.Msg['POPUP_DOWNLOAD_STEP_' + i] ||
-                    'POPUP_DOWNLOAD_STEP_' + i;
-                step.html('<span class="download-message">' + a + '</span>');
-                step.css('opacity', '0');
-                $('#download-instructions').append(step);
-            }
-
-            $('#save-client-compiled-program').oneWrap('shown.bs.modal', function (e) {
-                $('#download-instructions li').each(function (index) {
-                    $(this)
-                        .delay(750 * index)
-                        .animate(
-                            {
-                                opacity: 1,
-                            },
-                            1000
-                        );
-                });
-            });
-
-            $('#save-client-compiled-program').oneWrap('hidden.bs.modal', function (e) {
-                // @ts-ignore
-                if (!window.msCrypto) {
-                    audio.pause();
-                    audio.load();
-                }
-                let textH = $('#popupDownloadHeader').text();
-                $('#popupDownloadHeader').text(textH.replace($.trim(GUISTATE_C.getRobotRealName()), '$'));
-                $('#programLink').remove();
-                $('#download-instructions').empty();
-                GUISTATE_C.setConnectionState('wait');
-                MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
-
-                //Un-hide the div if it was hidden before
-                $('#changedDownloadFolder').removeClass('hidden');
-                $('#OKButtonModalFooter').removeClass('hidden');
-            });
-
-            $('#save-client-compiled-program').modal('show');
-        }
-    }
-
-    public override terminate(): void {
-        super.terminate();
-        this.clearDownloadModal();
-    }
-
-    public setState(): void {}
-
-    /**
-     * Creates a Play button for an Audio object so that the sound can be played
-     * and paused/restarted inside the browser:
-     *
-     * <button type="button" class="btn btn-primary" style="font-size:36px">
-     * <span class="typcn typcn-media-play" style="color : black"></span>
-     * </button>
-     */
-    createPlayButton(audio: HTMLAudioElement) {
-        $('#trA').removeClass('hidden');
-        let playButton: HTMLButtonElement;
-        if ('Blob' in window) {
-            //Create a bootstrap button
-            playButton = document.createElement('button');
-            playButton.setAttribute('type', 'button');
-            playButton.setAttribute('class', 'btn btn-primary');
-
-            let playing: boolean = false;
-            playButton.onclick = function () {
-                if (playing == false) {
-                    audio.play();
-                    playIcon.setAttribute('class', 'typcn typcn-media-stop');
-                    playing = true;
-                    audio.addEventListener('ended', function () {
-                        $('#save-client-compiled-program').modal('hide');
-                    });
-                } else {
-                    playIcon.setAttribute('class', 'typcn typcn-media-play');
-                    audio.pause();
-                    audio.load();
-                    playing = false;
-                }
-            };
-
-            //Create the play icon inside the button
-            let playIcon = document.createElement('span');
-            playIcon.setAttribute('class', 'typcn typcn-media-play');
-            playIcon.setAttribute('style', 'color : black');
-            playButton.appendChild(playIcon);
-        }
-
-        if (playButton) {
-            let programLinkDiv = document.createElement('div');
-            programLinkDiv.setAttribute('id', 'programLink');
-            programLinkDiv.setAttribute('style', 'text-align: center;');
-            programLinkDiv.appendChild(document.createElement('br'));
-            programLinkDiv.appendChild(playButton);
-            playButton.setAttribute('style', 'font-size:36px');
-            $('#downloadLink').append(programLinkDiv);
-        }
-    }
-}
-
 class ThymioDeviceManagerConnection extends AbstractConnection {
     static readonly URL = 'ws://localhost:8597';
     // provide a stop program (see https://github.com/Mobsya/vpl-web/blob/master/thymio/index.js#L197) instead of using a stop function of TDM
@@ -1420,12 +1273,148 @@ export class Unowifirev2Connection extends TokenConnection {}
 //cyberpi
 export class Mbot2Connection extends TokenConnection {}
 
-//edison
-export class EdisonConnection extends AudioConnection {}
+export class EdisonConnection extends AbstractPromptConnection {
+    private static API_URL: string = 'https://api.edisonrobotics.net/';
+    private static API_LONG: string = 'ep/wav/long';
+    private static API_SHORT: string = 'ep/wav/short';
+
+    /**
+     * Creates the pop-up for robots that play sound inside the browser instead
+     * of downloading a file (f.e. Edison) This function is very similar to
+     * runForAutoConnection, but instead of a download link a Play button is
+     * created. Also, some parts of the autoConnection pop-up are hidden: - the
+     * "I've changed my download folder" checkbox - the "OK" button in the
+     * footer
+     *
+     * @param result
+     *            the result that is received from the server after sending the
+     *            program to it
+     */
+
+    protected run(result: any) {
+        if (result.rc !== 'ok') {
+            GUISTATE_C.setConnectionState('wait');
+            MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
+        } else {
+            let urlAPI = EdisonConnection.API_URL + EdisonConnection.API_LONG;
+            if (UTIL.isChromeOS() || UTIL.isWindowsOS()) {
+                urlAPI = EdisonConnection.API_URL + EdisonConnection.API_SHORT;
+            }
+            $('#changedDownloadFolder').addClass('hidden');
+            $('#OKButtonModalFooter').addClass('hidden');
+            let textH = $('#popupDownloadHeader').text();
+            $('#popupDownloadHeader').text(textH.replace('$', GUISTATE_C.getRobotRealName().trim()));
+            for (let i = 1; Blockly.Msg['POPUP_DOWNLOAD_STEP_' + i]; i++) {
+                let step = $('<li class="typcn typcn-roberta">');
+                let a =
+                    Blockly.Msg['POPUP_DOWNLOAD_STEP_' + i + '_' + GUISTATE_C.getRobotGroup().toUpperCase()] ||
+                    Blockly.Msg['POPUP_DOWNLOAD_STEP_' + i] ||
+                    'POPUP_DOWNLOAD_STEP_' + i;
+                step.html('<span class="download-message">' + a + '</span>');
+                $('#download-instructions').append(step);
+            }
+            $('#save-client-compiled-program').oneWrap('hidden.bs.modal', function (e) {
+                GUISTATE_C.setConnectionState('wait');
+                // @ts-ignore
+                if (audio && !window.msCrypto) {
+                    audio.pause();
+                    audio.load();
+                }
+                that.clearDownloadModal();
+            });
+            $('body>.pace').fadeIn();
+            let audio: HTMLAudioElement;
+            let that = this;
+
+            const handleError = function (errorMessage) {
+                GUISTATE_C.setConnectionState('wait');
+                that.clearDownloadModal();
+                $('body>.pace').fadeOut(400, function () {
+                    MSG.displayPopupMessage('ORA_PROGRAM_SAVE_AS_ERROR_PROGRAM_EXISTS', errorMessage, 'OK');
+                });
+            };
+
+            const onload = function (response) {
+                try {
+                    if (response.compile == 'true') {
+                        let wavProgram = response.wav;
+                        audio = new Audio(wavProgram);
+                        that.createPlayButton(audio);
+                        $('body>.pace').fadeOut(400, function () {
+                            $('#save-client-compiled-program').modal('show');
+                        });
+                    } else {
+                        handleError('Compiler Error:<br>' + response.message);
+                    }
+                } catch (error) {
+                    handleError('API ' + urlAPI + ' usage error');
+                }
+            };
+            const onerror = function (e) {
+                handleError('Compiler ' + urlAPI + ' not available, please try it again later!');
+            };
+            PROGRAM.externAPIRequest(urlAPI, result.compiledCode, onload, onerror);
+        }
+    }
+
+    /**
+     * Creates a Play button for an Audio object so that the sound can be played
+     * and paused/restarted inside the browser:
+     *
+     * <button type="button" class="btn btn-primary" style="font-size:36px">
+     * <span class="typcn typcn-media-play" style="color : black"></span>
+     * </button>
+     */
+    createPlayButton(audio: HTMLAudioElement) {
+        let playButton: HTMLButtonElement;
+        if ('Blob' in window) {
+            //Create a bootstrap button
+            playButton = document.createElement('button');
+            playButton.setAttribute('type', 'button');
+            playButton.setAttribute('class', 'btn btn-primary');
+
+            let playing: boolean = false;
+            playButton.onclick = function () {
+                if (playing == false) {
+                    audio.play();
+                    playIcon.setAttribute('class', 'typcn typcn-media-stop');
+                    playing = true;
+                    audio.addEventListener('ended', function () {
+                        $('#save-client-compiled-program').modal('hide');
+                    });
+                } else {
+                    playIcon.setAttribute('class', 'typcn typcn-media-play');
+                    audio.pause();
+                    audio.load();
+                    playing = false;
+                }
+            };
+            let playIcon = document.createElement('span');
+            playIcon.setAttribute('class', 'typcn typcn-media-play');
+            playIcon.setAttribute('style', 'color : #333333');
+            playButton.appendChild(playIcon);
+        }
+
+        if (playButton) {
+            let programLinkDiv = document.createElement('div');
+            programLinkDiv.setAttribute('id', 'programLink');
+            programLinkDiv.setAttribute('style', 'text-align: center;');
+            programLinkDiv.appendChild(document.createElement('br'));
+            programLinkDiv.appendChild(playButton);
+            playButton.setAttribute('style', 'font-size:36px');
+            $(programLinkDiv).appendTo('#downloadLink');
+        }
+    }
+
+    public setState(): void {}
+
+    public override terminate(): void {
+        super.terminate();
+        this.clearDownloadModal();
+    }
+}
 
 //ev3
-export class Ev3Connection extends AudioConnection {}
-
 export class Ev3c4ev3Connection extends AutoConnection {}
 
 export class Ev3devConnection extends TokenConnection {}

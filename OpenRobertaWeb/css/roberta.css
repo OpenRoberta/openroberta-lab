@@ -1223,9 +1223,19 @@ button#simCustomObstacle.typcn:before {
 
 .modal-header,
 .modal-footer {
-    border: 0;
+    border: none;
     padding: 16px 16px 20px;
     text-align: left;
+}
+
+.modal-header {
+    border-top-left-radius: inherit;
+    border-top-right-radius: inherit;
+}
+
+.modal-footer {
+    border-bottom-left-radius: inherit;
+    border-bottom-right-radius: inherit;
 }
 
 .form-control:focus, .form-select:focus {

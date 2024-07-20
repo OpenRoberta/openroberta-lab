@@ -200,6 +200,15 @@ function sendProgramHexToAgent(programHex, robotPort, programName, signature, co
     });
 }
 
+export function externPost(url, data, successFn, onError) {
+    return $.post({
+        url: url,
+        data: data,
+        error: WRAP.wrapREST(onError),
+        success: WRAP.wrapREST(successFn),
+    });
+}
+
 function showServerError(type) {
     type += navigator.language.indexOf('de') > -1 ? '_DE' : '_EN';
     var message;
