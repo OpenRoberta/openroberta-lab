@@ -402,7 +402,7 @@ function initRobotListEvents() {
         'click',
         function (e) {
             e.stopPropagation();
-            mainCallback('ev3lejosv1', function () {
+            mainCallback('ev3lejosv1', {}, function () {
                 PROGRAM_C.newProgram(true);
                 TOUR_C.start('welcome');
             });
