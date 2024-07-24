@@ -93,6 +93,7 @@ public class CalliopeV3PythonVisitor extends MbedV2PythonVisitor implements ICal
         CALLIBOT_TO_PIN_MAP.put("SERVO_S1", "0x14");
         CALLIBOT_TO_PIN_MAP.put("SERVO_S2", "0x15");
     }
+
     /**
      * initialize the Python code generator visitor.
      *

@@ -10,6 +10,7 @@ import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.mbed.microbitV2.SoundToggleAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.SetVolumeAction;
+import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.microbitV2.LogoSetTouchMode;
 import de.fhg.iais.roberta.syntax.sensor.mbed.microbitV2.LogoTouchSensor;
@@ -32,6 +33,18 @@ public abstract class MbedV2PythonVisitor extends MbedPythonVisitor implements I
         String firmware,
         ClassToInstanceMap<IProjectBean> beans) {
         super(programPhrases, robotConfiguration, firmware, beans);
+    }
+
+    @Override
+    public Void visitRgbColor(RgbColor rgbColor) {
+        this.src.add("(");
+        rgbColor.R.accept(this);
+        this.src.add(", ");
+        rgbColor.G.accept(this);
+        this.src.add(", ");
+        rgbColor.B.accept(this);
+        this.src.add(")");
+        return null;
     }
 
     @Override

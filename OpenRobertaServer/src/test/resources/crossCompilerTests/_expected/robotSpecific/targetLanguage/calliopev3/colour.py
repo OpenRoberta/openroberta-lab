@@ -49,7 +49,7 @@ def run():
     np[1] = (___color)
     np.show()
     ____wait()
-    np[1] = (255, 20, 150, 255)
+    np[1] = ((255, 20, 150))
     np.show()
 
 def main():

@@ -411,18 +411,6 @@ public class JoyCarPythonVisitor extends MicrobitV2PythonVisitor implements IJoy
     }
 
     @Override
-    public Void visitRgbColor(RgbColor rgbColor) {
-        this.src.add("(");
-        rgbColor.R.accept(this);
-        this.src.add(", ");
-        rgbColor.G.accept(this);
-        this.src.add(", ");
-        rgbColor.B.accept(this);
-        this.src.add(")");
-        return null;
-    }
-
-    @Override
     protected void generateProgramSuffix(boolean withWrapping) {
         if ( !withWrapping ) {
             return;
