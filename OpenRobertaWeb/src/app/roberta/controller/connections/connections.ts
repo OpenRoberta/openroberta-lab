@@ -1277,6 +1277,17 @@ export class EdisonConnection extends AbstractPromptConnection {
     private static API_URL: string = 'https://api.edisonrobotics.net/';
     private static API_LONG: string = 'ep/wav/long';
     private static API_SHORT: string = 'ep/wav/short';
+    private switchedOnce: boolean = false;
+    private shortLong: String = 'long';
+    private urlAPI: string = EdisonConnection.API_URL + EdisonConnection.API_LONG;
+
+    override init() {
+        super.init();
+        if (UTIL.isChromeOS() || UTIL.isWindowsOS()) {
+            this.urlAPI = EdisonConnection.API_URL + EdisonConnection.API_SHORT;
+            this.shortLong = 'short';
+        }
+    }
 
     /**
      * Creates the pop-up for robots that play sound inside the browser instead
@@ -1296,21 +1307,17 @@ export class EdisonConnection extends AbstractPromptConnection {
             GUISTATE_C.setConnectionState('wait');
             MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
         } else {
-            let urlAPI = EdisonConnection.API_URL + EdisonConnection.API_LONG;
-            if (UTIL.isChromeOS() || UTIL.isWindowsOS()) {
-                urlAPI = EdisonConnection.API_URL + EdisonConnection.API_SHORT;
-            }
             $('#changedDownloadFolder').addClass('hidden');
             $('#OKButtonModalFooter').addClass('hidden');
             let textH = $('#popupDownloadHeader').text();
             $('#popupDownloadHeader').text(textH.replace('$', GUISTATE_C.getRobotRealName().trim()));
             for (let i = 1; Blockly.Msg['POPUP_DOWNLOAD_STEP_' + i]; i++) {
                 let step = $('<li class="typcn typcn-roberta">');
-                let a =
+                let text =
                     Blockly.Msg['POPUP_DOWNLOAD_STEP_' + i + '_' + GUISTATE_C.getRobotGroup().toUpperCase()] ||
                     Blockly.Msg['POPUP_DOWNLOAD_STEP_' + i] ||
                     'POPUP_DOWNLOAD_STEP_' + i;
-                step.html('<span class="download-message">' + a + '</span>');
+                step.html('<span class="download-message">' + text + '</span>');
                 $('#download-instructions').append(step);
             }
             $('#save-client-compiled-program').oneWrap('hidden.bs.modal', function (e) {
@@ -1344,16 +1351,27 @@ export class EdisonConnection extends AbstractPromptConnection {
                             $('#save-client-compiled-program').modal('show');
                         });
                     } else {
-                        handleError('Compiler Error:<br>' + response.message);
+                        let permissionDenied = response.message.toLowerCase().indexOf('permission denied') >= 0;
+                        if (permissionDenied && !that.switchedOnce) {
+                            that.switchedOnce = true;
+                            if (that.shortLong === 'long') {
+                                that.urlAPI = EdisonConnection.API_URL + EdisonConnection.API_SHORT;
+                            } else {
+                                that.urlAPI = EdisonConnection.API_URL + EdisonConnection.API_LONG;
+                            }
+                            PROGRAM.externAPIRequest(that.urlAPI, result.compiledCode, onload, onerror);
+                        } else {
+                            handleError('Compiler Error:<br>' + response.message);
+                        }
                     }
                 } catch (error) {
-                    handleError('API ' + urlAPI + ' usage error');
+                    handleError('API ' + that.urlAPI + ' usage error');
                 }
             };
             const onerror = function (e) {
-                handleError('Compiler ' + urlAPI + ' not available, please try it again later!');
+                handleError('Compiler ' + that.urlAPI + ' not available, please try it again later!');
             };
-            PROGRAM.externAPIRequest(urlAPI, result.compiledCode, onload, onerror);
+            PROGRAM.externAPIRequest(this.urlAPI, result.compiledCode, onload, onerror);
         }
     }
 
