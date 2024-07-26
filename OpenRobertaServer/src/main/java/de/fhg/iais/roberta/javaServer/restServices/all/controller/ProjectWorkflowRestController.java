@@ -157,6 +157,7 @@ public class ProjectWorkflowRestController {
         try {
             ProjectNepoResponse response = ProjectNepoResponse.make();
             response.setCmd("stop");
+            response.setCompiledCode("");
 
             String token = httpSessionState.getToken();
             if ( token != null ) {

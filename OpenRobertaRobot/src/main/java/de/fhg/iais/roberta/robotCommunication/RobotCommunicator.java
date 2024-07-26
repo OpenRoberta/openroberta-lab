@@ -48,8 +48,7 @@ public class RobotCommunicator {
                 || !existingIdentificator.equals(newIdentificator)
                 || existingIdentificator.equals("usb")
                 || existingIdentificator.equals("unknown")
-                || existingIdentificator.equals("?") ) //
-            {
+            ) {
                 LOG.info("ROBOT_RC: token already used. New token required");
                 return false;
             }
@@ -58,9 +57,7 @@ public class RobotCommunicator {
             RobotCommunicationData storedState = this.allStates.get(storedToken);
             if ( newIdentificator.equals(storedState.getRobotIdentificator())
                 && !newIdentificator.equals("usb")
-                && !newIdentificator.equals("unknown")
-                && !newIdentificator.equals("?") ) //
-            {
+                && !newIdentificator.equals("unknown") ) {
                 LOG.info("ROBOT_RC: token approval request for robot [" + newIdentificator + "], but an old request is pending. Start abort old request");
                 this.allStates.remove(storedToken);
                 storedState.abort(); // notifyAll() executed
