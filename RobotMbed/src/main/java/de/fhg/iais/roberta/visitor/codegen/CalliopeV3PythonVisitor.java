@@ -388,7 +388,7 @@ public class CalliopeV3PythonVisitor extends MbedV2PythonVisitor implements ICal
 
     @Override
     public Void visitRadioReceiveAction(RadioReceiveAction radioReceiveAction) {
-        this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(CalliopeMethods.RECEIVE_MESSAGE), "()");
+        this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(CalliopeMethods.RECEIVE_MESSAGE), "(\"", radioReceiveAction.type, "\")");
         return null;
     }
 

@@ -43,7 +43,7 @@ def run():
         if calliopemini.button_b.is_pressed() == True:
             break
     calliopemini.sleep(100)
-    calliopemini.display.scroll(str(receive_message()))
+    calliopemini.display.scroll(str(receive_message("String")))
     calliopemini.display.clear()
     calliopemini.display.show(calliopemini.Image.YES)
 
@@ -53,12 +53,15 @@ def main():
     except Exception as e:
         raise
 
-def receive_message():
+def receive_message(type):
     global rssi
     details = radio.receive_full()
     if details:
         msg, rssi, timestamp = details
         return msg.decode('utf-8')[3:]
+    if (type == "String"):
+        return "  "
+    return 0
 
 if __name__ == "__main__":
     main()
