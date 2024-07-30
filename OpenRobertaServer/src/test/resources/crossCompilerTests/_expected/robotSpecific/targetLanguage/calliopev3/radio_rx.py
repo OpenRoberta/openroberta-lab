@@ -42,9 +42,11 @@ def run():
     while True:
         if calliopemini.button_b.is_pressed() == True:
             break
-    calliopemini.sleep(100)
-    calliopemini.display.scroll(str(receive_message()))
+    calliopemini.display.scroll(str(receive_message("Number") + 23))
+    calliopemini.display.scroll(str(receive_message("Boolean") and True))
+    calliopemini.display.scroll(str("".join(str(arg) for arg in [receive_message("String"), "as expected!"])))
     calliopemini.display.clear()
+    calliopemini.sleep(100)
     calliopemini.display.show(calliopemini.Image.YES)
 
 def main():
@@ -53,12 +55,29 @@ def main():
     except Exception as e:
         raise
 
-def receive_message():
+def receive_message(type):
     global rssi
     details = radio.receive_full()
     if details:
         msg, rssi, timestamp = details
-        return msg.decode('utf-8')[3:]
+        msg = msg.decode('utf-8')[3:]
+        if type == "Number":
+            try:
+                digit = float(msg)
+            except ValueError:
+                digit = 0
+            return digit
+        elif type == "Boolean":
+            return msg == 'True' or msg == '1'
+        elif type == "String":
+            return msg
+    else:
+        if type == "Number":
+            return 0
+        elif type == "Boolean":
+            return False
+        elif type == "String":
+            return ''
 
 if __name__ == "__main__":
     main()

@@ -43,6 +43,10 @@ def run():
         if calliopemini.button_a.is_pressed() == True:
             break
     radio.config(power=7)
+    radio.send(str(77))
+    radio.config(power=7)
+    radio.send(str(True))
+    radio.config(power=7)
     radio.send(str("Hallo Roberta!"))
     calliopemini.sleep(100)
     calliopemini.display.clear()

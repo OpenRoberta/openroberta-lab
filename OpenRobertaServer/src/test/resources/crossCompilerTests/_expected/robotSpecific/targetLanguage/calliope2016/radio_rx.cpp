@@ -48,9 +48,11 @@ int main()
         }
         _uBit.sleep(_ITERATION_SLEEP_TIMEOUT);
     }
-    _uBit.sleep(100);
-    _uBit.display.scroll(ManagedString(ManagedString(_uBit.radio.datagram.recv())));
+    _uBit.display.scroll(ManagedString(atoi((char*)_uBit.radio.datagram.recv().getBytes()) + 23));
+    _uBit.display.scroll(ManagedString(atoi((char*)_uBit.radio.datagram.recv().getBytes()) && true));
+    _uBit.display.scroll(ManagedString(ManagedString(_uBit.radio.datagram.recv())) + ManagedString(ManagedString("as expected!")));
     _uBit.display.clear();
+    _uBit.sleep(100);
     _uBit.display.print(MicroBitImage("0,0,0,0,0\n0,0,0,0,255\n0,0,0,255,0\n255,0,255,0,0\n0,255,0,0,0\n"));
     release_fiber();
 }

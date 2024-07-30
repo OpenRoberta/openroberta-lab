@@ -5,6 +5,9 @@
                 <block type="robControls_start" id="SRhyqr`97V.~KiRhwz2?" intask="true" deletable="false">
                     <mutation declare="true"></mutation>
                     <field name="DEBUG"></field>
+                    <data>
+                        {"learningRate":0.03,"regularizationRate":0,"noise":0,"batchSize":10,"discretize":false,"percTrainData":50,"activationKey":"linear","activation":{},"regularization":null,"initUntil":null,"collectStats":false,"numHiddenLayers":0,"networkShape":[],"weights":[[["1"]],[[]]],"biases":[["0"],["0"]],"precision":"2","weightArcMaxSize":8,"weightSuppressMultOp":true,"inputs":["n1"],"outputs":["n2"],"hiddenNeurons":[]}
+                    </data>
                     <statement name="ST">
                         <block type="robGlobalVariables_declare" id="DEUmoekTq6z5d#fTC[;e" intask="true" deletable="false" movable="false">
                             <mutation next="true" declaration_type="Array_Colour"></mutation>
@@ -243,6 +246,26 @@
                                     <field name="BOOL">TRUE</field>
                                 </block>
                             </value>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedCommunication_sendBlock" id="G1=x=9Nz:O/qSKhzal/U" intask="true">
+                    <mutation datatype="Number"></mutation>
+                    <field name="TYPE">Number</field>
+                    <field name="POWER">7</field>
+                    <value name="sendData">
+                        <block type="math_number" id="V.ObmPEUgFc)Tym|z*/O" intask="true">
+                            <field name="NUM">77</field>
+                        </block>
+                    </value>
+                </block>
+                <block type="mbedCommunication_sendBlock" id="`ygN^R:CC9rIM=GzDigI" intask="true">
+                    <mutation datatype="Boolean"></mutation>
+                    <field name="TYPE">Boolean</field>
+                    <field name="POWER">7</field>
+                    <value name="sendData">
+                        <block type="logic_boolean" id="%aO;gpwqq;nH[R~jdKgc" intask="true">
+                            <field name="BOOL">TRUE</field>
                         </block>
                     </value>
                 </block>

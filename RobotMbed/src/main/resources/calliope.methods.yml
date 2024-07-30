@@ -108,12 +108,30 @@ SERVO_GET_ANGLE:
 
 RECEIVE_MESSAGE:
   PYTHON: |
-    def receive_message():
+    def receive_message(type):
         global rssi
         details = radio.receive_full()
         if details:
             msg, rssi, timestamp = details
-            return msg.decode('utf-8')[3:]
+            msg = msg.decode('utf-8')[3:]
+            if type == "Number":
+                try:
+                    digit = float(msg)
+                except ValueError:
+                    digit = 0
+                return digit
+            elif type == "Boolean":
+                return msg == 'True' or msg == '1'     
+            elif type == "String":
+                return msg
+        else:
+            if type == "Number":
+                return 0
+            elif type == "Boolean":
+                return False       
+            elif type == "String":
+                return ''
+
 
 GET_ROTATION:
   PYTHON: |

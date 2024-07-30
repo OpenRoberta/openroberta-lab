@@ -24,6 +24,8 @@ DisplayImageAction[displayImageMode: IMAGE, valuesToDisplay: Image [[, , #, , ]
 WaitStmt [
 (repeat [WAIT, Binary [EQ, SensorExpr [GetSampleSensor [KeysSensor [A, PRESSED, - EMPTY_SLOT -]]], BoolConst[value: true]]]
 )]
+RadioSendAction[type: Number, power: 7, message: NumConst[value: 77]]
+RadioSendAction[type: Boolean, power: 7, message: BoolConst[value: true]]
 RadioSendAction[type: String, power: 7, message: StringConst[value: Hallo Roberta!]]
 WaitTimeStmt[time: NumConst[value: 100]]
 ClearDisplayAction[port: - EMPTY_PORT -]

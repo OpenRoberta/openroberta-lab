@@ -49,6 +49,10 @@ int main()
         _uBit.sleep(_ITERATION_SLEEP_TIMEOUT);
     }
     _uBit.radio.setTransmitPower(7);
+    _uBit.radio.datagram.send(ManagedString((int)(77)));
+    _uBit.radio.setTransmitPower(7);
+    _uBit.radio.datagram.send(ManagedString((int)(true)?true:false));
+    _uBit.radio.setTransmitPower(7);
     _uBit.radio.datagram.send(ManagedString((ManagedString("Hallo Roberta!"))));
     _uBit.sleep(100);
     _uBit.display.clear();
