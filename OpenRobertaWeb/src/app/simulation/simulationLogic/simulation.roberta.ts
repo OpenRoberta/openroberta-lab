@@ -19,7 +19,14 @@ import * as Blockly from 'blockly';
 import * as NN_CTRL from 'nn.controller';
 import { SimulationScene } from 'simulation.scene';
 import { SelectionListener } from 'robot.base';
-import { BaseSimulationObject, CircleSimulationObject, MarkerSimulationObject, RectangleSimulationObject, SimObjectShape, TriangleSimulationObject } from './simulation.objects';
+import {
+    BaseSimulationObject,
+    CircleSimulationObject,
+    MarkerSimulationObject,
+    RectangleSimulationObject,
+    SimObjectShape,
+    TriangleSimulationObject,
+} from './simulation.objects';
 import { Pose } from 'robot.base.mobile';
 import { Simulation } from 'progSim.controller';
 
@@ -847,6 +854,7 @@ export class SimulationRoberta implements Simulation {
                         sim.observers[block.id].disconnect();
                     }
                     $(block.svgPath_).removeClass('breakpoint').animate({ 'fill-opacity': '1' }, 0);
+                    sim.removeBreakPoint(block);
                 }, sim);
         }
     }
