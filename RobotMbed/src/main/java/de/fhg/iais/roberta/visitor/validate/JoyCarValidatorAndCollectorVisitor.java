@@ -13,6 +13,7 @@ import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.UsedActor;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.SwitchLedMatrixAction;
 import de.fhg.iais.roberta.syntax.action.mbed.joycar.RgbLedOffActionJoycar;
 import de.fhg.iais.roberta.syntax.action.mbed.joycar.RgbLedOnActionJoycar;
@@ -33,12 +34,20 @@ import de.fhg.iais.roberta.util.syntax.SC;
 import de.fhg.iais.roberta.util.syntax.WithUserDefinedPort;
 import de.fhg.iais.roberta.visitor.IJoyCarVisitor;
 import de.fhg.iais.roberta.visitor.JoycarMethods;
+import de.fhg.iais.roberta.visitor.MicrobitMethods;
 
 public class JoyCarValidatorAndCollectorVisitor extends MicrobitV2ValidatorAndCollectorVisitor implements IJoyCarVisitor<Void> {
 
     private static final Map<String, String> SENSOR_COMPONENT_TYPE_MAP = Collections.unmodifiableMap(new HashMap<String, String>() {{
         put("ULTRASONIC_SENSING", SC.ULTRASONIC);
     }});
+
+    @Override
+    public Void visitRadioReceiveAction(RadioReceiveAction radioReceiveAction) {
+        usedHardwareBuilder.addUsedActor(new UsedActor("", SC.RADIO));
+        usedMethodBuilder.addUsedMethod(JoycarMethods.RECEIVE_MESSAGE);
+        return null;
+    }
 
     public JoyCarValidatorAndCollectorVisitor(
         ConfigurationAst brickConfiguration,

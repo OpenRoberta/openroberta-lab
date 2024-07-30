@@ -41,6 +41,8 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.util.syntax.SC;
 import de.fhg.iais.roberta.visitor.CalliopeMethods;
 import de.fhg.iais.roberta.visitor.IMbedVisitor;
+import de.fhg.iais.roberta.visitor.JoycarMethods;
+import de.fhg.iais.roberta.visitor.MicrobitMethods;
 
 public abstract class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndCollectorVisitor implements IMbedVisitor<Void> {
 
@@ -209,9 +211,9 @@ public abstract class MbedValidatorAndCollectorVisitor extends CommonNepoValidat
     @Override
     public Void visitRadioReceiveAction(RadioReceiveAction radioReceiveAction) {
         usedHardwareBuilder.addUsedActor(new UsedActor("", SC.RADIO));
+        usedMethodBuilder.addUsedMethod(MicrobitMethods.RECEIVE_MESSAGE);
         return null;
     }
-
 
     @Override
     public Void visitRadioSendAction(RadioSendAction radioSendAction) {

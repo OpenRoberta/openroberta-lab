@@ -100,7 +100,21 @@ public class MicrobitV2TypecheckVisitor extends TypecheckCommonLanguageVisitor i
 
     @Override
     public BlocklyType visitRadioReceiveAction(RadioReceiveAction radioReceiveAction) {
-        return Sig.of(BlocklyType.NUMBER).typeCheckPhrases(radioReceiveAction, this);
+        BlocklyType type;
+        switch ( radioReceiveAction.type ) {
+            case "Number":
+                type = BlocklyType.NUMBER;
+                break;
+            case "Boolean":
+                type = BlocklyType.BOOLEAN;
+                break;
+            case "String":
+                type = BlocklyType.STRING;
+                break;
+            default:
+                throw new DbcException("invalid type in radioReceiveAction " + radioReceiveAction.type);
+        }
+        return Sig.of(type).typeCheckPhrases(radioReceiveAction, this);
     }
 
     @Override

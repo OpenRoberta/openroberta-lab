@@ -6,6 +6,7 @@ import java.util.Objects;
 
 import com.google.common.collect.ClassToInstanceMap;
 
+import de.fhg.iais.roberta.bean.CodeGeneratorSetupBean;
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
@@ -48,6 +49,7 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.syntax.SC;
 import de.fhg.iais.roberta.visitor.IMicrobitVisitor;
 import de.fhg.iais.roberta.visitor.IVisitor;
+import de.fhg.iais.roberta.visitor.MicrobitMethods;
 import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractPythonVisitor;
 
 /**
@@ -352,19 +354,8 @@ public abstract class MbedPythonVisitor extends AbstractPythonVisitor implements
 
     @Override
     public Void visitRadioReceiveAction(RadioReceiveAction radioReceiveAction) {
-        switch ( radioReceiveAction.type ) {
-            case "Number":
-                this.src.add("((lambda x: 0 if x is None else float(x))(radio.receive()))");
-                break;
-            case "Boolean":
-                this.src.add("('True' == radio.receive())");
-                break;
-            case "String":
-                this.src.add("radio.receive()");
-                break;
-            default:
-                throw new IllegalArgumentException("unhandled type");
-        }
+        this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(MicrobitMethods.RECEIVE_MESSAGE));
+        this.src.add("(\"", radioReceiveAction.type, "\")");
         return null;
     }
 

@@ -4,14 +4,11 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-import com.google.common.collect.ClassToInstanceMap;
-
-import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
-import de.fhg.iais.roberta.visitor.validate.CommonNepoValidatorAndCollectorVisitor;
-import de.fhg.iais.roberta.visitor.validate.MbedValidatorAndCollectorVisitor;
+import de.fhg.iais.roberta.visitor.CalliopeMethods;
+import de.fhg.iais.roberta.visitor.MicrobitMethods;
 import de.fhg.iais.roberta.worker.AbstractValidatorAndCollectorWorker;
 
 
@@ -33,6 +30,11 @@ public abstract class MbedValidatorAndCollectorWorker extends AbstractValidatorA
         this.defaultProperties = Collections.unmodifiableList(defaultProps);
         this.existingPins = Collections.unmodifiableList(freePins);
         this.mapCorrectConfigPins = mapCorrectConfigPins;
+    }
+
+    @Override
+    protected List<Class<? extends Enum<?>>> getAdditionalMethodEnums() {
+        return Collections.singletonList(MicrobitMethods.class);
     }
 
     protected boolean isDisplaySwitchUsed(Project project) {

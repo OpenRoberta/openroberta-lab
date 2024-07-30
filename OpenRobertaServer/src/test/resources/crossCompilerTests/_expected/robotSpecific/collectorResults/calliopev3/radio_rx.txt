@@ -3,4 +3,4 @@ Sensors:
 Actors: 
 [UsedActor [, RADIO], UsedActor [, DISPLAY], UsedActor [_R, RGBLED], UsedActor [, MUSIC], UsedActor [, DISPLAY_GRAYSCALE], UsedActor [, KEY]]
 Methods: 
-[GET, RECEIVE_MESSAGE]
+[GET, RECEIVE_MESSAGE, RECEIVE_MESSAGE]

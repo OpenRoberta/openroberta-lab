@@ -20,13 +20,26 @@ def run():
             radio.send(str(1))
             print("Sending 1 with strength 7")
         microbit.sleep(500)
-        print(((lambda x: 0 if x is None else float(x))(radio.receive())))
+        print(receive_message("Number"))
 
 def main():
     try:
         run()
     except Exception as e:
         raise
+
+def receive_message(type):
+    msg = radio.receive()
+    if type == "Number":
+        try:
+            digit = float(msg)
+        except (ValueError, TypeError) as e:
+            digit = 0
+        return digit
+    elif type == "Boolean":
+        return ((lambda x: False if x is None else x == True)(msg))
+    elif type == "String":
+        return ((lambda x: '' if x is None else x)(msg))
 
 if __name__ == "__main__":
     main()

@@ -1,4 +1,4 @@
-include: "classpath:/common.methods.yml"
+include: "classpath:/mbed.methods.yml"
 
 ULTRASONIC_GET_DISTANCE:
   PYTHON: |

@@ -7,5 +7,6 @@ public enum JoycarMethods {
     SERVO_SET_ANGLE,
     LED_SET_COLOUR,
     SETSPEED,
-    SCALE
+    SCALE,
+    RECEIVE_MESSAGE
 }

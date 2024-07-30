@@ -14,6 +14,7 @@ import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.generic.MbedPinWriteValueAction;
+import de.fhg.iais.roberta.syntax.action.mbed.RadioReceiveAction;
 import de.fhg.iais.roberta.syntax.action.mbed.joycar.RgbLedOffActionJoycar;
 import de.fhg.iais.roberta.syntax.action.mbed.joycar.RgbLedOnActionJoycar;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
@@ -40,6 +41,7 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.syntax.SC;
 import de.fhg.iais.roberta.visitor.IJoyCarVisitor;
 import de.fhg.iais.roberta.visitor.JoycarMethods;
+import de.fhg.iais.roberta.visitor.MicrobitMethods;
 
 public class JoyCarPythonVisitor extends MicrobitV2PythonVisitor implements IJoyCarVisitor<Void> {
     /**
@@ -501,6 +503,13 @@ public class JoyCarPythonVisitor extends MicrobitV2PythonVisitor implements IJoy
             this.src.add(valueType);
             this.src.add("()");
         }
+        return null;
+    }
+
+    @Override
+    public Void visitRadioReceiveAction(RadioReceiveAction radioReceiveAction) {
+        this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(JoycarMethods.RECEIVE_MESSAGE));
+        this.src.add("(\"", radioReceiveAction.type, "\")");
         return null;
     }
 }

@@ -3,4 +3,4 @@ Sensors:
 Actors: 
 [UsedActor [, RADIO], UsedActor [, KEY]]
 Methods: 
-[]
+[RECEIVE_MESSAGE]
