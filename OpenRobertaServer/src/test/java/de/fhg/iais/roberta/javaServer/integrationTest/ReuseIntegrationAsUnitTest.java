@@ -57,6 +57,7 @@ import de.fhg.iais.roberta.mode.action.Language;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.util.Util;
+import de.fhg.iais.roberta.util.XsltAndJavaTransformer;
 import de.fhg.iais.roberta.util.ast.AstFactory;
 import de.fhg.iais.roberta.util.basic.Pair;
 import de.fhg.iais.roberta.util.jaxb.JaxbHelper;
@@ -381,7 +382,6 @@ public class ReuseIntegrationAsUnitTest {
      * @param programName
      * @param programXml
      * @param configXml
-     * @param robotFactory
      * @return true, if everything went fine
      */
     private boolean compareGenerateAndRegenerateForOneProgram(
@@ -430,9 +430,10 @@ public class ReuseIntegrationAsUnitTest {
         }
         Project.Builder builder = UnitTestHelper.setupWithConfigAndProgramXML(testFactory, programXml, configXml);
         Project project = builder.build();
+        XsltAndJavaTransformer.executeRegenerateNEPO(project);
 
-        String regeneratedProgramXml = project.getAnnotatedProgramAsXml();
-        String regeneratedConfigXml = project.getAnnotatedConfigurationAsXml();
+        String regeneratedProgramXml = project.getProgramAsBlocklyXML();
+        String regeneratedConfigXml = project.getConfigurationAsBlocklyXML();
 
         String diffProg;
         if ( COMPARE_EXPECTED_AND_ACTUAL ) {
@@ -446,9 +447,6 @@ public class ReuseIntegrationAsUnitTest {
             if ( diffProg != null ) {
                 LOG.error("error in program " + programName + " is: " + diffProg);
             }
-            // if ( diffConfig != null ) {
-            //    LOG.error(diffConfig);
-            // }
             thisUnitTestIsOk = false;
         }
         if ( STORE_ALWAYS_DATA_INTO_FILES || !thisUnitTestIsOk ) {

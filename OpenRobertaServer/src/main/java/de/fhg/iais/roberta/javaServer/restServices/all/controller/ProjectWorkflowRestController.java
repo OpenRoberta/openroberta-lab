@@ -61,7 +61,7 @@ public class ProjectWorkflowRestController {
             // To make this compatible with old frontend we will have to use the old names...
             response.setCmd("showSourceP");
             response.setSourceCode(project.getSourceCode().toString());
-            response.setProgXML(project.getAnnotatedProgramAsXml());
+            response.setProgXML(project.getProgramAsBlocklyXML());
             response.setConfAnnos(new JSONObject(project.getConfAnnotationList()));
             addProjectResultToResponse(response, project);
             Statistics.info("ProgramSource", "success", project.hasSucceeded());
@@ -93,7 +93,7 @@ public class ProjectWorkflowRestController {
             response.setCmd("runPSim");
             response.setJavaScriptProgram(project.getSourceCode().toString());
             response.setFileExtension(project.getSourceCodeFileExtension());
-            response.setProgXML(project.getAnnotatedProgramAsXml());
+            response.setProgXML(project.getProgramAsBlocklyXML());
             response.setConfAnnos(new JSONObject(project.getConfAnnotationList()));
             response.setConfiguration(project.getConfigurationJSON());
             response.setProgramName(project.getProgramName());
@@ -124,7 +124,7 @@ public class ProjectWorkflowRestController {
             Project project = request2project(wfRequest, dbSession, httpSessionState, this.robotCommunicator, true, false);
             ProjectService.executeWorkflow("run", project);
             response.setCmd("runPBack");
-            response.setProgXML(project.getAnnotatedProgramAsXml());
+            response.setProgXML(project.getProgramAsBlocklyXML());
             response.setConfAnnos(new JSONObject(project.getConfAnnotationList()));
             response.setCompiledCode(project.getCompiledHex());
             response.setConfiguration(project.getConfigurationJSON());
@@ -134,7 +134,7 @@ public class ProjectWorkflowRestController {
                 project.setResult(Key.ROBOT_PUSH_RUN);
             }
             addProjectResultToResponse(response, project);
-            final int programLength = StringUtils.countMatches(project.getAnnotatedProgramAsXml(), "<block ");
+            final int programLength = StringUtils.countMatches(project.getProgramAsBlocklyXML(), "<block ");
             Statistics.info("ProgramRun", "LoggedIn", httpSessionState.isUserLoggedIn(), "success", project.hasSucceeded(), "programLength", programLength);
             return UtilForREST.responseWithFrontendInfo(response, httpSessionState, this.robotCommunicator);
         } catch ( Exception e ) {
@@ -204,10 +204,10 @@ public class ProjectWorkflowRestController {
             Project project = request2project(wfRequest, dbSession, httpSessionState, this.robotCommunicator, true, true);
             ProjectService.executeWorkflow("compile", project);
             response.setCmd("compileP");
-            response.setProgXML(project.getAnnotatedProgramAsXml());
+            response.setProgXML(project.getProgramAsBlocklyXML());
             response.setCompiledCode(project.getCompiledHex());
             addProjectResultToResponse(response, project);
-            final int programLength = StringUtils.countMatches(project.getAnnotatedProgramAsXml(), "<block ");
+            final int programLength = StringUtils.countMatches(project.getProgramAsBlocklyXML(), "<block ");
             Statistics.info("ProgramCompile", "LoggedIn", httpSessionState.isUserLoggedIn(), "success", project.hasSucceeded(), "programLength", programLength);
             return UtilForREST.responseWithFrontendInfo(response, httpSessionState, this.robotCommunicator);
         } catch ( Exception e ) {

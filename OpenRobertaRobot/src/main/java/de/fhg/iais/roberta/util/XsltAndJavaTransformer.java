@@ -156,21 +156,34 @@ public final class XsltAndJavaTransformer {
                 .setProgramXml(programText)
                 .setConfigurationXml(configText == null ? robotFactory.getConfigurationDefault() : configText)
                 .build();
-            executeTransformWorkflow(project);
-            return Pair.of(project.getAnnotatedProgramAsXml(), configText == null ? null : project.getAnnotatedConfigurationAsXml());
+            executeWorkflow("transform", project);
+            return Pair.of(project.getProgramAsBlocklyXML(), configText == null ? null : project.getConfigurationAsBlocklyXML());
         } else {
             return null;
         }
     }
 
-    public static void executeTransformWorkflow(Project project) {
-        List<IWorker> workflowPipe = project.getRobotFactory().getWorkerPipe("transform");
+    public static void executeWorkflow(String workflow, Project project) {
+        List<IWorker> workflowPipe = project.getRobotFactory().getWorkerPipe(workflow);
         if ( project.hasSucceeded() ) {
             for ( IWorker worker : workflowPipe ) {
                 worker.execute(project);
                 if ( !project.hasSucceeded() ) {
                     break;
                 }
+            }
+        }
+    }
+
+    public static void executeRegenerateNEPO(Project project) {
+        if ( project.hasSucceeded() ) {
+            String classNameForRegenerateNEPO = project.getRobotFactory().getPluginProperties().getStringProperty("robot.plugin.worker.regenerateNepo");
+            try {
+                Class<?> classForRegenerateNEPO = ClassLoader.getSystemClassLoader().loadClass(classNameForRegenerateNEPO);
+                Object _ = classForRegenerateNEPO.getMethod("execute", Project.class).invoke(classForRegenerateNEPO.newInstance(),project);
+                Assert.isTrue(project.hasSucceeded());
+            } catch ( Throwable e ) {
+                throw new DbcException("error with class " + classNameForRegenerateNEPO, e);
             }
         }
     }

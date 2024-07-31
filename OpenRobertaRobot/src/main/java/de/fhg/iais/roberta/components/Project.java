@@ -1,15 +1,12 @@
 package de.fhg.iais.roberta.components;
 
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,15 +18,12 @@ import com.google.common.collect.MutableClassToInstanceMap;
 
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.NNBean;
-import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
 import de.fhg.iais.roberta.blockly.generated.Instance;
 import de.fhg.iais.roberta.factory.RobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
-import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
-import de.fhg.iais.roberta.syntax.lang.blocksequence.Location;
 import de.fhg.iais.roberta.transformer.Jaxb2ConfigurationAst;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
@@ -67,62 +61,11 @@ public final class Project {
     private Key result = Key.COMPILERWORKFLOW_PROJECT_BUILD_SUCCESS;
     private int errorCounter = 0;
     private JSONObject configurationJSON;
+    private String programAsBlocklyXML = null;
+    private String configurationAsBlocklyXML = null;
     private List<String> errorAndWarningMessages = null;
 
     private Project() {
-    }
-
-    private static String jaxbToXml(BlockSet blockSet) throws JAXBException {
-        JAXBContext jaxbContext = JAXBContext.newInstance(BlockSet.class);
-        Marshaller marshaller = jaxbContext.createMarshaller();
-        marshaller.setProperty(Marshaller.JAXB_FRAGMENT, true);
-        StringWriter writer = new StringWriter();
-        marshaller.marshal(blockSet, writer);
-        return writer.toString();
-    }
-
-    private static BlockSet astToJaxb(ProgramAst program) {
-        Assert.notNull(program);
-        List<List<Phrase>> astProgram = program.getTree();
-        BlockSet blockSet = new BlockSet();
-        blockSet.setDescription(program.getDescription());
-        blockSet.setRobottype(program.getRobotType());
-        blockSet.setTags(program.getTags());
-        blockSet.setXmlversion(program.getXmlVersion());
-
-        for ( List<Phrase> tree : astProgram ) {
-            Instance instance = new Instance();
-            blockSet.getInstance().add(instance);
-            for ( Phrase phrase : tree ) {
-                if ( phrase.getKind().hasName("LOCATION") ) {
-                    instance.setX(((Location) phrase).x);
-                    instance.setY(((Location) phrase).y);
-                }
-                List<Block> blockList = phrase.ast2xml();
-                if ( blockList != null ) { // TODO: textly - ast2xml should never return null, but does (e.g. Location)
-                    instance.getBlock().addAll(blockList);
-                }
-            }
-        }
-        return blockSet;
-    }
-
-    private static BlockSet astToJaxb(ConfigurationAst config) {
-        Assert.notNull(config);
-        Map<String, ConfigurationComponent> configurationComponents = config.getConfigurationComponents();
-        BlockSet blockSet = new BlockSet();
-        blockSet.setRobottype(config.getRobotType());
-        blockSet.setXmlversion(config.getXmlVersion());
-        blockSet.setDescription(config.getDescription());
-        blockSet.setTags(config.getTags());
-        for ( ConfigurationComponent configComp : configurationComponents.values() ) {
-            Instance instance = new Instance();
-            blockSet.getInstance().add(instance);
-            instance.setX(String.valueOf(configComp.x));
-            instance.setY(String.valueOf(configComp.y));
-            instance.getBlock().addAll(configComp.ast2xml());
-        }
-        return blockSet;
     }
 
     public String getToken() {
@@ -177,9 +120,6 @@ public final class Project {
         return this.isNativeEditorCode;
     }
 
-    /**
-     * @return the programTransformer
-     */
     public ProgramAst getProgramAst() {
         return this.program;
     }
@@ -188,9 +128,6 @@ public final class Project {
         this.program = program;
     }
 
-    /**
-     * @return the robot configuration
-     */
     public ConfigurationAst getConfigurationAst() {
         return this.configuration;
     }
@@ -296,20 +233,24 @@ public final class Project {
         return errorAndWarningMessages;
     }
 
-    public String getAnnotatedProgramAsXml() {
-        try {
-            return jaxbToXml(astToJaxb(this.program));
-        } catch ( JAXBException e ) {
-            throw new DbcException("Transformation of program AST into blockset and into XML failed.", e);
-        }
+    public String getProgramAsBlocklyXML() {
+        Assert.notNull(programAsBlocklyXML, "Transformation of program AST into NEPO not executed by the worker chain.");
+        return programAsBlocklyXML;
     }
 
-    public String getAnnotatedConfigurationAsXml() {
-        try {
-            return jaxbToXml(astToJaxb(this.configuration));
-        } catch ( JAXBException e ) {
-            throw new DbcException("Transformation of configuration AST into blockset and into XML failed.", e);
-        }
+    public void setProgramAsBlocklyXML(String programAsBlocklyXML) {
+        Assert.isNull(this.programAsBlocklyXML);
+        this.programAsBlocklyXML = programAsBlocklyXML;
+    }
+
+    public String getConfigurationAsBlocklyXML() {
+        Assert.notNull(configurationAsBlocklyXML, "Transformation of configuration AST into NEPO not executed by the worker chain.");
+        return configurationAsBlocklyXML;
+    }
+
+    public void setConfigurationAsBlocklyXML(String configurationAsBlocklyXML) {
+        Assert.isNull(this.configurationAsBlocklyXML);
+        this.configurationAsBlocklyXML = configurationAsBlocklyXML;
     }
 
     public JSONObject getConfigurationJSON() {

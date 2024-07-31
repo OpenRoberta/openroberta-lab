@@ -30,6 +30,17 @@ public final class UnitTestHelper {
 
     private static final Logger LOG = LoggerFactory.getLogger(UnitTestHelper.class);
 
+    private static String DEFAULT_PROGRAM_ARDUINO = //
+        "<block_set xmlns=\"http://de.fhg.iais.roberta.blockly\" robottype=\"arduino\" xmlversion=\"3.1\" description=\"\" tags=\"\">\n" +
+        "<instance x=\"373\" y=\"50\">\n" +
+        "<block type=\"robControls_start_ardu\" id=\"l9Lp`gNd]GQJ_0PBfA?z\" intask=\"true\" deletable=\"false\">\n" +
+        "<mutation declare=\"false\"/>\n" +
+        "<field name=\"DEBUG\"/>\n" +
+        "</block>\n" +
+        "<block type=\"robControls_loopForever_ardu\" id=\"`mIJB4z:(3D;T%:]?^Iz\" intask=\"true\" deletable=\"false\" movable=\"false\"/>\n" +
+        "</instance>\n" +
+        "</block_set>";
+
     private UnitTestHelper() {
     }
 
@@ -61,45 +72,6 @@ public final class UnitTestHelper {
         }
     }
 
-    public static void checkWorkers(RobotFactory factory, String expectedSource, String programXmlFilename, IWorker... workers) {
-        String programXml = Util.readResourceContent(programXmlFilename);
-        Project.Builder builder = setupWithProgramXMLWithDefaultConfig(factory, programXml);
-        builder.setWithWrapping(false);
-        Project project = builder.build();
-        for ( IWorker worker : workers ) {
-            worker.execute(project);
-        }
-        String generatedProgramSource = project.getSourceCode().toString().replaceAll("\\s+", "");
-        Assert.assertEquals(expectedSource.replaceAll("\\s+", ""), generatedProgramSource);
-    }
-
-    public static void checkWorkersWithConf(
-        RobotFactory factory,
-        ConfigurationAst configuration,
-        String expectedSource,
-        String programXmlFilename,
-        IWorker... workers) //
-    {
-        String programXml = Util.readResourceContent(programXmlFilename);
-        Project.Builder builder = setupWithProgramXMLWithDefaultConfig(factory, programXml);
-        builder.setConfigurationAst(configuration);
-        builder.setWithWrapping(false);
-        Project project = builder.build();
-        for ( IWorker worker : workers ) {
-            worker.execute(project);
-        }
-        String generatedProgramSource = project.getSourceCode().toString().replaceAll("\\s+", "");
-        Assert.assertEquals(expectedSource.replaceAll("\\s+", ""), generatedProgramSource);
-    }
-
-    public static Project checkWorkflow(RobotFactory factory, String workflow, String exportXmlFilename) {
-        String xmlText = Util.readResourceContent(exportXmlFilename);
-        Project.Builder builder = setupWithExportXML(factory, xmlText);
-        Project project = builder.build();
-        executeWorkflowMustSucceed(workflow, factory, project);
-        return project;
-    }
-
     public static Project.Builder setupWithNativeSource(RobotFactory factory, String nativeSource) {
         return new Project.Builder().setProgramNativeSource(nativeSource).setFactory(factory);
     }
@@ -126,9 +98,6 @@ public final class UnitTestHelper {
         XsltAndJavaTransformer xsltAndJavaTransformer,
         String programXmlAsString,
         String configurationXmlAsString) {
-//        Pair<String, String> transformed = xsltAndJavaTransformer.transform(factory, programXmlAsString, configurationXmlAsString);
-//        programXmlAsString = transformed.getFirst();
-//        configurationXmlAsString = transformed.getSecond();
         programXmlAsString = xsltAndJavaTransformer.transformXslt(programXmlAsString);
         configurationXmlAsString = xsltAndJavaTransformer.transformXslt(configurationXmlAsString);
         return new Project.Builder().setConfigurationXml(configurationXmlAsString).setProgramXml(programXmlAsString).setFactory(factory);
@@ -140,26 +109,16 @@ public final class UnitTestHelper {
     }
 
     public static Project.Builder setupWithConfigXML(RobotFactory factory, String configXmlAsString) {
-        return new Project.Builder().setConfigurationXml(configXmlAsString).setFactory(factory).setProgramName("Test");
-    }
-
-    public static void checkProgramReverseTransformation(RobotFactory factory, String programBlocklyXmlFilename) throws SAXException, IOException {
-        String programXml = Util.readResourceContent(programBlocklyXmlFilename);
-        Project.Builder builder = setupWithProgramXMLWithDefaultConfig(factory, programXml);
-        Project project = builder.build();
-        Assert.assertNull(runXmlUnit(programXml, project.getAnnotatedProgramAsXml()));
+        Builder builder = new Project.Builder().setProgramXml(DEFAULT_PROGRAM_ARDUINO);
+        return builder.setConfigurationXml(configXmlAsString).setFactory(factory).setProgramName("Test");
     }
 
     public static void checkConfigReverseTransformation(RobotFactory factory, String configBlocklyXmlFilename) throws SAXException, IOException {
         String configXml = Util.readResourceContent(configBlocklyXmlFilename);
         Project.Builder builder = setupWithConfigXML(factory, configXml);
         Project project = builder.build();
-        Assert.assertNull(runXmlUnit(configXml, project.getAnnotatedConfigurationAsXml()));
-    }
-
-    public static void checkProgramAstEquality(RobotFactory factory, String expectedAst, String programBlocklyXmlFilename) {
-        String generatedAst = getProgramAst(factory, programBlocklyXmlFilename).toString();
-        checkAstEquality(generatedAst, expectedAst);
+        XsltAndJavaTransformer.executeRegenerateNEPO(project);
+        Assert.assertNull(runXmlUnit(configXml, project.getConfigurationAsBlocklyXML()));
     }
 
     public static void checkConfigAstEquality(RobotFactory factory, String expectedAst, String configBlocklyXmlFilename) {
@@ -180,10 +139,6 @@ public final class UnitTestHelper {
         }
     }
 
-    public static Phrase getAstOfFirstBlock(RobotFactory factory, String programBlocklyXmlFilename) {
-        return getProgramAst(factory, programBlocklyXmlFilename).get(0).get(1);
-    }
-
     // TODO merge this with "getAstOfFirstBlock" - would require generifying the projects' program ast
     public static <V> Phrase getGenericAstOfFirstBlock(RobotFactory factory, String pathToProgramXml) throws Exception {
         BlockSet project = JaxbHelper.path2BlockSet(pathToProgramXml);
@@ -199,107 +154,11 @@ public final class UnitTestHelper {
         return project.getProgramAst().getTree();
     }
 
-    public static Phrase getProgramAstFromExportXml(RobotFactory factory, String xml) {
-        String configXml = Util.readResourceContent(xml);
-        Project.Builder builder = setupWithExportXML(factory, configXml);
-        Project project = builder.build();
-        return project.getProgramAst().getTree().get(0).get(1);
-    }
-
     public static Collection<ConfigurationComponent> getConfigAst(RobotFactory factory, String configBlocklyXmlFilename) {
         String configXml = Util.readResourceContent(configBlocklyXmlFilename);
         Project.Builder builder = setupWithConfigXML(factory, configXml);
         Project project = builder.build();
         return project.getConfigurationAst().getConfigurationComponents().values();
-    }
-
-    public static void checkGeneratedSourceEqualityWithExportXml(RobotFactory factory, String expectedSourceFilename, String exportedXmlFilename) {
-        String exportedXml = Util.readResourceContent(exportedXmlFilename);
-        Project.Builder builder = setupWithExportXML(factory, exportedXml);
-        checkGeneratedSourceEquality(factory, Util.readResourceContent(expectedSourceFilename), builder.build());
-    }
-
-    public static void checkGeneratedSourceEqualityWithExportXmlAndSourceAsString(RobotFactory factory, String expectedSource, String exportedXmlFilename) {
-        String exportedXml = Util.readResourceContent(exportedXmlFilename);
-        Project.Builder builder = setupWithExportXML(factory, exportedXml);
-        checkGeneratedSourceEquality(factory, expectedSource, builder.build());
-    }
-
-    public static void checkGeneratedSourceEqualityWithProgramXml(RobotFactory factory, String expectedSourceFilename, String programXmlFilename) {
-        String programXml = Util.readResourceContent(programXmlFilename);
-        Project.Builder builder = setupWithProgramXMLWithDefaultConfig(factory, programXml);
-        checkGeneratedSourceEquality(factory, Util.readResourceContent(expectedSourceFilename), builder.build());
-    }
-
-    public static void checkGeneratedSourceEqualityWithProgramXml(
-        RobotFactory factory,
-        String expectedSourceFilename,
-        String programXmlFilename,
-        ConfigurationAst configurationAst) {
-        String programXml = Util.readResourceContent(programXmlFilename);
-        Project.Builder builder = setupWithProgramXMLWithDefaultConfig(factory, programXml);
-        builder.setConfigurationAst(configurationAst);
-        checkGeneratedSourceEquality(factory, Util.readResourceContent(expectedSourceFilename), builder.build());
-    }
-
-    public static void checkGeneratedSourceEqualityWithProgramXml(
-        RobotFactory factory,
-        String expectedSourceFilename,
-        String programXmlFilename,
-        String configurationXmlFilename) {
-        String programXml = Util.readResourceContent(programXmlFilename);
-        String configurationXml = Util.readResourceContent(configurationXmlFilename);
-        Project.Builder builder = setupWithConfigAndProgramXML(factory, programXml, configurationXml);
-        builder.setSSID("mySSID");
-        builder.setPassword("myPassw0rd");
-        checkGeneratedSourceEquality(factory, Util.readResourceContent(expectedSourceFilename), builder.build());
-    }
-
-    public static void checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(
-        RobotFactory factory,
-        String expectedSource,
-        String programXmlFilename,
-        boolean withWrapping) {
-        String programXml = Util.readResourceContent(programXmlFilename);
-        Project.Builder builder = setupWithProgramXMLWithDefaultConfig(factory, programXml);
-        builder.setWithWrapping(withWrapping);
-        checkGeneratedSourceEquality(factory, expectedSource, builder.build());
-    }
-
-    public static void checkGeneratedSourceEqualityWithProgramXmlAndSourceAsString(
-        RobotFactory factory,
-        String expectedSource,
-        String programXmlFilename,
-        ConfigurationAst configurationAst,
-        boolean withWrapping) {
-        String programXml = Util.readResourceContent(programXmlFilename);
-        Project.Builder builder = setupWithProgramXMLWithDefaultConfig(factory, programXml);
-        builder.setConfigurationAst(configurationAst);
-        builder.setWithWrapping(withWrapping);
-        checkGeneratedSourceEquality(factory, expectedSource, builder.build());
-    }
-
-    public static String generateSourceWithProgramXml(
-        RobotFactory factory,
-        String programXmlFilename,
-        ConfigurationAst configurationAst,
-        boolean withWrapping) {
-        String programXml = Util.readResourceContent(programXmlFilename);
-        Project.Builder builder = setupWithProgramXMLWithDefaultConfig(factory, programXml);
-        builder.setConfigurationAst(configurationAst);
-        builder.setWithWrapping(withWrapping);
-        return generateSource(factory, builder.build());
-    }
-
-    public static String generateSource(RobotFactory factory, Project project) {
-        executeWorkflowMustSucceed("showsource", factory, project);
-        return project.getSourceCode().toString();
-    }
-
-    private static void checkGeneratedSourceEquality(RobotFactory factory, String expectedSource, Project project) {
-        executeWorkflowMustSucceed("showsource", factory, project);
-        String generatedProgramSource = project.getSourceCode().toString().replaceAll("\\s+", "");
-        Assert.assertEquals(expectedSource.replaceAll("\\s+", ""), generatedProgramSource);
     }
 
     /**

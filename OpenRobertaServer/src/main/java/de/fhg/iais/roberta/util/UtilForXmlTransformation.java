@@ -23,7 +23,7 @@ public class UtilForXmlTransformation {
                 .setConfigurationXml(configText == null ? robotFactory.getConfigurationDefault() : configText)
                 .build();
             ProjectService.executeWorkflow("transform", project);
-            return Pair.of(project.getAnnotatedProgramAsXml(), configText == null ? null : project.getAnnotatedConfigurationAsXml());
+            return Pair.of(project.getProgramAsBlocklyXML(), configText == null ? null : project.getConfigurationAsBlocklyXML());
         } else {
             return null;
         }
