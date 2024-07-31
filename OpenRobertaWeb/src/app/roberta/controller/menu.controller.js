@@ -219,7 +219,6 @@ export function init(callback) {
         alert('Problem');
         return;
     }
-    $('#startupVersion').text(GUISTATE_C.getServerVersion());
     initMenuEvents();
     /**
      * Regularly ping the server to keep status information up-to-date

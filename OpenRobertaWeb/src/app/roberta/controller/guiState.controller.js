@@ -147,6 +147,7 @@ function isKioskMode() {
 function setState(result) {
     if (result['serverVersion']) {
         GUISTATE.server.version = result['serverVersion'];
+        $('.labReleaseVersion').text(GUISTATE.server.version);
     }
     if (result['robotVersion']) {
         GUISTATE.robot.version = result['robotVersion'];
