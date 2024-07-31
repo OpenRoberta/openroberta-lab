@@ -77,18 +77,18 @@ function handleQuery() {
         var target = decodeURI(document.location.hash).split('&&');
         if (target[0] === '#overview') {
             GUISTATE_C.setStartWithoutPopup();
-            mainCallback('ev3lejosv1', function () {
+            mainCallback('ev3lejosv1', {}, function () {
                 PROGRAM_C.newProgram(true);
                 TOUR_C.start('overview');
             });
             newUrl = domain + QUERY_START + 'tour' + QUERY_ASSIGNMENT + 'overview';
         } else if (target[0] === '#loadProgram' && target.length >= 4) {
             GUISTATE_C.setStartWithoutPopup();
-            mainCallback && mainCallback instanceof Function && mainCallback(target[1], IMPORT_C.loadProgramFromXML, [target[2], target[3]]);
-            newUrl = domain + QUERY_START + 'loadProgram' + QUERY_ASSIGNMENT + '_vC353v-LPr_';
+            mainCallback && mainCallback instanceof Function && mainCallback(target[1], {}, IMPORT_C.loadProgramFromXML, [target[2], target[3]]);
+            newUrl = domain + QUERY_START + 'loadSystem' + QUERY_ASSIGNMENT + target[1] + QUERY_DELIMITER + 'loadProgram' + QUERY_ASSIGNMENT + target[3];
         } else if (target[0] === '#loadSystem' && target.length >= 2) {
             GUISTATE_C.setStartWithoutPopup();
-            mainCallback && mainCallback instanceof Function && mainCallback(target[1]);
+            mainCallback && mainCallback instanceof Function && mainCallback(target[1], {});
             newUrl = domain + QUERY_START + 'loadSystem' + QUERY_ASSIGNMENT + target[1];
         } else if (target[0] === '#gallery') {
             deprecated = false;
