@@ -110,7 +110,7 @@ Blockly.Msg.BATTERY_GETSAMPLE_TOOLTIP = "Liest die aktuelle Spannung der Batteri
 Blockly.Msg.BELOW = "unten";
 Blockly.Msg.BLE_ADAPTER_DISABLED = "Wir konnten auf keinen Bluetooth Adapter zugreifen.<br>Schau mal in unser <a href='https://wiki.open-roberta.org/' target='_blank'>Open Roberta Wiki<</a> für weitere Informationen unter: Spike Prime / Robot Inventor -> Pybricks -> Vorbereitung.'";
 Blockly.Msg.BLE_DOWNLOAD_IN_PROGRESS = "Wir sind grade damit beschäftigt, dein Programm auf den Roboter zu übertragen. Warte ein paar Sekunden und starte den Upload neu.";
-Blockly.Msg.BLE_ERROR_CAPABILITIES = "Deine Hub-Version kann nicht mit dem Lab verbunden werden. Schau in unser <a href='https://wiki.open-roberta.org/' target='_blank'>Open Roberta Wiki<</a>  unter: Spike Prime / Robot Inventor -> Pybricks -> Vorbereitung.'";
+Blockly.Msg.BLE_ERROR_CAPABILITIES = "Deine Hub-Version kann nicht mit dem Lab verbunden werden. Schau in unser <a href='https://wiki.open-roberta.org/' target='_blank'>Open Roberta Wiki</a>  unter: Spike Prime / Robot Inventor -> Pybricks -> Vorbereitung.'";
 Blockly.Msg.BLE_ERROR_COMMUNICATION = "Whoops etwas ist schiefgelaufen. Versuche deinen Roboter neu zu starten und übertrage das Programm nochmal.";
 Blockly.Msg.BLE_ERROR_DEVICE_BUSY = "Sieht so aus als wäre dein Roboter bereits mit dem Open Roberta Lab verbunden (vielleicht in einem anderen Browsertab?). Schließe den anderen Browsertab oder starte deinen Roboter neu.";
 Blockly.Msg.BLE_ERROR_PROGRAM_SIZE = "Dein Programm ist zu groß für den Spike Prime. Schau in unser <a href='https://wiki.open-roberta.org/' target='_blank'>Open Roberta Wiki<</a> für weitere Informationen.";
@@ -1218,6 +1218,7 @@ Blockly.Msg.ORA_ACCESS_RIGHT_DELETED = "Das Programm wird nun nicht mehr mit »$
 Blockly.Msg.ORA_ACCOUNT_NOT_ACTIVATED_TO_SHARE = "Du kannst Programme nur teilen oder in die Gallerie hochladen, wenn dein Benutzerkonto verifiziert wurde.<br><a href='https://www.roberta-home.de/index.php?id=138' target='_blank'>Mehr Infos ...</a>";
 Blockly.Msg.ORA_COMPILERWORKFLOW_ERROR_CONFIGURATION_NOT_FOUND = "Der Server konnte die Roboterkonfiguration nicht finden.";
 Blockly.Msg.ORA_COMPILERWORKFLOW_ERROR_CONFIGURATION_TRANSFORM_FAILED = "Die Roboterkonfiguration konnte nicht in die entsprechende Programmiersprache übertragen werden.";
+Blockly.Msg.ORA_COMPILERWORKFLOW_ERROR_EXTERN_FAILED = "Es sieht so aus, als ob der externe Kompilierungsservice, der für diesen Roboter verwendet wird, derzeit nicht verfügbar ist. Bitte versuche es später erneut und melde das Problem, falls es weiterhin besteht.";
 Blockly.Msg.ORA_COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED = "Das Programm kann nicht auf dem Roboter oder in der Simulation ausgeführt werden. Das Program kann nicht übersetzt werden. Die Fehlermeldung ist: <br><span style='background-color:#ddd;font-family:courier;'>{MESSAGE}</span>";
 Blockly.Msg.ORA_COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED = "Das Programm konnte nicht generiert werden.";
 Blockly.Msg.ORA_COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED_WITH_PARAMETERS = "Das Programm konnte nicht generiert werden. Es gibt Fehler in den block {BLOCK} mit dem pin {PIN}";
@@ -2171,6 +2172,7 @@ Blockly.Msg.WAIT_OR = "oder warte bis";
 Blockly.Msg.WAIT_TIME_TOOLTIP = "Wartet für eine bestimmte Zeit in Millisekunden.";
 Blockly.Msg.WAIT_TOOLTIP = "Wartet bis eine Bedingung wahr wird.";
 Blockly.Msg.WAIT_UNTIL = "Warte bis";
+Blockly.Msg.WEBUSB_NOT_SUPPORTED = "Dein Browser unterstützt WebUSB nicht. Um das Programm auf deinen Roboter herunterzuladen, wechsele bitte zu einem der folgenden Browser: Chrome, Edge oder Opera.";
 Blockly.Msg.WEIGHT_KG = "Gewicht kg";
 Blockly.Msg.WHEEL_BASE = "Radstand";
 Blockly.Msg.WIDTHRANGE = "Breitenbereich";

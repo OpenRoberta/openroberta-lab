@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2024-09-10 14:54:37.269773",
+		"lastupdated": "2024-10-10 15:37:43.429495",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -2190,5 +2190,7 @@
 	"BLE_ERROR_COMMUNICATION": "Whoops something went wrong. Try restarting your robot and upload the program again.",
 	"BLE_ERROR_DEVICE_BUSY": "Looks like your robot is already connected to another instance of the Open Roberta Lab (in another browser tab?).<br> Try to restart your robot or close the other tab.",
 	"BLE_ERROR_CAPABILITIES": "Looks like the firmware version of your robot is not compatible with the Open Roberta Lab. Check out the <a href='https://wiki.open-roberta.org/' target='_blank'>Open Roberta Wiki</a> for more information under: Spike Prime / Robot Inventor -> Pybricks -> Set Up.",
-	"BLE_ERROR_STOP": "Stopping the program execution does not work, your robot is maybe disconnected?<br>You can always use the Center Button on the hub to stop the program yourself."
+	"BLE_ERROR_STOP": "Stopping the program execution does not work, your robot is maybe disconnected?<br>You can always use the Center Button on the hub to stop the program yourself.",
+	"ORA_COMPILERWORKFLOW_ERROR_EXTERN_FAILED": "It looks like the external compilation service used for this robot is currently unavailable. Please try again later and report the problem if it persists.",
+	"WEBUSB_NOT_SUPPORTED": "Your browser does not support WebUSB. To download the programme to your robot, please switch to one of the following browsers: Chrome, Edge or Opera"
 }

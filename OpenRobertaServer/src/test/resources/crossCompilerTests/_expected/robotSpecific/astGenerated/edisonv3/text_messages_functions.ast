@@ -1,0 +1,12 @@
+MethodCall [text, , , VOID]
+MethodCall [messages, , , VOID]
+MethodCall [function_parameters, Var [x], Var [x2], Var [x3], Var [numberVar], Var [booleanVar], Var [numberList], VOID]
+
+Var [numberVar] := MethodExpr [MethodCall [function_return_numberVar, , , NUMBER]]
+
+
+Var [booleanVar] := MethodExpr [MethodCall [function_return_booleanVar, , , BOOLEAN]]
+
+
+Var [numberList] := MethodExpr [MethodCall [function_return_numberList, , , ARRAY_NUMBER]]
+
