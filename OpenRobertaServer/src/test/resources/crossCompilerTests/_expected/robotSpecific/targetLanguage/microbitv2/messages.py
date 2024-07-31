@@ -34,7 +34,7 @@ def receive_message(type):
             digit = 0
         return digit
     elif type == "Boolean":
-        return ((lambda x: False if x is None else x == True)(msg))
+        return ((lambda x: False if x is None else x == 'True')(msg))
     elif type == "String":
         return ((lambda x: '' if x is None else x)(msg))
 
