@@ -1218,6 +1218,7 @@ Blockly.Msg.ORA_ACCESS_RIGHT_DELETED = "Partekatzeko baimena ezabatu da!";
 Blockly.Msg.ORA_ACCOUNT_NOT_ACTIVATED_TO_SHARE = "Ez daukazu partekatzeko baimenik. Aktibatu zure kontua mesedez! <br><a href='https://www.roberta-home.de/index.php?id=138&L=1\" target=\"_blank\">Informazio gehiago ...</a>";
 Blockly.Msg.ORA_COMPILERWORKFLOW_ERROR_CONFIGURATION_NOT_FOUND = "Robotaren konfigurazioa ez da zerbitzarian aurkitu.";
 Blockly.Msg.ORA_COMPILERWORKFLOW_ERROR_CONFIGURATION_TRANSFORM_FAILED = "Ezin izan da robotaren konfigurazioa robotaren programazio lengoaira bihurtu.";
+Blockly.Msg.ORA_COMPILERWORKFLOW_ERROR_EXTERN_FAILED = "It looks like the external compilation service used for this robot is currently unavailable. Please try again later and report the problem if it persists.";  // untranslated
 Blockly.Msg.ORA_COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED = "Your program has errors so it cannot be compiled. The compiler messages are: <br><span style='background-color:#ddd;font-family:courier;'>{MESSAGE}</span>";  // untranslated
 Blockly.Msg.ORA_COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED = "Programa ezin izan da sortu.";
 Blockly.Msg.ORA_COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED_WITH_PARAMETERS = "The program could not be generated. Pin {PIN} is incorrect in block {BLOCK}";  // untranslated
@@ -2171,6 +2172,7 @@ Blockly.Msg.WAIT_OR = "edo itxaron honi";
 Blockly.Msg.WAIT_TIME_TOOLTIP = "Denbora konkretu bat itxaroten du milisegundutan.";
 Blockly.Msg.WAIT_TOOLTIP = "Baldintza egiazkoa izan arte itxaroten du.";
 Blockly.Msg.WAIT_UNTIL = "itxaron baldintza";
+Blockly.Msg.WEBUSB_NOT_SUPPORTED = "Your browser does not support WebUSB. To download the programme to your robot, please switch to one of the following browsers: Chrome, Edge or Opera";  // untranslated
 Blockly.Msg.WEIGHT_KG = "weight kg";  // untranslated
 Blockly.Msg.WHEEL_BASE = "wheel base";  // untranslated
 Blockly.Msg.WIDTHRANGE = "width range";  // untranslated

@@ -19,153 +19,6 @@ import * as IO from 'socket.io';
 import * as CONNECTION_C from 'connection.controller';
 import { Interpreter } from 'interpreter.interpreter';
 
-export class AudioConnection extends AbstractPromptConnection {
-    /**
-     * Creates the pop-up for robots that play sound inside the browser instead
-     * of downloading a file (f.e. Edison) This function is very similar to
-     * runForAutoConnection, but instead of a download link a Play button is
-     * created. Also, some parts of the autoConnection pop-up are hidden: - the
-     * "I've changed my download folder" checkbox - the "OK" button in the
-     * footer
-     *
-     * @param result
-     *            the result that is received from the server after sending the
-     *            program to it
-     */
-    protected run(result) {
-        if (result.rc !== 'ok') {
-            GUISTATE_C.setConnectionState('wait');
-            MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
-        } else {
-            let wavFileContent = UTIL.base64decode(result.compiledCode);
-            let audio: HTMLAudioElement;
-            $('#changedDownloadFolder').addClass('hidden');
-
-            //This detects IE11 (and IE11 only), see: https://developer.mozilla.org/en-US/docs/Web/API/Window/crypto
-            // @ts-ignore
-            if (window.msCrypto) {
-                //Internet Explorer (all ver.) does not support playing WAV files in the browser
-                //If the user uses IE11 the file will not be played, but downloaded instead
-                //See: https://caniuse.com/#feat=wav, https://www.w3schools.com/html/html5_audio.asp
-                this.createDownloadLink(GUISTATE_C.getProgramName() + '.wav', wavFileContent);
-            } else {
-                //All non-IE browsers can play WAV files in the browser, see: https://www.w3schools.com/html/html5_audio.asp
-                $('#OKButtonModalFooter').addClass('hidden');
-                let contentAsBlob = new Blob([wavFileContent], {
-                    type: 'audio/wav',
-                });
-                audio = new Audio(window.URL.createObjectURL(contentAsBlob));
-                this.createPlayButton(audio);
-            }
-
-            let textH = $('#popupDownloadHeader').text();
-            $('#popupDownloadHeader').text(textH.replace('$', $.trim(GUISTATE_C.getRobotRealName())));
-            for (let i = 1; Blockly.Msg['POPUP_DOWNLOAD_STEP_' + i]; i++) {
-                let step = $('<li class="typcn typcn-roberta">');
-                let a =
-                    Blockly.Msg['POPUP_DOWNLOAD_STEP_' + i + '_' + GUISTATE_C.getRobotGroup().toUpperCase()] ||
-                    Blockly.Msg['POPUP_DOWNLOAD_STEP_' + i] ||
-                    'POPUP_DOWNLOAD_STEP_' + i;
-                step.html('<span class="download-message">' + a + '</span>');
-                step.css('opacity', '0');
-                $('#download-instructions').append(step);
-            }
-
-            $('#save-client-compiled-program').oneWrap('shown.bs.modal', function (e) {
-                $('#download-instructions li').each(function (index) {
-                    $(this)
-                        .delay(750 * index)
-                        .animate(
-                            {
-                                opacity: 1,
-                            },
-                            1000
-                        );
-                });
-            });
-
-            $('#save-client-compiled-program').oneWrap('hidden.bs.modal', function (e) {
-                // @ts-ignore
-                if (!window.msCrypto) {
-                    audio.pause();
-                    audio.load();
-                }
-                let textH = $('#popupDownloadHeader').text();
-                $('#popupDownloadHeader').text(textH.replace($.trim(GUISTATE_C.getRobotRealName()), '$'));
-                $('#programLink').remove();
-                $('#download-instructions').empty();
-                GUISTATE_C.setConnectionState('wait');
-                MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
-
-                //Un-hide the div if it was hidden before
-                $('#changedDownloadFolder').removeClass('hidden');
-                $('#OKButtonModalFooter').removeClass('hidden');
-            });
-
-            $('#save-client-compiled-program').modal('show');
-        }
-    }
-
-    public override terminate(): void {
-        super.terminate();
-        this.clearDownloadModal();
-    }
-
-    public setState(): void {}
-
-    /**
-     * Creates a Play button for an Audio object so that the sound can be played
-     * and paused/restarted inside the browser:
-     *
-     * <button type="button" class="btn btn-primary" style="font-size:36px">
-     * <span class="typcn typcn-media-play" style="color : black"></span>
-     * </button>
-     */
-    createPlayButton(audio: HTMLAudioElement) {
-        $('#trA').removeClass('hidden');
-        let playButton: HTMLButtonElement;
-        if ('Blob' in window) {
-            //Create a bootstrap button
-            playButton = document.createElement('button');
-            playButton.setAttribute('type', 'button');
-            playButton.setAttribute('class', 'btn btn-primary');
-
-            let playing: boolean = false;
-            playButton.onclick = function () {
-                if (playing == false) {
-                    audio.play();
-                    playIcon.setAttribute('class', 'typcn typcn-media-stop');
-                    playing = true;
-                    audio.addEventListener('ended', function () {
-                        $('#save-client-compiled-program').modal('hide');
-                    });
-                } else {
-                    playIcon.setAttribute('class', 'typcn typcn-media-play');
-                    audio.pause();
-                    audio.load();
-                    playing = false;
-                }
-            };
-
-            //Create the play icon inside the button
-            let playIcon = document.createElement('span');
-            playIcon.setAttribute('class', 'typcn typcn-media-play');
-            playIcon.setAttribute('style', 'color : black');
-            playButton.appendChild(playIcon);
-        }
-
-        if (playButton) {
-            let programLinkDiv = document.createElement('div');
-            programLinkDiv.setAttribute('id', 'programLink');
-            programLinkDiv.setAttribute('style', 'text-align: center;');
-            programLinkDiv.appendChild(document.createElement('br'));
-            programLinkDiv.appendChild(playButton);
-            playButton.setAttribute('style', 'font-size:36px');
-            $('#downloadLink').append(programLinkDiv);
-        }
-    }
-}
-
 class ThymioDeviceManagerConnection extends AbstractConnection {
     static readonly URL = 'ws://localhost:8597';
     // provide a stop program (see https://github.com/Mobsya/vpl-web/blob/master/thymio/index.js#L197) instead of using a stop function of TDM
@@ -863,7 +716,6 @@ class AutoConnection extends AbstractPromptConnection {
             if (ok == 'done') {
                 MSG.displayInformation(result, 'MESSAGE_EDIT_START', result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
             } else if (ok == 'disconnected') {
-                //$('#save-client-compiled-program').modal('hide');
                 setTimeout(() => {
                     this.runWebUsbConnection(result);
                 }, 100);
@@ -1441,18 +1293,18 @@ export class Unowifirev2Connection extends TokenConnection {}
 //cyberpi
 export class Mbot2Connection extends TokenConnection {}
 
-export class EdisonConnection extends AbstractPromptConnection {
-    private static API_URL: string = 'https://api.edisonrobotics.net/';
-    private static API_LONG: string = 'ep/wav/long';
-    private static API_SHORT: string = 'ep/wav/short';
+export class Edisonv2Connection extends AbstractPromptConnection {
+    private static readonly API_URL: string = 'https://api.edisonrobotics.net/';
+    private static readonly API_LONG: string = 'ep/wav/long';
+    private static readonly API_SHORT: string = 'ep/wav/short';
     private switchedOnce: boolean = false;
     private shortLong: String = 'long';
-    private urlAPI: string = EdisonConnection.API_URL + EdisonConnection.API_LONG;
+    private urlAPI: string = Edisonv2Connection.API_URL + Edisonv2Connection.API_LONG;
 
     override init() {
         super.init();
         if (UTIL.isChromeOS() || UTIL.isWindowsOS()) {
-            this.urlAPI = EdisonConnection.API_URL + EdisonConnection.API_SHORT;
+            this.urlAPI = Edisonv2Connection.API_URL + Edisonv2Connection.API_SHORT;
             this.shortLong = 'short';
         }
     }
@@ -1505,7 +1357,7 @@ export class EdisonConnection extends AbstractPromptConnection {
                 GUISTATE_C.setConnectionState('wait');
                 that.clearDownloadModal();
                 $('body>.pace').fadeOut(400, function () {
-                    MSG.displayPopupMessage('ORA_PROGRAM_SAVE_AS_ERROR_PROGRAM_EXISTS', errorMessage, 'OK');
+                    MSG.displayPopupMessage('ORA_COMPILERWORKFLOW_ERROR_EXTERN_FAILED', errorMessage, 'OK');
                 });
             };
 
@@ -1523,9 +1375,9 @@ export class EdisonConnection extends AbstractPromptConnection {
                         if (permissionDenied && !that.switchedOnce) {
                             that.switchedOnce = true;
                             if (that.shortLong === 'long') {
-                                that.urlAPI = EdisonConnection.API_URL + EdisonConnection.API_SHORT;
+                                that.urlAPI = Edisonv2Connection.API_URL + Edisonv2Connection.API_SHORT;
                             } else {
-                                that.urlAPI = EdisonConnection.API_URL + EdisonConnection.API_LONG;
+                                that.urlAPI = Edisonv2Connection.API_URL + Edisonv2Connection.API_LONG;
                             }
                             PROGRAM.externAPIRequest(that.urlAPI, result.compiledCode, onload, onerror);
                         } else {
@@ -1597,6 +1449,402 @@ export class EdisonConnection extends AbstractPromptConnection {
     public override terminate(): void {
         super.terminate();
         this.clearDownloadModal();
+    }
+}
+
+export class Edisonv3Connection extends AutoConnection {
+    readonly EV3_WEBUSB_HEADER = 0x58;
+    readonly EV3_WEBUSB_CMD_GET_FIRMWARE_VERSION = 0x10;
+    readonly EV3_WEBUSB_CMD_GET_SERIAL_NUMBER = 0x11;
+    readonly EV3_WEBUSB_CMD_PUT_USER_PROGRAM = 0x14;
+    readonly EV3_WEBUSB_CMD_STOP_USER_PROGRAM = 0x16;
+    readonly EV3_WEBUSB_CMD_USER_DATA_IN = 0x18;
+    readonly EV3_WEBUSB_CMD_CHANGED_STATE = 0x19;
+    readonly EV3_WEBUSB_CMD_GET_PERSISTENT_DATA = 0x1c;
+    readonly EV3_VARIANT_CODE_BOOTLOADER = 0;
+    readonly EV3_STATE_CHANGE_DRIVE_CALIBRATION_COMPLETE = 1;
+    readonly EV3_STATE_CHANGE_OBSTACLE_CALIBRATION_COMPLETE = 2;
+    readonly EV3_STATE_CHANGE_USER_PROGRAM_COMPLETE = 3;
+
+    readonly EV3_STATE_CHANGE_ARG_USER_PROGRAM_COMPLETE_SUCCESS = 0;
+    readonly EV3_STATE_CHANGE_ARG_USER_PROGRAM_COMPLETE_NO_FILE = 1;
+    readonly EV3_STATE_CHANGE_ARG_USER_PROGRAM_COMPLETE_USER_ABORT = 2;
+    readonly EV3_STATE_CHANGE_ARG_USER_PROGRAM_COMPLETE_EXCEPTION = 3;
+
+    readonly urlAPI: string = 'https://api.edisonrobotics.net/open_roberta/compile';
+    private webUSBPendingInResolve: any;
+    private webUSBPendingInData: any;
+    private url: string;
+
+    protected override async run(result): Promise<void> {
+        if (result.rc !== 'ok') {
+            GUISTATE_C.setConnectionState('wait');
+            MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName(), GUISTATE_C.getRobot());
+        } else {
+            if (UTIL.isWebUsbSupported() && GUISTATE_C.getVendor() && GUISTATE_C.getVendor() !== 'na') {
+                let that = this;
+                that.connect(GUISTATE_C.getVendor()).then(
+                    (connected) => {
+                        this.webUSBPendingInData = null;
+                        this.webUSBPendingInResolve = null;
+                        if (connected) {
+                            $('body>.pace').fadeIn();
+                            PROGRAM.externAPIRequest(
+                                this.url,
+                                result.compiledCode,
+                                (result) => {
+                                    /*
+                            Possible result in error case:
+                              'No path found.'
+                              or
+                              {
+                                "error": false,
+                                "compile": false,
+                                "compiler": "mpy-cross-v1.2.0-x64",
+                                "message": "{\"wavFilename\": null, \"messages\": [\"ERR: file:13:: Syntax Error, Variable Ed_MILLISECONDS doesn't have a value yet\"], \"error\": true}",
+                                "log": "log: E3A-YGUzMzYxBgA5OTc4"
+                              }
+                            Possible result in success case:
+                            {
+                                "error": false,
+                                "message": "",
+                                "compiler": "mpy-cross-v1.2.0-x64",
+                                "hex": "4d06001f0c00030f1d1f1561253947632...",
+                                "log": "log: E3A-YGUzMzYxBgA5OTc4"
+                            }
+                            */
+                                    if (result && !result.hex) {
+                                        if (result === 'No path found.') {
+                                            return that.finishRunAction({
+                                                rc: 'error',
+                                                message: 'ORA_COMPILERWORKFLOW_ERROR_EXTERN_FAILED',
+                                            });
+                                        } else if (result.compile === false) {
+                                            return that.finishRunAction({
+                                                rc: 'error',
+                                                message: 'ORA_COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED',
+                                                parameters: { MESSAGE: JSON.parse(result.message).messages },
+                                            });
+                                        } else {
+                                            return that.finishRunAction({
+                                                rc: 'ok',
+                                            });
+                                        }
+                                    }
+                                    let resultHex: any = this.processAPIHexString(result.hex);
+                                    if (resultHex.rc === 'ok') {
+                                        this.upload(resultHex.data).then((result: any) => that.finishRunAction(result));
+                                    } else {
+                                        this.finishRunAction(resultHex);
+                                    }
+                                },
+                                (e) => {
+                                    this.finishRunAction({
+                                        rc: 'error',
+                                        message: 'ORA_COMPILERWORKFLOW_ERROR_EXTERN_FAILED',
+                                        parameters: { MESSAGE: e.statusText },
+                                    });
+                                }
+                            );
+                        } else {
+                            this.finishRunAction({
+                                rc: 'ok',
+                            });
+                        }
+                    },
+                    (e) => this.finishRunAction({ rc: 'ok' })
+                );
+            } else {
+                this.finishRunAction({
+                    rc: 'error',
+                    message: 'WEBUSB_NOT_SUPPORTED',
+                });
+            }
+        }
+    }
+
+    finishRunAction(result): void {
+        GUISTATE_C.setConnectionState('wait');
+        GUISTATE.robot.state = 'wait';
+        $('body>.pace').fadeOut();
+        if (result.rc !== 'ok') {
+            MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName(), null);
+        }
+    }
+
+    async webUSBOpenConnection(): Promise<{}> {
+        try {
+            this.device = await navigator.usb.requestDevice({
+                filters: [{ vendorId: GUISTATE_C.getVendor() }],
+            });
+            await this.device.open();
+            await this.device.selectConfiguration(1);
+            await this.device.claimInterface(0);
+            this.webUSBPendingInData = null;
+            this.webUSBPendingInResolve = null;
+            this.device.transferIn(1, 64).then(this.webUSBTransferInReady.bind(this));
+            let url = this.urlAPI;
+            let version = await this.getEV3FirmwareVersion();
+            if (
+                version[0] != this.EV3_VARIANT_CODE_BOOTLOADER &&
+                (version[2].startsWith('v0.1.0') || version[2].startsWith('v0.2.0') || version[1].startsWith('v0.3.0'))
+            ) {
+                await this.webUSBCommandStopUserProgram();
+            }
+            let uidNumber = await this.getEdisonV3UID();
+            let myData = await this.webUSBCommandGetPersistentData();
+            url = url + '?versionFirmware=' + version[2];
+            url = url + '&strUniqueID=';
+            url += uidNumber;
+            url = url + '&versionBootloader=' + version[1];
+            this.url = url + '&strUsage=' + '[' + myData + ']';
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }
+
+    override async connect(vendors: string): Promise<any> {
+        return await this.webUSBEnsureConnected();
+    }
+
+    webUSBTransferInReady(result) {
+        if (result.status == 'ok') {
+            if (
+                result.data.byteLength == 6 &&
+                result.data.getUint8(0) == this.EV3_WEBUSB_HEADER &&
+                result.data.getUint8(1) == this.EV3_WEBUSB_CMD_USER_DATA_IN
+            ) {
+                let value = result.data.getUint8(2) | (result.data.getUint8(3) << 8) | (result.data.getUint8(4) << 16) | (result.data.getUint8(5) << 24);
+            } else if (
+                result.data.byteLength == 4 &&
+                result.data.getUint8(0) == this.EV3_WEBUSB_HEADER &&
+                result.data.getUint8(1) == this.EV3_WEBUSB_CMD_CHANGED_STATE
+            ) {
+                const state = result.data.getUint8(2);
+                const state_arg = result.data.getUint8(3);
+                let state_msg = 'state change: ' + state + ' ' + state_arg;
+                if (state == this.EV3_STATE_CHANGE_DRIVE_CALIBRATION_COMPLETE) {
+                    if (state_arg == 3) {
+                        state_msg = 'state change: drive calibration completed successfully';
+                    } else {
+                        state_msg = 'state change: drive calibration failed: speed=' + (state_arg >> 4);
+                        if (state_arg & 4) {
+                            state_msg += ', left failed to achieve target speed';
+                        }
+                        if (state_arg & 8) {
+                            state_msg += ', right failed to achieve target speed';
+                        }
+                    }
+                } else if (state == this.EV3_STATE_CHANGE_OBSTACLE_CALIBRATION_COMPLETE) {
+                    state_msg = 'state change: obstacle calibration complete';
+                } else if (state == this.EV3_STATE_CHANGE_USER_PROGRAM_COMPLETE) {
+                    if (state_arg == this.EV3_STATE_CHANGE_ARG_USER_PROGRAM_COMPLETE_SUCCESS) {
+                        state_msg = 'state change: user program finished successfully';
+                    } else if (state_arg == this.EV3_STATE_CHANGE_ARG_USER_PROGRAM_COMPLETE_NO_FILE) {
+                        state_msg = "state change: user program doesn't exist";
+                    } else if (state_arg == this.EV3_STATE_CHANGE_ARG_USER_PROGRAM_COMPLETE_USER_ABORT) {
+                        state_msg = 'state change: user program stopped by square button';
+                    } else if (state_arg == this.EV3_STATE_CHANGE_ARG_USER_PROGRAM_COMPLETE_EXCEPTION) {
+                        state_msg = 'state change: user program had an exception';
+                    }
+                }
+            } else {
+                if (this.webUSBPendingInResolve !== null) {
+                    this.webUSBPendingInResolve(result);
+                    this.webUSBPendingInResolve = null;
+                } else {
+                    this.webUSBPendingInData = result;
+                }
+            }
+        }
+        this.device.transferIn(1, 64).then(this.webUSBTransferInReady.bind(this));
+    }
+
+    async webUSBCommandStopUserProgram() {
+        const data = new Uint8Array([this.EV3_WEBUSB_HEADER, this.EV3_WEBUSB_CMD_STOP_USER_PROGRAM, 0, 0, 0, 0, 0, 0]);
+        await this.webUSBTransferOut(data);
+        return await this.webUSBTransferIn(8);
+    }
+
+    async getEV3FirmwareVersion() {
+        const data = new Uint8Array([this.EV3_WEBUSB_HEADER, this.EV3_WEBUSB_CMD_GET_FIRMWARE_VERSION, 0, 0, 0, 0, 0, 0]);
+        //await this.webUSBEnsureConnected();
+        await this.device.transferOut(1, data);
+        let result = await this.webUSBTransferIn(64);
+        if (result && result.status == 'ok') {
+            if (result.data.getUint8(0) != this.EV3_WEBUSB_HEADER || result.data.getUint8(1) != this.EV3_WEBUSB_CMD_GET_FIRMWARE_VERSION) {
+                return [-1, 'invalid'];
+            }
+            const variantCode = result.data.getUint8(2);
+            const numBytes = result.data.getUint8(3);
+            let versionBootloader = '';
+            for (let i = 0; i < numBytes; i++) {
+                const c = result.data.getUint8(4 + i);
+                if (c == 0) {
+                    break;
+                }
+                versionBootloader += String.fromCodePoint(c);
+            }
+            let versionApplication = '';
+            for (let i = 0; i < numBytes; i++) {
+                const c = result.data.getUint8(4 + numBytes + i);
+                if (c == 0) {
+                    break;
+                }
+                versionApplication += String.fromCodePoint(c);
+            }
+            return [variantCode, versionBootloader, versionApplication];
+        } else {
+            return [-1, 'invalid'];
+        }
+        return [-1, 'invalid'];
+    }
+
+    async webUSBTransferIn(len) {
+        let prom;
+        let that = this;
+        if (this.webUSBPendingInData !== null) {
+            prom = new Promise(function (resolve, reject) {
+                let x = this.webUSBPendingInData;
+                that.webUSBPendingInData = null;
+                resolve(x);
+            });
+        } else {
+            prom = new Promise(function (resolve, reject) {
+                that.webUSBPendingInResolve = resolve;
+            });
+        }
+        let result = await prom;
+        return result;
+    }
+
+    async webUSBEnsureConnected() {
+        if (!this.webUSBIsConnected()) {
+            await this.webUSBOpenConnection();
+        }
+        return await this.webUSBCommandStopUserProgram();
+    }
+
+    async getEdisonV3UID() {
+        const data = new Uint8Array([this.EV3_WEBUSB_HEADER, this.EV3_WEBUSB_CMD_GET_SERIAL_NUMBER, 0, 0, 0, 0, 0, 0]);
+        await this.device.transferOut(1, data);
+        let result = await this.webUSBTransferIn(32);
+        if (result.status == 'ok') {
+            const numBytes = result.data.getUint8(3);
+            let serial = '';
+            for (let i = 0; i < numBytes; i++) {
+                serial += String.fromCodePoint(result.data.getUint8(4 + i));
+            }
+            return serial;
+        } else {
+            return false;
+        }
+    }
+
+    async webUSBCommandGetPersistentData(): Promise<{}> {
+        let total_len = 1024;
+        let calibration_data = null;
+        let that = this;
+        for (let offset = 0; offset < total_len; ) {
+            const data = new Uint8Array([that.EV3_WEBUSB_HEADER, that.EV3_WEBUSB_CMD_GET_PERSISTENT_DATA, offset & 0xff, offset >> 8, 0, 0, 0, 0]);
+            await that.device.transferOut(1, data);
+            const result = await that.webUSBTransferIn(64);
+            if (result.data.getUint8(0) != that.EV3_WEBUSB_HEADER || result.data.getUint8(1) != that.EV3_WEBUSB_CMD_GET_PERSISTENT_DATA) {
+                return null;
+            }
+            total_len = result.data.getUint8(2) | (result.data.getUint8(3) << 8);
+            if (calibration_data === null) {
+                calibration_data = new Uint8Array(total_len);
+            }
+            for (let i = 0; i < 60 && offset + i < total_len; ++i) {
+                calibration_data[offset + i] = result.data.getUint8(4 + i);
+            }
+            offset += 60;
+        }
+        return calibration_data;
+    }
+
+    webUSBIsConnected() {
+        if (typeof this.device == 'undefined') {
+            return false;
+        } else {
+            if (this.device.opened) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+
+    override async upload(userProgram): Promise<{}> {
+        var size = userProgram.length;
+        const data = new Uint8Array([this.EV3_WEBUSB_HEADER, this.EV3_WEBUSB_CMD_PUT_USER_PROGRAM, 0, 0, 0, 0, 0, 0]);
+        data[2] = size;
+        data[3] = size >> 8;
+        var lowerByte = true;
+        var checkSum = 0;
+        for (var i = 0; i < userProgram.length; i++) {
+            if (lowerByte) {
+                checkSum = checkSum ^ userProgram[i];
+                lowerByte = false;
+            } else {
+                checkSum = checkSum ^ (userProgram[i] << 8);
+                lowerByte = true;
+            }
+        }
+        data[5] = checkSum;
+        data[6] = checkSum >> 8;
+        await this.webUSBTransferOut(data);
+
+        let result = await this.webUSBTransferIn(8);
+        if (result.status == 'ok' && result.data.getUint8(0) == this.EV3_WEBUSB_HEADER && result.data.getUint8(1) == this.EV3_WEBUSB_CMD_PUT_USER_PROGRAM) {
+            // can start programming
+        } else {
+            return {
+                rc: 'error',
+                message: 'WEBUSB_DOWLOAD_PROBLEM',
+            };
+        }
+        await this.webUSBTransferOut(userProgram);
+        result = await this.webUSBTransferIn(8);
+        this.webUSBIsConnected();
+        if (
+            result.status == 'ok' &&
+            result.data.getUint8(0) == this.EV3_WEBUSB_HEADER &&
+            result.data.getUint8(1) == this.EV3_WEBUSB_CMD_PUT_USER_PROGRAM &&
+            result.data.getUint8(2) == 1
+        ) {
+            return {
+                rc: 'ok',
+            };
+        } else {
+            return {
+                rc: 'error',
+                message: 'WEBUSB_DOWLOAD_PROBLEM',
+            };
+        }
+    }
+
+    async webUSBTransferOut(data) {
+        await this.device.transferOut(1, data);
+    }
+
+    processAPIHexString(inputHexStr): {} {
+        var progSize = inputHexStr.length / 2;
+        var userProgData = new Uint8Array(progSize);
+        var i, j;
+        j = 0;
+        for (i = 0; i < inputHexStr.length; i = i + 2) {
+            var numString = '0x' + inputHexStr.substring(i, i + 2);
+            var numData = parseInt(numString);
+            userProgData[j] = numData;
+            j++;
+        }
+        if (progSize > 2048) {
+            return { rc: 'error', message: 'ORA_COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED', parameters: { MESSAGE: 'Program size > 2048 bytes' } };
+        }
+        return { rc: 'ok', data: userProgData };
     }
 }
 

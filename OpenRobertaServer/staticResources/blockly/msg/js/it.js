@@ -1218,6 +1218,7 @@ Blockly.Msg.ORA_ACCESS_RIGHT_DELETED = "Il diritto condiviso viene eliminato!";
 Blockly.Msg.ORA_ACCOUNT_NOT_ACTIVATED_TO_SHARE = "non sei autorizzato a condividere. Si prega di attivare il tuo account! <br> <a href='https://www.roberta-home.de/index.php?id=138&L=1\" target=\"_blank\"> Ulteriori informazioni ... </a>";
 Blockly.Msg.ORA_COMPILERWORKFLOW_ERROR_CONFIGURATION_NOT_FOUND = "non è stato possibile trovare la configurazione del robot sul server.";
 Blockly.Msg.ORA_COMPILERWORKFLOW_ERROR_CONFIGURATION_TRANSFORM_FAILED = "non è stato possibile trasformare la configurazione del robot nella lingua di programmazione del robot.";
+Blockly.Msg.ORA_COMPILERWORKFLOW_ERROR_EXTERN_FAILED = "It looks like the external compilation service used for this robot is currently unavailable. Please try again later and report the problem if it persists.";  // untranslated
 Blockly.Msg.ORA_COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED = "controlla i messaggi di errore nei blocchi di programmazione e nella configurazione! Il tuo programma presenta errori, quindi non può essere compilato.";
 Blockly.Msg.ORA_COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED = "non è stato possibile generare questo programma.";
 Blockly.Msg.ORA_COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED_WITH_PARAMETERS = "The program could not be generated. Pin {PIN} is incorrect in block {BLOCK}";  // untranslated
@@ -2171,6 +2172,7 @@ Blockly.Msg.WAIT_OR = "o attendere per";
 Blockly.Msg.WAIT_TIME_TOOLTIP = "attende un certo tempo in millisecondi.";
 Blockly.Msg.WAIT_TOOLTIP = "attende una condizione diventare vera.";
 Blockly.Msg.WAIT_UNTIL = "aspetta finchè";
+Blockly.Msg.WEBUSB_NOT_SUPPORTED = "Your browser does not support WebUSB. To download the programme to your robot, please switch to one of the following browsers: Chrome, Edge or Opera";  // untranslated
 Blockly.Msg.WEIGHT_KG = "weight kg";  // untranslated
 Blockly.Msg.WHEEL_BASE = "wheel base";  // untranslated
 Blockly.Msg.WIDTHRANGE = "width range";  // untranslated

@@ -64,6 +64,7 @@ public class EdisonValidatorAndCollectorVisitor extends CommonNepoValidatorAndCo
     public Void visitCurveAction(CurveAction curveAction) {
         // the block has the description "steer"
         requiredComponentVisited(curveAction, curveAction.paramLeft.getSpeed(), curveAction.paramRight.getSpeed());
+        usedMethodBuilder.addUsedMethod(EdisonMethods.DIFFCURVE);
         addUsedMethodsForDriveActions();
         curveAction.paramLeft.getSpeed().accept(this);
         curveAction.paramRight.getSpeed().accept(this);
@@ -258,8 +259,7 @@ public class EdisonValidatorAndCollectorVisitor extends CommonNepoValidatorAndCo
     }
 
     private void addUsedMethodsForDriveActions() {
-        usedMethodBuilder.addUsedMethod(EdisonMethods.DIFFCURVE);
-        usedMethodBuilder.addUsedMethod(EdisonMethods.SHORTEN); //used inside helper method
+        usedMethodBuilder.addUsedMethod(EdisonMethods.SHORTEN);
         usedMethodBuilder.addUsedMethod(EdisonMethods.GETDIR);
     }
 }

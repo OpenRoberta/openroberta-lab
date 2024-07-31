@@ -1218,6 +1218,7 @@ Blockly.Msg.ORA_ACCESS_RIGHT_DELETED = "Право на доступ видал�
 Blockly.Msg.ORA_ACCOUNT_NOT_ACTIVATED_TO_SHARE = "Ви не можете поділитися. Будь ласка, активуйте свій аккаунт! <br> <a href='https://www.roberta-home.de/index.php?id=138&L=1\" target=\"_blank\"> Додаткова інформація ... </a>";
 Blockly.Msg.ORA_COMPILERWORKFLOW_ERROR_CONFIGURATION_NOT_FOUND = "Конфігурацію робота не знайдено на сервері.";
 Blockly.Msg.ORA_COMPILERWORKFLOW_ERROR_CONFIGURATION_TRANSFORM_FAILED = "Конфігурацію робота неможливо перетворити на мову програмування робота.";
+Blockly.Msg.ORA_COMPILERWORKFLOW_ERROR_EXTERN_FAILED = "It looks like the external compilation service used for this robot is currently unavailable. Please try again later and report the problem if it persists.";  // untranslated
 Blockly.Msg.ORA_COMPILERWORKFLOW_ERROR_PROGRAM_COMPILE_FAILED = "Будь ласка, перевірте повідомлення про помилки у ваших програмних блоках і конфігурації! Ваша програма містить помилки, тому не може бути скомпільована.";
 Blockly.Msg.ORA_COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED = "Програму неможливо згенерувати.";
 Blockly.Msg.ORA_COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED_WITH_PARAMETERS = "The program could not be generated. Pin {PIN} is incorrect in block {BLOCK}";  // untranslated
@@ -2171,6 +2172,7 @@ Blockly.Msg.WAIT_OR = "чи почекай";
 Blockly.Msg.WAIT_TIME_TOOLTIP = "Чекає визначений час в мілісекундах.";
 Blockly.Msg.WAIT_TOOLTIP = "Чекає поки умова не стане правдивою.";
 Blockly.Msg.WAIT_UNTIL = "Почекай поки";
+Blockly.Msg.WEBUSB_NOT_SUPPORTED = "Your browser does not support WebUSB. To download the programme to your robot, please switch to one of the following browsers: Chrome, Edge or Opera";  // untranslated
 Blockly.Msg.WEIGHT_KG = "weight kg";  // untranslated
 Blockly.Msg.WHEEL_BASE = "wheel base";  // untranslated
 Blockly.Msg.WIDTHRANGE = "width range";  // untranslated

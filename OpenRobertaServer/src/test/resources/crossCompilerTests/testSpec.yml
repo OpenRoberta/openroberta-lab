@@ -16,10 +16,10 @@ robots:
     template: calliope
     dir: calliope
     suffix: ".cpp"
-    exclude: [ 
-        math,
-        v3_logotouch_and_sound
-     ]
+    exclude: [
+      math,
+      v3_logotouch_and_sound
+    ]
   calliope2017:
     template: calliope
     dir: calliope
@@ -37,20 +37,25 @@ robots:
     template: calliope
     dir: calliope
     suffix: ".cpp"
-    exclude: [ 
-        math,
-         v3_logotouch_and_sound
-         ]
+    exclude: [
+      math,
+      v3_logotouch_and_sound
+    ]
   calliopev3:
     template: calliope
     dir: calliope
     suffix: ".py"
-    exclude: [ 
-        messages,
-        sensor_gyro
+    exclude: [
+      messages,
+      sensor_gyro
     ]
-    pylintIgnoredModules: ["calliopemini", "callibot2", "tm1637", "music", "neopixel", "radio", "machine", "sht31", "tcs3472"]
-  edison:
+    pylintIgnoredModules: [ "calliopemini", "callibot2", "tm1637", "music", "neopixel", "radio", "machine", "sht31", "tcs3472" ]
+  edisonv2:
+    template: edison
+    dir: edison
+    suffix: ".py"
+    pylintIgnoredModules: [ "Ed" ]
+  edisonv3:
     template: edison
     dir: edison
     suffix: ".py"
@@ -162,32 +167,37 @@ progs:
   assign:
     decl: default
     exclude:
-      edison: "not supported"
+      edisonv2: "not supported"
+      edisonv3: "not supported"
       thymio: "not supported"
     remark: "simple assignment. For testing the test only"
   controlFlowDecisons:
     decl: controlFlowDecisons
     exclude:
-      edison: "not supported"
+      edisonv2: "not supported"
+      edisonv3: "not supported"
       thymio: "not supported"
     remark: "all combinations for IF-THEN-ELSE upto two levels"
   controlFlowLoops:
     decl: controlFlowLoops
     exclude:
-      edison: ""
+      edisonv2: ""
+      edisonv3: ""
       thymio: "not supported"
     remark: "all combinations of loops"
   controlFlowNestedLoops:
     decl: controlFlowNestedLoops
     exclude:
-      edison: "not supported"
+      edisonv2: "not supported"
+      edisonv3: "not supported"
       thymio: "not supported"
     remark: "all combinations of nested loops"
   functionsBasic:
     fragment: basicFunctions
     decl: basicFunctions
     exclude:
-      edison: "not supported"
+      edisonv2: "not supported"
+      edisonv3: "not supported"
       thymio: "not supported"
     remark: "basic function calls"
   functionWithWithoutParameter:
@@ -195,7 +205,8 @@ progs:
     decl: functionWithWithoutParameter
     exclude:
       ALL: "crashes crosscompilers - code generation fails!"
-      edison: ""
+      edisonv2: ""
+      edisonv3: ""
       bob3: "LedColor is used in the program. Doesn't work here"
       rob3rta: "LedColor is used in the program. Doesn't work here"
       thymio: "?"
@@ -203,7 +214,8 @@ progs:
   listOperations:
     decl: listOperations
     exclude:
-      edison: "Lists are implemented as an Array in edison robot and thus not expandable"
+      edisonv2: "Lists are implemented as an Array in edison robot and thus not expandable"
+      edisonv3: "Lists are implemented as an Array in edison robot and thus not expandable"
       nxt: "no extendable lists"
       bob3: "no lists"
       rob3rta: "no lists"
@@ -226,25 +238,29 @@ progs:
       bob3: "no lists"
       rob3rta: "no lists"
       wedo: "no lists"
-      edison: "Edisons lists are not extendable"
+      edisonv2: "Edisons lists are not extendable"
+      edisonv3: "Edisons lists are not extendable"
       thymio: "Thmio lists are not extendable"
     remark: "basic list operations"
   logicBooleanOp:
     decl: logicBooleanOp
     exclude:
-      edison: "not supported"
+      edisonv2: "not supported"
+      edisonv3: "not supported"
       thymio: "not supported"
     remark: "all combinations for boolean operator"
   logicBooleanOpTernary:
     decl: logicBooleanOpTernary
     exclude:
-      edison: "AND/OR blocks not supported"
+      edisonv2: "AND/OR blocks not supported"
+      edisonv3: "AND/OR blocks not supported"
       thymio: "? not supported"
     remark: "all combinations for ternary operator"
   mathAndLists:
     decl: mathAndLists
     exclude:
-      edison: "no extendable lists"
+      edisonv2: "no extendable lists"
+      edisonv3: "no extendable lists"
       nxt: "no extendable lists"
       bob3: "no lists"
       rob3rta: "no lists"
@@ -254,38 +270,44 @@ progs:
   mathBasics:
     decl: mathBasics
     exclude:
-      edison: "no real numeric type"
+      edisonv2: "no real numeric type"
+      edisonv3: "no real numeric type"
       thymio: "no real numeric type"
     remark: "basic math operations"
   mathBrackets:
     decl: mathBrackets
     exclude:
-      edison: "no real numeric type"
+      edisonv2: "no real numeric type"
+      edisonv3: "no real numeric type"
       thymio: "no real numeric type"
     remark: "different combinations for math brackets"
   mathFunctions:
     decl: mathFunctions
     exclude:
-      edison: "Most math functions are not supported"
+      edisonv2: "Most math functions are not supported"
+      edisonv3: "Most math functions are not supported"
       thymio: "Some math functions are not supported"
     remark: "some math functions (min, sin, pi, ...), similar to mathLogic. For testing the test only"
   mathLogic-1:
     decl: mathLogic
     exclude:
-      edison: "Most math functions are not supported"
+      edisonv2: "Most math functions are not supported"
+      edisonv3: "Most math functions are not supported"
       thymio: "Most math functions are not supported"
     remark: "math functions (min, random, ...)"
   mathLogic-2:
     decl: mathLogic
     exclude:
-      edison: "edison only supports integers as numbers which would mean that f.e. sqrt(2) == 1 == sqrt(1/2)"
+      edisonv2: "edison only supports integers as numbers which would mean that f.e. sqrt(2) == 1 == sqrt(1/2)"
+      edisonv3: "edison only supports integers as numbers which would mean that f.e. sqrt(2) == 1 == sqrt(1/2)"
       thymio: "thymio only supports integers as numbers"
     remark: "trigonometric functions (min, sin, pi, ...)"
   mathPower:
     decl: mathPower
     exclude:
       nxt: "Nested calls to the same function are not supported"
-      edison: "Not all pow functions are supported"
+      edisonv2: "Not all pow functions are supported"
+      edisonv3: "Not all pow functions are supported"
       thymio: "Not supported"
     remark: "different combinations for math power of"
   neuralNetwork:
@@ -302,7 +324,8 @@ progs:
     decl: orderOfOperations
     fragment: orderOfOperations
     exclude:
-      edison: "Most math functions are not supported"
+      edisonv2: "Most math functions are not supported"
+      edisonv3: "Most math functions are not supported"
       thymio: "Most math functions are not supported"
     remark: "precedence check for math binary operations"
   strings:
@@ -321,14 +344,16 @@ progs:
       rob3rta: "no strings"
       festobionic: "Comparison of string and char not possible"
       festobionicflower: "Comparison of string and char not possible"
-      edison: "no strings"
+      edisonv2: "no strings"
+      edisonv3: "no strings"
       wedo: "Comparison of string and char not possible"
       thymio: "no strings"
     remark: "different combinations of string concatenation"
   variablesNuStBo:
     decl: variablesNuStBo
     exclude:
-      edison: "not supported"
+      edisonv2: "not supported"
+      edisonv3: "not supported"
       bob3: "no strings"
       rob3rta: "no strings"
       thymio: "no strings"
