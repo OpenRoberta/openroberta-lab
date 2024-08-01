@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +17,6 @@ import org.slf4j.LoggerFactory;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.exprEvaluator.EvalExprErrorListener;
-import de.fhg.iais.roberta.exprEvaluator.TextlyVisitor;
 import de.fhg.iais.roberta.exprly.generated.ExprlyLexer;
 import de.fhg.iais.roberta.exprly.generated.ExprlyParser;
 import de.fhg.iais.roberta.syntax.Phrase;
@@ -71,8 +71,11 @@ public final class EvalStmts extends Stmt {
         BlocklyType type = BlocklyType.VOID;
         BlocklyProperties properties = Jaxb2Ast.extractBlocklyProperties(block);
 
+        String pluginProperties = helper.getRobotFactory().getPluginProperties().getPluginProperties().getProperty("robot.class.textly");
+        Class<?> pluginClass = Class.forName(pluginProperties);
+
         final List<NepoInfo> annotations = new ArrayList<>();
-        StmtList astOfStmt = EvalStmts.stmtList2AST(stmtListAsString, annotations);
+        StmtList astOfStmt = EvalStmts.stmtList2AST(stmtListAsString, annotations, pluginClass);
 
         if ( astOfStmt != null ) {
             astOfStmt.setReadOnly();
@@ -98,7 +101,7 @@ public final class EvalStmts extends Stmt {
     /**
      * Function to create an abstract syntax tree from an expression, that has been submitted as a string
      */
-    private static StmtList stmtList2AST(String stmtListAsString, List<NepoInfo> annotations) throws Exception {
+    private static StmtList stmtList2AST(String stmtListAsString, List<NepoInfo> annotations, Class<?> pluginClass) throws Exception {
         ExprlyParser parser = EvalStmts.mkParser(stmtListAsString);
         EvalExprErrorListener err = new EvalExprErrorListener();
         parser.removeErrorListeners();
@@ -110,8 +113,12 @@ public final class EvalStmts extends Stmt {
             annotations.add(NepoInfo.error("PROGRAM_ERROR_EXPRBLOCK_PARSE"));
             return null;
         } else {
-            TextlyVisitor<Stmt> exprlyStatements = new TextlyVisitor();
-            StmtList stmtList = (StmtList) exprlyStatements.visitStatementList(expression);
+//            TextlyVisitor<Stmt> exprlyStatements = new TextlyVisitor();
+//            StmtList stmtList = (StmtList) exprlyStatements.visitStatementList(expression);
+
+            Object textlyVisitorInstance = pluginClass.getDeclaredConstructor().newInstance();
+            Method visitStatementListMethod = pluginClass.getMethod("visitStatementList", ExprlyParser.StatementListContext.class);
+            StmtList stmtList = (StmtList) visitStatementListMethod.invoke(textlyVisitorInstance, expression);
             stmtList.setReadOnly();
             return stmtList;
         }
