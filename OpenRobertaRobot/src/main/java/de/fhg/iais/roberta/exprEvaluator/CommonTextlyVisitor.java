@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.tree.RuleNode;
 
 import de.fhg.iais.roberta.exprly.generated.ExprlyBaseVisitor;
@@ -69,7 +71,11 @@ import de.fhg.iais.roberta.util.ast.BlocklyRegion;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.syntax.FunctionNames;
 
-public  class TextlyVisitor<T> extends ExprlyBaseVisitor<T> {
+public abstract class CommonTextlyVisitor<T> extends ExprlyBaseVisitor<T> {
+    private static final Pattern VAR_NAME = Pattern.compile("[a-z][a-zA-Z0-9_]*");
+    private static final Pattern FUNCTION_NAME = Pattern.compile("[A-Z][a-zA-Z0-9_]*");
+    private static final Pattern BUTTONPORT_NAME = Pattern.compile("[a-zA-Z][a-zA-Z0-9_]*");
+
     /**
      * @return AST instance for the whole expression
      */
@@ -78,6 +84,33 @@ public  class TextlyVisitor<T> extends ExprlyBaseVisitor<T> {
         return visit(ctx.expr());
     }
 
+    /**
+     * @return an Exception for the Specific Expression, then in the AST will be generated in @RobotsMbedTextlyVisitor
+     */
+    @Override
+    public T visitRobotMicrobitv2Expression(ExprlyParser.RobotMicrobitv2ExpressionContext ctx) throws UnsupportedOperationException {
+        throw new UnsupportedOperationException("Specific Robot Expression");
+    }
+
+    /**
+     * @return an Exception for the Specific Expression, then in the AST will be generated in @WedoTextlyVisitor
+     */
+    @Override
+    public T visitRobotWeDoExpression(ExprlyParser.RobotWeDoExpressionContext ctx) throws UnsupportedOperationException {
+        throw new UnsupportedOperationException("Specific Robot Expression");
+    }
+
+    /**
+     * @return AST instance for the Robot expression
+     */
+    @Override
+    public T visitRobotExpression(ExprlyParser.RobotExpressionContext ctx) {
+        return visit(ctx.robotExpr());
+    }
+
+    /**
+     * @return AST instance for Statement List
+     */
     @Override
     public T visitStatementList(ExprlyParser.StatementListContext ctx) {
 
@@ -91,6 +124,9 @@ public  class TextlyVisitor<T> extends ExprlyBaseVisitor<T> {
         return (T) stmtList;
     }
 
+    /**
+     * @return AST instance Null Constants
+     */
     @Override
     public T visitNullConst(ExprlyParser.NullConstContext ctx) {
         return (T) new NullConst(mkPropertyFromClass(ctx, NullConst.class));
@@ -287,6 +323,9 @@ public  class TextlyVisitor<T> extends ExprlyBaseVisitor<T> {
         return (T) mkExpr(f, args, ctx);
     }
 
+    /**
+     * @return AST instance for Function Expression
+     */
     private T mkExpr(String f, List<Expr> args, ExprlyParser.FuncContext ctx) {
         ExprList list = new ExprList();
         for ( Expr e : args ) {
@@ -456,7 +495,7 @@ public  class TextlyVisitor<T> extends ExprlyBaseVisitor<T> {
         // By default we use VOID for the types of the variables, the type can be
         // checked later when compiling the program with the typechecker
         String nameVar = ctx.NAME().getText();
-        validateName(nameVar, "VAR");
+        validateName(nameVar, NameType.VAR);
         return (T) new Var(BlocklyType.VOID, nameVar, mkPropertyFromClass(ctx, Var.class));
     }
 
@@ -518,7 +557,9 @@ public  class TextlyVisitor<T> extends ExprlyBaseVisitor<T> {
         return (T) ternaryExpr;
     }
 
-
+    /**
+     * @return AST instance Statement Functions
+     */
     @Override
     public T visitStmtFunc(ExprlyParser.StmtFuncContext ctx) throws UnsupportedOperationException {
         String f = ctx.FNAMESTMT().getText();
@@ -535,6 +576,9 @@ public  class TextlyVisitor<T> extends ExprlyBaseVisitor<T> {
         return (T) mkStmtExpr(f, args, ctx);
     }
 
+    /**
+     * @return AST instance for Function statements
+     */
     private T mkStmtExpr(String f, List<Expr> args, ExprlyParser.StmtFuncContext ctx) {
         List<Expr> argsStatements = new LinkedList();
 
@@ -581,10 +625,13 @@ public  class TextlyVisitor<T> extends ExprlyBaseVisitor<T> {
         }
     }
 
+    /**
+     * @return AST instance for AssigStmt
+     */
     @Override
     public T visitBinaryVarAssign(ExprlyParser.BinaryVarAssignContext ctx) throws UnsupportedOperationException {
         String nameVar = ctx.NAME().getText();
-        validateName(nameVar, "VAR");
+        validateName(nameVar, NameType.VAR);
 
         Var n0 = new Var(BlocklyType.VOID, nameVar, mkPropertyFromClass(ctx, Var.class));
         Expr n1 = (Expr) visit(ctx.expr());
@@ -596,6 +643,9 @@ public  class TextlyVisitor<T> extends ExprlyBaseVisitor<T> {
         return (T) new AssignStmt(mkInlineProperty(ctx, "variables_set"), n0, n1);
     }
 
+    /**
+     * @return AST instance for the If statement
+     */
     @Override
     public T visitConditionStatementBlock(ExprlyParser.ConditionStatementBlockContext ctx) throws UnsupportedOperationException {
         List<Expr> conditionsList = new ArrayList<>();
@@ -628,6 +678,9 @@ public  class TextlyVisitor<T> extends ExprlyBaseVisitor<T> {
 
     }
 
+    /**
+     * @return AST instance for Repeat statement
+     */
     @Override
     public T visitRepeatStatement(ExprlyParser.RepeatStatementContext ctx) throws UnsupportedOperationException {
         StmtList statementList = new StmtList();
@@ -653,6 +706,9 @@ public  class TextlyVisitor<T> extends ExprlyBaseVisitor<T> {
         return null;
     }
 
+    /**
+     * @return AST instance for "for each" control statement
+     */
     @Override
     public T visitRepeatForEach(ExprlyParser.RepeatForEachContext ctx) throws UnsupportedOperationException {
         String typeAsString = ctx.PRIMITIVETYPE().getText();
@@ -662,7 +718,7 @@ public  class TextlyVisitor<T> extends ExprlyBaseVisitor<T> {
         emptyExpression.setReadOnly();
 
         String nameVar = ctx.NAME().getText();
-        validateName(nameVar, "VAR");
+        validateName(nameVar, NameType.VAR);
         VarDeclaration var = new VarDeclaration(type, nameVar, emptyExpression, false, false, mkExternalProperty(ctx, "robControls_forEach"));
         var.setReadOnly();
 
@@ -684,9 +740,11 @@ public  class TextlyVisitor<T> extends ExprlyBaseVisitor<T> {
 
     }
 
+    /**
+     * @return AST instance for "wait until" control statement
+     */
     @Override
     public T visitWaitStatement(ExprlyParser.WaitStatementContext ctx) throws UnsupportedOperationException {
-        //StmtList statementListWait = new StmtList();
         ExprList conditionsList = new ExprList();
         StmtList waitStatementList = new StmtList();
 
@@ -714,6 +772,9 @@ public  class TextlyVisitor<T> extends ExprlyBaseVisitor<T> {
         return (T) new WaitStmt(mkExternalProperty(ctx, "robControls_wait"), waitStatementList);
     }
 
+    /**
+     * @return AST instance for "repeant n times" and "repeant indefinitely" control statement
+     */
     @Override
     public T visitRepeatFor(ExprlyParser.RepeatForContext ctx) throws UnsupportedOperationException {
         String typeAsString = ctx.PRIMITIVETYPE().getText();
@@ -731,7 +792,7 @@ public  class TextlyVisitor<T> extends ExprlyBaseVisitor<T> {
 
             ExprList el = new ExprList();
             String nameVar = ctx.NAME().get(0).getText();
-            validateName(nameVar, "VAR");
+            validateName(nameVar, NameType.VAR);
             Var i = new Var(BlocklyType.NUMBER_INT, nameVar, mkPropertyFromClass(ctx, Var.class));
             el.addExpr(i);
             for ( ExprlyParser.ExprContext expr : ctx.expr() ) {
@@ -775,6 +836,9 @@ public  class TextlyVisitor<T> extends ExprlyBaseVisitor<T> {
 
     }
 
+    /**
+     * @return AST instance for Flow control Statements, break and continue
+     */
     @Override
     public T visitFlowControl(ExprlyParser.FlowControlContext ctx) throws UnsupportedOperationException {
         switch ( ctx.op.getType() ) {
@@ -790,11 +854,17 @@ public  class TextlyVisitor<T> extends ExprlyBaseVisitor<T> {
         }
     }
 
+    /**
+     * @return AST instance for "wait ms"
+     */
     @Override
     public T visitWaitTimeStatement(ExprlyParser.WaitTimeStatementContext ctx) throws UnsupportedOperationException {
         return (T) new WaitTimeStmt(mkExternalProperty(ctx, "robControls_wait_time"), (Expr) visit(ctx.expr()));
     }
 
+    /**
+     * @return AST instance for Parameters declaration
+     */
     @Override
     public T visitParamsMethod(ExprlyParser.ParamsMethodContext ctx) throws UnsupportedOperationException {
 
@@ -804,18 +874,21 @@ public  class TextlyVisitor<T> extends ExprlyBaseVisitor<T> {
         Phrase emptyExpression = new EmptyExpr(type);
         emptyExpression.setReadOnly();
         String nameVar = ctx.NAME().getText();
-        validateName(nameVar, "VAR");
+        validateName(nameVar, NameType.VAR);
         VarDeclaration var = new VarDeclaration(type, nameVar, emptyExpression, false, false, mkExternalProperty(ctx, "robControls_forEach"));
         var.setReadOnly();
 
         return (T) var;
     }
 
+    /**
+     * @return AST instance for Functions defined by user
+     */
     @Override
     public T visitFuncUser(ExprlyParser.FuncUserContext ctx) throws UnsupportedOperationException {
 
         String methodName = ctx.NAME(0).getText();
-        validateName(methodName, "FUNCTIONNAME");
+        validateName(methodName, NameType.FUNCTIONNAME);
         ExprList parameters = new ExprList();
 
         for ( ExprlyParser.ExprContext expr : ctx.expr() ) {
@@ -838,7 +911,7 @@ public  class TextlyVisitor<T> extends ExprlyBaseVisitor<T> {
             BlocklyType returnType = BlocklyType.get(ctx.PRIMITIVETYPE().getText());
             if ( ctx.NAME() != null ) {
                 String nameVar = ctx.NAME(1).getText();
-                validateName(nameVar, "VAR");
+                validateName(nameVar, NameType.VAR);
                 Var returnVar = new Var(BlocklyType.VOID, nameVar, mkPropertyFromClass(ctx, Var.class));
                 return (T) new MethodReturn(methodName, parameters, statementList, returnType, returnVar, mkExternalProperty(ctx, "robProcedures_defreturn"));
             } else {
@@ -851,31 +924,42 @@ public  class TextlyVisitor<T> extends ExprlyBaseVisitor<T> {
         return null;
     }
 
+    /**
+     * @return AST instance for Main part in the complete program representation
+     */
     @Override
     public T visitMainFunc(ExprlyParser.MainFuncContext ctx) throws UnsupportedOperationException {
         StmtList statementList = new StmtList();
+
         for ( ExprlyParser.StmtContext stmt : ctx.statementList().stmt() ) {
             Stmt statement = (Stmt) visit(stmt);
             statement.setReadOnly();
             statementList.addStmt(statement);
         }
         statementList.setReadOnly();
+
         return (T) statementList;
     }
 
-
+    /**
+     * @return AST instance for variable declarations in the complete program representation
+     */
     @Override
     public T visitVariableDeclaration(ExprlyParser.VariableDeclarationContext ctx) throws UnsupportedOperationException {
         String typeAsString = ctx.PRIMITIVETYPE().getText();
         BlocklyType type = BlocklyType.get(typeAsString);
         Expr expr = (Expr) visit(ctx.expr());
         String nameVar = ctx.NAME().getText();
-        validateName(nameVar, "VAR");
+        validateName(nameVar, NameType.VAR);
         VarDeclaration var = new VarDeclaration(type, nameVar, expr, true, true, mkExternalProperty(ctx, "robGlobalVariables_declare"));
         var.setReadOnly();
+
         return (T) var;
     }
 
+    /**
+     * @return Phrase instance complete program representation
+     */
     @Override
     public T visitProgram(ExprlyParser.ProgramContext ctx) {
         List<Phrase> phrases = new ArrayList<>();
@@ -891,12 +975,49 @@ public  class TextlyVisitor<T> extends ExprlyBaseVisitor<T> {
 
         StmtList statements = (StmtList) visitMainFunc((ExprlyParser.MainFuncContext) ctx.mainBlock());
         phrases.add(statements);
-        //return (T) main;
         return (T) phrases;
     }
 
+    /**
+     * @return AST instance Robot Statement
+     */
+    @Override
+    public T visitRobotStatement(ExprlyParser.RobotStatementContext ctx) {
+        return visit(ctx.robotStmt());
+    }
+
+    /**
+     * @return AST instance for Robot Statement Specific functions
+     */
+    @Override
+    public T visitRobotStmt(ExprlyParser.RobotStmtContext ctx) {
+        RuleContext ruleStatementRobot = (RuleContext) ctx.children.get(0);
+
+        if ( ruleStatementRobot instanceof ExprlyParser.RobotMicrobitv2StmtContext ) {
+            return visit(ctx.robotMicrobitv2Stmt());
+        } else if ( ruleStatementRobot instanceof ExprlyParser.RobotWeDoStatementContext ) {
+            return visit(ctx.robotWeDoStmt());
+        } else
+            return null;
+    }
+
+    /**
+     * @return an Exception for the Specific statement , then in the AST will be generated in @RobotsMbedTextlyVisitor
+     */
+    @Override
+    public T visitRobotMicrobitv2Statement(ExprlyParser.RobotMicrobitv2StatementContext ctx) throws UnsupportedOperationException {
+        throw new UnsupportedOperationException("Specific Robot Statement");
+    }
+
+    /**
+     * @return an Exception for the Specific statement , then in the AST will be generated in @WedoTextlyVisitor
+     */
+    @Override
+    public T visitRobotWeDoStatement(ExprlyParser.RobotWeDoStatementContext ctx) throws UnsupportedOperationException {
+        throw new UnsupportedOperationException("Specific Robot Statement");
+    }
+
     private static BlocklyProperties mknullProperty(ParserRuleContext ctx, String type) {
-        //TextRegion rg = ctx == null ? null : new TextRegion(ctx.start.getLine(), ctx.start.getStartIndex(), ctx.stop.getLine(), ctx.stop.getStopIndex());
         BlocklyRegion br = new BlocklyRegion(false, false, null, null, null, true, null, null, null);
         return new BlocklyProperties(type, "1", br, null);
     }
@@ -908,23 +1029,28 @@ public  class TextlyVisitor<T> extends ExprlyBaseVisitor<T> {
         return (T) result;
     }
 
-    private static void validateName(String nameText, String type) {
-        String pattern;
-        switch ( type ) {
-            case "VAR":
-                pattern = "[a-z][a-zA-Z0-9_]*";
-                break;
-            case "FUNCTIONNAME":
-                pattern = "[A-Z][a-zA-Z0-9_]*";
-                break;
-            case "BUTTON":
-            case "PORT":
-                pattern = "[a-zA-Z][a-zA-Z0-9_]*";
-                break;
-            default:
-                throw new DbcException("Invalid name type: " + type);
+    /**
+     * This validates the lexer rule NAME, for Variables, function name , button and port.
+     */
+    public enum NameType {
+        VAR(VAR_NAME),
+        FUNCTIONNAME(FUNCTION_NAME),
+        BUTTON(BUTTONPORT_NAME),
+        PORT(BUTTONPORT_NAME);
+
+        private final Pattern pattern;
+
+        NameType(Pattern pattern) {
+            this.pattern = pattern;
         }
-        if ( !nameText.matches(pattern) ) {
+
+        public Pattern getPattern() {
+            return pattern;
+        }
+    }
+
+    public void validateName(String nameText, NameType type) {
+        if ( !type.getPattern().matcher(nameText).matches() ) {
             throw new DbcException("Invalid " + type + " name: " + nameText);
         }
     }
@@ -945,7 +1071,6 @@ public  class TextlyVisitor<T> extends ExprlyBaseVisitor<T> {
         return mkExternalProperty(ctx, blocklyNames[0]);
     }
 }
-
 
 
 
