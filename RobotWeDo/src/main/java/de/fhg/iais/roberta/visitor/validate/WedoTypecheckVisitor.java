@@ -23,7 +23,7 @@ public class WedoTypecheckVisitor extends TypecheckCommonLanguageVisitor impleme
 
     @Override
     public BlocklyType visitClearDisplayAction(ClearDisplayAction clearDisplayAction) {
-        return BlocklyType.VOID;
+        return Sig.of(BlocklyType.VOID).typeCheckPhrases(clearDisplayAction, this);
     }
 
     @Override
@@ -39,18 +39,24 @@ public class WedoTypecheckVisitor extends TypecheckCommonLanguageVisitor impleme
 
     @Override
     public BlocklyType visitRgbLedOffAction(RgbLedOffAction rgbLedOffAction) {
-        return BlocklyType.VOID;
+        return Sig.of(BlocklyType.VOID).typeCheckPhrases(rgbLedOffAction, this);
     }
 
     @Override
     public BlocklyType visitMotorOnAction(MotorOnAction motorOnAction) {
-        return Sig.of(BlocklyType.VOID, BlocklyType.NUMBER, BlocklyType.NUMBER).typeCheckPhrases(motorOnAction, this,
-            motorOnAction.param.getSpeed(), motorOnAction.param.getDuration().getValue());
+        if ( motorOnAction.param.getDuration() != null ) {
+            return Sig.of(BlocklyType.VOID, BlocklyType.NUMBER, BlocklyType.NUMBER).typeCheckPhrases(motorOnAction, this,
+                motorOnAction.param.getSpeed(), motorOnAction.param.getDuration().getValue());
+        } else {
+            return Sig.of(BlocklyType.VOID, BlocklyType.NUMBER).typeCheckPhrases(motorOnAction, this,
+                motorOnAction.param.getSpeed());
+        }
+
     }
 
     @Override
     public BlocklyType visitMotorStopAction(MotorStopAction motorStopAction) {
-        return BlocklyType.VOID;
+        return Sig.of(BlocklyType.VOID).typeCheckPhrases(motorStopAction, this);
     }
 
     @Override
@@ -60,21 +66,21 @@ public class WedoTypecheckVisitor extends TypecheckCommonLanguageVisitor impleme
 
     @Override
     public BlocklyType visitPlayNoteAction(PlayNoteAction playNoteAction) {
-        return BlocklyType.VOID;
+        return Sig.of(BlocklyType.VOID).typeCheckPhrases(playNoteAction, this);
     }
 
     @Override
     public BlocklyType visitKeysSensor(KeysSensor keysSensor) {
-        return BlocklyType.BOOLEAN;
+        return Sig.of(BlocklyType.BOOLEAN).typeCheckPhrases(keysSensor, this);
     }
 
     @Override
     public BlocklyType visitGyroSensor(GyroSensor gyroSensor) {
-        return BlocklyType.BOOLEAN;
+        return Sig.of(BlocklyType.BOOLEAN).typeCheckPhrases(gyroSensor, this);
     }
 
     @Override
     public BlocklyType visitInfraredSensor(InfraredSensor infraredSensor) {
-        return BlocklyType.NUMBER;
+        return Sig.of(BlocklyType.NUMBER).typeCheckPhrases(infraredSensor, this);
     }
 }

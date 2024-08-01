@@ -108,8 +108,12 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
         requiredComponentVisited(evalExpr, evalExpr.exprAsBlock);
         List<NepoInfo> infosOfSubAst = InfoCollector.collectInfos(evalExpr);
         if ( !infosOfSubAst.isEmpty() ) {
-            addErrorToPhrase(evalExpr, "PROGRAM_ERROR_EXPRBLOCK_TYPECHECK");
+            for ( NepoInfo info : infosOfSubAst ) {
+                String message = info.getMessage();
+                addErrorToPhrase(evalExpr, message);
+            }
         }
+
         return null;
     }
 
@@ -118,7 +122,10 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
         requiredComponentVisited(stmtEvalExpr, stmtEvalExpr.stmtsAsBlock);
         List<NepoInfo> infosOfSubAst = InfoCollector.collectInfos(stmtEvalExpr);
         if ( !infosOfSubAst.isEmpty() ) {
-            addErrorToPhrase(stmtEvalExpr, "PROGRAM_ERROR_EXPRBLOCK_TYPECHECK");
+            for ( NepoInfo info : infosOfSubAst ) {
+                String message = info.getMessage();
+                addErrorToPhrase(stmtEvalExpr, message);
+            }
         }
         return null;
     }
@@ -132,7 +139,7 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
             this.getBuilder(UsedHardwareBean.Builder.class).addMarkedVariableAsGlobal(variableName);
         }
         if ( !builder.containsInScopeVariable(variableName) ) {
-            addErrorToPhrase(assignStmt, "SCOPE_ERROR"); // key will be overwritten by blockly
+            addErrorToPhrase(assignStmt, "SCOPE_ERROR");
         }
         return null;
     }
@@ -263,7 +270,8 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
         this.usedMethodBuilder.addUsedMethod(op);
         requiredComponentVisited(listSetIndex, listSetIndex.param);
         if ( listSetIndex.param.get(0).toString().contains("ListCreate ") ||
-            listSetIndex.param.get(0).toString().contains("ListRepeat ") ) {
+            listSetIndex.param.get(0).toString().contains("ListRepeat ") ||
+            listSetIndex.param.get(0) instanceof ExprList ) {
             addErrorToPhrase(listSetIndex, "BLOCK_USED_INCORRECTLY");
         }
         return null;
@@ -609,7 +617,7 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
     public Void visitVar(Var var) {
         String variableName = var.name;
         if ( !(this.getBuilder(UsedHardwareBean.Builder.class).containsInScopeVariable(variableName)) ) {
-            addErrorToPhrase(var, "SCOPE_ERROR"); // key will be overwritten by blockly
+            addErrorToPhrase(var, "SCOPE_ERROR");
         }
         return null;
     }

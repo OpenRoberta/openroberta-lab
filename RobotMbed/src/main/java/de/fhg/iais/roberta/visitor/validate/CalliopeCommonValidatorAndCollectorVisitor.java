@@ -77,7 +77,7 @@ public class CalliopeCommonValidatorAndCollectorVisitor extends MbedV2ValidatorA
     @Override
     public Void visitColorSensor(ColorSensor colorSensor) {
         addToPhraseIfUnsupportedInSim(colorSensor, true, isSim);
-        checkSensorExists(colorSensor);
+        checkSensorExists(colorSensor, SC.COLOUR);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(colorSensor.getUserDefinedPort(), SC.COLOR, colorSensor.getMode()));
         return null;
     }
@@ -105,7 +105,7 @@ public class CalliopeCommonValidatorAndCollectorVisitor extends MbedV2ValidatorA
     @Override
     public Void visitMoistureSensor(MoistureSensor moistureSensor) {
         addToPhraseIfUnsupportedInSim(moistureSensor, true, isSim);
-        checkSensorExists(moistureSensor);
+        checkSensorExists(moistureSensor, SC.MOISTURE);
         return null;
     }
 
@@ -126,7 +126,7 @@ public class CalliopeCommonValidatorAndCollectorVisitor extends MbedV2ValidatorA
     @Override
     public Void visitGyroSensor(GyroSensor gyroSensor) {
         addToPhraseIfUnsupportedInSim(gyroSensor, true, isSim);
-        checkSensorExists(gyroSensor);
+        checkSensorExists(gyroSensor, SC.GYRO);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(gyroSensor.getUserDefinedPort(), SC.ACCELEROMETER, gyroSensor.getMode()));
         return null;
     }
@@ -134,7 +134,7 @@ public class CalliopeCommonValidatorAndCollectorVisitor extends MbedV2ValidatorA
     @Override
     public Void visitHumiditySensor(HumiditySensor humiditySensor) {
         addToPhraseIfUnsupportedInSim(humiditySensor, true, isSim);
-        checkSensorExists(humiditySensor);
+        checkSensorExists(humiditySensor, SC.HUMIDITY);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(humiditySensor.getUserDefinedPort(), SC.HUMIDITY, humiditySensor.getMode()));
         return null;
     }
@@ -310,7 +310,7 @@ public class CalliopeCommonValidatorAndCollectorVisitor extends MbedV2ValidatorA
 
     @Override
     public Void visitSoundSensor(SoundSensor soundSensor) {
-        checkSensorExists(soundSensor);
+        checkSensorExists(soundSensor, SC.SOUND);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(soundSensor.getUserDefinedPort(), SC.SOUND, soundSensor.getMode()));
         return null;
     }
@@ -325,7 +325,7 @@ public class CalliopeCommonValidatorAndCollectorVisitor extends MbedV2ValidatorA
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor ultrasonicSensor) {
         addToPhraseIfUnsupportedInSim(ultrasonicSensor, true, isSim);
-        checkSensorExists(ultrasonicSensor);
+        checkSensorExists(ultrasonicSensor, SC.ULTRASONIC);
         ConfigurationComponent confCompCallibot = this.robotConfiguration.optConfigurationComponentByType(SC.CALLIBOT);
         if ( confCompCallibot == null ) {
             usedMethodBuilder.addUsedMethod(CalliopeMethods.ULTRASONIC_GET_DISTANCE);
@@ -418,7 +418,7 @@ public class CalliopeCommonValidatorAndCollectorVisitor extends MbedV2ValidatorA
 
     @Override
     public Void visitLogoTouchSensor(LogoTouchSensor logoTouchSensor) {
-        checkSensorExists(logoTouchSensor);
+        checkSensorExists(logoTouchSensor, "LOGOTOUCH");
         usedHardwareBuilder.addUsedSensor(new UsedSensor(logoTouchSensor.getUserDefinedPort(), "LOGOTOUCH", logoTouchSensor.getSlot()));
         return null;
     }

@@ -102,6 +102,7 @@ public final class BlocklyConstants {
     public static final String JOYSTICKAXIS = "JOYSTICKAXIS";
     public static final String STATE = "STATE";
     public static final String EXPRESSION = "EXPRESSION";
+    public static final String STMTEXPRESSION = "STMTEXPRESSION";
     public static final String CHANGE = "CHANGE";
 
     public static final String STRING_CONST_TEXT = "text";

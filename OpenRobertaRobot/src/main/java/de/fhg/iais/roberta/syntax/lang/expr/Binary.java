@@ -45,7 +45,6 @@ public final class Binary extends Expr {
         this.setReadOnly();
     }
 
-
     /**
      * @return the expression on the right hand side. Returns subclass of {@link Expr}
      */

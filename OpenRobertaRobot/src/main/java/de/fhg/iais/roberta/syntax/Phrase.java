@@ -152,12 +152,12 @@ abstract public class Phrase implements IInfoCollectable {
     }
 
     /**
-     * add an typecheck error to this phrase. Currently the real message is ignored and a standard message is added
+     * add an typecheck or Parser error to this phrase, only the error message will be displayed
      *
      * @param tc true: semantic error (typecheck); false: syntax error (parsing)
      */
-    public final void addTcError(String error, boolean tc) {
-        this.infos.addInfo(tc ? NepoInfo.error("PROGRAM_ERROR_EXPRBLOCK_TYPECHECK") : NepoInfo.error("PROGRAM_ERROR_EXPRBLOCK_PARSE"));
+    public final void addTextlyError(String error, boolean typecheckError) {
+        this.infos.addInfo(typecheckError ? NepoInfo.error("PROGRAM_ERROR_EXPRBLOCK_TYPECHECK " + error) : NepoInfo.error("PROGRAM_ERROR_EXPRBLOCK_PARSE " + error));
     }
 
     /**

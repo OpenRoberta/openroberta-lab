@@ -19,6 +19,7 @@ import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorStopAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
+import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
@@ -66,21 +67,21 @@ public class WedoValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
 
     @Override
     public Void visitRgbLedOnAction(RgbLedOnAction rgbLedOnAction) {
-        checkActorPresence(rgbLedOnAction);
+        checkActorPresence(rgbLedOnAction, rgbLedOnAction.port);
         requiredComponentVisited(rgbLedOnAction, rgbLedOnAction.colour);
         return null;
     }
 
     @Override
     public Void visitRgbLedOffAction(RgbLedOffAction rgbLedOffAction) {
-        checkActorPresence(rgbLedOffAction);
+        checkActorPresence(rgbLedOffAction, rgbLedOffAction.port);
         return null;
     }
 
     @Override
     public Void visitMotorOnAction(MotorOnAction motorOnAction) {
         requiredComponentVisited(motorOnAction, motorOnAction.param.getSpeed());
-        checkActorPresence(motorOnAction);
+        checkActorPresence(motorOnAction, motorOnAction.port);
         if ( motorOnAction.param.getDuration() != null ) {
             requiredComponentVisited(motorOnAction, motorOnAction.param.getDuration().getValue());
         }
@@ -90,20 +91,20 @@ public class WedoValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
 
     @Override
     public Void visitMotorStopAction(MotorStopAction motorStopAction) {
-        checkActorPresence(motorStopAction);
+        checkActorPresence(motorStopAction, motorStopAction.port);
         return null;
     }
 
     @Override
     public Void visitToneAction(ToneAction toneAction) {
-        checkActorPresence(toneAction);
+        checkActorPresence(toneAction, toneAction.port);
         requiredComponentVisited(toneAction, toneAction.frequency, toneAction.duration);
         return null;
     }
 
     @Override
     public Void visitPlayNoteAction(PlayNoteAction playNoteAction) {
-        checkActorPresence(playNoteAction);
+        checkActorPresence(playNoteAction, playNoteAction.port);
         return null;
     }
 
@@ -140,14 +141,44 @@ public class WedoValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
     }
 
     private void checkSensorPresence(ExternalSensor sensor) {
-        if ( !robotConfiguration.isComponentTypePresent(SENSOR_COMPONENT_TYPE_MAP.get(sensor.getKind().getName())) ) {
+        String sensorType = SENSOR_COMPONENT_TYPE_MAP.get(sensor.getKind().getName());
+        if ( !robotConfiguration.isComponentTypePresent(sensorType) ) {
             addErrorToPhrase(sensor, "CONFIGURATION_ERROR_SENSOR_MISSING");
+        } else {
+            Map<String, ConfigurationComponent> usedSensor = null;
+            usedSensor = robotConfiguration.getAllConfigurationComponentByType(sensorType);
+
+            boolean portCorrect = false;
+            for ( String portName : usedSensor.keySet() ) {
+                if ( portName.equals(sensor.getUserDefinedPort()) ) {
+                    portCorrect = true;
+                }
+            }
+
+            if ( !portCorrect ) {
+                sensor.addTextlyError("The defined sensor port: " + sensor.getUserDefinedPort() + " is incorrect, please check the robot configuration", true);
+            }
         }
     }
 
-    private void checkActorPresence(Action actor) {
-        if ( !robotConfiguration.isComponentTypePresent(ACTOR_COMPONENT_TYPE_MAP.get(actor.getKind().getName())) ) {
+    private void checkActorPresence(Action actor, String userPort) {
+        String actuatorType = ACTOR_COMPONENT_TYPE_MAP.get(actor.getKind().getName());
+        if ( !robotConfiguration.isComponentTypePresent(actuatorType) ) {
             addErrorToPhrase(actor, "CONFIGURATION_ERROR_ACTOR_MISSING");
+        } else {
+            Map<String, ConfigurationComponent> usedActuator;
+            usedActuator = robotConfiguration.getAllConfigurationComponentByType(actuatorType);
+
+            boolean portCorrect = false;
+            for ( String portName : usedActuator.keySet() ) {
+                if ( portName.equals(userPort) ) {
+                    portCorrect = true;
+                }
+            }
+            if ( !portCorrect ) {
+                actor.addTextlyError("The defined actuator port: " + userPort + " is incorrect, please check the robot configuration", true);
+            }
         }
     }
+
 }

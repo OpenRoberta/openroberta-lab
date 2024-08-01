@@ -56,6 +56,7 @@ public class ProjectWorkflowRestController {
             ProjectWorkflowRequest wfRequest = ProjectWorkflowRequest.make(fullRequest.getData());
             ProjectSourceResponse response = ProjectSourceResponse.make();
             response.setProgXML(wfRequest.getProgXML()); // always return the program, even if the workflow fails
+
             Project project = request2project(wfRequest, dbSession, httpSessionState, this.robotCommunicator, true, false);
             ProjectService.executeWorkflow("showsource", project);
             // To make this compatible with old frontend we will have to use the old names...

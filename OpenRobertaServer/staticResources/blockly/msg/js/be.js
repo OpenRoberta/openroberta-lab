@@ -1534,6 +1534,7 @@ Blockly.Msg.ROUNDS_PER_MINUTE_SPEED = "speed RPM";  // untranslated
 Blockly.Msg.SAY = "сказаць";
 Blockly.Msg.SAY_PARAMETERS_TOOLTIP = "Робат кажа зададзены тэкст. Дапускаецца выкарыстанне спецыяльных сімвалаў. Робат будзе выкарыстоўваць бягучую абраную мову. Магчымы кантроль хуткасці і тэмбру маўлення ў дыяпазоне ад 0 да 100.";
 Blockly.Msg.SAY_TOOLTIP = "Робат кажа зададзены тэкст. Дапускаецца выкарыстанне спецыяльных сімвалаў. Робат будзе выкарыстоўваць бягучую абраную мову.";
+Blockly.Msg.SCOPE_ERROR = "This variable is not accessible in the current context.";  // untranslated
 Blockly.Msg.SDCARD_TOOLTIP = "Represents an SD card.";  // untranslated
 Blockly.Msg.SEND_DATA = "Дадзеныя, якія трэба даслаць";
 Blockly.Msg.SEND_DATA_SENSEMAP = "openSenseMap";  // untranslated

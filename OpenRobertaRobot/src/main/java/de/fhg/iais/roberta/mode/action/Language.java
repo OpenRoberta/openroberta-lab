@@ -9,29 +9,29 @@ import de.fhg.iais.roberta.inter.mode.action.ILanguage;
  */
 
 public enum Language implements ILanguage {
-    GERMAN( "de" ),
-    ENGLISH( "en" ),
-    SPANISH( "es" ),
-    PORTUGUESE( "pt" ),
-    ITALIAN( "it" ),
-    FRENCH( "fr" ),
-    CATALAN( "ca" ),
-    RUSSIAN( "ru" ),
-    CZECH( "cs" ),
-    POLISH( "pl" ),
-    TURKISH( "te" ),
-    DUTCH( "nl" ),
-    FINNISH( "fi" ),
-    DANISH( "da" ),
-    JAPANESE( "ja" ),
-    CHINESE( "zh" ),
-    KOREAN( "ko" ),
-    ARABIC( "ar" ),
-    BRAZILIAN( "pt" ),
-    SWEDISH( "sv" ),
-    NORWEGIAN( "no" ),
-    GREEK( "el" ),
-    NOTSUPPORTED( "" );
+    GERMAN("de"),
+    ENGLISH("en"),
+    SPANISH("es"),
+    PORTUGUESE("pt"),
+    ITALIAN("it"),
+    FRENCH("fr"),
+    CATALAN("ca"),
+    RUSSIAN("ru"),
+    CZECH("cs"),
+    POLISH("pl"),
+    TURKISH("te"),
+    DUTCH("nl"),
+    FINNISH("fi"),
+    DANISH("da"),
+    JAPANESE("ja"),
+    CHINESE("zh"),
+    KOREAN("ko"),
+    ARABIC("ar"),
+    BRAZILIAN("pt"),
+    SWEDISH("sv"),
+    NORWEGIAN("no"),
+    GREEK("el"),
+    NOTSUPPORTED("");
 
     private final String[] values;
 
@@ -51,5 +51,9 @@ public enum Language implements ILanguage {
             }
         }
         return NOTSUPPORTED;
+    }
+
+    public String getAbbreviation() {
+        return this.values.length > 0 ? this.values[0] : "";
     }
 }

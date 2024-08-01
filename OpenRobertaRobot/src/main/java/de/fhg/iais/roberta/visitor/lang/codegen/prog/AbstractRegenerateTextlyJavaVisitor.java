@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.visitor.lang.codegen.prog;
 
 import java.util.AbstractMap;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -13,6 +14,9 @@ import java.util.stream.Stream;
 import org.apache.commons.text.StringEscapeUtils;
 
 import de.fhg.iais.roberta.components.Category;
+import de.fhg.iais.roberta.inter.mode.general.IMode;
+import de.fhg.iais.roberta.mode.general.IndexLocation;
+import de.fhg.iais.roberta.mode.general.ListElementOperations;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.Action;
 import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
@@ -88,10 +92,10 @@ import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
+import de.fhg.iais.roberta.textly.generated.TextlyJavaLexer;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.ast.BlockDescriptor;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
-import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.visitor.SourceBuilder;
 import de.fhg.iais.roberta.visitor.BaseVisitor;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -144,7 +148,6 @@ public abstract class AbstractRegenerateTextlyJavaVisitor extends BaseVisitor<Vo
             .forEach(p -> {
                 p.accept(this);
             });
-        this.src.DECR().nlI().add("}");
     }
 
     @Override
@@ -258,23 +261,23 @@ public abstract class AbstractRegenerateTextlyJavaVisitor extends BaseVisitor<Vo
                 this.src.nlI().add("while ( true ) {").INCR().accept(rept.list, this).DECR().nlI().add("};");
                 break;
             case UNTIL:
-                this.src.nlI().add("{").INCR().accept(rept.list, this).DECR().nlI().add("} until ( ").accept(rept.expr, this).add(" );");
+                generateCodeFromStmtCondition("while", rept.expr, rept.list);
                 break;
             case TIMES:
                 Expr timesClause = ((ExprList) rept.expr).get().get(2);
-                this.src.nlI().add("for ( ").accept(timesClause, this).add(" times ) {").INCR().accept(rept.list, this).DECR().nlI().add("};");
+                this.src.nlI().add("for ( ").add(" Number i = 0; i < ").accept(timesClause, this).add("; i = i + 1 ) {").INCR().accept(rept.list, this).DECR().nlI().add("};");
                 break;
             case FOR:
                 generateCodeFromStmtConditionFor(rept.expr, rept.list);
                 break;
             case FOR_EACH:
                 Binary eachDecl = (Binary) rept.expr;
-                this.src.nlI().add("for ( ");
+                this.src.nlI().add("for each ( ");
                 genParameter((VarDeclaration) eachDecl.left);
-                this.src.add(" : ").accept(eachDecl.right,this).add(" )").add(" {").INCR().accept(rept.list, this).DECR().nlI().add("};");
+                this.src.add(" : ").accept(eachDecl.right, this).add(" )").add(" {").INCR().accept(rept.list, this).DECR().nlI().add("};");
                 break;
             default:
-                throw new DbcException("invalid mode of repeat statement");
+                break;
         }
         return null;
     }
@@ -289,7 +292,6 @@ public abstract class AbstractRegenerateTextlyJavaVisitor extends BaseVisitor<Vo
     public Void visitFunctionStmt(FunctionStmt functionStmt) {
         this.src.nlI();
         super.visitFunctionStmt(functionStmt);
-        this.src.add(";");
         return null;
     }
 
@@ -334,6 +336,27 @@ public abstract class AbstractRegenerateTextlyJavaVisitor extends BaseVisitor<Vo
 
     @Override
     public Void visitGetSubFunct(GetSubFunct getSubFunct) {
+        getTextlyGetSubFunct(getSubFunct.strParam);
+        processParams(getSubFunct.param);
+        this.src.add(")");
+        return null;
+    }
+
+    public Void getTextlyGetSubFunct(List<IMode> modes) {
+        String modeKey = modes.get(0).toString() + "_" + modes.get(1).toString();
+
+        Map<String, String> modeFunctionMap = new HashMap<>();
+        modeFunctionMap.put("FROM_START_FROM_START", "subList(");
+        modeFunctionMap.put("FROM_START_LAST", "subListFromIndexToLast(");
+        modeFunctionMap.put("FROM_START_FROM_END", "subListFromIndexToEnd(");
+        modeFunctionMap.put("FIRST_FROM_START", "subListFromFirstToIndex(");
+        modeFunctionMap.put("FIRST_LAST", "subListFromFirstToLast(");
+        modeFunctionMap.put("FIRST_FROM_END", "subListFromFirstToEnd(");
+        modeFunctionMap.put("FROM_END_FROM_START", "subListFromEndToIndex(");
+        modeFunctionMap.put("FROM_END_LAST", "subListFromEndToLast(");
+        modeFunctionMap.put("FROM_END_FROM_END", "subListFromEndToEnd(");
+
+        this.src.add(modeFunctionMap.getOrDefault(modeKey, "unknownMode("));
         return null;
     }
 
@@ -341,6 +364,7 @@ public abstract class AbstractRegenerateTextlyJavaVisitor extends BaseVisitor<Vo
     public Void visitIfStmt(IfStmt ifStmt) {
         generateCodeFromIfElse(ifStmt);
         generateCodeFromElse(ifStmt);
+        this.src.add(";");
         return null;
     }
 
@@ -352,51 +376,146 @@ public abstract class AbstractRegenerateTextlyJavaVisitor extends BaseVisitor<Vo
 
     @Override
     public Void visitIndexOfFunct(IndexOfFunct indexOfFunct) {
+        if ( indexOfFunct.location == IndexLocation.FIRST ) {
+            this.src.add("indexOfFirst(");
+        } else {
+            this.src.add("indexOfLast(");
+        }
+        indexOfFunct.value.accept(this);
+        this.src.add(" , ");
+        indexOfFunct.find.accept(this);
+        this.src.add(")");
         return null;
     }
 
     @Override
     public Void visitLengthOfListFunct(LengthOfListFunct lengthOfListFunct) {
+        this.src.add("size(");
+        lengthOfListFunct.value.accept(this);
+        this.src.add(")");
         return null;
     }
 
     @Override
     public Void visitIsListEmptyFunct(IsListEmptyFunct isListEmptyFunct) {
+        this.src.add("isEmpty(");
+        isListEmptyFunct.value.accept(this);
+        this.src.add(")");
         return null;
     }
 
     @Override
     public Void visitListCreate(ListCreate listCreate) {
+        this.src.add("[");
+        for ( int i = 0; i < listCreate.exprList.el.size(); i++ ) {
+            this.src.accept(listCreate.exprList.el.get(i), this);
+            if ( i < listCreate.exprList.el.size() - 1 ) {
+                this.src.add(",");
+            }
+        }
+        this.src.add("]");
         return null;
     }
 
     @Override
     public Void visitListGetIndex(ListGetIndex listGetIndex) {
+        IndexLocation location = (IndexLocation) listGetIndex.location;
+        String operation = getOperation(listGetIndex.mode, location, "get");
+
+        if ( operation != null ) {
+            if ( listGetIndex.mode == ListElementOperations.REMOVE ) {
+                this.src.nlI().add(operation);
+            } else {
+                this.src.add(operation);
+            }
+            processParams(listGetIndex.param);
+            if ( listGetIndex.mode == ListElementOperations.REMOVE ) {
+                this.src.add(");");
+            } else {
+                this.src.add(")");
+            }
+        }
         return null;
     }
 
     @Override
     public Void visitListRepeat(ListRepeat listRepeat) {
-        this.src.add("new ArrayList<>(Collections.nCopies( (int) ");
-        listRepeat.param.get(1).accept(this);
-        this.src.add(", ");
-        if ( listRepeat.param.get(0).getBlocklyType() == BlocklyType.NUMBER ) {
-            this.src.add(" (float) ");
-        }
+        this.src.add("createListWith(");
         listRepeat.param.get(0).accept(this);
-        this.src.add("))");
+        this.src.add(" , ");
+        listRepeat.param.get(1).accept(this);
+        this.src.add(")");
         return null;
     }
 
     @Override
     public Void visitListSetIndex(ListSetIndex listSetIndex) {
+        IndexLocation location = (IndexLocation) listSetIndex.location;
+        String operation = getOperation(listSetIndex.mode, location, "set");
+        this.src.nlI();
+        if ( operation != null ) {
+            this.src.add(operation);
+            processParams(listSetIndex.param);
+            this.src.add(");");
+        }
+
         return null;
+    }
+
+    private String getOperation(ListElementOperations mode, IndexLocation location, String baseOperation) {
+        StringBuilder operation = new StringBuilder();
+        switch ( mode ) {
+            case GET:
+                operation.append("get");
+                break;
+            case GET_REMOVE:
+                operation.append("getAndRemove");
+                break;
+            case REMOVE:
+                operation.append("remove");
+                break;
+            case SET:
+                operation.append("set");
+                break;
+            case INSERT:
+                operation.append("insert");
+                break;
+            default:
+                return null;
+        }
+        switch ( location ) {
+            case FROM_START:
+                break;
+            case FROM_END:
+                operation.append("FromEnd");
+                break;
+            case FIRST:
+                operation.append("First");
+                break;
+            case LAST:
+                operation.append("Last");
+                break;
+            default:
+                return null;
+        }
+
+        operation.append("(");
+        return operation.toString();
+    }
+
+    private void processParams(List<Expr> params) {
+        for ( int i = 0; i < params.size(); i++ ) {
+            params.get(i).accept(this);
+            if ( i < params.size() - 1 ) {
+                this.src.add(" , ");
+            }
+        }
     }
 
     @Override
     public Void visitMainTask(MainTask mainTask) {
         mainTask.variables.accept(this);
-        this.src.nlI().nlI().add("void main() {").INCR();
+        this.src.nlI().nlI().add("void main() {").nlI().INCR();
         return null;
     }
 
@@ -404,27 +523,57 @@ public abstract class AbstractRegenerateTextlyJavaVisitor extends BaseVisitor<Vo
     public Void visitMathSingleFunct(MathSingleFunct mathSingleFunct) {
         switch ( mathSingleFunct.functName ) {
             case SQUARE:
-                this.src.add("(float) Math.pow(");
+                this.src.add("square(");
                 mathSingleFunct.param.get(0).accept(this);
-                this.src.add(", 2)");
+                this.src.add(")");
                 return null;
             case ROOT:
-                this.src.add("(float) Math.sqrt(");
+                this.src.add("sqrt(");
+                break;
+            case ABS:
+                this.src.add("abs(");
                 break;
             case LN:
-                this.src.add("(float) Math.log(");
+                this.src.add("log(");
+                break;
+            case LOG10:
+                this.src.add("log10(");
+                break;
+            case EXP:
+                this.src.add("exp(");
                 break;
             case POW10:
-                this.src.add("(float) Math.pow(10, ");
+                this.src.add("pow10(");
+                break;
+            case SIN:
+                this.src.add("sin(");
+                break;
+            case COS:
+                this.src.add("cos(");
+                break;
+            case TAN:
+                this.src.add("tan(");
+                break;
+            case ASIN:
+                this.src.add("asin(");
+                break;
+            case ACOS:
+                this.src.add("acos(");
+                break;
+            case ATAN:
+                this.src.add("atan(");
+                break;
+            case ROUND:
+                this.src.add("round(");
                 break;
             case ROUNDUP:
-                this.src.add("(float) Math.ceil(");
+                this.src.add("ceil(");
                 break;
             case ROUNDDOWN:
-                this.src.add("(float) Math.floor(");
+                this.src.add("floor(");
                 break;
             default:
-                this.src.add("(float) Math.");
+                this.src.add("Math.");
                 this.src.add(mathSingleFunct.functName.name().toLowerCase(Locale.ENGLISH), "(");
                 break;
         }
@@ -436,11 +585,11 @@ public abstract class AbstractRegenerateTextlyJavaVisitor extends BaseVisitor<Vo
 
     @Override
     public Void visitMathConstrainFunct(MathConstrainFunct mathConstrainFunct) {
-        this.src.add("Math.min(Math.max(");
+        this.src.add("constrain(");
         mathConstrainFunct.value.accept(this);
         this.src.add(", ");
         mathConstrainFunct.lowerBound.accept(this);
-        this.src.add("), ");
+        this.src.add(", ");
         mathConstrainFunct.upperBound.accept(this);
         this.src.add(")");
         return null;
@@ -448,6 +597,11 @@ public abstract class AbstractRegenerateTextlyJavaVisitor extends BaseVisitor<Vo
 
     @Override
     public Void visitMathModuloFunct(MathModuloFunct mathModuloFunct) {
+        this.src.add("(");
+        mathModuloFunct.dividend.accept(this);
+        this.src.add("%");
+        mathModuloFunct.divisor.accept(this);
+        this.src.add(")");
         return null;
     }
 
@@ -455,41 +609,41 @@ public abstract class AbstractRegenerateTextlyJavaVisitor extends BaseVisitor<Vo
     public Void visitMathNumPropFunct(MathNumPropFunct mathNumPropFunct) {
         switch ( mathNumPropFunct.functName ) {
             case EVEN:
-                this.src.add("(");
+                this.src.add("isEven(");
                 mathNumPropFunct.param.get(0).accept(this);
-                this.src.add(" % 2 == 0)");
+                this.src.add(")");
                 break;
             case ODD:
-                this.src.add("(");
+                this.src.add("isOdd(");
                 mathNumPropFunct.param.get(0).accept(this);
-                this.src.add(" % 2 == 1)");
+                this.src.add(")");
                 break;
             case PRIME:
-                this.src.add("( prime ");
+                this.src.add("isPrime(");
                 mathNumPropFunct.param.get(0).accept(this);
                 this.src.add(")");
                 break;
             case WHOLE:
-                this.src.add("(");
+                this.src.add("isWhole(");
                 mathNumPropFunct.param.get(0).accept(this);
-                this.src.add(" % 1 == 0)");
+                this.src.add(")");
                 break;
             case POSITIVE:
-                this.src.add("(");
+                this.src.add("isPositive(");
                 mathNumPropFunct.param.get(0).accept(this);
-                this.src.add(" > 0)");
+                this.src.add(")");
                 break;
             case NEGATIVE:
-                this.src.add("(");
+                this.src.add("isNegative(");
                 mathNumPropFunct.param.get(0).accept(this);
-                this.src.add(" < 0)");
+                this.src.add(")");
                 break;
             case DIVISIBLE_BY:
-                this.src.add("(");
+                this.src.add("isDivisibleBy(");
                 mathNumPropFunct.param.get(0).accept(this);
-                this.src.add(" % ");
+                this.src.add(" , ");
                 mathNumPropFunct.param.get(1).accept(this);
-                this.src.add(" == 0)");
+                this.src.add(")");
                 break;
             default:
                 break;
@@ -500,17 +654,33 @@ public abstract class AbstractRegenerateTextlyJavaVisitor extends BaseVisitor<Vo
     @Override
     public Void visitMathOnListFunct(MathOnListFunct mathOnListFunct) {
         switch ( mathOnListFunct.functName ) {
+            case SUM:
+                this.src.add("sum(");
+                mathOnListFunct.list.accept(this);
+                break;
             case MIN:
-                this.src.add("Collections.min(");
+                this.src.add("min(");
                 mathOnListFunct.list.accept(this);
                 break;
             case MAX:
-                this.src.add("Collections.max(");
+                this.src.add("max(");
+                mathOnListFunct.list.accept(this);
+                break;
+            case MEDIAN:
+                this.src.add("median(");
+                mathOnListFunct.list.accept(this);
+                break;
+            case AVERAGE:
+                this.src.add("average(");
+                mathOnListFunct.list.accept(this);
+                break;
+            case STD_DEV:
+                this.src.add("stddev(");
                 mathOnListFunct.list.accept(this);
                 break;
             case RANDOM:
+                this.src.add("randomItem(");
                 mathOnListFunct.list.accept(this);
-                this.src.add(".get(0"); // TODO remove? implement?
                 break;
             default:
                 mathOnListFunct.list.accept(this);
@@ -522,26 +692,25 @@ public abstract class AbstractRegenerateTextlyJavaVisitor extends BaseVisitor<Vo
 
     @Override
     public Void visitMathRandomFloatFunct(MathRandomFloatFunct mathRandomFloatFunct) {
-        this.src.add("(float) Math.random()");
+        this.src.add("randomFloat()");
         return null;
     }
 
     @Override
     public Void visitMathRandomIntFunct(MathRandomIntFunct mathRandomIntFunct) {
-        this.src.add("( Math.round(Math.random() * ((");
+        this.src.add("randomInt(");
+        mathRandomIntFunct.from.accept(this);
+        this.src.add(" , ");
         mathRandomIntFunct.to.accept(this);
-        this.src.add(") - (");
-        mathRandomIntFunct.from.accept(this);
-        this.src.add("))) + (");
-        mathRandomIntFunct.from.accept(this);
-        this.src.add(") )");
+        this.src.add(")");
         return null;
     }
 
     @Override
     public Void visitMathPowerFunct(MathPowerFunct mathPowerFunct) {
+        this.src.add("(");
         mathPowerFunct.param.get(0).accept(this);
-        this.src.add(", ");
+        this.src.add(" ^ ");
         mathPowerFunct.param.get(1).accept(this);
         this.src.add(")");
         return null;
@@ -549,24 +718,25 @@ public abstract class AbstractRegenerateTextlyJavaVisitor extends BaseVisitor<Vo
 
     @Override
     public Void visitMathCastStringFunct(MathCastStringFunct mathCastStringFunct) {
-        this.src.add("(String.valueOf(");
+        this.src.add("castToString(");
         mathCastStringFunct.value.accept(this);
-        this.src.add("))");
+        this.src.add(")");
         return null;
     }
 
     @Override
     public Void visitMathCastCharFunct(MathCastCharFunct mathCastCharFunct) {
-        this.src.add("String.valueOf((char)(int)(");
+        this.src.add("castToChar(");
         mathCastCharFunct.value.accept(this);
-        this.src.add("))");
+        this.src.add(")");
         return null;
     }
 
     @Override
     public Void visitMathChangeStmt(MathChangeStmt mathChangeStmt) {
+        this.src.nlI();
         mathChangeStmt.var.accept(this);
-        this.src.add(" += ");
+        this.src.add(" = ");
         mathChangeStmt.delta.accept(this);
         this.src.add(";");
         return null;
@@ -574,8 +744,9 @@ public abstract class AbstractRegenerateTextlyJavaVisitor extends BaseVisitor<Vo
 
     @Override
     public Void visitTextAppendStmt(TextAppendStmt textAppendStmt) {
+        this.src.nlI().add("appendText(");
         textAppendStmt.var.accept(this);
-        this.src.add(" += String.valueOf(");
+        this.src.add(" , ");
         textAppendStmt.text.accept(this);
         this.src.add(");");
         return null;
@@ -583,7 +754,7 @@ public abstract class AbstractRegenerateTextlyJavaVisitor extends BaseVisitor<Vo
 
     @Override
     public Void visitTextStringCastNumberFunct(TextStringCastNumberFunct textStringCastNumberFunct) {
-        this.src.add("Float.parseFloat(");
+        this.src.add("castToNumber(");
         textStringCastNumberFunct.value.accept(this);
         this.src.add(")");
         return null;
@@ -602,7 +773,9 @@ public abstract class AbstractRegenerateTextlyJavaVisitor extends BaseVisitor<Vo
     @Override
     public Void visitUnary(Unary unary) {
         this.src.add(unary.op.values[0]);
+        this.src.add("(");
         unary.expr.accept(this);
+        this.src.add(")");
         return null;
     }
 
@@ -627,16 +800,19 @@ public abstract class AbstractRegenerateTextlyJavaVisitor extends BaseVisitor<Vo
 
     @Override
     public Void visitWaitTimeStmt(WaitTimeStmt waitTimeStmt) {
+        this.src.nlI().add("wait ms (");
+        this.src.accept(waitTimeStmt.time, this);
+        this.src.add(");");
         return null;
     }
 
     @Override
     public Void visitTextCharCastNumberFunct(TextCharCastNumberFunct textCharCastNumberFunct) {
-        this.src.add("(int)(");
+        this.src.add("castStringToNumber(");
         textCharCastNumberFunct.value.accept(this);
-        this.src.add(".charAt(");
+        this.src.add(" , ");
         textCharCastNumberFunct.atIndex.accept(this);
-        this.src.add("))");
+        this.src.add(")");
         return null;
     }
 
@@ -644,15 +820,15 @@ public abstract class AbstractRegenerateTextlyJavaVisitor extends BaseVisitor<Vo
     public Void visitTextJoinFunct(TextJoinFunct textJoinFunct) {
         List<Expr> exprs = textJoinFunct.param.get();
         Iterator<Expr> iterator = exprs.iterator();
+        this.src.add("createTextWith(");
         while ( iterator.hasNext() ) {
-            this.src.add("String.valueOf(");
             Expr expr = iterator.next();
             expr.accept(this);
-            this.src.add(")");
             if ( iterator.hasNext() ) {
-                this.src.add(" + ");
+                this.src.add(" , ");
             }
         }
+        this.src.add(")");
         return null;
     }
 
@@ -660,7 +836,6 @@ public abstract class AbstractRegenerateTextlyJavaVisitor extends BaseVisitor<Vo
     public Void visitMethodVoid(MethodVoid methodVoid) {
         this.src.nlI().nlI().add("void ", methodVoid.getMethodName(), "(");
         genParameterList(methodVoid.getParameters().el);
-        ;
         this.src.add(") {").INCR().accept(methodVoid.body, this).DECR().nlI().add("}");
         return null;
     }
@@ -729,9 +904,9 @@ public abstract class AbstractRegenerateTextlyJavaVisitor extends BaseVisitor<Vo
 
     @Override
     public Void visitMethodCall(MethodCall methodCall) {
-        src.add(methodCall.getMethodName(), "(");
+        src.nlI().add(methodCall.getMethodName(), "(");
         genExpressionList(methodCall.getParametersValues().el);
-        src.add(")");
+        src.add(");");
         return null;
     }
 
@@ -879,10 +1054,10 @@ public abstract class AbstractRegenerateTextlyJavaVisitor extends BaseVisitor<Vo
         boolean first = true;
         for ( int i = 0; i < groups; i++ ) {
             if ( first ) {
-                this.src.nlI().add("wait if");
+                this.src.nlI().add(TextlyJavaLexer.VOCABULARY.getLiteralName(TextlyJavaLexer.WAIT).replace("'", ""));
                 first = false;
             } else {
-                this.src.add(" else wait if");
+                this.src.add(TextlyJavaLexer.VOCABULARY.getLiteralName(TextlyJavaLexer.ORWAITFOR).replace("'", ""));
             }
             RepeatStmt group = (RepeatStmt) sl.get(i);
             this.src.add(" ( ").accept(group.expr, this).add(" ) {").INCR().accept(group.list, this).DECR().nlI().add("}");
@@ -908,14 +1083,8 @@ public abstract class AbstractRegenerateTextlyJavaVisitor extends BaseVisitor<Vo
 
     private void generateCodeFromStmtConditionFor(Expr expr, StmtList sl) {
         List<Expr> el = ((ExprList) expr).get();
-        // TODO: really bad design. Copied from Java code generator. Refactor! Can introduce suble errors
-        int posOpenBracket = el.toString().lastIndexOf("[");
-        int posClosedBracket = el.toString().lastIndexOf("]");
-        int counterPos = el.toString().lastIndexOf("-");
-        String compareOp = (counterPos > posOpenBracket && counterPos < posClosedBracket) ? " > " : " < ";
-
-        this.src.nlI().add("for ( ").accept(el.get(0), this).add(" = ").accept(el.get(1), this).add("; ").accept(el.get(0), this);
-        this.src.add(compareOp).accept(el.get(2), this).add("; ").accept(el.get(0), this).add(" += ").accept(el.get(3), this).add(" ) {");
+        this.src.nlI().add("for ( Number ").accept(el.get(0), this).add(" = ").accept(el.get(1), this).add("; ").accept(el.get(0), this);
+        this.src.add(" < ").accept(el.get(2), this).add("; ").accept(el.get(0), this).add(" = ").accept(el.get(0), this).add(" + ").accept(el.get(3), this).add(" ) {");
         this.src.INCR().accept(sl, this).DECR().nlI().add("};");
     }
 

@@ -1534,6 +1534,7 @@ Blockly.Msg.ROUNDS_PER_MINUTE_SPEED = "speed RPM";  // untranslated
 Blockly.Msg.SAY = "说";
 Blockly.Msg.SAY_PARAMETERS_TOOLTIP = "机器人说的是给定的文本。也可以进入特殊的性状。机器人将使用所选语言尝试和说出输入的文本。修改速度 (范围: 0-100) 和音调的声音 (范围: 0-100) 与输入字段";
 Blockly.Msg.SAY_TOOLTIP = "机器人说的是给定的文本。也可以进入特殊的性状。机器人将使用所选语言尝试和说出输入的文本。";
+Blockly.Msg.SCOPE_ERROR = "This variable is not accessible in the current context.";  // untranslated
 Blockly.Msg.SDCARD_TOOLTIP = "Represents an SD card.";  // untranslated
 Blockly.Msg.SEND_DATA = "要发送的数据";
 Blockly.Msg.SEND_DATA_SENSEMAP = "openSenseMap";  // untranslated

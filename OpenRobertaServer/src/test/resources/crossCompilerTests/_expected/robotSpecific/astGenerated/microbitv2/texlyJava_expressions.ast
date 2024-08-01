@@ -1,0 +1,36 @@
+
+Var [num] := Binary [MINUS, Binary [ADD, FunctionExpr [MathSingleFunct [EXP, [NumConst[value: 2]]]], FunctionExpr [MathSingleFunct [SIN, [NumConst[value: 90]]]]], Binary [MULTIPLY, FunctionExpr [MathRandomIntFunct[from: NumConst[value: 1], to: NumConst[value: 10]]], FunctionExpr [MathSingleFunct [ROUNDUP, [NumConst[value: 2.3]]]]]]
+
+
+Var [num] := Binary [MINUS, Binary [ADD, Binary [ADD, Binary [ADD, FunctionExpr [MathOnListFunct[functName: SUM, list: Var [listN]]], FunctionExpr [MathOnListFunct[functName: RANDOM, list: Var [listN]]]], FunctionExpr [IndexOfFunct[location: FIRST, value: Var [listN], find: NumConst[value: 0]]]], FunctionExpr [ListGetIndex [GET, FIRST, [Var [listN]]]]], FunctionExpr [ListGetIndex [GET_REMOVE, FROM_START, [Var [listN2], NumConst[value: 1]]]]]
+
+
+Var [boolF] := Binary [OR, Binary [OR, Binary [OR, Binary [AND, FunctionExpr [MathNumPropFunct [EVEN, [NumConst[value: 10]]]], FunctionExpr [MathNumPropFunct [ODD, [NumConst[value: 7]]]]], Binary [AND, FunctionExpr [MathNumPropFunct [PRIME, [NumConst[value: 11]]]], FunctionExpr [MathNumPropFunct [WHOLE, [NumConst[value: 8]]]]]], Binary [AND, FunctionExpr [IsListEmptyFunct[value: Var [listN]]], FunctionExpr [MathNumPropFunct [POSITIVE, [NumConst[value: 5]]]]]], Binary [AND, FunctionExpr [MathNumPropFunct [NEGATIVE, [Unary [NEG, NumConst[value: 3]]]]], FunctionExpr [MathNumPropFunct [DIVISIBLE_BY, [NumConst[value: 10], NumConst[value: 5]]]]]]
+
+
+Var [str] := FunctionExpr [TextJoinFunct [FunctionExpr [ListGetIndex [GET, FIRST, [Var [listN]]]], StringConst[value: Hello], FunctionExpr [MathCastCharFunct[value: NumConst[value: 65]]]]]
+
+
+Var [listN2] := FunctionExpr [GetSubFunct [GET_SUBLIST, [FROM_START, FROM_START], [Var [listN], NumConst[value: 0], NumConst[value: 3]]]]
+
+
+Var [ima] := PredefinedImage[imageName: HEART]
+
+
+Var [num] := ActionExpr [DisplayGetPixelAction[x: NumConst[value: 300], y: NumConst[value: 500]]]
+
+
+Var [boolT] := SensorExpr [LogoTouchSensor [_LO, PRESSED, - EMPTY_SLOT -]]
+
+
+Var [boolT] := SensorExpr [GestureSensor [- EMPTY_PORT -, UP, - EMPTY_SLOT -]]
+
+
+Var [boolT] := ActionExpr [RadioReceiveAction[type: Boolean]]
+
+
+Var [ima] := FunctionExpr [ImageShiftFunction[shiftDirection: DOWN, image: Image [[0, 0, 0, 0, #]
+[0, 0, 0, 0, #]
+[0, 0, 0, 0, #]
+[0, 0, 0, 0, #]
+[0, 0, 0, 0, #]], positions: NumConst[value: 1]]]

@@ -1,0 +1,6 @@
+Sensors: 
+[UsedSensor [4, ULTRASONIC, PRESENCE], UsedSensor [3, COLOR, RGB], UsedSensor [2, GYRO, ANGLE]]
+Actors: 
+[UsedActor [B, LARGE]]
+Methods: 
+[CAST, DIVISIBLE_BY, EVEN, EXP, GET, GET_REMOVE, NEGATIVE, ODD, POSITIVE, PRIME, RANDOM, ROUNDUP, SIN, SUM, WHOLE]

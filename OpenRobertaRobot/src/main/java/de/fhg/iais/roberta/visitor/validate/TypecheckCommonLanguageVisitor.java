@@ -3,6 +3,7 @@ package de.fhg.iais.roberta.visitor.validate;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
@@ -10,6 +11,7 @@ import de.fhg.iais.roberta.mode.general.IndexLocation;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
+import de.fhg.iais.roberta.syntax.lang.expr.ActionExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary;
 import de.fhg.iais.roberta.syntax.lang.expr.BoolConst;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
@@ -51,6 +53,7 @@ import de.fhg.iais.roberta.syntax.lang.functions.TextCharCastNumberFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextJoinFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextPrintFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextStringCastNumberFunct;
+import de.fhg.iais.roberta.syntax.lang.methods.Method;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodCall;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodIfReturn;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodReturn;
@@ -77,7 +80,6 @@ import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.typecheck.InfoCollector;
 import de.fhg.iais.roberta.typecheck.Sig;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.FunctionNames;
@@ -91,6 +93,15 @@ import de.fhg.iais.roberta.visitor.BaseVisitor;
  */
 public abstract class TypecheckCommonLanguageVisitor extends BaseVisitor<BlocklyType> {
     private final UsedHardwareBean usedHardwareBean;
+    private static final Set<BlocklyType> VALID_LIST_TYPES = new HashSet<>(Arrays.asList(
+        BlocklyType.ARRAY_BOOLEAN,
+        BlocklyType.ARRAY_COLOUR,
+        BlocklyType.ARRAY_CONNECTION,
+        BlocklyType.ARRAY_NUMBER,
+        BlocklyType.ARRAY_STRING,
+        BlocklyType.ARRAY_IMAGE
+    ));
+
 
     /**
      * initialize the typecheck visitor.
@@ -174,7 +185,7 @@ public abstract class TypecheckCommonLanguageVisitor extends BaseVisitor<Blockly
         } else if ( getSubFunct.param.size() == 1 ) {
             return Sig.of(BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE).typeCheckPhraseList(getSubFunct, this, getSubFunct.param);
         } else {
-            getSubFunct.addTcError("Invalid number of parameters", true);
+            getSubFunct.addTextlyError("Invalid number of parameters", true);
             return BlocklyType.VOID;
         }
     }
@@ -201,18 +212,10 @@ public abstract class TypecheckCommonLanguageVisitor extends BaseVisitor<Blockly
     @Override
     public BlocklyType visitLengthOfListFunct(LengthOfListFunct lengthOfListFunct) {
         BlocklyType actualArrayType = lengthOfListFunct.value.accept(this);
-        Set<BlocklyType> validTypes = new HashSet<>(Arrays.asList( // TODO: textly - bad design, make constant
-            BlocklyType.ARRAY_BOOLEAN,
-            BlocklyType.ARRAY_COLOUR,
-            BlocklyType.ARRAY_CONNECTION,
-            BlocklyType.ARRAY_NUMBER,
-            BlocklyType.ARRAY_STRING,
-            BlocklyType.ARRAY_IMAGE
-        ));
-        if ( validTypes.contains(actualArrayType) ) {
+        if ( VALID_LIST_TYPES.contains(actualArrayType) ) {
             return FunctionNames.LIST_LENGTH.signature.typeCheckPhrases(lengthOfListFunct, this, lengthOfListFunct.value);
         } else {
-            lengthOfListFunct.addTcError("Cannot measure the length. The provided object is a " + actualArrayType + " but a list is expected", true);
+            lengthOfListFunct.addTextlyError("Cannot measure the length. The provided object is a " + actualArrayType + " but a list is expected", true);
             return BlocklyType.NOTHING;
         }
     }
@@ -221,7 +224,7 @@ public abstract class TypecheckCommonLanguageVisitor extends BaseVisitor<Blockly
     public BlocklyType visitIsListEmptyFunct(IsListEmptyFunct isListEmptyFunct) {
         BlocklyType actualType = isListEmptyFunct.value.accept(this);
         if ( !actualType.isArray() ) {
-            isListEmptyFunct.addTcError("expected was a list, but found was: " + actualType, true);
+            isListEmptyFunct.addTextlyError("expected was a list, but found was: " + actualType, true);
         }
         return BlocklyType.BOOLEAN;
     }
@@ -232,8 +235,12 @@ public abstract class TypecheckCommonLanguageVisitor extends BaseVisitor<Blockly
         if ( listCreate.exprList.el.size() == 0 ) {
             expectedType = listCreate.getBlocklyType();
         } else {
+            expectedType = listCreate.exprList.el.get(0).getBlocklyType();
+            if ( expectedType == BlocklyType.NULL || ((listCreate.exprList.el.get(0) instanceof ActionExpr) && expectedType.equalAsTypes(BlocklyType.CAPTURED_TYPE)) ) {
+                expectedType = BlocklyType.CONNECTION;
+            }
             for ( Phrase phrase : listCreate.exprList.get() ) {
-                expectedType = this.typeCheckPhrase(listCreate, phrase, expectedType);
+                this.typeCheckPhrase(listCreate, phrase, expectedType);
             }
         }
         return expectedType.getMatchingArrayTypeForElementType();
@@ -258,7 +265,6 @@ public abstract class TypecheckCommonLanguageVisitor extends BaseVisitor<Blockly
             default:
                 throw new UnsupportedOperationException("Invalid list get index mode. Expected 'GET', 'GET_REMOVE', or 'REMOVE'.");
         }
-
     }
 
     @Override
@@ -269,6 +275,10 @@ public abstract class TypecheckCommonLanguageVisitor extends BaseVisitor<Blockly
     @Override
     public BlocklyType visitListSetIndex(ListSetIndex listSetIndex) {
         Sig sig = null;
+        // If the IndexLocation is "FIRST" or "LAST", there are 2 parameters:
+        // one for the list and one for the new value to be set at the specified index.
+        // If the IndexLocation is "FROM_START" or "FROM_END", there are 3 parameters:
+        // the list, the new value, and an additional number indicating the exact index position.
         if ( listSetIndex.param.size() == 2 ) {
             sig = Sig.of(BlocklyType.VOID, BlocklyType.CAPTURED_TYPE, BlocklyType.CAPTURED_TYPE_ARRAY_ITEM);
         } else {
@@ -280,7 +290,6 @@ public abstract class TypecheckCommonLanguageVisitor extends BaseVisitor<Blockly
     @Override
     public BlocklyType visitMainTask(MainTask mainTask) {
         mainTask.variables.accept(this);
-        InfoCollector.collectInfosAndStore(mainTask);
         return Sig.of(BlocklyType.VOID).typeCheckPhrases(mainTask, this);
     }
 
@@ -296,7 +305,13 @@ public abstract class TypecheckCommonLanguageVisitor extends BaseVisitor<Blockly
 
     @Override
     public BlocklyType visitMathChangeStmt(MathChangeStmt mathChangeStmt) {
-        return Sig.of(BlocklyType.VOID, BlocklyType.NUMBER, BlocklyType.NUMBER).typeCheckPhrases(mathChangeStmt, this, mathChangeStmt.var, mathChangeStmt.delta);
+        BlocklyType varType = usedHardwareBean.getTypeOfDeclaredVariable(((Var) mathChangeStmt.var).name);
+        if ( varType != BlocklyType.NOTHING ) {
+            return Sig.of(BlocklyType.VOID, BlocklyType.NUMBER, BlocklyType.NUMBER).typeCheckPhrases(mathChangeStmt, this, mathChangeStmt.var, mathChangeStmt.delta);
+        } else {
+            mathChangeStmt.addTextlyError("Invalid variable name for this function", true);
+            return BlocklyType.NOTHING;
+        }
     }
 
     @Override
@@ -349,7 +364,7 @@ public abstract class TypecheckCommonLanguageVisitor extends BaseVisitor<Blockly
 
     @Override
     public BlocklyType visitMethodIfReturn(MethodIfReturn methodIfReturn) {
-        return Sig.of(BlocklyType.VOID).typeCheckPhrases(methodIfReturn, this);
+        return Sig.of(BlocklyType.VOID, BlocklyType.BOOLEAN).typeCheckPhrases(methodIfReturn, this, methodIfReturn.oraCondition);
     }
 
     @Override
@@ -365,7 +380,21 @@ public abstract class TypecheckCommonLanguageVisitor extends BaseVisitor<Blockly
 
     @Override
     public BlocklyType visitMethodCall(MethodCall methodCall) {
-        return usedHardwareBean.getSignatureOfMethod(methodCall.getMethodName()).typeCheckPhraseList(methodCall, this, methodCall.getParametersValues().el);
+        boolean methodExists = false;
+        List<Method> methods = usedHardwareBean.getUserDefinedMethods();
+        for ( Method m : methods ) {
+            if ( m.getMethodName().equals(methodCall.getMethodName()) ) {
+                methodExists = true;
+                break;
+            }
+        }
+        if ( methodExists ) {
+            return usedHardwareBean.getSignatureOfMethod(methodCall.getMethodName()).typeCheckPhraseList(methodCall, this, methodCall.getParametersValues().el);
+        } else {
+            methodCall.addTextlyError("Invalid Function name or Expression", true);
+            return BlocklyType.NOTHING;
+        }
+
     }
 
     @Override
@@ -380,7 +409,7 @@ public abstract class TypecheckCommonLanguageVisitor extends BaseVisitor<Blockly
 
     @Override
     public BlocklyType visitNNSetInputNeuronVal(NNSetInputNeuronVal nnSetInputNeuronVal) {
-        return Sig.of(BlocklyType.VOID).typeCheckPhrases(nnSetInputNeuronVal, this);
+        return Sig.of(BlocklyType.VOID, BlocklyType.NUMBER).typeCheckPhrases(nnSetInputNeuronVal, this, nnSetInputNeuronVal.value);
     }
 
 
@@ -391,22 +420,22 @@ public abstract class TypecheckCommonLanguageVisitor extends BaseVisitor<Blockly
 
     @Override
     public BlocklyType visitNNSetWeightStmt(NNSetWeightStmt nnSetWeightStmt) {
-        return Sig.of(BlocklyType.VOID).typeCheckPhrases(nnSetWeightStmt, this);
+        return Sig.of(BlocklyType.VOID, BlocklyType.NUMBER).typeCheckPhrases(nnSetWeightStmt, this, nnSetWeightStmt.value);
     }
 
     @Override
     public BlocklyType visitNNSetBiasStmt(NNSetBiasStmt nnSetBiasStmt) {
-        return Sig.of(BlocklyType.VOID).typeCheckPhrases(nnSetBiasStmt, this);
+        return Sig.of(BlocklyType.VOID, BlocklyType.NUMBER).typeCheckPhrases(nnSetBiasStmt, this, nnSetBiasStmt.value);
     }
 
     @Override
     public BlocklyType visitNNGetWeight(NNGetWeight nnGetWeight) {
-        return Sig.of(BlocklyType.VOID).typeCheckPhrases(nnGetWeight, this);
+        return Sig.of(BlocklyType.NUMBER).typeCheckPhrases(nnGetWeight, this);
     }
 
     @Override
     public BlocklyType visitNNGetBias(NNGetBias nnGetBias) {
-        return Sig.of(BlocklyType.VOID).typeCheckPhrases(nnGetBias, this);
+        return Sig.of(BlocklyType.NUMBER).typeCheckPhrases(nnGetBias, this);
     }
 
 
@@ -434,12 +463,8 @@ public abstract class TypecheckCommonLanguageVisitor extends BaseVisitor<Blockly
                     }
                 }
                 break;
-            case "UNTIL": // TODO: textly - rm dedundant lines
-                typeCheckPhrase(repeatStmt, repeatStmt.expr, BlocklyType.BOOLEAN);
-                break;
+            case "UNTIL":
             case "WHILE":
-                typeCheckPhrase(repeatStmt, repeatStmt.expr, BlocklyType.BOOLEAN);
-                break;
             case "FOREVER":
                 typeCheckPhrase(repeatStmt, repeatStmt.expr, BlocklyType.BOOLEAN);
                 break;
@@ -451,11 +476,11 @@ public abstract class TypecheckCommonLanguageVisitor extends BaseVisitor<Blockly
                     if ( listType.getMatchingElementTypeForArrayType().equalAsTypes(((VarDeclaration) exprBinary.left).getBlocklyType()) ) {
                         break;
                     } else {
-                        repeatStmt.addTcError("For the " + listType + listType.getMatchingArrayTypeForElementType() + "was expected. ", true);
+                        repeatStmt.addTextlyError("A list of " + exprBinary.left.getBlocklyType().getBlocklyName() + " was expected but it was found a  " + listType.getMatchingElementTypeForArrayType().toString().toLowerCase(), true);
                         break;
                     }
                 } else {
-                    repeatStmt.addTcError("The " + exprBinary.right.toString() + " should be a list of numbers, images, strings or booleans", true);
+                    repeatStmt.addTextlyError("This control statement is only for a list of numbers, images, strings or booleans", true);
                     break;
                 }
             case "WAIT":
@@ -463,7 +488,7 @@ public abstract class TypecheckCommonLanguageVisitor extends BaseVisitor<Blockly
                 break;
 
             default:
-                repeatStmt.addTcError("Invalid repeat mode. Expected 'TIMES', 'FOR', 'UNTIL', 'WHILE', 'FOREVER', 'FOR_EACH', or 'WAIT'.", true);
+                repeatStmt.addTextlyError("Invalid repeat mode. Expected 'TIMES', 'FOR', 'UNTIL', 'WHILE', 'FOREVER', 'FOR_EACH', or 'WAIT'.", true);
         }
         typeCheckPhrase(repeatStmt, repeatStmt.list, BlocklyType.VOID);
         return BlocklyType.VOID;
@@ -479,7 +504,7 @@ public abstract class TypecheckCommonLanguageVisitor extends BaseVisitor<Blockly
         } else if ( rgbColor.getParameters().length == 4 ) {
             return Sig.of(BlocklyType.COLOR, BlocklyType.VARARGS, BlocklyType.NUMBER).typeCheckPhrases(rgbColor, this, rgbColor.R, rgbColor.G, rgbColor.B);
         } else {
-            rgbColor.addTcError("getRGB can only have 0,3 or 4 parameters", true);
+            rgbColor.addTextlyError("getRGB can only have 0,3 or 4 parameters", true);
             return null;
         }
     }
@@ -488,7 +513,9 @@ public abstract class TypecheckCommonLanguageVisitor extends BaseVisitor<Blockly
     public BlocklyType visitSerialWriteAction(SerialWriteAction serialWriteAction) {
         BlocklyType actualType = serialWriteAction.value.accept(this);
         if ( actualType.isArray() ) {
-            serialWriteAction.addTcError(actualType + " is not expected", true);
+            serialWriteAction.addTextlyError("A list of " + actualType.getMatchingElementTypeForArrayType().toString().toLowerCase() + " are not supported for this Function", true);
+        } else if ( actualType.equalAsTypes(BlocklyType.IMAGE) ) {
+            serialWriteAction.addTextlyError("Images are not supported for this Function", true);
         }
         return Sig.of(BlocklyType.VOID, BlocklyType.ANY).typeCheckPhrases(serialWriteAction, this, serialWriteAction.value);
     }
@@ -560,7 +587,7 @@ public abstract class TypecheckCommonLanguageVisitor extends BaseVisitor<Blockly
         BlocklyType varType = usedHardwareBean.getTypeOfDeclaredVariable(var.name);
         if ( varType.equalAsTypes(BlocklyType.NOTHING) ) {
             String message = "no type found for variable: " + var.name;
-            var.addTcError("unknown variable: " + var.name, true);
+            var.addTextlyError("unknown variable: " + var.name, true);
         }
         var.setBlocklyTypeVar(varType);
         return varType;
@@ -581,6 +608,7 @@ public abstract class TypecheckCommonLanguageVisitor extends BaseVisitor<Blockly
     public BlocklyType visitWaitTimeStmt(WaitTimeStmt waitTimeStmt) {
         return Sig.of(BlocklyType.VOID, BlocklyType.NUMBER).typeCheckPhrases(waitTimeStmt, this, waitTimeStmt.time);
     }
+
 
     /**
      * typecheck the given {@link phraseToTypeCheck} and expect, that it is of the type {@link expectedType}. The expression is a component of

@@ -314,8 +314,8 @@ public class ReuseIntegrationAsUnitTest {
     @Ignore
     @Test
     public void testOneRobotSpecificProgramAsUnitTests() throws Exception {
-        String robotName = "microbitv2";
-        String programName = "sensor_gesture_compass_accelerometer";
+        String robotName = "ev3lejosv1";
+        String programName = "textlyJava_expressions";
         LOG.info("========= testing program " + programName + " for robot " + robotName);
         final String resourceDirectory = setupRobotFactoryAndGetResourceDirForRobotSpecificTests(robotName);
         runRegenerateAndCodeGenerationForOneRobotSpecificProgram(resourceDirectory, programName + ".xml", robotName, Collections.emptyList());
@@ -643,7 +643,7 @@ public class ReuseIntegrationAsUnitTest {
     }
 
     private void checkAndShowTestResult() {
-        if (errorCountRegeneration + errorCountCodeGeneration + errorCountCollectorTest == 0) {
+        if ( errorCountRegeneration + errorCountCodeGeneration + errorCountCollectorTest == 0 ) {
             LOG.error("OK - test was successful");
         }
         LOG.info("succeeding regeneration tests: " + successCountRegeneration);

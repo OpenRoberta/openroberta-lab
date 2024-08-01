@@ -6,6 +6,7 @@ import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.ast.BlockDescriptor;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.Assoc;
+import de.fhg.iais.roberta.util.syntax.FunctionNames;
 
 /**
  * the top class of all functions. There are two ways for a client to find out which kind of function {@link #Function}-object is:<br>
@@ -51,5 +52,6 @@ public abstract class Function extends Phrase {
     public BlocklyType getReturnType() {
         return AnnotationHelper.getReturnType(this.getClass());
     }
+
 
 }

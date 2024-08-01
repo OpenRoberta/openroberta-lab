@@ -116,13 +116,13 @@ public interface IEv3Visitor<V> extends IVisitor<V> {
 
     V visitTurnAction(TurnAction turnAction);
 
-    Void visitMotorOnAction(MotorOnAction motorOnAction);
+    V visitMotorOnAction(MotorOnAction motorOnAction);
 
-    Void visitMotorSetPowerAction(MotorSetPowerAction motorSetPowerAction);
+    V visitMotorSetPowerAction(MotorSetPowerAction motorSetPowerAction);
 
-    Void visitMotorGetPowerAction(MotorGetPowerAction motorGetPowerAction);
+    V visitMotorGetPowerAction(MotorGetPowerAction motorGetPowerAction);
 
-    Void visitMotorStopAction(MotorStopAction motorStopAction);
+    V visitMotorStopAction(MotorStopAction motorStopAction);
 
     V visitDriveAction(DriveAction driveAction);
 

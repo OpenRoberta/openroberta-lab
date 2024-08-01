@@ -1,0 +1,447 @@
+{"ops": [
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "0"
+  },
+  {
+    "opc": "VarDeclaration",
+    "name": "num",
+    "type": "NUMBER"
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "value": true
+  },
+  {
+    "opc": "VarDeclaration",
+    "name": "boolT",
+    "type": "BOOLEAN"
+  },
+  {
+    "opc": "expr",
+    "expr": "STRING_CONST",
+    "value": ""
+  },
+  {
+    "opc": "VarDeclaration",
+    "name": "str",
+    "type": "STRING"
+  },
+  {
+    "opc": "expr",
+    "expr": "COLOR_CONST",
+    "value": 10
+  },
+  {
+    "opc": "VarDeclaration",
+    "name": "color",
+    "type": "COLOR"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "2"
+  },
+  {
+    "op": "SQUARE",
+    "opc": "expr",
+    "expr": "SingleFunction"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "10"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "1"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "100"
+  },
+  {
+    "opc": "expr",
+    "expr": "MathConstrainFunct"
+  },
+  {
+    "op": "ADD",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "expr",
+    "expr": "randDouble"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "3.7"
+  },
+  {
+    "op": "ROUNDDOWN",
+    "opc": "expr",
+    "expr": "SingleFunction"
+  },
+  {
+    "op": "MULTIPLY",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "op": "MINUS",
+    "opc": "expr",
+    "expr": "Binary"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "num"
+  },
+  {
+    "opc": "comment",
+    "text": "Binary",
+    "type": "start",
+    "n": 1
+  },
+  {
+    "opc": "comment",
+    "text": "Binary",
+    "type": "start",
+    "n": 2
+  },
+  {
+    "opc": "comment",
+    "text": "Binary",
+    "type": "start",
+    "n": 3
+  },
+  {
+    "opc": "comment",
+    "text": "Binary",
+    "type": "start",
+    "n": 4
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "10"
+  },
+  {
+    "op": "EVEN",
+    "opc": "expr",
+    "expr": "MathPropFunct"
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": "b_m_4"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "7"
+  },
+  {
+    "op": "ODD",
+    "opc": "expr",
+    "expr": "MathPropFunct"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": "b_e_4"
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "label": "b_m_4",
+    "value": false
+  },
+  {
+    "opc": "comment",
+    "text": "Binary",
+    "label": "b_e_4",
+    "type": "end"
+  },
+  {
+    "opc": "jump",
+    "conditional": true,
+    "target": "b_m_3"
+  },
+  {
+    "opc": "comment",
+    "text": "Binary",
+    "type": "start",
+    "n": 5
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "11"
+  },
+  {
+    "op": "PRIME",
+    "opc": "expr",
+    "expr": "MathPropFunct"
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": "b_m_5"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "8"
+  },
+  {
+    "op": "WHOLE",
+    "opc": "expr",
+    "expr": "MathPropFunct"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": "b_e_5"
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "label": "b_m_5",
+    "value": false
+  },
+  {
+    "opc": "comment",
+    "text": "Binary",
+    "label": "b_e_5",
+    "type": "end"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": "b_e_3"
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "label": "b_m_3",
+    "value": true
+  },
+  {
+    "opc": "comment",
+    "text": "Binary",
+    "label": "b_e_3",
+    "type": "end"
+  },
+  {
+    "opc": "jump",
+    "conditional": true,
+    "target": "b_m_2"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "5"
+  },
+  {
+    "op": "POSITIVE",
+    "opc": "expr",
+    "expr": "MathPropFunct"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": "b_e_2"
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "label": "b_m_2",
+    "value": true
+  },
+  {
+    "opc": "comment",
+    "text": "Binary",
+    "label": "b_e_2",
+    "type": "end"
+  },
+  {
+    "opc": "jump",
+    "conditional": true,
+    "target": "b_m_1"
+  },
+  {
+    "opc": "comment",
+    "text": "Binary",
+    "type": "start",
+    "n": 6
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "3"
+  },
+  {
+    "op": "NEG",
+    "opc": "expr",
+    "expr": "Unary"
+  },
+  {
+    "op": "NEGATIVE",
+    "opc": "expr",
+    "expr": "MathPropFunct"
+  },
+  {
+    "opc": "jump",
+    "conditional": false,
+    "target": "b_m_6"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "10"
+  },
+  {
+    "opc": "expr",
+    "expr": "NUM_CONST",
+    "value": "5"
+  },
+  {
+    "op": "DIVISIBLE_BY",
+    "opc": "expr",
+    "expr": "MathPropFunct"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": "b_e_6"
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "label": "b_m_6",
+    "value": false
+  },
+  {
+    "opc": "comment",
+    "text": "Binary",
+    "label": "b_e_6",
+    "type": "end"
+  },
+  {
+    "opc": "jump",
+    "conditional": "always",
+    "target": "b_e_1"
+  },
+  {
+    "opc": "expr",
+    "expr": "BOOL_CONST",
+    "label": "b_m_1",
+    "value": true
+  },
+  {
+    "opc": "comment",
+    "text": "Binary",
+    "label": "b_e_1",
+    "type": "end"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "boolT"
+  },
+  {
+    "opc": "expr",
+    "expr": "STRING_CONST",
+    "value": "Hello"
+  },
+  {
+    "opc": "expr",
+    "expr": "STRING_CONST",
+    "value": ""
+  },
+  {
+    "opc": "expr",
+    "expr": "STRING_CONST",
+    "value": "World !"
+  },
+  {
+    "NUMBER": 3,
+    "opc": "createTextJoin"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "str"
+  },
+  {
+    "opc": "expr",
+    "expr": "COLOR_CONST",
+    "value": 5
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "color"
+  },
+  {
+    "opc": "expr",
+    "expr": "COLOR_CONST",
+    "value": 5
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "color"
+  },
+  {
+    "GetSample": "gyro",
+    "mode": "UP",
+    "opc": "GetSample",
+    "port": "1",
+    "name": "W"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "boolT"
+  },
+  {
+    "GetSample": "buttons",
+    "opc": "GetSample",
+    "name": "W"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "boolT"
+  },
+  {
+    "GetSample": "infrared",
+    "opc": "GetSample",
+    "port": "2",
+    "name": "W"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "num"
+  },
+  {
+    "GetSample": "infrared",
+    "opc": "GetSample",
+    "port": "2",
+    "name": "W"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "num"
+  },
+  {
+    "GetSample": "timer",
+    "opc": "GetSample",
+    "port": "1"
+  },
+  {
+    "opc": "AssignStmt",
+    "name": "num"
+  },
+  {"opc": "stop"}
+]}

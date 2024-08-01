@@ -3,7 +3,7 @@ package de.fhg.iais.roberta.exprEvaluator;
 import java.util.HashMap;
 
 /**
- * This class is used to keep errors from the ExprlyTypeChecker
+ * This class is used to keep errors from the TextlyJavaTypeChecker
  */
 public class TcError {
     private final TcErrorMsg key;

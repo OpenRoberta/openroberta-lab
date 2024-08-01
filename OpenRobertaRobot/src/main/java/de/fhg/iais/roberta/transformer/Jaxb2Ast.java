@@ -312,14 +312,14 @@ public class Jaxb2Ast {
         return expr;
     }
 
-    public static List<Block> mkEvalBlockOutOfPhrase(Phrase phrase, String exprAsString) {
+    public static List<Block> mkEvalBlockOutOfPhrase(Phrase phrase, String exprAsString, String blocklyConstants) {
         String blocklyName = phrase.getBlocklyType().getBlocklyName();
         Block jaxbDestination = new Block();
         Mutation mutation = new Mutation();
         mutation.setType(blocklyName);
         Ast2Jaxb.setBasicProperties(phrase, jaxbDestination);
         Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.TYPE, blocklyName);
-        Ast2Jaxb.addField(jaxbDestination, BlocklyConstants.EXPRESSION, exprAsString);
+        Ast2Jaxb.addField(jaxbDestination, blocklyConstants, exprAsString);
         jaxbDestination.setMutation(mutation);
         return Collections.singletonList(jaxbDestination);
     }

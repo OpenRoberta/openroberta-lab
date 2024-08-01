@@ -1,8 +1,5 @@
 package de.fhg.iais.roberta.visitor.validate;
 
-import java.util.Arrays;
-import java.util.List;
-
 import com.google.common.collect.ClassToInstanceMap;
 
 import de.fhg.iais.roberta.bean.IProjectBean;
@@ -43,7 +40,7 @@ public abstract class MbedV2ValidatorAndCollectorVisitor extends MbedValidatorAn
 
     @Override
     public Void visitSoundSensor(SoundSensor soundSensor) {
-        checkSensorExists(soundSensor);
+        checkSensorExists(soundSensor, SC.SOUND);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(soundSensor.getUserDefinedPort(), SC.SOUND, soundSensor.getSlot()));
 
         return null;
@@ -51,9 +48,8 @@ public abstract class MbedV2ValidatorAndCollectorVisitor extends MbedValidatorAn
 
     @Override
     public Void visitLogoTouchSensor(LogoTouchSensor logoTouchSensor) {
-        checkSensorExists(logoTouchSensor);
+        checkSensorExists(logoTouchSensor, "LOGOTOUCH");
         usedHardwareBuilder.addUsedSensor(new UsedSensor(logoTouchSensor.getUserDefinedPort(), "LOGOTOUCH", logoTouchSensor.getSlot()));
-
         return null;
     }
 

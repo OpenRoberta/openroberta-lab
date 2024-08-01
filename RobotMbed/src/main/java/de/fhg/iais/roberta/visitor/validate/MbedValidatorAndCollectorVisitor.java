@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.visitor.validate;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import com.google.common.collect.ClassToInstanceMap;
 
@@ -41,7 +42,6 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.util.syntax.SC;
 import de.fhg.iais.roberta.visitor.CalliopeMethods;
 import de.fhg.iais.roberta.visitor.IMbedVisitor;
-import de.fhg.iais.roberta.visitor.JoycarMethods;
 import de.fhg.iais.roberta.visitor.MicrobitMethods;
 
 public abstract class MbedValidatorAndCollectorVisitor extends CommonNepoValidatorAndCollectorVisitor implements IMbedVisitor<Void> {
@@ -61,7 +61,7 @@ public abstract class MbedValidatorAndCollectorVisitor extends CommonNepoValidat
 
     @Override
     public Void visitAccelerometerSensor(AccelerometerSensor accelerometerSensor) {
-        checkSensorExists(accelerometerSensor);
+        checkSensorExists(accelerometerSensor, SC.ACCELEROMETER);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(accelerometerSensor.getUserDefinedPort(), SC.ACCELEROMETER, accelerometerSensor.getMode()));
         return null;
     }
@@ -74,7 +74,7 @@ public abstract class MbedValidatorAndCollectorVisitor extends CommonNepoValidat
 
     @Override
     public Void visitCompassSensor(CompassSensor compassSensor) {
-        checkSensorExists(compassSensor);
+        checkSensorExists(compassSensor, SC.COMPASS);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(compassSensor.getUserDefinedPort(), SC.COMPASS, compassSensor.getMode()));
         return null;
     }
@@ -141,7 +141,7 @@ public abstract class MbedValidatorAndCollectorVisitor extends CommonNepoValidat
 
     @Override
     public Void visitKeysSensor(KeysSensor keysSensor) {
-        checkSensorExists(keysSensor);
+        checkSensorExists(keysSensor, SC.KEY);
         usedHardwareBuilder.addUsedActor(new UsedActor("", SC.KEY));
         return null;
     }
@@ -149,7 +149,7 @@ public abstract class MbedValidatorAndCollectorVisitor extends CommonNepoValidat
 
     @Override
     public Void visitLightSensor(LightSensor lightSensor) {
-        checkSensorExists(lightSensor);
+        checkSensorExists(lightSensor, SC.LIGHT);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(lightSensor.getUserDefinedPort(), SC.LIGHT, lightSensor.getMode()));
         return null;
     }
@@ -158,7 +158,8 @@ public abstract class MbedValidatorAndCollectorVisitor extends CommonNepoValidat
     @Override
     public Void visitPinGetValueSensor(PinGetValueSensor pinValueSensor) {
         checkInternalPorts(pinValueSensor, pinValueSensor.getUserDefinedPort());
-        checkSensorExists(pinValueSensor);
+        String sensorType = pinValueSensor.getMode().equals("ANALOG") ? "ANALOG_PIN" : "DIGITAL_PIN";
+        checkSensorExists(pinValueSensor, sensorType);
         usedHardwareBuilder.addUsedActor(new UsedActor(pinValueSensor.getUserDefinedPort(), SC.PIN_VALUE));
         return null;
     }
@@ -191,6 +192,8 @@ public abstract class MbedValidatorAndCollectorVisitor extends CommonNepoValidat
                 }
             } else if ( this.occupiedPins.contains(pin) ) {
                 addWarningToPhrase(pinValueSensor, "VALIDATION_PIN_TAKEN_BY_INTERNAL_COMPONENT");
+            } else if ( configurationComponent.componentType.equals(SC.KEY) ) {
+                pinValueSensor.addTextlyError("The defined actuator port: " + port + " is incorrect, please check the robot configuration", true);
             }
         }
     }
@@ -232,7 +235,7 @@ public abstract class MbedValidatorAndCollectorVisitor extends CommonNepoValidat
 
     @Override
     public Void visitTemperatureSensor(TemperatureSensor temperatureSensor) {
-        checkSensorExists(temperatureSensor);
+        checkSensorExists(temperatureSensor, SC.TEMPERATURE);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(temperatureSensor.getUserDefinedPort(), SC.TEMPERATURE, temperatureSensor.getMode()));
         return null;
     }
@@ -280,13 +283,32 @@ public abstract class MbedValidatorAndCollectorVisitor extends CommonNepoValidat
         return usedActor;
     }
 
-    protected ConfigurationComponent checkSensorExists(ExternalSensor sensor) {
+    protected ConfigurationComponent checkSensorExists(ExternalSensor sensor, String sensorType) {
+
+        if ( !robotConfiguration.isComponentTypePresent(sensorType) ) {
+            addErrorToPhrase(sensor, "CONFIGURATION_ERROR_SENSOR_MISSING");
+        } else {
+            Map<String, ConfigurationComponent> usedSensor = null;
+            usedSensor = robotConfiguration.getAllConfigurationComponentByType(sensorType);
+
+            boolean portCorrect = false;
+            for ( String portName : usedSensor.keySet() ) {
+                if ( portName.equals(sensor.getUserDefinedPort()) ) {
+                    portCorrect = true;
+                }
+            }
+
+            if ( !portCorrect ) {
+                sensor.addTextlyError("The defined sensor port: " + sensor.getUserDefinedPort() + " is incorrect, please check the robot configuration", true);
+            }
+        }
+
         ConfigurationComponent usedSensor = robotConfiguration.optConfigurationComponent(sensor.getUserDefinedPort());
         ConfigurationComponent isCallibotUsed = robotConfiguration.optConfigurationComponentByType(SC.CALLIBOT);
         if ( usedSensor == null && isCallibotUsed == null ) {
             addErrorToPhrase(sensor, "CONFIGURATION_ERROR_SENSOR_MISSING");
         } else if ( isCallibotUsed != null ) {
-//            addErrorToPhrase(sensor, "CONFIGURATION_ERROR_SENSOR_MISSING");
+            //            addErrorToPhrase(sensor, "CONFIGURATION_ERROR_SENSOR_MISSING");
         } else {
             String type = usedSensor.componentType;
             switch ( sensor.getKind().getName() ) {

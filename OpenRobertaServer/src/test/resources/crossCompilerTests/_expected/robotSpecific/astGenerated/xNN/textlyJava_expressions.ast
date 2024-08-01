@@ -1,0 +1,44 @@
+
+Var [num] := Binary [MINUS, Binary [ADD, FunctionExpr [MathSingleFunct [EXP, [NumConst[value: 2]]]], FunctionExpr [MathSingleFunct [SIN, [NumConst[value: 90]]]]], Binary [MULTIPLY, FunctionExpr [MathRandomIntFunct[from: NumConst[value: 1], to: NumConst[value: 10]]], FunctionExpr [MathSingleFunct [ROUNDUP, [NumConst[value: 2.3]]]]]]
+
+
+Var [num] := Binary [MINUS, Binary [ADD, Binary [ADD, Binary [ADD, FunctionExpr [MathOnListFunct[functName: SUM, list: Var [listN]]], FunctionExpr [MathOnListFunct[functName: RANDOM, list: Var [listN]]]], FunctionExpr [IndexOfFunct[location: FIRST, value: Var [listN], find: NumConst[value: 0]]]], FunctionExpr [ListGetIndex [GET, FIRST, [Var [listN]]]]], FunctionExpr [ListGetIndex [GET_REMOVE, FROM_START, [Var [listN2], NumConst[value: 1]]]]]
+
+
+Var [boolT] := Binary [OR, Binary [OR, Binary [OR, Binary [AND, FunctionExpr [MathNumPropFunct [EVEN, [NumConst[value: 10]]]], FunctionExpr [MathNumPropFunct [ODD, [NumConst[value: 7]]]]], Binary [AND, FunctionExpr [MathNumPropFunct [PRIME, [NumConst[value: 11]]]], FunctionExpr [MathNumPropFunct [WHOLE, [NumConst[value: 8]]]]]], Binary [AND, FunctionExpr [IsListEmptyFunct[value: Var [listN]]], FunctionExpr [MathNumPropFunct [POSITIVE, [NumConst[value: 5]]]]]], Binary [AND, FunctionExpr [MathNumPropFunct [NEGATIVE, [Unary [NEG, NumConst[value: 3]]]]], FunctionExpr [MathNumPropFunct [DIVISIBLE_BY, [NumConst[value: 10], NumConst[value: 5]]]]]]
+
+
+Var [str] := FunctionExpr [TextJoinFunct [FunctionExpr [ListGetIndex [GET, FIRST, [Var [listColor]]]], StringConst[value: Hello], FunctionExpr [MathCastCharFunct[value: NumConst[value: 65]]]]]
+
+
+Var [listN2] := FunctionExpr [GetSubFunct [GET_SUBLIST, [FROM_START, FROM_START], [Var [listN], NumConst[value: 0], NumConst[value: 3]]]]
+
+
+Var [color] := ColorConst[hexValue: #0057a6]
+
+
+Var [color] := ColorConst[hexValue: #00642e]
+
+
+Var [num] := ActionExpr [MotorGetPowerAction[port: B]]
+
+
+Var [boolT] := SensorExpr [UltrasonicSensor [4, PRESENCE, - EMPTY_SLOT -]]
+
+
+Var [listN2] := SensorExpr [ColorSensor [3, RGB, - EMPTY_SLOT -]]
+
+
+Var [boolT] := SensorExpr [KeysSensor [UP, PRESSED, - EMPTY_SLOT -]]
+
+
+Var [num] := SensorExpr [GyroSensor [2, ANGLE, - EMPTY_SLOT -]]
+
+
+Var [conn] := ActionExpr [BluetoothConnectAction[address: StringConst[value: hola]]]
+
+
+Var [str] := ActionExpr [BluetoothReceiveAction[dataType: String, protocol: BLUETOOTH, channel: -1, connection: Var [conn]]]
+
+
+Var [conn] := ActionExpr [BluetoothWaitForConnectionAction[]]

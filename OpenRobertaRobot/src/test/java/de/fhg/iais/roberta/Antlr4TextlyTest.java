@@ -12,12 +12,12 @@
 //import org.slf4j.Logger;
 //import org.slf4j.LoggerFactory;
 //
-//import de.fhg.iais.roberta.textly.generated.TextlyLexer;
-//import de.fhg.iais.roberta.textly.generated.TextlyParser;
-//import de.fhg.iais.roberta.textly.generated.TextlyParser.ExprContext;
+//import de.fhg.iais.roberta.textly.generated.TextlyJavaLexer;
+//import de.fhg.iais.roberta.textly.generated.TextlyJavaParser;
+//import de.fhg.iais.roberta.textly.generated.TextlyJavaParser.ExprContext;
 //
-//public class Antlr4TextlyTest {
-//    private static final Logger LOG = LoggerFactory.getLogger(Antlr4TextlyTest.class);
+//public class Antlr4TextlyJavaTest {
+//    private static final Logger LOG = LoggerFactory.getLogger(Antlr4TextlyJavaTest.class);
 //
 //    private static final boolean DO_ASSERT = true;
 //    private static final boolean DO_PRINT = false;
@@ -60,17 +60,17 @@
 //    }
 //
 //    private String expr2String(String expr) throws Exception {
-//        TextlyParser parser = mkParser(expr);
+//        TextlyJavaParser parser = mkParser(expr);
 //        ExprContext tree = parser.expr();
 //        return tree.toStringTree(parser);
 //    }
 //
-//    private TextlyParser mkParser(String expr) throws UnsupportedEncodingException, IOException {
+//    private TextlyJavaParser mkParser(String expr) throws UnsupportedEncodingException, IOException {
 //        InputStream inputStream = new ByteArrayInputStream(expr.getBytes("UTF-8"));
 //        ANTLRInputStream input = new ANTLRInputStream(inputStream);
-//        TextlyLexer lex = new TextlyLexer(input);
+//        TextlyJavaLexer lex = new TextlyJavaLexer(input);
 //        CommonTokenStream tokens = new CommonTokenStream(lex);
-//        TextlyParser parser = new TextlyParser(tokens);
+//        TextlyJavaParser parser = new TextlyJavaParser(tokens);
 //        return parser;
 //    }
 //

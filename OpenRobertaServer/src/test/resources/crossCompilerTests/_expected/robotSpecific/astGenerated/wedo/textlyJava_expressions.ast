@@ -1,0 +1,29 @@
+
+Var [num] := Binary [MINUS, Binary [ADD, FunctionExpr [MathSingleFunct [SQUARE, [NumConst[value: 2]]]], FunctionExpr [MathConstrainFunct[value: NumConst[value: 10], lowerBound: NumConst[value: 1], upperBound: NumConst[value: 100]]]], Binary [MULTIPLY, FunctionExpr [MathRandomFloatFunct[]], FunctionExpr [MathSingleFunct [ROUNDDOWN, [NumConst[value: 3.7]]]]]]
+
+
+Var [boolT] := Binary [OR, Binary [OR, Binary [OR, Binary [AND, FunctionExpr [MathNumPropFunct [EVEN, [NumConst[value: 10]]]], FunctionExpr [MathNumPropFunct [ODD, [NumConst[value: 7]]]]], Binary [AND, FunctionExpr [MathNumPropFunct [PRIME, [NumConst[value: 11]]]], FunctionExpr [MathNumPropFunct [WHOLE, [NumConst[value: 8]]]]]], FunctionExpr [MathNumPropFunct [POSITIVE, [NumConst[value: 5]]]]], Binary [AND, FunctionExpr [MathNumPropFunct [NEGATIVE, [Unary [NEG, NumConst[value: 3]]]]], FunctionExpr [MathNumPropFunct [DIVISIBLE_BY, [NumConst[value: 10], NumConst[value: 5]]]]]]
+
+
+Var [str] := FunctionExpr [TextJoinFunct [StringConst[value: Hello], StringConst[value: ], StringConst[value: World !]]]
+
+
+Var [color] := ColorConst[hexValue: #90ee90]
+
+
+Var [color] := ColorConst[hexValue: #90ee90]
+
+
+Var [boolT] := SensorExpr [GyroSensor [T2, TILTED, UP]]
+
+
+Var [boolT] := SensorExpr [KeysSensor [T, PRESSED, - EMPTY_SLOT -]]
+
+
+Var [num] := SensorExpr [InfraredSensor [I, DISTANCE, - EMPTY_SLOT -]]
+
+
+Var [num] := SensorExpr [InfraredSensor [I, DISTANCE, - EMPTY_SLOT -]]
+
+
+Var [num] := SensorExpr [TimerSensor [1, VALUE, - EMPTY_SLOT -]]

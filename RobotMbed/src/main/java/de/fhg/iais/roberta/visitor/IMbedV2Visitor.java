@@ -20,4 +20,6 @@ public interface IMbedV2Visitor<V> extends IMbedVisitor<V> {
     V visitLogoSetTouchMode(LogoSetTouchMode logoSetTouchMode);
 
     V visitPinSetTouchMode(PinSetTouchMode pinSetTouchMode);
+
+
 }

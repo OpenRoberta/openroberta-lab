@@ -57,7 +57,7 @@ public enum BlocklyType {
     CONNECTION("Connection", ANY),
     PREDEFINED_IMAGE("PredefinedImage", ANY),
 
-    NULL("",STRING, COLOR),
+    NULL("",STRING, COLOR, CONNECTION),
     REF("",NULL),
     PRIM("", NUMBER, BOOLEAN),
     NOTHING("Void", REF, PRIM),

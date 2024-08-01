@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2024-08-13 15:04:49.738724",
+		"lastupdated": "2024-09-10 14:54:37.269773",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -923,6 +923,7 @@
 	"CONFIGURATION_ERROR_NO_BUILTIN_RGBLED": "This board does not have a built in RGB LED!",
 	"CONFIGURATION_ERROR_DIFFDRIVE_NOT_UNIQUE": "This configuration block may only occur once.",
 	"CONFIGURATION_ERROR_TOO_MANY_SUB_SENSORS": "Too many sensors are connected to this block.",
+	"SCOPE_ERROR": "This variable is not accessible in the current context.",
 	"DATATABLE_PROGRAM_NAME": "Program name",
 	"DATATABLE_CREATED_BY": "Creator",
 	"DATATABLE_SHARED": "Shared",

@@ -57,7 +57,7 @@ public class CalliopeValidatorAndCollectorVisitor extends CalliopeCommonValidato
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor ultrasonicSensor) {
         addToPhraseIfUnsupportedInSim(ultrasonicSensor, true, isSim);
-        checkSensorExists(ultrasonicSensor);
+        checkSensorExists(ultrasonicSensor, SC.ULTRASONIC);
         addActorMaybeCallibot(ultrasonicSensor);
         return null;
     }

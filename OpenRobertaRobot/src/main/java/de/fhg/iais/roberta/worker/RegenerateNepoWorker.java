@@ -40,7 +40,7 @@ public class RegenerateNepoWorker implements IWorker {
             project.setProgramAsBlocklyXML(programXML);
 
             AbstractRegenerateTextlyJavaVisitor textlyVisitor = getVisitorForTextlyJava(project);
-            if (textlyVisitor == null) {
+            if ( textlyVisitor == null ) {
                 project.setProgramAsTextly("- no textly -");
             } else {
                 String oldSource = project.getSourceCodeBuilder().toString();
@@ -98,7 +98,7 @@ public class RegenerateNepoWorker implements IWorker {
                     instance.setY(((Location) phrase).y);
                 }
                 List<Block> blockList = phrase.ast2xml();
-                if ( blockList != null ) { // TODO: textly - ast2xml should never return null, but does (e.g. Location)
+                if ( blockList != null ) { // TODO: textlyJava - ast2xml should never return null, but does (e.g. Location)
                     instance.getBlock().addAll(blockList);
                 }
             }

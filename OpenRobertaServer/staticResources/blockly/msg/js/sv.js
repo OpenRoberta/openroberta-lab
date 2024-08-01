@@ -1534,6 +1534,7 @@ Blockly.Msg.ROUNDS_PER_MINUTE_SPEED = "speed RPM";  // untranslated
 Blockly.Msg.SAY = "säg";
 Blockly.Msg.SAY_PARAMETERS_TOOLTIP = "Roboten säger den givna texten. Det är också möjligt att skriva in specialtecken. Roboten använder det valda språket och försöker säga den inmatade texten. Ändra hastigheten (intervall: 0-100) och tonhöjden (intervall: 0-100) med inmatningsfälten";
 Blockly.Msg.SAY_TOOLTIP = "Roboten säger den angivna texten. Det går även att skriva in specialtecken. Roboten använder det valda språket för att försöka säga den inmatade texten.";
+Blockly.Msg.SCOPE_ERROR = "This variable is not accessible in the current context.";  // untranslated
 Blockly.Msg.SDCARD_TOOLTIP = "Represents an SD card.";  // untranslated
 Blockly.Msg.SEND_DATA = "data att skicka";
 Blockly.Msg.SEND_DATA_SENSEMAP = "openSenseMap";  // untranslated

@@ -12,6 +12,7 @@ import de.fhg.iais.roberta.syntax.action.mbed.RadioSendAction;
 import de.fhg.iais.roberta.syntax.action.mbed.RadioSetChannelAction;
 import de.fhg.iais.roberta.syntax.action.mbed.SwitchLedMatrixAction;
 import de.fhg.iais.roberta.syntax.action.mbed.microbitV2.SoundToggleAction;
+import de.fhg.iais.roberta.syntax.action.motor.MotorOnAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.SetVolumeAction;
@@ -95,7 +96,8 @@ public class MicrobitV2TypecheckVisitor extends TypecheckCommonLanguageVisitor i
 
     @Override
     public BlocklyType visitRadioSendAction(RadioSendAction radioSendAction) {
-        return Sig.of(BlocklyType.VOID).typeCheckPhrases(radioSendAction, this);
+        BlocklyType typeMsg = BlocklyType.get(radioSendAction.type.toUpperCase());
+        return Sig.of(BlocklyType.VOID, typeMsg).typeCheckPhrases(radioSendAction, this, radioSendAction.message);
     }
 
     @Override

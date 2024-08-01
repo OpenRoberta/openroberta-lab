@@ -1534,6 +1534,7 @@ Blockly.Msg.ROUNDS_PER_MINUTE_SPEED = "Tempo U/min";
 Blockly.Msg.SAY = "Sage";
 Blockly.Msg.SAY_PARAMETERS_TOOLTIP = "Der Roboter sagt den angegebenen Text. Zusätzlich kann die Sprechgeschwindigkeit (0 langsam - 100 schnell) und die Stimmlage (0 tief - 100 hoch) verändert werden.";
 Blockly.Msg.SAY_TOOLTIP = "Der Roboter sagt den angegebenen Text.";
+Blockly.Msg.SCOPE_ERROR = "This variable is not accessible in the current context.";  // untranslated
 Blockly.Msg.SDCARD_TOOLTIP = "Block für die SD Karte.";
 Blockly.Msg.SEND_DATA = "data to send";  // untranslated
 Blockly.Msg.SEND_DATA_SENSEMAP = "openSenseMap";  // untranslated

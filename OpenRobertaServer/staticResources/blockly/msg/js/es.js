@@ -1534,6 +1534,7 @@ Blockly.Msg.ROUNDS_PER_MINUTE_SPEED = "velocidad RPM";
 Blockly.Msg.SAY = "decir";
 Blockly.Msg.SAY_PARAMETERS_TOOLTIP = "El robot dice el texto dado. También es posible ingresar caracteres especiales. El robot usará el idioma seleccionado para intentar hablar el texto ingresado. Modifica la velocidad (rango: 0-100) y el tono de la voz (rango: 0-100) con los campos de entrada.";
 Blockly.Msg.SAY_TOOLTIP = "El robot dice el texto dado. También es posible ingresar caracteres especiales. El robot usará el idioma seleccionado para intentar hablar el texto ingresado.";
+Blockly.Msg.SCOPE_ERROR = "This variable is not accessible in the current context.";  // untranslated
 Blockly.Msg.SDCARD_TOOLTIP = "Representa una tarjeta SD.";
 Blockly.Msg.SEND_DATA = "datos a enviar";
 Blockly.Msg.SEND_DATA_SENSEMAP = "openSenseMap";

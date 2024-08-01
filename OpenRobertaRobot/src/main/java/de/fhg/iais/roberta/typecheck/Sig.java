@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.lang.expr.Binary;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -59,7 +60,7 @@ public class Sig {
      */
     private BlocklyType typeCheck(Phrase phraseWhoseSignaturIsChecked, List<BlocklyType> actualParamTypes) {
         if ( varargParamType == null && actualParamTypes.size() != this.paramTypes.length ) {
-            phraseWhoseSignaturIsChecked.addTcError("number of parameters don't match", true);
+            phraseWhoseSignaturIsChecked.addTextlyError("number of parameters don't match", true);
             return BlocklyType.NOTHING;
         }
         int i = 0;
@@ -71,7 +72,7 @@ public class Sig {
                     // everything is fine, do NOT increment i !!!
                 } else {
                     String message = "for parameter " + i + " a vararg expected (super-)type is: " + varargParamType + ", but found was type : " + actualParamType;
-                    phraseWhoseSignaturIsChecked.addTcError(message, true);
+                    phraseWhoseSignaturIsChecked.addTextlyError(message, true);
                     return BlocklyType.NOTHING;
                 }
             } else {
@@ -81,24 +82,37 @@ public class Sig {
                     if ( this.paramTypes[i].equalAsTypes(BlocklyType.CAPTURED_TYPE) ) {
                         if ( capturedType == null ) {
                             capturedType = actualParamType;
+                        }
+                        if ( returnType == BlocklyType.VOID && !capturedType.isArray() ) {
+                            String message = "For this function a List was expected, but found was type: " + String.valueOf(actualParamType).toLowerCase();
+                            phraseWhoseSignaturIsChecked.addTextlyError(message, true);
+                            return BlocklyType.NOTHING;
                         } else if ( !actualParamType.equalAsTypes(capturedType) ) {
                             String message = "for parameter " + i + " the expected captured type is: " + capturedType + ", but found was type : " + actualParamType;
-                            phraseWhoseSignaturIsChecked.addTcError(message, true);
+                            phraseWhoseSignaturIsChecked.addTextlyError(message, true);
                             return BlocklyType.NOTHING;
                         }
                     } else if ( this.paramTypes[i].equalAsTypes(BlocklyType.CAPTURED_TYPE_ARRAY_ITEM) ) {
                         if ( capturedType == null ) {
                             capturedType = actualParamType.getMatchingArrayTypeForElementType();
                         } else if ( !actualParamType.equalAsTypes(capturedType.getMatchingElementTypeForArrayType()) ) {
-                            String message = "for parameter " + i + " the expected captured element type is: " + capturedType.getMatchingElementTypeForArrayType()
-                                + ", but found was type : " + actualParamType;
-                            phraseWhoseSignaturIsChecked.addTcError(message, true);
+                            String message = "For the " + formatName(phraseWhoseSignaturIsChecked.getKind().getName()) + " the expected type for one of the parameters is: " + String.valueOf(capturedType.getMatchingElementTypeForArrayType()).toLowerCase() + ", but found was type: " + String.valueOf(actualParamType).toLowerCase();
+                            phraseWhoseSignaturIsChecked.addTextlyError(message, true);
                             return BlocklyType.NOTHING;
                         }
                     } else {
-                        String message = "for parameter " + (i + 1) + " the expected type is: " + this.paramTypes[i] + ", but found was type: " + actualParamType;
-                        phraseWhoseSignaturIsChecked.addTcError(message, true);
-                        return BlocklyType.NOTHING;
+
+                        if ( phraseWhoseSignaturIsChecked instanceof Binary ) {
+                            String[] op = ((Binary) phraseWhoseSignaturIsChecked).op.values;
+                            String message = "For the function " + op[0] + " The expected type for one of the parameters  is: " + String.valueOf(this.paramTypes[i]).toLowerCase() + ", but found was type: " + formatName(String.valueOf(actualParamType));
+                            phraseWhoseSignaturIsChecked.addTextlyError(message, true);
+                            return BlocklyType.NOTHING;
+                        } else {
+                            String message = "For the " + formatName(phraseWhoseSignaturIsChecked.getKind().getName()) + " the expected type for one of the parameters is: " + String.valueOf(this.paramTypes[i]).toLowerCase() + ", but found was type: " + String.valueOf(actualParamType).toLowerCase();
+                            //String message = "for parameter " + (i + 1) + " the expected type is: " + this.paramTypes[i] + ", but found was type: " + actualParamType;
+                            phraseWhoseSignaturIsChecked.addTextlyError(message, true);
+                            return BlocklyType.NOTHING;
+                        }
                     }
                 }
                 i++;
@@ -107,11 +121,27 @@ public class Sig {
         }
         if ( this.returnType.equals(BlocklyType.CAPTURED_TYPE) && capturedType != null ) {
             return capturedType;
-        } else if ( this.returnType.equals(BlocklyType.CAPTURED_TYPE_ARRAY_ITEM) && capturedType != null && capturedType.isArray() ) {
-            return capturedType.getMatchingElementTypeForArrayType();
+        } else if ( this.returnType.equals(BlocklyType.CAPTURED_TYPE_ARRAY_ITEM) && capturedType != null ) {
+            if ( capturedType.isArray() ) {
+                return capturedType.getMatchingElementTypeForArrayType();
+            } else {
+                phraseWhoseSignaturIsChecked.addTextlyError("For this function a List was expected, but found was type: " + capturedType.toString().toLowerCase(), true);
+                return BlocklyType.NOTHING;
+            }
+
         } else {
             return this.returnType;
         }
+    }
+
+    private static String formatName(String input) {
+        String formatted = input.toLowerCase().replace('_', ' ');
+
+        if ( formatted.length() > 0 ) {
+            formatted = formatted.substring(0, 1).toUpperCase() + formatted.substring(1);
+        }
+
+        return formatted;
     }
 
     public BlocklyType typeCheckPhraseList(Phrase phraseToCheck, IVisitor<BlocklyType> visitor, List<? extends Phrase> phrases) {

@@ -18,7 +18,7 @@ public final class PredefinedImage extends Expr {
     public final String imageName;
 
     public PredefinedImage(BlocklyProperties properties, String imageName) {
-        super(properties, BlocklyType.STRING);
+        super(properties, BlocklyType.IMAGE);
         Assert.notNull(imageName);
         this.imageName = imageName;
         setReadOnly();

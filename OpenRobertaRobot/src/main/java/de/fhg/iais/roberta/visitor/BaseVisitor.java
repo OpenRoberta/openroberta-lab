@@ -114,7 +114,7 @@ public abstract class BaseVisitor<V> implements ILanguageVisitor<V> {
 
     /**
      * delegates visiting to the embedded stmt list.<br>
-     * <b>TODO: textly - rework! Cannot be final, because typechecking is not yet finalized</b>
+     * <b>TODO: textlyJava - rework! Cannot be final, because typechecking is not yet finalized</b>
      *
      * @param evalStmts
      * @return

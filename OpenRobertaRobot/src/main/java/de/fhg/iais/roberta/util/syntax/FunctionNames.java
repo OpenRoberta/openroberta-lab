@@ -98,6 +98,18 @@ public enum FunctionNames {
     //MathPowerFunct:
     POWER(Sig.of(BlocklyType.NUMBER, BlocklyType.NUMBER, BlocklyType.NUMBER), "^"),
 
+    //MathChangeStmt
+    CHANGEBY(Sig.of(BlocklyType.VOID, BlocklyType.NUMBER, BlocklyType.NUMBER), "changeBy"),
+    //TextAppendStmt
+    TEXTAPPEND(Sig.of(BlocklyType.VOID, BlocklyType.STRING, BlocklyType.STRING), "appendText"),
+    //MathCastStringFunc and MathCastCharFunc
+    CASTSTRINGCHAR(Sig.of(BlocklyType.STRING, BlocklyType.NUMBER), "castToString", "castToChar"),
+    //TextStringCastNumFunc
+    CASTTONUMBER(Sig.of(BlocklyType.NUMBER, BlocklyType.STRING), "castToNumber"),
+    //TextCharCastNumb
+    CASTSTRINGTONUMBER(Sig.of(BlocklyType.NUMBER, BlocklyType.STRING, BlocklyType.NUMBER), "castStringToNumber"),
+    //CreateEmptyList
+    LISTCREATE(Sig.of(BlocklyType.CAPTURED_TYPE), "createEmptyList"),
     LEFT(VOID),
     RIGHT(VOID),
     TEXT(VOID, "text"),
@@ -127,7 +139,7 @@ public enum FunctionNames {
      * get function from {@link FunctionNames} from string parameter. It is possible for one function to have multiple string mappings. Throws exception if the
      * operator does not exists.
      *
-     * @param functName of the function
+     * @param s of the function
      * @return function from the enum {@link FunctionNames}
      */
 

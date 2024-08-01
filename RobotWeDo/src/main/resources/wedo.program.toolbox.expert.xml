@@ -185,6 +185,7 @@
         <block type="text"/>
         <block type="text_comment"/>
         <block type="robText_join"/>
+        <block type='robActions_eval_expr'></block>
     </category>
     <category name="TOOLBOX_COLOUR" svg="true">
         <block type="robColour_picker">

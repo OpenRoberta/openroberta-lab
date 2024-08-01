@@ -1534,6 +1534,7 @@ Blockly.Msg.ROUNDS_PER_MINUTE_SPEED = "speed RPM";  // untranslated
 Blockly.Msg.SAY = "spune";
 Blockly.Msg.SAY_PARAMETERS_TOOLTIP = "Robotul spune textul dat. Poti introduce si caractere speciale. Robotul va folsii limba selectata ca sa incerce sa spuna textul dat. Modifica viteza (intre 0-100) si tonalitatea vocii (intre 0-100).";
 Blockly.Msg.SAY_TOOLTIP = "Robotul spune textul dat. Poti introduce si caractere speciale. Robotul va folsii limba selectata ca sa incerce sa spuna textul dat.";
+Blockly.Msg.SCOPE_ERROR = "This variable is not accessible in the current context.";  // untranslated
 Blockly.Msg.SDCARD_TOOLTIP = "Represents an SD card.";  // untranslated
 Blockly.Msg.SEND_DATA = "date de trimis";
 Blockly.Msg.SEND_DATA_SENSEMAP = "openSenseMap";  // untranslated
