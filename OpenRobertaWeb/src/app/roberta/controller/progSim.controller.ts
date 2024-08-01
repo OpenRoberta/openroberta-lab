@@ -399,6 +399,9 @@ class ProgSimDebugController extends ProgSimController {
             'click touchend',
             function (event, multi: boolean) {
                 C.SIM = SimulationRoberta.Instance;
+                if (!$('#simDebugButton').hasClass('rightActive')) {
+                    SimulationRoberta.Instance.updateDebugMode(false);
+                }
                 SimulationRoberta.Instance.updateDebugMode(true);
                 // Workaround for IOS speech synthesis, speech must be triggered once by a button click explicitly before it can be used programmatically
                 window.speechSynthesis && window.speechSynthesis.speak && window.speechSynthesis.speak(new SpeechSynthesisUtterance(''));
@@ -407,6 +410,19 @@ class ProgSimDebugController extends ProgSimController {
             },
             'sim debug open/close clicked'
         );
+        let rightMenuButtons = ['#codeButton', '#helpButton', '#infoButton'];
+        rightMenuButtons.forEach((button) => {
+            $(button).onWrap(
+                'click touchend',
+                function (event, multi) {
+                    SimulationRoberta.Instance.updateDebugMode(false);
+                    // Workaround for IOS speech synthesis, speech must be triggered once by a button click explicitly before it can be used programmatically
+                    window.speechSynthesis && window.speechSynthesis.speak && window.speechSynthesis.speak(new SpeechSynthesisUtterance(''));
+                    return false;
+                },
+                'close debug'
+            );
+        });
     }
 
     override addControlEvents() {

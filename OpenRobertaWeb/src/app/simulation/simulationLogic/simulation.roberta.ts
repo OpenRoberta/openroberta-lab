@@ -837,6 +837,7 @@ export class SimulationRoberta implements Simulation {
                                             sim._breakpoints.push(block.id);
                                             $(block.svgPath_).addClass('breakpoint');
                                         }
+                                        $(block.svgGroup_).removeClass('blocklySelected');
                                     }
                                 }
                             });
@@ -852,7 +853,8 @@ export class SimulationRoberta implements Simulation {
                     if (sim.observers.hasOwnProperty(block.id)) {
                         sim.observers[block.id].disconnect();
                     }
-                    $(block.svgPath_).removeClass('breakpoint');
+                    $(block.svgPath_).removeClass('breakpoint').animate({ 'fill-opacity': '1' }, 0);
+                    sim.removeBreakPoint(block);
                 }, sim);
         }
     }
