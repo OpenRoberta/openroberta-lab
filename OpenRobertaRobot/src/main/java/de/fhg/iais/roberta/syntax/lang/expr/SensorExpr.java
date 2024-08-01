@@ -44,4 +44,8 @@ public final class SensorExpr extends Expr {
         Phrase p = this.sensor;
         return p.ast2xml();
     }
+
+    public Sensor getSensor() {
+        return this.sensor;
+    }
 }

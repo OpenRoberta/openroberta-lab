@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +17,6 @@ import org.slf4j.LoggerFactory;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.exprEvaluator.EvalExprErrorListener;
-import de.fhg.iais.roberta.exprEvaluator.TextlyVisitor;
 import de.fhg.iais.roberta.exprly.generated.ExprlyLexer;
 import de.fhg.iais.roberta.exprly.generated.ExprlyParser;
 import de.fhg.iais.roberta.exprly.generated.ExprlyParser.ExpressionContext;
@@ -94,9 +94,13 @@ public final class EvalExpr extends Expr {
         BlocklyType type = BlocklyType.getByBlocklyName(typeAsString);
         BlocklyProperties properties = Jaxb2Ast.extractBlocklyProperties(block);
 
+        String pluginProperties = helper.getRobotFactory().getPluginProperties().getPluginProperties().getProperty("robot.class.textly");
+        Class<?> pluginClass = Class.forName(pluginProperties);
+        
         final List<NepoInfo> annotations = new ArrayList<>();
-        Expr astOfExpr = EvalExpr.expr2AST(expr, annotations);
+        Expr astOfExpr = EvalExpr.expr2AST(expr, annotations, pluginClass);
         astOfExpr.setReadOnly();
+
 
         EvalExpr evalExpr = new EvalExpr(expr, astOfExpr, type, properties);
         for ( NepoInfo info : annotations ) {
@@ -108,7 +112,7 @@ public final class EvalExpr extends Expr {
     /**
      * Function to create an abstract syntax tree from an expression, that has been submitted as a string
      */
-    private static Expr expr2AST(String exprAsString, List<NepoInfo> annotations) throws Exception {
+    private static Expr expr2AST(String exprAsString, List<NepoInfo> annotations, Class<?> pluginClass) throws Exception {
         ExprlyParser parser = EvalExpr.mkParser(exprAsString);
         EvalExprErrorListener err = new EvalExprErrorListener();
         parser.removeErrorListeners();
@@ -119,8 +123,12 @@ public final class EvalExpr extends Expr {
             annotations.add(NepoInfo.error("PROGRAM_ERROR_EXPRBLOCK_PARSE"));
             return errorExpr;
         } else {
-            TextlyVisitor<Expr> exprlyVisitor = new TextlyVisitor();
-            Expr expr = exprlyVisitor.visitExpression(expression);
+            //TextlyVisitor<Expr> exprlyVisitor = new TextlyVisitor();
+            //Expr expr = exprlyVisitor.visitExpression(expression);
+
+            Object textlyVisitorInstance = pluginClass.getDeclaredConstructor().newInstance();
+            Method visitExpressionMethod = pluginClass.getMethod("visitExpression", ExpressionContext.class);
+            Expr expr = (Expr) visitExpressionMethod.invoke(textlyVisitorInstance, expression);
             return expr;
         }
     }
