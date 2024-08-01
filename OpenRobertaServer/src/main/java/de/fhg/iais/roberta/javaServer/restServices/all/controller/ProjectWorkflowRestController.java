@@ -4,10 +4,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -26,10 +22,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 
-import de.fhg.iais.roberta.components.ProgramAst;
 import de.fhg.iais.roberta.components.Project;
-import de.fhg.iais.roberta.exprEvaluator.EvalExprErrorListener;
-import de.fhg.iais.roberta.exprEvaluator.TextlyVisitor;
 import de.fhg.iais.roberta.exprly.generated.ExprlyLexer;
 import de.fhg.iais.roberta.exprly.generated.ExprlyParser;
 import de.fhg.iais.roberta.generated.restEntities.BaseResponse;
@@ -46,11 +39,6 @@ import de.fhg.iais.roberta.persistence.ConfigurationProcessor;
 import de.fhg.iais.roberta.persistence.util.DbSession;
 import de.fhg.iais.roberta.persistence.util.HttpSessionState;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
-import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.syntax.lang.blocksequence.Location;
-import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
-import de.fhg.iais.roberta.syntax.lang.blocksequence.Task;
-import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.Statistics;
 import de.fhg.iais.roberta.util.UtilForREST;
@@ -334,39 +322,56 @@ public class ProjectWorkflowRestController {
         HttpSessionState httpSessionState = UtilForREST.handleRequestInit(dbSession, LOG, fullRequest, true);
 
         try {
-            JSONObject data = fullRequest.getData();
-            String textProg = data.get("progText").toString();
 
-            Iterator<String> keys = data.keys();
-
-            if ( keys.hasNext() ) {
-                String firstKey = keys.next();
-                data.remove(firstKey);
-            }
             ProjectWorkflowRequest wfRequest = ProjectWorkflowRequest.make(fullRequest.getData());
             ProjectSourceSimulationResponse response = ProjectSourceSimulationResponse.make();
             Project project = request2project(wfRequest, dbSession, httpSessionState, this.robotCommunicator, true, false);
 
-            ExprlyParser parser = mkParser(textProg);
-            EvalExprErrorListener err = new EvalExprErrorListener();
-            parser.removeErrorListeners();
-            parser.addErrorListener(err);
-
-            ExprlyParser.ProgramContext program = parser.program();
-            TextlyVisitor<List<Phrase>> exprlyStatements = new TextlyVisitor();
-            List<Phrase> mainPart = (List<Phrase>) exprlyStatements.visitProgram(program);
-
-            Task mainTask = (MainTask) mainPart.get(0);
-            StmtList stmtList = (StmtList) mainPart.get(1);
-
-            List<Phrase> phrases = new ArrayList<>(Arrays.asList(new Location("0", "0"), mainTask));
-            phrases.add(stmtList);
-            ProgramAst programAst = new ProgramAst.Builder()
-                .addToTree(phrases)
-                .build();
-
-            project.setProgramAst(programAst);
-            ProjectService.executeWorkflow("getsimulationcode", project);
+//            JSONObject data = fullRequest.getData();
+//            String textProg = data.get("progText").toString();
+//
+//            Iterator<String> keys = data.keys();
+//
+//            if ( keys.hasNext() ) {
+//                String firstKey = keys.next();
+//                data.remove(firstKey);
+//            }
+//            ExprlyParser parser = mkParser(textProg);
+//            EvalExprErrorListener err = new EvalExprErrorListener();
+//            parser.removeErrorListeners();
+//            parser.addErrorListener(err);
+//
+//            ExprlyParser.ProgramContext program = parser.program();
+//            Object exprlyStatements;
+//
+//            switch ( project.getRobot() ) {
+//                case "wedo":
+//                    exprlyStatements = new WedoTextlyVisitor<List<Phrase>>();
+//                    break;
+//                case "microbitv2":
+//                    exprlyStatements = new RobotMbedTextlyVisitor<List<Phrase>>();
+//                    break;
+//                default:
+//                    exprlyStatements = new TextlyVisitor<List<Phrase>>();
+//                    break;
+//            }
+//
+//            //TextlyVisitor<List<Phrase>> exprlyStatements = new TextlyVisitor();
+//            //RobotMbedTextlyVisitor<List<Phrase>> exprlyStatements = new RobotMbedTextlyVisitor();
+//            //WedoTextlyVisitor<List<Phrase>> exprlyStatements = new WedoTextlyVisitor<>();
+//            List<Phrase> mainPart = (List<Phrase>) ((ExprlyBaseVisitor<?>) exprlyStatements).visitProgram(program);
+//
+//            Task mainTask = (MainTask) mainPart.get(0);
+//            StmtList stmtList = (StmtList) mainPart.get(1);
+//
+//            List<Phrase> phrases = new ArrayList<>(Arrays.asList(new Location("0", "0"), mainTask));
+//            phrases.add(stmtList);
+//            ProgramAst programAst = new ProgramAst.Builder()
+//                .addToTree(phrases)
+//                .build();
+//
+//            project.setProgramAst(programAst);
+            ProjectService.executeWorkflow("textlyToAst", project);
             response.setCmd("runPSim");
             response.setJavaScriptProgram(project.getSourceCode().toString());
             response.setFileExtension(project.getSourceCodeFileExtension());
@@ -421,7 +426,8 @@ public class ProjectWorkflowRestController {
                 .setToken(httpSessionState.getToken())
                 .setRobot(robot)
                 .setFactory(httpSessionState.getRobotFactory())
-                .setRobotCommunicator(robotCommunicator);
+                .setRobotCommunicator(robotCommunicator)
+                .setProgText(wfRequest.getProgText());
         String progXml;
         String confXml;
         if ( isExportXml ) {

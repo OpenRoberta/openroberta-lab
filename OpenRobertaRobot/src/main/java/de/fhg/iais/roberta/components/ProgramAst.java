@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.List;
 
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.lang.expr.SensorExpr;
+import de.fhg.iais.roberta.syntax.sensor.Sensor;
 
 public final class ProgramAst {
     private final String robotType;
@@ -19,6 +21,21 @@ public final class ProgramAst {
         this.description = description;
         this.tags = tags;
         this.forests = tree;
+    }
+
+    public List<Sensor> extractSensors() {
+        List<Sensor> sensors = new ArrayList<>();
+
+        for ( List<Phrase> insideList : forests ) {
+            for ( Phrase phrase : insideList ) {
+                if ( phrase instanceof SensorExpr ) {
+                    SensorExpr sensorExpr = (SensorExpr) phrase;
+                    sensors.add(sensorExpr.getSensor());
+                }
+            }
+        }
+
+        return sensors;
     }
 
     public String getRobotType() {
