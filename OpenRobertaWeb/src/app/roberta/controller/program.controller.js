@@ -11,6 +11,7 @@ import * as PROGCODE_C from 'progCode.controller';
 import * as Blockly from 'blockly';
 import * as $ from 'jquery';
 import 'jquery-validate';
+import * as ACE_EDITOR from 'aceEditor';
 
 var $formSingleModal;
 
@@ -593,7 +594,7 @@ function programToBlocklyWorkspace(xml, opt_fromShowSource) {
     var language = GUISTATE_C.getLanguage();
     if ($('#codeDiv').hasClass('rightActive') && opt_fromShowSource) {
         PROGRAM.showSourceProgram(GUISTATE_C.getProgramName(), configName, xmlProgram, xmlConfigText, language, getSSID(), getPassword(), function (result) {
-            PROGCODE_C.setCode(result.sourceCode);
+            ACE_EDITOR.setViewCode(result.sourceCode);
         });
     }
     setTimeout(function () {

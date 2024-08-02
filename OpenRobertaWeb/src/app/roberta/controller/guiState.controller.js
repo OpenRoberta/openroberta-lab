@@ -19,6 +19,7 @@ import { switchLanguage as GALLERYLIST_C_switchLanguage } from 'galleryList.cont
 import { switchLanguage as TUTORIALLIST_C_switchLanguage } from 'tutorialList.controller';
 import { switchLanguage as LOGLIST_C_switchLanguage } from 'logList.controller';
 import { switchLanguage as PROGINFO_C_switchLanguage } from 'progInfo.controller';
+import * as ACE_EDITOR from 'aceEditor';
 
 export var LONG = 300000; // Ping time 5min
 export var SHORT = 3000; // Ping time 3sec
@@ -331,6 +332,8 @@ function setRobot(robot, result, opt_init) {
     }
 
     UTIL.clearTabAlert('tabConfiguration'); // also clear tab alert when switching robots
+
+    ACE_EDITOR.setCodeLanguage(getSourceCodeFileExtension());
 }
 
 export function resetRobot() {

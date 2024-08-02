@@ -4,53 +4,18 @@ import * as GUISTATE_C from 'guiState.controller';
 import * as PROG_C from 'program.controller';
 import * as PROGRAM from 'program.model';
 import * as Blockly from 'blockly';
-import * as CodeFlask from 'codeflask';
 import * as $ from 'jquery';
-import { getProgramName } from 'guiState.controller';
+import * as ACE_EDITOR from 'aceEditor';
 
 const INITIAL_WIDTH = 0.5;
 var blocklyWorkspace;
-var flask;
-/**
- *
- */
+
 function init() {
     blocklyWorkspace = GUISTATE_C.getBlocklyWorkspace();
-    flask = new CodeFlask('#codeContent', {
-        language: 'java',
-        lineNumbers: true,
-        readonly: true,
-    });
     initEvents();
 }
 
-function setCode(sourceCode) {
-    flask.updateCode(sourceCode);
-}
-
-function setCodeLanguage(language) {
-    var langToSet;
-    switch (language) {
-        case 'py':
-            langToSet = 'python';
-            break;
-        case 'java':
-            langToSet = 'java';
-            break;
-        case 'ino':
-        case 'nxc':
-        case 'cpp':
-            langToSet = 'clike';
-            break;
-        case 'json':
-            langToSet = 'js';
-            break;
-        default:
-            langToSet = 'js';
-    }
-    flask.updateLanguage(langToSet);
-}
-export { init, setCode, setCodeLanguage };
+export { init };
 
 function initEvents() {
     $('#codeButton').off('click touchend');
@@ -93,7 +58,7 @@ function initEvents() {
                     PROG_C.reloadProgram(result, true);
                     if (result.rc == 'ok') {
                         GUISTATE_C.setState(result);
-                        flask.updateCode(result.sourceCode);
+                        ACE_EDITOR.setViewCode(result.sourceCode);
                         GUISTATE_C.setProgramSource(result.sourceCode);
                     } else {
                         MSG.displayInformation(result, result.message, result.message, result.parameters);
@@ -128,7 +93,7 @@ function toggleCode($button) {
                 PROG_C.reloadProgram(result);
                 if (result.rc == 'ok') {
                     GUISTATE_C.setState(result);
-                    flask.updateCode(result.sourceCode);
+                    ACE_EDITOR.setViewCode(result.sourceCode);
                     // TODO change javaSource to source on server
                     GUISTATE_C.setProgramSource(result.sourceCode);
                     $button.openRightView($('#codeDiv'), INITIAL_WIDTH);

@@ -6,7 +6,7 @@ bootstrap-tagsinput:0.8.0	The MIT License
 bootstrap-wysiwyg:v2.0.1	The MIT License
 ch.qos.logback:logback-classic:1.2.3	Eclipse Public License - v 1.0 GNU Lesser General Public License
 ch.qos.logback:logback-core:1.2.3	Eclipse Public License - v 1.0 GNU Lesser General Public License
-CodeFlask	The MIT License
+Ace (Ajax.org Cloud9 Editor) BSD license
 com.google.code.findbugs:annotations:3.0.1	GNU Lesser Public License
 com.google.code.findbugs:jsr305:3.0.2	The Apache Software License, Version 2.0
 com.google.code.gson:gson:2.8.2	Apache 2.0
