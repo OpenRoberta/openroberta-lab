@@ -5,73 +5,28 @@ import * as PROGRAM from 'program.model';
 import * as PROG_C from 'program.controller';
 import * as PROGRUN_C from 'progRun.controller';
 import * as IMPORT_C from 'import.controller';
+// @ts-ignore
 import * as Blockly from 'blockly';
-import * as CodeFlask from 'codeflask';
 import * as $ from 'jquery';
-
-var flask;
-var currentLanguage;
-var wasEditedByUser;
+import * as ACE_EDITOR from 'aceEditor';
 
 function init() {
-    flask = new CodeFlask('#flaskEditor', {
-        language: 'java',
-        lineNumbers: true,
-        tabSize: 4,
-    });
     initEvents();
 }
 
-function clickSourceCodeEditor() {
-    getSourceCode(true);
-}
-
-function setCodeLanguage(language) {
-    var langToSet;
-    switch (language) {
-        case 'py':
-            langToSet = 'python';
-            break;
-        case 'java':
-            langToSet = 'java';
-            break;
-        case 'ino':
-        case 'nxc':
-        case 'cpp':
-            langToSet = 'clike';
-            break;
-        case 'json':
-            langToSet = 'js';
-            break;
-        default:
-            langToSet = 'js';
-    }
-    flask.updateLanguage(langToSet);
-    currentLanguage = langToSet;
-}
-
-function resetScroll() {
-    $('.codeflask__pre').attr('transform', 'translate3d(0px, 0px, 0px)');
-    $('.codeflask__lines').attr('transform', 'translate3d(0px, 0px, 0px)');
-}
-export { init, setCodeLanguage, resetScroll, clickSourceCodeEditor };
+export { init };
 
 function initEvents() {
-    flask.onUpdate(function (code) {
-        if ($('#sourceCodeEditorPane').hasClass('active')) {
-            wasEditedByUser = true;
-        }
-    });
-
     $('#backSourceCodeEditor').onWrap(
         'click',
         function () {
-            if (wasEditedByUser) {
-                $('#show-message-confirm').oneWrap('shown.bs.modal', function (e) {
+            if (ACE_EDITOR.wasEditedByUser()) {
+                $('#show-message-confirm').oneWrap('shown.bs.modal', function () {
                     $('#confirm').off();
                     $('#confirm').on('click', function (e) {
                         e.preventDefault();
-                        wasEditedByUser = false;
+                        ACE_EDITOR.setWasEditedByUser(false);
+                        // @ts-ignore
                         $('#tabProgram').tabWrapShow();
                     });
                     $('#confirmCancel').off();
@@ -82,7 +37,8 @@ function initEvents() {
                 });
                 MSG.displayMessage('SOURCE_CODE_EDITOR_CLOSE_CONFIRMATION', 'POPUP', '', true, false);
             } else {
-                wasEditedByUser = false;
+                ACE_EDITOR.setWasEditedByUser(false);
+                // @ts-ignore
                 $('#tabProgram').tabWrapShow();
             }
             return false;
@@ -93,7 +49,7 @@ function initEvents() {
     $('#runSourceCodeEditor').onWrap(
         'click',
         function () {
-            PROGRUN_C.runNative(flask.getCode());
+            PROGRUN_C.runNative(ACE_EDITOR.getEditorCode());
             return false;
         },
         'run button clicked'
@@ -104,10 +60,12 @@ function initEvents() {
         function () {
             GUISTATE_C.setRunEnabled(false);
             $('#buildSourceCodeEditor').addClass('disabled');
-            PROGRAM.compileN(GUISTATE_C.getProgramName(), flask.getCode(), GUISTATE_C.getLanguage(), function (result) {
+            //TODO add any type once present
+            PROGRAM.compileN(GUISTATE_C.getProgramName(), ACE_EDITOR.getEditorCode(), GUISTATE_C.getLanguage(), function (result: any) {
                 if (result.rc == 'ok') {
                     MSG.displayMessage(result.message, 'POPUP', '', false, false);
                 } else {
+                    // @ts-ignore
                     MSG.displayInformation(result, result.message, result.message, GUISTATE_C.getProgramName());
                 }
                 GUISTATE_C.setRunEnabled(true);
@@ -121,8 +79,9 @@ function initEvents() {
     $('#downloadSourceCodeEditor').onWrap(
         'click',
         function () {
-            var filename = GUISTATE_C.getProgramName() + '.' + GUISTATE_C.getSourceCodeFileExtension();
-            UTIL.download(filename, flask.getCode());
+            let filename: string = GUISTATE_C.getProgramName() + '.' + GUISTATE_C.getSourceCodeFileExtension();
+            UTIL.download(filename, ACE_EDITOR.getEditorCode());
+            // @ts-ignore
             MSG.displayMessage('MENU_MESSAGE_DOWNLOAD', 'TOAST', filename);
             return false;
         },
@@ -132,8 +91,8 @@ function initEvents() {
     $('#uploadSourceCodeEditor').onWrap(
         'click',
         function () {
-            IMPORT_C.importSourceCode(function (name, source) {
-                flask.updateCode(source);
+            IMPORT_C.importSourceCode(function (name: string, source: string) {
+                ACE_EDITOR.setEditorCode(source);
             });
             return false;
         },
@@ -152,12 +111,12 @@ function initEvents() {
     $('#tabSourceCodeEditor').onWrap(
         'show.bs.tab',
         function () {
-            if (currentLanguage === 'python' || currentLanguage === 'json') {
+            if (ACE_EDITOR.getCurrentLanguage() === 'python' || ACE_EDITOR.getCurrentLanguage() === 'json') {
                 $('#buildSourceCodeEditor').addClass('disabled');
             }
             $('#main-section').css('background-color', '#EEE');
         },
-        'in show source code editor'
+        'in show source code aceEditorController'
     );
 
     $('#tabSourceCodeEditor').onWrap(
@@ -165,7 +124,7 @@ function initEvents() {
         function () {
             GUISTATE_C.setView('tabSourceCodeEditor');
         },
-        'after show source code editor'
+        'after show source code aceEditorController'
     );
 
     $('#tabSourceCodeEditor').on('hide.bs.tab', function () {
@@ -180,17 +139,23 @@ function initEvents() {
         .attr('data-bs-placement', 'left')
         .attr('lkey', 'Blockly.Msg.SOURCE_CODE_EDITOR_IMPORT_TOOLTIP')
         .attr('data-bs-original-title', Blockly.Msg.SOURCE_CODE_EDITOR_IMPORT_TOOLTIP)
+        // @ts-ignore
         .tooltip('_fixTitle');
 }
 
-function getSourceCode(reload) {
-    var blocklyWorkspace = GUISTATE_C.getBlocklyWorkspace();
-    var dom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
-    var xmlProgram = Blockly.Xml.domToText(dom);
-    var isNamedConfig = !GUISTATE_C.isConfigurationStandard() && !GUISTATE_C.isConfigurationAnonymous();
-    var configName = isNamedConfig ? GUISTATE_C.getConfigurationName() : undefined;
-    var xmlConfigText = GUISTATE_C.isConfigurationAnonymous() ? GUISTATE_C.getConfigurationXML() : undefined;
-    var language = GUISTATE_C.getLanguage();
+export function clickSourceCodeEditor() {
+    getSourceCode(true);
+}
+
+function getSourceCode(reload: boolean) {
+    //TODO types for blockly
+    let blocklyWorkspace = GUISTATE_C.getBlocklyWorkspace();
+    let dom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
+    let xmlProgram: string = Blockly.Xml.domToText(dom);
+    let isNamedConfig: boolean = !GUISTATE_C.isConfigurationStandard() && !GUISTATE_C.isConfigurationAnonymous();
+    let configName: string = isNamedConfig ? GUISTATE_C.getConfigurationName() : undefined;
+    let xmlConfigText: string = GUISTATE_C.isConfigurationAnonymous() ? GUISTATE_C.getConfigurationXML() : undefined;
+    let language: string = GUISTATE_C.getLanguage();
     PROGRAM.showSourceProgram(
         GUISTATE_C.getProgramName(),
         configName,
@@ -199,15 +164,18 @@ function getSourceCode(reload) {
         PROG_C.getSSID(),
         PROG_C.getPassword(),
         language,
-        function (result) {
+        //TODO propper result types
+        function (result: any) {
             PROG_C.reloadProgram(result);
             if (result.rc == 'ok') {
                 if (reload) {
+                    // @ts-ignore
                     $('#tabSourceCodeEditor').tabWrapShow();
                 }
                 GUISTATE_C.setState(result);
-                flask.updateCode(result.sourceCode);
+                ACE_EDITOR.setEditorCode(result.sourceCode);
             } else {
+                // @ts-ignore
                 MSG.displayInformation(result, result.message, result.message, result.parameters);
             }
         }

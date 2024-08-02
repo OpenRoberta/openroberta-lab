@@ -6,8 +6,6 @@ import * as ROBOT from 'robot.model';
 import * as PROGRAM_C from 'program.controller';
 import * as CONFIGURATION_C from 'configuration.controller';
 import * as WEBVIEW_C from 'webview.controller';
-import * as CODEEDITOR_C from 'sourceCodeEditor.controller';
-import * as PROGCODE_C from 'progCode.controller';
 import * as $ from 'jquery';
 // @ts-ignore
 import * as Blockly from 'blockly';
@@ -459,9 +457,6 @@ function switchRobot(robot: string, extensions: object, opt_continue?: boolean, 
                 if (GUISTATE_C.getView() == 'tabProgList') {
                     $('#progList>.bootstrap-table').find('button[name="refresh"]').clickWrap();
                 }
-                PROGCODE_C.setCodeLanguage(GUISTATE_C.getSourceCodeFileExtension());
-                CODEEDITOR_C.setCodeLanguage(GUISTATE_C.getSourceCodeFileExtension());
-                CODEEDITOR_C.resetScroll();
                 //TODO inform app if one is there
                 //                    WEBVIEW_C.jsToAppInterface({
                 //                        'target' : 'wedo',

@@ -1,7 +1,8 @@
 require.config({
     baseUrl: '.',
     paths: {
-        codeflask: 'libs/codeflask/codeflask.min',
+        ace: 'libs/ace/ace',
+        ace_lang: 'libs/ace/ext-language_tools',
         blockly: 'blockly/blockly_compressed',
         bootstrap: 'libs/bootstrap/bootstrap.bundle.min',
         'bootstrap-table': 'libs/bootstrap/bootstrap-table-1.22.1-dist/js/bootstrap-table.min',
@@ -105,6 +106,7 @@ require.config({
         'util.roberta': 'js/helper/util',
         wrap: 'js/helper/wrap',
         table: 'js/helper/table',
+        aceEditor: 'js/helper/aceEditor',
 
         'interpreter.constants': 'js/app/nepostackmachine/interpreter.constants',
         'interpreter.interpreter': 'js/app/nepostackmachine/interpreter.interpreter',
@@ -152,6 +154,9 @@ require.config({
         },
         thymio: {
             deps: ['flatbuffers', '@cor3ntin/flexbuffers-wasm', 'lodash.isequal'],
+        },
+        ace_lang: {
+            deps: ['ace'],
         },
         bootstrap: {
             deps: ['jquery'],
@@ -232,9 +237,9 @@ require([
     'volume-meter',
     'user.model',
     'sourceCodeEditor.controller',
-    'codeflask',
     'confVisualization',
     'robotBlock',
+    'sourceCodeEditor.controller',
     'startView.controller',
     //start connections
     'connection.interface',
@@ -242,6 +247,8 @@ require([
     'connections',
     'connection.controller',
     //end connections
+    'ace',
+    'ace_lang',
 ], function (require) {
     //window.Popper = require('popper.js').default;
     window.$ = window.jQuery = require('jquery');
@@ -278,11 +285,11 @@ require([
     userGroupController = require('userGroup.controller');
     webviewController = require('webview.controller');
     sourceCodeEditorController = require('sourceCodeEditor.controller');
-    codeflask = require('codeflask');
     confVisualization = require('confVisualization');
     robotBlock = require('robotBlock');
     startViewController = require('startView.controller');
     connectionController = require('connection.controller');
+    aceEditor = require('aceEditor');
 
     $(document).ready(WRAP.wrapTotal(init, 'page init'));
 });
@@ -292,6 +299,7 @@ require([
  */
 function init() {
     COMM.setErrorFn(handleServerErrors);
+
     $.when(languageController.init())
         .then(function (language) {
             return webviewController.init(language);
@@ -303,6 +311,7 @@ function init() {
             return userController.init();
         })
         .then(function () {
+            aceEditor.init();
             galleryListController.init();
             tutorialListController.init();
             logListController.init();

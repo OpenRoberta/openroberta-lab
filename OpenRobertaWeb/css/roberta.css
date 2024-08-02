@@ -383,17 +383,66 @@ canvas.border {
     display: block;
 }
 
+/* Start Ace Editor Styling */
+
+#sourceCodeEditor {
+    height: calc(100% - 80px);
+    height: -moz-calc(100% - 80px);
+    height: -webkit-calc(100% - 80px);
+    width: 100%;
+}
+
 #codeContainer {
     overflow-y: auto;
     height: 100%;
+    width: 100%;
+    padding-right: 5px;
+    padding-top: 10px;
+    background-color: #eee;
+    padding-bottom: 80px;
 }
 
-#codeContent {
-    overflow-y: auto;
-    padding-bottom: 60px;
-    padding-top: 12px;
-    background-color: #eee;
+#codeContent .ace_scroller .ace_content .ace_hidden-cursors .ace_cursor {
+    opacity: 0;
 }
+
+.ace_layer {
+    left: -4px;
+}
+
+.ace_editor {
+    width: 100%;
+    height: 100%;
+    color: inherit;
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    font-size: 12px;
+    line-height: 18px;
+    direction: ltr;
+}
+
+.ace_active-line {
+    background-color: #c3e3efb3 !important;
+}
+
+.ace_gutter-active-line {
+    background-color: #c3e3efb3 !important;
+}
+
+.ace_lineBackgroundGrey {
+    background-color: #eee !important;
+    left: 0 !important;
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+}
+
+.ace_lineBackgroundWhite {
+    background-color: #FFFFFF !important;
+    left: 0 !important;
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+}
+
+/* End Ace Editor Styling */
 
 #infoContent {
     border: solid 10px #eee;
@@ -3687,96 +3736,6 @@ label.quiz.answer.fail {
 
 td[lkey="Blockly.Msg.POPUP_DOWNLOAD_STEP_A_SENSEBOX"] {
     padding-bottom: 2.5em;
-}
-
-#flaskEditor {
-    height: 100%; /*fix for FF calc thing*/
-}
-
-#sourceCodeEditor pre {
-    position: absolute;
-    top: 0;
-    padding: 0;
-    line-height: 18px;
-    background-color: transparent;
-    border: 0 solid #ccc;
-    border-radius: 0;
-    color: #000;
-    font-family: 'Roboto', sans-serif;
-}
-
-#sourceCodeEditor .codeflask {
-    height: calc(100% - 80px);
-    height: -moz-calc(100% - 80px);
-    height: -webkit-calc(100% - 80px);
-    position: relative;
-}
-
-#sourceCodeEditor textarea {
-    position: absolute;
-    top: 0;
-    line-height: 18px;
-    font-size: 13px;
-    padding: 0;
-    z-index: 5;
-    color: transparent;
-}
-
-#codeDiv pre {
-    position: absolute;
-    background-color: transparent;
-    border: 0 solid #ccc;
-    border-radius: 0;
-    color: #000;
-    font-family: 'Roboto', sans-serif;
-    background-image: linear-gradient(transparent 50%, rgba(247, 247, 247, 1) 0%);
-    background-size: 100% 2.77em;
-    background-repeat: repeat;
-    width: 100%;
-    margin-top: 0;
-    line-height: 18px;
-    padding: 0;
-}
-
-#sourceCodeEditor .codeflask__flatten {
-    padding-top: 0 !important;
-    line-height: 18px;
-}
-
-#codeDiv textarea {
-    position: absolute;
-    z-index: 8;
-    color: rgba(255, 255, 255, 0) !important;
-    height: calc(100% - 82px);
-    margin-top: 0;
-    line-height: 18px;
-    padding: 0;
-}
-
-#codeDiv .codeflask__flatten {
-    background-color: #FFF0;
-    padding-top: 0 !important;
-    line-height: 18px;
-}
-
-#codeDiv .codeflask__lines {
-    background-color: #EEE;
-    z-index: 5 !important;
-}
-
-.codeflask__lines {
-    background-color: #EEE;
-    padding-top: 0 !important;
-    z-index: 5 !important;
-}
-
-.codeflask__lines__line {
-    color: #333;
-    line-height: 18px !important;
-}
-
-.codeflask--has-line-numbers::before {
-    z-index: 4 !important;
 }
 
 pre code {

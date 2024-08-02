@@ -248,6 +248,9 @@
       "table": [
         "helper/table"
       ],
+      "aceEditor": [
+        "helper/aceEditor"
+      ],
       "interpreter.constants": [
         "app/nepostackmachine/interpreter.constants"
       ],
