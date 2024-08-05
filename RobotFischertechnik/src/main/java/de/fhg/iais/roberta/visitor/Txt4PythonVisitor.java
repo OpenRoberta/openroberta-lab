@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.visitor;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -80,7 +81,7 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
     private String IMU = "";
     private String gesture = "";
     private ArrayList<String> ultrasonicSensors = new ArrayList<>();
-
+    private Map<String, List<ConfigurationComponent>> detectorsMap = new HashMap<>();
     /**
      * initialize the Python code generator visitor.
      *
@@ -194,17 +195,38 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
         this.src.add("try:");
         incrIndentation();
         nlIndent();
+        Map<String, List<ConfigurationComponent>> detectors = getDetectorsMap();
         if ( usedHardwareBean.isSensorUsed(FischertechnikConstants.BALL) ) {
-            this.src.add("ball_detector.detected()").nlI();
+            List<ConfigurationComponent> balldetectors = detectors.get("CAMERA_BALLDETECTOR");
+            for ( ConfigurationComponent detector : balldetectors ) {
+                {
+                    this.src.add("ball_detector" + detector.userDefinedPortName + ".detected()").nlI();
+                }
+            }
         }
         if ( usedHardwareBean.isSensorUsed(FischertechnikConstants.LINE) ) {
-            this.src.add("line_detector.detected()").nlI();
+            List<ConfigurationComponent> linedetectors = detectors.get("CAMERA_LINE");
+            for ( ConfigurationComponent detector : linedetectors ) {
+                {
+                    this.src.add("line_detector" + detector.userDefinedPortName + ".detected()").nlI();
+                }
+            }
         }
         if ( usedHardwareBean.isSensorUsed(SC.COLOUR) ) {
-            this.src.add("color_detector.detected()").nlI();
+            List<ConfigurationComponent> colordetectors = detectors.get("CAMERA_COLORDETECTOR");
+            for ( ConfigurationComponent detector : colordetectors ) {
+                {
+                    this.src.add("color_detector_" + detector.userDefinedPortName + ".detected()").nlI();
+                }
+            }
         }
         if ( usedHardwareBean.isSensorUsed(SC.MOTION) ) {
-            this.src.add("motion_detector.detected()").nlI();
+            List<ConfigurationComponent> motiondetectors = detectors.get("CAMERA_MOTIONDETECTOR");
+            for ( ConfigurationComponent detector : motiondetectors ) {
+                {
+                    this.src.add("motion_detector_" + detector.userDefinedPortName + ".detected()").nlI();
+                }
+            }
         }
         this.src.add("break");
         decrIndentation();
@@ -665,7 +687,7 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
 
     @Override
     public Void visitMotionSensor(MotionSensor motionSensor) {
-        this.src.add("motion_detector.detected()");
+        this.src.add("motion_detector_" + motionSensor.getUserDefinedPort() + ".detected()");
         return null;
     }
 
@@ -1074,48 +1096,58 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
         if ( usedHardwareBean.isSensorUsed(FischertechnikConstants.CAMERA) ) {
             ConfigurationComponent camera = getCamera();
             String usbPort = camera.getOptProperty("PORT").substring(3);
-            int cameraHeight = 240;
-            int cameraWidth = 320;
+            String[] resolution = camera.getOptProperty("RESOLUTION").split("x");
             String cameraVariable = "TXT_M_USB1_" + usbPort + "_camera";
             this.src.add("txt_factory.init_usb_factory()").nlI();
             this.src.add("txt_factory.init_camera_factory()").nlI();
             this.src.add(cameraVariable + " = txt_factory.usb_factory.create_camera(TXT_M, " + usbPort + ")").nlI();
             this.src.add(cameraVariable + ".set_rotate(False)").nlI();
-            this.src.add(cameraVariable + ".set_height(" + cameraHeight + ")").nlI();
-            this.src.add(cameraVariable + ".set_width(" + cameraWidth + ")").nlI();
+            this.src.add(cameraVariable + ".set_height(" + resolution[1] + ")").nlI();
+            this.src.add(cameraVariable + ".set_width(" + resolution[0] + ")").nlI();
             this.src.add(cameraVariable + ".set_fps(15)").nlI();
             this.src.add(cameraVariable + ".start()").nlI();
-            this.src.add("CAMERA_HEIGHT = " + cameraHeight).nlI();
-            this.src.add("CAMERA_WIDTH = " + cameraWidth).nlI();
             nlIndent();
-            if ( usedHardwareBean.isSensorUsed(SC.MOTION) ) {
-                String sensitivity = camera.getOptProperty("MOTION");
-                this.src.add("motion_detector = txt_factory.camera_factory.create_motion_detector" +
-                    "(0, 0, CAMERA_WIDTH, CAMERA_HEIGHT," +
-                    " CAMERA_WIDTH * CAMERA_HEIGHT * (" + sensitivity + " / 100) / 500)").nlI();
+            initDetectors(usedHardwareBean, camera);
+        }
+    }
+
+    private void initDetectors(UsedHardwareBean usedHardwareBean, ConfigurationComponent camera) {
+        String usbPort = camera.getOptProperty("PORT").substring(3);
+        String cameraVariable = "TXT_M_USB1_" + usbPort + "_camera";
+        Map<String, List<ConfigurationComponent>> detectorsMap = getDetectorsMap();
+
+        if ( usedHardwareBean.isSensorUsed(SC.MOTION) ) {
+            List<ConfigurationComponent> motiondetectors = detectorsMap.get("CAMERA_MOTIONDETECTOR");
+            for ( ConfigurationComponent detector : motiondetectors ) {
+                String x = detector.getOptProperty("XSTART");
+                String y = detector.getOptProperty("YSTART");
+                String width = Integer.toString(Integer.parseInt(detector.getOptProperty("XEND")) - Integer.parseInt(x));
+                String height = Integer.toString(Integer.parseInt(detector.getOptProperty("YEND")) - Integer.parseInt(y));
+
+                this.src.add("motion_detector_" +
+                    detector.userDefinedPortName +
+                    "= txt_factory.camera_factory.create_motion_detector(" +
+                    x + ", " + y + ", " + width + ", " + height + ", " +
+                    detector.getOptProperty("TOLERANCE") + ")").nlI();
                 this.src.add(cameraVariable, ".add_detector(motion_detector)").nlI();
 
             }
-            if ( usedHardwareBean.isSensorUsed(SC.COLOUR) ) {
-                int percent = Integer.parseInt(camera.getOptProperty("COLOURSIZE"));
+        }
+        if ( usedHardwareBean.isSensorUsed(SC.COLOUR) ) {
 
-                double colourWidth = cameraWidth * ((double) percent / 100);
-                double colourHeight = cameraHeight * ((double) percent / 100);
-                int startX = (cameraWidth - (int) colourWidth) / 2;
-                int startY = (cameraHeight - (int) colourHeight) / 2;
-                this.src.add("color_detector = txt_factory.camera_factory.create_color_detector(", startX, ", ", startY, ", ", (int) colourWidth, ", ", (int) colourHeight, ", 1)").nlI();
-                this.src.add(cameraVariable, ".add_detector(color_detector)").nlI();
-            }
-            if ( usedHardwareBean.isSensorUsed(FischertechnikConstants.LINE) ) {
-                this.src.add("line_detector = txt_factory.camera_factory.create_line_detector(60, 45, 200, 150, 5, 100, -100, 100, 6)").nlI();
-                this.src.add(cameraVariable, ".add_detector(line_detector)").nlI();
-            }
-            if ( usedHardwareBean.isSensorUsed(FischertechnikConstants.BALL) ) {
-                this.src.add("ball_detector = txt_factory.camera_factory.create_ball_detector(0, 0, 320, 240, 10, 100, -100, 100, ");
-                this.src.add(hexToRgb(camera.getOptProperty("COLOUR")));
-                this.src.add(", 20)").nlI();
-                this.src.add(cameraVariable, ".add_detector(ball_detector)").nlI();
-            }
+            //TODO
+            this.src.add("color_detector = txt_factory.camera_factory.create_color_detector(", 100, ", ", 200, ", ", (int) 100, ", ", (int) 200, ", 1)").nlI();
+            this.src.add(cameraVariable, ".add_detector(color_detector)").nlI();
+        }
+        if ( usedHardwareBean.isSensorUsed(FischertechnikConstants.LINE) ) {
+            this.src.add("line_detector = txt_factory.camera_factory.create_line_detector(60, 45, 200, 150, 5, 100, -100, 100, 6)").nlI();
+            this.src.add(cameraVariable, ".add_detector(line_detector)").nlI();
+        }
+        if ( usedHardwareBean.isSensorUsed(FischertechnikConstants.BALL) ) {
+            this.src.add("ball_detector = txt_factory.camera_factory.create_ball_detector(0, 0, 320, 240, 10, 100, -100, 100, ");
+            this.src.add(hexToRgb(camera.getOptProperty("COLOUR")));
+            this.src.add(", 20)").nlI();
+            this.src.add(cameraVariable, ".add_detector(ball_detector)").nlI();
         }
     }
 
@@ -1259,6 +1291,21 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
             }
         }
         return configurationAst.getConfigurationComponent(encoderPort).getComponentProperties().get("PORT");
+    }
+
+    private Map<String, List<ConfigurationComponent>> getDetectorsMap() {
+        if ( this.detectorsMap.isEmpty() ) {
+            ConfigurationComponent camera = getCamera();
+            List<ConfigurationComponent> detectors = camera.getSubComponents().get("DETECTORS");
+            Map<String, List<ConfigurationComponent>> detectorsMap = new HashMap<>();
+            for ( ConfigurationComponent detector : detectors ) {
+                detectorsMap
+                    .computeIfAbsent(detector.componentType, k -> new ArrayList<>())
+                    .add(detector);
+            }
+            this.detectorsMap = detectorsMap;
+        }
+        return this.detectorsMap;
     }
 
 }

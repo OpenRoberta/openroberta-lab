@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.visitor;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.google.common.collect.ClassToInstanceMap;
@@ -534,13 +535,33 @@ public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
     protected void checkSensorPort(ExternalSensor sensor) {
         ConfigurationComponent configurationComponent = this.robotConfiguration.optConfigurationComponent(sensor.getUserDefinedPort());
         if ( configurationComponent == null ) {
-            addErrorToPhrase(sensor, "CONFIGURATION_ERROR_SENSOR_MISSING");
-            return;
+            configurationComponent = getSubComponent(sensor.getUserDefinedPort());
+            if ( configurationComponent == null ) {
+                addErrorToPhrase(sensor, "CONFIGURATION_ERROR_SENSOR_MISSING");
+                return;
+            }
         }
         String expectedComponentType = SENSOR_COMPONENT_TYPE_MAP.get(sensor.getKind().getName());
         if ( expectedComponentType != null && !expectedComponentType.equalsIgnoreCase(configurationComponent.componentType) ) {
             addErrorToPhrase(sensor, "CONFIGURATION_ERROR_SENSOR_WRONG");
         }
+    }
+
+    private ConfigurationComponent getSubComponent(String userDefinedPort) {
+        for ( ConfigurationComponent component : this.robotConfiguration.getConfigurationComponentsValues() ) {
+            try {
+                for ( List<ConfigurationComponent> subComponents : component.getSubComponents().values() ) {
+                    for ( ConfigurationComponent subComponent : subComponents ) {
+                        if ( subComponent.userDefinedPortName.equals(userDefinedPort) ) {
+                            return subComponent;
+                        }
+                    }
+                }
+            } catch ( UnsupportedOperationException e ) {
+                continue;
+            }
+        }
+        return null;
     }
 
     private ConfigurationComponent getMotorFromUserName(String userName) {
