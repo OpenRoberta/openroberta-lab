@@ -483,4 +483,5 @@ export {
     checkProgramCompatibility,
     likeProgram,
     resetProgram,
+    processUserCode,
 };
