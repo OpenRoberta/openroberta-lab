@@ -135,6 +135,11 @@ public final class Jaxb2ConfigurationAst {
         for ( int i = 1; i < block.getField().size(); i++ ) {
             map.put(block.getField().get(i).getName(), block.getField().get(i).getValue());
         }
+        for ( Value value : block.getValue() ) {
+            String name = value.getName();
+            String val = value.getBlock().getField().get(0).getValue().toString();
+            map.put(name, val);
+        }
         LinkedHashMap<String, List<ConfigurationComponent>> subcomponents = new LinkedHashMap<>();
         List<Statement> statements = block.getStatement();
         if ( statements.size() == 0 ) {

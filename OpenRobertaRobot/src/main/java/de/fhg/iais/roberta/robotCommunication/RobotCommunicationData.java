@@ -19,7 +19,7 @@ import de.fhg.iais.roberta.util.basic.Clock;
 public class RobotCommunicationData {
     private static final Logger LOG = LoggerFactory.getLogger(RobotCommunicationData.class);
     private static final int TIMEOUT_UNTIL_TOKEN_EXPIRES_WHEN_USER_DOESNT_APPROVE = 300000;
-    private static final int TIMEOUT_UNTIL_ASSUME_DISCONNECTED_IF_ROBOT_DOESNT_PUSH = 10000;
+    private static final int TIMEOUT_UNTIL_ASSUME_DISCONNECTED_IF_ROBOT_DOESNT_PUSH = 11000;
     private static final int PUSH_TIMEOUT_INTERVALL = 10000;
 
     private final String token;

@@ -1,15 +1,20 @@
 <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="txt4" xmlversion="" description="" tags="">
-    <instance x="714" y="110">
+    <instance x="714" y="24">
         <block type="robConf_camera_txt4" id="CAM" intask="true">
             <field name="NAME">C</field>
-            <field name="COLOURSIZE">30</field>
-            <field name="MOTION">2</field>
             <field name="PORT">USB1</field>
-            <value name="COLOUR">
-                <block type="robColour_picker" id="COL" intask="true" deletable="false">
-                    <field name="COLOUR">#FFA500</field>
+            <statement name="DETECTORS">
+                <block type="robConf_line_txt4" id="S(/UHHH;N[4Km1TML1" intask="true">
+                    <field name="NAME">L</field>
+                    <field name="XSTART">0</field>
+                    <field name="XEND">320</field>
+                    <field name="YSTART">60</field>
+                    <field name="XEND">80</field>
+                    <field name="NUMBERLINES">3</field>
+                    <field name="MINIMUM">30</field>
+                    <field name="MAXIMUM">100</field>
                 </block>
-            </value>
+            </statement>
         </block>
     </instance>
     <instance x="498" y="168">

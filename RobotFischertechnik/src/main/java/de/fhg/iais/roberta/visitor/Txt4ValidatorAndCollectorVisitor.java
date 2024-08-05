@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.visitor;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.google.common.collect.ClassToInstanceMap;
@@ -379,10 +380,7 @@ public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
 
     @Override
     public Void visitCameraLineInformationSensor(CameraLineInformationSensor cameraLineInformationSensor) {
-        ConfigurationComponent configurationComponent = this.robotConfiguration.optConfigurationComponent(cameraLineInformationSensor.getUserDefinedPort());
-        if ( configurationComponent == null ) {
-            addErrorToPhrase(cameraLineInformationSensor, "CONFIGURATION_ERROR_SENSOR_MISSING");
-        }
+        checkSensorPort(cameraLineInformationSensor);
         requiredComponentVisited(cameraLineInformationSensor, cameraLineInformationSensor.lineId);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(cameraLineInformationSensor.getUserDefinedPort(), FischertechnikConstants.CAMERA, FischertechnikConstants.LINE));
         usedHardwareBuilder.addUsedSensor(new UsedSensor(cameraLineInformationSensor.getUserDefinedPort(), FischertechnikConstants.LINE, FischertechnikConstants.LINE));
@@ -392,11 +390,7 @@ public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
 
     @Override
     public Void visitCameraLineColourSensor(CameraLineColourSensor cameraLineColourSensor) {
-        ConfigurationComponent configurationComponent = this.robotConfiguration.optConfigurationComponent(cameraLineColourSensor.getUserDefinedPort());
-        if ( configurationComponent == null ) {
-            addErrorToPhrase(cameraLineColourSensor, "CONFIGURATION_ERROR_SENSOR_MISSING");
-        }
-
+        checkSensorPort(cameraLineColourSensor);
         requiredComponentVisited(cameraLineColourSensor, cameraLineColourSensor.lineId);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(cameraLineColourSensor.getUserDefinedPort(), FischertechnikConstants.CAMERA, FischertechnikConstants.LINE));
         usedHardwareBuilder.addUsedSensor(new UsedSensor(cameraLineColourSensor.getUserDefinedPort(), FischertechnikConstants.LINE, FischertechnikConstants.LINE));
@@ -531,16 +525,41 @@ public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
         return null;
     }
 
-    protected void checkSensorPort(ExternalSensor sensor) {
+    protected void checkSensorPort(WithUserDefinedPort sensor) {
         ConfigurationComponent configurationComponent = this.robotConfiguration.optConfigurationComponent(sensor.getUserDefinedPort());
         if ( configurationComponent == null ) {
-            addErrorToPhrase(sensor, "CONFIGURATION_ERROR_SENSOR_MISSING");
-            return;
+            configurationComponent = getSubComponent(sensor.getUserDefinedPort());
+            if ( configurationComponent == null ) {
+                addErrorToPhrase((Phrase) sensor, "CONFIGURATION_ERROR_SENSOR_MISSING");
+            }
         }
+        if ( sensor instanceof ExternalSensor ) {
+            checkKind((ExternalSensor) sensor, configurationComponent);
+        }
+    }
+
+    protected void checkKind(ExternalSensor sensor, ConfigurationComponent configurationComponent) {
         String expectedComponentType = SENSOR_COMPONENT_TYPE_MAP.get(sensor.getKind().getName());
         if ( expectedComponentType != null && !expectedComponentType.equalsIgnoreCase(configurationComponent.componentType) ) {
             addErrorToPhrase(sensor, "CONFIGURATION_ERROR_SENSOR_WRONG");
         }
+    }
+
+    private ConfigurationComponent getSubComponent(String userDefinedPort) {
+        for ( ConfigurationComponent component : this.robotConfiguration.getConfigurationComponentsValues() ) {
+            try {
+                for ( List<ConfigurationComponent> subComponents : component.getSubComponents().values() ) {
+                    for ( ConfigurationComponent subComponent : subComponents ) {
+                        if ( subComponent.userDefinedPortName.equals(userDefinedPort) ) {
+                            return subComponent;
+                        }
+                    }
+                }
+            } catch ( UnsupportedOperationException e ) {
+                continue;
+            }
+        }
+        return null;
     }
 
     private ConfigurationComponent getMotorFromUserName(String userName) {

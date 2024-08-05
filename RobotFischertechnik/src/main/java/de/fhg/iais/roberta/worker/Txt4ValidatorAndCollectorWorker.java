@@ -24,7 +24,7 @@ import de.fhg.iais.roberta.visitor.validate.CommonNepoValidatorAndCollectorVisit
 
 public class Txt4ValidatorAndCollectorWorker extends AbstractValidatorAndCollectorWorker {
 
-    private static final List<String> NON_BLOCKING_PROPERTIES = Collections.unmodifiableList(Arrays.asList("MOTOR_FL", "MOTOR_FR", "MOTOR_RL", "MOTOR_RR", "MOTOR_L", "MOTOR_R", "BRICK_WHEEL_DIAMETER", "BRICK_TRACK_WIDTH", "WHEEL_BASE", "VCC", "GND"));
+    private static final List<String> NON_BLOCKING_PROPERTIES = Collections.unmodifiableList(Arrays.asList("MOTOR_FL", "MOTOR_FR", "MOTOR_RL", "MOTOR_RR", "MOTOR_L", "MOTOR_R", "BRICK_WHEEL_DIAMETER", "BRICK_TRACK_WIDTH", "WHEEL_BASE", "VCC", "GND", "DETECTORS", "RESOLUTION", "XSTART", "XEND", "YSTART", "YEND", "NUMBERLINES", "MINIMUM", "MAXIMUM", "COLOUR", "TOLERANCE"));
     private List<String> takenPins;
     private List<String> usedI2CSensors;
 
