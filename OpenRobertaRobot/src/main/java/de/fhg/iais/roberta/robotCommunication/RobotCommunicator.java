@@ -72,6 +72,11 @@ public class RobotCommunicator {
         if ( addNewRegistration(newRobotCommunicationData) ) {
             return newRobotCommunicationData.robotTokenAgreementRequest(); // this will freeze the request until another thread issues a notifyAll()
         } else {
+            try {
+                Thread.sleep(1000); // to avoid a DOS attack (either by a bad implementation of the robot-server protocol or by an attacker), we sleep
+            } catch ( InterruptedException e ) {
+                // ignore the interrupt
+            }
             return false;
         }
     }
