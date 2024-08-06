@@ -10,6 +10,136 @@ import org.antlr.v4.runtime.tree.ParseTreeVisitor;
  */
 public interface ExprlyVisitor<T> extends ParseTreeVisitor<T> {
 	/**
+	 * Visit a parse tree produced by {@link ExprlyParser#program}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitProgram(ExprlyParser.ProgramContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code VariableDeclaration}
+	 * labeled alternative in {@link ExprlyParser#declaration}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitVariableDeclaration(ExprlyParser.VariableDeclarationContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code MainFunc}
+	 * labeled alternative in {@link ExprlyParser#mainBlock}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMainFunc(ExprlyParser.MainFuncContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code FuncUser}
+	 * labeled alternative in {@link ExprlyParser#userFunc}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFuncUser(ExprlyParser.FuncUserContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ParamsMethod}
+	 * labeled alternative in {@link ExprlyParser#nameDecl}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParamsMethod(ExprlyParser.ParamsMethodContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ExprlyParser#statementList}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitStatementList(ExprlyParser.StatementListContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code StmtFunc}
+	 * labeled alternative in {@link ExprlyParser#stmt}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitStmtFunc(ExprlyParser.StmtFuncContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code StmtUsedDefCall}
+	 * labeled alternative in {@link ExprlyParser#stmt}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitStmtUsedDefCall(ExprlyParser.StmtUsedDefCallContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code BinaryVarAssign}
+	 * labeled alternative in {@link ExprlyParser#stmt}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBinaryVarAssign(ExprlyParser.BinaryVarAssignContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code ConditionStatementBlock}
+	 * labeled alternative in {@link ExprlyParser#stmt}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitConditionStatementBlock(ExprlyParser.ConditionStatementBlockContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code RepeatFor}
+	 * labeled alternative in {@link ExprlyParser#stmt}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRepeatFor(ExprlyParser.RepeatForContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code RepeatStatement}
+	 * labeled alternative in {@link ExprlyParser#stmt}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRepeatStatement(ExprlyParser.RepeatStatementContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code RepeatForEach}
+	 * labeled alternative in {@link ExprlyParser#stmt}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRepeatForEach(ExprlyParser.RepeatForEachContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code WaitStatement}
+	 * labeled alternative in {@link ExprlyParser#stmt}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitWaitStatement(ExprlyParser.WaitStatementContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code FlowControl}
+	 * labeled alternative in {@link ExprlyParser#stmt}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFlowControl(ExprlyParser.FlowControlContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code WaitTimeStatement}
+	 * labeled alternative in {@link ExprlyParser#stmt}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitWaitTimeStatement(ExprlyParser.WaitTimeStatementContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code UserFuncIfStmt}
+	 * labeled alternative in {@link ExprlyParser#stmt}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitUserFuncIfStmt(ExprlyParser.UserFuncIfStmtContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code RobotStatement}
+	 * labeled alternative in {@link ExprlyParser#stmt}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRobotStatement(ExprlyParser.RobotStatementContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ExprlyParser#robotStmt}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRobotStmt(ExprlyParser.RobotStmtContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link ExprlyParser#expression}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -29,13 +159,6 @@ public interface ExprlyVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitIfElseOp(ExprlyParser.IfElseOpContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code ParamsMethod}
-	 * labeled alternative in {@link ExprlyParser#expr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitParamsMethod(ExprlyParser.ParamsMethodContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code BinaryB}
 	 * labeled alternative in {@link ExprlyParser#expr}.
@@ -114,149 +237,6 @@ public interface ExprlyVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitConnExp(ExprlyParser.ConnExpContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link ExprlyParser#robotExpr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitRobotExpr(ExprlyParser.RobotExprContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code RobotSensorExpression}
-	 * labeled alternative in {@link ExprlyParser#robotSensorExpr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitRobotSensorExpression(ExprlyParser.RobotSensorExpressionContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code RobotActuatorExpression}
-	 * labeled alternative in {@link ExprlyParser#robotActuatorExpr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitRobotActuatorExpression(ExprlyParser.RobotActuatorExpressionContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code RobotSpecificExpression}
-	 * labeled alternative in {@link ExprlyParser#robotSpecificExpr}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitRobotSpecificExpression(ExprlyParser.RobotSpecificExpressionContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link ExprlyParser#statementList}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitStatementList(ExprlyParser.StatementListContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code StmtFunc}
-	 * labeled alternative in {@link ExprlyParser#stmt}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitStmtFunc(ExprlyParser.StmtFuncContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code BinaryVarAssign}
-	 * labeled alternative in {@link ExprlyParser#stmt}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitBinaryVarAssign(ExprlyParser.BinaryVarAssignContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code ConditionStatementBlock}
-	 * labeled alternative in {@link ExprlyParser#stmt}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitConditionStatementBlock(ExprlyParser.ConditionStatementBlockContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code RepeatFor}
-	 * labeled alternative in {@link ExprlyParser#stmt}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitRepeatFor(ExprlyParser.RepeatForContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code RepeatStatement}
-	 * labeled alternative in {@link ExprlyParser#stmt}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitRepeatStatement(ExprlyParser.RepeatStatementContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code RepeatForEach}
-	 * labeled alternative in {@link ExprlyParser#stmt}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitRepeatForEach(ExprlyParser.RepeatForEachContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code WaitStatement}
-	 * labeled alternative in {@link ExprlyParser#stmt}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitWaitStatement(ExprlyParser.WaitStatementContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code FlowControl}
-	 * labeled alternative in {@link ExprlyParser#stmt}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitFlowControl(ExprlyParser.FlowControlContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code WaitTimeStatement}
-	 * labeled alternative in {@link ExprlyParser#stmt}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitWaitTimeStatement(ExprlyParser.WaitTimeStatementContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code FuncUser}
-	 * labeled alternative in {@link ExprlyParser#stmt}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitFuncUser(ExprlyParser.FuncUserContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code UserFuncIfStmt}
-	 * labeled alternative in {@link ExprlyParser#stmt}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitUserFuncIfStmt(ExprlyParser.UserFuncIfStmtContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link ExprlyParser#robotStmt}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitRobotStmt(ExprlyParser.RobotStmtContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code RobotSensorStatement}
-	 * labeled alternative in {@link ExprlyParser#robotSensorStmt}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitRobotSensorStatement(ExprlyParser.RobotSensorStatementContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link ExprlyParser#program}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitProgram(ExprlyParser.ProgramContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code VariableDeclaration}
-	 * labeled alternative in {@link ExprlyParser#declaration}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitVariableDeclaration(ExprlyParser.VariableDeclarationContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code MainFunc}
-	 * labeled alternative in {@link ExprlyParser#mainBlock}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitMainFunc(ExprlyParser.MainFuncContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code Col}
 	 * labeled alternative in {@link ExprlyParser#literal}.
 	 * @param ctx the parse tree
@@ -319,4 +299,62 @@ public interface ExprlyVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitUserDefCall(ExprlyParser.UserDefCallContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ExprlyParser#robotExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRobotExpr(ExprlyParser.RobotExprContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code RobotMicrobitv2Expression}
+	 * labeled alternative in {@link ExprlyParser#robotMicrobitv2Expr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRobotMicrobitv2Expression(ExprlyParser.RobotMicrobitv2ExpressionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ExprlyParser#microbitv2SensorExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMicrobitv2SensorExpr(ExprlyParser.Microbitv2SensorExprContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code RobotMicrobitv2Statement}
+	 * labeled alternative in {@link ExprlyParser#robotMicrobitv2Stmt}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRobotMicrobitv2Statement(ExprlyParser.RobotMicrobitv2StatementContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ExprlyParser#microbitv2SensorStmt}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMicrobitv2SensorStmt(ExprlyParser.Microbitv2SensorStmtContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code RobotWeDoExpression}
+	 * labeled alternative in {@link ExprlyParser#robotWeDoExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRobotWeDoExpression(ExprlyParser.RobotWeDoExpressionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ExprlyParser#weDoSensorExpr}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitWeDoSensorExpr(ExprlyParser.WeDoSensorExprContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code RobotWeDoStatement}
+	 * labeled alternative in {@link ExprlyParser#robotWeDoStmt}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitRobotWeDoStatement(ExprlyParser.RobotWeDoStatementContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ExprlyParser#wedoSensorStmt}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitWedoSensorStmt(ExprlyParser.WedoSensorStmtContext ctx);
 }

@@ -12,6 +12,7 @@ import de.fhg.iais.roberta.exprly.generated.ExprlyParser;
 import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
+import de.fhg.iais.roberta.syntax.lang.expr.NullConst;
 import de.fhg.iais.roberta.syntax.lang.expr.SensorExpr;
 import de.fhg.iais.roberta.syntax.lang.stmt.SensorStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
@@ -51,8 +52,9 @@ public class RobotMbedTextlyVisitor<T> extends CommonTextlyVisitor<T> {
                 hide.setValue("_A");
                 listHide.add(hide);
                 mutation.setMode("VALUE");
-                ExternalSensorBean externalSensorBeanAcce = new ExternalSensorBean("_A", "VALUE", ctx.op.getText().toUpperCase(), mutation, listHide);
-                return (T) new SensorExpr(new AccelerometerSensor(mkInlineProperty(ctx, "robSensors_accelerometer_getSample"), externalSensorBeanAcce));
+                ExternalSensorBean externalSensorBeanAcce = new ExternalSensorBean("_A", "VALUE", ctx.NAME().getText().toUpperCase(), mutation, listHide);
+                SensorExpr sensorExprAccelerometer = new SensorExpr(new AccelerometerSensor(mkInlineProperty(ctx, "robSensors_accelerometer_getSample"), externalSensorBeanAcce));
+                return (T) checkValidationName(sensorExprAccelerometer, ctx.NAME().getText(), NameType.ACCELEROMETERPORT);
 
             case "logoTouchSensor":
 
@@ -100,9 +102,10 @@ public class RobotMbedTextlyVisitor<T> extends CommonTextlyVisitor<T> {
 
             case "keysSensor":
                 mutation.setMode("PRESSED");
-                validateName(ctx.NAME().getText(), NameType.BUTTON);
+                //validateName(ctx.NAME().getText(), NameType.BUTTON);
                 ExternalSensorBean externalSensorBeanKey = new ExternalSensorBean(ctx.NAME().getText(), "PRESSED", "- EMPTY_SLOT -", mutation, listHide);
-                return (T) new SensorExpr(new KeysSensor(mkInlineProperty(ctx, "robSensors_key_getSample"), externalSensorBeanKey));
+                SensorExpr sensorExpr = new SensorExpr(new KeysSensor(mkInlineProperty(ctx, "robSensors_key_getSample"), externalSensorBeanKey));
+                return (T) checkValidationName(sensorExpr, ctx.NAME().getText(), NameType.BUTTON);
 
             case "lightSensor":
                 hide.setName("SENSORPORT");
@@ -183,6 +186,13 @@ public class RobotMbedTextlyVisitor<T> extends CommonTextlyVisitor<T> {
     @Override
     public T visitRobotMicrobitv2Expression(ExprlyParser.RobotMicrobitv2ExpressionContext ctx) {
         return visitMicrobitv2SensorExpr(ctx.microbitv2SensorExpr());
+    }
+
+    @Override
+    public T visitRobotWeDoExpression(ExprlyParser.RobotWeDoExpressionContext ctx) throws UnsupportedOperationException {
+        Expr result = new EmptyExpr(BlocklyType.NUMBER);
+        result.addTcError("this expression is only for Wedo Robot " + ctx.getText(), false);
+        return (T) result;
     }
 
     private static BlocklyProperties mkInlineProperty(ParserRuleContext ctx, String type) {

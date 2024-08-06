@@ -123,9 +123,6 @@ public final class EvalExpr extends Expr {
             annotations.add(NepoInfo.error("PROGRAM_ERROR_EXPRBLOCK_PARSE"));
             return errorExpr;
         } else {
-            //TextlyVisitor<Expr> exprlyVisitor = new TextlyVisitor();
-            //Expr expr = exprlyVisitor.visitExpression(expression);
-
             Object textlyVisitorInstance = pluginClass.getDeclaredConstructor().newInstance();
             Method visitExpressionMethod = pluginClass.getMethod("visitExpression", ExpressionContext.class);
             Expr expr = (Expr) visitExpressionMethod.invoke(textlyVisitorInstance, expression);

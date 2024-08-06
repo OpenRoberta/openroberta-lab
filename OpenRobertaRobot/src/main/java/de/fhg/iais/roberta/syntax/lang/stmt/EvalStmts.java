@@ -113,9 +113,6 @@ public final class EvalStmts extends Stmt {
             annotations.add(NepoInfo.error("PROGRAM_ERROR_EXPRBLOCK_PARSE"));
             return null;
         } else {
-//            TextlyVisitor<Stmt> exprlyStatements = new TextlyVisitor();
-//            StmtList stmtList = (StmtList) exprlyStatements.visitStatementList(expression);
-
             Object textlyVisitorInstance = pluginClass.getDeclaredConstructor().newInstance();
             Method visitStatementListMethod = pluginClass.getMethod("visitStatementList", ExprlyParser.StatementListContext.class);
             StmtList stmtList = (StmtList) visitStatementListMethod.invoke(textlyVisitorInstance, expression);

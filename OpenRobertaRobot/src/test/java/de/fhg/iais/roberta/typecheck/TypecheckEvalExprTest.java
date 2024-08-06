@@ -293,7 +293,7 @@ public class TypecheckEvalExprTest extends AstTest {
      */
     public void testEvalExprForDebug() throws Exception {
         errorMessages = new ArrayList<>();
-
+        testEvalExpr(BOOL, "b", true);
         showErrorsAndFailWithErrors();
     }
 
