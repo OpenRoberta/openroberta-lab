@@ -61,7 +61,6 @@ public class RobotCommand {
         }
 
         String robot = r.getWithDefault("?", "robot");
-        String macaddr = r.getWithDefault("?", "macaddr");
         String robotName = r.getWithDefault("?", "robotname", "brickname");
         String batteryvoltage = r.getWithDefault("?", "battery");
         String menuversion = r.getWithDefault("?", "menuversion");
@@ -72,6 +71,7 @@ public class RobotCommand {
         JSONObject response;
         switch (cmd) {
             case CMD_REGISTER:
+                String macaddr = r.get("macaddr");
                 LOG.info("ROBOT_PROTOCOL: robot [" + macaddr + "] send token " + token + " for user approval");
                 RobotCommunicationData state =
                         new RobotCommunicationData(token, robot, macaddr, robotName, batteryvoltage, menuversion, runtimeVersion, pluginName, firmwareversion);
@@ -91,8 +91,7 @@ public class RobotCommand {
                     return Response.serverError().build();
                 } else {
                     if (!command.equals(CMD_REPEAT) || logPush) {
-                        LOG.info("ROBOT_PROTOCOL: the command " + command + " is pushed to robot [" + macaddr
-                                + "] for token " + token + " [count: " + counter + "]");
+                        LOG.info("ROBOT_PROTOCOL: the command " + command + " is pushed to robot with token " + token + " [count: " + counter + "]");
                     }
                     response = new JSONObject().put(CMD, command);
                     response.put(SUBTYPE, this.brickCommunicator.getSubtype());

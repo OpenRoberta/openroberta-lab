@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicationData.State;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 
 /**
  * class, that synchronizes the communication between the bricks and the web-app. Thread-safe. See class {@link RobotCommunicationData} for further
@@ -37,11 +38,11 @@ public class RobotCommunicator {
      *
      * @return true if the ticket has been accepted
      */
-    public boolean addNewRegistration(RobotCommunicationData newRobotCommunicationData) {
-        String token = newRobotCommunicationData.getToken();
+    RegistrationRequest addNewRegistration(RobotCommunicationData newRobotCommunicationData) {
+        String newToken = newRobotCommunicationData.getToken();
         String newIdentificator = newRobotCommunicationData.getRobotIdentificator();
-        Assert.isTrue(token != null && newIdentificator != null);
-        RobotCommunicationData existingRobotCommunicationData = this.allStates.get(token);
+        Assert.isTrue(newToken != null && newIdentificator != null);
+        RobotCommunicationData existingRobotCommunicationData = this.allStates.get(newToken);
         if ( existingRobotCommunicationData != null ) {
             String existingIdentificator = existingRobotCommunicationData.getRobotIdentificator();
             if ( existingIdentificator == null
@@ -50,34 +51,45 @@ public class RobotCommunicator {
                 || existingIdentificator.equals("unknown")
             ) {
                 LOG.info("ROBOT_RC: token already used. New token required");
-                return false;
+                return RegistrationRequest.TOKEN_INVALID;
             }
         }
         for ( String storedToken : this.allStates.keySet() ) {
             RobotCommunicationData storedState = this.allStates.get(storedToken);
             if ( newIdentificator.equals(storedState.getRobotIdentificator())
                 && !newIdentificator.equals("usb")
-                && !newIdentificator.equals("unknown") ) {
-                LOG.info("ROBOT_RC: token approval request for robot [" + newIdentificator + "], but an old request is pending. Start abort old request");
-                this.allStates.remove(storedToken);
-                storedState.abort(); // notifyAll() executed
-                LOG.info("ROBOT_RC: token approval request for robot [" + newIdentificator + "], but an old request is pending. End abort old request.");
+                && !newIdentificator.equals("unknown") ) //
+            {
+                if ( storedState.getToken().equals(newToken) ) {
+                    // TODO: keep? Experimental for Fischertechnik. A register for a token that was the same as a past registration. Keep running!
+                    LOG.info("ROBOT_RC: token approved for robot [" + newIdentificator + "]. Token  " + newToken + " unchanged");
+                    return RegistrationRequest.REPEATED_REGISTRATION_REQUEST;
+                } else {
+                    this.allStates.remove(storedToken);
+                    storedState.abort(); // notifyAll() executed
+                    LOG.info("ROBOT_RC: token approval request for robot [" + newIdentificator + "]. An old request is pending and aborted.");
+                }
             }
         }
-        this.allStates.put(token, newRobotCommunicationData);
-        return true;
+        this.allStates.put(newToken, newRobotCommunicationData);
+        return RegistrationRequest.NEW_REGISTRATION_REQUEST;
     }
 
     public boolean robotWantsTokenToBeApproved(RobotCommunicationData newRobotCommunicationData) {
-        if ( addNewRegistration(newRobotCommunicationData) ) {
-            return newRobotCommunicationData.robotTokenAgreementRequest(); // this will freeze the request until another thread issues a notifyAll()
-        } else {
-            try {
-                Thread.sleep(1000); // to avoid a DOS attack (either by a bad implementation of the robot-server protocol or by an attacker), we sleep
-            } catch ( InterruptedException e ) {
-                // ignore the interrupt
-            }
-            return false;
+        switch ( addNewRegistration(newRobotCommunicationData) ) {
+            case TOKEN_INVALID:
+                try {
+                    Thread.sleep(1000); // to avoid server congestion if a robot uses a bad implementation of the robot-server protocol
+                } catch ( InterruptedException e ) {
+                    // ignore the interrupt
+                }
+                return false;
+            case NEW_REGISTRATION_REQUEST:
+                return newRobotCommunicationData.robotTokenAgreementRequest();  // this will freeze the request until another thread issues a notifyAll()
+            case REPEATED_REGISTRATION_REQUEST:
+                return true; // was already approved. Second approvement would irritate the user
+            default:
+                throw new DbcException("invalid registration request");
         }
     }
 
@@ -285,5 +297,11 @@ public class RobotCommunicator {
             }
         }
         return false;
+    }
+
+    public enum RegistrationRequest {
+        TOKEN_INVALID,
+        NEW_REGISTRATION_REQUEST,
+        REPEATED_REGISTRATION_REQUEST;
     }
 }
