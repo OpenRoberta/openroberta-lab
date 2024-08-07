@@ -332,7 +332,7 @@ public class ProjectWorkflowRestController {
             response.setCmd("runPSim");
             response.setJavaScriptProgram(project.getSourceCode().toString());
             response.setFileExtension(project.getSourceCodeFileExtension());
-            response.setProgXML(project.getAnnotatedProgramAsXml());
+            response.setProgXML(project.getProgramAsBlocklyXML());
             response.setConfAnnos(new JSONObject(project.getConfAnnotationList()));
             response.setConfiguration(project.getConfigurationJSON());
             response.setProgramName(project.getProgramName());
