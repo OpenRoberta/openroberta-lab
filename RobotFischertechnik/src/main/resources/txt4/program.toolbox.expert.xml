@@ -161,6 +161,16 @@
         <block type='robSensors_encoder_reset_txt4'></block>
         <block type='robSensors_timer_getSample'></block>
         <block type='robSensors_timer_reset'></block>
+        <block type='robSensors_key_getSample'></block>
+        <block type='robSensors_light_getSample'></block>
+        <block type='robSensors_phototransistor_getSample'></block>
+        <block type='robSensors_temperature_getSample'></block>
+        <block type='robSensors_environmental_getSample'></block>
+        <block type='robSensors_environmental_calibrate'></block>
+        <block type='robSensors_gesture_getSample'></block>
+        <block type='robSensors_accelerometer_getSample'></block>
+        <block type='robSensors_compass_getSample'></block>
+        <block type='robSensors_gyro_getSample'></block>
         <block type='robSensors_colour_getSample'></block>
         <block type='robSensors_cameraline_getSample'></block>
         <block type='robSensors_get_line_camera_txt4'>
@@ -179,16 +189,7 @@
         </block>
         <block type='robSensors_ball_getSample'></block>
         <block type='robSensors_motion_getSample'></block>
-        <block type='robSensors_key_getSample'></block>
-        <block type='robSensors_light_getSample'></block>
-        <block type='robSensors_phototransistor_getSample'></block>
-        <block type='robSensors_temperature_getSample'></block>
-        <block type='robSensors_environmental_getSample'></block>
-        <block type='robSensors_environmental_calibrate'></block>
-        <block type='robSensors_gesture_getSample'></block>
-        <block type='robSensors_accelerometer_getSample'></block>
-        <block type='robSensors_compass_getSample'></block>
-        <block type='robSensors_gyro_getSample'></block>
+        
     </category>
     <category name='TOOLBOX_CONTROL' svg='true'>
         <category name='TOOLBOX_DECISION' svg='true'>

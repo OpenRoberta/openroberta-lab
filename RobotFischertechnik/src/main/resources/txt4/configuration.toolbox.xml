@@ -20,7 +20,13 @@
         <block type='robConf_imu'></block>
         <block type='robConf_camera_txt4'></block>
         <block type='robConf_line_txt4'></block>
-        <block type='robConf_balldetector_txt4'></block>
+        <block type='robConf_balldetector_txt4'>
+            <value name='COLOUR'>
+                <block type='robColour_picker' deletable="false">
+                    <field name='COLOUR'>#FFA500</field>
+                </block>
+            </value>
+        </block>
         <block type='robConf_colordetector_txt4'></block>
         <block type='robConf_motiondetector_txt4'></block>
     </category>

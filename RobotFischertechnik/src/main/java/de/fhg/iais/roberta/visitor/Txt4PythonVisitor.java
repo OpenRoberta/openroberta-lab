@@ -200,7 +200,7 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
             List<ConfigurationComponent> balldetectors = detectors.get("CAMERA_BALLDETECTOR");
             for ( ConfigurationComponent detector : balldetectors ) {
                 {
-                    this.src.add("ball_detector" + detector.userDefinedPortName + ".detected()").nlI();
+                    this.src.add("ball_detector_" + detector.userDefinedPortName + ".detected()").nlI();
                 }
             }
         }
@@ -208,7 +208,7 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
             List<ConfigurationComponent> linedetectors = detectors.get("CAMERA_LINE");
             for ( ConfigurationComponent detector : linedetectors ) {
                 {
-                    this.src.add("line_detector" + detector.userDefinedPortName + ".detected()").nlI();
+                    this.src.add("line_detector_" + detector.userDefinedPortName + ".detected()").nlI();
                 }
             }
         }
@@ -694,19 +694,20 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
     @Override
     public Void visitColorSensor(ColorSensor colorSensor) {
         this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(Txt4Methods.CAMERAGETCOLOUR));
-        this.src.add("()");
+        this.src.add("(", "color_detector_", colorSensor.getUserDefinedPort(), ")");
         return null;
     }
 
     @Override
     public Void visitCameraLineSensor(CameraLineSensor cameraLineSensor) {
-        this.src.add("line_detector.get_line_count()");
+        this.src.add("line_detector_" + cameraLineSensor.getUserDefinedPort() + ".get_line_count()");
         return null;
     }
 
     @Override
     public Void visitCameraLineInformationSensor(CameraLineInformationSensor cameraLineInformationSensor) {
-        this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(Txt4Methods.LINEINFORMATION), "(");
+        this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(Txt4Methods.LINEINFORMATION), "(",
+            "line_detector_", cameraLineInformationSensor.getUserDefinedPort(), ", ");
         cameraLineInformationSensor.lineId.accept(this);
         this.src.add(")");
         return null;
@@ -714,7 +715,8 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
 
     @Override
     public Void visitCameraLineColourSensor(CameraLineColourSensor cameraLineColourSensor) {
-        this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(Txt4Methods.LINEGETCOLOUR), "(");
+        this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(Txt4Methods.LINEGETCOLOUR), "(",
+            "line_detector_", cameraLineColourSensor.getUserDefinedPort(), ", ");
         cameraLineColourSensor.lineId.accept(this);
         this.src.add(")");
         return null;
@@ -722,8 +724,8 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
 
     @Override
     public Void visitCameraBallSensor(CameraBallSensor cameraBallSensor) {
-        this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(Txt4Methods.BALLINFORMATION), "()");
-
+        this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(Txt4Methods.BALLINFORMATION), "(" +
+            "ball_detector_", cameraBallSensor.getUserDefinedPort(), ")");
         return null;
     }
 
@@ -1115,40 +1117,76 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
         String usbPort = camera.getOptProperty("PORT").substring(3);
         String cameraVariable = "TXT_M_USB1_" + usbPort + "_camera";
         Map<String, List<ConfigurationComponent>> detectorsMap = getDetectorsMap();
-
+        Map<String, String> detectorRegion = new HashMap<>();
         if ( usedHardwareBean.isSensorUsed(SC.MOTION) ) {
             List<ConfigurationComponent> motiondetectors = detectorsMap.get("CAMERA_MOTIONDETECTOR");
             for ( ConfigurationComponent detector : motiondetectors ) {
-                String x = detector.getOptProperty("XSTART");
-                String y = detector.getOptProperty("YSTART");
-                String width = Integer.toString(Integer.parseInt(detector.getOptProperty("XEND")) - Integer.parseInt(x));
-                String height = Integer.toString(Integer.parseInt(detector.getOptProperty("YEND")) - Integer.parseInt(y));
-
-                this.src.add("motion_detector_" +
-                    detector.userDefinedPortName +
-                    "= txt_factory.camera_factory.create_motion_detector(" +
-                    x + ", " + y + ", " + width + ", " + height + ", " +
-                    detector.getOptProperty("TOLERANCE") + ")").nlI();
-                this.src.add(cameraVariable, ".add_detector(motion_detector)").nlI();
-
+                detectorRegion = getDetectorregion(detector);
+                
+                this.src.add("motion_detector_", detector.userDefinedPortName,
+                    " = txt_factory.camera_factory.create_motion_detector(",
+                    detectorRegion.get("startX"), ", ", detectorRegion.get("startY"), ", ", detectorRegion.get("width"), ", ", detectorRegion.get("height"), ", ",
+                    detector.getOptProperty("TOLERANCE"), ")").nlI();
+                this.src.add(cameraVariable, ".add_detector(motion_detector_", detector.userDefinedPortName,
+                    ")").nlI();
             }
         }
         if ( usedHardwareBean.isSensorUsed(SC.COLOUR) ) {
+            List<ConfigurationComponent> colordetectors = detectorsMap.get("CAMERA_COLORDETECTOR");
+            for ( ConfigurationComponent detector : colordetectors ) {
+                detectorRegion = getDetectorregion(detector);
 
-            //TODO
-            this.src.add("color_detector = txt_factory.camera_factory.create_color_detector(", 100, ", ", 200, ", ", (int) 100, ", ", (int) 200, ", 1)").nlI();
-            this.src.add(cameraVariable, ".add_detector(color_detector)").nlI();
+                this.src.add("color_detector_", detector.userDefinedPortName,
+                    " = txt_factory.camera_factory.create_color_detector(",
+                    detectorRegion.get("startX"), ", ", detectorRegion.get("startY"), ", ", detectorRegion.get("width"), ", ", detectorRegion.get("height"),
+                    ", 1)").nlI();
+                this.src.add(cameraVariable, ".add_detector(color_detector_", detector.userDefinedPortName, ")").nlI();
+            }
         }
         if ( usedHardwareBean.isSensorUsed(FischertechnikConstants.LINE) ) {
-            this.src.add("line_detector = txt_factory.camera_factory.create_line_detector(60, 45, 200, 150, 5, 100, -100, 100, 6)").nlI();
-            this.src.add(cameraVariable, ".add_detector(line_detector)").nlI();
+            List<ConfigurationComponent> linedetectors = detectorsMap.get("CAMERA_LINE");
+            for ( ConfigurationComponent detector : linedetectors ) {
+                detectorRegion = getDetectorregion(detector);
+
+                this.src.add("line_detector_", detector.userDefinedPortName,
+                    " = txt_factory.camera_factory.create_line_detector(",
+                    detectorRegion.get("startX"), ", ", detectorRegion.get("startY"), ", ", detectorRegion.get("width"), ", ", detectorRegion.get("height"), ", ",
+                    detector.getOptProperty("MINIMUM"), ", ", detector.getOptProperty("MAXIMUM"),
+                    ", -100, 100, ",
+                    detector.getOptProperty("NUMBERLINES"), ")").nlI();
+                this.src.add(cameraVariable, ".add_detector(line_detector_", detector.userDefinedPortName, ")").nlI();
+            }
         }
         if ( usedHardwareBean.isSensorUsed(FischertechnikConstants.BALL) ) {
-            this.src.add("ball_detector = txt_factory.camera_factory.create_ball_detector(0, 0, 320, 240, 10, 100, -100, 100, ");
-            this.src.add(hexToRgb(camera.getOptProperty("COLOUR")));
-            this.src.add(", 20)").nlI();
-            this.src.add(cameraVariable, ".add_detector(ball_detector)").nlI();
+            List<ConfigurationComponent> balldetectors = detectorsMap.get("CAMERA_BALLDETECTOR");
+            for ( ConfigurationComponent detector : balldetectors ) {
+                detectorRegion = getDetectorregion(detector);
+
+                this.src.add("ball_detector_", detector.userDefinedPortName,
+                    " = txt_factory.camera_factory.create_ball_detector(",
+                    detectorRegion.get("startX"), ", ", detectorRegion.get("startY"), ", ", detectorRegion.get("width"), ", ", detectorRegion.get("height"), ", ",
+                    detector.getOptProperty("MINIMUM"), ",", detector.getOptProperty("MAXIMUM"),
+                    ", -100, 100, ",
+                    hexToRgb(camera.getOptProperty("COLOUR")), ", ",
+                    detector.getOptProperty("TOLERANCE"), ")").nlI();
+                this.src.add(cameraVariable, ".add_detector(ball_detector_", detector.userDefinedPortName, ")").nlI();
+            }
         }
+    }
+
+    private Map<String, String> getDetectorregion(ConfigurationComponent detector) {
+        String x = detector.getOptProperty("XSTART");
+        String y = detector.getOptProperty("YSTART");
+        String width = Integer.toString(Integer.parseInt(detector.getOptProperty("XEND")) - Integer.parseInt(x));
+        String height = Integer.toString(Integer.parseInt(detector.getOptProperty("YEND")) - Integer.parseInt(y));
+
+        Map<String, String> positionMap = new HashMap<>();
+        positionMap.put("startX", x);
+        positionMap.put("startY", y);
+        positionMap.put("width", width);
+        positionMap.put("height", height);
+
+        return positionMap;
     }
 
     private String hexToRgb(String hexStr) {
