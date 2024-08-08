@@ -36,7 +36,7 @@ import de.fhg.iais.roberta.util.syntax.Assoc;
 @NepoBasic(name = "EVAL_EXPR", category = "EXPR", blocklyNames = {"robActions_eval_expr"})
 public final class EvalExpr extends Expr {
     private static final Logger LOG = LoggerFactory.getLogger(EvalExpr.class);
-    private static final boolean REGENERATE_EVALBLOCK = false; // true: make eval to eval when unparsing the AST; false: make eval to blockly blocks
+    private static final boolean REGENERATE_EVALBLOCK = true; // true: make eval to eval when unparsing the AST; false: make eval to blockly blocks
 
     public final String exprAsString;
     public final Expr exprAsBlock;

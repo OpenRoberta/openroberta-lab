@@ -32,6 +32,10 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 public class RegenerateNepoWorker implements IWorker {
     private static final Logger LOG = LoggerFactory.getLogger(RegenerateNepoWorker.class);
 
+    public boolean mustRunEvenIfPreviousWorkerFailed() {
+        return true;
+    }
+
     @Override
     public void execute(Project project) {
         try {
