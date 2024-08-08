@@ -9,11 +9,14 @@ import de.fhg.iais.roberta.blockly.generated.Hide;
 import de.fhg.iais.roberta.blockly.generated.Mutation;
 import de.fhg.iais.roberta.exprEvaluator.CommonTextlyVisitor;
 import de.fhg.iais.roberta.exprly.generated.ExprlyParser;
+import de.fhg.iais.roberta.syntax.action.mbed.DisplayTextAction;
+import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
+import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.ExprList;
-import de.fhg.iais.roberta.syntax.lang.expr.NullConst;
 import de.fhg.iais.roberta.syntax.lang.expr.SensorExpr;
+import de.fhg.iais.roberta.syntax.lang.stmt.ActionStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.SensorStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
@@ -79,33 +82,23 @@ public class RobotMbedTextlyVisitor<T> extends CommonTextlyVisitor<T> {
                 return (T) new SensorExpr(new CompassSensor(mkInlineProperty(ctx, "robSensors_compass_getSample"), externalSensorBeanCompass));
 
             case "gestureSensor":
-                String op = ctx.op.getText();
-                String transformedOp;
+                String gesture = ctx.NAME().getText();
+                String specialGesture = gesture.equalsIgnoreCase("facedown") ? "FACE_DOWN" :
+                    gesture.equalsIgnoreCase("faceup") ? "FACE_UP" : null;
+                String gestureToUse = specialGesture == null ? gesture.toUpperCase() : specialGesture;
 
-                switch ( op ) {
-                    case "faceDown":
-                        transformedOp = "FACE_DOWN";
-                        break;
-                    case "faceUp":
-                        transformedOp = "FACE_UP";
-                        break;
-                    default:
-                        transformedOp = op.toUpperCase();
-                        break;
-                }
+                mutation.setMode(gestureToUse);
 
-                mutation.setMode(transformedOp);
-
-
-                ExternalSensorBean externalSensorBeanGesture = new ExternalSensorBean("- EMPTY_PORT -", transformedOp, "- EMPTY_SLOT -", mutation, listHide);
-                return (T) new SensorExpr(new GestureSensor(mkInlineProperty(ctx, "robSensors_gesture_getSample"), externalSensorBeanGesture));
+                ExternalSensorBean externalSensorBeanGesture = new ExternalSensorBean("- EMPTY_PORT -", gestureToUse, "- EMPTY_SLOT -", mutation, listHide);
+                SensorExpr sensorExprGesture = new SensorExpr(new GestureSensor(mkInlineProperty(ctx, "robSensors_gesture_getSample"), externalSensorBeanGesture));
+                return (T) checkValidationName(sensorExprGesture, specialGesture != null ? gesture : gestureToUse, NameType.GESTURESENSOROP);
 
             case "keysSensor":
                 mutation.setMode("PRESSED");
                 //validateName(ctx.NAME().getText(), NameType.BUTTON);
                 ExternalSensorBean externalSensorBeanKey = new ExternalSensorBean(ctx.NAME().getText(), "PRESSED", "- EMPTY_SLOT -", mutation, listHide);
-                SensorExpr sensorExpr = new SensorExpr(new KeysSensor(mkInlineProperty(ctx, "robSensors_key_getSample"), externalSensorBeanKey));
-                return (T) checkValidationName(sensorExpr, ctx.NAME().getText(), NameType.BUTTON);
+                SensorExpr sensorExprKey = new SensorExpr(new KeysSensor(mkInlineProperty(ctx, "robSensors_key_getSample"), externalSensorBeanKey));
+                return (T) checkValidationName(sensorExprKey, ctx.NAME().getText(), NameType.BUTTON);
 
             case "lightSensor":
                 hide.setName("SENSORPORT");
@@ -179,8 +172,54 @@ public class RobotMbedTextlyVisitor<T> extends CommonTextlyVisitor<T> {
     }
 
     @Override
-    public T visitRobotMicrobitv2Statement(ExprlyParser.RobotMicrobitv2StatementContext ctx) {
+    public T visitMicrobitv2ActuatorStmt(ExprlyParser.Microbitv2ActuatorStmtContext ctx) {
+        String actuator = ctx.start.getText();
+        Hide hide = new Hide();
+        List<Hide> listHide = new LinkedList();
+        switch ( actuator ) {
+            case "showText":
+
+                Expr msgT = (Expr) visit(ctx.expr(0));
+                msgT.setReadOnly();
+                DisplayTextAction displayTextActionText = new DisplayTextAction(mkInlineProperty(ctx, "mbedActions_display_text"), "TEXT", msgT);
+                ActionStmt actionStmtText = new ActionStmt(displayTextActionText);
+                return (T) actionStmtText;
+            case "showCharacter":
+                Expr msgC = (Expr) visit(ctx.expr(0));
+                msgC.setReadOnly();
+                DisplayTextAction displayTextActionChar = new DisplayTextAction(mkInlineProperty(ctx, "mbedActions_display_text"), "CHARACTER", msgC);
+                ActionStmt actionStmtChar = new ActionStmt(displayTextActionChar);
+                return (T) actionStmtChar;
+            case "pitch":
+                Expr freq = (Expr) visit(ctx.expr(0));
+                freq.setReadOnly();
+                Expr duration = (Expr) visit(ctx.expr(1));
+                duration.setReadOnly();
+                hide.setName("ACTORPORT");
+                hide.setValue("_B");
+                ToneAction toneAction = new ToneAction(mkInlineProperty(ctx, "mbedActions_play_tone"), freq, duration, "_B", hide);
+                ActionStmt actionStmtTone = new ActionStmt(toneAction);
+                return (T) actionStmtTone;
+
+            case "playFile":
+                String fileName = ctx.NAME().getText().toUpperCase();
+                hide.setName("ACTORPORT");
+                hide.setValue("_B");
+                PlayFileAction playFileAction = new PlayFileAction(mkInlineProperty(ctx, "actions_play_file"), "- EMPTY_PORT -", fileName, hide);
+                ActionStmt actionStmtPlayFile = new ActionStmt(playFileAction);
+                return (T) checkValidationName(actionStmtPlayFile, ctx.NAME().getText(), NameType.PLAYFILE);
+        }
+        return null;
+    }
+
+    @Override
+    public T visitRobotMicrobitv2SensorStatement(ExprlyParser.RobotMicrobitv2SensorStatementContext ctx) {
         return visitMicrobitv2SensorStmt(ctx.microbitv2SensorStmt());
+    }
+
+    @Override
+    public T visitRobotMicrobitv2ActuatorStatement(ExprlyParser.RobotMicrobitv2ActuatorStatementContext ctx) {
+        return visitMicrobitv2ActuatorStmt(ctx.microbitv2ActuatorStmt());
     }
 
     @Override
@@ -188,6 +227,8 @@ public class RobotMbedTextlyVisitor<T> extends CommonTextlyVisitor<T> {
         return visitMicrobitv2SensorExpr(ctx.microbitv2SensorExpr());
     }
 
+
+    // TODO: catch expection for other robots
     @Override
     public T visitRobotWeDoExpression(ExprlyParser.RobotWeDoExpressionContext ctx) throws UnsupportedOperationException {
         Expr result = new EmptyExpr(BlocklyType.NUMBER);

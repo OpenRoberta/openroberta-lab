@@ -75,6 +75,16 @@ public abstract class CommonTextlyVisitor<T> extends ExprlyBaseVisitor<T> {
     private static final Pattern FUNCTION_NAME = Pattern.compile("[A-Z][a-zA-Z0-9_]*");
     private static final Pattern BUTTONPORT_NAME = Pattern.compile("[a-zA-Z][a-zA-Z0-9_]*");
     private static final Pattern ACCELEROMETER_PORT = Pattern.compile("\\b(?:x|y|z|strength)\\b");
+    private static final Pattern PLAY_FILE = Pattern.compile(
+        "\\b(?:dadadadum|entertainer|prelude|ode|nyan|ringtone|funk|blues|birthday|wedding|funeral|punchline|python|baddy|chase|ba_ding|wawawawaa|jump_up|jump_down|power_up|power_down)\\b",
+        Pattern.CASE_INSENSITIVE);
+    private static final Pattern GYRO_SENSOR_SLOT = Pattern.compile(
+        "\\b(?:up|down|back|front|no|any)\\b",
+        Pattern.CASE_INSENSITIVE);
+    private static final Pattern GESTURE_SENSOR_OP = Pattern.compile(
+        "\\b(?:up|down|facedown|faceup|shake|freefall)\\b",
+        Pattern.CASE_INSENSITIVE
+    );
 
     /**
      * @return AST instance for the whole expression
@@ -1014,19 +1024,35 @@ public abstract class CommonTextlyVisitor<T> extends ExprlyBaseVisitor<T> {
     }
 
     /**
-     * @return an Exception for the Specific statement , then in the AST will be generated in @RobotsMbedTextlyVisitor
+     * @return an Exception for the Specific sensor microbitv2 statement , then in the AST will be generated in @RobotsMbedTextlyVisitor
      */
     @Override
-    public T visitRobotMicrobitv2Statement(ExprlyParser.RobotMicrobitv2StatementContext ctx) throws UnsupportedOperationException {
+    public T visitRobotMicrobitv2SensorStatement(ExprlyParser.RobotMicrobitv2SensorStatementContext ctx) throws UnsupportedOperationException {
+        throw new UnsupportedOperationException("Specific sensor microbitv2 Statement");
+    }
+
+    /**
+     * @return an Exception for the Specific actuator microbitv2 statement , then in the AST will be generated in @RobotsMbedTextlyVisitor
+     */
+    @Override
+    public T visitRobotMicrobitv2ActuatorStatement(ExprlyParser.RobotMicrobitv2ActuatorStatementContext ctx) throws UnsupportedOperationException {
+        throw new UnsupportedOperationException("Specific actuator microbitv2 Statement");
+    }
+
+    /**
+     * @return an Exception for the Specific sensor WeDo statement , then in the AST will be generated in @WedoTextlyVisitor
+     */
+    @Override
+    public T visitRobotWeDoSensorStatement(ExprlyParser.RobotWeDoSensorStatementContext ctx) throws UnsupportedOperationException {
         throw new UnsupportedOperationException("Specific Robot Statement");
     }
 
     /**
-     * @return an Exception for the Specific statement , then in the AST will be generated in @WedoTextlyVisitor
+     * @return an Exception for the Specific actuator WeDo statement , then in the AST will be generated in @RobotsMbedTextlyVisitor
      */
     @Override
-    public T visitRobotWeDoStatement(ExprlyParser.RobotWeDoStatementContext ctx) throws UnsupportedOperationException {
-        throw new UnsupportedOperationException("Specific Robot Statement");
+    public T visitRobotWedoActuatorStatement(ExprlyParser.RobotWedoActuatorStatementContext ctx) throws UnsupportedOperationException {
+        throw new UnsupportedOperationException("Specific actuator microbitv2 Statement");
     }
 
     private static BlocklyProperties mknullProperty(ParserRuleContext ctx, String type) {
@@ -1049,7 +1075,10 @@ public abstract class CommonTextlyVisitor<T> extends ExprlyBaseVisitor<T> {
         FUNCTIONNAME(FUNCTION_NAME),
         BUTTON(BUTTONPORT_NAME),
         PORT(BUTTONPORT_NAME),
-        ACCELEROMETERPORT(ACCELEROMETER_PORT);
+        ACCELEROMETERPORT(ACCELEROMETER_PORT),
+        PLAYFILE(PLAY_FILE),
+        GYROSENSORSLOT(GYRO_SENSOR_SLOT),
+        GESTURESENSOROP(GESTURE_SENSOR_OP);
 
         private final Pattern pattern;
 
