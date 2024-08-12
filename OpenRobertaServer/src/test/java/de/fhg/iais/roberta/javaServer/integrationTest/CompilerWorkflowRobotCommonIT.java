@@ -226,6 +226,7 @@ public class CompilerWorkflowRobotCommonIT {
      * - supply the list of robots (you may copy from the console output)<br>
      * - decide whether to generate only or to generate and compile
      */
+    @Ignore
     @Test
     public void testCompileOneProgram() {
         String progName = "listOperations";
@@ -452,7 +453,7 @@ public class CompilerWorkflowRobotCommonIT {
 
             // Every robot needs at least a show source workflow
             ProjectService.executeWorkflow("showsource", showSourceProject);
-            sourceCode = showSourceProject.getSourceCode().toString();
+            sourceCode = showSourceProject.getSourceCodeBuilder().toString();
             result = showSourceProject.hasSucceeded() ? (programXml.contains(PARTIAL_SUCCESS_DEF) ? Result.PARTIAL_SUCCESS : Result.SUCCESS) : Result.FAILURE;
             reason = String.valueOf(showSourceProject.getResult());
         } catch ( Exception e ) {

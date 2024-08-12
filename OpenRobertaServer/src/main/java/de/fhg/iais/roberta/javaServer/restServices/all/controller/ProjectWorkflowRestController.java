@@ -60,7 +60,7 @@ public class ProjectWorkflowRestController {
             ProjectService.executeWorkflow("showsource", project);
             // To make this compatible with old frontend we will have to use the old names...
             response.setCmd("showSourceP");
-            response.setSourceCode(project.getSourceCode().toString());
+            response.setSourceCode(project.getSourceCodeBuilder().toString());
             response.setProgXML(project.getProgramAsBlocklyXML());
             response.setConfAnnos(new JSONObject(project.getConfAnnotationList()));
             addProjectResultToResponse(response, project);
@@ -91,7 +91,7 @@ public class ProjectWorkflowRestController {
             ProjectService.executeWorkflow("getsimulationcode", project);
             // To make this compatible with old frontend we will have to use the old names...
             response.setCmd("runPSim");
-            response.setJavaScriptProgram(project.getSourceCode().toString());
+            response.setJavaScriptProgram(project.getSourceCodeBuilder().toString());
             response.setFileExtension(project.getSourceCodeFileExtension());
             response.setProgXML(project.getProgramAsBlocklyXML());
             response.setConfAnnos(new JSONObject(project.getConfAnnotationList()));
@@ -234,7 +234,7 @@ public class ProjectWorkflowRestController {
             ProjectService.executeWorkflow("runnative", project);
             response.setCmd("runNative");
             response.setCompiledCode(project.getCompiledHex());
-            response.setSourceCode(project.getSourceCode().toString());
+            response.setSourceCode(project.getSourceCodeBuilder().toString());
             addProjectResultToResponse(response, project);
             Statistics.info("ProgramRunNative", "LoggedIn", httpSessionState.isUserLoggedIn(), "success", project.hasSucceeded());
             return UtilForREST.responseWithFrontendInfo(response, httpSessionState, this.robotCommunicator);

@@ -3,6 +3,9 @@ package de.fhg.iais.roberta.util.visitor;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
+import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.visitor.IVisitor;
+
 public class SourceBuilder {
     private static final String INDENT = "    ";
     private int indentation = 0;
@@ -47,8 +50,10 @@ public class SourceBuilder {
     public SourceBuilder nlI() {
         // removes trailing whitespace, e.g. \n  \n -> \n\n
         int last = this.sb.length() - 1;
-        while ( this.sb.charAt(last) == ' ' ) {
-            this.sb.deleteCharAt(last--);
+        if (last > 0) {
+            while ( this.sb.charAt(last) == ' ' ) {
+                this.sb.deleteCharAt(last--);
+            }
         }
         this.sb.append("\n");
         indent();
@@ -67,6 +72,11 @@ public class SourceBuilder {
             add(val);
         }
         return false;
+    }
+
+    public SourceBuilder accept(Phrase phrase, IVisitor<?> visitor) {
+        phrase.accept(visitor);
+        return this;
     }
 
     public SourceBuilder collect(Collection<? extends CharSequence> collection, String separator) {

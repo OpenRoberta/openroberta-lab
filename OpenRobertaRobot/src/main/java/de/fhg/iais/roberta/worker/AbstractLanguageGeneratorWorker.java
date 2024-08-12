@@ -38,7 +38,7 @@ public abstract class AbstractLanguageGeneratorWorker implements IWorker {
                 .put(CodeGeneratorSetupBean.class, codeGenSetupBeanBuilder.build())
                 .build();
         visitor = this.getVisitor(project, beans);
-        visitor.setStringBuilders(project.getSourceCode(), project.getIndentation());
+        visitor.setStringBuilders(project.getSourceCodeBuilder(), project.getIndentationBuilder());
         visitor.generateCode(project.isWithWrapping());
         project.setResult(Key.COMPILERWORKFLOW_PROGRAM_GENERATION_SUCCESS);
     }

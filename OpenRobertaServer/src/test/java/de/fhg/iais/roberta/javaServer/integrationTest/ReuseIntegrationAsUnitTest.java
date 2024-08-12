@@ -168,7 +168,7 @@ public class ReuseIntegrationAsUnitTest {
     @Ignore
     @Test
     public void testOneCommonProgrammAsUnitTest() throws Exception {
-        String programName = "listOperations";
+        String programName = "display";
         String[] robotNames = {"microbitv2"}; // set to null, if all robots should be tested; otherwise put the robots under test into the array
         {
             List<String> pluginDefines = new ArrayList<>(); // maybe used later to add properties
@@ -315,7 +315,7 @@ public class ReuseIntegrationAsUnitTest {
     @Test
     public void testOneRobotSpecificProgramAsUnitTests() throws Exception {
         String robotName = "microbitv2";
-        String programName = "display";
+        String programName = "sensor_gesture_compass_accelerometer";
         LOG.info("========= testing program " + programName + " for robot " + robotName);
         final String resourceDirectory = setupRobotFactoryAndGetResourceDirForRobotSpecificTests(robotName);
         runRegenerateAndCodeGenerationForOneRobotSpecificProgram(resourceDirectory, programName + ".xml", robotName, Collections.emptyList());
@@ -529,7 +529,7 @@ public class ReuseIntegrationAsUnitTest {
                 thisUnitTestIsOk = false;
                 storeExportOfXml(directory, programName, robotName, programXml, configXml);
             } else {
-                String generatedProgramSource = project.getSourceCode().toString();
+                String generatedProgramSource = project.getSourceCodeBuilder().toString();
                 thisUnitTestIsOk =
                     compareExpectedToGenerated(
                         CROSS_COMPILER_TESTS + EXPECTED + directory + TARGET_LANGUAGE_GENERATED + robotName + "/",

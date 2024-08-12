@@ -19,10 +19,10 @@ public class Ev3LejosCompilerWorker implements ICompilerWorker {
         final CompilerSetupBean compilerWorkflowBean = project.getWorkerResult(CompilerSetupBean.class);
         final String compilerResourcesDir = compilerWorkflowBean.getCompilerResourcesDir();
         final String tempDir = compilerWorkflowBean.getTempDir();
-        final String crosscompilerSource = project.getSourceCode().toString();
+        final String crosscompilerSource = project.getSourceCodeBuilder().toString();
         Util.storeGeneratedProgram(tempDir, crosscompilerSource, project.getToken(), project.getProgramName(), ".java");
 
-        JavaSourceCompiler scp = new JavaSourceCompiler(project.getProgramName(), project.getSourceCode().toString(), compilerResourcesDir);
+        JavaSourceCompiler scp = new JavaSourceCompiler(project.getProgramName(), project.getSourceCodeBuilder().toString(), compilerResourcesDir);
         scp.compileAndPackage(tempDir, project.getToken());
         if ( scp.isSuccess() ) {
             LOG.info("jar for program {} generated successfully", project.getProgramName());

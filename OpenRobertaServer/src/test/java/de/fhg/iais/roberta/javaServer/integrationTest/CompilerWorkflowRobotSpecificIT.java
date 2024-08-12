@@ -207,7 +207,7 @@ public class CompilerWorkflowRobotSpecificIT {
      */
     public void testSingleRobotSpecificProgram() throws Exception {
         final String robotName = "microbitv2";
-        final String programFileName = "wait_until";
+        final String programFileName = "sensor_gesture_compass_accelerometer";
         final String robotDir = robotsFromTestSpec.getJSONObject(robotName).getString("dir");
         final boolean evalGeneratedProgram = true;
         setRobotTo(robotName);

@@ -2,11 +2,9 @@ package de.fhg.iais.roberta.worker.spikePybricks;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
 
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,7 +38,7 @@ public class SpikePybricksCompilerWorker implements ICompilerWorker {
     private Pair<Key, String> runBuild(Project project) {
         CompilerSetupBean compilerWorkflowBean = project.getWorkerResult(CompilerSetupBean.class);
         String compilerResourcesDir = compilerWorkflowBean.getCompilerResourcesDir();
-        String sourceCode = project.getSourceCode().toString();
+        String sourceCode = project.getSourceCodeBuilder().toString();
         String mpyCrossVersion = "6";
 
         String[] executableWithParameters =

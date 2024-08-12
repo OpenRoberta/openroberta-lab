@@ -33,7 +33,7 @@ public abstract class MbedCompilerWorker implements ICompilerWorker {
         CompilerSetupBean compilerWorkflowBean = project.getWorkerResult(CompilerSetupBean.class);
         String compilerBinDir = compilerWorkflowBean.getCompilerBinDir();
         String compilerResourcesDir = compilerWorkflowBean.getCompilerResourcesDir();
-        String sourceCode = project.getSourceCode().toString();
+        String sourceCode = project.getSourceCodeBuilder().toString();
 
         String scriptName = compilerResourcesDir + "/compile.py";
         String runtimeHexDir = compilerResourcesDir + "/runtimeHex";

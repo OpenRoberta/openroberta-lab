@@ -1,9 +1,6 @@
 package de.fhg.iais.roberta.worker;
 
-import java.io.File;
-import java.io.IOException;
 import java.io.StringWriter;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 
@@ -11,7 +8,6 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
-import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,13 +17,12 @@ import de.fhg.iais.roberta.blockly.generated.Instance;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.ProgramAst;
 import de.fhg.iais.roberta.components.Project;
-import de.fhg.iais.roberta.factory.RobotFactory;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.Location;
 import de.fhg.iais.roberta.util.Key;
-import de.fhg.iais.roberta.util.PluginProperties;
 import de.fhg.iais.roberta.util.dbc.Assert;
+import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractTextlyJavaVisitor;
 
 public class RegenerateNepoWorker implements IWorker {
     private static final Logger LOG = LoggerFactory.getLogger(RegenerateNepoWorker.class);
@@ -40,8 +35,24 @@ public class RegenerateNepoWorker implements IWorker {
     public void execute(Project project) {
         try {
             ProgramAst programAst = project.getProgramAst();
+
             String programXML = jaxbToXml(astToJaxb(programAst));
             project.setProgramAsBlocklyXML(programXML);
+
+            AbstractTextlyJavaVisitor textlyVisitor = getVisitorForTextlyJava(project);
+            if (textlyVisitor == null) {
+                project.setProgramAsTextly("- no textly -");
+            } else {
+                String oldSource = project.getSourceCodeBuilder().toString();
+                StringBuilder oldIndentBuilder = project.getIndentationBuilder();
+                StringBuilder textlyBuilder = new StringBuilder();
+                StringBuilder indentBuilder = new StringBuilder();
+                textlyVisitor.setStringBuilders(textlyBuilder, indentBuilder);
+                textlyVisitor.generateCode(true);
+                project.setProgramAsTextly(textlyBuilder.toString());
+                project.setSourceCode(oldSource);
+                project.setIndentationBuilder(oldIndentBuilder);
+            }
 
             ConfigurationAst configurationAst = project.getConfigurationAst();
             String configurationXML = jaxbToXml(astToJaxb(configurationAst));
@@ -53,6 +64,11 @@ public class RegenerateNepoWorker implements IWorker {
             LOG.error("program & configuration ast -> blockly failed", e);
             project.setResult(Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED);
         }
+    }
+
+    protected AbstractTextlyJavaVisitor getVisitorForTextlyJava(Project project) {
+        // TODO: refactor. Each plugin must support NEPO regeneration. Make class and method abstract
+        return null;
     }
 
     private static String jaxbToXml(BlockSet blockSet) throws JAXBException {

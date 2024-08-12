@@ -16,7 +16,7 @@ public class SaveWorker implements IWorker {
         Util
             .storeGeneratedProgram(
                 tempDir,
-                project.getSourceCode().toString(),
+                project.getSourceCodeBuilder().toString(),
                 project.getToken(),
                 project.getProgramName(),
                 "." + project.getSourceCodeFileExtension());

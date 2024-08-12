@@ -27,7 +27,7 @@ public class Txt4SaveWorker implements IWorker {
         final String programName = project.getProgramName();
         final String srcExtension = "." + project.getSourceCodeFileExtension();
         final String tgtExtension = "." + project.getBinaryFileExtension();
-        Util.storeGeneratedProgram(tempDir, project.getSourceCode().toString(), token, programName, srcExtension);
+        Util.storeGeneratedProgram(tempDir, project.getSourceCodeBuilder().toString(), token, programName, srcExtension);
         File resourceDir = new File(project.getRobotFactory().getPluginProperties().getUpdateDir() + "/0-0-1/roberta");
         File sourceDir = new File(tempDir + token + "/" + programName + "/source");
         File targetFile = new File(tempDir + token + "/" + programName + "/target/" + programName + tgtExtension);

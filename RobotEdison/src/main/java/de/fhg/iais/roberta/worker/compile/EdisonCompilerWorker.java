@@ -1,20 +1,10 @@
 package de.fhg.iais.roberta.worker.compile;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Base64;
-
-import de.fhg.iais.roberta.worker.IWorker;
-import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.fhg.iais.roberta.bean.CompilerSetupBean;
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.util.Key;
-import de.fhg.iais.roberta.util.PluginProperties;
-import de.fhg.iais.roberta.util.Util;
-import de.fhg.iais.roberta.util.basic.Pair;
 import de.fhg.iais.roberta.worker.ICompilerWorker;
 
 /**
@@ -26,7 +16,7 @@ public class EdisonCompilerWorker implements ICompilerWorker {
 
     @Override
     public void execute(Project project) {
-        String sourceCode = project.getSourceCode().toString();
+        String sourceCode = project.getSourceCodeBuilder().toString();
         project.setCompiledHex(sourceCode);
         if (!sourceCode.isEmpty()) {
             LOG.info("compile {} program {} successful", project.getRobot(), project.getProgramName());

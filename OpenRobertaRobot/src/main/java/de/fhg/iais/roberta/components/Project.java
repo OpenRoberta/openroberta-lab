@@ -42,7 +42,6 @@ public final class Project {
     private static final Logger LOG = LoggerFactory.getLogger(Project.class);
     private final Map<String, JSONObject> confAnnotationList = new HashMap<String, JSONObject>();
     private final ClassToInstanceMap<IProjectBean> workerResults = MutableClassToInstanceMap.create();
-    private final StringBuilder indentationBuilder = new StringBuilder();
     private final Map<String, String> resultParams = new HashMap<>();
     private String token;
     private String robot;
@@ -58,11 +57,13 @@ public final class Project {
     private ProgramAst program = null;
     private ConfigurationAst configuration = null;
     private StringBuilder sourceCodeBuilder = new StringBuilder();
+    private StringBuilder indentationBuilder = null;
     private String compiledHex = "";
     private Key result = Key.COMPILERWORKFLOW_PROJECT_BUILD_SUCCESS;
     private int errorCounter = 0;
     private JSONObject configurationJSON;
     private String programAsBlocklyXML = null;
+    private String programAsTextly = null;
     private String configurationAsBlocklyXML = null;
     private List<String> errorAndWarningMessages = null;
 
@@ -171,17 +172,35 @@ public final class Project {
         }
     }
 
-    public StringBuilder getSourceCode() {
+    /**
+     * very dangerous, this allows to pass the source code builder between worker. It is assumed, that only ONE worker
+     * will write. This is not true anymore. The RegenerateNepoWorker sets own source builder, but compensates this
+     * dangerous desing
+     * @return the UNIQUE builder for the whole worker chain
+     */
+    public StringBuilder getSourceCodeBuilder() {
         return this.sourceCodeBuilder;
+    }
+
+    /**
+     * very dangerous, this allows to pass the source code builder between worker. It is assumed, that only ONE worker
+     * will write. This is not true anymore. The RegenerateNepoWorker sets own source builder, but compensates this
+     * dangerous desing
+     * @return the UNIQUE builder for the whole worker chain
+     */
+    public StringBuilder getIndentationBuilder() {
+        return this.indentationBuilder;
     }
 
     public void setSourceCode(String sourceCode) {
         this.sourceCodeBuilder = new StringBuilder(sourceCode);
     }
 
-    public StringBuilder getIndentation() {
-        return this.indentationBuilder;
+    public void setIndentationBuilder(StringBuilder indentationBuilder) {
+        this.indentationBuilder = indentationBuilder;
     }
+
+
 
     /**
      * @return this will actually return either Intel Hex or base 64 encoded binary
@@ -235,13 +254,23 @@ public final class Project {
     }
 
     public String getProgramAsBlocklyXML() {
-        Assert.notNull(programAsBlocklyXML, "Transformation of program AST into NEPO not executed by the worker chain.");
+        Assert.notNull(programAsBlocklyXML, "Transformation of program AST into NEPO not executed by the worker chain (blockly).");
         return programAsBlocklyXML;
+    }
+
+    public String getProgramAsTextly() {
+        Assert.notNull(programAsTextly, "Transformation of program AST into NEPO not executed by the worker chain (textly).");
+        return programAsTextly;
     }
 
     public void setProgramAsBlocklyXML(String programAsBlocklyXML) {
         Assert.isNull(this.programAsBlocklyXML);
         this.programAsBlocklyXML = programAsBlocklyXML;
+    }
+
+    public void setProgramAsTextly(String programAsTextly) {
+        Assert.isNull(this.programAsTextly);
+        this.programAsTextly = programAsTextly;
     }
 
     public String getConfigurationAsBlocklyXML() {
