@@ -2248,8 +2248,8 @@ export class CameraSensor implements ISensor, IUpdateAction, IDrawable, ILabel, 
     readonly MAX_BLOB_DIST_SQR = this.MAX_MARKER_DIST_SQR;
     readonly LINE_RADIUS: number = 60;
     readonly markerEnabled: boolean = true;
-    readonly lineEnabled: boolean = true;
-    readonly colorEnabled: boolean = true;
+    lineEnabled: boolean = true;
+    colorEnabled: boolean = true;
     x: number;
     y: number;
     h: number;
@@ -2674,27 +2674,35 @@ export class Txt4CameraSensor extends CameraSensor {
     p: PointRobotWorld = { x: 0, y: 0, rx: 0, ry: 0 };
     rect: Point4Rectangle = { p1: this.p, p2: this.p, p3: this.p, p4: this.p };
 
-    constructor(pose: Pose, aov: number, blobSize: number) {
+    constructor(pose: Pose, aov: number, blobSize: number, lineWidth: number) {
         super(pose, aov);
         this.BLOBSIZE = blobSize;
+        if (this.BLOBSIZE === 0) {
+            this.colorEnabled = false;
+        }
+        if (lineWidth === 0) {
+            this.lineEnabled = false;
+        }
     }
 
     override draw(rCtx: CanvasRenderingContext2D, myRobot: RobotBase): void {
-        super.draw(rCtx, myRobot);
-        rCtx.save();
-        //***********
-        rCtx.rotate(-(myRobot as RobotBaseMobile).pose.theta);
-        rCtx.translate(-(myRobot as RobotBaseMobile).pose.x, -(myRobot as RobotBaseMobile).pose.y);
-        rCtx.beginPath();
-        rCtx.strokeStyle = '#00ffff';
-        rCtx.moveTo(this.rect.p1.rx, this.rect.p1.ry);
-        rCtx.lineTo(this.rect.p2.rx, this.rect.p2.ry);
-        rCtx.lineTo(this.rect.p3.rx, this.rect.p3.ry);
-        rCtx.lineTo(this.rect.p4.rx, this.rect.p4.ry);
-        rCtx.lineTo(this.rect.p1.rx, this.rect.p1.ry);
-        rCtx.stroke();
-        //*******************
-        rCtx.restore();
+        if (this.colorEnabled || this.lineEnabled) {
+            super.draw(rCtx, myRobot);
+        }
+        if (this.colorEnabled) {
+            rCtx.save();
+            rCtx.rotate(-(myRobot as RobotBaseMobile).pose.theta);
+            rCtx.translate(-(myRobot as RobotBaseMobile).pose.x, -(myRobot as RobotBaseMobile).pose.y);
+            rCtx.beginPath();
+            rCtx.strokeStyle = '#00ffff';
+            rCtx.moveTo(this.rect.p1.rx, this.rect.p1.ry);
+            rCtx.lineTo(this.rect.p2.rx, this.rect.p2.ry);
+            rCtx.lineTo(this.rect.p3.rx, this.rect.p3.ry);
+            rCtx.lineTo(this.rect.p4.rx, this.rect.p4.ry);
+            rCtx.lineTo(this.rect.p1.rx, this.rect.p1.ry);
+            rCtx.stroke();
+            rCtx.restore();
+        }
     }
 
     override updateSensor(
@@ -2974,6 +2982,16 @@ export class Txt4CameraSensor extends CameraSensor {
 
     override getLabel(): string {
         let myLabel: string = '';
+        if (this.colorEnabled) {
+            myLabel +=
+                '<div><label>' +
+                Blockly.Msg.SENSOR_CAMERA +
+                ' ' +
+                Blockly.Msg.MODE_COLOUR +
+                '</label><span style="margin-left:6px; width: 20px; border-style:solid; border-width:thin; background-color:' +
+                (this.color.length > 0 ? SIMATH.rgbToHex(this.color[0], this.color[1], this.color[2]) : '#fff') +
+                '">&nbsp;</span></div>';
+        }
         if (this.lineEnabled) {
             myLabel +=
                 '<div><label>' +
@@ -2995,13 +3013,6 @@ export class Txt4CameraSensor extends CameraSensor {
                 Blockly.Msg.MODE_COLOUR +
                 '</label><span style="margin-left:6px; width: 20px; border-style:solid; border-width:thin; background-color:' +
                 (this.lineColor.length > 0 ? SIMATH.rgbToHex(this.lineColor[0], this.lineColor[1], this.lineColor[2]) : '#fff') +
-                '">&nbsp;</span></div>' +
-                '<div><label>' +
-                Blockly.Msg.SENSOR_CAMERA +
-                ' ' +
-                Blockly.Msg.MODE_COLOUR +
-                '</label><span style="margin-left:6px; width: 20px; border-style:solid; border-width:thin; background-color:' +
-                (this.color.length > 0 ? SIMATH.rgbToHex(this.color[0], this.color[1], this.color[2]) : '#fff') +
                 '">&nbsp;</span></div>';
         }
         return myLabel;

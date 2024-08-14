@@ -2,17 +2,15 @@
     <instance x="714" y="24">
         <block type="robConf_camera_txt4" id="CAM" intask="true">
             <field name="NAME">C</field>
+            <field name="RESOLUTION">320x240</field>
             <field name="PORT">USB1</field>
             <statement name="DETECTORS">
-                <block type="robConf_line_txt4" id="S(/UHHH;N[4Km1TML1" intask="true">
-                    <field name="NAME">L</field>
-                    <field name="XSTART">0</field>
-                    <field name="XEND">320</field>
-                    <field name="YSTART">60</field>
-                    <field name="XEND">80</field>
-                    <field name="NUMBERLINES">3</field>
-                    <field name="MINIMUM">30</field>
-                    <field name="MAXIMUM">100</field>
+                <block type="robConf_colordetector_txt4" id="g+lcwYrb?XfB#_g=0Air" intask="true">
+                    <field name="NAME">F</field>
+                    <field name="XSTART">135</field>
+                    <field name="XEND">185</field>
+                    <field name="YSTART">95</field>
+                    <field name="YEND">145</field>
                 </block>
             </statement>
         </block>

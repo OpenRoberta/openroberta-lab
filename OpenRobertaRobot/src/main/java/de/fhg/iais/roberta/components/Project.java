@@ -1,8 +1,10 @@
 package de.fhg.iais.roberta.components;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -19,11 +21,11 @@ import com.google.common.collect.MutableClassToInstanceMap;
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.NNBean;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
-import de.fhg.iais.roberta.blockly.generated.Instance;
 import de.fhg.iais.roberta.factory.RobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
+import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponentNode;
 import de.fhg.iais.roberta.transformer.Jaxb2ConfigurationAst;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
@@ -328,33 +330,44 @@ public final class Project {
         public Builder setConfigurationAst(ConfigurationAst configurationAst) {
             this.project.configuration = configurationAst;
             this.project.configurationJSON = new JSONObject();
-            JSONObject sensorsJSON = new JSONObject();
-            JSONObject actuatorsJSON = new JSONObject();
             try {
                 this.project.configurationJSON.put("TRACKWIDTH", configurationAst.getTrackWidth());
                 this.project.configurationJSON.put("WHEELDIAMETER", configurationAst.getWheelDiameter());
-                for ( ConfigurationComponent sensor : configurationAst.getSensors() ) {
-                    JSONObject propJSON = new JSONObject();
-                    propJSON.put("TYPE", sensor.componentType);
-                    for ( String prop : sensor.getComponentProperties().keySet() ) {
-                        propJSON.put(prop, sensor.getComponentProperties().get(prop));
-                    }
-                    sensorsJSON.put(sensor.userDefinedPortName, propJSON);
-                }
-                for ( ConfigurationComponent actuator : configurationAst.getActors() ) {
-                    JSONObject propJSON = new JSONObject();
-                    propJSON.put("TYPE", actuator.componentType);
-                    for ( String prop : actuator.getComponentProperties().keySet() ) {
-                        propJSON.put(prop, actuator.getComponentProperties().get(prop));
-                    }
-                    actuatorsJSON.put(actuator.userDefinedPortName, propJSON);
-                }
-                this.project.configurationJSON.put("SENSORS", sensorsJSON);
-                this.project.configurationJSON.put("ACTUATORS", actuatorsJSON);
+                this.project.configurationJSON.put("SENSORS", configurationAst2JSON(configurationAst.getSensors()));
+                this.project.configurationJSON.put("ACTUATORS", configurationAst2JSON(configurationAst.getActors()));
             } catch ( JSONException e ) {
                 throw new DbcException("exception when generating the configuration ", e);
             }
             return this;
+        }
+
+        private static JSONObject configurationAst2JSON(Collection<ConfigurationComponent> configurationAst) {
+            JSONObject compJSON = new JSONObject();
+            for ( ConfigurationComponent component : configurationAst ) {
+                JSONObject propJSON = new JSONObject();
+                propJSON.put("TYPE", component.componentType);
+                for ( String prop : component.getComponentProperties().keySet() ) {
+                    propJSON.put(prop, component.getComponentProperties().get(prop));
+                }
+                if ( component instanceof ConfigurationComponentNode ) {
+                    LinkedHashMap<String, List<ConfigurationComponent>> subComponentLists = component.getSubComponents();
+                    for ( String subComponentList : subComponentLists.keySet() ) {
+                        JSONObject sub = new JSONObject();
+                        List<ConfigurationComponent> subList = subComponentLists.get(subComponentList);
+                        for ( ConfigurationComponent subComp : subList ) {
+                            JSONObject subPropJSON = new JSONObject();
+                            subPropJSON.put("TYPE", subComp.componentType);
+                            for ( String prop : subComp.getComponentProperties().keySet() ) {
+                                subPropJSON.put(prop, subComp.getComponentProperties().get(prop));
+                            }
+                            sub.put(subComp.userDefinedPortName, subPropJSON);
+                        }
+                        propJSON.put("SUBCOMPONENTS", sub);
+                    }
+                }
+                compJSON.put(component.userDefinedPortName, propJSON);
+            }
+            return compJSON;
         }
 
         public Builder setProgramAst(ProgramAst programAst) {

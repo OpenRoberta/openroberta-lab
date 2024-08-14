@@ -36,48 +36,67 @@ export default class RobotTxt4 extends RobotBaseMobile {
         this.led = new Txt4RGBLed(this.id, { x: 0, y: 0 }, true, null, 3);
         let sensors: object = configuration['SENSORS'];
         for (const c in sensors) {
-            switch (sensors[c]['TYPE']) {
-                case 'TXT_CAMERA':
-                    this[c] = new Txt4CameraSensor(new Pose(0, 0, 0), (2 * Math.PI) / 5, sensors[c]['COLOURSIZE']);
-                    break;
-                case 'INFRARED':
-                    this[c] = new Txt4InfraredSensors(c, { x: 14, y: 0 });
-                    break;
-                case 'ULTRASONIC': {
-                    let mySensors = [];
-                    let txt4 = this;
-                    Object.keys(this).forEach((x) => {
-                        if (txt4[x] && txt4[x] instanceof DistanceSensor) {
-                            mySensors.push(txt4[x]);
+            if (sensors[c]['TYPE']) {
+                switch (sensors[c]['TYPE']) {
+                    case 'TXT_CAMERA':
+                        let resolution: Array<number> = sensors[c]['RESOLUTION'].split('x');
+                        let colourSize: number = 0;
+                        let lineWidth: number = 0;
+                        let detectors = sensors[c]['SUBCOMPONENTS'];
+                        for (let detector in detectors) {
+                            if (detectors[detector]['TYPE'] && detectors[detector]['TYPE'] === 'CAMERA_COLORDETECTOR') {
+                                let xSize: number = detectors[detector]['XEND'] - detectors[detector]['XSTART'];
+                                let ySize: number = detectors[detector]['YEND'] - detectors[detector]['YSTART'];
+                                colourSize = ((xSize * 100) / resolution[0] + (ySize * 100) / resolution[1]) / 2;
+                            }
+                            if (detectors[detector]['TYPE'] && detectors[detector]['TYPE'] === 'CAMERA_LINE') {
+                                let min: number = detectors[detector]['MINIMUM'];
+                                let max: number = detectors[detector]['MAXIMUM'];
+                                lineWidth = max - min;
+                            }
                         }
-                    });
-                    const ord = mySensors.length + 1;
-                    const num = Object.keys(sensors).filter((port) => sensors[port]['TYPE'] == 'ULTRASONIC').length;
-                    let position: Pose = new Pose(this.chassis.geom.x + this.chassis.geom.w, 0, 0);
-                    if (num == 3) {
-                        if (ord == 1) {
-                            position = new Pose(this.chassis.geom.h / 2, -this.chassis.geom.h / 2, -Math.PI / 4);
-                        } else if (ord == 2) {
-                            position = new Pose(this.chassis.geom.h / 2, this.chassis.geom.h / 2, Math.PI / 4);
+                        // TODO add and evaluate min max line width
+                        this[c] = new Txt4CameraSensor(new Pose(0, 0, 0), (2 * Math.PI) / 5, colourSize, lineWidth);
+                        break;
+                    case 'INFRARED':
+                        this[c] = new Txt4InfraredSensors(c, { x: 14, y: 0 });
+                        break;
+                    case 'ULTRASONIC': {
+                        let mySensors = [];
+                        let txt4 = this;
+                        Object.keys(this).forEach((x) => {
+                            if (txt4[x] && txt4[x] instanceof DistanceSensor) {
+                                mySensors.push(txt4[x]);
+                            }
+                        });
+                        const ord = mySensors.length + 1;
+                        const num = Object.keys(sensors).filter((port) => sensors[port]['TYPE'] == 'ULTRASONIC').length;
+                        let position: Pose = new Pose(this.chassis.geom.x + this.chassis.geom.w, 0, 0);
+                        if (num == 3) {
+                            if (ord == 1) {
+                                position = new Pose(this.chassis.geom.h / 2, -this.chassis.geom.h / 2, -Math.PI / 4);
+                            } else if (ord == 2) {
+                                position = new Pose(this.chassis.geom.h / 2, this.chassis.geom.h / 2, Math.PI / 4);
+                            }
+                        } else if (num % 2 === 0) {
+                            switch (ord) {
+                                case 1:
+                                    position = new Pose(this.chassis.geom.x + this.chassis.geom.w, -this.chassis.geom.h / 2, -Math.PI / 4);
+                                    break;
+                                case 2:
+                                    position = new Pose(this.chassis.geom.x + this.chassis.geom.w, this.chassis.geom.h / 2, Math.PI / 4);
+                                    break;
+                                case 3:
+                                    position = new Pose(this.chassis.geom.x, -this.chassis.geom.h / 2, (-3 * Math.PI) / 4);
+                                    break;
+                                case 4:
+                                    position = new Pose(this.chassis.geom.x, this.chassis.geom.h / 2, (3 * Math.PI) / 4);
+                                    break;
+                            }
                         }
-                    } else if (num % 2 === 0) {
-                        switch (ord) {
-                            case 1:
-                                position = new Pose(this.chassis.geom.x + this.chassis.geom.w, -this.chassis.geom.h / 2, -Math.PI / 4);
-                                break;
-                            case 2:
-                                position = new Pose(this.chassis.geom.x + this.chassis.geom.w, this.chassis.geom.h / 2, Math.PI / 4);
-                                break;
-                            case 3:
-                                position = new Pose(this.chassis.geom.x, -this.chassis.geom.h / 2, (-3 * Math.PI) / 4);
-                                break;
-                            case 4:
-                                position = new Pose(this.chassis.geom.x, this.chassis.geom.h / 2, (3 * Math.PI) / 4);
-                                break;
-                        }
+                        this[c] = new UltrasonicSensor(c, position.x, position.y, position.theta, 400); // see https://www.fischertechnik.de/de-de/schulen/lernmaterial/sekundarstufe-programmieren/stem-coding-competition
+                        break;
                     }
-                    this[c] = new UltrasonicSensor(c, position.x, position.y, position.theta, 400); // see https://www.fischertechnik.de/de-de/schulen/lernmaterial/sekundarstufe-programmieren/stem-coding-competition
-                    break;
                 }
             }
         }
