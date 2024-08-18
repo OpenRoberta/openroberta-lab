@@ -378,6 +378,25 @@
             <xsl:apply-templates/>
         </xsl:copy>
     </xsl:template>
+    <xsl:template match="b:block[./@type = 'actions_led']">
+        <xsl:copy>
+            <xsl:apply-templates select="@*"/>
+            <xsl:choose>
+                <xsl:when test="b:field[./@name = 'ACTORPORT']/text() = 'L_CalliBot_beide'">
+                    <xsl:attribute name="type">actions_led</xsl:attribute>
+                    <xsl:element name="{'field'}" namespace="">
+                        <xsl:attribute name="name">ACTORPORT</xsl:attribute>
+                        <xsl:text>L_CalliBot_links</xsl:text>
+                    </xsl:element>
+                    <xsl:apply-templates/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:attribute name="type">actions_led</xsl:attribute>
+                    <xsl:apply-templates/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:copy>
+    </xsl:template>
     <!-- mbedActions_leds_on block needs to be restructured -->
     <xsl:template match="b:block[./@type = 'mbedActions_leds_on']">
         <xsl:copy>
@@ -388,6 +407,14 @@
                     <xsl:element name="{'hide'}" namespace="">
                         <xsl:attribute name="name">ACTORPORT</xsl:attribute>
                         <xsl:attribute name="value">_R</xsl:attribute>
+                    </xsl:element>
+                    <xsl:apply-templates select="b:value"/>
+                </xsl:when>
+                <xsl:when test="not(b:field/@name = 'ACTORPORT') or b:field[./@name = 'ACTORPORT']/text() = 'CalliBot_alle'">
+                    <xsl:attribute name="type">actions_rgbLed_on</xsl:attribute>
+                    <xsl:element name="{'field'}" namespace="">
+                        <xsl:attribute name="name">ACTORPORT</xsl:attribute>
+                        <xsl:text>CalliBot_links_vorne</xsl:text>
                     </xsl:element>
                     <xsl:apply-templates select="b:value"/>
                 </xsl:when>
@@ -408,6 +435,13 @@
                     <xsl:element name="{'hide'}" namespace="">
                         <xsl:attribute name="name">ACTORPORT</xsl:attribute>
                         <xsl:attribute name="value">_R</xsl:attribute>
+                    </xsl:element>
+                </xsl:when>
+                <xsl:when test="not(b:field/@name = 'ACTORPORT') or b:field[./@name = 'ACTORPORT']/text() = 'CalliBot_alle'">
+                    <xsl:attribute name="type">actions_rgbLed_off</xsl:attribute>
+                    <xsl:element name="{'field'}" namespace="">
+                        <xsl:attribute name="name">ACTORPORT</xsl:attribute>
+                        <xsl:text>CalliBot_links_vorne</xsl:text>
                     </xsl:element>
                 </xsl:when>
                 <xsl:otherwise>

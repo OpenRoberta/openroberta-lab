@@ -41,4 +41,9 @@ public final class ConfigurationComponentNode extends ConfigurationComponent {
         getComponentProperties().forEach((key, value) -> Ast2Jaxb.addField(destination, key, value));
         return Collections.singletonList(destination);
     }
+    
+    @Override
+    public boolean hasSubComponents() {
+        return true;
+    }
 }

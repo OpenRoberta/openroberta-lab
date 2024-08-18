@@ -55,7 +55,7 @@ public final class ConfigurationAst {
         this.password = password;
         this.componentTypes = new ArrayList<>();
         for ( ConfigurationComponent confComp : this.configurationComponents.values() ) {
-            if ( hasSubComponents(confComp) ) {
+            if ( confComp.hasSubComponents() ) {
                 this.componentTypes.add(confComp.componentType);
                 for ( List<ConfigurationComponent> ccList : confComp.getSubComponents().values() ) {
                     for ( ConfigurationComponent cc : ccList ) {
@@ -74,11 +74,6 @@ public final class ConfigurationAst {
             map.put(confComp.userDefinedPortName, confComp);
         }
         return map;
-    }
-
-    // TODO - what about sub components of mBot2 and Joycar?
-    private static boolean hasSubComponents(ConfigurationComponent confComp) {
-        return confComp.componentType.equals("CALLIBOT");
     }
 
     public String getRobotName() {
@@ -197,7 +192,7 @@ public final class ConfigurationAst {
                 this.configurationComponents
                     .values()
                     .stream()
-                    .filter(ConfigurationAst::hasSubComponents)
+                    .filter(cc -> cc.hasSubComponents())
                     .filter(cc -> cc.getComponentProperties().entrySet().stream().anyMatch(entry -> entry.getValue().equals(userDefinedName)))
                     .findFirst()
                     .orElseThrow(() -> new DbcException("configuration component missing for user defined name " + userDefinedName));
@@ -213,7 +208,7 @@ public final class ConfigurationAst {
                 this.configurationComponents
                     .values()
                     .stream()
-                    .filter(ConfigurationAst::hasSubComponents)
+                    .filter(cc -> cc.hasSubComponents())
                     .filter(cc -> cc.getComponentProperties().entrySet().stream().anyMatch(entry -> entry.getValue().equals(userDefinedName)))
                     .findFirst()
                     .orElse(null);

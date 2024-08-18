@@ -176,19 +176,7 @@ public class CalliopeTwo2ThreeTransformerTest {
     @Test
     public void executeTransformer_ShouldReturnTransformedLedRgbled_WhenGivenOldLedRgbled() {
         String expectedProgramAst =
-            "BlockAST[project=[[Location[x=512,y=50],MainTask[],"
-                + "RgbLedOnAction[port:CalliBot_links_vorne,colour:ColorConst[hexValue:#ff0000]],"
-                + "RgbLedOnAction[port:CalliBot_links_hinten,colour:ColorConst[hexValue:#ff0000]],"
-                + "RgbLedOnAction[port:CalliBot_rechts_hinten,colour:ColorConst[hexValue:#ff0000]],"
-                + "RgbLedOnAction[port:CalliBot_rechts_vorne,colour:ColorConst[hexValue:#ff0000]],"
-                + "RgbLedOffAction[port:CalliBot_links_vorne],"
-                + "RgbLedOffAction[port:CalliBot_links_hinten],"
-                + "RgbLedOffAction[port:CalliBot_rechts_hinten],"
-                + "RgbLedOffAction[port:CalliBot_rechts_vorne],"
-                + "LedAction[port:L_CalliBot_links,mode:ON],"
-                + "LedAction[port:L_CalliBot_links,mode:OFF],"
-                + "LedAction[port:L_CalliBot_rechts,mode:ON],"
-                + "LedAction[port:L_CalliBot_rechts,mode:OFF]]]]";
+            "BlockAST[project=[[Location[x=512,y=50],MainTask[],RgbLedOnAction[port:R,colour:ColorConst[hexValue:#ff0000]],RgbLedOnAction[port:R2,colour:ColorConst[hexValue:#ff0000]],RgbLedOnAction[port:R3,colour:ColorConst[hexValue:#ff0000]],RgbLedOnAction[port:R4,colour:ColorConst[hexValue:#ff0000]],RgbLedOffAction[port:CalliBot],RgbLedOffAction[port:CalliBot],RgbLedOffAction[port:CalliBot],RgbLedOffAction[port:CalliBot],LedAction[port:CalliBot,mode:ON],LedAction[port:CalliBot,mode:OFF],LedAction[port:CalliBot,mode:ON],LedAction[port:CalliBot,mode:OFF]]]]";
         String[] expectedToBeInConfigAst =
             {
                 "ConfigurationComponent [componentType=RGBLED, category=CONFIGURATION_ACTOR, userDefinedName=R, portName=R, componentProperties={PIN1=0}]",
@@ -271,11 +259,7 @@ public class CalliopeTwo2ThreeTransformerTest {
     @Test
     public void executeTransformer_ShouldReturnTransformedUltrasonic_WhenGivenOldUltrasonic() {
         String expectedProgramAst =
-            "BlockAST[project=[[Location[x=549,y=76],MainTask[],"
-                + "DebugAction[value:SensorExpr[UltrasonicSensor[A1,DISTANCE,- EMPTY_SLOT -]]],"
-                + "DebugAction[value:SensorExpr[UltrasonicSensor[CalliBot_vorne,DISTANCE,- EMPTY_SLOT -]]],"
-                + "DebugAction[value:SensorExpr[GetSampleSensor[UltrasonicSensor[A1,DISTANCE,- EMPTY_SLOT -]]]],"
-                + "DebugAction[value:SensorExpr[GetSampleSensor[UltrasonicSensor[CalliBot_vorne,DISTANCE,- EMPTY_SLOT -]]]]]]]";
+            "BlockAST[project=[[Location[x=549,y=76],MainTask[],DebugAction[value:SensorExpr[UltrasonicSensor[A1,DISTANCE,-EMPTY_SLOT-]]],DebugAction[value:SensorExpr[UltrasonicSensor[U,DISTANCE,-EMPTY_SLOT-]]],DebugAction[value:SensorExpr[GetSampleSensor[UltrasonicSensor[A1,DISTANCE,-EMPTY_SLOT-]]]],DebugAction[value:SensorExpr[GetSampleSensor[UltrasonicSensor[U,DISTANCE,-EMPTY_SLOT-]]]]]]]";
         String[] expectedToBeInConfigAst =
             {
                 "ConfigurationComponent[componentType=ULTRASONIC,category=CONFIGURATION_SENSOR,userDefinedName=A1,portName=A1,componentProperties={PIN1=1}]",
@@ -440,11 +424,7 @@ public class CalliopeTwo2ThreeTransformerTest {
     @Test
     public void executeTransformer_ShouldReturnTransformedInfrared_WhenGivenOldInfrared() {
         String expectedProgramAst =
-            "BlockAST[project=[[Location[x=512,y=50],MainTask[],"
-                + "DebugAction[value:SensorExpr[InfraredSensor[I_CalliBot_links,LINE,- EMPTY_SLOT -]]],"
-                + "DebugAction[value:SensorExpr[InfraredSensor[I_CalliBot_rechts,LINE,- EMPTY_SLOT -]]],"
-                + "DebugAction[value:SensorExpr[GetSampleSensor[InfraredSensor[I_CalliBot_links,LINE,- EMPTY_SLOT -]]]],"
-                + "DebugAction[value:SensorExpr[GetSampleSensor[InfraredSensor[I_CalliBot_rechts,LINE,- EMPTY_SLOT -]]]]]]]";
+            "BlockAST [project=[[Location [x=512, y=50], MainTask [], DebugAction[value: SensorExpr [InfraredSensor [I2, LINE, - EMPTY_SLOT -]]], DebugAction[value: SensorExpr [InfraredSensor [I, LINE, - EMPTY_SLOT -]]], DebugAction[value: SensorExpr [GetSampleSensor [InfraredSensor [I2, LINE, - EMPTY_SLOT -]]]], DebugAction[value: SensorExpr [GetSampleSensor [InfraredSensor [I, LINE, - EMPTY_SLOT -]]]]]]]";
         String[] expectedToBeInConfigAst =
             {
                 "ConfigurationComponent [componentType=CALLIBOT, category=CONFIGURATION_ACTOR, userDefinedName=CalliBot, portName=CalliBot, componentProperties={}]"
@@ -694,10 +674,7 @@ public class CalliopeTwo2ThreeTransformerTest {
     @Test
     public void executeTransformer_ShouldReturnTransformedMotors_WhenGivenOldMotors() {
         String expectedProgramAst =
-            "BlockAST[project=[[Location[x=512,y=50],MainTask[],"
-                + "BothMotorsOnAction[speedA:NumConst[value:30],speedB:NumConst[value:10],portA:Port_A,portB:Port_B],"
-                + "BothMotorsOnAction[speedA:NumConst[value:30],speedB:NumConst[value:10],portA:CalliBot_links,portB:CalliBot_rechts],"
-                + "BothMotorsStopAction[]]]]";
+            "BlockAST[project=[[Location[x=512,y=50],MainTask[],BothMotorsOnAction[speedA:NumConst[value:30],speedB:NumConst[value:10],portA:Port_A,portB:Port_B],BothMotorsOnAction[speedA:NumConst[value:30],speedB:NumConst[value:10],portA:M,portB:M2],BothMotorsStopAction[]]]]";
         String[] expectedToBeInConfigAst =
             {
                 "ConfigurationComponent[componentType=MOTOR,category=CONFIGURATION_ACTOR,userDefinedName=Port_B,portName=Port_B,componentProperties={PIN1=B}]",
@@ -718,15 +695,7 @@ public class CalliopeTwo2ThreeTransformerTest {
     @Test
     public void executeTransformer_ShouldReturnTransformedMotorSingle_WhenGivenOldMotorSingle() {
         String expectedProgramAst =
-            "BlockAST[project=[[Location[x=512,y=50],MainTask[],"
-                + "MotorOnAction[Port_A,MotionParam[speed=NumConst[value:30],duration=null]],"
-                + "MotorOnAction[Port_B,MotionParam[speed=NumConst[value:30],duration=null]],"
-                + "MotorOnAction[CalliBot_links,MotionParam[speed=NumConst[value:30],duration=null]],"
-                + "MotorOnAction[CalliBot_rechts,MotionParam[speed=NumConst[value:30],duration=null]],"
-                + "MotorStop[port=Port_A],"
-                + "MotorStop[port=Port_B],"
-                + "MotorStop[port=CalliBot_links],"
-                + "MotorStop[port=CalliBot_rechts]]]]";
+            "BlockAST[project=[[Location[x=512,y=50],MainTask[],MotorOnAction[Port_A,MotionParam[speed=NumConst[value:30],duration=null]],MotorOnAction[Port_B,MotionParam[speed=NumConst[value:30],duration=null]],MotorOnAction[M,MotionParam[speed=NumConst[value:30],duration=null]],MotorOnAction[M2,MotionParam[speed=NumConst[value:30],duration=null]],MotorStop[port=Port_A],MotorStop[port=Port_B],MotorStop[port=M],MotorStop[port=M2]]]]";
         String[] expectedToBeInConfigAst =
             {
                 "ConfigurationComponent[componentType=MOTOR,category=CONFIGURATION_ACTOR,userDefinedName=Port_B,portName=Port_B,componentProperties={PIN1=B}]",
@@ -747,11 +716,7 @@ public class CalliopeTwo2ThreeTransformerTest {
     @Test
     public void executeTransformer_ShouldReturnTransformedMotors_WhenGivenOldMotorDouble() {
         String expectedProgramAst =
-            "BlockAST[project=[[Location[x=512,y=50],MainTask[],"
-                + "BothMotorsOnAction[speedA:NumConst[value:30],speedB:NumConst[value:30],portA:Port_A,portB:Port_B],"
-                + "BothMotorsOnAction[speedA:NumConst[value:30],speedB:NumConst[value:30],portA:CalliBot_links,portB:CalliBot_rechts],"
-                + "BothMotorsStopAction[],"
-                + "BothMotorsStopAction[]]]]";
+            "BlockAST[project=[[Location[x=512,y=50],MainTask[],BothMotorsOnAction[speedA:NumConst[value:30],speedB:NumConst[value:30],portA:Port_A,portB:Port_B],BothMotorsOnAction[speedA:NumConst[value:30],speedB:NumConst[value:30],portA:M,portB:M2],BothMotorsStopAction[],BothMotorsStopAction[]]]]";
         String[] expectedToBeInConfigAst =
             {
                 "ConfigurationComponent[componentType=MOTOR,category=CONFIGURATION_ACTOR,userDefinedName=Port_B,portName=Port_B,componentProperties={PIN1=B}]",

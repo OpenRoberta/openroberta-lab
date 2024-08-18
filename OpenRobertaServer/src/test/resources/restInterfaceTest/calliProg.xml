@@ -5,6 +5,9 @@
                 <block type="robControls_start" id="]iEx8lcTWa0dZr%+jIB(" intask="true" deletable="false">
                     <mutation declare="false"></mutation>
                     <field name="DEBUG"></field>
+                    <data>
+                        {"learningRate":0.03,"regularizationRate":0,"noise":0,"batchSize":10,"discretize":false,"percTrainData":50,"activationKey":"linear","activation":{},"regularization":null,"initUntil":null,"collectStats":false,"numHiddenLayers":0,"networkShape":[],"weights":[[["1"]],[[]]],"biases":[["0"],["0"]],"precision":"2","weightArcMaxSize":8,"weightSuppressMultOp":true,"inputs":["n1"],"outputs":["n2"],"hiddenNeurons":[]}
+                    </data>
                 </block>
                 <block type="mbedActions_display_text" id=";jF}SPox[#AhU(*c;0}Y" intask="true">
                     <field name="TYPE">TEXT</field>
@@ -14,9 +17,9 @@
                         </block>
                     </value>
                 </block>
-                <block type="mbedActions_leds_on" id=":moIOPb3)6W~)U*/3Z8A" intask="true">
-                    <field name="ACTORPORT">0</field>
-                    <value name="COLOR">
+                <block type="actions_rgbLed_hidden_on_calliope" id=":moIOPb3)6W~)U*/3Z8A" intask="true">
+                    <hide name="ACTORPORT" value="_R"></hide>
+                    <value name="COLOUR">
                         <block type="mbedColour_picker" id="9@g(wUJt101Q2g.XlMH2" intask="true">
                             <field name="COLOUR">#ff0000</field>
                         </block>
@@ -29,9 +32,9 @@
                         </block>
                     </value>
                 </block>
-                <block type="mbedActions_leds_on" id="W[1x7LuKm[_s2iXMqM|x" intask="true">
-                    <field name="ACTORPORT">0</field>
-                    <value name="COLOR">
+                <block type="actions_rgbLed_hidden_on_calliope" id="W[1x7LuKm[_s2iXMqM|x" intask="true">
+                    <hide name="ACTORPORT" value="_R"></hide>
+                    <value name="COLOUR">
                         <block type="mbedColour_picker" id="76Y5ieTe[J7J}-BExt.h" intask="true">
                             <field name="COLOUR">#009900</field>
                         </block>
@@ -42,8 +45,62 @@
     </program>
     <config>
         <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="3.1" description="" tags="">
-            <instance x="138" y="88">
-                <block type="mbedBrick_Calliope-Brick" id="1" intask="true"></block>
+            <instance x="-34" y="120">
+                <block type="robConf_key" id="~wk*JZQvB.fj=I`N#NWp" intask="true" deletable="false">
+                    <field name="NAME">B</field>
+                    <field name="PIN1">B</field>
+                </block>
+            </instance>
+            <instance x="197" y="162">
+                <block type="robConf_sound" id="e:4V0FcDx%9,.7xO,Ns@" intask="true" deletable="false">
+                    <field name="NAME">_S</field>
+                </block>
+            </instance>
+            <instance x="197" y="190">
+                <block type="robConf_light" id="9Ktt(7_4+XmKC0]5Zha?" intask="true" deletable="false">
+                    <field name="NAME">_L</field>
+                </block>
+            </instance>
+            <instance x="80" y="211">
+                <block type="robConf_gyro" id="lIT?C5y|(7FWCQIUn~pc" intask="true" deletable="false">
+                    <field name="NAME">_G</field>
+                </block>
+            </instance>
+            <instance x="80" y="239">
+                <block type="robConf_compass" id="O%Oi0Tq`hGEvrgHGPYY=" intask="true" deletable="false">
+                    <field name="NAME">_C</field>
+                </block>
+            </instance>
+            <instance x="250" y="250">
+                <block type="robConf_robot" id="robot" intask="false" deletable="false">
+                    <field name="ROBOT">undefined</field>
+                </block>
+            </instance>
+            <instance x="-34" y="270">
+                <block type="robConf_key" id="Kbp:=x@gw@n.b~NH|1|e" intask="true" deletable="false">
+                    <field name="NAME">A</field>
+                    <field name="PIN1">A</field>
+                </block>
+            </instance>
+            <instance x="80" y="268">
+                <block type="robConf_accelerometer" id="#(ufvG,s^FcqI,aFn/A{" intask="true" deletable="false">
+                    <field name="NAME">_A</field>
+                </block>
+            </instance>
+            <instance x="80" y="378">
+                <block type="robConf_temperature" id="0y].dnS)P)~Jjzeu3/0C" intask="true" deletable="false">
+                    <field name="NAME">_T</field>
+                </block>
+            </instance>
+            <instance x="-34" y="422">
+                <block type="robConf_rgbledh" id="lgi%C3,J!smR:eP0aal_" intask="true" deletable="false">
+                    <field name="NAME">_R</field>
+                </block>
+            </instance>
+            <instance x="-34" y="450">
+                <block type="robConf_buzzer" id="}%d2_68IJd*7Oy{qrMR," intask="true" deletable="false">
+                    <field name="NAME">_B</field>
+                </block>
             </instance>
         </block_set>
     </config>

@@ -1,6 +1,7 @@
 package de.fhg.iais.roberta.util;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,6 +9,9 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
@@ -15,6 +19,8 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
 
 import com.google.common.base.Charsets;
 
@@ -70,14 +76,11 @@ public final class XsltAndJavaTransformer {
         if ( programText.contains(HIGHEST_XML_VERSION) ) {
             return Pair.of(programText, configText);
         }
-        boolean defaultConfig;
         String xmlVersion;
         try {
             if ( configText != null ) {
-                defaultConfig = false;
                 configText = transformXslt(configText);
             } else {
-                defaultConfig = true;
                 configText = factory.getConfigurationDefault();
             }
             programText = transformXslt(programText);
@@ -94,10 +97,30 @@ public final class XsltAndJavaTransformer {
             Pair<String, String> progConfPair = transformBetweenVersions(factory, xmlVersion, programText, configText);
             programText = progConfPair == null ? programText : progConfPair.getFirst();
             configText = progConfPair == null ? configText : progConfPair.getSecond();
-            configText = defaultConfig ? null : configText;
+            configText = hasXMLChanged(configText, factory.getConfigurationDefault()) ? configText : null;
             return Pair.of(programText, configText);
         } catch ( Exception e ) {
             throw new DbcException("Java transformation failed", e);
+        }
+    }
+
+    private boolean hasXMLChanged(String xml1, String xml2) {
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        dbf.setNamespaceAware(true);
+        dbf.setCoalescing(true);
+        dbf.setIgnoringElementContentWhitespace(true);
+        dbf.setIgnoringComments(true);
+        try {
+            DocumentBuilder db = dbf.newDocumentBuilder();
+            InputStream inputStream = new ByteArrayInputStream(xml1.getBytes());
+            Document doc1 = db.parse(inputStream);
+            doc1.normalizeDocument();
+            inputStream = new ByteArrayInputStream(xml2.getBytes());
+            Document doc2 = db.parse(inputStream);
+            doc2.normalizeDocument();
+            return !doc1.isEqualNode(doc2);
+        } catch ( IOException | SAXException | ParserConfigurationException e ) {
+            return false; // if the comparison fails, we assume it has not changed
         }
     }
 
@@ -180,7 +203,7 @@ public final class XsltAndJavaTransformer {
             String classNameForRegenerateNEPO = project.getRobotFactory().getPluginProperties().getStringProperty("robot.plugin.worker.regenerateNepo");
             try {
                 Class<?> classForRegenerateNEPO = ClassLoader.getSystemClassLoader().loadClass(classNameForRegenerateNEPO);
-                Object _ = classForRegenerateNEPO.getMethod("execute", Project.class).invoke(classForRegenerateNEPO.newInstance(),project);
+                Object _ = classForRegenerateNEPO.getMethod("execute", Project.class).invoke(classForRegenerateNEPO.newInstance(), project);
                 Assert.isTrue(project.hasSucceeded());
             } catch ( Throwable e ) {
                 throw new DbcException("error with class " + classNameForRegenerateNEPO, e);

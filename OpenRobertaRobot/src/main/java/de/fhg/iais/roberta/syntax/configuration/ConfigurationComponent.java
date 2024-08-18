@@ -158,4 +158,7 @@ public class ConfigurationComponent extends Phrase {
         return Collections.singletonList(destination);
     }
 
+    public boolean hasSubComponents() {
+        return false;
+    }
 }

@@ -156,19 +156,19 @@ public class CalliopeThree2ThreeOneTransformerTest {
                 "RgbLedOnAction[port:CalliBot_rechts_vorne,colour:ColorConst[hexValue:#ff0000]]," +
                 "RgbLedOnAction[port:CalliBot_links_hinten,colour:ColorConst[hexValue:#ff0000]]," +
                 "RgbLedOnAction[port:CalliBot_rechts_hinten,colour:ColorConst[hexValue:#ff0000]]," +
-                "RgbLedOnAction[port:CalliBot_alle,colour:ColorConst[hexValue:#ff0000]]," +
+                "RgbLedOnAction[port:CalliBot_links_vorne,colour:ColorConst[hexValue:#ff0000]]," +
                 "RgbLedOffAction[port:R]," +
                 "RgbLedOffAction[port:CalliBot_links_vorne]," +
                 "RgbLedOffAction[port:CalliBot_rechts_vorne]," +
                 "RgbLedOffAction[port:CalliBot_links_hinten]," +
                 "RgbLedOffAction[port:CalliBot_rechts_hinten]," +
-                "RgbLedOffAction[port:CalliBot_alle]," +
+                "RgbLedOffAction[port:CalliBot_links_vorne]," +
                 "LedAction[port:L_CalliBot_links,mode:ON]," +
                 "LedAction[port:L_CalliBot_links,mode:OFF]," +
                 "LedAction[port:L_CalliBot_rechts,mode:ON]," +
                 "LedAction[port:L_CalliBot_rechts,mode:OFF]," +
-                "LedAction[port:L_CalliBot_beide,mode:ON]," +
-                "LedAction[port:L_CalliBot_beide,mode:OFF]]]]";
+                "LedAction[port:L_CalliBot_links,mode:ON]," +
+                "LedAction[port:L_CalliBot_links,mode:OFF]]]]";
         String[] expectedToBeInConfigAst =
             {
                 "ConfigurationComponent[componentType=RGBLED,category=CONFIGURATION_ACTOR,userDefinedName=_R,portName=_R,componentProperties={PIN1=0}]",

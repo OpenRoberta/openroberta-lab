@@ -1,7 +1,10 @@
 package de.fhg.iais.roberta.worker;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.tuple.Triple;
@@ -9,6 +12,8 @@ import org.apache.commons.lang3.tuple.Triple;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.factory.BlocklyDropdownFactory;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
+import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponentLeaf;
+import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponentNode;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyRegion;
 import de.fhg.iais.roberta.util.basic.Pair;
@@ -19,7 +24,6 @@ public final class MbedTwo2ThreeTransformerHelper {
 
     private static final Map<Triple<String, String, String>, String> PROG_BLOCK_TO_CONF_BLOCKLY_NAME = new HashMap<>();
     private static final Map<Pair<String, String>, String> CALLIOPE_XML_NAME_TO_FRONTEND_NAME = new HashMap<>();
-    private static final Map<Pair<String, String>, String> CALLIBOT = new HashMap<>();
     private static final int OFFSET_X = 175;
     private static final int OFFSET_Y = 60;
     private static final int MAX_VERTICAL_BLOCKS = 8;
@@ -34,6 +38,7 @@ public final class MbedTwo2ThreeTransformerHelper {
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("ACCELEROMETER_SENSING", "VALUE", "Z"), "robConf_accelerometer");
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("ACCELEROMETER_SENSING", "VALUE", "STRENGTH"), "robConf_accelerometer");
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("COMPASS_SENSING", "ANGLE", BlocklyConstants.EMPTY_PORT), "robConf_compass");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("COMPASS_SENSING", "ANGLE", "NO_PORT"), "robConf_compass");
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("COMPASS_SENSING", "DEFAULT", ""), "robConf_compass");
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("FOURDIGITDISPLAY_SHOW_ACTION", "", "5"), "robConf_fourdigitdisplay");
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("FOURDIGITDISPLAY_CLEAR_ACTION", "", "5"), "robConf_fourdigitdisplay");
@@ -41,40 +46,96 @@ public final class MbedTwo2ThreeTransformerHelper {
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("GYRO_SENSING", "ANGLE", "Y"), "robConf_gyro");
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("HUMIDITY_SENSING", "HUMIDITY", "5"), "robConf_humidity");
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("HUMIDITY_SENSING", "TEMPERATURE", "5"), "robConf_humidity");
-        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("INFRARED_SENSING", "LINE", "2"), "robConf_callibot2");
-        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("INFRARED_SENSING", "LINE", "1"), "robConf_callibot2");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("INFRARED_SENSING", "LINE", "2"), "robConf_callibot2,I2");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("INFRARED_SENSING", "LINE", "1"), "robConf_callibot2,I");
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("KEYS_SENSING", "PRESSED", "A"), "robConf_key");
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("KEYS_SENSING", "PRESSED", "B"), "robConf_key");
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("LEDBAR_SET_ACTION", "", "5"), "robConf_ledbar");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("LIGHT_SENSING", "DEFAULT", ""), "robConf_light");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("LIGHT_SENSING", "LIGHT_VALUE", BlocklyConstants.EMPTY_PORT), "robConf_light");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("LIGHT_SENSING", "VALUE", BlocklyConstants.EMPTY_PORT), "robConf_light");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("LIGHT_SENSING", "LIGHT_VALUE", "NO_PORT"), "robConf_light");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("LED_ON_ACTION", "", "0"), "robConf_rgbled");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PLAY_NOTE_ACTION", "", "NO_PORT"), "robConf_buzzer");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PLAY_NOTE_ACTION", "", BlocklyConstants.EMPTY_PORT), "robConf_buzzer");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("ULTRASONIC_SENSING", "DISTANCE", "1"), "robConf_ultrasonic");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("TONE_ACTION", "", BlocklyConstants.EMPTY_PORT), "robConf_buzzer");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("SOUND_SENSING", "SOUND", "NO_PORT"), "robConf_sound");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("SOUND_SENSING", "SOUND", BlocklyConstants.EMPTY_PORT), "robConf_sound");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("TEMPERATURE_SENSING", "DEFAULT", ""), "robConf_temperature");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("TEMPERATURE_SENSING", "TEMPERATURE", "NO_PORT"), "robConf_temperature");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("TEMPERATURE_SENSING", "VALUE", "NO_PORT"), "robConf_temperature");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("TONE_ACTION", "", "NO_PORT"), "robConf_buzzer");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("TEMPERATURE_SENSING", "TEMPERATURE", BlocklyConstants.EMPTY_PORT), "robConf_temperature");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("TEMPERATURE_SENSING", "VALUE", BlocklyConstants.EMPTY_PORT), "robConf_temperature");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("LIGHT_SENSING", "VALUE", "NO_PORT"), "robConf_light");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("LIGHT_STATUS_ACTION", "OFF", "0"), "robConf_rgbled");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("MOTOR_STOP_ACTION", "", "A"), "robConf_motor");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("MOTOR_STOP_ACTION", "", "B"), "robConf_motor");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("MOTOR_STOP_ACTION", "", "AB"), "robConf_motor");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("MOTOR_ON_ACTION", "", "A"), "robConf_motor");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("MOTOR_ON_ACTION", "", "B"), "robConf_motor");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("MOTOR_ON_ACTION", "", "AB"), "robConf_motor");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("SERVO_SET_ACTION", "", "1"), "robConf_servo");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("SERVO_SET_ACTION", "", "2"), "robConf_servo");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("SERVO_SET_ACTION", "", "5"), "robConf_servo");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("SERVO_SET_ACTION", "", "C04"), "robConf_servo");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("SERVO_SET_ACTION", "", "C05"), "robConf_servo");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("SERVO_SET_ACTION", "", "C06"), "robConf_servo");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("SERVO_SET_ACTION", "", "C16"), "robConf_servo");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("SERVO_SET_ACTION", "", "C17"), "robConf_servo");
+
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("LED_ON_ACTION", "", "1"), "robConf_callibot2,R");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("LED_ON_ACTION", "", "2"), "robConf_callibot2,R2");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("LED_ON_ACTION", "", "3"), "robConf_callibot2,R3");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("LED_ON_ACTION", "", "4"), "robConf_callibot2,R4");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("LED_ACTION", "ON", "1"), "robConf_callibot2,R");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("LED_ACTION", "ON", "2"), "robConf_callibot2,L");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("LED_ACTION", "ON", "3"), "robConf_callibot2,R");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("LED_ACTION", "OFF", "1"), "robConf_callibot2,L");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("LED_ACTION", "OFF", "2"), "robConf_callibot2,R");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("LED_ACTION", "OFF", "3"), "robConf_callibot2,L");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("LIGHT_ACTION", "ON", "1"), "robConf_callibot2");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("LIGHT_ACTION", "ON", "2"), "robConf_callibot2");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("LIGHT_ACTION", "ON", "3"), "robConf_callibot2");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("LIGHT_ACTION", "OFF", "1"), "robConf_callibot2");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("LIGHT_ACTION", "OFF", "2"), "robConf_callibot2");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("LIGHT_ACTION", "OFF", "3"), "robConf_callibot2");
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("RGBLED_ON_HIDDEN_ACTION", "", "_R"), "robConf_rgbledh");
-        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("RGBLED_ON_ACTION", "", "R"), "robConf_callibot2");
-        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("RGBLED_ON_ACTION", "", "R2"), "robConf_callibot2");
-        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("RGBLED_ON_ACTION", "", "R3"), "robConf_callibot2");
-        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("RGBLED_ON_ACTION", "", "R4"), "robConf_callibot2");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("RGBLED_ON_ACTION", "", "R"), "robConf_callibot2,R");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("RGBLED_ON_ACTION", "", "R2"), "robConf_callibot2,R2");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("RGBLED_ON_ACTION", "", "R3"), "robConf_callibot2,R3");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("RGBLED_ON_ACTION", "", "R4"), "robConf_callibot2,R4");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("RGBLED_ON_ACTION", "", "1"), "robConf_callibot2,R");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("RGBLED_ON_ACTION", "", "2"), "robConf_callibot2,R2");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("RGBLED_ON_ACTION", "", "3"), "robConf_callibot2,R3");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("RGBLED_ON_ACTION", "", "4"), "robConf_callibot2,R4");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("RGBLED_ON_ACTION", "", "5"), "robConf_callibot2,R4");
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("LED_ACTION", "ON", "L"), "robConf_callibot2");
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("LED_ACTION", "ON", "L2"), "robConf_callibot2");
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("LED_ACTION", "OFF", "L"), "robConf_callibot2");
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("LED_ACTION", "OFF", "L2"), "robConf_callibot2");
-        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("LIGHT_SENSING", "DEFAULT", ""), "robConf_light");
-        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("LIGHT_SENSING", "LIGHT_VALUE", BlocklyConstants.EMPTY_PORT), "robConf_light");
-        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("LIGHT_SENSING", "VALUE", BlocklyConstants.EMPTY_PORT), "robConf_light");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("LIGHT_STATUS_ACTION", "OFF", "1"), "robConf_callibot2");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("LIGHT_STATUS_ACTION", "OFF", "2"), "robConf_callibot2");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("LIGHT_STATUS_ACTION", "OFF", "3"), "robConf_callibot2");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("LIGHT_STATUS_ACTION", "OFF", "4"), "robConf_callibot2");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("LIGHT_STATUS_ACTION", "OFF", "5"), "robConf_callibot2");
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("RGBLED_OFF_HIDDEN_ACTION", "", "_R"), "robConf_rgbledh");
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("RGBLED_OFF_ACTION", "", "R"), "robConf_callibot2");
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("RGBLED_OFF_ACTION", "", "R2"), "robConf_callibot2");
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("RGBLED_OFF_ACTION", "", "R3"), "robConf_callibot2");
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("RGBLED_OFF_ACTION", "", "R4"), "robConf_callibot2");
-        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("MOTOR_ON_ACTION", "", "A"), "robConf_motor");
-        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("MOTOR_ON_ACTION", "", "B"), "robConf_motor");
-        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("MOTOR_ON_ACTION", "", "AB"), "robConf_motor");
-        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("MOTOR_ON_ACTION", "", "0"), "robConf_callibot2");
-        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("MOTOR_ON_ACTION", "", "2"), "robConf_callibot2");
-        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("MOTOR_ON_ACTION", "", "3"), "robConf_callibot2");
-        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("MOTOR_STOP_ACTION", "", "A"), "robConf_motor");
-        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("MOTOR_STOP_ACTION", "", "B"), "robConf_motor");
-        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("MOTOR_STOP_ACTION", "", "AB"), "robConf_motor");
-        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("MOTOR_STOP_ACTION", "", "0"), "robConf_callibot2");
-        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("MOTOR_STOP_ACTION", "", "2"), "robConf_callibot2");
-        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("MOTOR_STOP_ACTION", "", "3"), "robConf_callibot2");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("RGBLED_OFF_ACTION", "", "1"), "robConf_callibot2,R");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("RGBLED_OFF_ACTION", "", "2"), "robConf_callibot2,R2");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("RGBLED_OFF_ACTION", "", "3"), "robConf_callibot2,R3");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("RGBLED_OFF_ACTION", "", "4"), "robConf_callibot2,R4");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("RGBLED_OFF_ACTION", "", "5"), "robConf_callibot2,R");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("MOTOR_ON_ACTION", "", "0"), "robConf_callibot2,M");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("MOTOR_ON_ACTION", "", "2"), "robConf_callibot2,M2");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("MOTOR_STOP_ACTION", "", "0"), "robConf_callibot2,M");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("MOTOR_STOP_ACTION", "", "2"), "robConf_callibot2,M2");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("ULTRASONIC_SENSING", "DISTANCE", "2"), "robConf_callibot2,U");
+
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_READ_VALUE", "ANALOG", "0"), "robConf_analogout");
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_READ_VALUE", "ANALOG", "1"), "robConf_analogout");
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_READ_VALUE", "ANALOG", "2"), "robConf_analogout");
@@ -183,6 +244,148 @@ public final class MbedTwo2ThreeTransformerHelper {
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_READ_VALUE", "PULSELOW", "C17"), "robConf_digitalout");
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_READ_VALUE", "PULSELOW", "C18"), "robConf_digitalout");
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_READ_VALUE", "PULSELOW", "C19"), "robConf_digitalout");
+        /* The following items were found in very old versions of this file. They can be helpful when converting old programs and should then be reactivated.
+           Currently we do not have test cases for them, so they can be ignored for the moment.
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "UP", "0"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "UP", "1"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "UP", "2"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "UP", "3"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "UP", "4"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "UP", "5"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "UP", "6"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "UP", "7"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "UP", "8"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "UP", "9"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "UP", "10"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "UP", "11"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "UP", "12"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "UP", "13"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "UP", "14"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "UP", "15"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "UP", "16"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "UP", "19"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "UP", "20"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "UP", "C04"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "UP", "C05"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "UP", "C06"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "UP", "C07"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "UP", "C08"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "UP", "C09"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "UP", "C10"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "UP", "C11"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "UP", "C12"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "UP", "C16"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "UP", "C17"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "UP", "C18"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "UP", "C19"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "DOWN", "0"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "DOWN", "1"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "DOWN", "2"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "DOWN", "3"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "DOWN", "4"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "DOWN", "5"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "DOWN", "6"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "DOWN", "7"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "DOWN", "8"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "DOWN", "9"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "DOWN", "10"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "DOWN", "11"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "DOWN", "12"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "DOWN", "13"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "DOWN", "14"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "DOWN", "15"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "DOWN", "16"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "DOWN", "19"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "DOWN", "20"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "DOWN", "C04"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "DOWN", "C05"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "DOWN", "C06"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "DOWN", "C07"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "DOWN", "C08"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "DOWN", "C09"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "DOWN", "C10"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "DOWN", "C11"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "DOWN", "C12"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "DOWN", "C16"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "DOWN", "C17"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "DOWN", "C18"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "DOWN", "C19"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "NONE", "0"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "NONE", "1"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "NONE", "2"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "NONE", "3"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "NONE", "4"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "NONE", "5"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "NONE", "6"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "NONE", "7"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "NONE", "8"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "NONE", "9"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "NONE", "10"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "NONE", "11"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "NONE", "12"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "NONE", "13"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "NONE", "14"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "NONE", "15"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "NONE", "16"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "NONE", "19"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "NONE", "20"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "NONE", "C04"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "NONE", "C05"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "NONE", "C06"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "NONE", "C07"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "NONE", "C08"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "NONE", "C09"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "NONE", "C10"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "NONE", "C11"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "NONE", "C12"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "NONE", "C16"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "NONE", "C17"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "NONE", "C18"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_SET_PULL", "NONE", "C19"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_WRITE_VALUE", "ANALOG", "0"), "robConf_analogin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_WRITE_VALUE", "ANALOG", "1"), "robConf_analogin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_WRITE_VALUE", "ANALOG", "2"), "robConf_analogin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_WRITE_VALUE", "ANALOG", "3"), "robConf_analogin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_WRITE_VALUE", "ANALOG", "4"), "robConf_analogin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_WRITE_VALUE", "ANALOG", "5"), "robConf_analogin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_WRITE_VALUE", "ANALOG", "10"), "robConf_analogin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_WRITE_VALUE", "ANALOG", "C04"), "robConf_analogin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_WRITE_VALUE", "ANALOG", "C05"), "robConf_analogin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_WRITE_VALUE", "ANALOG", "C06"), "robConf_analogin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_WRITE_VALUE", "ANALOG", "C16"), "robConf_analogin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_WRITE_VALUE", "ANALOG", "C17"), "robConf_analogin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_WRITE_VALUE", "DIGITAL", "0"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_WRITE_VALUE", "DIGITAL", "1"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_WRITE_VALUE", "DIGITAL", "2"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_WRITE_VALUE", "DIGITAL", "3"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_WRITE_VALUE", "DIGITAL", "4"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_WRITE_VALUE", "DIGITAL", "5"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_WRITE_VALUE", "DIGITAL", "6"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_WRITE_VALUE", "DIGITAL", "7"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_WRITE_VALUE", "DIGITAL", "8"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_WRITE_VALUE", "DIGITAL", "9"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_WRITE_VALUE", "DIGITAL", "10"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_WRITE_VALUE", "DIGITAL", "11"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_WRITE_VALUE", "DIGITAL", "12"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_WRITE_VALUE", "DIGITAL", "13"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_WRITE_VALUE", "DIGITAL", "14"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_WRITE_VALUE", "DIGITAL", "15"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_WRITE_VALUE", "DIGITAL", "16"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_WRITE_VALUE", "DIGITAL", "19"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_WRITE_VALUE", "DIGITAL", "20"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_WRITE_VALUE", "DIGITAL", "C04"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_WRITE_VALUE", "DIGITAL", "C05"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_WRITE_VALUE", "DIGITAL", "C06"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_WRITE_VALUE", "DIGITAL", "C07"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_WRITE_VALUE", "DIGITAL", "C08"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_WRITE_VALUE", "DIGITAL", "C09"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_WRITE_VALUE", "DIGITAL", "C10"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_WRITE_VALUE", "DIGITAL", "C11"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_WRITE_VALUE", "DIGITAL", "C12"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_WRITE_VALUE", "DIGITAL", "C16"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_WRITE_VALUE", "DIGITAL", "C17"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_WRITE_VALUE", "DIGITAL", "C18"), "robConf_digitalin");
+        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_WRITE_VALUE", "DIGITAL", "C19"), "robConf_digitalin");*/
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_WRITE_VALUE_MBED", "ANALOG", "0"), "robConf_analogin");
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_WRITE_VALUE_MBED", "ANALOG", "1"), "robConf_analogin");
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_WRITE_VALUE_MBED", "ANALOG", "2"), "robConf_analogin");
@@ -227,22 +430,6 @@ public final class MbedTwo2ThreeTransformerHelper {
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_WRITE_VALUE_MBED", "DIGITAL", "C17"), "robConf_digitalin");
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_WRITE_VALUE_MBED", "DIGITAL", "C18"), "robConf_digitalin");
         PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PIN_WRITE_VALUE_MBED", "DIGITAL", "C19"), "robConf_digitalin");
-        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("PLAY_NOTE_ACTION", "", BlocklyConstants.EMPTY_PORT), "robConf_buzzer");
-        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("SERVO_SET_ACTION", "", "1"), "robConf_servo");
-        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("SERVO_SET_ACTION", "", "2"), "robConf_servo");
-        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("SERVO_SET_ACTION", "", "5"), "robConf_servo");
-        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("SERVO_SET_ACTION", "", "C04"), "robConf_servo");
-        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("SERVO_SET_ACTION", "", "C05"), "robConf_servo");
-        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("SERVO_SET_ACTION", "", "C06"), "robConf_servo");
-        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("SERVO_SET_ACTION", "", "C16"), "robConf_servo");
-        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("SERVO_SET_ACTION", "", "C17"), "robConf_servo");
-        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("SOUND_SENSING", "SOUND", BlocklyConstants.EMPTY_PORT), "robConf_sound");
-        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("TEMPERATURE_SENSING", "DEFAULT", ""), "robConf_temperature");
-        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("TEMPERATURE_SENSING", "TEMPERATURE", BlocklyConstants.EMPTY_PORT), "robConf_temperature");
-        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("TEMPERATURE_SENSING", "VALUE", BlocklyConstants.EMPTY_PORT), "robConf_temperature");
-        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("TONE_ACTION", "", BlocklyConstants.EMPTY_PORT), "robConf_buzzer");
-        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("ULTRASONIC_SENSING", "DISTANCE", "1"), "robConf_ultrasonic");
-        PROG_BLOCK_TO_CONF_BLOCKLY_NAME.put(Triple.of("ULTRASONIC_SENSING", "DISTANCE", "2"), "robConf_callibot2");
 
         CALLIOPE_XML_NAME_TO_FRONTEND_NAME.put(Pair.of("robConf_analogin", "1"), "P1");
         CALLIOPE_XML_NAME_TO_FRONTEND_NAME.put(Pair.of("robConf_analogin", "2"), "P2");
@@ -271,25 +458,7 @@ public final class MbedTwo2ThreeTransformerHelper {
         CALLIOPE_XML_NAME_TO_FRONTEND_NAME.put(Pair.of("robConf_servo", "2"), "P2");
         CALLIOPE_XML_NAME_TO_FRONTEND_NAME.put(Pair.of("robConf_servo", "5"), "A1");
         CALLIOPE_XML_NAME_TO_FRONTEND_NAME.put(Pair.of("robConf_ultrasonic", "1"), "A1");
-
-        CALLIBOT.put(Pair.of("INFRARED_SENSING", "2"), "I_CalliBot_links");
-        CALLIBOT.put(Pair.of("INFRARED_SENSING", "1"), "I_CalliBot_rechts");
-        CALLIBOT.put(Pair.of("LED_ACTION", "L"), "L_CalliBot_links");
-        CALLIBOT.put(Pair.of("LED_ACTION", "L2"), "L_CalliBot_rechts");
-        CALLIBOT.put(Pair.of("RGBLED_ON_ACTION", "R"), "CalliBot_links_vorne");
-        CALLIBOT.put(Pair.of("RGBLED_ON_ACTION", "R4"), "CalliBot_rechts_vorne");
-        CALLIBOT.put(Pair.of("RGBLED_ON_ACTION", "R2"), "CalliBot_links_hinten");
-        CALLIBOT.put(Pair.of("RGBLED_ON_ACTION", "R3"), "CalliBot_rechts_hinten");
-        CALLIBOT.put(Pair.of("RGBLED_OFF_ACTION", "R"), "CalliBot_links_vorne");
-        CALLIBOT.put(Pair.of("RGBLED_OFF_ACTION", "R4"), "CalliBot_rechts_vorne");
-        CALLIBOT.put(Pair.of("RGBLED_OFF_ACTION", "R2"), "CalliBot_links_hinten");
-        CALLIBOT.put(Pair.of("RGBLED_OFF_ACTION", "R3"), "CalliBot_rechts_hinten");
-        CALLIBOT.put(Pair.of("MOTOR_ON_ACTION", "0"), "CalliBot_links");
-        CALLIBOT.put(Pair.of("MOTOR_ON_ACTION", "2"), "CalliBot_rechts");
-        CALLIBOT.put(Pair.of("MOTOR_STOP_ACTION", "0"), "CalliBot_links");
-        CALLIBOT.put(Pair.of("MOTOR_STOP_ACTION", "2"), "CalliBot_rechts");
-        //        CALLIBOT.put(Pair.of("MOTOR_STOP_ACTION", "3"), "robConf_callibot2");
-        CALLIBOT.put(Pair.of("ULTRASONIC_SENSING", "2"), "CalliBot_vorne");
+        CALLIOPE_XML_NAME_TO_FRONTEND_NAME.put(Pair.of("robConf_ultrasonicc", "2"), "U");
     }
 
     private final BlocklyDropdownFactory dropdownFactory;
@@ -313,11 +482,10 @@ public final class MbedTwo2ThreeTransformerHelper {
             mY = Math.min(mY, confComp.y);
             // Register the default components for any of the ports
             String pin1 = confComp.getOptProperty("PIN1");
+            BlocklyProperties blocklyProperties = confComp.getProperty();
             if ( pin1 == null ) {
-                BlocklyProperties blocklyProperties = confComp.getProperty();
                 this.createdComps.put(Pair.of(blocklyProperties.blockType, "default"), confComp);
             } else {
-                BlocklyProperties blocklyProperties = confComp.getProperty();
                 this.createdComps.put(Pair.of(blocklyProperties.blockType, pin1), confComp);
             }
         }
@@ -338,7 +506,9 @@ public final class MbedTwo2ThreeTransformerHelper {
      */
     public Pair<ConfigurationComponent, String> getComponentAndName(String progBlockType, String mode, String port) {
         // Reuse an existing component if able
-        String confBlocklyName = PROG_BLOCK_TO_CONF_BLOCKLY_NAME.get(Triple.of(progBlockType, mode, port));
+        String confBlocklyNameTemp = PROG_BLOCK_TO_CONF_BLOCKLY_NAME.get(Triple.of(progBlockType, mode, port));
+        String[] confBlocklyNameTuple = confBlocklyNameTemp.split(",");
+        String confBlocklyName = confBlocklyNameTuple[0];
         Assert
             .notNull(
                 confBlocklyName,
@@ -347,7 +517,6 @@ public final class MbedTwo2ThreeTransformerHelper {
         ConfigurationComponent confComp = this.createdComps.get(Pair.of(confBlocklyName, "default"));
         // Otherwise check if it has already been generated
         confComp = (confComp == null) ? this.createdComps.get(Pair.of(confBlocklyName, port)) : confComp;
-
         if ( confComp == null ) { // Otherwise generate a new one
             confComp = createComponent(confBlocklyName, port);
             if ( confComp.componentType.equals("CALLIBOT") ) {
@@ -358,8 +527,8 @@ public final class MbedTwo2ThreeTransformerHelper {
             }
         }
         String name;
-        if ( confComp.componentType.equals("CALLIBOT") ) {
-            name = CALLIBOT.get(Pair.of(progBlockType, port));
+        if ( confComp.componentType.equals("CALLIBOT") && confBlocklyNameTuple.length == 2 ) {
+            name = confBlocklyNameTuple[1];
         } else {
             name = confComp.userDefinedPortName;
         }
@@ -408,24 +577,49 @@ public final class MbedTwo2ThreeTransformerHelper {
         String name;
         Map<String, String> properties = new HashMap<>();
         if ( confType.equals("CALLIBOT") ) {
-            name = "CalliBot";
-            properties.put("MOTOR_L", "CalliBot_links");
-            properties.put("MOTOR_R", "CalliBot_rechts");
-            properties.put("RGBLED_LF", "CalliBot_links_vorne");
-            properties.put("RGBLED_RF", "CalliBot_rechts_vorne");
-            properties.put("RGBLED_LR", "CalliBot_links_hinten");
-            properties.put("RGBLED_RR", "CalliBot_rechts_hinten");
-            properties.put("LED_L", "L_CalliBot_links");
-            properties.put("LED_R", "L_CalliBot_rechts");
-            properties.put("INFRARED_L", "I_CalliBot_links");
-            properties.put("INFRARED_R", "I_CalliBot_rechts");
-            properties.put("ULTRASONIC", "CalliBot_vorne");
+            xPos += 150;
+            name = "C";
+            BlocklyRegion br = new BlocklyRegion(false, false, false, true, true, true, false, false, null);
+            BlocklyProperties blocklyProperties = new BlocklyProperties(confBlocklyName, name, br, null);
+            LinkedHashMap<String, List<ConfigurationComponent>> subcomponents = new LinkedHashMap<>();
+            List<ConfigurationComponent> subBlocks = new ArrayList<>();
+            addSubBlock(subBlocks, br, "MOTOR", "CONFIGURATION_ACTOR", "M", "MOTOR_L", "robConf_motorc");
+            addSubBlock(subBlocks, br, "MOTOR", "CONFIGURATION_ACTOR", "M2", "MOTOR_R", "robConf_motorc");
+            addSubBlock(subBlocks, br, "RGBLED", "CONFIGURATION_ACTOR", "R", "RGBLED_LF", "robConf_rgbled");
+            addSubBlock(subBlocks, br, "RGBLED", "CONFIGURATION_ACTOR", "R2", "RGBLED_RF", "robConf_rgbled");
+            addSubBlock(subBlocks, br, "RGBLED", "CONFIGURATION_ACTOR", "R3", "RGBLED_LR", "robConf_rgbled");
+            addSubBlock(subBlocks, br, "RGBLED", "CONFIGURATION_ACTOR", "R4", "RGBLED_RR", "robConf_rgbled");
+            addSubBlock(subBlocks, br, "LED", "CONFIGURATION_ACTOR", "L", "LED_L", "robConf_led");
+            addSubBlock(subBlocks, br, "LED", "CONFIGURATION_ACTOR", "R", "LED_R", "robConf_led");
+            addSubBlock(subBlocks, br, "INFRARED", "CONFIGURATION_SENSOR", "I", "INFRARED_L", "robConf_infrared");
+            addSubBlock(subBlocks, br, "INFRARED", "CONFIGURATION_SENSOR", "I2", "INFRARED_R", "robConf_infrared");
+            addSubBlock(subBlocks, br, "ULTRASONIC", "CONFIGURATION_SENSOR", "U", "U", "robConf_ultrasonicc");
+            addSubBlock(subBlocks, br, "KEYC", "CONFIGURATION_SENSOR", "K1", "KEY_FL", "robConf_keyc");
+            addSubBlock(subBlocks, br, "KEYC", "CONFIGURATION_SENSOR", "K2", "KEY_FR", "robConf_keyc");
+            addSubBlock(subBlocks, br, "SERVOMOTOR", "CONFIGURATION_ACTOR", "S", "SERVO_S1", "robConf_servoc");
+            addSubBlock(subBlocks, br, "SERVOMOTOR", "CONFIGURATION_ACTOR", "S2", "SERVO_S2", "robConf_servoc");
+            subcomponents.put("BUS", subBlocks);
+            return new ConfigurationComponentNode(confType, category, name, name, properties, blocklyProperties, xPos, yPos, subcomponents);
         } else {
             name = getName(port, confBlocklyName);
             properties = Collections.singletonMap("PIN1", port);
+            BlocklyRegion br = new BlocklyRegion(false, false, false, true, true, true, false, false, null);
+            BlocklyProperties blocklyProperties = new BlocklyProperties(confBlocklyName, name, br, null);
+            return new ConfigurationComponent(confType, category, name, name, properties, blocklyProperties, xPos, yPos);
         }
-        BlocklyRegion br = new BlocklyRegion(false, false, false, true, true, true, false, false, null);
-        BlocklyProperties blocklyProperties = new BlocklyProperties(confBlocklyName, name, br, null);
-        return new ConfigurationComponent(confType, category, name, name, properties, blocklyProperties, xPos, yPos);
+
+    }
+
+    private static void addSubBlock(
+        List<ConfigurationComponent> subBlocks,
+        BlocklyRegion br,
+        String componentType,
+        String category,
+        String portName,
+        String port,
+        String blockType) {
+        Map<String, String> map = new LinkedHashMap<>();
+        map.put("PORT", port);
+        subBlocks.add(new ConfigurationComponentLeaf(componentType, category, portName, portName, map, new BlocklyProperties(blockType, portName, br, null), 0, 0));
     }
 }

@@ -25,7 +25,6 @@ import de.fhg.iais.roberta.factory.RobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
-import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponentNode;
 import de.fhg.iais.roberta.transformer.Jaxb2ConfigurationAst;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
@@ -349,7 +348,7 @@ public final class Project {
                 for ( String prop : component.getComponentProperties().keySet() ) {
                     propJSON.put(prop, component.getComponentProperties().get(prop));
                 }
-                if ( component instanceof ConfigurationComponentNode ) {
+                if ( component.hasSubComponents() ) {
                     LinkedHashMap<String, List<ConfigurationComponent>> subComponentLists = component.getSubComponents();
                     for ( String subComponentList : subComponentLists.keySet() ) {
                         JSONObject sub = new JSONObject();
