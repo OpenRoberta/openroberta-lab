@@ -47,7 +47,8 @@ public class RegenerateNepoWorker implements IWorker {
             String configurationXML = jaxbToXml(astToJaxb(configurationAst));
             project.setConfigurationAsBlocklyXML(configurationXML);
 
-            project.setResult(Key.COMPILERWORKFLOW_SUCCESS);
+            // this worker executes independent of success or failure of preceding workers.
+            // thus, this worker should NEVER change the result. The result should stay as it is :-)
         } catch ( Throwable e ) {
             LOG.error("program & configuration ast -> blockly failed", e);
             project.setResult(Key.COMPILERWORKFLOW_ERROR_PROGRAM_GENERATION_FAILED);
