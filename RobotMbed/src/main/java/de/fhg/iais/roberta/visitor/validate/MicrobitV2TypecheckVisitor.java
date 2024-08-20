@@ -215,6 +215,6 @@ public class MicrobitV2TypecheckVisitor extends TypecheckCommonLanguageVisitor i
 
     @Override
     public BlocklyType visitPlayNoteAction(PlayNoteAction playNoteAction) {
-        return Sig.of(BlocklyType.NUMBER).typeCheckPhrases(playNoteAction, this);
+        return Sig.of(BlocklyType.VOID).typeCheckPhrases(playNoteAction, this);
     }
 }
