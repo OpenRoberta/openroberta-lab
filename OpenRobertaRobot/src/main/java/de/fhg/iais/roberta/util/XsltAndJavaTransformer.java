@@ -76,12 +76,15 @@ public final class XsltAndJavaTransformer {
         if ( programText.contains(HIGHEST_XML_VERSION) ) {
             return Pair.of(programText, configText);
         }
+        boolean configMissing;
         String xmlVersion;
         try {
-            if ( configText != null ) {
-                configText = transformXslt(configText);
-            } else {
+            if ( configText == null ) {
+                configMissing = true;
                 configText = factory.getConfigurationDefault();
+            } else {
+                configMissing = false;
+                configText = transformXslt(configText);
             }
             programText = transformXslt(programText);
             BlockSet jaxbProgram = JaxbHelper.xml2Element(programText, BlockSet.class);
@@ -97,14 +100,14 @@ public final class XsltAndJavaTransformer {
             Pair<String, String> progConfPair = transformBetweenVersions(factory, xmlVersion, programText, configText);
             programText = progConfPair == null ? programText : progConfPair.getFirst();
             configText = progConfPair == null ? configText : progConfPair.getSecond();
-            configText = hasXMLChanged(configText, factory.getConfigurationDefault()) ? configText : null;
+            configText = configMissing && isXMLEqual(configText, factory.getConfigurationDefault()) ? null : configText;
             return Pair.of(programText, configText);
         } catch ( Exception e ) {
             throw new DbcException("Java transformation failed", e);
         }
     }
 
-    private boolean hasXMLChanged(String xml1, String xml2) {
+    private boolean isXMLEqual(String xml1, String xml2) {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         dbf.setNamespaceAware(true);
         dbf.setCoalescing(true);
@@ -118,9 +121,9 @@ public final class XsltAndJavaTransformer {
             inputStream = new ByteArrayInputStream(xml2.getBytes());
             Document doc2 = db.parse(inputStream);
             doc2.normalizeDocument();
-            return !doc1.isEqualNode(doc2);
+            return doc1.isEqualNode(doc2);
         } catch ( IOException | SAXException | ParserConfigurationException e ) {
-            return false; // if the comparison fails, we assume it has not changed
+            return true; // if the comparison fails, we assume they are equal to provide the valid default config
         }
     }
 
