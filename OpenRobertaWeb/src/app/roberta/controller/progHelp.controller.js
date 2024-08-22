@@ -56,6 +56,11 @@ function toggleHelp($button) {
     if ($('#helpButton').hasClass('rightActive')) {
         $('#blocklyDiv').closeRightView();
     } else {
+        if (GUISTATE_C.hasExtension('nn')) {
+            $('.help.nnTrue').show();
+        } else {
+            $('.help.nnTrue').hide();
+        }
         if (GUISTATE_C.getProgramToolboxLevel() === 'beginner') {
             $('.help.expert').hide();
         } else {

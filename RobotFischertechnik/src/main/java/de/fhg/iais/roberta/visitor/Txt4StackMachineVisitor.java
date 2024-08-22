@@ -2,6 +2,7 @@ package de.fhg.iais.roberta.visitor;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -28,6 +29,7 @@ import de.fhg.iais.roberta.syntax.action.light.RgbLedOnHiddenAction;
 import de.fhg.iais.roberta.syntax.action.motor.MotorOnForAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.colour.ColourCompare;
+import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.sensor.CameraBallSensor;
 import de.fhg.iais.roberta.syntax.sensor.CameraLineColourSensor;
@@ -58,9 +60,11 @@ import de.fhg.iais.roberta.util.syntax.SC;
 import de.fhg.iais.roberta.visitor.lang.codegen.AbstractStackMachineVisitor;
 
 public final class Txt4StackMachineVisitor extends AbstractStackMachineVisitor implements ITxt4Visitor<Void> {
+    private final ConfigurationAst configurationAst;
 
     public Txt4StackMachineVisitor(ConfigurationAst configuration, List<List<Phrase>> phrases, UsedHardwareBean usedHardwareBean, NNBean nnBean) {
         super(configuration, usedHardwareBean, nnBean);
+        this.configurationAst = configuration;
         Assert.isTrue(!phrases.isEmpty());
     }
 
@@ -153,14 +157,17 @@ public final class Txt4StackMachineVisitor extends AbstractStackMachineVisitor i
 
     @Override
     public Void visitEncoderSensor(EncoderSensor encoderSensor) {
-        // TODO
-        return null;
+        String mode = encoderSensor.getMode().toLowerCase();
+        String port = getEncoderSensorport(encoderSensor.getUserDefinedPort()).toLowerCase();
+        JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.ENCODER_SENSOR_SAMPLE).put(C.PORT, port).put(C.MODE, mode);
+        return add(o);
     }
 
     @Override
     public Void visitEncoderReset(EncoderReset encoderReset) {
-        // TODO
-        return null;
+        String port = getEncoderSensorport(encoderReset.sensorPort);
+        JSONObject o = makeNode(C.ENCODER_SENSOR_RESET).put(C.PORT, port);
+        return add(o);
     }
 
     @Override
@@ -363,5 +370,19 @@ public final class Txt4StackMachineVisitor extends AbstractStackMachineVisitor i
     @Override
     public Void visitPhototransistor(Phototransistor phototransistor) {
         return null;
+    }
+
+    private String getEncoderSensorport(String encoderPort) {
+        for ( Map.Entry<String, ConfigurationComponent> entry : configurationAst.getAllConfigurationComponentByType("ENCODERMOTOR").entrySet() ) {
+            ConfigurationComponent motor = entry.getValue();
+            try {
+                ConfigurationComponent encoder = motor.getSubComponents().get("ENCODER").get(0);
+                if ( encoder.userDefinedPortName.equals(encoderPort) ) {
+                    return motor.getComponentProperties().get("PORT");
+                }
+            } catch ( UnsupportedOperationException ignored ) {
+            }
+        }
+        return encoderPort;
     }
 }

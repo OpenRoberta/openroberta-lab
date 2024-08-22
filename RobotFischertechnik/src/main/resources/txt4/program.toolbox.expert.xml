@@ -21,18 +21,6 @@
                 </value>
             </block>
             <block type='actions_motorOmniDiff_stop_txt4'></block>
-            <block type='actions_motorOmniDiff_curve'>
-                <value name='POWER_LEFT'>
-                    <block type='math_integer'>
-                        <field name='NUM'>10</field>
-                    </block>
-                </value>
-                <value name='POWER_RIGHT'>
-                    <block type='math_integer'>
-                        <field name='NUM'>30</field>
-                    </block>
-                </value>
-            </block>
             <block type='actions_motorOmniDiff_curve_for'>
                 <value name='POWER_LEFT'>
                     <block type='math_integer'>
@@ -47,6 +35,18 @@
                 <value name='DISTANCE'>
                     <block type='math_integer'>
                         <field name='NUM'>20</field>
+                    </block>
+                </value>
+            </block>
+            <block type='actions_motorOmniDiff_curve'>
+                <value name='POWER_LEFT'>
+                    <block type='math_integer'>
+                        <field name='NUM'>10</field>
+                    </block>
+                </value>
+                <value name='POWER_RIGHT'>
+                    <block type='math_integer'>
+                        <field name='NUM'>30</field>
                     </block>
                 </value>
             </block>
@@ -189,7 +189,7 @@
         </block>
         <block type='robSensors_ball_getSample'></block>
         <block type='robSensors_motion_getSample'></block>
-        
+
     </category>
     <category name='TOOLBOX_CONTROL' svg='true'>
         <category name='TOOLBOX_DECISION' svg='true'>

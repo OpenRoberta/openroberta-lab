@@ -74,6 +74,7 @@ public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
     private boolean driveWasChecked;
     private GestureSensor gestureSensorInGestureMode;
     private boolean nonGestureModeUsed;
+
     public Txt4ValidatorAndCollectorVisitor(ConfigurationAst robotConfiguration, ClassToInstanceMap<IProjectBean.IBuilder> beanBuilders, boolean isSim) {
         super(robotConfiguration, beanBuilders);
         driveWasChecked = false;
@@ -119,7 +120,7 @@ public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
     public Void visitMotorOmniDiffOnAction(MotorOmniDiffOnAction motorOmniDiffOnAction) {
         requiredComponentVisited(motorOmniDiffOnAction, motorOmniDiffOnAction.power);
         checkDiffOrOmniDrive(motorOmniDiffOnAction);
-        
+
         usedMethodBuilder.addUsedMethod(Txt4Methods.SPEEDTOPWM);
         usedHardwareBuilder.addUsedActor(new UsedActor(motorOmniDiffOnAction.getUserDefinedPort(), FischertechnikConstants.ENCODERMOTOR));
         if ( configHasOmnidrive() ) {
@@ -440,6 +441,7 @@ public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
     public Void visitPhototransistor(Phototransistor phototransistor) {
         checkSensorPort(phototransistor);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(phototransistor.getUserDefinedPort(), FischertechnikConstants.PHOTOTRANSISTOR, SC.DEFAULT));
+        addToPhraseIfUnsupportedInSim(phototransistor, true, isSim);
         return null;
     }
 
@@ -504,6 +506,7 @@ public class Txt4ValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
 
     @Override
     public Void visitPlayFileAction(PlayFileAction playFileAction) {
+        addToPhraseIfUnsupportedInSim(playFileAction, false, isSim);
         return null;
     }
 

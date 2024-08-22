@@ -1005,11 +1005,45 @@ export class Interpreter {
                         {
                             const item = this.state.pop();
                             const list = this.state.pop();
+                            let index = -1;
                             if (expr[C.POSITION] == C.FIRST) {
-                                this.state.push(list.indexOf(item));
+                                for (let i: number = 0; i < list.length; i++) {
+                                    if (Array.isArray(list[i])) {
+                                        index = i;
+                                        for (let j: number = 0; j < list[i].length; j++) {
+                                            if (list[i][j] != item[j]) {
+                                                index = -1;
+                                                break;
+                                            }
+                                        }
+                                        if (index != -1) {
+                                            break;
+                                        }
+                                    } else if (list[i] == item) {
+                                        index = i;
+                                        break;
+                                    }
+                                }
                             } else {
-                                this.state.push(list.lastIndexOf(item));
+                                for (let i: number = list.length - 1; i >= 0; i--) {
+                                    if (Array.isArray(list[i])) {
+                                        index = i;
+                                        for (let j: number = 0; j < list[i].length; j++) {
+                                            if (list[i][j] != item[j]) {
+                                                index = -1;
+                                                break;
+                                            }
+                                        }
+                                        if (index != -1) {
+                                            break;
+                                        }
+                                    } else if (list[i] == item) {
+                                        index = i;
+                                        break;
+                                    }
+                                }
                             }
+                            this.state.push(index);
                         }
                         break;
                     case C.GET:
