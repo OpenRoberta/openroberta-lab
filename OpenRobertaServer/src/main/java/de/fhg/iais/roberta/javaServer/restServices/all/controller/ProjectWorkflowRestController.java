@@ -234,6 +234,7 @@ public class ProjectWorkflowRestController {
             ProjectService.executeWorkflow("runnative", project);
             response.setCmd("runNative");
             response.setCompiledCode(project.getCompiledHex());
+            response.setSourceCode(project.getSourceCode().toString());
             addProjectResultToResponse(response, project);
             Statistics.info("ProgramRunNative", "LoggedIn", httpSessionState.isUserLoggedIn(), "success", project.hasSucceeded());
             return UtilForREST.responseWithFrontendInfo(response, httpSessionState, this.robotCommunicator);
