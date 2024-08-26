@@ -17,6 +17,7 @@ public class ProjectNativeResponse extends BaseResponse {
     protected String programName;
     protected JSONObject confAnnos;
     protected String compiledCode;
+    protected String sourceCode;
 
     /**
      * the response for the /projectWorkflow/runNative, ../compileNative and ../reset REST request
@@ -278,6 +279,27 @@ public class ProjectNativeResponse extends BaseResponse {
     }
 
     /**
+     * GET sourceCode. Object must be immutable. Never return null or an undefined/default value.
+     */
+    public String getSourceCode() {
+        if ( !this.immutable ) {
+            throw new RuntimeException("no sourceCode from an object under construction: " + toString());
+        }
+        return this.sourceCode;
+    }
+
+    /**
+     * SET sourceCode. Object must be mutable.
+     */
+    public ProjectNativeResponse setSourceCode(String sourceCode) {
+        if ( this.immutable ) {
+            throw new RuntimeException("sourceCode assigned to an immutable object: " + toString());
+        }
+        this.sourceCode = sourceCode;
+        return this;
+    }
+
+    /**
      * generates a JSON-object from an immutable bean.<br>
      * Throws a runtime exception if inconsistencies are detected.
      */
@@ -337,6 +359,9 @@ public class ProjectNativeResponse extends BaseResponse {
             if ( this.confAnnos != null ) {
                 jsonO.put("confAnnos", this.confAnnos);
             }
+            if ( this.sourceCode != null ) {
+                jsonO.put("sourceCode", this.sourceCode);
+            }
             jsonO.put("compiledCode", this.compiledCode);
         } catch ( JSONException e ) {
             throw new RuntimeException("JSON unparse error when unparsing: " + this, e);
@@ -346,7 +371,7 @@ public class ProjectNativeResponse extends BaseResponse {
 
     @Override
     public String toString() {
-        return "ProjectNativeResponse [immutable=" + this.immutable + ", cmd=" + this.cmd + ", rc=" + this.rc + ", message=" + this.message + ", cause=" + this.cause + ", parameters=" + this.parameters + ", initToken=" + this.initToken + ", serverTime=" + this.serverTime + ", serverVersion=" + this.serverVersion + ", robotWait=" + this.robotWait + ", robotBattery=" + this.robotBattery + ", robotName=" + this.robotName + ", robotVersion=" + this.robotVersion + ", robotFirmwareName=" + this.robotFirmwareName + ", robotSensorvalues=" + this.robotSensorvalues + ", robotNepoexitvalue=" + this.robotNepoexitvalue + ", robotState=" + this.robotState + ", notificationsAvailable=" + this.notificationsAvailable + ", programName=" + this.programName + ", confAnnos=" + this.confAnnos + ", compiledCode=" + this.compiledCode + " ]";
+        return "ProjectNativeResponse [immutable=" + this.immutable + ", cmd=" + this.cmd + ", rc=" + this.rc + ", message=" + this.message + ", cause=" + this.cause + ", parameters=" + this.parameters + ", initToken=" + this.initToken + ", serverTime=" + this.serverTime + ", serverVersion=" + this.serverVersion + ", robotWait=" + this.robotWait + ", robotBattery=" + this.robotBattery + ", robotName=" + this.robotName + ", robotVersion=" + this.robotVersion + ", robotFirmwareName=" + this.robotFirmwareName + ", robotSensorvalues=" + this.robotSensorvalues + ", robotNepoexitvalue=" + this.robotNepoexitvalue + ", robotState=" + this.robotState + ", notificationsAvailable=" + this.notificationsAvailable + ", programName=" + this.programName + ", confAnnos=" + this.confAnnos + ", compiledCode=" + this.compiledCode + ", sourceCode=" + this.sourceCode + " ]";
     }
 
     @Override
