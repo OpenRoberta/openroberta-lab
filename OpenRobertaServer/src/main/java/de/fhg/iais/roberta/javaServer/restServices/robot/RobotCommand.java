@@ -9,7 +9,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import de.fhg.iais.roberta.util.dbc.DbcException;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -20,6 +19,7 @@ import com.google.inject.Inject;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicationData;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
 import de.fhg.iais.roberta.util.AliveData;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 
 @Path("/pushcmd")
 public class RobotCommand {
@@ -55,12 +55,13 @@ public class RobotCommand {
             cmd = r.get("cmd");
             token = r.get("token");
             pluginName = r.get("pluginname", "firmwarename");
-        } catch (Exception e) {
+        } catch ( Exception e ) {
             LOG.error("Robot request aborted. Robot uses a wrong JSON: " + requestEntity, e);
             return Response.serverError().build();
         }
 
         String robot = r.getWithDefault("?", "robot");
+        String macaddr = r.getWithDefault("usb", "macaddr");
         String robotName = r.getWithDefault("?", "robotname", "brickname");
         String batteryvoltage = r.getWithDefault("?", "battery");
         String menuversion = r.getWithDefault("?", "menuversion");
@@ -69,28 +70,27 @@ public class RobotCommand {
         int nepoExitValue = requestEntity.optInt("nepoexitvalue", 0);
 
         JSONObject response;
-        switch (cmd) {
+        switch ( cmd ) {
             case CMD_REGISTER:
-                String macaddr = r.get("macaddr");
                 LOG.info("ROBOT_PROTOCOL: robot [" + macaddr + "] send token " + token + " for user approval");
                 RobotCommunicationData state =
-                        new RobotCommunicationData(token, robot, macaddr, robotName, batteryvoltage, menuversion, runtimeVersion, pluginName, firmwareversion);
+                    new RobotCommunicationData(token, robot, macaddr, robotName, batteryvoltage, menuversion, runtimeVersion, pluginName, firmwareversion);
                 boolean result = this.brickCommunicator.robotWantsTokenToBeApproved(state);
                 response = new JSONObject().put("response", result ? "ok" : "error").put("cmd", result ? CMD_REPEAT : CMD_ABORT);
                 return Response.ok(response.toString()).build();
             case CMD_PUSH:
                 int counter = pushRequestCounterForLogging.incrementAndGet();
                 boolean logPush = counter % EVERY_REQUEST == 0;
-                if (logPush) {
+                if ( logPush ) {
                     LOG.info("/pushcmd - push request for token " + token + " [count:" + counter + "]");
                 }
                 String command = this.brickCommunicator.robotWaitsForAServerPush(token, batteryvoltage, nepoExitValue);
 
-                if (command == null || this.brickCommunicator.getState(token) == null) {
+                if ( command == null || this.brickCommunicator.getState(token) == null ) {
                     LOG.error("ROBOT_PROTOCOL: robot was already disconnected, when a /pushcmd for token " + token + " terminated. We return a server error");
                     return Response.serverError().build();
                 } else {
-                    if (!command.equals(CMD_REPEAT) || logPush) {
+                    if ( !command.equals(CMD_REPEAT) || logPush ) {
                         LOG.info("ROBOT_PROTOCOL: the command " + command + " is pushed to robot with token " + token + " [count: " + counter + "]");
                     }
                     response = new JSONObject().put(CMD, command);
@@ -116,17 +116,17 @@ public class RobotCommand {
         }
 
         /**
-         * look for the first key from a keys array, that has a value in the JSONObject wrapped. Return this value.<br>
+         * look for the first key from a keys array, that has a value in the JSONObject wrapped. Return this value as a string.<br>
          * if no key is found at all, return the default value
          *
          * @param defaultValue if no keys are present in the JSONObject
-         * @param keys         the keys to lookup. The keys can be considered <i>synonyms</i>
+         * @param keys the keys to lookup. The keys can be considered <i>synonyms</i>
          * @return the value of the first key found or the default if no key matched
          */
         public String getWithDefault(String defaultValue, String... keys) {
-            for (String key : keys) {
-                if (json.has(key)) {
-                    return json.getString(key);
+            for ( String key : keys ) {
+                if ( json.has(key) ) {
+                    return json.optString(key, defaultValue);
                 }
             }
             return defaultValue;
@@ -140,8 +140,8 @@ public class RobotCommand {
          * @return the value of the first key found
          */
         public String get(String... keys) {
-            for (String key : keys) {
-                if (json.has(key)) {
+            for ( String key : keys ) {
+                if ( json.has(key) ) {
                     return json.getString(key);
                 }
             }
