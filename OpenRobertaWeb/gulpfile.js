@@ -19,17 +19,80 @@ const files = {
     jsPath: 'src/**/*',
     nodePaths: [
         {
-            //folder name in libs
             moduleName: 'ace',
-            //base path for the node module
-            base: '../OpenRobertaWeb/node_modules/ace-builds/src-min-noconflict',
-            //defines files to be copied over
-            src: [
-                //you may add '/**/*.js' instead of a {folder: '', file['']} structure or similar paths with wildcard
+            bases: [
                 {
-                    //the base folder is just an empty string, files may also be described as *.js if all files of a given folder should be copied
-                    folder: '',
-                    files: ['ace.js', 'ext-language_tools.js', 'mode-c_cpp.js', 'mode-java.js', 'mode-python.js', 'mode-json.js'],
+                    base: '../OpenRobertaWeb/node_modules/ace-builds/src-min-noconflict',
+                    //defines files to be copied over
+                    src: [
+                        //you may add '/**/*.js' instead of a {folder: '', file['']} structure or similar paths with wildcard
+                        {
+                            //the base folder is just an empty string, files may also be described as *.js if all files of a given folder should be copied
+                            folderSrc: '',
+                            folderDest: '',
+                            files: ['ace.js', 'ext-language_tools.js', 'mode-c_cpp.js', 'mode-java.js', 'mode-python.js', 'mode-json.js'],
+                        },
+                    ],
+                },
+            ],
+        },
+        {
+            moduleName: 'bootstrap',
+            bases: [
+                {
+                    base: '../OpenRobertaWeb/node_modules/bootstrap',
+                    src: [
+                        {
+                            folderSrc: 'dist/js',
+                            folderDest: '',
+                            files: ['bootstrap.bundle.min.js'],
+                        },
+                    ],
+                },
+                {
+                    base: '../OpenRobertaWeb/node_modules/bootstrap-tagsinput',
+                    src: [
+                        {
+                            folderSrc: 'dist',
+                            folderDest: '',
+                            files: ['bootstrap-tagsinput.min.js'],
+                        },
+                    ],
+                },
+                {
+                    base: '../OpenRobertaWeb/node_modules/bootstrap-wysiwyg/',
+                    src: [
+                        {
+                            folderSrc: 'js',
+                            folderDest: '',
+                            files: ['bootstrap-wysiwyg.min.js'],
+                        },
+                    ],
+                },
+                {
+                    base: '../OpenRobertaWeb/node_modules/bootstrap-table',
+                    src: [
+                        {
+                            folderSrc: 'dist',
+                            folderDest: 'bootstrap-table-1.22.1-dist/js',
+                            files: ['bootstrap-table.min.js', 'bootstrap-table-locale-all.min.js'],
+                        },
+                    ],
+                },
+            ],
+        },
+        {
+            moduleName: 'dapjs',
+            bases: [
+                {
+                    base: '../OpenRobertaWeb/node_modules/dapjs',
+                    src: [
+                        {
+                            folderSrc: 'dist',
+                            folderDest: '',
+                            files: ['dap.umd.js'],
+                        },
+                    ],
                 },
             ],
         },
@@ -68,21 +131,23 @@ function jsTask() {
 
 function nodeTask() {
     const streams = files.nodePaths.map(function (module) {
-        return module.src.map(function (source) {
-            if (typeof source === 'string') {
-                return src(module.base + source, { sourcemaps: true }) // set source and turn on sourcemaps
-                    .pipe(dest('../OpenRobertaServer/staticResources/libs/' + module.moduleName, { sourcemaps: '.' }));
-            } else if (source.folder !== undefined && source.files !== undefined) {
-                return source.files.map(function (file) {
-                    return src(module.base + '/' + source.folder + '/' + file).pipe(
-                        dest('../OpenRobertaServer/staticResources/libs/' + module.moduleName + '/' + source.folder, { sourcemaps: '.' })
+        return module.bases.map(function (base) {
+            return base.src.map(function (source) {
+                if (typeof source === 'string') {
+                    return src(base.base + source, { sourcemaps: true }) // set source and turn on sourcemaps
+                        .pipe(dest('../OpenRobertaServer/staticResources/libs/' + module.moduleName, { sourcemaps: '.' }));
+                } else if (source.folderSrc !== undefined && source.folderDest !== undefined && source.files !== undefined) {
+                    return source.files.map(function (file) {
+                        return src(base.base + '/' + source.folderSrc + '/' + file).pipe(
+                            dest('../OpenRobertaServer/staticResources/libs/' + module.moduleName + '/' + source.folderDest, { sourcemaps: '.' })
+                        );
+                    });
+                } else {
+                    throw Error(
+                        'make sure to define folder and files for each source or add a plain string as path, for copying from base folder leave this as an empty String'
                     );
-                });
-            } else {
-                throw Error(
-                    'make sure to define folder and files for each source or add a plain string as path, for copying from base folder leave this as an empty String'
-                );
-            }
+                }
+            });
         });
     });
     return merge(...streams);
