@@ -310,6 +310,27 @@
       ],
       "startView.model": [
         "app/roberta/models/startView.model"
+      ],
+      "microbitConstants": [
+        "helper/partialFlashing/microbitConstants"
+      ],
+      "partialFlashing": [
+        "helper/partialFlashing/partialFlashing"
+      ],
+      "partialFlashingUtils": [
+        "helper/partialFlashing/partialFlashingUtils"
+      ],
+      "asyncUtil": [
+        "helper/partialFlashing/asyncUtil.ts"
+      ],
+      "micropython": [
+        "helper/partialFlashing/micropython"
+      ],
+      "boardId": [
+        "helper/partialFlashing/boardId"
+      ],
+      "boardSerialInfo": [
+        "helper/partialFlashing/boardSerialInfo"
       ]
     },
     "allowSyntheticDefaultImports": true
