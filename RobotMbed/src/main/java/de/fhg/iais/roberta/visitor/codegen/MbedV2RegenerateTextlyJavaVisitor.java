@@ -1,20 +1,11 @@
 package de.fhg.iais.roberta.visitor.codegen;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.collect.ClassToInstanceMap;
-
-import de.fhg.iais.roberta.bean.IProjectBean;
-import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.ConfigurationAst;
-import de.fhg.iais.roberta.components.UsedActor;
-import de.fhg.iais.roberta.components.UsedSensor;
-import de.fhg.iais.roberta.inter.mode.action.ILanguage;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.display.ClearDisplayAction;
 import de.fhg.iais.roberta.syntax.action.generic.MbedPinWriteValueAction;
@@ -31,12 +22,10 @@ import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.SetVolumeAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
-import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.expr.mbed.Image;
 import de.fhg.iais.roberta.syntax.expr.mbed.PredefinedImage;
 import de.fhg.iais.roberta.syntax.functions.mbed.ImageInvertFunction;
 import de.fhg.iais.roberta.syntax.functions.mbed.ImageShiftFunction;
-import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.expr.ListCreate;
 import de.fhg.iais.roberta.syntax.lang.functions.GetSubFunct;
@@ -65,15 +54,15 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.syntax.SC;
 import de.fhg.iais.roberta.visitor.IMicrobitV2Visitor;
 import de.fhg.iais.roberta.visitor.IVisitor;
-import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractTextlyJavaVisitor;
+import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractRegenerateTextlyJavaVisitor;
 
 /**
  * This class is implementing {@link IVisitor}. All methods are implemented and they append a human-readable JAVA code representation of a phrase to a
  * StringBuilder. <b>This representation is correct JAVA code.</b> <br>
  */
 
-public final class MbedV2TextlyJavaVisitor extends AbstractTextlyJavaVisitor implements IMicrobitV2Visitor<Void> {
-    private static final Logger LOG = LoggerFactory.getLogger(MbedV2TextlyJavaVisitor.class);
+public final class MbedV2RegenerateTextlyJavaVisitor extends AbstractRegenerateTextlyJavaVisitor implements IMicrobitV2Visitor<Void> {
+    private static final Logger LOG = LoggerFactory.getLogger(MbedV2RegenerateTextlyJavaVisitor.class);
 
     protected final ConfigurationAst brickConfiguration;
 
@@ -83,7 +72,7 @@ public final class MbedV2TextlyJavaVisitor extends AbstractTextlyJavaVisitor imp
      * @param programPhrases the program
      * @param brickConfiguration hardware configuration of the brick
      */
-    public MbedV2TextlyJavaVisitor(
+    public MbedV2RegenerateTextlyJavaVisitor(
         List<List<Phrase>> programPhrases,
         ConfigurationAst brickConfiguration) {
         super(programPhrases);
@@ -315,61 +304,6 @@ public final class MbedV2TextlyJavaVisitor extends AbstractTextlyJavaVisitor imp
                 throw new DbcException("Invalid color constant: " + colorConst.getHexValueAsString());
         }
         this.src.add("PickColor.", color);
-        return null;
-    }
-
-    @Override
-    public Void visitGetSubFunct(GetSubFunct getSubFunct) {
-        return null;
-    }
-
-    @Override
-    public Void visitIndexOfFunct(IndexOfFunct indexOfFunct) {
-        return null;
-    }
-
-    @Override
-    public Void visitLengthOfListFunct(LengthOfListFunct lengthOfListFunct) {
-        return null;
-    }
-
-    @Override
-    public Void visitIsListEmptyFunct(IsListEmptyFunct isListEmptyFunct) {
-        return null;
-    }
-
-    @Override
-    public Void visitListCreate(ListCreate listCreate) {
-        return null;
-    }
-
-    @Override
-    public Void visitListGetIndex(ListGetIndex listGetIndex) {
-        return null;
-    }
-
-    @Override
-    public Void visitListSetIndex(ListSetIndex listSetIndex) {
-        return null;
-    }
-
-    @Override
-    public Void visitTimerSensor(TimerSensor timerSensor) {
-        return null;
-    }
-
-    @Override
-    public Void visitTimerReset(TimerReset timerReset) {
-        return null;
-    }
-
-    @Override
-    public Void visitWaitStmt(WaitStmt waitStmt) {
-        return null;
-    }
-
-    @Override
-    public Void visitWaitTimeStmt(WaitTimeStmt waitTimeStmt) {
         return null;
     }
 }

@@ -22,7 +22,7 @@ import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.Location;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.util.dbc.Assert;
-import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractTextlyJavaVisitor;
+import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractRegenerateTextlyJavaVisitor;
 
 public class RegenerateNepoWorker implements IWorker {
     private static final Logger LOG = LoggerFactory.getLogger(RegenerateNepoWorker.class);
@@ -39,7 +39,7 @@ public class RegenerateNepoWorker implements IWorker {
             String programXML = jaxbToXml(astToJaxb(programAst));
             project.setProgramAsBlocklyXML(programXML);
 
-            AbstractTextlyJavaVisitor textlyVisitor = getVisitorForTextlyJava(project);
+            AbstractRegenerateTextlyJavaVisitor textlyVisitor = getVisitorForTextlyJava(project);
             if (textlyVisitor == null) {
                 project.setProgramAsTextly("- no textly -");
             } else {
@@ -66,7 +66,7 @@ public class RegenerateNepoWorker implements IWorker {
         }
     }
 
-    protected AbstractTextlyJavaVisitor getVisitorForTextlyJava(Project project) {
+    protected AbstractRegenerateTextlyJavaVisitor getVisitorForTextlyJava(Project project) {
         // TODO: refactor. Each plugin must support NEPO regeneration. Make class and method abstract
         return null;
     }

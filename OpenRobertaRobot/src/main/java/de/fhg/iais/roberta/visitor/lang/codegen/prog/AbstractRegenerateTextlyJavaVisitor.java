@@ -78,6 +78,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.NNSetInputNeuronVal;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNSetWeightStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.NNStepStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
+import de.fhg.iais.roberta.syntax.lang.stmt.Stmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
@@ -90,6 +91,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.ast.BlockDescriptor;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.visitor.SourceBuilder;
 import de.fhg.iais.roberta.visitor.BaseVisitor;
 import de.fhg.iais.roberta.visitor.IVisitor;
@@ -99,7 +101,7 @@ import de.fhg.iais.roberta.visitor.IVisitor;
  * as an alternative to the blockly representation. This class is to be subclasses in all robot plugins that support the
  * textual representation as textlyJava
  */
-public abstract class AbstractTextlyJavaVisitor extends BaseVisitor<Void> {
+public abstract class AbstractRegenerateTextlyJavaVisitor extends BaseVisitor<Void> {
     protected final List<Phrase> programPhrases;
     protected SourceBuilder src;
 
@@ -108,7 +110,7 @@ public abstract class AbstractTextlyJavaVisitor extends BaseVisitor<Void> {
      *
      * @param programPhrases to generate the code from
      */
-    protected AbstractTextlyJavaVisitor(List<List<Phrase>> programPhrases) {
+    protected AbstractRegenerateTextlyJavaVisitor(List<List<Phrase>> programPhrases) {
         this.programPhrases =
             programPhrases
                 .stream()
@@ -132,6 +134,13 @@ public abstract class AbstractTextlyJavaVisitor extends BaseVisitor<Void> {
         this.programPhrases
             .stream()
             .filter(phrase -> phrase.getKind().getCategory() != Category.METHOD || phrase.getKind().hasName("METHOD_CALL"))
+            .forEach(p -> {
+                p.accept(this);
+            });
+        this.src.DECR().nlI().add("}");
+        this.programPhrases
+            .stream()
+            .filter(phrase -> phrase.getKind().getCategory() == Category.METHOD && !phrase.getKind().hasName("METHOD_CALL"))
             .forEach(p -> {
                 p.accept(this);
             });
@@ -240,45 +249,32 @@ public abstract class AbstractTextlyJavaVisitor extends BaseVisitor<Void> {
     }
 
     @Override
-    public Void visitRepeatStmt(RepeatStmt repeatStmt) {
-        boolean additionalClosingBracket = false;
-        boolean isWaitStmt = repeatStmt.mode == RepeatStmt.Mode.WAIT;
-        switch ( repeatStmt.mode ) {
-            case FOREVER:
-                /*
-                 *This ""if ( true ) {" statement is needed because when we have code after the "while ( true ) "
-                 *statement is unreachable
-                 */
-                this.src.add("if ( true ) {");
-                additionalClosingBracket = true;
-                incrIndentation();
-                nlIndent();
-            case UNTIL:
+    public Void visitRepeatStmt(RepeatStmt rept) {
+        switch ( rept.mode ) {
             case WHILE:
-                generateCodeFromStmtCondition("while", repeatStmt.expr);
+                generateCodeFromStmtCondition("while", rept.expr, rept.list);
+                break;
+            case FOREVER:
+                this.src.nlI().add("while ( true ) {").INCR().accept(rept.list, this).DECR().nlI().add("};");
+                break;
+            case UNTIL:
+                this.src.nlI().add("{").INCR().accept(rept.list, this).DECR().nlI().add("} until ( ").accept(rept.expr, this).add(" );");
                 break;
             case TIMES:
-            case FOR:
-                generateCodeFromStmtConditionFor("for", repeatStmt.expr);
+                Expr timesClause = ((ExprList) rept.expr).get().get(2);
+                this.src.nlI().add("for ( ").accept(timesClause, this).add(" times ) {").INCR().accept(rept.list, this).DECR().nlI().add("};");
                 break;
-            case WAIT:
-                generateCodeFromStmtCondition("if", repeatStmt.expr);
+            case FOR:
+                generateCodeFromStmtConditionFor(rept.expr, rept.list);
                 break;
             case FOR_EACH:
-                generateCodeFromStmtCondition("for", repeatStmt.expr);
+                Binary eachDecl = (Binary) rept.expr;
+                this.src.nlI().add("for ( ");
+                genParameter((VarDeclaration) eachDecl.left);
+                this.src.add(" : ").accept(eachDecl.right,this).add(" )").add(" {").INCR().accept(rept.list, this).DECR().nlI().add("};");
                 break;
             default:
-                break;
-        }
-        incrIndentation();
-        repeatStmt.list.accept(this);
-        decrIndentation();
-        nlIndent();
-        this.src.add("}");
-        if ( additionalClosingBracket ) {
-            decrIndentation();
-            nlIndent();
-            this.src.add("}");
+                throw new DbcException("invalid mode of repeat statement");
         }
         return null;
     }
@@ -343,7 +339,6 @@ public abstract class AbstractTextlyJavaVisitor extends BaseVisitor<Void> {
 
     @Override
     public Void visitIfStmt(IfStmt ifStmt) {
-        this.src.nlI();
         generateCodeFromIfElse(ifStmt);
         generateCodeFromElse(ifStmt);
         return null;
@@ -351,7 +346,7 @@ public abstract class AbstractTextlyJavaVisitor extends BaseVisitor<Void> {
 
     @Override
     public Void visitTernaryExpr(TernaryExpr te) {
-        this.src.add("(").accept(te.condition, this).add("?").accept(te.thenPart,this).add(":").accept(te.elsePart,this).add(")");
+        this.src.add("(").accept(te.condition, this).add("?").accept(te.thenPart, this).add(":").accept(te.elsePart, this).add(")");
         return null;
     }
 
@@ -619,13 +614,14 @@ public abstract class AbstractTextlyJavaVisitor extends BaseVisitor<Void> {
 
     @Override
     public Void visitVarDeclaration(VarDeclaration var) {
-        this.src.nlI().add(var.getBlocklyType().getBlocklyName()," ",var.name, " = ");
+        this.src.nlI().add(var.getBlocklyType().getBlocklyName(), " ", var.name, " = ");
         var.value.accept(this);
         return null;
     }
 
     @Override
     public Void visitWaitStmt(WaitStmt waitStmt) {
+        generateCodeFromWait(waitStmt);
         return null;
     }
 
@@ -662,16 +658,10 @@ public abstract class AbstractTextlyJavaVisitor extends BaseVisitor<Void> {
 
     @Override
     public Void visitMethodVoid(MethodVoid methodVoid) {
-        nlIndent();
-        this.src.add("private void ");
-        this.src.add(methodVoid.getCodeSafeMethodName(), "(");
-        methodVoid.getParameters().accept(this);
-        this.src.add(") {");
-        incrIndentation();
-        methodVoid.body.accept(this);
-        decrIndentation();
-        nlIndent();
-        this.src.add("}");
+        this.src.nlI().nlI().add("void ", methodVoid.getMethodName(), "(");
+        genParameterList(methodVoid.getParameters().el);
+        ;
+        this.src.add(") {").INCR().accept(methodVoid.body, this).DECR().nlI().add("}");
         return null;
     }
 
@@ -712,22 +702,14 @@ public abstract class AbstractTextlyJavaVisitor extends BaseVisitor<Void> {
 
     @Override
     public Void visitMethodReturn(MethodReturn methodReturn) {
-        nlIndent();
-        this.src.add("private ", getLanguageVarTypeFromBlocklyType(methodReturn.getReturnType()));
-        this.src.add(" ", methodReturn.getCodeSafeMethodName(), "(");
-        methodReturn.getParameters().accept(this);
-        this.src.add(") {");
-        incrIndentation();
-        methodReturn.body.accept(this);
-        nlIndent();
-        this.src.add("return ");
+        this.src.nlI().nlI().add(methodReturn.getReturnType().getBlocklyName(), " ", methodReturn.getMethodName(), "(");
+        genParameterList(methodReturn.getParameters().el);
+        this.src.add(") {").INCR().accept(methodReturn.body, this).nlI().add("return ");
         methodReturn.returnValue.accept(this);
-        this.src.add(";");
-        decrIndentation();
-        nlIndent();
-        this.src.add("}");
+        this.src.add(";").DECR().nlI().add("}");
         return null;
     }
+
 
     @Override
     public Void visitMethodIfReturn(MethodIfReturn methodIfReturn) {
@@ -741,22 +723,15 @@ public abstract class AbstractTextlyJavaVisitor extends BaseVisitor<Void> {
 
     @Override
     public Void visitMethodStmt(MethodStmt methodStmt) {
-        methodStmt.method.accept(this);
-        BlocklyProperties blocklyProperties = methodStmt.getProperty();
-        if ( blocklyProperties.blockType.equals("robProcedures_ifreturn") ) {
-            this.src.add(";");
-        }
+        this.src.nlI().nlI().accept(methodStmt.method, this).add(";");
         return null;
     }
 
     @Override
     public Void visitMethodCall(MethodCall methodCall) {
-        src.add(methodCall.getCodeSafeMethodName(), "(");
-        methodCall.getParametersValues().accept(this);
+        src.add(methodCall.getMethodName(), "(");
+        genExpressionList(methodCall.getParametersValues().el);
         src.add(")");
-        if ( methodCall.getReturnType() == BlocklyType.VOID ) {
-            this.src.add(";");
-        }
         return null;
     }
 
@@ -881,18 +856,38 @@ public abstract class AbstractTextlyJavaVisitor extends BaseVisitor<Void> {
 
     protected void generateCodeFromIfElse(IfStmt ifStmt) {
         int exprSize = ifStmt.expr.size();
-        String conditionStmt = "if";
+        boolean first = true;
         for ( int i = 0; i < exprSize; i++ ) {
-            generateCodeFromStmtCondition(conditionStmt, ifStmt.expr.get(i));
-            conditionStmt = "else if";
-            incrIndentation();
-            ifStmt.thenList.get(i).accept(this);
-            decrIndentation();
+            if ( first ) {
+                this.src.nlI().add("if");
+                first = false;
+            } else {
+                this.src.add(" else if");
+            }
+            this.src.add(" ( ").accept(ifStmt.expr.get(i), this).add(" ) {");
+            this.src.INCR().accept(ifStmt.thenList.get(i), this).DECR();
             if ( i + 1 < exprSize ) {
                 nlIndent();
                 this.src.add("} ");
             }
         }
+    }
+
+    protected void generateCodeFromWait(WaitStmt wait) {
+        List<Stmt> sl = wait.statements.sl;
+        int groups = sl.size();
+        boolean first = true;
+        for ( int i = 0; i < groups; i++ ) {
+            if ( first ) {
+                this.src.nlI().add("wait if");
+                first = false;
+            } else {
+                this.src.add(" else wait if");
+            }
+            RepeatStmt group = (RepeatStmt) sl.get(i);
+            this.src.add(" ( ").accept(group.expr, this).add(" ) {").INCR().accept(group.list, this).DECR().nlI().add("}");
+        }
+        this.src.add(";");
     }
 
     protected void generateCodeFromElse(IfStmt ifStmt) {
@@ -907,55 +902,21 @@ public abstract class AbstractTextlyJavaVisitor extends BaseVisitor<Void> {
         this.src.add("}");
     }
 
-    private void generateCodeFromStmtCondition(String stmtType, Expr expr) {
-        this.src.add(stmtType, " ( ");
-        expr.accept(this);
-        this.src.add(" ) {");
+    private void generateCodeFromStmtCondition(String stmtType, Expr expr, StmtList sl) {
+        this.src.nlI().add(stmtType).add(" ( ").accept(expr, this).add(" )").add(" {").INCR().accept(sl, this).DECR().nlI().add("};");
     }
 
-    private void generateCodeFromStmtConditionFor(String stmtType, Expr expr) {
-        this.src.add(stmtType, " ( ", "float ");
-        ExprList expressions = (ExprList) expr;
-        expressions.get().get(0).accept(this);
-        this.src.add(" = ");
-        expressions.get().get(1).accept(this);
-        this.src.add("; ");
-        expressions.get().get(0).accept(this);
-        int posOpenBracket = expressions.get().toString().lastIndexOf("[");
-        int posClosedBracket = expressions.get().toString().lastIndexOf("]");
-        int counterPos = expressions.get().toString().lastIndexOf("-");
-        if ( counterPos > posOpenBracket && counterPos < posClosedBracket ) {
-            this.src.add("> ");
-        } else {
-            this.src.add("< ");
-        }
-        expressions.get().get(2).accept(this);
-        this.src.add("; ");
-        expressions.get().get(0).accept(this);
-        this.src.add("+= ");
-        expressions.get().get(3).accept(this);
-        this.src.add(" ) {");
-    }
+    private void generateCodeFromStmtConditionFor(Expr expr, StmtList sl) {
+        List<Expr> el = ((ExprList) expr).get();
+        // TODO: really bad design. Copied from Java code generator. Refactor! Can introduce suble errors
+        int posOpenBracket = el.toString().lastIndexOf("[");
+        int posClosedBracket = el.toString().lastIndexOf("]");
+        int counterPos = el.toString().lastIndexOf("-");
+        String compareOp = (counterPos > posOpenBracket && counterPos < posClosedBracket) ? " > " : " < ";
 
-    private boolean isEqualityOpOnStrings(Binary binary) {
-        boolean isLeftAndRightString = isStringExpr(binary.left) && isStringExpr(binary.getRight());
-        boolean isEqualityOp = binary.op == Op.EQ || binary.op == Op.NEQ;
-        return isEqualityOp && isLeftAndRightString;
-    }
-
-    private void generateCodeForStringEqualityOp(Binary binary) {
-        if ( binary.op == Op.NEQ ) {
-            this.src.add("!");
-        }
-        generateSubExpr(this.src, false, binary.left, binary);
-        this.src.add(".equals(");
-        generateSubExpr(this.src, false, binary.getRight(), binary);
-        this.src.add(")");
-    }
-
-    private void appendBreakStmt() {
-        nlIndent();
-        this.src.add("break;");
+        this.src.nlI().add("for ( ").accept(el.get(0), this).add(" = ").accept(el.get(1), this).add("; ").accept(el.get(0), this);
+        this.src.add(compareOp).accept(el.get(2), this).add("; ").accept(el.get(0), this).add(" += ").accept(el.get(3), this).add(" ) {");
+        this.src.INCR().accept(sl, this).DECR().nlI().add("};");
     }
 
     protected static <K, V> Map.Entry<K, V> entry(K key, V value) {
@@ -980,6 +941,26 @@ public abstract class AbstractTextlyJavaVisitor extends BaseVisitor<Void> {
 
     public void nlIndent() {
         src.nlI();
+    }
+
+    protected void genParameterList(List<Expr> parameters) {
+        boolean first = true;
+        for ( Expr expr : parameters ) {
+            first = src.addIf(first, ", ");
+            genParameter((VarDeclaration) expr);
+        }
+    }
+
+    protected void genParameter(VarDeclaration param) {
+        this.src.add(param.getBlocklyType().getBlocklyName(), " ", param.name);
+    }
+
+    protected void genExpressionList(List<Expr> parameters) {
+        boolean first = true;
+        for ( Expr expr : parameters ) {
+            first = src.addIf(first, ", ");
+            this.src.accept(expr, this);
+        }
     }
 
     protected String getBinaryOperatorSymbol(Op op) {
