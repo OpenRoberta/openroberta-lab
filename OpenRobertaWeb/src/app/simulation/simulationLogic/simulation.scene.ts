@@ -21,7 +21,6 @@ import { IDestroyable, RobotBase, RobotFactory } from 'robot.base';
 import { Interpreter } from 'interpreter.interpreter';
 import { Pose, RobotBaseMobile } from 'robot.base.mobile';
 import RobotRcj from 'robot.rcj';
-import { ISensor } from 'robot.sensors';
 
 const RESIZE_CONST: number = 3;
 
@@ -725,8 +724,8 @@ export class SimulationScene {
         let num = 0;
         $(window)
             .off('resize.sim')
-            .on('resize.sim', function (event, param) {
-                if (num > RESIZE_CONST) {
+            .on('resize.sim', function (e, custom) {
+                if (num > RESIZE_CONST || custom == 'loaded') {
                     that.centerBackground(false);
                     num = 0;
                 } else {

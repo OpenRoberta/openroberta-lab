@@ -22,7 +22,6 @@ import { SelectionListener } from 'robot.base';
 import {
     BaseSimulationObject,
     CircleSimulationObject,
-    Ground,
     MarkerSimulationObject,
     RectangleSimulationObject,
     SimObjectShape,
@@ -708,7 +707,9 @@ export class SimulationRoberta implements Simulation {
         if (configData.hasOwnProperty('tileSet')) {
             await this.prepareRescueLine(configData).then(
                 function (result) {
-                    // TODO
+                    setTimeout(function () {
+                        $(window).trigger('resize', 'loaded');
+                    }, 100);
                 },
                 function (result) {
                     alert(result.message);
