@@ -29,7 +29,7 @@ const files = {
                 {
                     //the base folder is just an empty string, files may also be described as *.js if all files of a given folder should be copied
                     folder: '',
-                    files: ['ace.js', 'ext-language_tools.js', 'mode-c_cpp.js', 'mode-java.js', 'mode-python.js', 'mode-json.js'],
+                    files: ['ace.js', 'ext-language_tools.js', 'mode-c_cpp.js', 'mode-java.js', 'mode-python.js', 'mode-json.js', 'worker-json.js'],
                 },
             ],
         },
