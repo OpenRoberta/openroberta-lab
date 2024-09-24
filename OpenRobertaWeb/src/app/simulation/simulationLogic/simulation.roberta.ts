@@ -584,6 +584,15 @@ export class SimulationRoberta implements Simulation {
     }
 
     initEvents() {
+        let that = this;
+        $(window).on('focus', function () {
+            that.start();
+            return false;
+        });
+        $(window).on('blur', function () {
+            that.stop();
+            return false;
+        });
         $('#simDiv').on('wheel mousewheel touchmove', (e) => {
             this.handleMouseWheel(e);
         });
@@ -773,6 +782,7 @@ export class SimulationRoberta implements Simulation {
     }
 
     start() {
+        this.time = new Date().getTime();
         this.canceled = false;
         if (this.globalID === 0) {
             this.render();
