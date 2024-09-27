@@ -143,6 +143,7 @@ public class Ev3TypecheckVisitor extends TypecheckCommonLanguageVisitor implemen
 
     @Override
     public BlocklyType visitShowTextAction(ShowTextAction showTextAction) {
+        // really ANY, not PRIM only
         return Sig.of(BlocklyType.VOID, BlocklyType.ANY, BlocklyType.NUMBER, BlocklyType.NUMBER).typeCheckPhrases(showTextAction, this,
             showTextAction.msg, showTextAction.x, showTextAction.y);
     }

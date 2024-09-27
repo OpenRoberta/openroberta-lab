@@ -1,1 +1,97 @@
-<export xmlns="http://de.fhg.iais.roberta.blockly"><program><block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="wedo" xmlversion="3.1" description="" tags=""><instance x="299" y="55"><block type="robControls_start" id="aD~tDB*%_:osl(%?C=D`" intask="true" deletable="false"><mutation declare="true"></mutation><field name="DEBUG">FALSE</field><statement name="ST"><block type="robGlobalVariables_declare" id="Lc{xY@{u#io.uPd;5QU:" intask="true" deletable="false" movable="false"><mutation next="true" declaration_type="Number"></mutation><field name="VAR">num</field><field name="TYPE">Number</field><value name="VALUE"><block type="math_number" id="anO{6Lo!cVef43G9fuf|" intask="true"><field name="NUM">0</field></block></value></block><block type="robGlobalVariables_declare" id="Nqad8)^Bgt}Ya7MgQFM~" intask="true" deletable="false" movable="false"><mutation next="true" declaration_type="String"></mutation><field name="VAR">str</field><field name="TYPE">String</field><value name="VALUE"><block type="text" id="oB@OdllA^/j5w?BhZj3S" intask="true"><field name="TEXT"></field></block></value></block><block type="robGlobalVariables_declare" id="8b7%6SdJ@Kr,drDH%(6N" intask="true" deletable="false" movable="false"><mutation next="true" declaration_type="Boolean"></mutation><field name="VAR">boolT</field><field name="TYPE">Boolean</field><value name="VALUE"><block type="logic_boolean" id="@p4)2-(|r!]][_FVq51S" intask="true"><field name="BOOL">TRUE</field></block></value></block><block type="robGlobalVariables_declare" id="WSg[;aS{o@^2XWvoz%0+" intask="true" deletable="false" movable="false"><mutation next="false" declaration_type="Colour"></mutation><field name="VAR">color</field><field name="TYPE">Colour</field><value name="VALUE"><block type="robColour_picker" id="7zkGH!lAH{p#O3]_!p=c" intask="true"><field name="COLOUR">#FFFFFE</field></block></value></block></statement></block><block type="robActions_eval_stmt" id="QfBBULK%oqEdAh!goyN{" intask="true"><field name="STMTEXPRESSION"></field></block></instance></block_set></program><config><block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="wedo" xmlversion="3.1" description="" tags=""><instance x="42" y="10"><block type="robBrick_WeDo-Brick" id="1" intask="true" deletable="false"><field name="VAR">W</field></block></instance><instance x="38" y="182"><block type="robConf_buzzer" id="3" intask="true"><field name="NAME">S</field><field name="VAR">W</field></block></instance><instance x="43" y="257"><block type="robConf_rgbled" id="4" intask="true"><field name="NAME">R</field></block></instance><instance x="45" y="327"><block type="robConf_key" id="5" intask="true"><field name="NAME">T</field><field name="VAR">W</field></block></instance><instance x="26" y="402"><block type="robConf_infrared" id="6" intask="true"><field name="NAME">I</field><field name="VAR">W</field><field name="CONNECTOR">2</field></block></instance><instance x="43" y="525"><block type="robConf_gyro" id="a[{cEi^6i^o3jj67-HA5" intask="true"><field name="NAME">T2</field><field name="VAR">W</field><field name="CONNECTOR">1</field></block></instance></block_set></config></export>
+<export xmlns="http://de.fhg.iais.roberta.blockly">
+    <program>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="wedo" xmlversion="3.1" description="" tags="">
+            <instance x="299" y="55">
+                <block type="robControls_start" id="aD~tDB*%_:osl(%?C=D`" intask="true" deletable="false">
+                    <mutation declare="true"></mutation>
+                    <field name="DEBUG">FALSE</field>
+                    <statement name="ST">
+                        <block type="robGlobalVariables_declare" id="Lc{xY@{u#io.uPd;5QU:" intask="true" deletable="false" movable="false">
+                            <mutation next="true" declaration_type="Number"></mutation>
+                            <field name="VAR">num</field>
+                            <field name="TYPE">Number</field>
+                            <value name="VALUE">
+                                <block type="math_number" id="anO{6Lo!cVef43G9fuf|" intask="true">
+                                    <field name="NUM">0</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robGlobalVariables_declare" id="Nqad8)^Bgt}Ya7MgQFM~" intask="true" deletable="false" movable="false">
+                            <mutation next="true" declaration_type="String"></mutation>
+                            <field name="VAR">str</field>
+                            <field name="TYPE">String</field>
+                            <value name="VALUE">
+                                <block type="text" id="oB@OdllA^/j5w?BhZj3S" intask="true">
+                                    <field name="TEXT"></field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robGlobalVariables_declare" id="8b7%6SdJ@Kr,drDH%(6N" intask="true" deletable="false" movable="false">
+                            <mutation next="true" declaration_type="Boolean"></mutation>
+                            <field name="VAR">boolT</field>
+                            <field name="TYPE">Boolean</field>
+                            <value name="VALUE">
+                                <block type="logic_boolean" id="@p4)2-(|r!]][_FVq51S" intask="true">
+                                    <field name="BOOL">TRUE</field>
+                                </block>
+                            </value>
+                        </block>
+                        <block type="robGlobalVariables_declare" id="WSg[;aS{o@^2XWvoz%0+" intask="true" deletable="false" movable="false">
+                            <mutation next="false" declaration_type="Colour"></mutation>
+                            <field name="VAR">color</field>
+                            <field name="TYPE">Colour</field>
+                            <value name="VALUE">
+                                <block type="robColour_picker" id="7zkGH!lAH{p#O3]_!p=c" intask="true">
+                                    <field name="COLOUR">#FFFFFE</field>
+                                </block>
+                            </value>
+                        </block>
+                    </statement>
+                </block>
+                <block type="robActions_eval_stmt" id="QfBBULK%oqEdAh!goyN{" intask="true">
+                    <field name="STMTEXPRESSION">--TO_BE-TESTED--</field>
+                </block>
+            </instance>
+        </block_set>
+    </program>
+    <config>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="wedo" xmlversion="3.1" description="" tags="">
+            <instance x="42" y="10">
+                <block type="robBrick_WeDo-Brick" id="1" intask="true" deletable="false">
+                    <field name="VAR">W</field>
+                </block>
+            </instance>
+            <instance x="38" y="182">
+                <block type="robConf_buzzer" id="3" intask="true">
+                    <field name="NAME">S</field>
+                    <field name="VAR">W</field>
+                </block>
+            </instance>
+            <instance x="43" y="257">
+                <block type="robConf_rgbled" id="4" intask="true">
+                    <field name="NAME">R</field>
+                </block>
+            </instance>
+            <instance x="45" y="327">
+                <block type="robConf_key" id="5" intask="true">
+                    <field name="NAME">T</field>
+                    <field name="VAR">W</field>
+                </block>
+            </instance>
+            <instance x="26" y="402">
+                <block type="robConf_infrared" id="6" intask="true">
+                    <field name="NAME">I</field>
+                    <field name="VAR">W</field>
+                    <field name="CONNECTOR">2</field>
+                </block>
+            </instance>
+            <instance x="43" y="525">
+                <block type="robConf_gyro" id="a[{cEi^6i^o3jj67-HA5" intask="true">
+                    <field name="NAME">T2</field>
+                    <field name="VAR">W</field>
+                    <field name="CONNECTOR">1</field>
+                </block>
+            </instance>
+        </block_set>
+    </config>
+</export>

@@ -154,6 +154,7 @@ public abstract class TypecheckCommonLanguageVisitor extends BaseVisitor<Blockly
 
     @Override
     public BlocklyType visitDebugAction(DebugAction debugAction) {
+        // really ANY, not PRIM only
         return Sig.of(BlocklyType.VOID, BlocklyType.ANY).typeCheckPhrases(debugAction, this, debugAction.value);
     }
 
@@ -471,16 +472,16 @@ public abstract class TypecheckCommonLanguageVisitor extends BaseVisitor<Blockly
             case "FOR_EACH":
                 Binary exprBinary = (Binary) repeatStmt.expr;
                 BlocklyType listType = typeCheckPhrase(repeatStmt, exprBinary.right, BlocklyType.CAPTURED_TYPE);
-                BlocklyType varType = typeCheckPhrase(repeatStmt, exprBinary.left, BlocklyType.CAPTURED_TYPE);
+                BlocklyType varType = exprBinary.left instanceof VarDeclaration ? exprBinary.left.getBlocklyType() : BlocklyType.NOTHING;
                 if ( listType.isArray() ) {
-                    if ( listType.getMatchingElementTypeForArrayType().equalAsTypes(((VarDeclaration) exprBinary.left).getBlocklyType()) ) {
+                    if ( listType.getMatchingElementTypeForArrayType().equalAsTypes(varType) ) {
                         break;
                     } else {
-                        repeatStmt.addTextlyError("A list of " + exprBinary.left.getBlocklyType().getBlocklyName() + " was expected but it was found a  " + listType.getMatchingElementTypeForArrayType().toString().toLowerCase(), true);
+                        repeatStmt.addTextlyError("a list of " + exprBinary.left.getBlocklyType().getBlocklyName() + " was expected but it was found a list of " + listType.getMatchingElementTypeForArrayType().toString().toLowerCase(), true);
                         break;
                     }
                 } else {
-                    repeatStmt.addTextlyError("This control statement is only for a list of numbers, images, strings or booleans", true);
+                    repeatStmt.addTextlyError("this control statement is only for a list of numbers, images, strings or booleans", true);
                     break;
                 }
             case "WAIT":
@@ -488,7 +489,7 @@ public abstract class TypecheckCommonLanguageVisitor extends BaseVisitor<Blockly
                 break;
 
             default:
-                repeatStmt.addTextlyError("Invalid repeat mode. Expected 'TIMES', 'FOR', 'UNTIL', 'WHILE', 'FOREVER', 'FOR_EACH', or 'WAIT'.", true);
+                repeatStmt.addTextlyError("invalid repeat mode. Expected 'TIMES', 'FOR', 'UNTIL', 'WHILE', 'FOREVER', 'FOR_EACH', or 'WAIT'.", true);
         }
         typeCheckPhrase(repeatStmt, repeatStmt.list, BlocklyType.VOID);
         return BlocklyType.VOID;
@@ -544,7 +545,7 @@ public abstract class TypecheckCommonLanguageVisitor extends BaseVisitor<Blockly
 
     @Override
     public BlocklyType visitTextAppendStmt(TextAppendStmt textAppendStmt) {
-        return Sig.of(BlocklyType.VOID, BlocklyType.STRING, BlocklyType.STRING).typeCheckPhrases(textAppendStmt, this, textAppendStmt.var, textAppendStmt.text);
+        return Sig.of(BlocklyType.VOID, BlocklyType.STRING, BlocklyType.PRIM).typeCheckPhrases(textAppendStmt, this, textAppendStmt.var, textAppendStmt.text);
     }
 
     @Override
@@ -554,7 +555,7 @@ public abstract class TypecheckCommonLanguageVisitor extends BaseVisitor<Blockly
 
     @Override
     public BlocklyType visitTextJoinFunct(TextJoinFunct textJoinFunct) {
-        return Sig.of(BlocklyType.STRING, BlocklyType.VARARGS, BlocklyType.ANY).typeCheckPhraseList(textJoinFunct, this, textJoinFunct.param.el);
+        return Sig.of(BlocklyType.STRING, BlocklyType.VARARGS, BlocklyType.PRIM).typeCheckPhraseList(textJoinFunct, this, textJoinFunct.param.el);
     }
 
     @Override

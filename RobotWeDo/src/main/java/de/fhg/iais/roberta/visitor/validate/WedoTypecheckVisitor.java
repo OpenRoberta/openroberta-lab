@@ -28,6 +28,7 @@ public class WedoTypecheckVisitor extends TypecheckCommonLanguageVisitor impleme
 
     @Override
     public BlocklyType visitShowTextAction(ShowTextAction showTextAction) {
+        // really ANY, not PRIM only
         return Sig.of(BlocklyType.VOID, BlocklyType.ANY).typeCheckPhrases(showTextAction, this,
             showTextAction.msg);
     }

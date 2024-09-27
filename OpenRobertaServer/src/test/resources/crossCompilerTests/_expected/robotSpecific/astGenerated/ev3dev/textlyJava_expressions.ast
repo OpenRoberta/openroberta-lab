@@ -8,7 +8,7 @@ Var [num] := Binary [MINUS, Binary [ADD, Binary [ADD, Binary [ADD, FunctionExpr 
 Var [boolT] := Binary [OR, Binary [OR, Binary [OR, Binary [AND, FunctionExpr [MathNumPropFunct [EVEN, [NumConst[value: 10]]]], FunctionExpr [MathNumPropFunct [ODD, [NumConst[value: 7]]]]], Binary [AND, FunctionExpr [MathNumPropFunct [PRIME, [NumConst[value: 11]]]], FunctionExpr [MathNumPropFunct [WHOLE, [NumConst[value: 8]]]]]], Binary [AND, FunctionExpr [IsListEmptyFunct[value: Var [listN]]], FunctionExpr [MathNumPropFunct [POSITIVE, [NumConst[value: 5]]]]]], Binary [AND, FunctionExpr [MathNumPropFunct [NEGATIVE, [Unary [NEG, NumConst[value: 3]]]]], FunctionExpr [MathNumPropFunct [DIVISIBLE_BY, [NumConst[value: 10], NumConst[value: 5]]]]]]
 
 
-Var [str] := FunctionExpr [TextJoinFunct [FunctionExpr [ListGetIndex [GET, FIRST, [Var [listColor]]]], StringConst[value: Hello], FunctionExpr [MathCastCharFunct[value: NumConst[value: 65]]]]]
+Var [str] := FunctionExpr [TextJoinFunct [NumConst[value: 5], StringConst[value: Hello], FunctionExpr [MathCastCharFunct[value: NumConst[value: 65]]], BoolConst[value: true]]]
 
 
 Var [listN2] := FunctionExpr [GetSubFunct [GET_SUBLIST, [FROM_START, FROM_START], [Var [listN], NumConst[value: 0], NumConst[value: 3]]]]

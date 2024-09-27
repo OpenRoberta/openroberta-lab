@@ -155,7 +155,7 @@
                     </statement>
                 </block>
                 <block type="robActions_eval_stmt" id="j9NR67FbYghDs0:r:@mU" intask="true">
-                    <field name="STMTEXPRESSION"></field>
+                    <field name="STMTEXPRESSION">--TO-BE-TESTED--</field>
                 </block>
             </instance>
         </block_set>

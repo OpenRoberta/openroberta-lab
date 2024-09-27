@@ -39,7 +39,7 @@ def run():
     ___num = ( math.exp(2) + math.sin(90) ) - ( _randInt(1, 10) * math.ceil(float(2.3)) )
     ___num = ( ( ( sum(___listN) + ___listN[0] ) + ___listN.index(0) ) + ___listN[0] ) - ___listN2.pop(1)
     ___boolT = ( ( ( (10 % 2) == 0 and (7 % 2) == 1 ) or ( _isPrime(11) and (8 % 1) == 0 ) ) or ( not ___listN and 5 > 0 ) ) or ( - (3) < 0 and (10 % 5) == 0 )
-    ___str = "".join(str(arg) for arg in [___listColor[0], "Hello", chr((int)(65))])
+    ___str = "".join(str(arg) for arg in [5, "Hello", chr((int)(65)), True])
     ___listN2 = ___listN[0:3]
     ___color = 'blue'
     ___color = 'green'

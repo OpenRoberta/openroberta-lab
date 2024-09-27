@@ -30,7 +30,7 @@ public class NEPOprog {
 
     public static void main(String[] args) {
         try {
-            brickConfiguration = new EV3Configuration.Builder()
+             brickConfiguration = new EV3Configuration.Builder()
                 .setWheelDiameter(5.6)
                 .setTrackWidth(18.0)
                 .addActor(ActorPort.B, new Actor(ActorType.LARGE, true, DriveDirection.FOREWARD, MotorSide.RIGHT))
@@ -60,7 +60,7 @@ public class NEPOprog {
         ___num = ( (float) Math.exp(2) + (float) Math.sin(90) ) - ( ( Math.round(Math.random() * ((10) - (1))) + (1) ) * (float) Math.ceil(((float) 2.3)) );
         ___num = ( ( ( _sum(___listN) + ___listN.get(0) ) + ___listN.indexOf( (float) 0) ) + ___listN.get( (int) (0)) ) - ___listN2.remove( (int) (1));
         ___boolT = ( ( ( (10 % 2 == 0) && (7 % 2 == 1) ) || ( _isPrime( (int) 11) && (8 % 1 == 0) ) ) || ( ___listN.isEmpty() && (5 > 0) ) ) || ( (- (3) < 0) && (10 % 5 == 0) );
-        ___str = String.valueOf(___listColor.get( (int) (0))) + String.valueOf("Hello") + String.valueOf(String.valueOf((char)(int)(65)));
+        ___str = String.valueOf(5) + String.valueOf("Hello") + String.valueOf(String.valueOf((char)(int)(65))) + String.valueOf(true);
         ___listN2 = new ArrayList<>(___listN.subList((int) 0, (int) 3));
         ___color = PickColor.BLUE;
         ___color = PickColor.GREEN;

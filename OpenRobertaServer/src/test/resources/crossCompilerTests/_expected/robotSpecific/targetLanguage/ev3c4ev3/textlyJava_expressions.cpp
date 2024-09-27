@@ -32,7 +32,7 @@ int main () {
     ___num = ( exp(2) + sin(M_PI / 180.0 * (90)) ) - ( ((rand() % (int) ((1) - (10))) + (1)) * ceil(2.3) );
     ___num = ( ( ( _getListSum(___listN) + _getListElementByIndex(___listN, 0) ) + _getFirstOccuranceOfElement(___listN, 0) ) + _getListElementByIndex(___listN, 0) ) - _getAndRemoveListElementByIndex(___listN2, 1);
     ___boolT = ( ( ( (fmod(10, 2) == 0) && (fmod(7, 2) != 0) ) || ( _isPrime(11) && (8 == floor(8)) ) ) || ( ___listN.empty() && (5 > 0) ) ) || ( (- (3) < 0) && (fmod(10,5) == 0) );
-    ___str = ToString(_getListElementByIndex(___listColor, 0)) + ToString("Hello") + ToString((char)(int)(65));
+    ___str = ToString(5) + ToString("Hello") + ToString((char)(int)(65)) + ToString(true);
     ___listN2 = _getSubList(___listN, 0, 3);
     ___color = Blue;
     ___color = Green;

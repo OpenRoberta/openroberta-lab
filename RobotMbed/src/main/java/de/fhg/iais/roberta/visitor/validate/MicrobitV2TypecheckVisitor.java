@@ -50,7 +50,7 @@ public class MicrobitV2TypecheckVisitor extends TypecheckCommonLanguageVisitor i
 
     @Override
     public BlocklyType visitDisplayTextAction(DisplayTextAction displayTextAction) {
-        return Sig.of(BlocklyType.VOID, BlocklyType.ANY).typeCheckPhrases(displayTextAction, this, displayTextAction.msg);
+        return Sig.of(BlocklyType.VOID, BlocklyType.PRIM).typeCheckPhrases(displayTextAction, this, displayTextAction.msg);
     }
 
     @Override

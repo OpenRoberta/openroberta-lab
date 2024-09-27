@@ -13,16 +13,20 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
  *                    ANY
  *                     I
  *  +---------+--------+-------+
- *  I         I        I       I
- * STRING   COLOR   NUMERIC   BOOL
- *  I         I        I       I
- *  +---------+        I       I
- *            I        I       I
- *           NULL      +-------+
- *            I                I
- *           REF              PRIM
- *            I                I
- *            +--------+-------+
+ *  I         I                I
+ *  I         I              PRIM
+ *  I         I                I
+ *  I         I        +-------+-------+
+ *  I         I        I       I       I
+ * STRING   COLOR   NUMERIC   BOOL   STRING
+ *  I         I        I       I       I
+ *  +---------+        I       I       I
+ *            I        I       I       I
+ *           NULL      I       I       I
+ *            I        I       I       I
+ *           REF       I       I       I
+ *            I        I       I       I
+ *            +--------+-------+-------+
  *                     I
  *                   NOTHING
  * </pre>
@@ -47,11 +51,12 @@ public enum BlocklyType {
     ANY(""),
     COMPARABLE("",ANY),
     ADDABLE("",ANY),
+    PRIM("", ANY),
 
-    BOOLEAN("Boolean",COMPARABLE),
-    NUMBER("Number",COMPARABLE, ADDABLE),
+    BOOLEAN("Boolean",COMPARABLE, PRIM),
+    NUMBER("Number",COMPARABLE, ADDABLE, PRIM),
     NUMBER_INT("Number", COMPARABLE, ADDABLE),
-    STRING("String",COMPARABLE, ADDABLE),
+    STRING("String",COMPARABLE, ADDABLE, PRIM),
     COLOR("Colour",ANY), //
     IMAGE("Image", ANY),
     CONNECTION("Connection", ANY),
@@ -59,7 +64,7 @@ public enum BlocklyType {
 
     NULL("",STRING, COLOR, CONNECTION),
     REF("",NULL),
-    PRIM("", NUMBER, BOOLEAN),
+
     NOTHING("Void", REF, PRIM),
     VOID(""),
     CAPTURED_TYPE(""),
@@ -109,6 +114,8 @@ public enum BlocklyType {
     public boolean hasAsSuperType(BlocklyType potentialSuperType) {
         if ( this.equalAsTypes(potentialSuperType) ) {
             return true;
+        } else if ( this.equals(BlocklyType.NOTHING) || potentialSuperType.equals(BlocklyType.NOTHING) ) {
+            return false;
         } else if ( this.superTypes.length == 0 ) {
             return false;
         } else {

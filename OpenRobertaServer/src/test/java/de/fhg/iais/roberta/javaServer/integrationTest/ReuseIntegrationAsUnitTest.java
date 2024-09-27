@@ -314,8 +314,8 @@ public class ReuseIntegrationAsUnitTest {
     @Ignore
     @Test
     public void testOneRobotSpecificProgramAsUnitTests() throws Exception {
-        String robotName = "ev3lejosv1";
-        String programName = "textlyJava_expressions";
+        String robotName = "microbitv2";
+        String programName = "for_loop";
         LOG.info("========= testing program " + programName + " for robot " + robotName);
         final String resourceDirectory = setupRobotFactoryAndGetResourceDirForRobotSpecificTests(robotName);
         runRegenerateAndCodeGenerationForOneRobotSpecificProgram(resourceDirectory, programName + ".xml", robotName, Collections.emptyList());
