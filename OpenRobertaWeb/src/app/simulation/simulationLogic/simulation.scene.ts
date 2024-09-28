@@ -53,7 +53,7 @@ export class RcjScoringTool implements IObserver {
     private loPCounter: number[][];
     private prevCheckPointTile: {} = {};
 
-    constructor(configData) {
+    constructor(robot: RobotBase, configData: any) {
         this.configData = configData;
         let rcj = this;
         $('#rcjStop').addClass('disabled');
@@ -85,6 +85,7 @@ export class RcjScoringTool implements IObserver {
             return false;
         });
         $('#rcjName').val(configData.name);
+        $('#rcjTeam').val(robot.interpreter.name);
     }
 
     private init() {
@@ -102,7 +103,6 @@ export class RcjScoringTool implements IObserver {
             this.robot.resetPose();
         }
         this.loPCounter = [];
-        $('#simControl').trigger('click');
     }
 
     timer() {
@@ -117,21 +117,22 @@ export class RcjScoringTool implements IObserver {
                 this.secs = 0;
             }
             $('#rcjTime').val(this.mins + ':' + this.secs + ':' + this.msecs);
-            $('#rcjPose').val(Math.round(this.pose.x) + ', ' + Math.round(this.pose.y) + ', ' + Math.round((this.pose.theta * 180) / Math.PI));
             $('#rcjPath').val(this.path);
             $('#rcjLastPath').val(this.lastPath);
             $('#rcjLoPpS').val(JSON.stringify(this.loPCounter));
             $('#rcjLine').val(this.line ? 'true' : 'false');
-            $('#rcjTeam').val(this.robot.interpreter.name);
         }
     }
 
     update(robot: RobotBaseMobile) {
-        this.pose = robot.pose;
-        if (this.robot != robot) {
-            this.robot = robot;
-            this.initialPose = this.robot.initialPose;
+        if (!this.running) {
+            if (this.robot != robot) {
+                this.robot = robot;
+                this.initialPose = this.robot.initialPose;
+            }
+            return;
         }
+        this.pose = robot.pose;
         let x = Math.floor((this.pose.x - 10) / 90);
         let y = Math.floor((this.pose.y - 10) / 90);
         let tile = this.configData.tiles['' + x + ',' + y + ',0'];
@@ -931,15 +932,21 @@ export class SimulationScene {
             this.currentBackground = num;
         }
         workingScene = this.currentBackground == 2 && this.imgBackgroundList[2].currentSrc.includes('robertaBackground');
-        let configData = this.sim.getConfigData();
+        let configData = this.sim.configType === 'std' ? this.sim.getConfigData() : null;
         this.obstacleList = [];
         this.colorAreaList = [];
         this.markerList = [];
+        this.rcjList = [];
         this.ground.w = this.imgBackgroundList[this.currentBackground].width;
         this.ground.h = this.imgBackgroundList[this.currentBackground].height;
         this.backgroundImg = this.imgBackgroundList[this.currentBackground];
         this.centerBackground(true);
-        this.sim.setNewConfig(configData);
+        if (this.sim.configType === 'std') {
+            this.sim.setNewConfig(configData);
+        } else {
+            this.sim.configType = 'std';
+            this.imgBackgroundList.pop();
+        }
         if (workingScene) {
             let myObstacle: BaseSimulationObject = this.obstacleList.find((obstacle) => {
                 if ((obstacle as RectangleSimulationObject).type === SimObjectType.Obstacle) {
@@ -995,6 +1002,7 @@ export class SimulationScene {
         this.robots.forEach((robot) => (robot as RobotBaseMobile).resetPose());
         this.dCtx.canvas.width = this.dCtx.canvas.width;
         this.udCtx.canvas.width = this.udCtx.canvas.width;
+        this.rcjCtx.canvas.width = this.rcjCtx.canvas.width;
     }
 
     addMarker(markerId: number) {
@@ -1002,8 +1010,8 @@ export class SimulationScene {
         this._redrawMarkers = true;
     }
 
-    setRcjScoringTool(configData) {
-        this.rcjScoringTool = new RcjScoringTool(configData);
+    setRcjScoringTool(robot: RobotBase, configData) {
+        this.rcjScoringTool = new RcjScoringTool(robot, configData);
         this.scoring = true;
         let scene = this;
         $('#simCompetition').show();

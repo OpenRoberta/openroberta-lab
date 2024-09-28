@@ -59,6 +59,7 @@ export class SimulationRoberta implements Simulation {
     private callbackOnEnd: () => void;
     private TILE_SIZE: number = 90;
     private EV_WALL_SIZE: number = 10;
+    private _configType: string = 'std'; // to distinguish between "rcj" and "std"
 
     private constructor() {}
 
@@ -167,6 +168,14 @@ export class SimulationRoberta implements Simulation {
 
     set interpreterRunning(value: boolean) {
         this._interpreterRunning = value;
+    }
+
+    get configType(): string {
+        return this._configType;
+    }
+
+    set configType(value: string) {
+        this._configType = value;
     }
 
     addMarker(markerId: number) {
@@ -707,10 +716,11 @@ export class SimulationRoberta implements Simulation {
         if (configData.hasOwnProperty('tileSet')) {
             await this.prepareRescueLine(configData).then(
                 function (result) {
+                    this.configType = 'rcj';
                     setTimeout(function () {
                         $(window).trigger('resize', 'loaded');
                     }, 100);
-                },
+                }.bind(this),
                 function (result) {
                     alert(result.message);
                     // TODO with msg.keys: MSG.displayInformation(result, '', result.message, null, null);
@@ -1232,14 +1242,15 @@ export class SimulationRoberta implements Simulation {
                         sim.deleteAllObstacle();
                         drawEntranceEvacuationZone(entrance, ctx);
                         drawTileSeparator(ctx);
-                        sim.scene.imgBackgroundList = [createBackgroundImage()];
-                        sim.setBackground(0);
+                        let image = createBackgroundImage();
+                        sim.scene.imgBackgroundList.push(image);
+                        sim.setBackground(sim.scene.imgBackgroundList.length - 1);
                         sim.scene.addImportObstacle(importObstacles.concat(getRcjVictims(evacuationVctimsZone)));
                         sim.scene.addImportRcjLabel(rcjLabel);
                         sim.scene.drawRcjLabel();
                         sim.importPoses = [[startPose, startPose]];
                         sim.scene.setRobotPoses(sim.importPoses);
-                        sim.scene.setRcjScoringTool(configData);
+                        sim.scene.setRcjScoringTool(sim.scene.robots[0], configData);
                         $('#simCompetition').show();
                         resolve(result);
                     } else {
