@@ -2368,43 +2368,86 @@ limitations under the License.
     <div class='simWindow slide-in' data-bs-backdrop='false' id='rcjScoringWindow'>
         <button aria-label='Close' class='btn-close close' data-bs-dismiss='modal' type='button'></button>
         <div class='valuesContent'>
-            <table>
-                <form>
-                    <tr>
-                        <td>
-                            <label for='rcjName'>Name</label> <input disabled type='text' id='rcjName' /></td>
-                        <td><label for='rcjTeam'>Team</label> <input disabled type='text'
-                            id='rcjTeam' />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <label for='rcjTime'>Time</label> <input disabled value='0' type='text' id='rcjTime' /></td>
-                        <td>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <label for='rcjPath'>Path</label><input disabled type='text' id='rcjPath' /></td>
-                        <td><label for='rcjLastPath'>Last Path</label><input disabled type='text'
-                            id='rcjLastPath' /></td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <label for='rcjLine'>Line</label><input disabled type='text' id='rcjLine' />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <label for='rcjLoPpS'>LoPs per Section</label><input disabled type='text' id='rcjLoPpS' />
-                        </td>
-                    </tr>
-                </form>
+            <table id='rcjScoringTable'>
+                <tr>
+                    <td colspan='4' style='text-align:center'><h4>SCORING</h4></td>
+                </tr>
+                <!--                <colgroup>-->
+                <!--                    <col span='1' style='width: 20%;'>-->
+                <!--                    <col span='1' style='width: 30%;'>-->
+                <!--                    <col span='1' style='width: 20%;'>-->
+                <!--                    <col span='1' style='width: 30%;'>-->
+                <!--                </colgroup>-->
+                <tr>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td>Team</td>
+                    <td id='rcjTeam'></td>
+                    <td>Name</td>
+                    <td id='rcjName'></td>
+                </tr>
+                <tr>
+                    <td>Time</td>
+                    <td id='rcjTime'></td>
+                    <td>AutoLoP</td>
+                    <td>
+                        <div class='d-flex'>
+                            <div class='form-switch form-check'>
+                                <input type='checkbox' class='form-check-input' id='autoLoP'>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td colspan='2"'><h4>SCORE</h4></td>
+                    <td colspan='2"'><h4>STATUS</h4></td>
+                </tr>
+                <tr>
+                    <td>Line Points</td>
+                    <td id='rcjLinePoints'></td>
+                    <td>Following Line</td>
+                    <td id='rcjLine'></td>
+                </tr>
+                <tr>
+                    <td>Obstacle Points</td>
+                    <td id='rcjObstaclePoints'></td>
+                    <td>Path</td>
+                    <td id='rcjPath'></td>
+                </tr>
+                <tr>
+                    <td>Rescue Multi</td>
+                    <td id='rcjRescueMulti'></td>
+                    <td>Last Tile</td>
+                    <td id='rcjLastPath'></td>
+                </tr>
+                <tr>
+                    <td>LoP Count</td>
+                    <td id='rcjLoPCount'></td>
+                    <td>Section</td>
+                    <td id='rcjSection'></td>
+                </tr>
+                <tr>
+                    <td colspan='2'>
+                        <hr>
+                    </td>
+                    <td>LoP in Section</td>
+                    <td id='rcjLoPpS'></td>
+                </tr>
+                <tr>
+                    <td>Total Score</td>
+                    <td id='rcjTotalScore'></td>
+                </tr>
             </table>
             <div class='modal-footer'>
-                <button id='rcjStart' class='btn' type='button'>Start</button>
-                <button id='rcjLoP' class='btn' type='button'>LoP</button>
-                <button id='rcjStop' class='btn' type='button'>Stop</button>
+                <button id='rcjStartStop' class='btn' type='button'>Start<br>Scoring Run</button>
+                <div class='btn-group-vertical gap-3' style='max-width: fit-content;'>
+                    <button id='rcjLoP' class='btn disabled' type='button'>Call LoP</button>
+                    <button id='rcjNextCP' class='btn disabled' type='button'>Next Checkpoint</button>
+                </div>
             </div>
         </div>
     </div>

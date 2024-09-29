@@ -41,7 +41,7 @@ export class RcjScoringTool implements IObserver {
     private running: boolean = false;
     private mins: number = 0;
     private secs: number = 0;
-    private msecs: number = 0;
+    private csecs: number = 0;
     private stopWatch: any;
     private pose: Pose;
     private path: number = 0;
@@ -57,11 +57,21 @@ export class RcjScoringTool implements IObserver {
         this.configData = configData;
         let rcj = this;
         $('#rcjStop').addClass('disabled');
-        $('#rcjStart').on('click', function () {
-            rcj.init();
-            $('#rcjStart').addClass('disabled');
-            $('#rcjStop').removeClass('disabled');
-            return false;
+        $('#rcjStartStop').on('click', function () {
+            if ($(this).text().indexOf('Start') >= 0) {
+                $(this).html('Stop<br>Scoring Run');
+                rcj.init();
+                $('#rcjStartStop').toggleClass('running');
+                $('#rcjLoP').removeClass('disabled');
+                return false;
+            } else {
+                $(this).html('Start<br>Scoring Run');
+                clearInterval(rcj.stopWatch);
+                $('#rcjStartStop').toggleClass('running');
+                $('#rcjLoP').addClass('disabled');
+                rcj.lastCheckPoint = {};
+                return false;
+            }
         });
         $('#rcjLoP').on('click', function (e) {
             $('#rcjLoP').addClass('disabled');
@@ -69,6 +79,8 @@ export class RcjScoringTool implements IObserver {
             let lastCheckPointPose = simulationRoberta.getTilePose(rcj.lastCheckPoint, configData['tiles'][rcj.lastCheckPoint['next']], rcj.prevCheckPointTile);
             rcj.robot.pose = new Pose(lastCheckPointPose.x, lastCheckPointPose.y, lastCheckPointPose.theta);
             rcj.robot.initialPose = new Pose(lastCheckPointPose.x, lastCheckPointPose.y, lastCheckPointPose.theta);
+            rcj.path = rcj.lastCheckPoint['index'][0];
+            rcj.lastPath = rcj.path;
             rcj.loPCounter.forEach((tuple) => {
                 if (tuple[0] == rcj.lastCheckPoint['index'][0]) {
                     tuple[1] += 1;
@@ -76,16 +88,9 @@ export class RcjScoringTool implements IObserver {
             });
             return false;
         });
-        $('#rcjStop').on('click', function () {
-            clearInterval(rcj.stopWatch);
-            $('#rcjStart').removeClass('disabled');
-            $('#rcjStop').addClass('disabled');
-            $('#rcjLoP').addClass('disabled');
-            rcj.lastCheckPoint = {};
-            return false;
-        });
-        $('#rcjName').val(configData.name);
-        $('#rcjTeam').val(robot.interpreter.name);
+        $('#rcjName').text(configData.name);
+        $('#rcjTeam').text(robot.interpreter.name);
+        $('#rcjTime').text('00:00:0');
     }
 
     private init() {
@@ -95,7 +100,7 @@ export class RcjScoringTool implements IObserver {
         clearInterval(this.stopWatch);
         this.mins = 0;
         this.secs = 0;
-        this.msecs = 0;
+        this.csecs = 0;
         this.running = true;
         this.stopWatch = setInterval(this.timer.bind(this), 100);
         if (this.robot && this.initialPose) {
@@ -107,30 +112,30 @@ export class RcjScoringTool implements IObserver {
 
     timer() {
         if (this.running) {
-            this.msecs++;
-            if (this.msecs === 10) {
+            this.csecs++;
+            if (this.csecs === 10) {
                 this.secs++;
-                this.msecs = 0;
+                this.csecs = 0;
             }
             if (this.secs === 60) {
                 this.mins++;
                 this.secs = 0;
             }
-            $('#rcjTime').val(this.mins + ':' + this.secs + ':' + this.msecs);
-            $('#rcjPath').val(this.path);
-            $('#rcjLastPath').val(this.lastPath);
-            $('#rcjLoPpS').val(JSON.stringify(this.loPCounter));
-            $('#rcjLine').val(this.line ? 'true' : 'false');
+            $('#rcjTime').text(('00' + this.mins).slice(-2) + ':' + ('00' + this.secs).slice(-2) + ':' + this.csecs);
+            $('#rcjPath').text(this.path === -1 ? 'wrong' : 'correct');
+            $('#rcjLastPath').text(this.lastPath);
+            $('#rcjLoPpS').text(JSON.stringify(this.loPCounter));
+            $('#rcjLine').text(this.line ? 'yes' : 'no');
         }
     }
 
     update(robot: RobotBaseMobile) {
         if (!this.running) {
-            if (this.robot != robot) {
-                this.robot = robot;
-                this.initialPose = this.robot.initialPose;
-            }
             return;
+        }
+        if (this.robot != robot) {
+            this.robot = robot;
+            this.initialPose = this.robot.initialPose;
         }
         this.pose = robot.pose;
         let x = Math.floor((this.pose.x - 10) / 90);
@@ -945,6 +950,8 @@ export class SimulationScene {
             this.sim.setNewConfig(configData);
         } else {
             this.sim.configType = 'std';
+            $('#rcjScoringWindow').fadeOut();
+            this.removeRcjScoringTool();
             this.imgBackgroundList.pop();
         }
         if (workingScene) {
@@ -1019,5 +1026,11 @@ export class SimulationScene {
         $('#simCompetition').onWrap('click', function () {
             scene.rcjScoringTool.openClose();
         });
+    }
+    removeRcjScoringTool() {
+        this.rcjScoringTool = null;
+        this.scoring = false;
+        $('#simCompetition').hide();
+        $('#simCompetition').off();
     }
 }
