@@ -1144,7 +1144,7 @@ export class NXTChassis extends LegoChassis {
         let display = myRobot.interpreter.getRobotBehaviour().getActionState('display', true);
         if (display) {
             if (display.text) {
-                $('#display' + this.id).html($('#display').html() + '<text x=' + display.x * 1.5 + ' y=' + display.y * 12 + '>' + display.text + '</text>');
+                $('#display' + this.id).html($('#display'+ this.id).html() + '<text x=' + display.x * 1.5 + ' y=' + display.y * 12 + '>' + display.text + '</text>');
             }
             if (display.clear) {
                 $('#display' + this.id).html('');
