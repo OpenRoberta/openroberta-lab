@@ -43,12 +43,14 @@ public class RegenerateNepoWorker implements IWorker {
             if ( textlyVisitor == null ) {
                 project.setProgramAsTextly("- no textly -");
             } else {
+
                 String oldSource = project.getSourceCodeBuilder().toString();
                 StringBuilder oldIndentBuilder = project.getIndentationBuilder();
                 StringBuilder textlyBuilder = new StringBuilder();
                 StringBuilder indentBuilder = new StringBuilder();
                 textlyVisitor.setStringBuilders(textlyBuilder, indentBuilder);
                 textlyVisitor.generateCode(true);
+
                 project.setProgramAsTextly(textlyBuilder.toString());
                 project.setSourceCode(oldSource);
                 project.setIndentationBuilder(oldIndentBuilder);

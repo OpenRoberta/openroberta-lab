@@ -7,7 +7,6 @@ import * as NN_C from 'nn.controller';
 import * as PROGRAM from 'program.model';
 import * as USER from 'user.model';
 import * as CONFIGURATION_C from 'configuration.controller';
-import * as PROGCODE_C from 'progCode.controller';
 import * as Blockly from 'blockly';
 import * as $ from 'jquery';
 import 'jquery-validate';

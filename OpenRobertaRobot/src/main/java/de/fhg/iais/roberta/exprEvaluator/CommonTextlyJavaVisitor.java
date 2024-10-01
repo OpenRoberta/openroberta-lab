@@ -1065,7 +1065,7 @@ public abstract class CommonTextlyJavaVisitor<T> extends TextlyJavaBaseVisitor<T
             variablesDec.addStmt(statement);
         }
         variablesDec.setReadOnly();
-        MainTask main = new MainTask(mkExternalProperty(ctx, "robControls_start"), variablesDec, "TRUE", null);
+        MainTask main = new MainTask(mkMainTaskProperty(ctx, "robControls_start"), variablesDec, "TRUE", null);
         phrases.add(main);
 
         StmtList statements = (StmtList) visitMainFunc((TextlyJavaParser.MainFuncContext) ctx.mainBlock());
@@ -1290,6 +1290,11 @@ public abstract class CommonTextlyJavaVisitor<T> extends TextlyJavaBaseVisitor<T
         return new BlocklyProperties(type, "1", br, null);
     }
 
+    private static BlocklyProperties mkMainTaskProperty(ParserRuleContext ctx, String type) {
+        BlocklyRegion br = new BlocklyRegion(false, false, null, false, null, true, null, null, null);
+        return new BlocklyProperties(type, "10000", br, null);
+    }
+
     @Override
     public T visitChildren(RuleNode node) {
         Expr result = (Expr) super.visitChildren(node);
@@ -1329,7 +1334,7 @@ public abstract class CommonTextlyJavaVisitor<T> extends TextlyJavaBaseVisitor<T
 
     public <E extends Phrase> E checkValidationName(E element, String name, NameType type) {
 
-        if ( !validatePattern(name, type)  ) {
+        if ( !validatePattern(name, type) ) {
             element.addTextlyError("Invalid name for " + customizeString(NameType.valueOf(type.name())) + " : " + name, true);
         }
         return element;
@@ -1375,6 +1380,7 @@ public abstract class CommonTextlyJavaVisitor<T> extends TextlyJavaBaseVisitor<T
         }
         return mkExternalProperty(ctx, blocklyNames[0]);
     }
+
 }
 
 

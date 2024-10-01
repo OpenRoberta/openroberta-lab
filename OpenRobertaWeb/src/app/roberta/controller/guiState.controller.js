@@ -588,6 +588,14 @@ function setView(view) {
         $('.robotType').addClass('disabled');
         $('#head-navi-tooltip-program').attr('data-bs-toggle', '');
         $('#head-navi-tooltip-configuration').attr('data-bs-toggle', '');
+    } else if (view === 'tabTextly') {
+        $('#head-navigation-program-edit').css('display', 'none');
+        $('#head-navigation-configuration-edit').css('display', 'inline');
+        $('#menuTabProgram').parent().removeClass('disabled');
+        $('#menuTabNN').parent().removeClass('disabled');
+        $('#menuTabNNLearn').parent().removeClass('disabled');
+        $('#menuTabConfiguration').parent().addClass('disabled');
+        UTIL.clearTabAlert(view);
     } else {
         $('#head-navi-tooltip-program').attr('data-bs-toggle', '');
         $('#head-navi-tooltip-configuration').attr('data-bs-toggle', '');

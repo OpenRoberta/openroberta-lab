@@ -22,6 +22,7 @@ public class ProjectWorkflowRequest extends BaseRequest {
     protected String password;
     protected String language;
     protected String robot;
+    protected String textly;
 
     /**
      * the request description for the /projectWorkflow/* REST request
@@ -54,7 +55,8 @@ public class ProjectWorkflowRequest extends BaseRequest {
         String SSID,
         String password,
         String language,
-        String robot) {
+        String robot,
+        String textly) {
         ProjectWorkflowRequest entity = new ProjectWorkflowRequest();
         entity.setCmd(cmd);
         entity.setProgramName(programName);
@@ -65,6 +67,7 @@ public class ProjectWorkflowRequest extends BaseRequest {
         entity.setPassword(password);
         entity.setLanguage(language);
         entity.setRobot(robot);
+        entity.setProgramTextly(textly);
         entity.immutable();
         return entity;
     }
@@ -103,6 +106,10 @@ public class ProjectWorkflowRequest extends BaseRequest {
                     setLanguage(jsonO.optString(key));
                 } else if ( "robot".equals(key) ) {
                     setRobot(jsonO.optString(key));
+                } else if ( "programAstText".equals(key) ) {
+                    setProgramTextly(jsonO.optString(key));
+                } else if ( "textlyErrors".equals(key) ) {
+                    setProgramTextly(jsonO.optString(key));
                 } else {
                     throw new RuntimeException("JSON parse error. Found invalid key: " + key + " in " + jsonO);
                 }
@@ -367,6 +374,27 @@ public class ProjectWorkflowRequest extends BaseRequest {
             throw new RuntimeException("robot assigned to an immutable object: " + toString());
         }
         this.robot = robot;
+        return this;
+    }
+
+    /**
+     * GET new Textly program. Object must be immutable. Never return null or an undefined/default value.
+     */
+    public String getProgramTextly() {
+        if ( !this.immutable ) {
+            throw new RuntimeException("no Textly program from an object under construction: " + toString());
+        }
+        return this.textly;
+    }
+
+    /**
+     * SET Textly program. Object must be mutable.
+     */
+    public ProjectWorkflowRequest setProgramTextly(String textly) {
+        if ( this.immutable ) {
+            throw new RuntimeException("Textly program assigned to an immutable object: " + toString());
+        }
+        this.textly = textly;
         return this;
     }
 

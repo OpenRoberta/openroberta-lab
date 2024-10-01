@@ -10,7 +10,8 @@ import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
 
 public class EvalExprStmtErrorListener extends BaseErrorListener {
-    private final List<String> error = new LinkedList<>();
+    private final List<String> errors = new LinkedList<>();
+    private List<String> stackRule = new LinkedList<>();
 
     @Override
     public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e) {
@@ -22,10 +23,18 @@ public class EvalExprStmtErrorListener extends BaseErrorListener {
         //this.error.add(s);
         msg = msg.replace("<EOF>", "at the end of the line");
         msg = msg.replace("NAME", " a different option for this expression ");
-        this.error.add(msg);
+        //TextlyError error = new TextlyError(line, charPositionInLine, offendingSymbol.toString(), msg);
+        this.errors.add(msg);
+        this.stackRule = stack;
     }
 
     public List<String> getError() {
-        return this.error;
+        return this.errors;
     }
+
+    public List<String> getStackRule() {
+        return this.stackRule;
+    }
+
+
 }

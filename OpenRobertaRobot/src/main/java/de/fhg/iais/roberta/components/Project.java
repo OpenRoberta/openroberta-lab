@@ -21,6 +21,7 @@ import com.google.common.collect.MutableClassToInstanceMap;
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.NNBean;
 import de.fhg.iais.roberta.blockly.generated.BlockSet;
+import de.fhg.iais.roberta.exprEvaluator.TextlyError;
 import de.fhg.iais.roberta.factory.RobotFactory;
 import de.fhg.iais.roberta.inter.mode.action.ILanguage;
 import de.fhg.iais.roberta.robotCommunication.RobotCommunicator;
@@ -66,6 +67,7 @@ public final class Project {
     private String programAsTextly = null;
     private String configurationAsBlocklyXML = null;
     private List<String> errorAndWarningMessages = null;
+    private List<String> textlyErrors = null;
 
     private Project() {
     }
@@ -176,6 +178,7 @@ public final class Project {
      * very dangerous, this allows to pass the source code builder between worker. It is assumed, that only ONE worker
      * will write. This is not true anymore. The RegenerateNepoWorker sets own source builder, but compensates this
      * dangerous desing
+     *
      * @return the UNIQUE builder for the whole worker chain
      */
     public StringBuilder getSourceCodeBuilder() {
@@ -186,6 +189,7 @@ public final class Project {
      * very dangerous, this allows to pass the source code builder between worker. It is assumed, that only ONE worker
      * will write. This is not true anymore. The RegenerateNepoWorker sets own source builder, but compensates this
      * dangerous desing
+     *
      * @return the UNIQUE builder for the whole worker chain
      */
     public StringBuilder getIndentationBuilder() {
@@ -199,7 +203,6 @@ public final class Project {
     public void setIndentationBuilder(StringBuilder indentationBuilder) {
         this.indentationBuilder = indentationBuilder;
     }
-
 
 
     /**
@@ -269,7 +272,7 @@ public final class Project {
     }
 
     public void setProgramAsTextly(String programAsTextly) {
-        Assert.isNull(this.programAsTextly);
+        //Assert.isNull(this.programAsTextly);
         this.programAsTextly = programAsTextly;
     }
 
@@ -283,6 +286,12 @@ public final class Project {
         this.configurationAsBlocklyXML = configurationAsBlocklyXML;
     }
 
+    public void setTextlyErrors(List<String> errors) {
+        this.textlyErrors = errors;
+    }
+    public List<String> getTextlyErrors() {
+        return this.textlyErrors;
+    }
     public JSONObject getConfigurationJSON() {
         return this.configurationJSON;
     }
@@ -369,6 +378,7 @@ public final class Project {
             return this;
         }
 
+        
         private static JSONObject configurationAst2JSON(Collection<ConfigurationComponent> configurationAst) {
             JSONObject compJSON = new JSONObject();
             for ( ConfigurationComponent component : configurationAst ) {
