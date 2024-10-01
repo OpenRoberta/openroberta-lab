@@ -35,6 +35,11 @@ export function init(callback: Function) {
         } else {
             robot['extensions']['sim'] = false;
         }
+        if (robot['extensions']['textly'] === 'always') {
+            robot['extensions']['textly'] = true;
+        } else if (robot['extensions']['textly'] === 'never') {
+            robot['extensions']['textly'] = false;
+        }
         delete robot['sim'];
         return robot;
     });
@@ -99,6 +104,11 @@ function initRobotList() {
         e.stopPropagation();
         $('.accordion-collapse.show').collapse('hide');
         let extensions = {};
+        if (row.extensions.hasOwnProperty('textly') && row.extensions['textly'] === true) {
+            extensions['textly'] = true;
+        } else {
+            extensions['textly'] = false;
+        }
         $(e.target)
             .closest('.card-views')
             .find('.form-check-input')
@@ -216,6 +226,9 @@ function initRobotList() {
                         if (value === 'sim') {
                             continue;
                         }
+                        if (value === 'textly') {
+                            continue;
+                        }
                         if (extensions[value] !== 'never') {
                             $myextensions.removeClass('invisible');
                             $myextensions
@@ -288,7 +301,7 @@ function initRobotList() {
     $('span#results').text(startRobots.length);
 }
 function initView() {
-    $('.mainTab').parent().addClass('invisible');
+    $('#tabProgram, #tabConfiguration').parent().addClass('invisible');
     $('.notStart').addClass('disabled');
     $('#header').removeClass('shadow');
     GUISTATE_C.resetRobot();

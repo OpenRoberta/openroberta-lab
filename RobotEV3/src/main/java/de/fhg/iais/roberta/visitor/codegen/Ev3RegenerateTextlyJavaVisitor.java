@@ -110,7 +110,7 @@ public final class Ev3RegenerateTextlyJavaVisitor extends AbstractRegenerateText
 
     @Override
     public Void visitPlayFileAction(PlayFileAction playFileAction) {
-        this.src.nlI().add("ev3.playFile(").add(playFileAction.fileName).add(");");
+        this.src.nlI().add("ev3.playFile(").add(Integer.toString(Integer.parseInt(playFileAction.fileName) + 1)).add(");");
         return null;
     }
 
@@ -354,7 +354,7 @@ public final class Ev3RegenerateTextlyJavaVisitor extends AbstractRegenerateText
 
     @Override
     public Void visitCurveAction(CurveAction curveAction) {
-        this.src.nlI().add("ev3.driveInCurve(").add(curveAction.direction.toString().toLowerCase()).add(",");
+        this.src.nlI().add("ev3.driveInCurve(").add(curveAction.direction.toString().equals("BACKWARD") ? "backward" : "forward").add(",");
         curveAction.paramLeft.speed.accept(this);
         this.src.add(",");
         curveAction.paramRight.speed.accept(this);
@@ -421,7 +421,7 @@ public final class Ev3RegenerateTextlyJavaVisitor extends AbstractRegenerateText
 
     @Override
     public Void visitDriveAction(DriveAction driveAction) {
-        this.src.nlI().add("ev3.driveDistance(").add(driveAction.direction.toString().toLowerCase()).add(",");
+        this.src.nlI().add("ev3.driveDistance(").add(driveAction.direction.toString().equals("BACKWARD") ? "backward" : "forward").add(",");
         driveAction.param.speed.accept(this);
         if ( driveAction.param.getDuration() == null ) {
             this.src.add(");");

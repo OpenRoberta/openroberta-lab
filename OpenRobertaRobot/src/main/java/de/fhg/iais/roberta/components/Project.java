@@ -66,6 +66,7 @@ public final class Project {
     private String programAsTextly = null;
     private String configurationAsBlocklyXML = null;
     private List<String> errorAndWarningMessages = null;
+    private List<JSONObject> textlyErrors = null;
 
     private Project() {
     }
@@ -176,6 +177,7 @@ public final class Project {
      * very dangerous, this allows to pass the source code builder between worker. It is assumed, that only ONE worker
      * will write. This is not true anymore. The RegenerateNepoWorker sets own source builder, but compensates this
      * dangerous desing
+     *
      * @return the UNIQUE builder for the whole worker chain
      */
     public StringBuilder getSourceCodeBuilder() {
@@ -186,6 +188,7 @@ public final class Project {
      * very dangerous, this allows to pass the source code builder between worker. It is assumed, that only ONE worker
      * will write. This is not true anymore. The RegenerateNepoWorker sets own source builder, but compensates this
      * dangerous desing
+     *
      * @return the UNIQUE builder for the whole worker chain
      */
     public StringBuilder getIndentationBuilder() {
@@ -199,7 +202,6 @@ public final class Project {
     public void setIndentationBuilder(StringBuilder indentationBuilder) {
         this.indentationBuilder = indentationBuilder;
     }
-
 
 
     /**
@@ -269,7 +271,7 @@ public final class Project {
     }
 
     public void setProgramAsTextly(String programAsTextly) {
-        Assert.isNull(this.programAsTextly);
+        //Assert.isNull(this.programAsTextly);
         this.programAsTextly = programAsTextly;
     }
 
@@ -281,6 +283,14 @@ public final class Project {
     public void setConfigurationAsBlocklyXML(String configurationAsBlocklyXML) {
         Assert.isNull(this.configurationAsBlocklyXML);
         this.configurationAsBlocklyXML = configurationAsBlocklyXML;
+    }
+
+    public void setTextlyErrors(List<JSONObject> errors) {
+        this.textlyErrors = errors;
+    }
+
+    public List<JSONObject> getTextlyErrors() {
+        return this.textlyErrors;
     }
 
     public JSONObject getConfigurationJSON() {
@@ -368,6 +378,7 @@ public final class Project {
             }
             return this;
         }
+
 
         private static JSONObject configurationAst2JSON(Collection<ConfigurationComponent> configurationAst) {
             JSONObject compJSON = new JSONObject();

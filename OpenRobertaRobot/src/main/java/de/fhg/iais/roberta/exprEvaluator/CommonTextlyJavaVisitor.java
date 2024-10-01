@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.RuleNode;
 
 import de.fhg.iais.roberta.inter.mode.general.IMode;
@@ -52,9 +53,11 @@ import de.fhg.iais.roberta.syntax.lang.functions.TextCharCastNumberFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextJoinFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextPrintFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextStringCastNumberFunct;
+import de.fhg.iais.roberta.syntax.lang.methods.Method;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodCall;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodIfReturn;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodReturn;
+import de.fhg.iais.roberta.syntax.lang.methods.MethodVoid;
 import de.fhg.iais.roberta.syntax.lang.stmt.AssignStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.ExprStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.FunctionStmt;
@@ -123,7 +126,7 @@ public abstract class CommonTextlyJavaVisitor<T> extends TextlyJavaBaseVisitor<T
     @Override
     public T visitRobotWeDoExpression(TextlyJavaParser.RobotWeDoExpressionContext ctx) throws UnsupportedOperationException {
         Expr result = new EmptyExpr(BlocklyType.NUMBER);
-        result.addTextlyError("this expression is only for Wedo Robot " + ctx.getText(), false);
+        result.addTextlyError("this expression is only for Wedo Robot " + ctx.getText(), true);
         return (T) result;
     }
 
@@ -139,7 +142,7 @@ public abstract class CommonTextlyJavaVisitor<T> extends TextlyJavaBaseVisitor<T
     @Override
     public T visitRobotEv3Expression(TextlyJavaParser.RobotEv3ExpressionContext ctx) throws UnsupportedOperationException {
         Expr result = new EmptyExpr(BlocklyType.NUMBER);
-        result.addTextlyError("this expression is only for Ev3 Robot " + ctx.getText(), false);
+        result.addTextlyError("this expression is only for Ev3 Robot " + ctx.getText(), true);
         return (T) result;
     }
 
@@ -504,7 +507,7 @@ public abstract class CommonTextlyJavaVisitor<T> extends TextlyJavaBaseVisitor<T
                     return (T) new FunctionExpr(new TextCharCastNumberFunct(mkPropertyFromClass(ctx, TextCharCastNumberFunct.class), args.get(0), args.get(1)));
                 default:
                     Expr result = new EmptyExpr(BlocklyType.NOTHING);
-                    result.addTextlyError("Invalid function name " + f, false);
+                    result.addTextlyError("Invalid function name " + f, true);
                     return (T) result;
             }
         } else if ( "getRGB".equals(f) ) {
@@ -686,30 +689,30 @@ public abstract class CommonTextlyJavaVisitor<T> extends TextlyJavaBaseVisitor<T
                     if ( args.get(0) instanceof Var ) {
                         return (T) new MathChangeStmt(mkInlineProperty(ctx, "robMath_change"), args.get(0), args.get(1));
                     } else {
-                        StmtList statementList = new StmtList();
+                        StmtList statementList = new StmtList(ctx);
                         statementList.setReadOnly();
-                        statementList.addTextlyError("This function use a variable for the first parameter ", false);
+                        statementList.addTextlyError("This function use a variable for the first parameter ", true);
                         return (T) statementList;
                     }
                 case "appendText":
                     if ( args.get(0) instanceof Var ) {
                         return (T) new TextAppendStmt(mkInlineProperty(ctx, "robText_append"), args.get(0), args.get(1));
                     } else {
-                        StmtList statementList = new StmtList();
+                        StmtList statementList = new StmtList(ctx);
                         statementList.setReadOnly();
-                        statementList.addTextlyError("This function use a variable for the first parameter ", false);
+                        statementList.addTextlyError("This function use a variable for the first parameter ", true);
                         return (T) statementList;
                     }
 
 
                 default:
-                    StmtList statementList = new StmtList();
+                    StmtList statementList = new StmtList(ctx);
                     statementList.setReadOnly();
-                    statementList.addTextlyError("Invalid function name " + f, false);
+                    statementList.addTextlyError("Invalid function name " + f, true);
                     return (T) statementList;
             }
         } else {
-            StmtList statementList = new StmtList();
+            StmtList statementList = new StmtList(ctx);
             statementList.setReadOnly();
             statementList.addTextlyError("Wrong number of arguments for this function", true);
             return (T) statementList;
@@ -900,13 +903,13 @@ public abstract class CommonTextlyJavaVisitor<T> extends TextlyJavaBaseVisitor<T
                     return (T) new RepeatStmt(RepeatStmt.Mode.FOR, el, statementList, mkExternalProperty(ctx, "robControls_for"));
                 } else {
                     Stmt resultError = new RepeatStmt(RepeatStmt.Mode.FOR, el, statementList, mkExternalProperty(ctx, "robControls_for"));
-                    resultError.addTextlyError("Variable name should be the same for ++ notation", false);
+                    resultError.addTextlyError("Variable name should be the same for ++ notation", true);
                     return (T) resultError;
                 }
 
             } else if ( ctx.op != null && ctx.op.getType() == TextlyJavaParser.STEP && !(el.el.get(3) instanceof Var) ) {
                 Stmt resultError = new RepeatStmt(RepeatStmt.Mode.FOR, el, statementList, mkExternalProperty(ctx, "robControls_for"));
-                resultError.addTextlyError("For ++ notation only variable is allowed", false);
+                resultError.addTextlyError("For ++ notation only variable is allowed", true);
                 return (T) resultError;
             } else if ( ctx.op != null && ctx.op.getType() == TextlyJavaParser.SUB && el.el.get(3) instanceof NumConst ) {
                 el.el.set(3, new Unary((Unary.Op.NEG), el.el.get(3), mkInlineProperty(ctx, "math_single")));
@@ -914,13 +917,12 @@ public abstract class CommonTextlyJavaVisitor<T> extends TextlyJavaBaseVisitor<T
             } else if ( ctx.op != null && ctx.op.getType() == TextlyJavaParser.ADD ) {
                 String nameVariable = ctx.NAME(2).getText();
                 Var var = checkValidationName(new Var(BlocklyType.NUMBER_INT, nameVariable, mkPropertyFromClass(ctx, Var.class)), nameVar, NameType.VAR);
-                el.el.set(3, new Binary(Binary.Op.ADD, var, el.el.get(3), "", mkInlineProperty(ctx, "math_arithmetic")));
                 return (T) new RepeatStmt(RepeatStmt.Mode.FOR, el, statementList, mkExternalProperty(ctx, "robControls_for"));
             } else {
                 return (T) new RepeatStmt(RepeatStmt.Mode.FOR, el, statementList, mkExternalProperty(ctx, "robControls_for"));
             }
         } else {
-            StmtList statementList = new StmtList();
+            StmtList statementList = new StmtList(ctx);
             statementList.setReadOnly();
             statementList.addTextlyError("Invalid type for " + ctx.NAME(), true);
             return (T) statementList;
@@ -939,7 +941,7 @@ public abstract class CommonTextlyJavaVisitor<T> extends TextlyJavaBaseVisitor<T
             case TextlyJavaParser.CONTINUE:
                 return (T) new StmtFlowCon(mkExternalProperty(ctx, "controls_flow_statements"), StmtFlowCon.Flow.CONTINUE);
             default:
-                StmtList statementList = new StmtList();
+                StmtList statementList = new StmtList(ctx);
                 statementList.setReadOnly();
                 statementList.addTextlyError("Invalid flow control statement. Expected 'break' or 'continue' ", true);
                 return (T) statementList;
@@ -961,15 +963,29 @@ public abstract class CommonTextlyJavaVisitor<T> extends TextlyJavaBaseVisitor<T
     public T visitParamsMethod(TextlyJavaParser.ParamsMethodContext ctx) throws UnsupportedOperationException {
 
         String typeAsString = ctx.PRIMITIVETYPE().getText();
-        BlocklyType type = BlocklyType.get(typeAsString);
-
+        BlocklyType type = BlocklyType.getByBlocklyName(textlyArray.getBlocklyType(typeAsString));
         Phrase emptyExpression = new EmptyExpr(type);
         emptyExpression.setReadOnly();
         String nameVar = ctx.NAME().getText();
-        VarDeclaration var = checkValidationName(new VarDeclaration(type, nameVar, emptyExpression, false, false, mkExternalProperty(ctx, "robControls_forEach")), nameVar, NameType.VAR);
+        boolean isLastParam = isLastParamsMethodContext(ctx);
+        VarDeclaration var = checkValidationName(new VarDeclaration(type, nameVar, emptyExpression, isLastParam, false, mkExternalProperty(ctx, "robLocalVariables_declare")), nameVar, NameType.VAR);
         var.setReadOnly();
 
         return (T) var;
+    }
+
+    private boolean isLastParamsMethodContext(TextlyJavaParser.ParamsMethodContext ctx) {
+
+        ParserRuleContext parentCtx = ctx.getParent();
+        List<ParseTree> children = parentCtx.children;
+
+        int ctxIndex = children.indexOf(ctx);
+        for ( int i = ctxIndex + 1; i < children.size(); i++ ) {
+            if ( children.get(i) instanceof TextlyJavaParser.ParamsMethodContext ) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -978,12 +994,12 @@ public abstract class CommonTextlyJavaVisitor<T> extends TextlyJavaBaseVisitor<T
     @Override
     public T visitFuncUser(TextlyJavaParser.FuncUserContext ctx) throws UnsupportedOperationException {
 
-        String methodName = ctx.NAME(0).getText();
+        String methodName = ctx.NAME().getText();
 
         if ( validatePattern(methodName, NameType.FUNCTIONNAME) ) {
             ExprList parameters = new ExprList();
-            for ( TextlyJavaParser.ExprContext expr : ctx.expr() ) {
-                Expr param = (Expr) visit(expr);
+            for ( TextlyJavaParser.NameDeclContext nameDeclContext : ctx.nameDecl() ) {
+                Expr param = (Expr) visit(nameDeclContext);
                 parameters.addExpr(param);
                 param.setReadOnly();
             }
@@ -1000,17 +1016,13 @@ public abstract class CommonTextlyJavaVisitor<T> extends TextlyJavaBaseVisitor<T
 
             if ( ctx.op != null && ctx.op.getType() == TextlyJavaParser.RETURN ) {
                 BlocklyType returnType = BlocklyType.get(ctx.PRIMITIVETYPE().getText());
-                if ( ctx.NAME() != null ) {
-                    String nameVar = ctx.NAME(1).getText();
-                    Var returnVar = checkValidationName(new Var(BlocklyType.VOID, nameVar, mkPropertyFromClass(ctx, Var.class)), nameVar, NameType.VAR);
-                    return (T) new MethodReturn(methodName, parameters, statementList, returnType, returnVar, mkExternalProperty(ctx, "robProcedures_defreturn"));
-                } else {
-                    Expr returnExpr = parameters.el.get(parameters.el.size() - 1);
-                    parameters.delExpr(parameters.el.get(parameters.el.size() - 1), parameters.el.size() - 1);
-                    return (T) new MethodReturn(methodName, parameters, statementList, returnType, returnExpr, mkExternalProperty(ctx, "robProcedures_defreturn"));
-                }
+                Expr returnExpr = (Expr) visit(ctx.expr());
+                returnExpr.setReadOnly();
+                return (T) new MethodReturn(methodName, parameters, statementList, returnType, returnExpr, mkExternalProperty(ctx, "robProcedures_defreturn"));
+            } else {
+                return (T) new MethodVoid(methodName, parameters, statementList, mkExternalProperty(ctx, "robProcedures_defnoreturn"));
             }
-            return null;
+
         } else {
             Expr result = new EmptyExpr(BlocklyType.NOTHING);
             result.addTextlyError("Invalid name for Function", true);
@@ -1043,8 +1055,12 @@ public abstract class CommonTextlyJavaVisitor<T> extends TextlyJavaBaseVisitor<T
     public T visitVariableDeclaration(TextlyJavaParser.VariableDeclarationContext ctx) throws UnsupportedOperationException {
 
         String typeAsString = ctx.nameDecl().start.getText();
-        BlocklyType type = BlocklyType.get(typeAsString);
+        BlocklyType type = BlocklyType.getByBlocklyName(textlyArray.getBlocklyType(typeAsString));
         Expr expr = (Expr) visit(ctx.expr());
+        if ( type.isArray() ) {
+            expr.setReadOnly();
+            expr = new ListCreate(type.getMatchingElementTypeForArrayType(), (ExprList) expr, mkExternalProperty(ctx, "robLists_create_with"));
+        }
         String nameVar = ctx.nameDecl().stop.getText();
         VarDeclaration var = checkValidationName(new VarDeclaration(type, nameVar, expr, true, true, mkExternalProperty(ctx, "robGlobalVariables_declare")), nameVar, NameType.VAR);
         var.setReadOnly();
@@ -1065,11 +1081,16 @@ public abstract class CommonTextlyJavaVisitor<T> extends TextlyJavaBaseVisitor<T
             variablesDec.addStmt(statement);
         }
         variablesDec.setReadOnly();
-        MainTask main = new MainTask(mkExternalProperty(ctx, "robControls_start"), variablesDec, "TRUE", null);
+        MainTask main = new MainTask(mkMainTaskProperty(ctx, "robControls_start"), variablesDec, "TRUE", null);
         phrases.add(main);
 
         StmtList statements = (StmtList) visitMainFunc((TextlyJavaParser.MainFuncContext) ctx.mainBlock());
         phrases.add(statements);
+
+        for ( TextlyJavaParser.UserFuncContext funcUserContext : ctx.userFunc() ) {
+            Method methodStmt = (Method) visit(funcUserContext);
+            phrases.add(methodStmt);
+        }
         return (T) phrases;
     }
 
@@ -1194,9 +1215,9 @@ public abstract class CommonTextlyJavaVisitor<T> extends TextlyJavaBaseVisitor<T
      */
     @Override
     public T visitRobotMicrobitv2SensorStatement(TextlyJavaParser.RobotMicrobitv2SensorStatementContext ctx) throws UnsupportedOperationException {
-        StmtList statementList = new StmtList();
+        StmtList statementList = new StmtList(ctx);
         statementList.setReadOnly();
-        statementList.addTextlyError("Specific sensor microbitv2 Statement", false);
+        statementList.addTextlyError("Specific sensor microbitv2 Statement", true);
         return (T) statementList;
     }
 
@@ -1208,9 +1229,9 @@ public abstract class CommonTextlyJavaVisitor<T> extends TextlyJavaBaseVisitor<T
      */
     @Override
     public T visitRobotMicrobitv2ActuatorStatement(TextlyJavaParser.RobotMicrobitv2ActuatorStatementContext ctx) throws UnsupportedOperationException {
-        StmtList statementList = new StmtList();
+        StmtList statementList = new StmtList(ctx);
         statementList.setReadOnly();
-        statementList.addTextlyError("This actuator is specific for MicrobitV2 robot", false);
+        statementList.addTextlyError("This actuator is specific for MicrobitV2 robot", true);
         return (T) statementList;
     }
 
@@ -1222,9 +1243,9 @@ public abstract class CommonTextlyJavaVisitor<T> extends TextlyJavaBaseVisitor<T
      */
     @Override
     public T visitRobotWeDoSensorStatement(TextlyJavaParser.RobotWeDoSensorStatementContext ctx) throws UnsupportedOperationException {
-        StmtList statementList = new StmtList();
+        StmtList statementList = new StmtList(ctx);
         statementList.setReadOnly();
-        statementList.addTextlyError("This Sensor is specific for WeDo robot", false);
+        statementList.addTextlyError("This Sensor is specific for WeDo robot", true);
         return (T) statementList;
 
     }
@@ -1237,9 +1258,9 @@ public abstract class CommonTextlyJavaVisitor<T> extends TextlyJavaBaseVisitor<T
      */
     @Override
     public T visitRobotWedoActuatorStatement(TextlyJavaParser.RobotWedoActuatorStatementContext ctx) throws UnsupportedOperationException {
-        StmtList statementList = new StmtList();
+        StmtList statementList = new StmtList(ctx);
         statementList.setReadOnly();
-        statementList.addTextlyError("This actuator is specific for WeDo robot", false);
+        statementList.addTextlyError("This actuator is specific for WeDo robot", true);
         return (T) statementList;
     }
 
@@ -1251,9 +1272,9 @@ public abstract class CommonTextlyJavaVisitor<T> extends TextlyJavaBaseVisitor<T
      */
     @Override
     public T visitRobotEv3SensorStatement(TextlyJavaParser.RobotEv3SensorStatementContext ctx) throws UnsupportedOperationException {
-        StmtList statementList = new StmtList();
+        StmtList statementList = new StmtList(ctx);
         statementList.setReadOnly();
-        statementList.addTextlyError("Specific sensor Ev3 Statement", false);
+        statementList.addTextlyError("Specific sensor Ev3 Statement", true);
         return (T) statementList;
     }
 
@@ -1265,9 +1286,9 @@ public abstract class CommonTextlyJavaVisitor<T> extends TextlyJavaBaseVisitor<T
      */
     @Override
     public T visitRobotEv3ActuatorStatement(TextlyJavaParser.RobotEv3ActuatorStatementContext ctx) throws UnsupportedOperationException {
-        StmtList statementList = new StmtList();
+        StmtList statementList = new StmtList(ctx);
         statementList.setReadOnly();
-        statementList.addTextlyError("This actuator is specific for Ev3 robot", false);
+        statementList.addTextlyError("This actuator is specific for Ev3 robot", true);
         return (T) statementList;
     }
 
@@ -1279,15 +1300,20 @@ public abstract class CommonTextlyJavaVisitor<T> extends TextlyJavaBaseVisitor<T
      */
     @Override
     public T visitRobotEv3NeuralNetworks(TextlyJavaParser.RobotEv3NeuralNetworksContext ctx) throws UnsupportedOperationException {
-        StmtList statementList = new StmtList();
+        StmtList statementList = new StmtList(ctx);
         statementList.setReadOnly();
-        statementList.addTextlyError("This neural function is specific for xNN robot", false);
+        statementList.addTextlyError("This neural function is specific for xNN robot", true);
         return (T) statementList;
     }
 
     private static BlocklyProperties mknullProperty(ParserRuleContext ctx, String type) {
         BlocklyRegion br = new BlocklyRegion(false, false, null, null, null, true, null, null, null);
         return new BlocklyProperties(type, "1", br, null);
+    }
+
+    private static BlocklyProperties mkMainTaskProperty(ParserRuleContext ctx, String type) {
+        BlocklyRegion br = new BlocklyRegion(false, false, null, false, null, true, null, null, null);
+        return new BlocklyProperties(type, "2", br, null);
     }
 
     @Override
@@ -1329,7 +1355,7 @@ public abstract class CommonTextlyJavaVisitor<T> extends TextlyJavaBaseVisitor<T
 
     public <E extends Phrase> E checkValidationName(E element, String name, NameType type) {
 
-        if ( !validatePattern(name, type)  ) {
+        if ( !validatePattern(name, type) ) {
             element.addTextlyError("Invalid name for " + customizeString(NameType.valueOf(type.name())) + " : " + name, true);
         }
         return element;
@@ -1374,6 +1400,44 @@ public abstract class CommonTextlyJavaVisitor<T> extends TextlyJavaBaseVisitor<T
             throw new DbcException("rework that! Too many blockly names to generate an ast object, that can be regenerated as XML");
         }
         return mkExternalProperty(ctx, blocklyNames[0]);
+    }
+
+    private enum textlyArray {
+        ARRAY_NUMBER("List<Number>"),
+        ARRAY_BOOLEAN("List<Boolean>"),
+        ARRAY_STRING("List<String>"),
+        ARRAY_COLOUR("List<Colour>"),
+        ARRAY_IMAGE("List<Image>"),
+        ARRAY_CONNECTION("List<Connection>"),
+        NUMBER("Number"),
+        STRING("String"),
+        BOOLEAN("Boolean"),
+        COLOUR("Colour"),
+        IMAGE("Image"),
+        CONNECTION("Connection");
+
+        private final String name;
+
+        textlyArray(String name) {
+            this.name = name;
+        }
+
+        /**
+         * Given a textly type return the Blockly type needed in the AST class
+         * if the textly name is wrong return null
+         *
+         * @param textlyName
+         * @return the AST mode name
+         */
+        public static String getBlocklyType(String textlyName) {
+            for ( textlyArray arrayType : values() ) {
+                if ( arrayType.name.equalsIgnoreCase(textlyName) ) {
+                    return arrayType.name();
+                }
+            }
+            return null;
+        }
+
     }
 }
 

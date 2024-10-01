@@ -4,10 +4,12 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONObject;
+
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.util.ast.TextRegion;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.visitor.IInfoCollectable;
-import de.fhg.iais.roberta.visitor.IVisitor;
 
 /**
  * This class is a visitor and responsible for processing the infos generated (and stored in the Phrases) during validation and typechecking for an AST.
@@ -16,13 +18,18 @@ import de.fhg.iais.roberta.visitor.IVisitor;
 public class NepoInfoProcessor {
 
     private final List<NepoInfo> infos = new ArrayList<>();
+    private final List<JSONObject> textlyErrors = new ArrayList<>();
     private boolean deleteOldInfo;
+    private boolean collectTextlyErrors;
+    private static final String TYPECHECK_ERROR_KEY = "PROGRAM_ERROR_EXPRBLOCK_TYPECHECK";
+    private TextRegion lastValidTextRegion;
 
     /**
      * initialize the info collector visitor.
      */
-    private NepoInfoProcessor(boolean deleteOldInfo) {
+    private NepoInfoProcessor(boolean deleteOldInfo, boolean collectTextlyErrors) {
         this.deleteOldInfo = deleteOldInfo;
+        this.collectTextlyErrors = collectTextlyErrors;
     }
 
     /**
@@ -33,7 +40,7 @@ public class NepoInfoProcessor {
      */
     public static List<NepoInfo> collectNepoInfos(Phrase phrase) //
     {
-        NepoInfoProcessor phraseVisitor = new NepoInfoProcessor(false);
+        NepoInfoProcessor phraseVisitor = new NepoInfoProcessor(false, false);
         try {
             phraseVisitor.collect(phrase);
         } catch ( IllegalAccessException e ) {
@@ -51,8 +58,8 @@ public class NepoInfoProcessor {
     public static List<NepoInfo> collectNepoErrors(Phrase phrase) //
     {
         List<NepoInfo> errors = new ArrayList<>();
-        for (NepoInfo nepoInfo : collectNepoInfos(phrase)) {
-            if (nepoInfo.getSeverity().equals(NepoInfo.Severity.ERROR)) {
+        for ( NepoInfo nepoInfo : collectNepoInfos(phrase) ) {
+            if ( nepoInfo.getSeverity().equals(NepoInfo.Severity.ERROR) ) {
                 errors.add(nepoInfo);
             }
         }
@@ -69,16 +76,32 @@ public class NepoInfoProcessor {
      */
     public static List<NepoInfo> elevateNepoInfos(Phrase phrase) //
     {
-        NepoInfoProcessor phraseVisitor = new NepoInfoProcessor(true);
+        NepoInfoProcessor phraseVisitor = new NepoInfoProcessor(true, false);
         try {
             phraseVisitor.collect(phrase);
         } catch ( IllegalAccessException e ) {
             throw new DbcException("Cannot collect nepo infos", e);
         }
-        for (NepoInfo nepoInfo : phraseVisitor.infos) {
+        for ( NepoInfo nepoInfo : phraseVisitor.infos ) {
             phrase.addNepoInfo(nepoInfo);
         }
         return phraseVisitor.infos;
+    }
+
+    /**
+     * collect textly errors (generated and stored in the Phrases) during validation and typechecking for an AST
+     *
+     * @param phrase whose errors should be collected
+     * @return list of collected textly errors as JSON objects
+     */
+    public static List<JSONObject> collectTextlyErrors(Phrase phrase) {
+        NepoInfoProcessor phraseVisitor = new NepoInfoProcessor(false, true);
+        try {
+            phraseVisitor.collect(phrase);
+        } catch ( IllegalAccessException e ) {
+            throw new DbcException("Cannot collect textly errors", e);
+        }
+        return phraseVisitor.textlyErrors;
     }
 
     /**
@@ -96,10 +119,29 @@ public class NepoInfoProcessor {
                 }
             } else if ( Phrase.class.isAssignableFrom(clazz) ) {
                 Phrase phrase = (Phrase) object;
-                for ( NepoInfo info : phrase.getInfos().getInfos() ) {
-                    infos.add(info);
+                TextRegion currentTextRegion = phrase.getProperty().getTextRegion();
+                if ( currentTextRegion != null ) {
+                    lastValidTextRegion = currentTextRegion;
                 }
-                if ( deleteOldInfo) {
+
+                for ( NepoInfo info : phrase.getInfos().getInfos() ) {
+                    if ( collectTextlyErrors ) {
+                        if ( info.getSeverity().equals(NepoInfo.Severity.ERROR) ) {
+                            String customMessage = info.getMessage().replace(TYPECHECK_ERROR_KEY, "");
+                            if ( lastValidTextRegion != null ) {
+                                JSONObject errorObject = new JSONObject();
+                                errorObject.put("line", lastValidTextRegion.getLineStart());
+                                errorObject.put("charPositionInLine", lastValidTextRegion.getColStart());
+                                errorObject.put("offendingSymbol", "");
+                                errorObject.put("message", customMessage);
+                                textlyErrors.add(errorObject);
+                            }
+                        }
+                    } else {
+                        infos.add(info);
+                    }
+                }
+                if ( deleteOldInfo ) {
                     phrase.getInfos().clear();
                 }
                 for ( Field field : clazz.getFields() ) {

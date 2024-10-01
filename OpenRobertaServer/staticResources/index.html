@@ -404,6 +404,11 @@ limitations under the License.
                             <span class='menuTab' lkey='Blockly.Msg.TAB_PROGRAM'>Program</span>&nbsp;<span id='tabProgramName'></span>
                         </a>
                     </li>
+                    <li class='nav-item hidden mainTab tabLinkTextly'>
+                        <a class='nav-link' data-bs-toggle='tab' href='#textlyEditorPane' id='tabTextly' role='tab'>
+                            <span class='menuTab' lkey='Blockly.Msg.TAB_TEXTLYJAVA_EDITOR'>Textly Editor</span>
+                        </a>
+                    </li>
                     <li class='nav-item'>
                         <a class='nav-link mainTab' data-bs-toggle='tab' href='#configuration' id='tabConfiguration' role='tab'>
                             <span class='menuTab' lkey='Blockly.Msg.TAB_CONFIGURATION'>Configuration</span>&nbsp;<span id='tabConfigurationName'></span>
@@ -972,6 +977,11 @@ limitations under the License.
 
             </div>
         </div>
+        <div class='tab-pane fade' id='textlyEditorPane'>
+            <div class='md-form' id='sourceTextlyEditor'>
+                <div id='aceTextlyEditor'>some text</div>
+            </div>
+        </div>
         <div class='tab-pane fade  mx-3' id='galleryList'>
             <div class='listToolbar' id='galleryListToolbar'>
                 <button class='btn' id='backGalleryList'>
@@ -1046,7 +1056,6 @@ limitations under the License.
                 <div id='bricklyDiv'></div>
             </div>
         </div>
-
         <div class='tab-pane fade' id='nn' style='display: none;'>
             <button class='nn-btn' data-bs-original-title='' id='goto-sim' lkey='Blockly.Msg.MENU_SIM_START_TOOLTIP' rel='tooltip' title=''>
                 <span class='typcn typcn-simulation'></span>

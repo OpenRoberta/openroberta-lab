@@ -265,7 +265,7 @@ public abstract class AbstractRegenerateTextlyJavaVisitor extends BaseVisitor<Vo
                 break;
             case TIMES:
                 Expr timesClause = ((ExprList) rept.expr).get().get(2);
-                this.src.nlI().add("for ( ").add(" Number i = 0; i < ").accept(timesClause, this).add("; i = i + 1 ) {").INCR().accept(rept.list, this).DECR().nlI().add("};");
+                this.src.nlI().add("for ( ").add("Number i = 0; i < ").accept(timesClause, this).add("; i = i + ").accept(((ExprList) rept.expr).el.get(3), this).add(") {").INCR().accept(rept.list, this).DECR().nlI().add("};");
                 break;
             case FOR:
                 generateCodeFromStmtConditionFor(rept.expr, rept.list);
@@ -787,7 +787,13 @@ public abstract class AbstractRegenerateTextlyJavaVisitor extends BaseVisitor<Vo
 
     @Override
     public Void visitVarDeclaration(VarDeclaration var) {
-        this.src.nlI().add(var.getBlocklyType().getBlocklyName(), " ", var.name, " = ");
+        if ( var.value instanceof ListCreate ) {
+            this.src.nlI().add("List<" + var.getBlocklyType().getMatchingElementTypeForArrayType().getBlocklyName() + ">", " ", var.name, " = ");
+        } else if ( var.getBlocklyType().isArray() ) {
+            this.src.nlI().add("List<" + var.getBlocklyType().getMatchingElementTypeForArrayType().getBlocklyName() + ">", " ", var.name, " = ");
+        } else {
+            this.src.nlI().add(var.getBlocklyType().getBlocklyName(), " ", var.name, " = ");
+        }
         var.value.accept(this);
         return null;
     }
@@ -877,7 +883,11 @@ public abstract class AbstractRegenerateTextlyJavaVisitor extends BaseVisitor<Vo
 
     @Override
     public Void visitMethodReturn(MethodReturn methodReturn) {
-        this.src.nlI().nlI().add(methodReturn.getReturnType().getBlocklyName(), " ", methodReturn.getMethodName(), "(");
+        if ( methodReturn.getReturnType().isArray() ) {
+            this.src.nlI().nlI().add("List<" + methodReturn.getReturnType().getMatchingElementTypeForArrayType().getBlocklyName() + ">", " ", methodReturn.getMethodName(), "(");
+        } else {
+            this.src.nlI().nlI().add(methodReturn.getReturnType().getBlocklyName(), " ", methodReturn.getMethodName(), "(");
+        }
         genParameterList(methodReturn.getParameters().el);
         this.src.add(") {").INCR().accept(methodReturn.body, this).nlI().add("return ");
         methodReturn.returnValue.accept(this);
@@ -1121,7 +1131,11 @@ public abstract class AbstractRegenerateTextlyJavaVisitor extends BaseVisitor<Vo
     }
 
     protected void genParameter(VarDeclaration param) {
-        this.src.add(param.getBlocklyType().getBlocklyName(), " ", param.name);
+        if ( ((EmptyExpr) param.value).defVal.isArray() ) {
+            this.src.add("List<" + ((EmptyExpr) param.value).defVal.getMatchingElementTypeForArrayType().getBlocklyName() + ">", " ", param.name);
+        } else {
+            this.src.add(param.getBlocklyType().getBlocklyName(), " ", param.name);
+        }
     }
 
     protected void genExpressionList(List<Expr> parameters) {

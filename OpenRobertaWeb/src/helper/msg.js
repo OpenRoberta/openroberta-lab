@@ -1,4 +1,3 @@
-import * as exports from 'exports';
 import * as LOG from 'log';
 import * as $ from 'jquery';
 import * as Blockly from 'blockly';
@@ -99,6 +98,12 @@ function displayMessage(messageId, output, replaceWith, opt_cancel, opt_robot) {
             toastMessages.unshift(value);
             if (toastMessages.length === 1) {
                 displayToastMessages();
+            }
+        } else if (output === 'TEXTLYPOPUP') {
+            if (cancel) {
+                displayPopupMessage(lkey, value + Blockly.Msg.POPUP_TEXTLY_CONFIRM_CONTINUE, 'OK', Blockly.Msg.POPUP_CANCEL);
+            } else {
+                displayPopupMessage(lkey, value, 'OK');
             }
         }
     }

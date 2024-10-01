@@ -3,10 +3,10 @@ grammar TextlyJava;
 // Rules for complete program textual representation
 
 program                 : declaration* mainBlock userFunc* EOF ;
-declaration             : nameDecl '=' expr ';'                                                                            # VariableDeclaration;
-mainBlock               : 'void' 'main' '(' ')' '{' statementList '}'                                                      # MainFunc;
-userFunc                : PRIMITIVETYPE NAME '(' (expr(',' expr)*)* ')' '{' statementList (op=RETURN (NAME|expr))? '}'     # FuncUser;
-nameDecl                : PRIMITIVETYPE NAME                                                                               # ParamsMethod;
+declaration             : nameDecl '=' expr ';'                                                                                        # VariableDeclaration;
+mainBlock               : VOID 'main' '(' ')' '{' statementList '}'                                                                    # MainFunc;
+userFunc                : (PRIMITIVETYPE|VOID) NAME '(' (nameDecl (',' nameDecl)*)* ')' '{' statementList (op=RETURN expr';')? '}'     # FuncUser;
+nameDecl                : PRIMITIVETYPE NAME                                                                                           # ParamsMethod;
 
 // Statements block rules
 
@@ -243,12 +243,17 @@ RETURN          : 'return';
 PRIMITIVETYPE   : 'Number'
                 | 'Boolean'
                 | 'String'
-                | 'Color'
+                | 'Colour'
                 | 'Connection'
                 | 'Image'
-                | 'Void'
+                | 'List<Number>'
+                | 'List<Boolean>'
+                | 'List<Colour>'
+                | 'List<Connection>'
+                | 'List<String>'
+                | 'List<Image>'
                 ;
-
+VOID            : 'void';
 NEWLINE         :   '\r'? '\n'  -> skip;
 
 WS              :   (' '|'\t')+ -> skip;

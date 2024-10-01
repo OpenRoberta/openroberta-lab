@@ -614,6 +614,21 @@ function initMenuEvents() {
         },
         'tabNNlearn clicked'
     );
+    $('#menuTabTextly').onWrap(
+        'click',
+        '',
+        function (event) {
+            if ($('#tabProgram').hasClass('tabClicked')) {
+                $('.scroller-right').clickWrap();
+            } else if ($('#tabConfiguration').hasClass('tabClicked')) {
+                $('.scroller-right').clickWrap();
+            } else if ($('#tabTextly').hasClass('tabClicked')) {
+                $('.scroller-right').clickWrap();
+            }
+            $('#tabTextly').clickWrap();
+        },
+        'tabTextly clicked'
+    );
 
     // Close submenu on mouseleave
     $('.navbar-fixed-top').on('mouseleave', function (event) {

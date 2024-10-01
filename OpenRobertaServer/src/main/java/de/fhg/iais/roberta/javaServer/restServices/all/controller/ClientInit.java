@@ -106,6 +106,7 @@ public class ClientInit {
                     // add the robot extensions. Currently only "nn"
                     JSONObject robotExtensions = new JSONObject();
                     robotExtensions.put("nn", httpSessionState.getRobotFactory(robot).nnProperty());
+                    robotExtensions.put("textly", httpSessionState.getRobotFactory(robot).textlyProperty());
                     robotDescription.put("extensions", robotExtensions);
                     // end add
                     robotDescription.put("progLanguage", httpSessionState.getRobotFactory(robot).getSourceCodeFileExtension());

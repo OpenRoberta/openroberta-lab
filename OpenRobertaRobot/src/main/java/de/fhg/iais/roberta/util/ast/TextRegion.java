@@ -12,4 +12,11 @@ public class TextRegion {
         this.lineStop = lineStop;
         this.colStop = colStop;
     }
+
+    public int getLineStart() {
+        return lineStart;
+    }
+    public int getColStart() {
+        return colStart;
+    }
 }

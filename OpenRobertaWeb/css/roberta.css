@@ -392,6 +392,13 @@ canvas.border {
     width: 100%;
 }
 
+#sourceTextlyEditor {
+    height: calc(100% - 80px);
+    height: -moz-calc(100% - 80px);
+    height: -webkit-calc(100% - 80px);
+    width: 100%;
+}
+
 #codeContainer {
     overflow-y: auto;
     height: 100%;
