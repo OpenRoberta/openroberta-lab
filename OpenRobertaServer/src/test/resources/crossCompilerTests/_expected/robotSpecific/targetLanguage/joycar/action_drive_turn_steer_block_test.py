@@ -3,16 +3,35 @@ import random
 import math
 import music
 
-class BreakOutOfALoop(Exception): pass
-class ContinueLoop(Exception): pass
 
-microbit.i2c.init(freq=400000, sda=microbit.pin20, scl=microbit.pin19)
-microbit.i2c.write(0x70, b'\x00\x01')
-microbit.i2c.write(0x70, b'\xE8\xAA')
+def drive(speedLeft, speedRight):
+    sR = scale(speedRight)
+    sL = scale(speedLeft)
+    b2 = b3 = b4 = b5 = 0
+    if speedRight < 0:
+        b2 = b'\x02' + bytes([sR])
+        b3 = b'\x03' + bytes([0])
+    else:
+        b2 = b'\x02' + bytes([0])
+        b3 = b'\x03' + bytes([sR])
+    if speedLeft < 0:
+        b4 = b'\x04' + bytes([sL])
+        b5 = b'\x05' + bytes([0])
+    else:
+        b4 = b'\x04' + bytes([0])
+        b5 = b'\x05' + bytes([sL])
+    microbit.i2c.write(0x70, b2)
+    microbit.i2c.write(0x70, b3)
+    microbit.i2c.write(0x70, b4)
+    microbit.i2c.write(0x70, b5)
 
-timer1 = microbit.running_time()
+def scale(speed):
+    if speed == 0:
+        return 0
+    else:
+        return round(abs(speed) * 446.25 / 255 + 80)
 
-___speed = 0
+
 def ____driveSpeedTest():
     global timer1, ___speed
     # Robot should increase speed from 0 to 100% and decrease the speed again until it starts driving backwards with up                                 too 100% of its speed
@@ -137,6 +156,17 @@ def ____steerDriveTest():
     drive(0, 0)
     music.pitch(261, 250, microbit.pin16)
 
+class BreakOutOfALoop(Exception): pass
+class ContinueLoop(Exception): pass
+
+microbit.i2c.init(freq=400000, sda=microbit.pin20, scl=microbit.pin19)
+microbit.i2c.write(0x70, b'\x00\x01')
+microbit.i2c.write(0x70, b'\xE8\xAA')
+
+timer1 = microbit.running_time()
+
+___speed = 0
+
 def run():
     global timer1, ___speed
     ____steerDriveTest()
@@ -150,33 +180,6 @@ def main():
         raise
     finally:
         drive(0, 0)
-
-def drive(speedLeft, speedRight):
-    sR = scale(speedRight)
-    sL = scale(speedLeft)
-    b2 = b3 = b4 = b5 = 0
-    if speedRight < 0:
-        b2 = b'\x02' + bytes([sR])
-        b3 = b'\x03' + bytes([0])
-    else:
-        b2 = b'\x02' + bytes([0])
-        b3 = b'\x03' + bytes([sR])
-    if speedLeft < 0:
-        b4 = b'\x04' + bytes([sL])
-        b5 = b'\x05' + bytes([0])
-    else:
-        b4 = b'\x04' + bytes([0])
-        b5 = b'\x05' + bytes([sL])
-    microbit.i2c.write(0x70, b2)
-    microbit.i2c.write(0x70, b3)
-    microbit.i2c.write(0x70, b4)
-    microbit.i2c.write(0x70, b5)
-
-def scale(speed):
-    if speed == 0:
-        return 0
-    else:
-        return round(abs(speed) * 446.25 / 255 + 80)
 
 if __name__ == "__main__":
     main()

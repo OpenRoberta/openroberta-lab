@@ -1,11 +1,5 @@
 #!/usr/bin/env python3
 import math, random, time, requests, threading, sys, io
-sys.stdout = io.StringIO()
-sys.stderr = io.StringIO()
-ROBOTINOIP = "127.0.0.1:80"
-PARAMS = {'sid':'robertaProgram'}
-MAXSPEED = 0.5
-MAXROTATION = 0.57
 
 def _median(l):
     l = sorted(l)
@@ -33,12 +27,6 @@ def _standard_deviation(l):
         sd += (i - mean)*(i - mean)
     return math.sqrt(sd / len(l))
 
-___booleanFalse = None
-___booleanTrue = None
-___number = None
-___numberList = []
-___string = None
-___numberlist2 = []
 def ____lists():
     global ___booleanFalse, ___booleanTrue, ___number, ___numberList, ___string, ___numberlist2
     ___numberList = [0] * 5
@@ -104,6 +92,21 @@ def ____math():
     ___string = str(___number)
     ___string = chr((int)(___number))
 
+sys.stdout = io.StringIO()
+sys.stderr = io.StringIO()
+ROBOTINOIP = "127.0.0.1:80"
+PARAMS = {'sid':'robertaProgram'}
+MAXSPEED = 0.5
+MAXROTATION = 0.57
+
+
+
+___booleanFalse = None
+___booleanTrue = None
+___number = None
+___numberList = []
+___string = None
+___numberlist2 = []
 
 def run(RV):
     global ___booleanFalse, ___booleanTrue, ___number, ___numberList, ___string, ___numberlist2

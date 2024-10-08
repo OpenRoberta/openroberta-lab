@@ -1,16 +1,4 @@
 import Ed
-Ed.EdisonVersion = Ed.V2
-Ed.DistanceUnits = Ed.CM
-Ed.Tempo = Ed.TEMPO_SLOW
-obstacleDetectionOn = False
-Ed.LineTrackerLed(Ed.ON)
-Ed.ReadClapSensor()
-Ed.ReadLineState()
-Ed.TimeWait(250, Ed.TIME_MILLISECONDS)
-
-___numberVar = 0
-___booleanVar = True
-___numberList = Ed.List(3, [0,0,0])
 
 def ____control():
     global ___numberVar, ___booleanVar, ___numberList
@@ -53,6 +41,19 @@ def ____logic():
     ___booleanVar = not ___booleanVar
     ___booleanVar = True
     ___booleanVar = False
+
+Ed.EdisonVersion = Ed.V2
+Ed.DistanceUnits = Ed.CM
+Ed.Tempo = Ed.TEMPO_SLOW
+obstacleDetectionOn = False
+Ed.LineTrackerLed(Ed.ON)
+Ed.ReadClapSensor()
+Ed.ReadLineState()
+Ed.TimeWait(250, Ed.TIME_MILLISECONDS)
+
+___numberVar = 0
+___booleanVar = True
+___numberList = Ed.List(3, [0,0,0])
 
 ____control()
 ____logic()

@@ -2,15 +2,7 @@ import microbit
 import random
 import math
 
-class BreakOutOfALoop(Exception): pass
-class ContinueLoop(Exception): pass
 
-timer1 = microbit.running_time()
-
-___n1 = 0
-___b = False
-___n2 = 1
-___n3 = 4
 def ____number():
     global timer1, ___n1, ___b, ___n2, ___n3
     ___n1 = ___n2 + ___n3
@@ -34,6 +26,16 @@ def ____retNumber2(___x):
     global timer1, ___n1, ___b, ___n2, ___n3
     ___x = ___x / float(2)
     return ___x
+
+class BreakOutOfALoop(Exception): pass
+class ContinueLoop(Exception): pass
+
+timer1 = microbit.running_time()
+
+___n1 = 0
+___b = False
+___n2 = 1
+___n3 = 4
 
 def run():
     global timer1, ___n1, ___b, ___n2, ___n3

@@ -7,34 +7,7 @@ import math
 import os
 import time
 
-class BreakOutOfALoop(Exception): pass
-class ContinueLoop(Exception): pass
 
-_brickConfiguration = {
-    'wheel-diameter': 5.6,
-    'track-width': 18.0,
-    'actors': {
-        'B':Hal.makeLargeMotor(ev3dev.OUTPUT_B, 'on', 'foreward'),
-    },
-    'sensors': {
-        '1':Hal.makeTouchSensor(ev3dev.INPUT_1),
-        '2':Hal.makeGyroSensor(ev3dev.INPUT_2),
-        '3':Hal.makeColorSensor(ev3dev.INPUT_3),
-        '4':Hal.makeUltrasonicSensor(ev3dev.INPUT_4),
-    },
-}
-hal = Hal(_brickConfiguration)
-
-___numberVar = 0
-___booleanVar = True
-___stringVar = ""
-___colourVar = 'white'
-___connectionVar = None
-___numberList = [0, 0]
-___booleanList = [True, True]
-___stringList = ["", ""]
-___colourList = ['white', 'white']
-___connectionList = [___connectionVar, ___connectionVar]
 def ____sensors():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___connectionVar, ___numberList, ___booleanList, ___stringList, ___colourList, ___connectionList
     hal.drawText(str(hal.isPressed('1')), ___numberVar, ___numberVar)
@@ -155,6 +128,35 @@ def ____waitUntil():
         if hal.getTimerValue(5) > 500:
             break
         hal.waitFor(15)
+
+class BreakOutOfALoop(Exception): pass
+class ContinueLoop(Exception): pass
+
+_brickConfiguration = {
+    'wheel-diameter': 5.6,
+    'track-width': 18.0,
+    'actors': {
+        'B':Hal.makeLargeMotor(ev3dev.OUTPUT_B, 'on', 'foreward'),
+    },
+    'sensors': {
+        '1':Hal.makeTouchSensor(ev3dev.INPUT_1),
+        '2':Hal.makeGyroSensor(ev3dev.INPUT_2),
+        '3':Hal.makeColorSensor(ev3dev.INPUT_3),
+        '4':Hal.makeUltrasonicSensor(ev3dev.INPUT_4),
+    },
+}
+hal = Hal(_brickConfiguration)
+
+___numberVar = 0
+___booleanVar = True
+___stringVar = ""
+___colourVar = 'white'
+___connectionVar = None
+___numberList = [0, 0]
+___booleanList = [True, True]
+___stringList = ["", ""]
+___colourList = ['white', 'white']
+___connectionList = [___connectionVar, ___connectionVar]
 
 def run():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___connectionVar, ___numberList, ___booleanList, ___stringList, ___colourList, ___connectionList

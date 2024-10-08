@@ -4,27 +4,7 @@ import math
 import time
 import random
 from roberta import Hal
-h = Hal()
-h.sonar.subscribe("OpenRobertaApp")
-h.mark.subscribe("RobertaLab", 500, 0.0)
 
-from roberta import FaceRecognitionModule
-faceRecognitionModule = FaceRecognitionModule("faceRecognitionModule")
-
-from roberta import SpeechRecognitionModule
-speechRecognitionModule = SpeechRecognitionModule("speechRecognitionModule")
-speechRecognitionModule.pauseASR()
-h.sonar.subscribe("OpenRobertaApp")
-
-
-___numberVar = 0
-___booleanVar = True
-___stringVar = ""
-___colourVar = 0xff0000
-___numberList = [0, 0]
-___booleanList = [True, True]
-___stringList = ["", ""]
-___colourList = [0xff0000, 0xff0000]
 def ____sensors():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___numberList, ___booleanList, ___stringList, ___colourList
     h.say(str(h.touchsensors('head', 'front')))
@@ -251,6 +231,28 @@ def ____sensorsWaitUntil():
             break
         h.wait(15)
 
+h = Hal()
+h.sonar.subscribe("OpenRobertaApp")
+h.mark.subscribe("RobertaLab", 500, 0.0)
+
+from roberta import FaceRecognitionModule
+faceRecognitionModule = FaceRecognitionModule("faceRecognitionModule")
+
+from roberta import SpeechRecognitionModule
+speechRecognitionModule = SpeechRecognitionModule("speechRecognitionModule")
+speechRecognitionModule.pauseASR()
+h.sonar.subscribe("OpenRobertaApp")
+
+
+
+___numberVar = 0
+___booleanVar = True
+___stringVar = ""
+___colourVar = 0xff0000
+___numberList = [0, 0]
+___booleanList = [True, True]
+___stringList = ["", ""]
+___colourList = [0xff0000, 0xff0000]
 
 def run():
     h.setAutonomousLife('ON')

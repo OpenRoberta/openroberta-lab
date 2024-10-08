@@ -37,7 +37,6 @@ import de.fhg.iais.roberta.syntax.lang.functions.MathSingleFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextCharCastNumberFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.TextStringCastNumberFunct;
 import de.fhg.iais.roberta.syntax.lang.methods.MethodIfReturn;
-import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetSampleSensor;
@@ -74,19 +73,14 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
         super(programPhrases, beans);
     }
 
-    /**
-     * Generates the program prefix, i.e. all preparations that need to be executed before Blockly generated code is reached
-     *
-     * @param withWrapping if the source code should be wrapped by prefix/suffix
-     */
     @Override
-    protected void generateProgramPrefix(boolean withWrapping) {
-        if ( !withWrapping ) {
-            return;
-        }
-
+    protected void visitorGenerateImports() {
         this.src.add("import Ed");
         nlIndent();
+    }
+
+    @Override
+    protected void visitorGenerateGlobalVariables() {
         this.src.add("Ed.EdisonVersion = Ed.V2");
         nlIndent();
         this.src.add("Ed.DistanceUnits = Ed.CM");
@@ -102,7 +96,6 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
         this.src.add("Ed.ReadLineState()");
         nlIndent();
         this.src.add("Ed.TimeWait(250, Ed.TIME_MILLISECONDS)"); //möglicherweise überflüssig
-        generateNNStuff("python");
     }
 
     /**
@@ -119,15 +112,6 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
         decrIndentation(); // everything is still indented from main program
         nlIndent(); //new line for helper methods
         nlIndent();
-
-        if ( !this.getBean(CodeGeneratorSetupBean.class).getUsedMethods().isEmpty() ) {
-            String helperMethodImpls =
-                this
-                    .getBean(CodeGeneratorSetupBean.class)
-                    .getHelperMethodGenerator()
-                    .getHelperMethodDefinitions(this.getBean(CodeGeneratorSetupBean.class).getUsedMethods());
-            this.src.add(helperMethodImpls);
-        }
     }
 
     @Override
@@ -315,12 +299,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
      */
     @Override
     public Void visitMainTask(MainTask mainTask) {
-        StmtList variables = mainTask.variables;
-        variables.accept(this); //fill usedGlobalVarInFunctions with values
-
-        nlIndent();
-        generateUserDefinedMethods(); //Functions created by the user will be defined before the main function
-
+        visitorGenerateUserVariables(mainTask);
         return null;
     }
 

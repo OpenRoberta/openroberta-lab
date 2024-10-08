@@ -854,4 +854,26 @@ public abstract class AbstractJavaVisitor extends AbstractLanguageVisitor {
                     .collect(entriesToMap()));
     }
 
+    @Override
+    protected void visitorGenerateNN() {
+        generateNNStuff("java");
+    }
+
+    //TODO 1650 remove these once all visitors implement the methods
+    @Override
+    protected void visitorGenerateHelperMethods() {
+
+    }
+
+    @Override
+    protected void visitorGenerateImports() {
+
+    }
+
+    @Override
+    protected void visitorGenerateGlobalVariables() {
+
+    }
+    //TODO 1650 END
+
 }

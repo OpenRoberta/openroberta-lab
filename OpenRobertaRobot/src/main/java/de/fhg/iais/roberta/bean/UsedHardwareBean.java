@@ -17,7 +17,6 @@ import de.fhg.iais.roberta.syntax.lang.methods.Method;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.typecheck.Sig;
 import de.fhg.iais.roberta.util.dbc.DbcException;
-import de.fhg.iais.roberta.util.ast.AstFactory;
 
 /**
  * Container for all used hardware related information, used in for example code generation. Currently used for more than just used hardware, should be split up
@@ -29,6 +28,7 @@ public class UsedHardwareBean implements IProjectBean {
 
     private List<String> inScopeVariables = new ArrayList<>();
     private List<String> globalVariables = new ArrayList<>();
+
     private Map<String, BlocklyType> declaredVariables = new HashMap<>();
     private List<VarDeclaration> visitedVars = new ArrayList<>();
     private List<Method> userDefinedMethods = new ArrayList<>();
@@ -45,6 +45,10 @@ public class UsedHardwareBean implements IProjectBean {
     private Map<String, String[][]> usedIDImages = new HashMap<>();
     private Set<UsedImport> usedImports = new LinkedHashSet<>();
     private Map<String, String> lockedComponent = new HashMap<>();
+
+    public List<String> getInScopeVariables() {
+        return inScopeVariables;
+    }
 
     public List<VarDeclaration> getVisitedVars() {
         return this.visitedVars;
@@ -107,7 +111,9 @@ public class UsedHardwareBean implements IProjectBean {
         return this.usedImports;
     }
 
-    public Map<String, String> getLockedComponent() { return this.lockedComponent; }
+    public Map<String, String> getLockedComponent() {
+        return this.lockedComponent;
+    }
 
     public Set<UsedSensor> getUsedSensors() {
         return this.usedSensors;

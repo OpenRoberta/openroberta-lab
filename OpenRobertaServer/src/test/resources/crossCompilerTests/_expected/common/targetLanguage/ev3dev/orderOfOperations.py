@@ -7,20 +7,18 @@ import math
 import os
 import time
 
-class BreakOutOfALoop(Exception): pass
-class ContinueLoop(Exception): pass
 
-_brickConfiguration = {
-    'wheel-diameter': 5.6,
-    'track-width': 18.0,
-    'actors': {
-    },
-    'sensors': {
-    },
-}
-hal = Hal(_brickConfiguration)
+def _randInt(min_val, max_val):
+    val = int.from_bytes(os.urandom(4), byteorder='big')
+    if min_val < max_val:
+        return min_val + (val % ((max_val - min_val) + 1))
+    else:
+        return max_val + (val % ((min_val - max_val) + 1))
 
-___item = 0
+def _randDouble():
+    return 1.0*int.from_bytes(os.urandom(4), byteorder='big') / 0xffffffff
+
+
 def ____plusOperations(___item2):
     global ___item
     ___item2 = ( 1 * 2 ) + ( 3 + 4 )
@@ -66,6 +64,21 @@ def ____divisionOperations(___item5):
     ___item5 = ( ( 6 / float(_randInt(10 - 1, 100 - 1)) ) % ( 5 ) )
     ___item5 = ( ( _randDouble() / float(5) ) % ( 5 ) )
 
+class BreakOutOfALoop(Exception): pass
+class ContinueLoop(Exception): pass
+
+_brickConfiguration = {
+    'wheel-diameter': 5.6,
+    'track-width': 18.0,
+    'actors': {
+    },
+    'sensors': {
+    },
+}
+hal = Hal(_brickConfiguration)
+
+___item = 0
+
 def run():
     global ___item
     ____plusOperations(___item)
@@ -84,16 +97,6 @@ def main():
         hal.drawText('Press any key', 0, 4)
         while not hal.isKeyPressed('any'): hal.waitFor(500)
         raise
-
-def _randInt(min_val, max_val):
-    val = int.from_bytes(os.urandom(4), byteorder='big')
-    if min_val < max_val:
-        return min_val + (val % ((max_val - min_val) + 1))
-    else:
-        return max_val + (val % ((min_val - max_val) + 1))
-
-def _randDouble():
-    return 1.0*int.from_bytes(os.urandom(4), byteorder='big') / 0xffffffff
 
 if __name__ == "__main__":
     main()

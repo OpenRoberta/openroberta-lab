@@ -3,18 +3,6 @@ from lib.display import display
 import math
 import time
 
-txt_factory.init()
-txt_factory.init_input_factory()
-txt_factory.init_i2c_factory()
-TXT_M = txt_factory.controller_factory.create_graphical_controller()
-
-TXT_M_I2C_2_gesture_sensor = txt_factory.i2c_factory.create_gesture_sensor(TXT_M, 2)
-TXT_M_I2C_1_environment_sensor = txt_factory.i2c_factory.create_environment_sensor(TXT_M, 1)
-txt_factory.initialized()
-TXT_M_I2C_2_gesture_sensor.enable_light()
-TXT_M_I2C_2_gesture_sensor.enable_proximity()
-time.sleep(0.1)
-
 
 def ____environmentalSensor():
     print("Environmental Sensor")
@@ -89,6 +77,19 @@ def ____rgbGesture():
             break
         print(int((TXT_M_I2C_2_gesture_sensor.get_proximity() / 255) * 100))
         time.sleep(500/1000)
+
+txt_factory.init()
+txt_factory.init_input_factory()
+txt_factory.init_i2c_factory()
+TXT_M = txt_factory.controller_factory.create_graphical_controller()
+
+TXT_M_I2C_2_gesture_sensor = txt_factory.i2c_factory.create_gesture_sensor(TXT_M, 2)
+TXT_M_I2C_1_environment_sensor = txt_factory.i2c_factory.create_environment_sensor(TXT_M, 1)
+txt_factory.initialized()
+TXT_M_I2C_2_gesture_sensor.enable_light()
+TXT_M_I2C_2_gesture_sensor.enable_proximity()
+time.sleep(0.1)
+
 
 def run():
     print("I2C Sensors Test Press the right display button to go to next sensor")

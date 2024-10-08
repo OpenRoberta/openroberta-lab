@@ -9,15 +9,15 @@ MAXROTATION = 0.57
 
 _timer1 = None
 
+
 ___Element = None
 ___Element2 = None
 ___Element3 = None
 ___Element4 = None
 ___Element5 = None
 
-
 def run(RV):
-    global _timer1, ___Element, ___Element2, ___Element3, ___Element4, ___Element5
+    global ___Element, ___Element2, ___Element3, ___Element4, ___Element5, _timer1
     time.sleep(1)
     _timer1 = time.time()
     ___Element = ((time.time() - _timer1)/1000)

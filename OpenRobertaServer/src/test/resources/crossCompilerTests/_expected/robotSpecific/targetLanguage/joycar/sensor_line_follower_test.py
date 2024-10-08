@@ -2,69 +2,6 @@ import microbit
 import random
 import math
 
-class BreakOutOfALoop(Exception): pass
-class ContinueLoop(Exception): pass
-
-microbit.i2c.init(freq=400000, sda=microbit.pin20, scl=microbit.pin19)
-microbit.i2c.write(0x70, b'\x00\x01')
-microbit.i2c.write(0x70, b'\xE8\xAA')
-
-timer1 = microbit.running_time()
-
-___speedLeft = 60
-___speedRight = 60
-def ____lineSensorsLEDTest():
-    global timer1, ___speedLeft, ___speedRight
-    # Displays the line sensors which of the three line sensors are over a black line
-    while True:
-        if microbit.button_a.is_pressed():
-            microbit.display.clear()
-            break
-        if fetch_sensor_data(0x38)[2]:
-            for ___i in range(int(0), int(5), int(1)):
-                microbit.display.set_pixel(4, ___i, 9)
-        else:
-            for ___m in range(int(0), int(5), int(1)):
-                microbit.display.set_pixel(4, ___m, 0)
-        if fetch_sensor_data(0x38)[3]:
-            for ___j in range(int(0), int(5), int(1)):
-                microbit.display.set_pixel(2, ___j, 9)
-        else:
-            for ___n in range(int(0), int(5), int(1)):
-                microbit.display.set_pixel(2, ___n, 0)
-        if fetch_sensor_data(0x38)[4]:
-            for ___k in range(int(0), int(5), int(1)):
-                microbit.display.set_pixel(0, ___k, 9)
-        else:
-            for ___o in range(int(0), int(5), int(1)):
-                microbit.display.set_pixel(0, ___o, 0)
-
-def ____followLineTest():
-    global timer1, ___speedLeft, ___speedRight
-    while True:
-        if fetch_sensor_data(0x38)[3]:
-            ___speedLeft = 60
-            ___speedRight = 60
-        elif fetch_sensor_data(0x38)[2] and not fetch_sensor_data(0x38)[4]:
-            ___speedLeft = 20
-            ___speedRight = 40
-        elif fetch_sensor_data(0x38)[4] and not fetch_sensor_data(0x38)[2]:
-            ___speedLeft = 40
-            ___speedRight = 20
-        drive(___speedLeft, ___speedRight)
-
-def run():
-    global timer1, ___speedLeft, ___speedRight
-    ____lineSensorsLEDTest()
-    ____followLineTest()
-
-def main():
-    try:
-        run()
-    except Exception as e:
-        raise
-    finally:
-        drive(0, 0)
 
 def drive(speedLeft, speedRight):
     sR = scale(speedRight)
@@ -112,6 +49,72 @@ def scale(speed):
         return 0
     else:
         return round(abs(speed) * 446.25 / 255 + 80)
+
+
+def ____lineSensorsLEDTest():
+    global timer1, ___speedLeft, ___speedRight
+    # Displays the line sensors which of the three line sensors are over a black line
+    while True:
+        if microbit.button_a.is_pressed():
+            microbit.display.clear()
+            break
+        if fetch_sensor_data(0x38)[2]:
+            for ___i in range(int(0), int(5), int(1)):
+                microbit.display.set_pixel(4, ___i, 9)
+        else:
+            for ___m in range(int(0), int(5), int(1)):
+                microbit.display.set_pixel(4, ___m, 0)
+        if fetch_sensor_data(0x38)[3]:
+            for ___j in range(int(0), int(5), int(1)):
+                microbit.display.set_pixel(2, ___j, 9)
+        else:
+            for ___n in range(int(0), int(5), int(1)):
+                microbit.display.set_pixel(2, ___n, 0)
+        if fetch_sensor_data(0x38)[4]:
+            for ___k in range(int(0), int(5), int(1)):
+                microbit.display.set_pixel(0, ___k, 9)
+        else:
+            for ___o in range(int(0), int(5), int(1)):
+                microbit.display.set_pixel(0, ___o, 0)
+
+def ____followLineTest():
+    global timer1, ___speedLeft, ___speedRight
+    while True:
+        if fetch_sensor_data(0x38)[3]:
+            ___speedLeft = 60
+            ___speedRight = 60
+        elif fetch_sensor_data(0x38)[2] and not fetch_sensor_data(0x38)[4]:
+            ___speedLeft = 20
+            ___speedRight = 40
+        elif fetch_sensor_data(0x38)[4] and not fetch_sensor_data(0x38)[2]:
+            ___speedLeft = 40
+            ___speedRight = 20
+        drive(___speedLeft, ___speedRight)
+
+class BreakOutOfALoop(Exception): pass
+class ContinueLoop(Exception): pass
+
+microbit.i2c.init(freq=400000, sda=microbit.pin20, scl=microbit.pin19)
+microbit.i2c.write(0x70, b'\x00\x01')
+microbit.i2c.write(0x70, b'\xE8\xAA')
+
+timer1 = microbit.running_time()
+
+___speedLeft = 60
+___speedRight = 60
+
+def run():
+    global timer1, ___speedLeft, ___speedRight
+    ____lineSensorsLEDTest()
+    ____followLineTest()
+
+def main():
+    try:
+        run()
+    except Exception as e:
+        raise
+    finally:
+        drive(0, 0)
 
 if __name__ == "__main__":
     main()

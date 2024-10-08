@@ -23,6 +23,7 @@ hal = Hal(_brickConfiguration)
 ___number = 0
 ___boolean2 = True
 ___string = ""
+
 def run():
     global ___number, ___boolean2, ___string
     # Variable Test START

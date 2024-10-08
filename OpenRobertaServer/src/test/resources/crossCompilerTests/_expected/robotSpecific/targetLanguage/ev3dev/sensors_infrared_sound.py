@@ -7,6 +7,20 @@ import math
 import os
 import time
 
+
+def ____sensors():
+    global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___connectionVar, ___numberList, ___booleanList, ___stringList, ___colourList, ___connectionList
+    hal.drawText(str(hal.getInfraredSensorDistance('4')), ___numberVar, ___numberVar)
+    hal.drawText(str(hal.getInfraredSensorSeek('4')), ___numberVar, ___numberVar)
+    hal.drawText(str(hal.getSoundLevel('2')), ___numberVar, ___numberVar)
+
+def ____waitUntil():
+    global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___connectionVar, ___numberList, ___booleanList, ___stringList, ___colourList, ___connectionList
+    while True:
+        if hal.getInfraredSensorDistance('4') < 30:
+            break
+        hal.waitFor(15)
+
 class BreakOutOfALoop(Exception): pass
 class ContinueLoop(Exception): pass
 
@@ -32,18 +46,6 @@ ___booleanList = [True, True]
 ___stringList = ["", ""]
 ___colourList = ['white', 'white']
 ___connectionList = [___connectionVar, ___connectionVar]
-def ____sensors():
-    global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___connectionVar, ___numberList, ___booleanList, ___stringList, ___colourList, ___connectionList
-    hal.drawText(str(hal.getInfraredSensorDistance('4')), ___numberVar, ___numberVar)
-    hal.drawText(str(hal.getInfraredSensorSeek('4')), ___numberVar, ___numberVar)
-    hal.drawText(str(hal.getSoundLevel('2')), ___numberVar, ___numberVar)
-
-def ____waitUntil():
-    global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___connectionVar, ___numberList, ___booleanList, ___stringList, ___colourList, ___connectionList
-    while True:
-        if hal.getInfraredSensorDistance('4') < 30:
-            break
-        hal.waitFor(15)
 
 def run():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___connectionVar, ___numberList, ___booleanList, ___stringList, ___colourList, ___connectionList

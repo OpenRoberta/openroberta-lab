@@ -1,28 +1,7 @@
 import cyberpi, mbot2, mbuild
 import time
 import math, random
-_timer1 = cyberpi.timer.get()
-_timer2 = cyberpi.timer.get()
-_timer3 = cyberpi.timer.get()
-_timer4 = cyberpi.timer.get()
-_timer5 = cyberpi.timer.get()
 
-_colors = {
-            "red": (204,0,0),
-            "yellow": (255,255,0),
-            "green": (51,204,0),
-            "cyan": (51,255,255),
-            "blue": (51,102,255),
-            "purple": (204,51,204),
-            "white": (255,255,255),
-            "black": (0,0,0)
-        }
-
-
-___numVar = 0
-___colourVar = (204, 0, 0)
-___numList = []
-___booleanVar = True
 def ____sensors():
     global _timer1, _timer2, _timer3, _timer4, _timer5, ___numVar, ___colourVar, ___numList, ___booleanVar
     ___numVar = mbuild.ultrasonic2.get(2)
@@ -118,6 +97,29 @@ def ____wait_until():
     while True:
         if (mbot2.EM_get_angle("EM1") / 360) > 2:
             break
+
+_timer1 = cyberpi.timer.get()
+_timer2 = cyberpi.timer.get()
+_timer3 = cyberpi.timer.get()
+_timer4 = cyberpi.timer.get()
+_timer5 = cyberpi.timer.get()
+
+_colors = {
+            "red": (204,0,0),
+            "yellow": (255,255,0),
+            "green": (51,204,0),
+            "cyan": (51,255,255),
+            "blue": (51,102,255),
+            "purple": (204,51,204),
+            "white": (255,255,255),
+            "black": (0,0,0)
+        }
+
+
+___numVar = 0
+___colourVar = (204, 0, 0)
+___numList = []
+___booleanVar = True
 
 def run():
     global _timer1, _timer2, _timer3, _timer4, _timer5, ___numVar, ___colourVar, ___numList, ___booleanVar

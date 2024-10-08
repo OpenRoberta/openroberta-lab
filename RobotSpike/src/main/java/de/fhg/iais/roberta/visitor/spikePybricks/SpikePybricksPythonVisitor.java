@@ -678,23 +678,26 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
 
     @Override
     protected void generateProgramPrefix(boolean withWrapping) {
-        if ( !withWrapping ) {
-            return;
-        }
         usedHardwareBean = this.getBean(UsedHardwareBean.class);
+        super.generateProgramPrefix(withWrapping);
+    }
 
+    @Override
+    protected void visitorGenerateImports() {
         src.add("from pybricks.hubs import PrimeHub").nlI();
         importPubDevices();
         importParameters();
         importTools();
         importMathFunctions();
         importRobotics();
+    }
+
+    @Override
+    protected void visitorGenerateGlobalVariables() {
         changeColors();
         instantiateComponents();
         src.add("hub = PrimeHub()").nlI();
         prepareComponents();
-
-        generateNNStuff("python");
     }
 
     /**
@@ -799,7 +802,7 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
     }
 
     private void changeColors() {
-        if ( usedHardwareBean.isImportUsed(SC.COlOR_IMPORT) ){
+        if ( usedHardwareBean.isImportUsed(SC.COlOR_IMPORT) ) {
             nlIndent();
             src.add("Color.MAGENTA = Color(315,50,15)").nlI();
             src.add("Color.BLUE = Color(225,20,20)").nlI();
@@ -849,13 +852,13 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
                 AtomicBoolean componentLocked = new AtomicBoolean(false);
                 usedHardwareBean.getLockedComponent().forEach(
                     (component, port) -> {
-                        if((motor.getPort()).equals(port)) {
+                        if ( (motor.getPort()).equals(port) ) {
                             src.add("motor").add(motor.getPort()).add(" = left_motor").nlI();
                             componentLocked.set(true);
                         }
                     }
                 );
-                if(!componentLocked.get()){
+                if ( !componentLocked.get() ) {
                     src.add("motor").add(motor.getPort()).add(" = Motor(Port.").add(motor.getPort()).add(")").nlI();
                 }
             });
@@ -907,7 +910,7 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
         if ( usedHardwareBean.isSensorUsed(SC.GYRO) ) {
             src.add("hub.imu.reset_heading(0)").nlI();
         }
-        if ( usedHardwareBean.isActorUsed(SC.SPEAKER)){
+        if ( usedHardwareBean.isActorUsed(SC.SPEAKER) ) {
             //TODO make volume be settings controlled
             src.add("hub.speaker.volume(15)").nlI();
         }

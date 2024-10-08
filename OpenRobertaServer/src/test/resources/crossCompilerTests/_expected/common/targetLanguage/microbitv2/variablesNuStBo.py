@@ -10,6 +10,7 @@ timer1 = microbit.running_time()
 ___number = 0
 ___boolean2 = True
 ___string = ""
+
 def run():
     global timer1, ___number, ___boolean2, ___string
     # Variable Test START

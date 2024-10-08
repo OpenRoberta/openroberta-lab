@@ -4,15 +4,12 @@ import java.util.List;
 
 import com.google.common.collect.ClassToInstanceMap;
 
-import de.fhg.iais.roberta.bean.CodeGeneratorSetupBean;
 import de.fhg.iais.roberta.bean.IProjectBean;
-import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
-import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.visitor.lang.codegen.prog.AbstractPythonVisitor;
 
@@ -71,24 +68,8 @@ public abstract class AbstractSpikePythonVisitor extends AbstractPythonVisitor i
 
     @Override
     public Void visitMainTask(MainTask mainTask) {
-        StmtList variables = mainTask.variables;
-        if ( !variables.get().isEmpty() ) {
-            variables.accept(this);
-            nlIndent();
-        }
-        if ( this.programPhrases
-            .stream()
-            .filter(phrase -> phrase.getKind().getCategory() == Category.METHOD && !phrase.getKind().hasName("METHOD_CALL"))
-            .count() > 0 ) {
-            generateUserDefinedMethods();
-        }
-        if ( !this.getBean(CodeGeneratorSetupBean.class).getUsedMethods().isEmpty() ) {
-            String helperMethodImpls =
-                this.getBean(CodeGeneratorSetupBean.class)
-                    .getHelperMethodGenerator()
-                    .getHelperMethodDefinitions(this.getBean(CodeGeneratorSetupBean.class).getUsedMethods());
-            this.src.add(helperMethodImpls);
-        }
+        visitorGenerateUserVariables(mainTask);
+
         nlIndent();
         this.src.add("def run():");
         incrIndentation();

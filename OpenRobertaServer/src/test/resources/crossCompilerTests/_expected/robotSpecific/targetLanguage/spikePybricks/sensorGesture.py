@@ -4,12 +4,6 @@ from pybricks.tools import Matrix, wait, StopWatch, vector
 import umath as math
 import urandom as random
 
-
-stopWatch = StopWatch()
-hub = PrimeHub()
-hub.imu.reset_heading(0)
-
-
 def display_text(text):
     text_list = list(text)
     for idx,c in enumerate(text_list):
@@ -61,6 +55,13 @@ def is_tapped(threshold = 5000):
           return True
     wait(20)
     return False
+
+
+
+stopWatch = StopWatch()
+hub = PrimeHub()
+hub.imu.reset_heading(0)
+
 
 def run():
     display_text(str((hub.imu.up() == Side.TOP)))

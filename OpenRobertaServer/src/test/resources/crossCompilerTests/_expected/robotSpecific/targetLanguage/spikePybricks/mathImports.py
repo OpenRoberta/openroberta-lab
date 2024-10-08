@@ -3,18 +3,19 @@ from pybricks.tools import Matrix
 import umath as math
 import urandom as random
 
-
-hub = PrimeHub()
-
-
-___item = 0
-
 def display_text(text):
     text_list = list(text)
     for idx,c in enumerate(text_list):
         if ord(c) < 33 or ord(c) > 125:
             text_list[idx] = '?'
     hub.display.text("".join(text_list))
+
+
+
+hub = PrimeHub()
+
+
+___item = 0
 
 def run():
     global ___item

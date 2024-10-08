@@ -2,21 +2,6 @@ import cyberpi, mbot2, mbuild
 import time
 import math, random
 
-_trackWidth = 11.5
-_circumference = 20.420352248333657
-_diffPortsSwapped = False
-
-_colors = {
-            "red": (204,0,0),
-            "yellow": (255,255,0),
-            "green": (51,204,0),
-            "cyan": (51,255,255),
-            "blue": (51,102,255),
-            "purple": (204,51,204),
-            "white": (255,255,255),
-            "black": (0,0,0)
-        }
-
 def diffDriveFor(rpmL, rpmR, distance):
     timeToWait = getTimeToWait(rpmL, rpmR, distance)
     if distance < 0:
@@ -121,6 +106,23 @@ def ____lights():
     mbuild.ultrasonic2.set_bri(50, "all", 1)
     mbuild.quad_rgb_sensor.set_led(RGBAsString((204, 0, 0)), 1)
     mbuild.quad_rgb_sensor.off_led(1)
+
+
+_trackWidth = 11.5
+_circumference = 20.420352248333657
+_diffPortsSwapped = False
+
+_colors = {
+            "red": (204,0,0),
+            "yellow": (255,255,0),
+            "green": (51,204,0),
+            "cyan": (51,255,255),
+            "blue": (51,102,255),
+            "purple": (204,51,204),
+            "white": (255,255,255),
+            "black": (0,0,0)
+        }
+
 
 def run():
     ____action()

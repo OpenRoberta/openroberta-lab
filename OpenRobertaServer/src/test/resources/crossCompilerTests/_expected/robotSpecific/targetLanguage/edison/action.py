@@ -1,94 +1,4 @@
 import Ed
-Ed.EdisonVersion = Ed.V2
-Ed.DistanceUnits = Ed.CM
-Ed.Tempo = Ed.TEMPO_SLOW
-obstacleDetectionOn = False
-Ed.LineTrackerLed(Ed.ON)
-Ed.ReadClapSensor()
-Ed.ReadLineState()
-Ed.TimeWait(250, Ed.TIME_MILLISECONDS)
-
-___n = 1000
-___b = True
-___nl = Ed.List(3, [0,0,0])
-
-def ____drive():
-    global ___n, ___b, ___nl
-    _diffDrive(Ed.FORWARD, ___n, ___n)
-    Ed.ReadClapSensor()
-    _diffDrive(Ed.BACKWARD, ___n, ___n)
-    Ed.ReadClapSensor()
-    _diffDrive(Ed.FORWARD, ___n, Ed.DISTANCE_UNLIMITED)
-    _diffDrive(Ed.BACKWARD, ___n, Ed.DISTANCE_UNLIMITED)
-    Ed.Drive(Ed.STOP, Ed.SPEED_1, 1)
-    Ed.ReadClapSensor()
-    _diffTurn(Ed.SPIN_RIGHT, ___n, ___n)
-    Ed.ReadClapSensor()
-    _diffTurn(Ed.SPIN_LEFT, ___n, ___n)
-    Ed.ReadClapSensor()
-    _diffTurn(Ed.SPIN_RIGHT, ___n, Ed.DISTANCE_UNLIMITED)
-    _diffTurn(Ed.SPIN_LEFT, ___n, Ed.DISTANCE_UNLIMITED)
-    _diffCurve(Ed.FORWARD, ___n, ___n, ___n)
-    Ed.ReadClapSensor()
-    _diffCurve(Ed.BACKWARD, ___n, ___n, ___n)
-    Ed.ReadClapSensor()
-    _diffCurve(Ed.FORWARD, ___n, ___n, Ed.DISTANCE_UNLIMITED)
-    _diffCurve(Ed.BACKWARD, ___n, ___n, Ed.DISTANCE_UNLIMITED)
-
-def ____sounds():
-    global ___n, ___b, ___nl
-    Ed.PlayTone(8000000/1000, ___n)
-    Ed.TimeWait(___n, Ed.TIME_MILLISECONDS)
-    Ed.ReadClapSensor()
-    Ed.PlayTone(4000000/261, 2000)
-    Ed.TimeWait(2000, Ed.TIME_MILLISECONDS)
-    Ed.ReadClapSensor()
-    Ed.PlayTone(4000000/293, 1000)
-    Ed.TimeWait(1000, Ed.TIME_MILLISECONDS)
-    Ed.ReadClapSensor()
-    Ed.PlayTone(4000000/329, 500)
-    Ed.TimeWait(500, Ed.TIME_MILLISECONDS)
-    Ed.ReadClapSensor()
-    Ed.PlayTone(4000000/349, 250)
-    Ed.TimeWait(250, Ed.TIME_MILLISECONDS)
-    Ed.ReadClapSensor()
-    Ed.PlayTone(4000000/391, 125)
-    Ed.TimeWait(125, Ed.TIME_MILLISECONDS)
-    Ed.ReadClapSensor()
-
-def ____lights():
-    global ___n, ___b, ___nl
-    Ed.LeftLed(Ed.ON)
-    Ed.RightLed(Ed.OFF)
-
-def ____action():
-    global ___n, ___b, ___nl
-    ____move()
-    ____drive()
-    ____sounds()
-    ____lights()
-
-def ____move():
-    global ___n, ___b, ___nl
-    _motorOn(0, ___n, Ed.DISTANCE_UNLIMITED)
-    _motorOn(1, ___n, Ed.DISTANCE_UNLIMITED)
-    Ed.DriveLeftMotor(Ed.STOP, Ed.SPEED_1, 1)
-    Ed.ReadClapSensor()
-    Ed.DriveRightMotor(Ed.STOP, Ed.SPEED_1, 1)
-    Ed.ReadClapSensor()
-
-____action()
-___soundfile1 = Ed.TuneString(7,"c8e8g8z")
-Ed.PlayTune(___soundfile1)
-while (Ed.ReadMusicEnd() == Ed.MUSIC_NOT_FINISHED):
-    pass
-Ed.ReadClapSensor()
-___soundfile2 = Ed.TuneString(7,"g8e8c8z")
-Ed.PlayTune(___soundfile2)
-while (Ed.ReadMusicEnd() == Ed.MUSIC_NOT_FINISHED):
-    pass
-Ed.ReadClapSensor()
-
 
 def _diffCurve(direction, leftSpeed, rightSpeed, distance):
     if (leftSpeed < 0): 
@@ -185,3 +95,95 @@ def _motorOn(motor, power, distance):
 
 def _shorten(num): 
     return ((num+5)/10)
+
+
+def ____drive():
+    global ___n, ___b, ___nl
+    _diffDrive(Ed.FORWARD, ___n, ___n)
+    Ed.ReadClapSensor()
+    _diffDrive(Ed.BACKWARD, ___n, ___n)
+    Ed.ReadClapSensor()
+    _diffDrive(Ed.FORWARD, ___n, Ed.DISTANCE_UNLIMITED)
+    _diffDrive(Ed.BACKWARD, ___n, Ed.DISTANCE_UNLIMITED)
+    Ed.Drive(Ed.STOP, Ed.SPEED_1, 1)
+    Ed.ReadClapSensor()
+    _diffTurn(Ed.SPIN_RIGHT, ___n, ___n)
+    Ed.ReadClapSensor()
+    _diffTurn(Ed.SPIN_LEFT, ___n, ___n)
+    Ed.ReadClapSensor()
+    _diffTurn(Ed.SPIN_RIGHT, ___n, Ed.DISTANCE_UNLIMITED)
+    _diffTurn(Ed.SPIN_LEFT, ___n, Ed.DISTANCE_UNLIMITED)
+    _diffCurve(Ed.FORWARD, ___n, ___n, ___n)
+    Ed.ReadClapSensor()
+    _diffCurve(Ed.BACKWARD, ___n, ___n, ___n)
+    Ed.ReadClapSensor()
+    _diffCurve(Ed.FORWARD, ___n, ___n, Ed.DISTANCE_UNLIMITED)
+    _diffCurve(Ed.BACKWARD, ___n, ___n, Ed.DISTANCE_UNLIMITED)
+
+def ____sounds():
+    global ___n, ___b, ___nl
+    Ed.PlayTone(8000000/1000, ___n)
+    Ed.TimeWait(___n, Ed.TIME_MILLISECONDS)
+    Ed.ReadClapSensor()
+    Ed.PlayTone(4000000/261, 2000)
+    Ed.TimeWait(2000, Ed.TIME_MILLISECONDS)
+    Ed.ReadClapSensor()
+    Ed.PlayTone(4000000/293, 1000)
+    Ed.TimeWait(1000, Ed.TIME_MILLISECONDS)
+    Ed.ReadClapSensor()
+    Ed.PlayTone(4000000/329, 500)
+    Ed.TimeWait(500, Ed.TIME_MILLISECONDS)
+    Ed.ReadClapSensor()
+    Ed.PlayTone(4000000/349, 250)
+    Ed.TimeWait(250, Ed.TIME_MILLISECONDS)
+    Ed.ReadClapSensor()
+    Ed.PlayTone(4000000/391, 125)
+    Ed.TimeWait(125, Ed.TIME_MILLISECONDS)
+    Ed.ReadClapSensor()
+
+def ____lights():
+    global ___n, ___b, ___nl
+    Ed.LeftLed(Ed.ON)
+    Ed.RightLed(Ed.OFF)
+
+def ____action():
+    global ___n, ___b, ___nl
+    ____move()
+    ____drive()
+    ____sounds()
+    ____lights()
+
+def ____move():
+    global ___n, ___b, ___nl
+    _motorOn(0, ___n, Ed.DISTANCE_UNLIMITED)
+    _motorOn(1, ___n, Ed.DISTANCE_UNLIMITED)
+    Ed.DriveLeftMotor(Ed.STOP, Ed.SPEED_1, 1)
+    Ed.ReadClapSensor()
+    Ed.DriveRightMotor(Ed.STOP, Ed.SPEED_1, 1)
+    Ed.ReadClapSensor()
+
+Ed.EdisonVersion = Ed.V2
+Ed.DistanceUnits = Ed.CM
+Ed.Tempo = Ed.TEMPO_SLOW
+obstacleDetectionOn = False
+Ed.LineTrackerLed(Ed.ON)
+Ed.ReadClapSensor()
+Ed.ReadLineState()
+Ed.TimeWait(250, Ed.TIME_MILLISECONDS)
+
+___n = 1000
+___b = True
+___nl = Ed.List(3, [0,0,0])
+
+____action()
+___soundfile1 = Ed.TuneString(7,"c8e8g8z")
+Ed.PlayTune(___soundfile1)
+while (Ed.ReadMusicEnd() == Ed.MUSIC_NOT_FINISHED):
+    pass
+Ed.ReadClapSensor()
+___soundfile2 = Ed.TuneString(7,"g8e8c8z")
+Ed.PlayTune(___soundfile2)
+while (Ed.ReadMusicEnd() == Ed.MUSIC_NOT_FINISHED):
+    pass
+Ed.ReadClapSensor()
+

@@ -3,15 +3,8 @@ import random
 import math
 import machine
 from sht31 import SHT31
-class BreakOutOfALoop(Exception): pass
-class ContinueLoop(Exception): pass
-
-timer1 = calliopemini.running_time()
-sht31 = SHT31()
 
 
-___colourVar = (255, 0, 0)
-___numberList = [0, 0]
 def ____sensorsWaitUntil():
     global timer1, ___colourVar, ___numberList
     print("Press A")
@@ -98,6 +91,16 @@ def ____sensorsWaitUntil():
     while True:
         if sht31.get_temp_humi("t") < 30:
             break
+
+class BreakOutOfALoop(Exception): pass
+class ContinueLoop(Exception): pass
+
+timer1 = calliopemini.running_time()
+sht31 = SHT31()
+
+
+___colourVar = (255, 0, 0)
+___numberList = [0, 0]
 
 def run():
     global timer1, ___colourVar, ___numberList

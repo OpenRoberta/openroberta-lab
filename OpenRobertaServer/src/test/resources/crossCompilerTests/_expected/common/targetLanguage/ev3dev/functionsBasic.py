@@ -7,23 +7,7 @@ import math
 import os
 import time
 
-class BreakOutOfALoop(Exception): pass
-class ContinueLoop(Exception): pass
 
-_brickConfiguration = {
-    'wheel-diameter': 5.6,
-    'track-width': 18.0,
-    'actors': {
-    },
-    'sensors': {
-    },
-}
-hal = Hal(_brickConfiguration)
-
-___n1 = 0
-___b = False
-___n2 = 1
-___n3 = 4
 def ____number():
     global ___n1, ___b, ___n2, ___n3
     ___n1 = ___n2 + ___n3
@@ -47,6 +31,24 @@ def ____retNumber2(___x):
     global ___n1, ___b, ___n2, ___n3
     ___x = ___x / float(2)
     return ___x
+
+class BreakOutOfALoop(Exception): pass
+class ContinueLoop(Exception): pass
+
+_brickConfiguration = {
+    'wheel-diameter': 5.6,
+    'track-width': 18.0,
+    'actors': {
+    },
+    'sensors': {
+    },
+}
+hal = Hal(_brickConfiguration)
+
+___n1 = 0
+___b = False
+___n2 = 1
+___n3 = 4
 
 def run():
     global ___n1, ___b, ___n2, ___n3

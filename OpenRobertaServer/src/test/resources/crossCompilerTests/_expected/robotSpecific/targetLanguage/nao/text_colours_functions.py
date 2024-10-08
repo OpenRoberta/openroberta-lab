@@ -4,17 +4,7 @@ import math
 import time
 import random
 from roberta import Hal
-h = Hal()
 
-
-___numberVar = 0
-___booleanVar = True
-___stringVar = ""
-___colourVar = 0xff0000
-___numberList = [0, 0]
-___booleanList = [True, True]
-___stringList = ["", ""]
-___colourList = [0xff0000, 0xff0000]
 def ____text():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___numberList, ___booleanList, ___stringList, ___colourList
     h.say("")
@@ -131,6 +121,18 @@ def ____function_return_colourList():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___numberList, ___booleanList, ___stringList, ___colourList
     return ___colourList
 
+h = Hal()
+
+
+
+___numberVar = 0
+___booleanVar = True
+___stringVar = ""
+___colourVar = 0xff0000
+___numberList = [0, 0]
+___booleanList = [True, True]
+___stringList = ["", ""]
+___colourList = [0xff0000, 0xff0000]
 
 def run():
     h.setAutonomousLife('ON')

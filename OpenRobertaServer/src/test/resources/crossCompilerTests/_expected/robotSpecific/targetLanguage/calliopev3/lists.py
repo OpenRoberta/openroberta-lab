@@ -2,23 +2,8 @@ import calliopemini
 import random
 import math
 
-class BreakOutOfALoop(Exception): pass
-class ContinueLoop(Exception): pass
-
-timer1 = calliopemini.running_time()
 
 
-___numberVar = 0
-___booleanVar = True
-___stringVar = ""
-___colourVar = (255, 0, 0)
-___imageVar = calliopemini.Image.HEART
-___numberList = [0, 0]
-___booleanList = [True, True]
-___stringList = ["", ""]
-___colourList = [(255, 0, 0), (255, 0, 0)]
-___imageList = [calliopemini.Image.HEART, calliopemini.Image.HEART]
-___item2 = [0, 0, 0]
 def ____lists():
     global timer1, ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___imageVar, ___numberList, ___booleanList, ___stringList, ___colourList, ___imageList, ___item2
     calliopemini.display.scroll(str(len( ___numberList)))
@@ -54,6 +39,24 @@ def ____lists():
     ___numberList = ___numberList[0:___numberVar]
     ___numberList = ___numberList[0:-1 -___numberVar]
     ___numberList = ___numberList[0:]
+
+class BreakOutOfALoop(Exception): pass
+class ContinueLoop(Exception): pass
+
+timer1 = calliopemini.running_time()
+
+
+___numberVar = 0
+___booleanVar = True
+___stringVar = ""
+___colourVar = (255, 0, 0)
+___imageVar = calliopemini.Image.HEART
+___numberList = [0, 0]
+___booleanList = [True, True]
+___stringList = ["", ""]
+___colourList = [(255, 0, 0), (255, 0, 0)]
+___imageList = [calliopemini.Image.HEART, calliopemini.Image.HEART]
+___item2 = [0, 0, 0]
 
 def run():
     global timer1, ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___imageVar, ___numberList, ___booleanList, ___stringList, ___colourList, ___imageList, ___item2

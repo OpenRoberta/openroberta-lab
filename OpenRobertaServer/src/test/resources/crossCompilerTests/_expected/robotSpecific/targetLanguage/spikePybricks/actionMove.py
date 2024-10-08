@@ -5,18 +5,19 @@ from pybricks.tools import Matrix, wait
 import umath as math
 import urandom as random
 
-motorA = Motor(Port.A)
-motorB = Motor(Port.B)
-
-hub = PrimeHub()
-
-
 def get_deg_sec_from_percent(percent):
     if percent < -100 :
         percent = -100
     if percent > 100 :
         percent = 100
     return int(810.0 * (percent/100.0))
+
+
+motorA = Motor(Port.A)
+motorB = Motor(Port.B)
+
+hub = PrimeHub()
+
 
 def run():
     motorA.run_angle(rotation_angle = 360 * 1, speed = get_deg_sec_from_percent(30))

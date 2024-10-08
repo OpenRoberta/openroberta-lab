@@ -7,32 +7,7 @@ import math
 import os
 import time
 
-class BreakOutOfALoop(Exception): pass
-class ContinueLoop(Exception): pass
 
-_brickConfiguration = {
-    'wheel-diameter': 5.6,
-    'track-width': 18.0,
-    'actors': {
-    },
-    'sensors': {
-        '2':Hal.makeCompassSensor(ev3dev.INPUT_2),
-        '3':Hal.makeHTColorSensorV2(ev3dev.INPUT_3),
-        '4':Hal.makeIRSeekerSensor(ev3dev.INPUT_4),
-    },
-}
-hal = Hal(_brickConfiguration)
-
-___numberVar = 0
-___booleanVar = True
-___stringVar = ""
-___colourVar = 'white'
-___connectionVar = None
-___numberList = [0, 0]
-___booleanList = [True, True]
-___stringList = ["", ""]
-___colourList = ['white', 'white']
-___connectionList = [___connectionVar, ___connectionVar]
 def ____sensors():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___connectionVar, ___numberList, ___booleanList, ___stringList, ___colourList, ___connectionList
 
@@ -75,6 +50,33 @@ def ____waitUntil():
         if hal.getHiTecColorSensorV2Ambient('3') < 50:
             break
         hal.waitFor(15)
+
+class BreakOutOfALoop(Exception): pass
+class ContinueLoop(Exception): pass
+
+_brickConfiguration = {
+    'wheel-diameter': 5.6,
+    'track-width': 18.0,
+    'actors': {
+    },
+    'sensors': {
+        '2':Hal.makeCompassSensor(ev3dev.INPUT_2),
+        '3':Hal.makeHTColorSensorV2(ev3dev.INPUT_3),
+        '4':Hal.makeIRSeekerSensor(ev3dev.INPUT_4),
+    },
+}
+hal = Hal(_brickConfiguration)
+
+___numberVar = 0
+___booleanVar = True
+___stringVar = ""
+___colourVar = 'white'
+___connectionVar = None
+___numberList = [0, 0]
+___booleanList = [True, True]
+___stringList = ["", ""]
+___colourList = ['white', 'white']
+___connectionList = [___connectionVar, ___connectionVar]
 
 def run():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___connectionVar, ___numberList, ___booleanList, ___stringList, ___colourList, ___connectionList

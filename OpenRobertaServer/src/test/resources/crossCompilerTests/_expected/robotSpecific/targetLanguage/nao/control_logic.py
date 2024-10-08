@@ -4,21 +4,7 @@ import math
 import time
 import random
 from roberta import Hal
-h = Hal()
 
-class BreakOutOfALoop(Exception): pass
-class ContinueLoop(Exception): pass
-
-
-
-___numberVar = 0
-___booleanVar = True
-___stringVar = ""
-___colourVar = 0xff0000
-___numberList = [0, 0]
-___booleanList = [True, True]
-___stringList = ["", ""]
-___colourList = [0xff0000, 0xff0000]
 def ____control():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___numberList, ___booleanList, ___stringList, ___colourList
     if ___booleanVar:
@@ -75,6 +61,22 @@ def ____logic():
     h.say(str(None))
     h.say(str(___numberVar if ( ___booleanVar ) else ___numberVar))
 
+h = Hal()
+
+
+class BreakOutOfALoop(Exception): pass
+class ContinueLoop(Exception): pass
+
+
+
+___numberVar = 0
+___booleanVar = True
+___stringVar = ""
+___colourVar = 0xff0000
+___numberList = [0, 0]
+___booleanList = [True, True]
+___stringList = ["", ""]
+___colourList = [0xff0000, 0xff0000]
 
 def run():
     h.setAutonomousLife('ON')

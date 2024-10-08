@@ -884,7 +884,6 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
         this.src.add("}");
     }
 
-    @Override
     protected void generateProgramPrefix(boolean withWrapping) {
         if ( withWrapping ) {
             generateSignaturesOfUserDefinedMethods();
@@ -1023,5 +1022,48 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
                     )
                     .collect(entriesToMap()));
     }
+
+
+    //TODO 1650 add generate defines method to generate program prefix
+    /*
+    @Override
+    protected void generateProgramPrefix(boolean withWrapping) {
+        if ( !withWrapping ) {
+            return;
+        }
+        _generateDefines();
+        //TODO 1650 create non abstract generateProgramPrefix if JAVA & CPP visitors have same structure
+        //otherwise just insert generate logic here
+        super.generateProgramPrefix(true);
+    }
+    */
+
+    //TODO 1650 incorporate generate defines logic
+    protected void visitorGenerateDefines() {
+
+    }
+
+    //TODO 1650 now the abstract visior calls the generate function
+    @Override
+    protected void visitorGenerateNN() {
+        generateNNStuff("c++");
+    }
+
+    //TODO 1650 remove these once all visitors implement the methods
+    @Override
+    protected void visitorGenerateHelperMethods() {
+
+    }
+
+    @Override
+    protected void visitorGenerateImports() {
+
+    }
+
+    @Override
+    protected void visitorGenerateGlobalVariables() {
+
+    }
+    //TODO 1650 END
 
 }

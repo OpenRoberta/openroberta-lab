@@ -2,26 +2,6 @@ import calliopemini
 import random
 import math
 
-class BreakOutOfALoop(Exception): pass
-class ContinueLoop(Exception): pass
-
-timer1 = calliopemini.running_time()
-
-
-___n = 0
-def ____lights():
-    global timer1, ___n
-    set_led(___n,___n)
-
-def run():
-    global timer1, ___n
-    ____lights()
-
-def main():
-    try:
-        run()
-    except Exception as e:
-        raise
 
 def write16(di, dcki, data):
     state = dcki.read_digital()
@@ -51,6 +31,29 @@ def set_led(led_no, brightness):
         di.write_digital(1)
         di.write_digital(0)
     calliopemini.sleep(1)
+
+
+def ____lights():
+    global timer1, ___n
+    set_led(___n,___n)
+
+class BreakOutOfALoop(Exception): pass
+class ContinueLoop(Exception): pass
+
+timer1 = calliopemini.running_time()
+
+
+___n = 0
+
+def run():
+    global timer1, ___n
+    ____lights()
+
+def main():
+    try:
+        run()
+    except Exception as e:
+        raise
 
 if __name__ == "__main__":
     main()

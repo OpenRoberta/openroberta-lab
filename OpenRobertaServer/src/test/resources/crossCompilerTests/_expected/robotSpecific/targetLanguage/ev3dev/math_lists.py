@@ -7,29 +7,43 @@ import math
 import os
 import time
 
-class BreakOutOfALoop(Exception): pass
-class ContinueLoop(Exception): pass
 
-_brickConfiguration = {
-    'wheel-diameter': 5.6,
-    'track-width': 18.0,
-    'actors': {
-    },
-    'sensors': {
-    },
-}
-hal = Hal(_brickConfiguration)
+def _median(l):
+    l = sorted(l)
+    l_len = len(l)
+    if l_len < 1:
+        return None
+    if l_len % 2 == 0:
+        return (l[int((l_len - 1) / 2)] + l[int((l_len + 1) / 2)] ) / 2.0
+    else:
+        return l[int((l_len - 1) / 2)]
 
-___numberVar = 0
-___booleanVar = True
-___stringVar = ""
-___colourVar = 'white'
-___connectionVar = None
-___numberList = [0, 0]
-___booleanList = [True, True]
-___stringList = ["", ""]
-___colourList = ['white', 'white']
-___connectionList = [___connectionVar, ___connectionVar]
+def _isPrime(number):
+    if(number == 0 or number == 1):
+        return False
+    for i in range(2, int(math.floor(math.sqrt(number))) + 1):
+        remainder = number % i
+        if remainder == 0:
+            return False
+    return True
+
+def _randInt(min_val, max_val):
+    val = int.from_bytes(os.urandom(4), byteorder='big')
+    if min_val < max_val:
+        return min_val + (val % ((max_val - min_val) + 1))
+    else:
+        return max_val + (val % ((min_val - max_val) + 1))
+
+def _randDouble():
+    return 1.0*int.from_bytes(os.urandom(4), byteorder='big') / 0xffffffff
+
+def _standard_deviation(l):
+    mean = float(sum(l)) / len(l)
+    sd = 0
+    for i in l:
+        sd += (i - mean)*(i - mean)
+    return math.sqrt(sd / len(l))
+
 def ____math():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___connectionVar, ___numberList, ___booleanList, ___stringList, ___colourList, ___connectionList
     hal.drawText(str(0), ___numberVar, ___numberVar)
@@ -119,6 +133,30 @@ def ____lists():
     hal.drawText(str(___numberList[-1 -___numberVar:-1 -___numberVar]), ___numberVar, ___numberVar)
     hal.drawText(str(___numberList[-1 -___numberVar:]), ___numberVar, ___numberVar)
 
+class BreakOutOfALoop(Exception): pass
+class ContinueLoop(Exception): pass
+
+_brickConfiguration = {
+    'wheel-diameter': 5.6,
+    'track-width': 18.0,
+    'actors': {
+    },
+    'sensors': {
+    },
+}
+hal = Hal(_brickConfiguration)
+
+___numberVar = 0
+___booleanVar = True
+___stringVar = ""
+___colourVar = 'white'
+___connectionVar = None
+___numberList = [0, 0]
+___booleanList = [True, True]
+___stringList = ["", ""]
+___colourList = ['white', 'white']
+___connectionList = [___connectionVar, ___connectionVar]
+
 def run():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___connectionVar, ___numberList, ___booleanList, ___stringList, ___colourList, ___connectionList
     ____math()
@@ -135,40 +173,5 @@ def main():
         while not hal.isKeyPressed('any'): hal.waitFor(500)
         raise
 
-def _median(l):
-    l = sorted(l)
-    l_len = len(l)
-    if l_len < 1:
-        return None
-    if l_len % 2 == 0:
-        return (l[int((l_len - 1) / 2)] + l[int((l_len + 1) / 2)] ) / 2.0
-    else:
-        return l[int((l_len - 1) / 2)]
-
-def _isPrime(number):
-    if(number == 0 or number == 1):
-        return False
-    for i in range(2, int(math.floor(math.sqrt(number))) + 1):
-        remainder = number % i
-        if remainder == 0:
-            return False
-    return True
-
-def _randInt(min_val, max_val):
-    val = int.from_bytes(os.urandom(4), byteorder='big')
-    if min_val < max_val:
-        return min_val + (val % ((max_val - min_val) + 1))
-    else:
-        return max_val + (val % ((min_val - max_val) + 1))
-
-def _randDouble():
-    return 1.0*int.from_bytes(os.urandom(4), byteorder='big') / 0xffffffff
-
-def _standard_deviation(l):
-    mean = float(sum(l)) / len(l)
-    sd = 0
-    for i in l:
-        sd += (i - mean)*(i - mean)
-    return math.sqrt(sd / len(l))
 if __name__ == "__main__":
     main()
