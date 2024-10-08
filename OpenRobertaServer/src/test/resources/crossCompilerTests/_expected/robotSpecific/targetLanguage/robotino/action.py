@@ -100,7 +100,6 @@ _digitalPinValues = [0 for i in range(8)]
 currentSpeed = [0, 0, 0]
 
 
-
 def run(RV):
     time.sleep(1)
     resetOdometry(RV, 0, 0, 0)

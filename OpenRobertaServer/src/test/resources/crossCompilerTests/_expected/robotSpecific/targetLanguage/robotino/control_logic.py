@@ -70,7 +70,6 @@ MAXSPEED = 0.5
 MAXROTATION = 0.57
 
 
-
 ___booleanFalse = None
 ___booleanTrue = None
 ___number = None

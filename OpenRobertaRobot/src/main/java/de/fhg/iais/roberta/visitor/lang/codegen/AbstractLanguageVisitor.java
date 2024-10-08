@@ -749,7 +749,7 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> {
      * generated more than once
      */
     protected void visitorGenerateHelperMethods() {
-        if ( !this.getBean(CodeGeneratorSetupBean.class).getUsedMethods().isEmpty() ) {
+        if ( hasHelperMethods()) {
             String helperMethodImpls =
                 this
                     .getBean(CodeGeneratorSetupBean.class)
@@ -757,6 +757,23 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> {
                     .getHelperMethodDefinitions(this.getBean(CodeGeneratorSetupBean.class).getUsedMethods());
             this.src.add(helperMethodImpls).nlI();
         }
+    }
+
+    //helpermethods will always add a nlIndent() some robotots need this indent for programs without additional method
+    //this is because helpter methods now indent at another place
+    protected void mimicHelperMethodIndent(){
+        if(!hasHelperMethods() && !hasUserdefinedMethods()){
+            nlIndent();
+        }
+    }
+
+    protected boolean hasHelperMethods(){
+        return !this.getBean(CodeGeneratorSetupBean.class).getUsedMethods().isEmpty();
+    }
+
+    private boolean hasUserdefinedMethods() {
+        return this.programPhrases
+            .stream().anyMatch(phrase -> phrase.getKind().getCategory() == Category.METHOD && !phrase.getKind().hasName("METHOD_CALL"));
     }
 
     /**

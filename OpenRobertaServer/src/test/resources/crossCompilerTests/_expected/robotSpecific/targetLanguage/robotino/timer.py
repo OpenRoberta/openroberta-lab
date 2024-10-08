@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import math, random, time, requests, threading, sys, io
+
 sys.stdout = io.StringIO()
 sys.stderr = io.StringIO()
 ROBOTINOIP = "127.0.0.1:80"
@@ -8,7 +9,6 @@ MAXSPEED = 0.5
 MAXROTATION = 0.57
 
 _timer1 = None
-
 
 ___Element = None
 ___Element2 = None

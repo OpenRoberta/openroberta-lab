@@ -81,6 +81,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
 
     @Override
     protected void visitorGenerateGlobalVariables() {
+        mimicHelperMethodIndent();
         this.src.add("Ed.EdisonVersion = Ed.V2");
         nlIndent();
         this.src.add("Ed.DistanceUnits = Ed.CM");

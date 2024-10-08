@@ -120,10 +120,10 @@ public final class RobotinoPythonVisitor extends AbstractPythonVisitor implement
 
     @Override
     protected void visitorGenerateGlobalVariables() {
+        mimicHelperMethodIndent();
         generateVariables();
         nlIndent();
         generateTimerVariables(false);
-        nlIndent();
     }
 
     @Override
@@ -157,10 +157,7 @@ public final class RobotinoPythonVisitor extends AbstractPythonVisitor implement
         return null;
     }
 
-    private boolean hasUserdefinedMethods() {
-        return this.programPhrases
-            .stream().anyMatch(phrase -> phrase.getKind().getCategory() == Category.METHOD && !phrase.getKind().hasName("METHOD_CALL"));
-    }
+
 
     private void generateMain() {
         this.src.add("def main(RV):");
