@@ -2,10 +2,10 @@ package de.fhg.iais.roberta.javaServer.typecheck;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
 
-import org.apache.commons.lang3.tuple.Triple;
 import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -14,18 +14,16 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.factory.RobotFactory;
+import de.fhg.iais.roberta.javaServer.restServices.all.service.ProjectService;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.typecheck.InfoCollector;
+import de.fhg.iais.roberta.typecheck.NepoInfoProcessor;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.ast.AstFactory;
 import de.fhg.iais.roberta.util.test.UnitTestHelper;
-import de.fhg.iais.roberta.visitor.validate.MicrobitV2TypecheckVisitor;
-import de.fhg.iais.roberta.visitor.validate.WedoTypecheckVisitor;
 
 /**
  * This class contains unit tests to validate the type-checking functionality for the MicrobitV2
@@ -68,6 +66,11 @@ public class TestTypecheck {
     private static final Logger LOG = LoggerFactory.getLogger(TestTypecheck.class);
     private static final boolean SHOW_MESSAGES = true;
 
+    private static Map<String, RobotFactory> robotFactories = new HashMap<>();
+
+    private static List<String> ROBOTS_ALL = Arrays.asList("microbitv2", "ev3lejosv1", "wedo");
+    private static List<String> ROBOTS_WITH_LISTS = Arrays.asList("microbitv2", "ev3lejosv1");
+
     public static final String TEST_SPEC_YML = "classpath:/crossCompilerTests/testSpec.yml";
 
     private static JSONObject robotsFromTestSpec;
@@ -79,198 +82,203 @@ public class TestTypecheck {
     private int parserErrorCount = 0;
     private List<String> messages = null;
 
+    private static class TC {
+        public final BlocklyType resultType;
+        public final String underTest;
+        public final List<String> robotsToBeTested;
+
+        private TC(BlocklyType resultType, String underTest, List<String> robotsToBeTested) {
+            this.resultType = resultType;
+            this.underTest = underTest;
+            this.robotsToBeTested = robotsToBeTested;
+        }
+
+        public static TC of(BlocklyType resultType, String underTest, List<String> robotsToBeTested) {
+            return new TC(resultType, underTest, robotsToBeTested);
+        }
+    }
+
     /**
      * tests common to all robot plugins (as implemented in TypecheckCommonLanguageVisitor)
      * executed for the microbitv2 plugin
      */
-    public static final List<String> NUMBER_EXPRESSIONS = Arrays.asList(
-        "sin(num) + cos(num) + tan(num)",
-        "exp(2) + square(4) + sqrt(9) + abs(-5) + log10(100) + log(2)",
-        "randomInt(1, 10) + randomFloat()",
-        "floor(3.7) + ceil(2.3) + round(4.6)",
-        "pow10(2) + (10%3)",
-        "num + 1",
-        "sum(listN) + max(listN) - min(listN)",
-        "get(listN, 1)",
-        "castToNumber(\"2\")",
-        "castStringToNumber(str,1)"
+    public static final List<TC> EXPRESSIONS = Arrays.asList(
+        TC.of(BlocklyType.NUMBER, "sin(num) + cos(num) + tan(num)", ROBOTS_ALL),
+        TC.of(BlocklyType.NUMBER, "exp(2) + square(4) + sqrt(9) + abs(-5) + log10(100) + log(2)", ROBOTS_ALL),
+        TC.of(BlocklyType.NUMBER, "randomInt(1, 10) + randomFloat()", ROBOTS_ALL),
+        TC.of(BlocklyType.NUMBER, "floor(3.7) + ceil(2.3) + round(4.6)", ROBOTS_ALL),
+        TC.of(BlocklyType.NUMBER, "pow10(2) + (10%3)", ROBOTS_ALL),
+        TC.of(BlocklyType.NUMBER, "num + 1", ROBOTS_ALL),
+        TC.of(BlocklyType.NUMBER, "sum(listN) + max(listN) - min(listN)", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.NUMBER, "get(listN, 1)", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.NUMBER, "castToNumber(\"2\")", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.NUMBER, "castStringToNumber(str,1)", ROBOTS_WITH_LISTS),
+
+        TC.of(BlocklyType.BOOLEAN, "isEven(10) && isOdd(7) || isPrime(11) && isWhole(8)", ROBOTS_ALL),
+        TC.of(BlocklyType.BOOLEAN, "isEmpty(listN)", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.BOOLEAN, "isPositive(5) || isNegative(-3)", ROBOTS_ALL),
+        TC.of(BlocklyType.BOOLEAN, "(num > 5) && (num <= 10)", ROBOTS_ALL),
+        TC.of(BlocklyType.BOOLEAN, "!boolF", ROBOTS_ALL),
+        TC.of(BlocklyType.BOOLEAN, "(num == 10) || (num != 5)", ROBOTS_ALL),
+
+        TC.of(BlocklyType.ARRAY_NUMBER, "subList(listN2, 0, 3)", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.ARRAY_NUMBER, "subListFromIndexToEnd(listN2, 0, 1)", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.ARRAY_NUMBER, "subListFromEndToIndex(listN2, 1, 1)", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.ARRAY_NUMBER, "subListFromFirstToLast(listN2)", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.ARRAY_NUMBER, "createListWith(getFromEnd(listN, 0),2)", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.ARRAY_NUMBER, "createListWith(getLast(listN),2)", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.ARRAY_NUMBER, "subListFromEndToLast(listN, 3)", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.ARRAY_NUMBER, "createEmptyList(Number)", ROBOTS_WITH_LISTS),
+
+        TC.of(BlocklyType.STRING, "createTextWith(\"Hello\", num)", ROBOTS_ALL),
+        TC.of(BlocklyType.STRING, "\"Hello World!\"", ROBOTS_ALL),
+        TC.of(BlocklyType.STRING, "createTextWith(sin(num), cos(num))", ROBOTS_ALL),
+        TC.of(BlocklyType.STRING, "createTextWith(getFirst(listN), get(listN, 1))", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.STRING, "castToString(5)", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.STRING, "castToChar(65)", ROBOTS_WITH_LISTS)
     );
 
-    public static final List<String> BOOLEAN_EXPRESSIONS = Arrays.asList(
-        "isEven(10) && isOdd(7) || isPrime(11) && isWhole(8)",
-        "isEmpty(listN) && isPositive(5) || isNegative(-3)",
-        "(num > 5) && (num <= 10)",
-        "!boolF",
-        "(num == 10) || (num != 5)",
-        "microbitv2.receiveMessage(Boolean)"
-    );
+    public static final List<TC> GENERIC_STMTS = Arrays.asList(
+        TC.of(BlocklyType.VOID, "set(listN, 1000,0);", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.VOID, "setFromEnd(listN, 1000,0);", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.VOID, "setFirst(listN,666);", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.VOID, "setLast(listN,666);", ROBOTS_WITH_LISTS),
 
-    public static final List<String> LIST_EXPRESSIONS = Arrays.asList(
-        "subList(listN2, 0, 3)",
-        "subListFromIndexToEnd(listN2, 0, 1)",
-        "subListFromEndToIndex(listN2, 1, 1)",
-        "subListFromFirstToLast(listN2)",
-        "createListWith(getFromEnd(listN, 0),2)",
-        "createListWith(getLast(listN),2)",
-        "subListFromEndToLast(listN, 3)",
-        "createEmptyList(Number)"
-    );
+        TC.of(BlocklyType.VOID, "insert(listN, 1000,0);", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.VOID, "insertFromEnd(listN, 1000,0);", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.VOID, "insertFirst(listN,666);", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.VOID, "insertLast(listN,666);", ROBOTS_WITH_LISTS),
 
-    public static final List<String> STRING_EXPRESSIONS = Arrays.asList(
-        "createTextWith(\"Hello\", num)",
-        "\"Hello World!\"",
-        "createTextWith(sin(num), cos(num))",
-        "createTextWith(getFirst(listN), get(listN, 1))",
-        "castToString(5)",
-        "castToChar(65)"
-    );
+        TC.of(BlocklyType.VOID, "remove(listN,0);", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.VOID, "removeFromEnd(listN,0);", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.VOID, "removeFirst(listN);", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.VOID, "removeLast(listN);", ROBOTS_WITH_LISTS),
 
-    public static final List<String> STMT_FUNC = Arrays.asList(
-        "set(listN, 1000,0);",
-        "setFromEnd(listN, 1000,0);",
-        "setFirst(listN,666);",
-        "setLast(listN,666);",
+        TC.of(BlocklyType.VOID, "changeBy(num,2);", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "appendText(str, \"aaa\");", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "appendText(str, str);", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "appendText(str, 1-4);", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "appendText(str, true||false);", ROBOTS_ALL),
 
-        "insert(listN, 1000,0);",
-        "insertFromEnd(listN, 1000,0);",
-        "insertFirst(listN,666);",
-        "insertLast(listN,666);",
-
-        "remove(listN,0);",
-        "removeFromEnd(listN,0);",
-        "removeFirst(listN);",
-        "removeLast(listN);",
-
-        "changeBy(num,2);",
-        "appendText(str, \"aaa\");",
-        "appendText(str, str);",
-        "appendText(str, 1-4);",
-        "appendText(str, true||false);"
-    );
-
-    public static final List<String> STMT_VAR_ASSIGN_SIMPLE_EXPRESSIONS = Arrays.asList(
         // very simple cases
-        ";",
-        "// comment",
+        TC.of(BlocklyType.VOID, ";", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "// comment", ROBOTS_ALL),
         // Number expressions
-        "num = num;",
-        "num = 1;",
-        "num = 1.4;",
-        "num = pi;",
-        "num = sqrt_1_2;",
-        "num = randomInt(1, 100);",
-        "num = randomFloat();",
-        "num = sin(num);",
-        "num = (sin(45) + cos(45)) * tan(60);",
-        "num = exp(num);",
-        "num = log10(num) * (square(10));",
-        "num = ceil(3.782) + floor(3.1782);",
-        "num = round(phi);",
-        "num = min(listN);",
-        "num = max(listN) * average(listN);",
-        "num = sum(listN);",
-        "num = randomItem(listN);",
-        "num = size(listN);",
-        "num = indexOfFirst(listN, 2);",
-        "num = indexOfLast(listN, 2);",
-        "num = getFirst(listN);",
-        "num = getAndRemove(listN, 2);",
-        "num = constrain(102, 1, 100);",
-        "num = ((((3))));",
-        "num = 2^2;",
-        "num = num^num;",
-        "num = 5%2;",
-        "num = 10*10;",
-        "num = 100/10;",
-        "num = 1+2;",
-        "num = pi + e;",
-        "num = pi + 4.5;",
-        "num = randomFloat() + cos(num);",
-        "num = +-1;",
-        "num = -+1;",
-        "num = true ? 1 : 2;",
+        TC.of(BlocklyType.VOID, "num = num;", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "num = 1;", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "num = 1.4;", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "num = pi;", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "num = sqrt_1_2;", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "num = randomInt(1, 100);", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "num = randomFloat();", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "num = sin(num);", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "num = (sin(45) + cos(45)) * tan(60);", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "num = exp(num);", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "num = log10(num) * (square(10));", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "num = ceil(3.782) + floor(3.1782);", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "num = round(phi);", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "num = min(listN);", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.VOID, "num = max(listN) * average(listN);", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.VOID, "num = sum(listN);", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.VOID, "num = randomItem(listN);", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.VOID, "num = size(listN);", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.VOID, "num = indexOfFirst(listN, 2);", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.VOID, "num = indexOfLast(listN, 2);", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.VOID, "num = getFirst(listN);", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.VOID, "num = getAndRemove(listN, 2);", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.VOID, "num = constrain(102, 1, 100);", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "num = ((((3))));", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "num = 2^2;", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "num = num^num;", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "num = 5%2;", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "num = 10*10;", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "num = 100/10;", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "num = 1+2;", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "num = pi + e;", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "num = pi + 4.5;", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "num = randomFloat() + cos(num);", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "num = +-1;", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "num = -+1;", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "num = true ? 1 : 2;", ROBOTS_ALL),
 
         // Boolean expressions
-        "boolT = boolF;",
-        "boolT = true;",
-        "boolT = !!!!true;",
-        "boolT = (num > 4) ? (num == 2) : (num + 1 == num + 3);",
-        "boolT = isPositive(----6);",
-        "boolT = isDivisibleBy(6, 2);",
-        "boolT = isWhole(6.21234);",
-        "boolT = isPrime(6);",
-        "boolT = isEmpty(listN);",
-        "boolT = !boolF;",
-        "boolT = boolT || true;",
-        "boolT = num == num;",
-        "boolT = 7 == 7;",
-        "boolT = str == str;",
-        "boolT = num > 0;",
-        "boolT = pi > 20;",
-        "boolT = num >= num;",
-        "boolT = 10 > 0;",
-        "boolT = true || false;",
-        "boolT = num > 4;",
-        "boolT = num != 5;",
-        "boolT = (num == 10) || (num != 5);",
-        "boolT = 1 < 20;",
-        "boolT = 2 <= 3;",
+        TC.of(BlocklyType.VOID, "boolT = boolF;", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "boolT = true;", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "boolT = !!!!true;", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "boolT = (num > 4) ? (num == 2) : (num + 1 == num + 3);", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "boolT = isPositive(----6);", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "boolT = isDivisibleBy(6, 2);", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "boolT = isWhole(6.21234);", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "boolT = isPrime(6);", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "boolT = isEmpty(listN);", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.VOID, "boolT = !boolF;", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "boolT = boolT || true;", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "boolT = num == num;", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "boolT = 7 == 7;", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "boolT = str == str;", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "boolT = num > 0;", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "boolT = pi > 20;", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "boolT = num >= num;", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "boolT = 10 > 0;", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "boolT = true || false;", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "boolT = num > 4;", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "boolT = num != 5;", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "boolT = (num == 10) || (num != 5);", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "boolT = 1 < 20;", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "boolT = 2 <= 3;", ROBOTS_ALL),
 
         // String expressions
-        "str = \"OpenRoberta is awesome!\";",
-        "str = createTextWith(str, 12, true);",
-        "str = createTextWith(true, 'true', 12);"
-    );
+        TC.of(BlocklyType.VOID, "str = \"OpenRoberta is awesome!\";", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "str = createTextWith(str, 12, true);", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "str = createTextWith(true, 'true', 12);", ROBOTS_ALL),
 
-    public static final List<String> STMT_VAR_ASSIGN = Arrays.asList(
-        //EXPRESSIONS:
-        "num=sin(num)+cos(num)+tan(num)+asin(num)+acos(num)+atan(num);",
-        "num=exp(2) + square(4) + sqrt(9) + abs(-5) + log10(100) + log(2);",
-        "num=randomInt(1,10)+ randomFloat();",
-        "num= floor(3.7) + ceil(2.3) + round(4.6);",
-        "boolT = isEven(10) && isOdd(7) || isPrime(11) && isWhole(8) || isEmpty(listN) && isPositive(5) || isNegative(-3) && isDivisibleBy(10, 5);",
+        TC.of(BlocklyType.VOID, "num=sin(num)+cos(num)+tan(num)+asin(num)+acos(num)+atan(num);", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "num=exp(2) + square(4) + sqrt(9) + abs(-5) + log10(100) + log(2);", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "num=randomInt(1,10)+ randomFloat();", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "num= floor(3.7) + ceil(2.3) + round(4.6);", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "boolT = isEven(10) && isOdd(7) || isPrime(11) && isWhole(8) && isPositive(5) || isNegative(-3) && isDivisibleBy(10, 5);", ROBOTS_ALL),
 
-        "num = sum(listN) + max(listN) - min(listN) * average(listN) / median(listN) + stddev(listN) % size(listN) + randomItem(listN);",
-        "num = indexOfFirst(listN, 0);",
-        "num = indexOfLast(listN, 0);",
-        "num= getFirst(listN)+get(listN,1)+ getFromEnd(listN,0)+ getLast(listN);",
+        TC.of(BlocklyType.VOID, "num = sum(listN) + max(listN) - min(listN) * average(listN);", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.VOID, "num = median(listN) + stddev(listN) % size(listN) + randomItem(listN);", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.VOID, "num = indexOfFirst(listN, 0);", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.VOID, "num = indexOfLast(listN, 0);", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.VOID, "num= getFirst(listN)+get(listN,1)+ getFromEnd(listN,0)+ getLast(listN);", ROBOTS_WITH_LISTS),
 
-        "str = createTextWith(getFirst(listN), get(listN,1), getFromEnd(listN,2), get(listN,3), getLast(listN));",
+        TC.of(BlocklyType.VOID, "str = createTextWith(getFirst(listN), get(listN,1), getFromEnd(listN,2), get(listN,3), getLast(listN));", ROBOTS_WITH_LISTS),
 
-        "num = getAndRemoveFirst(listN2) + getAndRemove(listN2, 1) + getAndRemoveFromEnd(listN2, 0) + getAndRemoveLast(listN2);",
+        TC.of(BlocklyType.VOID, "num = getAndRemoveFirst(listN2) + getAndRemove(listN2, 1);", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.VOID, "num = getAndRemoveFromEnd(listN2, 0) + getAndRemoveLast(listN2);", ROBOTS_WITH_LISTS),
 
-        "listN2 = subList(listN, 0, 3);",
-        "listN2 = subListFromIndexToEnd(listN, 0, 1);",
-        "listN2 = subListFromEndToIndex(listN, 1, 1);",
-        "listN2 = subListFromEndToEnd(listN, 4, 2);",
-        "listN2 = subListFromIndexToLast(listN, 1);",
-        "listN2 = subListFromFirstToIndex(listN, 2);",
-        "listN2 = subListFromFirstToLast(listN);",
-        "listN2 = subListFromFirstToIndex(listN, 3);",
-        "listN2 = subListFromEndToLast(listN, 3);",
-        "str = castToString(5);",
-        "str = castToChar(65);",
-        "num = castToNumber(\"2\");",
-        "num = castStringToNumber(str,1);"
-    );
+        TC.of(BlocklyType.VOID, "listN2 = subList(listN, 0, 3);", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.VOID, "listN2 = subListFromIndexToEnd(listN, 0, 1);", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.VOID, "listN2 = subListFromEndToIndex(listN, 1, 1);", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.VOID, "listN2 = subListFromEndToEnd(listN, 4, 2);", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.VOID, "listN2 = subListFromIndexToLast(listN, 1);", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.VOID, "listN2 = subListFromFirstToIndex(listN, 2);", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.VOID, "listN2 = subListFromFirstToLast(listN);", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.VOID, "listN2 = subListFromFirstToIndex(listN, 3);", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.VOID, "listN2 = subListFromEndToLast(listN, 3);", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.VOID, "str = castToString(5);", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.VOID, "str = castToChar(65);", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.VOID, "num = castToNumber(\"2\");", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.VOID, "num = castStringToNumber(str,1);", ROBOTS_WITH_LISTS),
 
-    public static final List<String> STMT_CONTROLS_STATEMENTS = Arrays.asList(
-        "for ( Number i=1; i<10; i++){};",
-        "for ( Number i=1; i<10; i=i+1){};",
-        "for ( Number i=1; i<10; i=i+2+4){};",
-        "for ( Number i=1; i<10; i=num+1){};",
-        "for each( Number item: listN){num=1;};",
-        "if(true){num=1;} else if(false){num=2;} else{num=5;};",
-        "if(boolT||boolF){num=1;} else if(false){num=2;} else{num=5;};",
-        "while(true){num=1;};",
-        "while(boolT==true){num=2;};",
-        "while((boolT==true) && (boolF==false)){num=2;};",
-        "for (Number i = 0; i < 10; i = i + 2) { if (isEven(i)) {insertLast(listN, i * 2);} else {insertFirst(listN, i);}; };",
-        "waitUntil(average(listN) == 5) {insertLast(listN, 7);} orWaitFor(average(listN) == 2) {insertFirst(listN, 666);};",
-        "waitUntil(false) {num=1;} orWaitFor(true) {num=2;};",
-        "wait ms(500);",
-        "while(true){break;};",
-        "while(true){continue;};"
+        TC.of(BlocklyType.VOID, "for ( Number i=1; i<10; i++){};", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "for ( Number i=1; i<10; i=i+1){};", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "for ( Number i=1; i<10; i=i+2+4){};", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "for ( Number i=1; i<10; i=num+1){};", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "for each( Number item: listN){num=1;};", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.VOID, "if(true){num=1;} else if(false){num=2;} else{num=5;};", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "if(boolT||boolF){num=1;} else if(false){num=2;} else{num=5;};", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "while(true){num=1;};", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "while(boolT==true){num=2;};", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "while((boolT==true) && (boolF==false)){num=2;};", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "for (Number i = 0; i < 10; i = i + 2) { if (isEven(i)) {num = num + i*2;} else {num = num - i;}; };", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "waitUntil(num == 5) {num = 6;} orWaitFor(num == 2) {num = num + 1;};", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "waitUntil(false) {num=1;} orWaitFor(true) {num=2;};", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "wait ms(500);", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "while(true){break;};", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "while(true){continue;};", ROBOTS_ALL)
     );
 
     public static final List<String> MICROBITV2_SPECIFIC = Arrays.asList(
@@ -391,7 +399,7 @@ public class TestTypecheck {
         "wedo.turnRgbOff(R);"
     );
 
-    List<String> STMT_VAR_ASSIGN_SIMPLE_EXPRESSIONS_ERROR_PARSER = Arrays.asList(
+    List<String> PARSER_ERRORS = Arrays.asList(
         "num = 1,,;",
         "num = 1",
         "num = randomInt(1,,100);",
@@ -415,81 +423,76 @@ public class TestTypecheck {
         "undefinedVar = ;"
     );
 
-    public static final List<String> STMT_FUNC_FAIL = Arrays.asList(
+    public static final List<TC> TYPECHECK_ERRORS = Arrays.asList(
         //FNAMESTMT:
-        "set(listN, \"hola\",0);",
-        "setFromEnd(listN, 1000,0,2);",
-        "setFirst(listN,false);",
-        "setLast(listN);",
-        "insert(listN, true,0);",
-        "insertFromEnd(listN, 1000);",
-        "insertFirst(listN,666,9);",
-        "insertLast(listN,666,true);",
-        "remove(listN,0,0);",
-        "removeFromEnd(listN);",
-        "removeFirst(listN,true);",
-        "removeLast();",
+        TC.of(BlocklyType.VOID, "set(listN, \"hola\",0);", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.VOID, "setFromEnd(listN, 1000,0,2);", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.VOID, "setFirst(listN,false);", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.VOID, "setLast(listN);", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.VOID, "insert(listN, true,0);", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.VOID, "insertFromEnd(listN, 1000);", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.VOID, "insertFirst(listN,666,9);", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.VOID, "insertLast(listN,666,true);", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.VOID, "remove(listN,0,0);", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.VOID, "removeFromEnd(listN);", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.VOID, "removeFirst(listN,true);", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.VOID, "removeLast();", ROBOTS_WITH_LISTS),
 
-        "set(4, 1000,0);",
-        "removeFromEnd(3,0);",
-        "insert(3, 1000,0);",
+        TC.of(BlocklyType.VOID, "set(4, 1000,0);", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.VOID, "removeFromEnd(3,0);", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.VOID, "insert(3, 1000,0);", ROBOTS_WITH_LISTS),
 
-        "appendText(str, listN);",
-        "appendText(str, ima);"
-    );
+        TC.of(BlocklyType.VOID, "appendText(str, listN);", ROBOTS_WITH_LISTS),
 
-    public static final List<String> STMT_VAR_ASSIGN_FAIL = Arrays.asList(
-        //EXPRESSIONS:
-        "num=true;",
-        "num=str;",
-        "num=sin(num+true)+cos(num)+tan(num)+asin(num)+acos(num)+atan(num);",
-        "num=exp(2) + square(#black) + sqrt(9) + abs(-5) + log10(100) + log(2);",
-        "num=randomInt(1,10,0)+ randomFloat(1);",
-        "num= floor(3.7) + ceil(2.3) + round(true);",
-        "boolT = isEven(10) && isOdd(7,0) || isPrime(11,0) && isWhole(8) || isEmpty(listN) && isPositive(5) || isNegative(-3) && isDivisibleBy(10, 5);",
-        "num = sum(listN) + max(listN) - min(listN) * average(listN) / median(listN) + stddev(listN) % size(listN+2) + randomItem(listN,0);",
-        "num = indexOfFirst(listN);",
-        "num = indexOfLast(listN, true);",
-        "str = createTextWith(sin(true));",
-        "num = getFirst(listN) +get(listN,1)+getFromEnd(listN,0,1)+getLast(listN,true);",
-        "num = getAndRemoveFirst(listN,0) + getAndRemove(listN, 1,2) + getAndRemoveFromEnd(listN, 0,true) + getAndRemoveLast(listN,false);",
+        //EXPRESSIONS
+        TC.of(BlocklyType.VOID, "num=true;", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "num=str;", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "num=sin(num+true)+cos(num)+tan(num)+asin(num)+acos(num)+atan(num);", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "num=exp(2) + square(#black) + sqrt(9) + abs(-5) + log10(100) + log(2);", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "num=randomInt(1,10,0)+ randomFloat(1);", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "num= floor(3.7) + ceil(2.3) + round(true);", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "boolT = isEven(10) && isOdd(7,0) || isPrime(11,0) && isWhole(8) && isPositive(5) || isNegative(-3) && isDivisibleBy(10, 5);", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "num = sum(listN) + max(listN) - min(listN) * average(listN) / median(listN) + stddev(listN) % size(listN+2) + randomItem(listN,0);", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.VOID, "num = indexOfFirst(listN);", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.VOID, "num = indexOfLast(listN, true);", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.VOID, "str = createTextWith(sin(true));", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "num = getFirst(listN) +get(listN,1)+getFromEnd(listN,0,1)+getLast(listN,true);", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.VOID, "num = getAndRemoveFirst(listN,0) + getAndRemove(listN, 1,2) + getAndRemoveFromEnd(listN, 0,true) + getAndRemoveLast(listN,false);", ROBOTS_WITH_LISTS),
 
-        "listN = subList(listN2,0,true);",
-        "listN = subListFromIndexToEnd(listN2,#black,1);",
-        "listN = subListFromEndToIndex(listN2,1,1,2);",
-        "listN = subListFromEndToEnd(listN2,4,2,false);",
-        "listN = subListFromIndexToLast(listN2,1,3);",
-        "listN = subListFromFirstToIndex();",
-        "listN = subListFromFirstToLast(listN2,2);",
-        "listN = subListFromFirstToIndex(listN2,false);",
-        "listN = subListFromEndToLast(listN2,3,3);",
+        TC.of(BlocklyType.VOID, "listN = subList(listN2,0,true);", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.VOID, "listN = subListFromIndexToEnd(listN2,#black,1);", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.VOID, "listN = subListFromEndToIndex(listN2,1,1,2);", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.VOID, "listN = subListFromEndToEnd(listN2,4,2,false);", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.VOID, "listN = subListFromIndexToLast(listN2,1,3);", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.VOID, "listN = subListFromFirstToIndex();", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.VOID, "listN = subListFromFirstToLast(listN2,2);", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.VOID, "listN = subListFromFirstToIndex(listN2,false);", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.VOID, "listN = subListFromEndToLast(listN2,3,3);", ROBOTS_WITH_LISTS),
 
-        "undefinedVariable = \"str\";",
-        "num = undefinedVariable;",
-        "undefinedVariable = undefinedVariable;",
-        "appendText(str, undefinedVariable);"
-    );
+        TC.of(BlocklyType.VOID, "undefinedVariable = \"str\";", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "num = undefinedVariable;", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "undefinedVariable = undefinedVariable;", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "appendText(str, undefinedVariable);", ROBOTS_ALL),
 
-    public static final List<String> STMT_CONTROLS_STATEMENTS_FAIL = Arrays.asList(
-        "for ( Boolean i=1; i<10; i++){};",
-        "for ( Number i=1; i<10; i=true){};",
-        "for ( String i=1; i<10; i=i+2+4){};",
-        "for ( Number i=1; i<1+true; i++){};",
-        "for ( Number i=1; i<10; i=num+true){};",
+        TC.of(BlocklyType.VOID, "for ( Boolean i=1; i<10; i++){};", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "for ( Number i=1; i<10; i=true){};", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "for ( String i=1; i<10; i=i+2+4){};", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "for ( Number i=1; i<1+true; i++){};", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "for ( Number i=1; i<10; i=num+true){};", ROBOTS_ALL),
 
-        "for each( Boolean item: listN){num=1;};",
-        "for each( Number item: true){num=1;};",
-        "if(5){num=1;} else if(false){num=2;} else{num=5;};",
-        "if(boolT||[0,0,0]){num=1;} else if(false){num=2;} else{num=5;};",
-        "while(boolT==2){num=1;};",
-        "while(boolT==2+2){num=2;};",
-        "while(2){num=1;};",
-        "while((boolT==#black) && (boolF==false)){num=2;};",
-        "for (Number i = 0; i < 10; i = i + 2) { if (isEven(i+ #black)) {insertLast(listN, i * 2);} else {insertFirst(listN, i);}; };",
-        "waitUntil(average(listN) == 5) {insertLast(listN, 7,9);} orWaitFor(average(listN) == 2) {insertFirst(listN, 666);};",
-        "waitUntil(#black) {num=1;} orWaitFor(true) {num=2;}; ",
-        "waitUntil(2) {num=1;} orWaitFor(false) {num=0;};",
-        "wait ms(false);"
+        TC.of(BlocklyType.VOID, "for each( Boolean item: listN){num=1;};", ROBOTS_WITH_LISTS),
+        TC.of(BlocklyType.VOID, "for each( Number item: true){num=1;};", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "if(5){num=1;} else if(false){num=2;} else{num=5;};", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "if(boolT||[0,0,0]){num=1;} else if(false){num=2;} else{num=5;};", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "while(boolT==2){num=1;};", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "while(boolT==2+2){num=2;};", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "while(2){num=1;};", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "while((boolT==#black) && (boolF==false)){num=2;};", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "for (Number i = 0; i < 10; i = i + 2) { if (isEven(i+ #black)) {num = 1;} else {num = 2;}; };", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "waitUntil(num == true) {num = 2;} orWaitFor(boolT) {num = 4;};", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "waitUntil(#black) {num=1;} orWaitFor(true) {num=2;}; ", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "waitUntil(2) {num=1;} orWaitFor(false) {num=0;};", ROBOTS_ALL),
+        TC.of(BlocklyType.VOID, "wait ms(false);", ROBOTS_ALL)
     );
 
     @BeforeClass
@@ -501,41 +504,26 @@ public class TestTypecheck {
     }
 
     private void setupRobotFactoryForRobot(String robotName) {
-        List<String> pluginDefines = new ArrayList<>(); // maybe used later to add properties
-        testFactory = Util.configureRobotPlugin(robotName, "", "", pluginDefines);
+        testFactory = robotFactories.getOrDefault(robotName, null);
+        if ( testFactory == null ) {
+            List<String> pluginDefines = new ArrayList<>(); // maybe used later to add properties
+            testFactory = Util.configureRobotPlugin(robotName, "", "", pluginDefines);
+            robotFactories.put(robotName, testFactory);
+        }
     }
 
     @Test
     public void testSuccessExpr() throws Exception {
-        List<Triple<String, BlocklyType, List<String>>> toBeTested = new ArrayList<>();
-        toBeTested.add(Triple.of("microbitv2", BlocklyType.NUMBER, NUMBER_EXPRESSIONS));
-        toBeTested.add(Triple.of("microbitv2", BlocklyType.BOOLEAN, BOOLEAN_EXPRESSIONS));
-        toBeTested.add(Triple.of("microbitv2", BlocklyType.ARRAY_NUMBER, LIST_EXPRESSIONS));
-        toBeTested.add(Triple.of("microbitv2", BlocklyType.STRING, STRING_EXPRESSIONS));
-
-        for ( Triple<String, BlocklyType, List<String>> testSpec : toBeTested ) {
-            String robotName = testSpec.getLeft();
-            setupRobotFactoryForRobot(robotName);
-            LOG.info("");
-            LOG.info("========= EVALUATING for robot " + robotName + " expressions of type " + testSpec.getMiddle());
-            for ( String expression : testSpec.getRight() ) {
-                LOG.info(expression);
-                String xmlUnderTest = TestTypecheckUtil.getProgramUnderTestForEvalExpr(testSpec.getMiddle(), expression);
-                typecheckAndCollectInfosForProgram(testFactory, xmlUnderTest);
+        for ( TC testSpec : EXPRESSIONS ) {
+            for ( String robotName : testSpec.robotsToBeTested ) {
+                setupRobotFactoryForRobot(robotName);
+                LOG.info(String.format("%-16s t: %-16s e: %s", robotName, testSpec.resultType, testSpec.underTest));
+                String xmlUnderTest1 = TestTypecheckUtil.getProgramUnderTestForEvalExpr(testFactory, testSpec.resultType, testSpec.underTest);
+                typecheckAndCollectInfosForProgram(testFactory, xmlUnderTest1);
                 checkMustSucceed();
-            }
-        }
-
-        for ( Triple<String, BlocklyType, List<String>> testSpec : toBeTested ) {
-            String robotName = testSpec.getLeft();
-            setupRobotFactoryForRobot(robotName);
-            LOG.info("");
-            LOG.info("========= EVALUATING for robot " + robotName + " assignments of expressions of type " + testSpec.getMiddle());
-            for ( String expression : testSpec.getRight() ) {
-                LOG.info(expression);
-                String statement = TestTypecheckUtil.convertToStatement(expression, testSpec.getMiddle());
-                String xmlUnderTest = TestTypecheckUtil.getProgramUnderTestForEvalStmt(robotName, statement);
-                typecheckAndCollectInfosForProgram(testFactory, xmlUnderTest);
+                String statement = TestTypecheckUtil.convertToStatement(testSpec.underTest, testSpec.resultType);
+                String xmlUnderTest2 = TestTypecheckUtil.getProgramUnderTestForEvalStmt(testFactory, statement);
+                typecheckAndCollectInfosForProgram(testFactory, xmlUnderTest2);
                 checkMustSucceed();
             }
         }
@@ -543,63 +531,44 @@ public class TestTypecheck {
 
     @Test
     public void testSuccessStmts() throws Exception {
-        List<Triple<String, String, List<String>>> toBeTested = new ArrayList<>();
-        toBeTested.add(Triple.of("microbitv2", "microbitv2 specific functions", MICROBITV2_SPECIFIC));
-        toBeTested.add(Triple.of("microbitv2", "generic function calls", STMT_FUNC));
-        toBeTested.add(Triple.of("microbitv2", "simple assignments", STMT_VAR_ASSIGN_SIMPLE_EXPRESSIONS));
-        toBeTested.add(Triple.of("microbitv2", "assignments", STMT_VAR_ASSIGN));
-        toBeTested.add(Triple.of("microbitv2", "control statements", STMT_CONTROLS_STATEMENTS));
-        toBeTested.add(Triple.of("wedo", "wedo specigic functions", WEDO_SPECIFIC));
-
-        for ( Triple<String, String, List<String>> testSpec : toBeTested ) {
-            String robotName = testSpec.getLeft();
-            setupRobotFactoryForRobot(robotName);
-            LOG.info("");
-            LOG.info("========= EVALUATING for robot " + robotName + " statements of kind: " + testSpec.getMiddle());
-            for ( String expression : testSpec.getRight() ) {
-                LOG.info(expression);
-                String xmlUnderTest = TestTypecheckUtil.getProgramUnderTestForEvalStmt(testSpec.getLeft(), expression);
+        for ( TC testSpec : GENERIC_STMTS ) {
+            for ( String robotName : testSpec.robotsToBeTested ) {
+                setupRobotFactoryForRobot(robotName);
+                LOG.info(String.format("%-16s t: %-16s s: %s", robotName, testSpec.resultType, testSpec.underTest));
+                String xmlUnderTest = TestTypecheckUtil.getProgramUnderTestForEvalStmt(testFactory, testSpec.underTest);
                 typecheckAndCollectInfosForProgram(testFactory, xmlUnderTest);
                 checkMustSucceed();
             }
         }
     }
 
+    /**
+     * parser errors are generic and tested for all robot plugins only by using microbitv2
+     */
     @Test
     public void testParserErrors() throws Exception {
-        List<Triple<String, String, List<String>>> toBeTested = new ArrayList<>();
-        toBeTested.add(Triple.of("microbitv2", "microbitv2 parser errors", STMT_VAR_ASSIGN_SIMPLE_EXPRESSIONS_ERROR_PARSER));
+        String robotName = "microbitv2";
+        setupRobotFactoryForRobot(robotName);
+        LOG.info("");
+        LOG.info("========= EVALUATING for robot " + robotName + " (generic) parser errors");
 
-        for ( Triple<String, String, List<String>> testSpec : toBeTested ) {
-            String robotName = testSpec.getLeft();
-            setupRobotFactoryForRobot(robotName);
-            LOG.info("");
-            LOG.info("========= EVALUATING for robot " + robotName + " parser errors of kind: " + testSpec.getMiddle());
-            for ( String expression : testSpec.getRight() ) {
-                LOG.info(expression);
-                String xmlUnderTest = TestTypecheckUtil.getProgramUnderTestForEvalStmt(testSpec.getLeft(), expression);
-                typecheckAndCollectInfosForProgram(testFactory, xmlUnderTest);
-                checkParserFailResults();
-            }
+        for ( String underTest : PARSER_ERRORS ) {
+            LOG.info(underTest);
+            String xmlUnderTest = TestTypecheckUtil.getProgramUnderTestForEvalStmt(testFactory, underTest);
+            typecheckAndCollectInfosForProgram(testFactory, xmlUnderTest);
+            checkMustHaveParseErrors();
         }
     }
 
     @Test
     public void testTypecheckErrors() throws Exception {
-        List<Triple<String, String, List<String>>> toBeTested = new ArrayList<>();
-        toBeTested.add(Triple.of("microbitv2", "control statements", STMT_CONTROLS_STATEMENTS_FAIL));
-        toBeTested.add(Triple.of("microbitv2", "function calls", STMT_FUNC_FAIL));
-        toBeTested.add(Triple.of("microbitv2", "assignments", STMT_VAR_ASSIGN_FAIL));
-
-
-        for ( Triple<String, String, List<String>> testSpec : toBeTested ) {
-            String robotName = testSpec.getLeft();
-            setupRobotFactoryForRobot(robotName);
-            LOG.info("");
-            LOG.info("========= EVALUATING for robot " + robotName + " typecheck errors of kind: " + testSpec.getMiddle());
-            for ( String expression : testSpec.getRight() ) {
-                LOG.info(expression);
-                String xmlUnderTest = TestTypecheckUtil.getProgramUnderTestForEvalStmt(testSpec.getLeft(), expression);
+        LOG.info("");
+        LOG.info("========= TESTING typecheck errors");
+        for ( TC testSpec : TYPECHECK_ERRORS ) {
+            for ( String robotName : testSpec.robotsToBeTested ) {
+                setupRobotFactoryForRobot(robotName);
+                LOG.info(String.format("%-16s t: %-16s s: %s", robotName, testSpec.resultType, testSpec.underTest));
+                String xmlUnderTest = TestTypecheckUtil.getProgramUnderTestForEvalStmt(testFactory, testSpec.underTest);
                 typecheckAndCollectInfosForProgram(testFactory, xmlUnderTest);
                 checkMustHaveTypeErrors();
             }
@@ -609,11 +578,12 @@ public class TestTypecheck {
     @Ignore
     @Test
     public void testSingleStmt() throws Exception {
-        String robotName = "microbitv2";
+        String robotName = "ev3lejosv1";
         setupRobotFactoryForRobot(robotName);
-        String expression = "listN = subList(listN2,0,true);";
+        String statement = "undef = 4;";
+        LOG.info("expect a typecheck error for robot: " + robotName + " statement: " + statement);
 
-        String xmlUnderTest = TestTypecheckUtil.getProgramUnderTestForEvalStmt(robotName, expression);
+        String xmlUnderTest = TestTypecheckUtil.getProgramUnderTestForEvalStmt(testFactory, statement);
         typecheckAndCollectInfosForProgram(testFactory, xmlUnderTest);
         checkMustHaveTypeErrors(); // check if the stmt should fail
         //checkMustSucceed(); // check if the stmt should not fail
@@ -623,15 +593,20 @@ public class TestTypecheck {
     @Test
     public void testSingleExpression() throws Exception {
         String robotName = "microbitv2";
-        setupRobotFactoryForRobot(robotName);
-
+        BlocklyType expectedType = BlocklyType.NUMBER;
+        String expectedResult = "ok"; // "ok" or "typeerror"
         String expression = "sin(num) + cos(num) + tan(num)";
 
-        String xmlUnderTest = TestTypecheckUtil.getProgramUnderTestForEvalExpr(BlocklyType.NUMBER, expression);
+        setupRobotFactoryForRobot(robotName);
+        String xmlUnderTest = TestTypecheckUtil.getProgramUnderTestForEvalExpr(testFactory, expectedType, expression);
         typecheckAndCollectInfosForProgram(testFactory, xmlUnderTest);
-        checkMustHaveTypeErrors(); // check if the expression should fail
-        //checkTypecheckGoodResults(); // check if the expression should not fail
-
+        if ( expectedResult.equals("ok") ) {
+            checkMustSucceed();
+        } else if ( expectedResult.equals("typeerror") ) {
+            checkMustHaveTypeErrors();
+        } else {
+            Assert.fail("expected result invalid");
+        }
     }
 
     private void typecheckAndCollectInfosForProgram(RobotFactory factory, String xmlUnderTest) throws Exception {
@@ -641,20 +616,17 @@ public class TestTypecheck {
 
         Project.Builder builder = UnitTestHelper.setupWithExportXML(factory, xmlUnderTest);
         Project project = builder.build();
-
-        UnitTestHelper.executeWorkflow("showsource", testFactory, project);
-        UsedHardwareBean usedHardwareBean = project.getWorkerResult(UsedHardwareBean.class);
+        ProjectService.executeWorkflow("showsource", project);
 
         for ( List<Phrase> listOfPhrases : project.getProgramAst().getTree() ) {
             for ( Phrase phrase : listOfPhrases ) {
-                List<NepoInfo> infos = typecheckAndCollectInfosForPhrase(phrase, usedHardwareBean, factory.getPluginProperties().getRobotName());
+                List<NepoInfo> infos = NepoInfoProcessor.collectNepoInfos(phrase);
                 for ( NepoInfo info : infos ) {
                     if ( info.getSeverity() == NepoInfo.Severity.ERROR ) {
                         if ( info.getMessage().contains("PARSE") ) {
                             messages.add(info.getMessage());
                             parserErrorCount++;
-                        }
-                        if ( info.getMessage().contains("TYPECHECK") ) {
+                        } else {
                             messages.add(info.getMessage());
                             typecheckErrorCount++;
                         }
@@ -664,47 +636,34 @@ public class TestTypecheck {
         }
     }
 
-    private static List<NepoInfo> typecheckAndCollectInfosForPhrase(Phrase ast, UsedHardwareBean usedHardwareBean, String robotName) throws Exception {
-        if ( robotName.equals("wedo") ) {
-            WedoTypecheckVisitor visitor = new WedoTypecheckVisitor(usedHardwareBean);
-            ast.accept(visitor);
-            return InfoCollector.collectInfos(ast);
-        } else if ( robotName.equals("microbitv2") ) {
-            MicrobitV2TypecheckVisitor visitor = new MicrobitV2TypecheckVisitor(usedHardwareBean);
-            ast.accept(visitor);
-            return InfoCollector.collectInfos(ast);
-        } else {
-            LOG.info("Invalid Robot name" + robotName);
-            return null;
-        }
-    }
-
     private void checkMustSucceed() {
-        if (parserErrorCount > 0 || typecheckErrorCount > 0 || SHOW_MESSAGES) {
+        if ( parserErrorCount > 0 || typecheckErrorCount > 0 || SHOW_MESSAGES ) {
             for ( String message : messages ) {
                 LOG.info(message);
             }
         }
-        Assert.assertEquals("Unexpected parser error", 0, parserErrorCount);
-        Assert.assertEquals("Unexpected typecheck error", 0, typecheckErrorCount);
+        Assert.assertTrue("unexpected parser error", parserErrorCount == 0);
+        Assert.assertTrue("unexpected typecheck error", typecheckErrorCount == 0);
     }
 
     private void checkMustHaveTypeErrors() {
-        if (SHOW_MESSAGES) {
+        if ( SHOW_MESSAGES ) {
             for ( String message : messages ) {
                 LOG.info(message);
             }
         }
-        Assert.assertEquals("Unexpected parser error", 0, parserErrorCount);
-        Assert.assertNotEquals("typecheck error was expected", 0, typecheckErrorCount);
+        Assert.assertTrue("unexpected parser error", parserErrorCount == 0);
+        Assert.assertTrue("typecheck error was expected", typecheckErrorCount != 0);
     }
 
-    private void checkParserFailResults() {
-        if (SHOW_MESSAGES) {
+    private void checkMustHaveParseErrors() {
+        if ( SHOW_MESSAGES ) {
             for ( String message : messages ) {
                 LOG.info(message);
             }
         }
-        Assert.assertNotEquals("parse error was expeced", 0, parserErrorCount);
+        Assert.assertTrue("parse error was expeced", parserErrorCount != 0);
     }
+
+
 }

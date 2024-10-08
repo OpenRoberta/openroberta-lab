@@ -1,7 +1,6 @@
 package de.fhg.iais.roberta.visitor.validate;
 
 import java.util.HashMap;
-import java.util.List;
 
 import com.google.common.collect.ClassToInstanceMap;
 
@@ -78,8 +77,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.TextAppendStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.typecheck.InfoCollector;
-import de.fhg.iais.roberta.typecheck.NepoInfo;
+import de.fhg.iais.roberta.typecheck.NepoInfoProcessor;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.FunctionNames;
 
@@ -106,27 +104,14 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
     @Override
     public Void visitEvalExpr(EvalExpr evalExpr) {
         requiredComponentVisited(evalExpr, evalExpr.exprAsBlock);
-        List<NepoInfo> infosOfSubAst = InfoCollector.collectInfos(evalExpr);
-        if ( !infosOfSubAst.isEmpty() ) {
-            for ( NepoInfo info : infosOfSubAst ) {
-                String message = info.getMessage();
-                addErrorToPhrase(evalExpr, message);
-            }
-        }
-
+        NepoInfoProcessor.elevateNepoInfos(evalExpr);
         return null;
     }
 
     @Override
-    public Void visitEvalStmts(EvalStmts stmtEvalExpr) {
-        requiredComponentVisited(stmtEvalExpr, stmtEvalExpr.stmtsAsBlock);
-        List<NepoInfo> infosOfSubAst = InfoCollector.collectInfos(stmtEvalExpr);
-        if ( !infosOfSubAst.isEmpty() ) {
-            for ( NepoInfo info : infosOfSubAst ) {
-                String message = info.getMessage();
-                addErrorToPhrase(stmtEvalExpr, message);
-            }
-        }
+    public Void visitEvalStmts(EvalStmts evalStmt) {
+        requiredComponentVisited(evalStmt, evalStmt.stmtsAsBlock);
+        NepoInfoProcessor.elevateNepoInfos(evalStmt);
         return null;
     }
 

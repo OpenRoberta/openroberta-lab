@@ -1,14 +1,13 @@
 package de.fhg.iais.roberta.javaServer.typecheck;
 
 import java.util.EnumMap;
-import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import org.junit.Assert;
 
+import de.fhg.iais.roberta.factory.RobotFactory;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.Util;
 
@@ -27,8 +26,12 @@ public class TestTypecheckUtil {
         VAR_NAME_MAP.put(BlocklyType.COLOR, "color");
     }
 
-    public static String getProgramUnderTestForEvalStmt(String robot, String stmt) {
-        String filePath = "/crossCompilerTests/robotSpecific/" + robot + "/textly/templateProgramStmtExpr.xml";
+    public static String getProgramUnderTestForEvalStmt(RobotFactory robotFactory, String stmt) {
+        String pathPartForRobot = robotFactory.getPluginProperties().getStringProperty("robot.plugin.group");
+        if (pathPartForRobot == null) {
+            pathPartForRobot = robotFactory.getPluginProperties().getRobotName();
+        }
+        String filePath = "/crossCompilerTests/robotSpecific/" + pathPartForRobot + "/textly/templateProgramStmtExpr.xml";
         String xmlContent = Util.readResourceContent(filePath);
 
         Matcher matcher = TO_BE_TESTED_PATTERN.matcher(xmlContent);
@@ -36,8 +39,12 @@ public class TestTypecheckUtil {
         return modifiedXML;
     }
 
-    public static String getProgramUnderTestForEvalExpr(BlocklyType expectedType, String toBeTested) {
-        String filePath = "/crossCompilerTests/robotSpecific/microbitv2/textly/templateProgramExprEval.xml";
+    public static String getProgramUnderTestForEvalExpr(RobotFactory robotFactory, BlocklyType expectedType, String toBeTested) {
+        String pathPartForRobot = robotFactory.getPluginProperties().getStringProperty("robot.plugin.group");
+        if (pathPartForRobot == null) {
+            pathPartForRobot = robotFactory.getPluginProperties().getRobotName();
+        }
+        String filePath = "/crossCompilerTests/robotSpecific/" + pathPartForRobot + "/textly/templateProgramExprEval.xml";
         String xmlContent = Util.readResourceContent(filePath);
 
         String varName = VAR_NAME_MAP.get(expectedType);

@@ -44,34 +44,6 @@ public final class UnitTestHelper {
     private UnitTestHelper() {
     }
 
-    public static void executeWorkflowMustSucceed(String workflowName, RobotFactory robotFactory, Project project) {
-        Assert.assertNull(executeWorkflow(workflowName, robotFactory, project));
-    }
-
-    /**
-     * execute a workflow
-     *
-     * @param workflowName
-     * @param robotFactory
-     * @param project
-     * @return null, if the workflow succeeds; otherwise a String with an error message
-     */
-    public static String executeWorkflow(String workflowName, RobotFactory robotFactory, Project project) {
-        List<IWorker> workflowPipe = robotFactory.getWorkerPipe(workflowName);
-        if ( project.hasSucceeded() ) {
-            for ( IWorker worker : workflowPipe ) {
-                worker.execute(project);
-                if ( !project.hasSucceeded() ) {
-                    String workerClassName = worker.getClass().getSimpleName();
-                    return "Worker " + workerClassName + " failed with " + project.getErrorCounter() + " errors: " + project.getErrorAndWarningMessages();
-                }
-            }
-            return null;
-        } else {
-            return "Error in project. Messages: " + project.getErrorAndWarningMessages();
-        }
-    }
-
     public static Project.Builder setupWithNativeSource(RobotFactory factory, String nativeSource) {
         return new Project.Builder().setProgramNativeSource(nativeSource).setFactory(factory);
     }

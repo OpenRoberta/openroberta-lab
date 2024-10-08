@@ -5,7 +5,6 @@ import java.util.List;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.transformer.AnnotationHelper;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.typecheck.InfoCollector;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
 import de.fhg.iais.roberta.typecheck.NepoInfos;
 import de.fhg.iais.roberta.util.ast.AstFactory;
@@ -158,20 +157,6 @@ abstract public class Phrase implements IInfoCollectable {
      */
     public final void addTextlyError(String error, boolean typecheckError) {
         this.infos.addInfo(typecheckError ? NepoInfo.error("PROGRAM_ERROR_EXPRBLOCK_TYPECHECK " + error) : NepoInfo.error("PROGRAM_ERROR_EXPRBLOCK_PARSE " + error));
-    }
-
-    /**
-     * retrieve typecheck errors from the AST sub-tree of an eval block.
-     * They must be elevated to this block, because the EvalExpr block is explicitly designed to hide the sub-tree.
-     */
-    public boolean elevateNepoInfosAndCheckForCorrectness() {
-        boolean errorFree = true;
-        List<NepoInfo> infos = InfoCollector.collectInfos(this);
-        for ( NepoInfo info : infos ) {
-            addNepoInfo(info);
-            errorFree = false;
-        }
-        return errorFree;
     }
 
     /**

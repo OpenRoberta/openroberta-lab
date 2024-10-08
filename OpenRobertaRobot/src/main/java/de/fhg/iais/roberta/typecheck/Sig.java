@@ -83,7 +83,9 @@ public class Sig {
                     if ( this.paramTypes[i].equalAsTypes(BlocklyType.CAPTURED_TYPE) ) {
                         if ( capturedType == null ) {
                             capturedType = actualParamType;
-                            returnTypeIfError = capturedType;
+                            if (returnTypeIfError.equalAsTypes(BlocklyType.CAPTURED_TYPE)) {
+                                returnTypeIfError = capturedType;
+                            }
                         }
                         if ( returnType == BlocklyType.VOID && !capturedType.isArray() ) {
                             String message = "a list type was expected, but found was type: " + b2m(actualParamType);
@@ -97,9 +99,11 @@ public class Sig {
                     } else if ( this.paramTypes[i].equalAsTypes(BlocklyType.CAPTURED_TYPE_ARRAY_ITEM) ) {
                         if ( capturedType == null ) {
                             capturedType = actualParamType.getMatchingArrayTypeForElementType();
-                            returnTypeIfError = capturedType;
+                            if (returnTypeIfError.equalAsTypes(BlocklyType.CAPTURED_TYPE_ARRAY_ITEM)) {
+                                returnTypeIfError = capturedType;
+                            }
                         } else if ( !actualParamType.equalAsTypes(capturedType.getMatchingElementTypeForArrayType()) ) {
-                            String message = "For the " + n2m(phraseToCheck) + " the expected type for one of the parameters is: " + b2m(capturedType.getMatchingElementTypeForArrayType()) + ", but found was type: " + b2m(actualParamType);
+                            String message = "For parameter " + (i+1) + " of " + n2m(phraseToCheck) + " the expected type: " + b2m(capturedType.getMatchingElementTypeForArrayType()) + ", but found was type: " + b2m(actualParamType);
                             phraseToCheck.addTextlyError(message, true);
                             return returnTypeIfError;
                         }
@@ -107,11 +111,11 @@ public class Sig {
                         if ( phraseToCheck instanceof Binary ) {
                             String[] op = ((Binary) phraseToCheck).op.values;
                             String leftOrRight = i==0 ? "left" : "right";
-                            String message = "For the binary op \"" + op[0] + "\" the expected type for the " + leftOrRight + " parameter is: " + b2m(this.paramTypes[i]) + ", but found was type: " + b2m(actualParamType);
+                            String message = "For binary op \"" + op[0] + "\" the expected type for the " + leftOrRight + " parameter is: " + b2m(this.paramTypes[i]) + ", but found was type: " + b2m(actualParamType);
                             phraseToCheck.addTextlyError(message, true);
                             return returnTypeIfError;
                         } else {
-                            String message = "For the parameter " + (i+1) + " of " + n2m(phraseToCheck) + " the expected type: " + b2m(this.paramTypes[i]) + ", but found was type: " + b2m(actualParamType);
+                            String message = "For parameter " + (i+1) + " of " + n2m(phraseToCheck) + " the expected type is: " + b2m(this.paramTypes[i]) + ", but found was: " + b2m(actualParamType);
                             phraseToCheck.addTextlyError(message, true);
                             return returnTypeIfError;
                         }

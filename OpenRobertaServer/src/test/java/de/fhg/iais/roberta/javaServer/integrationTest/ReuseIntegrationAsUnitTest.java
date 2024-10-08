@@ -53,6 +53,7 @@ import de.fhg.iais.roberta.components.ProgramAst;
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.factory.RobotFactory;
 import de.fhg.iais.roberta.javaServer.restServices.all.controller.ProjectWorkflowRestController;
+import de.fhg.iais.roberta.javaServer.restServices.all.service.ProjectService;
 import de.fhg.iais.roberta.mode.action.Language;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
@@ -227,7 +228,7 @@ public class ReuseIntegrationAsUnitTest {
             Project.Builder builder = UnitTestHelper.setupWithConfigAndProgramXML(testFactory, programXml, configXml);
             builder.setRobot(robotName).setProgramName("NEPOprog").setSSID("test").setPassword("test").setLanguage(Language.ENGLISH);
             Project project = builder.build();
-            String msg = UnitTestHelper.executeWorkflow("getsimulationcode", testFactory, project);
+            ProjectService.executeWorkflow("getsimulationcode", project);
             String stackMachineCode = StackmachinePrettyPrinter.prettyPrint(new JSONObject(project.getCompiledHex()), true, true);
             codeGenerationOk = codeGenerationOk &&
                 compareExpectedToGenerated(
@@ -311,11 +312,11 @@ public class ReuseIntegrationAsUnitTest {
         checkAndShowTestResult();
     }
 
-    @Ignore
+    // @Ignore
     @Test
     public void testOneRobotSpecificProgramAsUnitTests() throws Exception {
-        String robotName = "microbitv2";
-        String programName = "for_loop";
+        String robotName = "ev3dev";
+        String programName = "sensors_ht";
         LOG.info("========= testing program " + programName + " for robot " + robotName);
         final String resourceDirectory = setupRobotFactoryAndGetResourceDirForRobotSpecificTests(robotName);
         runRegenerateAndCodeGenerationForOneRobotSpecificProgram(resourceDirectory, programName + ".xml", robotName, Collections.emptyList());
@@ -467,10 +468,9 @@ public class ReuseIntegrationAsUnitTest {
      * if an error is detected, the data is written to the directory 'target/unitTests' for debugging
      *
      * @param directory Used to select the target directory for storing
-     * @param programXml
-     * @param configXml
+     * @param robotName
      * @param programName
-     * @param robotFactory
+     * @param exportXml
      */
     private boolean compareCollectorResultsForOneProgram(String directory, String robotName, String programName, String exportXml) //
     {
@@ -482,7 +482,7 @@ public class ReuseIntegrationAsUnitTest {
         Project project = builder.build();
 
         try {
-            UnitTestHelper.executeWorkflow("showsource", testFactory, project);
+            ProjectService.executeWorkflow("showsource", project);
 
             UsedHardwareBean usedHardwareBean = project.getWorkerResult(UsedHardwareBean.class);
             UsedMethodBean usedMethodBean = project.getWorkerResult(UsedMethodBean.class);
@@ -523,9 +523,9 @@ public class ReuseIntegrationAsUnitTest {
 
         boolean thisUnitTestIsOk;
         try {
-            String msg = UnitTestHelper.executeWorkflow("showsource", testFactory, project);
-            if ( msg != null ) {
-                LOG.error("showsource workflow failed for " + programName + " with message " + msg);
+            ProjectService.executeWorkflow("showsource", project);
+            if ( !project.hasSucceeded() ) {
+                LOG.error("showsource workflow failed for " + programName + " with " + project.getResult());
                 thisUnitTestIsOk = false;
                 storeExportOfXml(directory, programName, robotName, programXml, configXml);
             } else {

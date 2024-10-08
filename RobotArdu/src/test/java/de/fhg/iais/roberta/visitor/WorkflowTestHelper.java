@@ -69,35 +69,11 @@ public class WorkflowTestHelper {
             .setRobot(robot)
             .build();
 
-        if ( project.hasSucceeded() ) {
-            for ( IWorker worker : workerChain ) {
+        for ( IWorker worker : workerChain ) {
+            if ( project.hasSucceeded() || worker.mustRunEvenIfPreviousWorkerFailed()) {
                 worker.execute(project);
-                if ( !project.hasSucceeded() ) {
-                    break;
-                }
             }
         }
-        return project;
-    }
-
-    protected Project executeWorkflow(String workflowName) {
-        ProgramAst programAst = new ProgramAst.Builder()
-            .setRobotType(robotFactory.getGroup())
-            .addToTree(phrases)
-            .build();
-
-        ConfigurationAst configurationAst = new ConfigurationAst.Builder()
-            .setRobotType(robotFactory.getGroup())
-            .addComponents(configurationComponents)
-            .build();
-
-        Project project = new Project.Builder()
-            .setFactory(robotFactory)
-            .setProgramAst(programAst)
-            .setConfigurationAst(configurationAst)
-            .build();
-
-        UnitTestHelper.executeWorkflow(workflowName, robotFactory, project);
         return project;
     }
 

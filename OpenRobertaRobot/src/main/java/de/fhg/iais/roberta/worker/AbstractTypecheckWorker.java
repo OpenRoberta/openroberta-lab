@@ -5,7 +5,7 @@ import java.util.List;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.typecheck.InfoCollector;
+import de.fhg.iais.roberta.typecheck.NepoInfoProcessor;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.visitor.validate.TypecheckCommonLanguageVisitor;
 
@@ -23,7 +23,7 @@ public abstract class AbstractTypecheckWorker implements IWorker {
         for ( List<Phrase> listOfPhrases : project.getProgramAst().getTree() ) {
             for ( Phrase phrase : listOfPhrases ) {
                 phrase.accept(visitor);
-                int errorsOfThisPhrase = InfoCollector.collectInfos(phrase).size();
+                int errorsOfThisPhrase = NepoInfoProcessor.collectNepoErrors(phrase).size();
                 errors += errorsOfThisPhrase;
             }
         }
@@ -43,5 +43,5 @@ public abstract class AbstractTypecheckWorker implements IWorker {
      * @param usedHardwareBean the used hardware bean
      * @return the appropriate visitor for the current robot
      */
-    protected abstract TypecheckCommonLanguageVisitor getVisitor(Project project, UsedHardwareBean usedHardwareBean);
+    public abstract TypecheckCommonLanguageVisitor getVisitor(Project project, UsedHardwareBean usedHardwareBean);
 }

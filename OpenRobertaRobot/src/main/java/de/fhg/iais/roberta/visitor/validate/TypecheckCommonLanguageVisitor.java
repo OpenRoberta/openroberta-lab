@@ -80,6 +80,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerSensor;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
+import de.fhg.iais.roberta.typecheck.NepoInfoProcessor;
 import de.fhg.iais.roberta.typecheck.Sig;
 import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.syntax.FunctionNames;
@@ -105,8 +106,6 @@ public abstract class TypecheckCommonLanguageVisitor extends BaseVisitor<Blockly
 
     /**
      * initialize the typecheck visitor.
-     *
-     * @param phrase to typecheck
      */
     public TypecheckCommonLanguageVisitor(UsedHardwareBean usedHardwareBean) {
         this.usedHardwareBean = usedHardwareBean;
@@ -115,14 +114,14 @@ public abstract class TypecheckCommonLanguageVisitor extends BaseVisitor<Blockly
     public BlocklyType visitEvalExpr(EvalExpr evalExpr) {
         BlocklyType expectedType = evalExpr.getBlocklyType();
         Sig.of(expectedType, expectedType).typeCheckPhrases(evalExpr, this, evalExpr.exprAsBlock);
-        evalExpr.elevateNepoInfosAndCheckForCorrectness();
+        NepoInfoProcessor.elevateNepoInfos(evalExpr);
         return expectedType;
     }
 
     public BlocklyType visitEvalStmts(EvalStmts evalStmts) {
         BlocklyType expectedType = evalStmts.getBlocklyType();
         Sig.of(expectedType, expectedType).typeCheckPhrases(evalStmts, this, evalStmts.stmtsAsBlock);
-        evalStmts.elevateNepoInfosAndCheckForCorrectness();
+        NepoInfoProcessor.elevateNepoInfos(evalStmts);
         return expectedType;
     }
 

@@ -1,8 +1,10 @@
 package de.fhg.iais.roberta.util.visitor;
 
+import de.fhg.iais.roberta.typecheck.NepoInfoProcessor;
+
 /**
  * Interface to declare, that components of a class, which implements this interface, contain infos, that the
- * class {@link de.fhg.iais.roberta.typecheck.InfoCollector} should collect
+ * class {@link NepoInfoProcessor} should collect
  */
 public interface IInfoCollectable {
 

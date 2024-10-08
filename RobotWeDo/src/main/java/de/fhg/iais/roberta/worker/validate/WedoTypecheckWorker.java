@@ -9,7 +9,7 @@ import de.fhg.iais.roberta.worker.AbstractTypecheckWorker;
 public class WedoTypecheckWorker extends AbstractTypecheckWorker {
 
     @Override
-    protected TypecheckCommonLanguageVisitor getVisitor(Project project, UsedHardwareBean usedHardwareBean) {
+    public TypecheckCommonLanguageVisitor getVisitor(Project project, UsedHardwareBean usedHardwareBean) {
         return new WedoTypecheckVisitor(usedHardwareBean);
     }
 }

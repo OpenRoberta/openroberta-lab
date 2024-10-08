@@ -38,6 +38,16 @@
 								</block>
 							</value>
 						</block>
+						<block type="robGlobalVariables_declare" id="8b7%6SdJ@Kr,drDH%(6N" intask="true" deletable="false" movable="false">
+							<mutation next="true" declaration_type="Boolean"></mutation>
+							<field name="VAR">boolF</field>
+							<field name="TYPE">Boolean</field>
+							<value name="VALUE">
+								<block type="logic_boolean" id="@p4)2-(|r!]][_FVq51S" intask="true">
+									<field name="BOOL">FALSE</field>
+								</block>
+							</value>
+						</block>
 						<block type="robGlobalVariables_declare" id="WSg[;aS{o@^2XWvoz%0+" intask="true" deletable="false" movable="false">
 							<mutation next="false" declaration_type="Colour"></mutation>
 							<field name="VAR">color</field>

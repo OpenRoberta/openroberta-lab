@@ -34,4 +34,8 @@ public class NepoInfos {
             this.infos.add(info);
         }
     }
+
+    public void clear() {
+        infos.clear();
+    }
 }
