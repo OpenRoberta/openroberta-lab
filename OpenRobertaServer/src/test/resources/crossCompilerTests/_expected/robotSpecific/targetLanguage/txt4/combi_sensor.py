@@ -16,6 +16,7 @@ TXT_M_I2C_1_combined_sensor_6pin.init_gyrometer(250, 12.5)
 time.sleep(0.1)
 
 
+
 def ____combiSensor():
     print("CombiSensor aka IMU")
     print("Acceleration X")

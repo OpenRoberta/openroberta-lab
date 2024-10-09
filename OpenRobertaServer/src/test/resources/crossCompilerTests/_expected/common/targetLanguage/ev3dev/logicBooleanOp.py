@@ -21,6 +21,7 @@ _brickConfiguration = {
 hal = Hal(_brickConfiguration)
 
 ___x = 0
+
 def run():
     global ___x
     # Logic Boolean Operators -- Start

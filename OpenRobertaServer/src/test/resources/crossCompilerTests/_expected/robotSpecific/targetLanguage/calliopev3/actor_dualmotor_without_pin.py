@@ -2,6 +2,45 @@ import calliopemini
 import random
 import math
 
+
+def servo_get_angle(angle):
+    if (angle < 0): 
+        angle = 0
+    if (angle > 180): 
+        angle = 180
+    return round(0.55 * angle) + 25
+
+def set_both_motors(speed_A, speed_B):
+    digit_0 = 0
+    digit_1 = 0
+    if (speed_A < 0):
+        digit_0 = 1
+        speed_A *= -1
+    if (speed_B < 0):
+        digit_1 = 1
+        speed_B *= -1
+    speed_A = int(speed_A * 10.23)
+    speed_B = int(speed_B * 10.23)
+    calliopemini.pin_M_MODE.write_digital(1)
+    calliopemini.pin_M0_DIR.write_digital(digit_0)
+    calliopemini.pin_M1_DIR.write_digital(digit_1)
+    calliopemini.pin_M0_SPEED.write_analog(speed_A)
+    calliopemini.pin_M1_SPEED.write_analog(speed_B)
+
+def set_motor(port, speed):
+    digit = 0
+    if (speed < 0):
+        digit = 1
+        speed *= -1
+    speed = int(speed * 10.23)
+    calliopemini.pin_M_MODE.write_digital(1)
+    if (port == "A"):
+        calliopemini.pin_M0_DIR.write_digital(digit)
+        calliopemini.pin_M0_SPEED.write_analog(speed)
+    else:
+        calliopemini.pin_M1_DIR.write_digital(digit)
+        calliopemini.pin_M1_SPEED.write_analog(speed)
+
 class BreakOutOfALoop(Exception): pass
 class ContinueLoop(Exception): pass
 
@@ -10,6 +49,7 @@ calliopemini.pin1.set_analog_period(20)
 
 
 ___n = 50
+
 def ____move():
     global timer1, ___n
     print("M1 M2 Speed 50 Variable")
@@ -99,6 +139,7 @@ def ____wait():
             break
     calliopemini.sleep(700)
 
+
 def run():
     global timer1, ___n
     ____move()
@@ -108,44 +149,6 @@ def main():
         run()
     except Exception as e:
         raise
-
-def servo_get_angle(angle):
-    if (angle < 0): 
-        angle = 0
-    if (angle > 180): 
-        angle = 180
-    return round(0.55 * angle) + 25
-
-def set_both_motors(speed_A, speed_B):
-    digit_0 = 0
-    digit_1 = 0
-    if (speed_A < 0):
-        digit_0 = 1
-        speed_A *= -1
-    if (speed_B < 0):
-        digit_1 = 1
-        speed_B *= -1
-    speed_A = int(speed_A * 10.23)
-    speed_B = int(speed_B * 10.23)
-    calliopemini.pin_M_MODE.write_digital(1)
-    calliopemini.pin_M0_DIR.write_digital(digit_0)
-    calliopemini.pin_M1_DIR.write_digital(digit_1)
-    calliopemini.pin_M0_SPEED.write_analog(speed_A)
-    calliopemini.pin_M1_SPEED.write_analog(speed_B)
-
-def set_motor(port, speed):
-    digit = 0
-    if (speed < 0):
-        digit = 1
-        speed *= -1
-    speed = int(speed * 10.23)
-    calliopemini.pin_M_MODE.write_digital(1)
-    if (port == "A"):
-        calliopemini.pin_M0_DIR.write_digital(digit)
-        calliopemini.pin_M0_SPEED.write_analog(speed)
-    else:
-        calliopemini.pin_M1_DIR.write_digital(digit)
-        calliopemini.pin_M1_SPEED.write_analog(speed)
 
 if __name__ == "__main__":
     main()

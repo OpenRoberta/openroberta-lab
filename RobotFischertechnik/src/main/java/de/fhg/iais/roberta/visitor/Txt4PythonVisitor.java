@@ -11,7 +11,6 @@ import com.google.common.collect.ClassToInstanceMap;
 import de.fhg.iais.roberta.bean.CodeGeneratorSetupBean;
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
-import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.components.ConfigurationAst;
 import de.fhg.iais.roberta.components.UsedSensor;
 import de.fhg.iais.roberta.constants.FischertechnikConstants;
@@ -38,7 +37,6 @@ import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
-import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.CameraBallSensor;
@@ -82,6 +80,7 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
     private String gesture = "";
     private ArrayList<String> ultrasonicSensors = new ArrayList<>();
     private Map<String, List<ConfigurationComponent>> detectorsMap = new HashMap<>();
+
     /**
      * initialize the Python code generator visitor.
      *
@@ -114,29 +113,12 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
     @Override
     public Void visitMainTask(MainTask mainTask) {
         UsedHardwareBean usedHardwareBean = this.getBean(UsedHardwareBean.class);
-        if ( this.programPhrases
-            .stream()
-            .filter(phrase -> phrase.getKind().getCategory() == Category.METHOD && !phrase.getKind().hasName("METHOD_CALL"))
-            .count() > 0 ) {
-            generateUserDefinedMethods();
-        }
-        if ( !this.getBean(CodeGeneratorSetupBean.class).getUsedMethods().isEmpty() ) {
-            String helperMethodImpls =
-                this.getBean(CodeGeneratorSetupBean.class)
-                    .getHelperMethodGenerator()
-                    .getHelperMethodDefinitions(this.getBean(CodeGeneratorSetupBean.class).getUsedMethods());
-            this.src.add(helperMethodImpls);
-        }
-        generateNNStuff("python");
+
         if ( usedHardwareBean.isSensorUsed(FischertechnikConstants.CAMERA) ) {
             cameraInitialized(usedHardwareBean);
         }
         nlIndent();
-        StmtList variables = mainTask.variables;
-        if ( !variables.get().isEmpty() ) {
-            variables.accept(this);
-            nlIndent();
-        }
+        visitorGenerateUserVariablesAndMethods(mainTask);
         this.src.add("def run():");
         incrIndentation();
         if ( !this.usedGlobalVarInFunctions.isEmpty() ) {
@@ -916,10 +898,7 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
     }
 
     @Override
-    protected void generateProgramPrefix(boolean withWrapping) {
-        if ( !withWrapping ) {
-            return;
-        }
+    protected void visitorGenerateImports() {
         UsedHardwareBean usedHardwareBean = this.getBean(UsedHardwareBean.class);
         this.src.add("import fischertechnik.factories as txt_factory").nlI();
 
@@ -942,6 +921,11 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
 
         this.src.add("import math").nlI();
         this.src.add("import time").nlI().nlI();
+    }
+
+    @Override
+    protected void visitorGenerateGlobalVariables() {
+        UsedHardwareBean usedHardwareBean = this.getBean(UsedHardwareBean.class);
 
         this.src.add("txt_factory.init()").nlI();
         this.src.add("txt_factory.init_input_factory()").nlI();
@@ -1122,7 +1106,7 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
             List<ConfigurationComponent> motiondetectors = detectorsMap.get("CAMERA_MOTIONDETECTOR");
             for ( ConfigurationComponent detector : motiondetectors ) {
                 detectorRegion = getDetectorregion(detector);
-                
+
                 this.src.add("motion_detector_", detector.userDefinedPortName,
                     " = txt_factory.camera_factory.create_motion_detector(",
                     detectorRegion.get("startX"), ", ", detectorRegion.get("startY"), ", ", detectorRegion.get("width"), ", ", detectorRegion.get("height"), ", ",

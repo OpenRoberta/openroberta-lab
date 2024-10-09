@@ -1,4 +1,22 @@
 import Ed
+
+def _irSeek(mode):
+    global obstacleDetectionOn
+    if (obstacleDetectionOn == True):
+        Ed.ObstacleDetectionBeam(Ed.OFF)
+        obstacleDetectionOn = False
+    if (mode == 0): 
+        return Ed.ReadIRData()
+    elif (mode == 1): 
+        return Ed.ReadRemote()
+
+def _irSend(payload):
+    global obstacleDetectionOn
+    if (obstacleDetectionOn == True):
+        Ed.ObstacleDetectionBeam(Ed.OFF)
+        obstacleDetectionOn = False
+    Ed.SendIRData(payload)
+
 Ed.EdisonVersion = Ed.V2
 Ed.DistanceUnits = Ed.CM
 Ed.Tempo = Ed.TEMPO_SLOW
@@ -37,6 +55,7 @@ def ____function_return_numberList():
     global ___numberVar, ___booleanVar, ___numberList
     return ___numberList
 
+
 ____text()
 ____messages()
 ____function_parameters(___numberVar, ___booleanVar, ___numberList)
@@ -44,20 +63,3 @@ ___numberVar = ____function_return_numberVar()
 ___booleanVar = ____function_return_booleanVar()
 ___numberList = ____function_return_numberList()
 
-
-def _irSeek(mode):
-    global obstacleDetectionOn
-    if (obstacleDetectionOn == True):
-        Ed.ObstacleDetectionBeam(Ed.OFF)
-        obstacleDetectionOn = False
-    if (mode == 0): 
-        return Ed.ReadIRData()
-    elif (mode == 1): 
-        return Ed.ReadRemote()
-
-def _irSend(payload):
-    global obstacleDetectionOn
-    if (obstacleDetectionOn == True):
-        Ed.ObstacleDetectionBeam(Ed.OFF)
-        obstacleDetectionOn = False
-    Ed.SendIRData(payload)

@@ -17,6 +17,7 @@ def ____wait():
             break
     calliopemini.sleep(500)
 
+
 def run():
     global timer1
     calliopemini.display.scroll("Curve Right")

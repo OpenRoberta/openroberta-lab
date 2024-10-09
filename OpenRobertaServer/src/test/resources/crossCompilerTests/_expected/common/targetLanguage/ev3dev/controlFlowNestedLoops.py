@@ -7,6 +7,7 @@ import math
 import os
 import time
 
+
 class BreakOutOfALoop(Exception): pass
 class ContinueLoop(Exception): pass
 
@@ -21,6 +22,7 @@ _brickConfiguration = {
 hal = Hal(_brickConfiguration)
 
 ___X = 0
+
 def run():
     global ___X
     # Control Flow Nested Loop --Start

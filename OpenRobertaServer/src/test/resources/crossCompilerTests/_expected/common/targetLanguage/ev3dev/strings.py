@@ -7,6 +7,7 @@ import math
 import os
 import time
 
+
 class BreakOutOfALoop(Exception): pass
 class ContinueLoop(Exception): pass
 
@@ -23,6 +24,7 @@ hal = Hal(_brickConfiguration)
 ___text = "start:"
 ___eight = " eight"
 ___number = 0
+
 def run():
     global ___text, ___eight, ___number
     # String Concat -- Start --

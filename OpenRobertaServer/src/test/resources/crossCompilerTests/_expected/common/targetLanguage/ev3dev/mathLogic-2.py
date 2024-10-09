@@ -7,6 +7,7 @@ import math
 import os
 import time
 
+
 class BreakOutOfALoop(Exception): pass
 class ContinueLoop(Exception): pass
 
@@ -25,6 +26,7 @@ ___r2 = 0
 ___b1 = True
 ___r3 = 0
 ___sim = True
+
 def run():
     global ___r1, ___r2, ___b1, ___r3, ___sim
     ___r3 = math.pi / float(2) if ( ___sim ) else 90

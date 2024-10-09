@@ -46,7 +46,6 @@ import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
-import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
@@ -573,9 +572,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
 
     @Override
     public Void visitMainTask(MainTask mainTask) {
-        StmtList variables = mainTask.variables;
-        variables.accept(this);
-        generateUserDefinedMethods();
+        visitorGenerateUserVariablesAndMethods(mainTask);
         nlIndent();
         this.src.add("def run():");
         incrIndentation();
@@ -654,11 +651,7 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     }
 
     @Override
-    protected void generateProgramPrefix(boolean withWrapping) {
-        if ( !withWrapping ) {
-            return;
-        }
-        this.usedGlobalVarInFunctions.clear();
+    protected void visitorGenerateImports() {
         this.src.add("#!/usr/bin/python");
         nlIndent();
         nlIndent();
@@ -675,6 +668,10 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
         this.src.add("import time");
         nlIndent();
         nlIndent();
+    }
+
+    @Override
+    protected void visitorGenerateGlobalVariables() {
         this.src.add("class BreakOutOfALoop(Exception): pass");
         nlIndent();
         this.src.add("class ContinueLoop(Exception): pass");
@@ -691,7 +688,6 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
             this.src.add(TTSLanguageMapper.getLanguageString(this.language));
             this.src.add("\")");
         }
-        generateNNStuff("python");
     }
 
     @Override

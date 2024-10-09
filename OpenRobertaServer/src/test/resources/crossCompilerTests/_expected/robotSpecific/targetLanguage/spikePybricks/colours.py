@@ -4,6 +4,15 @@ from pybricks.tools import Matrix, wait
 import umath as math
 import urandom as random
 
+def hub_light_on(color):
+    if color != Color.BLACK and color != Color.WHITE and color != Color.NONE :
+        hub.light.on(Color(color.h,100,100))
+    elif color == Color.BLACK or color == Color.NONE:
+        hub.light.on(Color(0,0,0))
+    elif color == Color.WHITE :
+        hub.light.on(Color(0,0,100))
+
+
 Color.MAGENTA = Color(315,50,15)
 Color.BLUE = Color(225,20,20)
 Color.AZURE = Color(200,20,20)
@@ -16,14 +25,6 @@ Color.WHITE = Color(0,0,70)
 
 hub = PrimeHub()
 
-
-def hub_light_on(color):
-    if color != Color.BLACK and color != Color.WHITE and color != Color.NONE :
-        hub.light.on(Color(color.h,100,100))
-    elif color == Color.BLACK or color == Color.NONE:
-        hub.light.on(Color(0,0,0))
-    elif color == Color.WHITE :
-        hub.light.on(Color(0,0,100))
 
 def run():
     hub_light_on(Color.MAGENTA)

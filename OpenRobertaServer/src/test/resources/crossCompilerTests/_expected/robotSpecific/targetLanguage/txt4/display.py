@@ -3,24 +3,6 @@ from lib.display import display
 import math
 import time
 
-txt_factory.init()
-txt_factory.init_input_factory()
-TXT_M = txt_factory.controller_factory.create_graphical_controller()
-
-txt_factory.initialized()
-time.sleep(0.1)
-current_led = "redLed"
-led_colors = {
-    "red": 0xcc0000,
-    "yellow": 0xffff00,
-    "green": 0x33cc00,
-    "cyan": 0x33ffff,
-    "blue": 0x3366ff,
-    "purple": 0xcc33cc,
-    "white": 0xffffff,
-    "black": 0x000000
-}
-
 
 def clear_display():
     for i in range(8):
@@ -43,6 +25,25 @@ def get_closest_color(hex_value):
         distance = math.sqrt((r - cr) ** 2 + (g - cg) ** 2 + (b - cb) ** 2)
         color_diffs.append((distance, name))
     return min(color_diffs)[1]
+
+txt_factory.init()
+txt_factory.init_input_factory()
+TXT_M = txt_factory.controller_factory.create_graphical_controller()
+
+txt_factory.initialized()
+time.sleep(0.1)
+current_led = "redLed"
+led_colors = {
+    "red": 0xcc0000,
+    "yellow": 0xffff00,
+    "green": 0x33cc00,
+    "cyan": 0x33ffff,
+    "blue": 0x3366ff,
+    "purple": 0xcc33cc,
+    "white": 0xffffff,
+    "black": 0x000000
+}
+
 
 def run():
     for color, value in led_colors.items():

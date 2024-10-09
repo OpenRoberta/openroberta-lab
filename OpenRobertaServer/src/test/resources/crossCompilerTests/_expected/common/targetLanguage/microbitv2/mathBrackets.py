@@ -8,6 +8,7 @@ class ContinueLoop(Exception): pass
 timer1 = microbit.running_time()
 
 ___ergebnis = 0
+
 def run():
     global timer1, ___ergebnis
     # Grundrechenarten Basics  --START--

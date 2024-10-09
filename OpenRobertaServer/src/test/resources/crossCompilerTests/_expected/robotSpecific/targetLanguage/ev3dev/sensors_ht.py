@@ -33,6 +33,7 @@ ___booleanList = [True, True]
 ___stringList = ["", ""]
 ___colourList = ['white', 'white']
 ___connectionList = [___connectionVar, ___connectionVar]
+
 def ____sensors():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___connectionVar, ___numberList, ___booleanList, ___stringList, ___colourList, ___connectionList
 
@@ -75,6 +76,7 @@ def ____waitUntil():
         if hal.getHiTecColorSensorV2Ambient('3') < 50:
             break
         hal.waitFor(15)
+
 
 def run():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___connectionVar, ___numberList, ___booleanList, ___stringList, ___colourList, ___connectionList

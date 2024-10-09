@@ -11,6 +11,7 @@ timer1 = microbit.running_time()
 ___accX = microbit.accelerometer.get_x()
 ___accY = microbit.accelerometer.get_y()
 ___accZ = microbit.accelerometer.get_z()
+
 def run():
     global timer1, ___accX, ___accY, ___accZ
     microbit.display.show(microbit.Image('90009:09090:00900:09090:90009'))

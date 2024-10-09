@@ -3,6 +3,20 @@ import random
 import math
 import radio
 
+
+def receive_message(type):
+    msg = radio.receive()
+    if type == "Number":
+        try:
+            digit = float(msg)
+        except (ValueError, TypeError) as e:
+            digit = 0
+        return digit
+    elif type == "Boolean":
+        return ((lambda x: False if x is None else x == 'True')(msg))
+    elif type == "String":
+        return ((lambda x: '' if x is None else x)(msg))
+
 class BreakOutOfALoop(Exception): pass
 class ContinueLoop(Exception): pass
 
@@ -10,6 +24,7 @@ timer1 = microbit.running_time()
 radio.on()
 
 ___Element = 0
+
 def run():
     global timer1, ___Element
     radio.config(group=0)
@@ -27,19 +42,6 @@ def main():
         run()
     except Exception as e:
         raise
-
-def receive_message(type):
-    msg = radio.receive()
-    if type == "Number":
-        try:
-            digit = float(msg)
-        except (ValueError, TypeError) as e:
-            digit = 0
-        return digit
-    elif type == "Boolean":
-        return ((lambda x: False if x is None else x == 'True')(msg))
-    elif type == "String":
-        return ((lambda x: '' if x is None else x)(msg))
 
 if __name__ == "__main__":
     main()

@@ -2,12 +2,14 @@ import microbit
 import random
 import math
 
+
 class BreakOutOfALoop(Exception): pass
 class ContinueLoop(Exception): pass
 
 timer1 = microbit.running_time()
 
 ___item = 0
+
 def ____plusOperations(___item2):
     global timer1, ___item
     ___item2 = ( 1 * 2 ) + ( 3 + 4 )
@@ -52,6 +54,7 @@ def ____divisionOperations(___item5):
     ___item5 = ( ( 6 / float(math.pi) ) % ( round(float(7.8)) ) )
     ___item5 = ( ( 6 / float(random.randint(10 - 1, 100 - 1)) ) % ( 5 ) )
     ___item5 = ( ( random.random() / float(5) ) % ( 5 ) )
+
 
 def run():
     global timer1, ___item

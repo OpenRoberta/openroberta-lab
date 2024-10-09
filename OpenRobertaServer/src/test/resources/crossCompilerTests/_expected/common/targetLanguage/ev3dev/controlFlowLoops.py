@@ -22,6 +22,7 @@ hal = Hal(_brickConfiguration)
 
 ___x = 0
 ___y = 1
+
 def run():
     global ___x, ___y
     # Control Flow Loop -- Start

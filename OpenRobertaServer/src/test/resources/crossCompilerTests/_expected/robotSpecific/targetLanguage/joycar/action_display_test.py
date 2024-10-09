@@ -9,6 +9,7 @@ class ContinueLoop(Exception): pass
 timer1 = microbit.running_time()
 
 ___Animation = [microbit.Image.HEART_SMALL, microbit.Image.HEART, microbit.Image.HEART_SMALL, microbit.Image.HEART, microbit.Image.HEART_SMALL, microbit.Image.HEART, microbit.Image.HEART_SMALL, microbit.Image.HEART, microbit.Image.HEART_SMALL, microbit.Image.HAPPY, microbit.Image.HAPPY, microbit.Image.HAPPY, microbit.Image.SMILE, microbit.Image.HAPPY, microbit.Image.SMILE, microbit.Image.HAPPY, microbit.Image.HAPPY, microbit.Image.HAPPY, microbit.Image.HAPPY, microbit.Image.SMILE, microbit.Image.HAPPY]
+
 def ____showImageMatrix():
     global timer1, ___Animation
     # tests the show image block
@@ -89,6 +90,7 @@ def ____getBrightness():
         microbit.display.set_pixel(0, 0, ___m)
         microbit.display.scroll(str(microbit.display.get_pixel(0, 0)))
     microbit.display.clear()
+
 
 def run():
     global timer1, ___Animation

@@ -8,6 +8,7 @@ class ContinueLoop(Exception): pass
 timer1 = microbit.running_time()
 
 ___Element2 = [6, 7, 8]
+
 def run():
     global timer1, ___Element2
     for ___i in range(int(0), int(5), int(1)):

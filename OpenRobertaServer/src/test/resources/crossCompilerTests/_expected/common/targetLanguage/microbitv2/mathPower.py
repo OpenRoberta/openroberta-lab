@@ -2,12 +2,14 @@ import microbit
 import random
 import math
 
+
 class BreakOutOfALoop(Exception): pass
 class ContinueLoop(Exception): pass
 
 timer1 = microbit.running_time()
 
 ___result = False
+
 def run():
     global timer1, ___result
     # Math power -- Start --

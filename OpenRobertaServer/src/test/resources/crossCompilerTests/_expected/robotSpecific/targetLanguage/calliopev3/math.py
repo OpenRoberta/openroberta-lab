@@ -2,6 +2,32 @@ import calliopemini
 import random
 import math
 
+
+def _median(l):
+    l = sorted(l)
+    l_len = len(l)
+    if l_len < 1:
+        return None
+    if l_len % 2 == 0:
+        return (l[int((l_len - 1) / 2)] + l[int((l_len + 1) / 2)] ) / 2.0
+    else:
+        return l[int((l_len - 1) / 2)]
+
+def _isPrime(number):
+    if(number == 0 or number == 1):
+        return False
+    for i in range(2, int(math.floor(math.sqrt(number))) + 1):
+        remainder = number % i
+        if remainder == 0:
+            return False
+    return True
+
+def _standard_deviation(l):
+    mean = float(sum(l)) / len(l)
+    sd = 0
+    for i in l:
+        sd += (i - mean)*(i - mean)
+    return math.sqrt(sd / len(l))
 class BreakOutOfALoop(Exception): pass
 class ContinueLoop(Exception): pass
 
@@ -10,6 +36,7 @@ timer1 = calliopemini.running_time()
 
 ___numberVar = 0
 ___numberList = [0, 0]
+
 def ____math():
     global timer1, ___numberVar, ___numberList
     calliopemini.display.scroll(str(0))
@@ -59,6 +86,7 @@ def ____math():
     calliopemini.display.scroll(str(_standard_deviation(___numberList)))
 
 
+
 def run():
     global timer1, ___numberVar, ___numberList
     ____math()
@@ -69,30 +97,5 @@ def main():
     except Exception as e:
         raise
 
-def _median(l):
-    l = sorted(l)
-    l_len = len(l)
-    if l_len < 1:
-        return None
-    if l_len % 2 == 0:
-        return (l[int((l_len - 1) / 2)] + l[int((l_len + 1) / 2)] ) / 2.0
-    else:
-        return l[int((l_len - 1) / 2)]
-
-def _isPrime(number):
-    if(number == 0 or number == 1):
-        return False
-    for i in range(2, int(math.floor(math.sqrt(number))) + 1):
-        remainder = number % i
-        if remainder == 0:
-            return False
-    return True
-
-def _standard_deviation(l):
-    mean = float(sum(l)) / len(l)
-    sd = 0
-    for i in l:
-        sd += (i - mean)*(i - mean)
-    return math.sqrt(sd / len(l))
 if __name__ == "__main__":
     main()

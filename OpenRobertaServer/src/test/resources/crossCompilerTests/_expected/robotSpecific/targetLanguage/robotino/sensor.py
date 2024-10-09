@@ -1,11 +1,5 @@
 #!/usr/bin/env python3
 import math, random, time, requests, threading, sys, io
-sys.stdout = io.StringIO()
-sys.stderr = io.StringIO()
-ROBOTINOIP = "127.0.0.1:80"
-PARAMS = {'sid':'robertaProgram'}
-MAXSPEED = 0.5
-MAXROTATION = 0.57
 
 def getAnalogPin(pos):
     ANALOGPIN_URL = "http://" + ROBOTINOIP + "/data/analoginputarray"
@@ -100,11 +94,19 @@ def resetOdometry(RV, x, y, z):
     time.sleep(0.1)
     RV.writeFloatVector(1, [])
 
+sys.stdout = io.StringIO()
+sys.stderr = io.StringIO()
+ROBOTINOIP = "127.0.0.1:80"
+PARAMS = {'sid':'robertaProgram'}
+MAXSPEED = 0.5
+MAXROTATION = 0.57
+
 _timer1 = None
 _timer2 = None
 _timer3 = None
 _timer4 = None
 _timer5 = None
+
 
 ___Element5 = None
 ___Element6 = None
@@ -125,9 +127,8 @@ ___Element19 = None
 ___Element20 = None
 ___Element2 = []
 
-
 def run(RV):
-    global _timer1, _timer2, _timer3, _timer4, _timer5, ___Element5, ___Element6, ___Element7, ___Element8, ___Element9, ___Element10, ___Element11, ___Element12, ___Element13, ___Element14, ___Element15, ___Element16, ___Element, ___Element17, ___Element18, ___Element19, ___Element20, ___Element2
+    global ___Element5, ___Element6, ___Element7, ___Element8, ___Element9, ___Element10, ___Element11, ___Element12, ___Element13, ___Element14, ___Element15, ___Element16, ___Element, ___Element17, ___Element18, ___Element19, ___Element20, ___Element2, _timer1, _timer2, _timer3, _timer4, _timer5
     time.sleep(1)
     resetOdometry(RV, 0, 0, 0)
     RV.writeFloat(4, 100)

@@ -3,27 +3,6 @@ from fischertechnik.controller.Motor import Motor
 import math
 import time
 
-txt_factory.init()
-txt_factory.init_input_factory()
-txt_factory.init_motor_factory()
-txt_factory.init_counter_factory()
-TXT_M = txt_factory.controller_factory.create_graphical_controller()
-
-TXT_M_M2_motor = txt_factory.motor_factory.create_encodermotor(TXT_M, 2)
-TXT_M_C2_motor_step_counter = txt_factory.counter_factory.create_encodermotor_counter(TXT_M, 2)
-TXT_M_C2_motor_step_counter.set_motor(TXT_M_M2_motor)
-TXT_M_M1_motor = txt_factory.motor_factory.create_encodermotor(TXT_M, 1)
-TXT_M_C1_motor_step_counter = txt_factory.counter_factory.create_encodermotor_counter(TXT_M, 1)
-TXT_M_C1_motor_step_counter.set_motor(TXT_M_M1_motor)
-txt_factory.initialized()
-time.sleep(0.1)
-#init differentialDrive
-left_motor = TXT_M_M1_motor
-right_motor = TXT_M_M2_motor
-WHEEL_DIAMETER = 6
-TRACK_WIDTH = 15
-STEPS_PER_ROTATION = 128
-
 
 def diffdrive_turn_degrees(speed, degrees):
     if degrees < 0:
@@ -78,6 +57,28 @@ def motor_start(motor, speed):
 def speed_to_pwm(speed):
     speed = max(min(speed, 100), -100)
     return int((speed / 100) * 512)
+
+txt_factory.init()
+txt_factory.init_input_factory()
+txt_factory.init_motor_factory()
+txt_factory.init_counter_factory()
+TXT_M = txt_factory.controller_factory.create_graphical_controller()
+
+TXT_M_M2_motor = txt_factory.motor_factory.create_encodermotor(TXT_M, 2)
+TXT_M_C2_motor_step_counter = txt_factory.counter_factory.create_encodermotor_counter(TXT_M, 2)
+TXT_M_C2_motor_step_counter.set_motor(TXT_M_M2_motor)
+TXT_M_M1_motor = txt_factory.motor_factory.create_encodermotor(TXT_M, 1)
+TXT_M_C1_motor_step_counter = txt_factory.counter_factory.create_encodermotor_counter(TXT_M, 1)
+TXT_M_C1_motor_step_counter.set_motor(TXT_M_M1_motor)
+txt_factory.initialized()
+time.sleep(0.1)
+#init differentialDrive
+left_motor = TXT_M_M1_motor
+right_motor = TXT_M_M2_motor
+WHEEL_DIAMETER = 6
+TRACK_WIDTH = 15
+STEPS_PER_ROTATION = 128
+
 
 def run():
     print("Driving Forwards")

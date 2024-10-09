@@ -7,18 +7,7 @@ import math
 import os
 import time
 
-class BreakOutOfALoop(Exception): pass
-class ContinueLoop(Exception): pass
 
-_brickConfiguration = {
-    'wheel-diameter': 5.6,
-    'track-width': 18.0,
-    'actors': {
-    },
-    'sensors': {
-    },
-}
-hal = Hal(_brickConfiguration)
 ____n1 = 0
 ____n3 = 0
 ____h1n1 = 0
@@ -45,11 +34,23 @@ def ____nnStep():
     ____h1n2 = ____b_h1n2 + ____n1 * ____w_n1_h1n2 + ____n3 * ____w_n3_h1n2
     ____n2 = ____b_n2 + ____h1n1 * ____w_h1n1_n2 + ____h1n2 * ____w_h1n2_n2
     ____n4 = ____b_n4 + ____h1n1 * ____w_h1n1_n4 + ____h1n2 * ____w_h1n2_n4
+class BreakOutOfALoop(Exception): pass
+class ContinueLoop(Exception): pass
 
+_brickConfiguration = {
+    'wheel-diameter': 5.6,
+    'track-width': 18.0,
+    'actors': {
+    },
+    'sensors': {
+    },
+}
+hal = Hal(_brickConfiguration)
 
 ___n = 0
+
 def ____runNN():
-    global ____n1, ____n3, ____h1n1, ____h1n2, ____b_h1n1, ____w_n1_h1n1, ____w_n3_h1n1, ____b_h1n2, ____w_n1_h1n2, ____w_n3_h1n2, ____b_n2, ____w_h1n1_n2, ____w_h1n2_n2, ____b_n4, ____w_h1n1_n4, ____w_h1n2_n4, ___n
+    global ___n, ____n1, ____n3, ____h1n1, ____h1n2, ____b_h1n1, ____w_n1_h1n1, ____w_n3_h1n1, ____b_h1n2, ____w_n1_h1n2, ____w_n3_h1n2, ____b_n2, ____w_h1n1_n2, ____w_h1n2_n2, ____b_n4, ____w_h1n1_n4, ____w_h1n2_n4
     ____n1 = 2
     ____n3 = 4
     ____w_n1_h1n1 = ____w_h1n2_n2
@@ -59,8 +60,9 @@ def ____runNN():
     ____nnStep()
     ___n = ____n2
 
+
 def run():
-    global ____n1, ____n3, ____h1n1, ____h1n2, ____b_h1n1, ____w_n1_h1n1, ____w_n3_h1n1, ____b_h1n2, ____w_n1_h1n2, ____w_n3_h1n2, ____b_n2, ____w_h1n1_n2, ____w_h1n2_n2, ____b_n4, ____w_h1n1_n4, ____w_h1n2_n4, ___n
+    global ___n, ____n1, ____n3, ____h1n1, ____h1n2, ____b_h1n1, ____w_n1_h1n1, ____w_n3_h1n1, ____b_h1n2, ____w_n1_h1n2, ____w_n3_h1n2, ____b_n2, ____w_h1n1_n2, ____w_h1n2_n2, ____b_n4, ____w_h1n1_n4, ____w_h1n2_n4
     ____runNN()
 
 def main():

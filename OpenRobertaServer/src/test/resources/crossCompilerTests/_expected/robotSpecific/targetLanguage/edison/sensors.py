@@ -1,4 +1,22 @@
 import Ed
+
+def _irSeek(mode):
+    global obstacleDetectionOn
+    if (obstacleDetectionOn == True):
+        Ed.ObstacleDetectionBeam(Ed.OFF)
+        obstacleDetectionOn = False
+    if (mode == 0): 
+        return Ed.ReadIRData()
+    elif (mode == 1): 
+        return Ed.ReadRemote()
+
+def _obstacleDetection(mode):
+    global obstacleDetectionOn
+    if (obstacleDetectionOn == False):
+        Ed.ObstacleDetectionBeam(Ed.ON)
+        obstacleDetectionOn = True
+    return Ed.ReadObstacleDetection() == mode
+
 Ed.EdisonVersion = Ed.V2
 Ed.DistanceUnits = Ed.CM
 Ed.Tempo = Ed.TEMPO_SLOW
@@ -78,23 +96,7 @@ def ____sensorWaitUntil():
             break
         pass
 
+
 ____sensors()
 ____sensorWaitUntil()
 
-
-def _irSeek(mode):
-    global obstacleDetectionOn
-    if (obstacleDetectionOn == True):
-        Ed.ObstacleDetectionBeam(Ed.OFF)
-        obstacleDetectionOn = False
-    if (mode == 0): 
-        return Ed.ReadIRData()
-    elif (mode == 1): 
-        return Ed.ReadRemote()
-
-def _obstacleDetection(mode):
-    global obstacleDetectionOn
-    if (obstacleDetectionOn == False):
-        Ed.ObstacleDetectionBeam(Ed.ON)
-        obstacleDetectionOn = True
-    return Ed.ReadObstacleDetection() == mode

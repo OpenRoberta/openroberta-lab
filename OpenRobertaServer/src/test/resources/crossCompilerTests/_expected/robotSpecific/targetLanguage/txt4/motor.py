@@ -3,6 +3,25 @@ from fischertechnik.controller.Motor import Motor
 import math
 import time
 
+
+def motor_start(motor, speed):
+    motor.set_speed(speed_to_pwm(speed), Motor.CCW)
+    motor.start()
+
+def motor_start_for(motor, speed, degrees):
+    steps = int((degrees / 360) * STEPS_PER_ROTATION)
+    motor.set_speed(speed_to_pwm(speed), Motor.CCW)
+    motor.set_distance(steps)
+    while True:
+        if not motor.is_running():
+            break
+        time.sleep(0.010)
+    motor.stop()
+
+def speed_to_pwm(speed):
+    speed = max(min(speed, 100), -100)
+    return int((speed / 100) * 512)
+
 txt_factory.init()
 txt_factory.init_input_factory()
 txt_factory.init_motor_factory()
@@ -27,24 +46,6 @@ txt_factory.initialized()
 time.sleep(0.1)
 STEPS_PER_ROTATION = 128
 
-
-def motor_start(motor, speed):
-    motor.set_speed(speed_to_pwm(speed), Motor.CCW)
-    motor.start()
-
-def motor_start_for(motor, speed, degrees):
-    steps = int((degrees / 360) * STEPS_PER_ROTATION)
-    motor.set_speed(speed_to_pwm(speed), Motor.CCW)
-    motor.set_distance(steps)
-    while True:
-        if not motor.is_running():
-            break
-        time.sleep(0.010)
-    motor.stop()
-
-def speed_to_pwm(speed):
-    speed = max(min(speed, 100), -100)
-    return int((speed / 100) * 512)
 
 def run():
     print("Moving Motors")

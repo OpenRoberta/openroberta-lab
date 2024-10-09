@@ -8,6 +8,7 @@ class ContinueLoop(Exception): pass
 timer1 = microbit.running_time()
 
 ___X = 0
+
 def run():
     global timer1, ___X
     if not 0 == ___X:

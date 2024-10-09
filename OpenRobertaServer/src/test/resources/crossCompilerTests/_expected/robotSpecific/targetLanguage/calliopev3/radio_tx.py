@@ -5,6 +5,7 @@ import radio
 import music
 import neopixel
 
+
 class BreakOutOfALoop(Exception): pass
 class ContinueLoop(Exception): pass
 
@@ -17,6 +18,7 @@ radio.on()
 
 ___colours = [(255, 0, 0), (255, 153, 0), (255, 255, 0), (51, 255, 51), (102, 204, 204)]
 ___idx = 0
+
 def run():
     global timer1, ___colours, ___idx
     radio.config(group=7)

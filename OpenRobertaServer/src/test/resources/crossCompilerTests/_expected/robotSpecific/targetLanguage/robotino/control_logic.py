@@ -1,11 +1,5 @@
 #!/usr/bin/env python3
 import math, random, time, requests, threading, sys, io
-sys.stdout = io.StringIO()
-sys.stderr = io.StringIO()
-ROBOTINOIP = "127.0.0.1:80"
-PARAMS = {'sid':'robertaProgram'}
-MAXSPEED = 0.5
-MAXROTATION = 0.57
 
 def isBumped():
     BUMPER_URL = "http://" + ROBOTINOIP + "/data/bumper"
@@ -16,11 +10,20 @@ def isBumped():
     else:
         return -1
 
+sys.stdout = io.StringIO()
+sys.stderr = io.StringIO()
+ROBOTINOIP = "127.0.0.1:80"
+PARAMS = {'sid':'robertaProgram'}
+MAXSPEED = 0.5
+MAXROTATION = 0.57
+
+
 
 ___booleanFalse = None
 ___booleanTrue = None
 ___number = None
 ___numberList = []
+
 def ____logic():
     global ___booleanFalse, ___booleanTrue, ___number, ___numberList
     if ___number == ___number:

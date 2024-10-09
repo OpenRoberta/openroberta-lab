@@ -5,6 +5,31 @@ import radio
 import music
 import neopixel
 
+
+def receive_message(type):
+    global rssi
+    details = radio.receive_full()
+    if details:
+        msg, rssi, timestamp = details
+        msg = msg.decode('utf-8')[3:]
+        if type == "Number":
+            try:
+                digit = float(msg)
+            except ValueError:
+                digit = 0
+            return digit
+        elif type == "Boolean":
+            return msg == 'True' or msg == '1'     
+        elif type == "String":
+            return msg
+    else:
+        if type == "Number":
+            return 0
+        elif type == "Boolean":
+            return False       
+        elif type == "String":
+            return ''
+
 class BreakOutOfALoop(Exception): pass
 class ContinueLoop(Exception): pass
 
@@ -17,6 +42,7 @@ radio.on()
 
 ___colours = [(255, 0, 0), (255, 153, 0), (255, 255, 0), (51, 255, 51), (102, 204, 204)]
 ___idx = 0
+
 def run():
     global timer1, ___colours, ___idx
     radio.config(group=7)
@@ -54,30 +80,6 @@ def main():
         run()
     except Exception as e:
         raise
-
-def receive_message(type):
-    global rssi
-    details = radio.receive_full()
-    if details:
-        msg, rssi, timestamp = details
-        msg = msg.decode('utf-8')[3:]
-        if type == "Number":
-            try:
-                digit = float(msg)
-            except ValueError:
-                digit = 0
-            return digit
-        elif type == "Boolean":
-            return msg == 'True' or msg == '1'
-        elif type == "String":
-            return msg
-    else:
-        if type == "Number":
-            return 0
-        elif type == "Boolean":
-            return False
-        elif type == "String":
-            return ''
 
 if __name__ == "__main__":
     main()

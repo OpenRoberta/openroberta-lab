@@ -1322,4 +1322,24 @@ public abstract class AbstractAsebaVisitor extends AbstractLanguageVisitor {
     protected String getUnaryOperatorSymbol(Unary.Op op) {
         return AbstractAsebaVisitor.unaryOpSymbols().get(op);
     }
+
+    @Override
+    protected void visitorGenerateNN() {
+        generateNNStuff("aseba");
+    }
+
+    @Override
+    protected void visitorGenerateHelperMethods() {
+
+    }
+
+    @Override
+    protected void visitorGenerateImports() {
+
+    }
+
+    @Override
+    protected void visitorGenerateGlobalVariables() {
+
+    }
 }

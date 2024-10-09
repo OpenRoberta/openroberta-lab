@@ -7,6 +7,26 @@ import math
 import os
 import time
 
+
+def _isPrime(number):
+    if(number == 0 or number == 1):
+        return False
+    for i in range(2, int(math.floor(math.sqrt(number))) + 1):
+        remainder = number % i
+        if remainder == 0:
+            return False
+    return True
+
+def _randInt(min_val, max_val):
+    val = int.from_bytes(os.urandom(4), byteorder='big')
+    if min_val < max_val:
+        return min_val + (val % ((max_val - min_val) + 1))
+    else:
+        return max_val + (val % ((min_val - max_val) + 1))
+
+def _randDouble():
+    return 1.0*int.from_bytes(os.urandom(4), byteorder='big') / 0xffffffff
+
 class BreakOutOfALoop(Exception): pass
 class ContinueLoop(Exception): pass
 
@@ -25,6 +45,7 @@ ___r2 = 0
 ___b1 = True
 ___r3 = 0
 ___sim = True
+
 def run():
     global ___r1, ___r2, ___b1, ___r3, ___sim
     ___r1 = math.sqrt(( 20 - ( 2 * ( 4 / float(2) ) ) ) + math.pow(3, 2))
@@ -62,25 +83,6 @@ def main():
         hal.drawText('Press any key', 0, 4)
         while not hal.isKeyPressed('any'): hal.waitFor(500)
         raise
-
-def _isPrime(number):
-    if(number == 0 or number == 1):
-        return False
-    for i in range(2, int(math.floor(math.sqrt(number))) + 1):
-        remainder = number % i
-        if remainder == 0:
-            return False
-    return True
-
-def _randInt(min_val, max_val):
-    val = int.from_bytes(os.urandom(4), byteorder='big')
-    if min_val < max_val:
-        return min_val + (val % ((max_val - min_val) + 1))
-    else:
-        return max_val + (val % ((min_val - max_val) + 1))
-
-def _randDouble():
-    return 1.0*int.from_bytes(os.urandom(4), byteorder='big') / 0xffffffff
 
 if __name__ == "__main__":
     main()

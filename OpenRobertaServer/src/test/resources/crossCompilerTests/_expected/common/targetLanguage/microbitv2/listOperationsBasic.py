@@ -2,6 +2,7 @@ import microbit
 import random
 import math
 
+
 class BreakOutOfALoop(Exception): pass
 class ContinueLoop(Exception): pass
 
@@ -14,6 +15,7 @@ ___number = 3
 ___bool = True
 ___string = "c"
 ___item = 0
+
 def run():
     global timer1, ___initialEmptyNumbers, ___initialEmptyBoolean, ___initialEmptyStrings, ___number, ___bool, ___string, ___item
     # Basis List Operations START

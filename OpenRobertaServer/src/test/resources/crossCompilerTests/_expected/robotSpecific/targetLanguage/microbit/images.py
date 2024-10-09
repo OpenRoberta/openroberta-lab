@@ -9,6 +9,7 @@ timer1 = microbit.running_time()
 
 ___Element = microbit.Image('90009:09090:00900:09090:90009')
 ___Element2 = [microbit.Image.HEART, microbit.Image.ASLEEP, microbit.Image.SAD]
+
 def run():
     global timer1, ___Element, ___Element2
     microbit.display.show(microbit.Image('90900:90900:90900:90900:90900'))

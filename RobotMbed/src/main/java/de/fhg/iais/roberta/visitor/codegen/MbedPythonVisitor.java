@@ -32,7 +32,6 @@ import de.fhg.iais.roberta.syntax.functions.mbed.ImageInvertFunction;
 import de.fhg.iais.roberta.syntax.functions.mbed.ImageShiftFunction;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
-import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
@@ -244,12 +243,14 @@ public abstract class MbedPythonVisitor extends AbstractPythonVisitor implements
     }
 
     @Override
-    public Void visitMainTask(MainTask mainTask) {
-        this.usedGlobalVarInFunctions.clear();
+    protected void collectVariablesForFunctionGlobals() {
         this.usedGlobalVarInFunctions.add("timer1");
-        StmtList variables = mainTask.variables;
-        variables.accept(this);
-        generateUserDefinedMethods();
+        super.collectVariablesForFunctionGlobals();
+    }
+
+    @Override
+    public Void visitMainTask(MainTask mainTask) {
+        visitorGenerateUserVariablesAndMethods(mainTask);
         nlIndent();
         this.src.add("def run():");
         incrIndentation();
@@ -403,10 +404,7 @@ public abstract class MbedPythonVisitor extends AbstractPythonVisitor implements
     }
 
     @Override
-    protected void generateProgramPrefix(boolean withWrapping) {
-        if ( !withWrapping ) {
-            return;
-        }
+    protected void visitorGenerateImports() {
         this.src.add("import " + this.firmware);
         nlIndent();
         this.src.add("import random");
@@ -451,6 +449,10 @@ public abstract class MbedPythonVisitor extends AbstractPythonVisitor implements
             }
         }
         nlIndent();
+    }
+
+    @Override
+    protected void visitorGenerateGlobalVariables() {
         this.src.add("class BreakOutOfALoop(Exception): pass");
         nlIndent();
         this.src.add("class ContinueLoop(Exception): pass");
@@ -494,7 +496,6 @@ public abstract class MbedPythonVisitor extends AbstractPythonVisitor implements
             nlIndent();
             this.src.add("radio.on()");
         }
-        generateNNStuff("python");
     }
 
     @Override
@@ -561,4 +562,6 @@ public abstract class MbedPythonVisitor extends AbstractPythonVisitor implements
         }
         return null;
     }
+
+
 }

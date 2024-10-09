@@ -14,6 +14,7 @@ import com.google.common.collect.ClassToInstanceMap;
 import de.fhg.iais.roberta.bean.CodeGeneratorSetupBean;
 import de.fhg.iais.roberta.bean.IProjectBean;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
+import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.mode.general.IndexLocation;
 import static de.fhg.iais.roberta.mode.general.ListElementOperations.GET;
@@ -23,6 +24,7 @@ import static de.fhg.iais.roberta.mode.general.ListElementOperations.REMOVE;
 import static de.fhg.iais.roberta.mode.general.ListElementOperations.SET;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.serial.SerialWriteAction;
+import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary;
 import de.fhg.iais.roberta.syntax.lang.expr.BoolConst;
 import de.fhg.iais.roberta.syntax.lang.expr.EmptyExpr;
@@ -155,7 +157,7 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
 
     @Override
     public Void visitVarDeclaration(VarDeclaration var) {
-        this.usedGlobalVarInFunctions.add(var.getCodeSafeName());
+        //this.usedGlobalVarInFunctions.add(var.getCodeSafeName());
         this.src.add(var.getCodeSafeName());
         this.src.add(" = ");
         if ( !var.value.getKind().hasName("EMPTY_EXPR") ) {
@@ -1022,15 +1024,6 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
 
     @Override
     protected void generateProgramSuffix(boolean withWrapping) {
-        if ( !this.getBean(CodeGeneratorSetupBean.class).getUsedMethods().isEmpty() ) {
-            String helperMethodImpls =
-                this
-                    .getBean(CodeGeneratorSetupBean.class)
-                    .getHelperMethodGenerator()
-                    .getHelperMethodDefinitions(this.getBean(CodeGeneratorSetupBean.class).getUsedMethods());
-            this.src.add(helperMethodImpls);
-        }
-
         nlIndent();
         this.src.add("if __name__ == \"__main__\":");
         incrIndentation();
@@ -1038,4 +1031,37 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
         this.src.add("main()");
         decrIndentation();
     }
+
+    protected void generateProgramPrefix(boolean withWrapping) {
+        if ( !withWrapping ) {
+            return;
+        }
+        collectVariablesForFunctionGlobals();
+        visitorGenerateImports();
+        visitorGenerateHelperMethods();
+        visitorGenerateNN();
+        visitorGenerateGlobalVariables();
+    }
+
+    @Override
+    protected void generateUserDefinedMethods() {
+        super.generateUserDefinedMethods();
+        if ( this.programPhrases.stream().filter(phrase -> phrase.getKind().getCategory() == Category.METHOD && !phrase.getKind().hasName("METHOD_CALL")).count() > 0 ) {
+            nlIndent();
+        }
+    }
+
+
+    protected void collectVariablesForFunctionGlobals() {
+        //since we are not in a scope yet these will be out global variables
+        this.getBean(UsedHardwareBean.class).getInScopeVariables().forEach(s -> {
+            usedGlobalVarInFunctions.add("___" + s);
+        });
+    }
+
+    @Override
+    protected void visitorGenerateNN() {
+        generateNNStuff("python");
+    }
+
 }

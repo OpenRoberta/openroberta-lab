@@ -45,7 +45,6 @@ import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.expr.Expr;
 import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
-import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.AccelerometerSensor;
@@ -91,12 +90,8 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
         setRightMotorPort();
     }
 
-
     @Override
-    protected void generateProgramPrefix(boolean withWrapping) {
-        if ( !withWrapping ) {
-            return;
-        }
+    protected void visitorGenerateImports() {
         this.src.add("import cyberpi");
         if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.ENCODER) ) {
             this.src.add(", mbot2");
@@ -109,19 +104,15 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
         nlIndent();
         this.src.add("import math, random");
         nlIndent();
+    }
+
+    @Override
+    protected void visitorGenerateGlobalVariables() {
         if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.DIFFERENTIALDRIVE) ) {
             appendRobotVariables();
         }
         generateTimerVariables();
         addColors();
-        if ( !this.getBean(CodeGeneratorSetupBean.class).getUsedMethods().isEmpty() ) {
-            String helperMethodImpls =
-                this.getBean(CodeGeneratorSetupBean.class)
-                    .getHelperMethodGenerator()
-                    .getHelperMethodDefinitions(this.getBean(CodeGeneratorSetupBean.class).getUsedMethods());
-            this.src.add(helperMethodImpls);
-        }
-        generateNNStuff("python");
     }
 
     private void appendRobotVariables() {
@@ -142,7 +133,8 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
         }
     }
 
-    private void generateTimerVariables() {
+    @Override
+    protected void collectVariablesForFunctionGlobals() {
         this.getBean(UsedHardwareBean.class)
             .getUsedSensors()
             .stream()
@@ -151,6 +143,18 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
             .keySet()
             .forEach(port -> {
                 this.usedGlobalVarInFunctions.add("_timer" + port);
+            });
+        super.collectVariablesForFunctionGlobals();
+    }
+
+    private void generateTimerVariables() {
+        this.getBean(UsedHardwareBean.class)
+            .getUsedSensors()
+            .stream()
+            .filter(usedSensor -> usedSensor.getType().equals(SC.TIMER))
+            .collect(Collectors.groupingBy(UsedSensor::getPort))
+            .keySet()
+            .forEach(port -> {
                 this.src.add("_timer", port, " = cyberpi.timer.get()");
                 nlIndent();
             });
@@ -182,9 +186,7 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
 
     @Override
     public Void visitMainTask(MainTask mainTask) {
-        StmtList variables = mainTask.variables;
-        variables.accept(this);
-        generateUserDefinedMethods();
+        visitorGenerateUserVariablesAndMethods(mainTask);
         nlIndent();
         this.src.add("def run():");
         incrIndentation();

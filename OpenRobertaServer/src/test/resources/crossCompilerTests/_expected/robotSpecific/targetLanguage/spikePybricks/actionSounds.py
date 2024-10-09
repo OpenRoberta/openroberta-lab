@@ -3,6 +3,12 @@ from pybricks.tools import Matrix, wait
 import umath as math
 import urandom as random
 
+def show_animation(image_list):
+    hub.display.animate(image_list, 500);
+    wait(500 * len(image_list) - 10)
+    hub.display.icon(image_list[len(image_list)-1])
+
+
 
 hub = PrimeHub()
 hub.speaker.volume(15)
@@ -10,11 +16,6 @@ hub.speaker.volume(15)
 
 ___A = 440
 ___C = float(261.6)
-
-def show_animation(image_list):
-    hub.display.animate(image_list, 500);
-    wait(500 * len(image_list) - 10)
-    hub.display.icon(image_list[len(image_list)-1])
 
 def run():
     global ___A, ___C

@@ -2,6 +2,7 @@ import spike
 import math
 from spike.control import wait_for_seconds, wait_until
 import hub as _hub
+
 display = _hub.display
 Image = _hub.Image
 hub = spike.PrimeHub()
