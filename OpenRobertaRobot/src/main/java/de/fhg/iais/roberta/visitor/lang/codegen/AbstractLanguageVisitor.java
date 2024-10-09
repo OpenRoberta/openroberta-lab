@@ -20,6 +20,7 @@ import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.Category;
 import de.fhg.iais.roberta.inter.mode.general.IMode;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary;
 import de.fhg.iais.roberta.syntax.lang.expr.Binary.Op;
 import de.fhg.iais.roberta.syntax.lang.expr.BoolConst;
@@ -114,13 +115,18 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> {
     }
 
     protected void generateUserDefinedMethods() {
-        this.programPhrases
+        if ( this.programPhrases
             .stream()
             .filter(phrase -> phrase.getKind().getCategory() == Category.METHOD && !phrase.getKind().hasName("METHOD_CALL"))
-            .forEach(e -> {
-                e.accept(this);
-                nlIndent();
-            });
+            .count() > 0 ) {
+            this.programPhrases
+                .stream()
+                .filter(phrase -> phrase.getKind().getCategory() == Category.METHOD && !phrase.getKind().hasName("METHOD_CALL"))
+                .forEach(e -> {
+                    e.accept(this);
+                    nlIndent();
+                });
+        }
     }
 
     /**
@@ -707,7 +713,62 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> {
 
     abstract protected void generateCodeFromElse(IfStmt ifStmt);
 
-    abstract protected void generateProgramPrefix(boolean withWrapping);
+
+
+    /**
+     * How to rework Visitors:
+     * generateProgramPrefix will do the ordering for when to generate imports, nn, helper methods, etc.
+     * this function may stay abstract only if all vistors generation order differs to much, JAVA and CPP Code can probably be generated pretty similarly
+     * so there is potetntial for turning this into a non abstract function
+     * <p>
+     * all new functions introduced to solve this usse are prefiex with visitor<Name> this will solve naming conflicts
+     * e.g. EV3C4ev3... ussed generateImport although this visitor should not yet be changed
+     *
+     * <p>
+     * The Abstract CPPVisitor has some more information on this
+     */
+    protected abstract void generateProgramPrefix(boolean withWrapping);
+
+    /**
+     * just the nn-function call all this once in the abstract visitors for a given langugage
+     */
+    abstract protected void visitorGenerateNN();
+
+    abstract protected void visitorGenerateImports();
+
+    /**
+     * these are global and constant variables not user generated globals (user generated globals will be added in mainTask @_generateUserVariables)
+     */
+    abstract protected void visitorGenerateGlobalVariables();
+
+    /**
+     * this function should not be changed for a consitant behavour, this  may lead to minor changes in visitors
+     * right now most visitors to this in the suffix, but some in the prefix -- make sure to remove helper function logic from visitor or methods will be
+     * generated more than once
+     */
+    protected void visitorGenerateHelperMethods() {
+        if ( !this.getBean(CodeGeneratorSetupBean.class).getUsedMethods().isEmpty() ) {
+            String helperMethodImpls =
+                this
+                    .getBean(CodeGeneratorSetupBean.class)
+                    .getHelperMethodGenerator()
+                    .getHelperMethodDefinitions(this.getBean(CodeGeneratorSetupBean.class).getUsedMethods());
+            this.src.add(helperMethodImpls).nlI();
+        }
+    }
+
+    /**
+     * this will be called from inside MaiNTask since we need the variable list, right now a lot of visitors to bascially this with some varaition
+     * please unify this to one function
+     */
+    protected void visitorGenerateUserVariablesAndMethods(MainTask mainTask) {
+        StmtList variables = mainTask.variables;
+        if ( !variables.get().isEmpty() ) {
+            variables.accept(this);
+            nlIndent();
+        }
+        generateUserDefinedMethods();
+    }
 
     abstract protected void generateProgramSuffix(boolean withWrapping);
 

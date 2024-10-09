@@ -5,6 +5,7 @@ import machine
 import neopixel
 from tcs3472 import tcs3472
 from sht31 import SHT31
+
 class BreakOutOfALoop(Exception): pass
 class ContinueLoop(Exception): pass
 
@@ -208,6 +209,7 @@ def ____external():
         calliopemini.sleep(100)
         if calliopemini.button_a.is_pressed():
             break
+
 
 def run():
     global timer1

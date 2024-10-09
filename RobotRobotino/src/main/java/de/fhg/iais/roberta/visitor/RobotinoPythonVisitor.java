@@ -24,7 +24,6 @@ import de.fhg.iais.roberta.syntax.actor.robotino.OmnidrivePositionAction;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.VarDeclaration;
-import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.DetectMarkSensor;
@@ -63,25 +62,6 @@ public final class RobotinoPythonVisitor extends AbstractPythonVisitor implement
         super(programPhrases, beans);
         this.configurationAst = configurationAst;
         varDeclarations = new ArrayList<>();
-    }
-
-    @Override
-    protected void generateProgramPrefix(boolean withWrapping) {
-        this.src.add("#!/usr/bin/env python3");
-        nlIndent();
-        this.src.add("import math, random, time, requests, threading, sys, io");
-        nlIndent();
-        generateVariables();
-        nlIndent();
-        if ( !this.getBean(CodeGeneratorSetupBean.class).getUsedMethods().isEmpty() ) {
-            String helperMethodImpls =
-                this.getBean(CodeGeneratorSetupBean.class)
-                    .getHelperMethodGenerator()
-                    .getHelperMethodDefinitions(this.getBean(CodeGeneratorSetupBean.class).getUsedMethods());
-            this.src.add(helperMethodImpls);
-        }
-        generateTimerVariables(false);
-        generateNNStuff("python");
     }
 
     private void generateVariables() {
@@ -131,17 +111,26 @@ public final class RobotinoPythonVisitor extends AbstractPythonVisitor implement
     }
 
     @Override
-    public Void visitMainTask(MainTask mainTask) {
-        StmtList variables = mainTask.variables;
-        variables.accept(this);
-        generateUserDefinedMethods();
-        if ( hasUserdefinedMethods() ) {
-            nlIndent();
-        } else if ( varDeclarations.size() > 0 ) {
-            nlIndent();
-            nlIndent();
-        }
+    protected void visitorGenerateImports() {
+        this.src.add("#!/usr/bin/env python3");
         nlIndent();
+        this.src.add("import math, random, time, requests, threading, sys, io");
+        nlIndent();
+    }
+
+    @Override
+    protected void visitorGenerateGlobalVariables() {
+        generateVariables();
+        nlIndent();
+        generateTimerVariables(false);
+        nlIndent();
+    }
+
+    @Override
+    public Void visitMainTask(MainTask mainTask) {
+        visitorGenerateUserVariablesAndMethods(mainTask);
+        nlIndent();
+
         this.src.add("def run(RV):");
         incrIndentation();
         generateGlobalVariables();

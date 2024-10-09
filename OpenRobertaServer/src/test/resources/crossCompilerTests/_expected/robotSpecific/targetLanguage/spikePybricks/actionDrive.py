@@ -6,16 +6,6 @@ import umath as math
 import urandom as random
 from pybricks.robotics import DriveBase
 
-left_motor = Motor(Port.A, Direction.COUNTERCLOCKWISE)
-right_motor = Motor(Port.B)
-TRACKWIDTH = 11.5 * 10
-WHEEL_DIAMETER = 56
-drive_base = DriveBase(left_motor, right_motor, wheel_diameter=WHEEL_DIAMETER, axle_track=TRACKWIDTH)
-drive_base.settings(straight_acceleration=810*10, turn_acceleration=810*10)
-
-hub = PrimeHub()
-
-
 def circle_circumference(diameter):
     return math.pi * (diameter)
 
@@ -111,6 +101,17 @@ def turn_for(power, degrees, direction):
         tr = 5
     drive_base.settings(turn_rate = tr)
     drive_base.turn( sign * degrees * direction )
+
+
+left_motor = Motor(Port.A, Direction.COUNTERCLOCKWISE)
+right_motor = Motor(Port.B)
+TRACKWIDTH = 11.5 * 10
+WHEEL_DIAMETER = 56
+drive_base = DriveBase(left_motor, right_motor, wheel_diameter=WHEEL_DIAMETER, axle_track=TRACKWIDTH)
+drive_base.settings(straight_acceleration=810*10, turn_acceleration=810*10)
+
+hub = PrimeHub()
+
 
 def run():
     drive_straight(30,10)

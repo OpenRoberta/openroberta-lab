@@ -11,6 +11,7 @@ timer1 = calliopemini.running_time()
 ___off = 0
 ___on = 1
 ___analogon = 255
+
 def ____pin():
     global timer1, ___off, ___on, ___analogon
     calliopemini.pin1.write_analog(___analogon)
@@ -99,6 +100,7 @@ def ____wait():
         if calliopemini.button_a.is_pressed() == True:
             break
     calliopemini.sleep(800)
+
 
 def run():
     global timer1, ___off, ___on, ___analogon

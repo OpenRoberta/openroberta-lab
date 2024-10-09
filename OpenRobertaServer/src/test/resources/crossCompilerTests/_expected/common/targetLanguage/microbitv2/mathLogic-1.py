@@ -2,6 +2,16 @@ import microbit
 import random
 import math
 
+
+def _isPrime(number):
+    if(number == 0 or number == 1):
+        return False
+    for i in range(2, int(math.floor(math.sqrt(number))) + 1):
+        remainder = number % i
+        if remainder == 0:
+            return False
+    return True
+
 class BreakOutOfALoop(Exception): pass
 class ContinueLoop(Exception): pass
 
@@ -12,6 +22,7 @@ ___r2 = 0
 ___b1 = True
 ___r3 = 0
 ___sim = True
+
 def run():
     global timer1, ___r1, ___r2, ___b1, ___r3, ___sim
     ___r1 = math.sqrt(( 20 - ( 2 * ( 4 / float(2) ) ) ) + math.pow(3, 2))
@@ -44,15 +55,6 @@ def main():
         run()
     except Exception as e:
         raise
-
-def _isPrime(number):
-    if(number == 0 or number == 1):
-        return False
-    for i in range(2, int(math.floor(math.sqrt(number))) + 1):
-        remainder = number % i
-        if remainder == 0:
-            return False
-    return True
 
 if __name__ == "__main__":
     main()

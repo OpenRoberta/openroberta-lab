@@ -2,6 +2,28 @@ import calliopemini
 import random
 import math
 
+
+def servo_get_angle(angle):
+    if (angle < 0): 
+        angle = 0
+    if (angle > 180): 
+        angle = 180
+    return round(0.55 * angle) + 25
+
+def set_motor(port, speed):
+    digit = 0
+    if (speed < 0):
+        digit = 1
+        speed *= -1
+    speed = int(speed * 10.23)
+    calliopemini.pin_M_MODE.write_digital(1)
+    if (port == "A"):
+        calliopemini.pin_M0_DIR.write_digital(digit)
+        calliopemini.pin_M0_SPEED.write_analog(speed)
+    else:
+        calliopemini.pin_M1_DIR.write_digital(digit)
+        calliopemini.pin_M1_SPEED.write_analog(speed)
+
 class BreakOutOfALoop(Exception): pass
 class ContinueLoop(Exception): pass
 
@@ -13,6 +35,7 @@ calliopemini.pin_A1_TX.set_analog_period(20)
 ___off = 0
 ___max = 100
 ___negative = 0
+
 def ____move():
     global timer1, ___off, ___max, ___negative
     print("m1 On")
@@ -93,6 +116,7 @@ def ____wait():
             break
     calliopemini.sleep(500)
 
+
 def run():
     global timer1, ___off, ___max, ___negative
     ____move()
@@ -102,27 +126,6 @@ def main():
         run()
     except Exception as e:
         raise
-
-def servo_get_angle(angle):
-    if (angle < 0): 
-        angle = 0
-    if (angle > 180): 
-        angle = 180
-    return round(0.55 * angle) + 25
-
-def set_motor(port, speed):
-    digit = 0
-    if (speed < 0):
-        digit = 1
-        speed *= -1
-    speed = int(speed * 10.23)
-    calliopemini.pin_M_MODE.write_digital(1)
-    if (port == "A"):
-        calliopemini.pin_M0_DIR.write_digital(digit)
-        calliopemini.pin_M0_SPEED.write_analog(speed)
-    else:
-        calliopemini.pin_M1_DIR.write_digital(digit)
-        calliopemini.pin_M1_SPEED.write_analog(speed)
 
 if __name__ == "__main__":
     main()

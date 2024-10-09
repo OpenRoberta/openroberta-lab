@@ -5,25 +5,6 @@ from pybricks.tools import Matrix, wait, StopWatch
 import umath as math
 import urandom as random
 
-Color.MAGENTA = Color(315,50,15)
-Color.BLUE = Color(225,20,20)
-Color.AZURE = Color(200,20,20)
-Color.CYAN = Color(150,20,20)
-Color.YELLOW = Color(55,35,35)
-Color.RED = Color(350,35,35)
-Color.BLACK = Color(0,10,10)
-Color.WHITE = Color(0,0,70)
-
-
-touch_sensor_B = ForceSensor(Port.F)
-touch_sensor_B = ForceSensor(Port.F)
-ultrasonic_sensor_U = UltrasonicSensor(Port.D)
-color_sensor_F = ColorSensor(Port.C)
-color_sensor_F.detectable_colors([Color.MAGENTA, Color.BLUE, Color.AZURE, Color.CYAN, Color.YELLOW, Color.RED, Color.BLACK, Color.WHITE, Color.NONE])
-stopWatch = StopWatch()
-hub = PrimeHub()
-
-
 def display_text(text):
     text_list = list(text)
     for idx,c in enumerate(text_list):
@@ -72,6 +53,26 @@ def hsv2rgb(color):
         rgb = (c, 0, x)
 
     return list(map(lambda n: (n + m) * 255, rgb))  
+
+
+Color.MAGENTA = Color(315,50,15)
+Color.BLUE = Color(225,20,20)
+Color.AZURE = Color(200,20,20)
+Color.CYAN = Color(150,20,20)
+Color.YELLOW = Color(55,35,35)
+Color.RED = Color(350,35,35)
+Color.BLACK = Color(0,10,10)
+Color.WHITE = Color(0,0,70)
+
+
+touch_sensor_B = ForceSensor(Port.F)
+touch_sensor_B = ForceSensor(Port.F)
+ultrasonic_sensor_U = UltrasonicSensor(Port.D)
+color_sensor_F = ColorSensor(Port.C)
+color_sensor_F.detectable_colors([Color.MAGENTA, Color.BLUE, Color.AZURE, Color.CYAN, Color.YELLOW, Color.RED, Color.BLACK, Color.WHITE, Color.NONE])
+stopWatch = StopWatch()
+hub = PrimeHub()
+
 
 def run():
     display_text(str((Button.LEFT in hub.buttons.pressed())))

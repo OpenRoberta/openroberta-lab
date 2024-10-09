@@ -884,7 +884,6 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
         this.src.add("}");
     }
 
-    @Override
     protected void generateProgramPrefix(boolean withWrapping) {
         if ( withWrapping ) {
             generateSignaturesOfUserDefinedMethods();
@@ -1022,6 +1021,43 @@ public abstract class AbstractCppVisitor extends AbstractLanguageVisitor {
 
                     )
                     .collect(entriesToMap()));
+    }
+
+
+    /*
+    @Override
+    protected void generateProgramPrefix(boolean withWrapping) {
+        if ( !withWrapping ) {
+            return;
+        }
+        _generateDefines();
+        //otherwise just insert generate logic here
+        super.generateProgramPrefix(true);
+    }
+    */
+
+    protected void visitorGenerateDefines() {
+
+    }
+
+    @Override
+    protected void visitorGenerateNN() {
+        generateNNStuff("c++");
+    }
+
+    @Override
+    protected void visitorGenerateHelperMethods() {
+
+    }
+
+    @Override
+    protected void visitorGenerateImports() {
+
+    }
+
+    @Override
+    protected void visitorGenerateGlobalVariables() {
+
     }
 
 }

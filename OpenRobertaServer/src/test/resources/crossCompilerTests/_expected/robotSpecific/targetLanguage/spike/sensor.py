@@ -1,12 +1,6 @@
 import spike
 import math
 from spike.control import wait_for_seconds, wait_until, Timer
-touch_sensor_B = spike.ForceSensor('F')
-touch_sensor_B = spike.ForceSensor('F')
-ultrasonic_sensor_U = spike.DistanceSensor('D')
-color_sensor_F = spike.ColorSensor('C')
-timer = Timer()
-hub = spike.PrimeHub()
 
 def get_sample_ultrasonic(sensor):
     sample = sensor.get_distance_cm(False)
@@ -18,6 +12,14 @@ def set_status_light(color):
     if (color is None):
         color = 'black'
     hub.status_light.on(color)
+
+
+touch_sensor_B = spike.ForceSensor('F')
+touch_sensor_B = spike.ForceSensor('F')
+ultrasonic_sensor_U = spike.DistanceSensor('D')
+color_sensor_F = spike.ColorSensor('C')
+timer = Timer()
+hub = spike.PrimeHub()
 
 def run():
     # sensors

@@ -1,13 +1,5 @@
 #!/usr/bin/env python3
 import math, random, time, requests, threading, sys, io
-sys.stdout = io.StringIO()
-sys.stderr = io.StringIO()
-ROBOTINOIP = "127.0.0.1:80"
-PARAMS = {'sid':'robertaProgram'}
-MAXSPEED = 0.5
-MAXROTATION = 0.57
-_digitalPinValues = [0 for i in range(8)]
-currentSpeed = [0, 0, 0]
 
 def driveForDistance(RV, x, y, distance):
     angle = math.atan2(y, x)
@@ -97,6 +89,16 @@ def turnForDegrees(RV, speed, degrees):
         lastOrientation = orientation
         time.sleep(0.05)
     setSpeedOmnidrivePercent(0, 0, 0)
+
+sys.stdout = io.StringIO()
+sys.stderr = io.StringIO()
+ROBOTINOIP = "127.0.0.1:80"
+PARAMS = {'sid':'robertaProgram'}
+MAXSPEED = 0.5
+MAXROTATION = 0.57
+_digitalPinValues = [0 for i in range(8)]
+currentSpeed = [0, 0, 0]
+
 
 
 def run(RV):

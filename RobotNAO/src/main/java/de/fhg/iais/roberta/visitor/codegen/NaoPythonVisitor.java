@@ -128,10 +128,8 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
 
     @Override
     public Void visitMainTask(MainTask mainTask) {
+        super.visitorGenerateUserVariablesAndMethods(mainTask);
         StmtList variables = mainTask.variables;
-        variables.accept(this);
-        generateUserDefinedMethods();
-        nlIndent();
         nlIndent();
         this.src.add("def run():");
         incrIndentation();
@@ -912,10 +910,7 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     }
 
     @Override
-    protected void generateProgramPrefix(boolean withWrapping) {
-        if ( !withWrapping ) {
-            return;
-        }
+    protected void visitorGenerateImports() {
         this.src.add("#!/usr/bin/python");
         nlIndent();
         nlIndent();
@@ -927,9 +922,14 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
         nlIndent();
         this.src.add("from roberta import Hal");
         nlIndent();
+    }
+
+    @Override
+    protected void visitorGenerateGlobalVariables() {
         this.src.add("h = Hal()");
         nlIndent();
         generateSensors();
+        nlIndent();
 
         if ( !this.getBean(UsedHardwareBean.class).getLoopsLabelContainer().isEmpty() ) {
             nlIndent();

@@ -1,15 +1,17 @@
 import spike
 import math
 from spike.control import wait_for_seconds, wait_until
-touch_sensor_B = spike.ForceSensor('F')
-hub = spike.PrimeHub()
-
-___Element2 = ['pink', 'azure', 'black']
 
 def set_status_light(color):
     if (color is None):
         color = 'black'
     hub.status_light.on(color)
+
+
+touch_sensor_B = spike.ForceSensor('F')
+hub = spike.PrimeHub()
+
+___Element2 = ['pink', 'azure', 'black']
 
 def run():
     global ___Element2

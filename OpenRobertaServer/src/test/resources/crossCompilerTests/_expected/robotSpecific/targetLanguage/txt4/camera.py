@@ -5,6 +5,50 @@ import colorsys
 import math
 import time
 
+
+def get_ball_information(detector):
+    if detector.detected():
+        return [detector.get_center_x(),
+                detector.get_center_y(),
+                detector.get_diameter()]
+    return [-1, -1, -1]
+
+def get_camera_colour(detector):
+    if detector.detected():
+        result = detector.get_result().value.get_hex()
+        return int(result[1:], 16)
+    else:
+        return -1
+
+def compare_colour(hex1, hex2, tolerance):
+    r1, g1, b1 = (hex1 >> i & 0xFF for i in (16, 8, 0))
+    r2, g2, b2 = (hex2 >> i & 0xFF for i in (16, 8, 0))
+    
+    hsv1 = colorsys.rgb_to_hsv(r1 / 255, g1 / 255, b1 / 255)
+    hsv2 = colorsys.rgb_to_hsv(r2 / 255, g2 / 255, b2 / 255)
+    
+    hue_diff = abs(hsv1[0] - hsv2[0])
+    if hue_diff > 0.5:
+        hue_diff = 1 - hue_diff
+    saturation_diff = abs(hsv1[1] - hsv2[1])
+    value_diff = abs(hsv1[2] - hsv2[2])
+    return (hue_diff <= (tolerance / 360) and saturation_diff <= 0.5 and value_diff <= 0.5)
+
+def get_line_colour(detector, index):
+    line = detector.get_line_by_index(index)
+    if line:
+        colour = line.color.get_hex()
+        return int(colour[1:], 16)
+    else:
+        return -1
+
+def get_line_information(detector, index):
+    line = detector.get_line_by_index(index)
+    if line is not None:
+        return [line.position, line.width]
+    else:
+        return [-1, -1]
+
 txt_factory.init()
 txt_factory.init_input_factory()
 TXT_M = txt_factory.controller_factory.create_graphical_controller()
@@ -36,6 +80,22 @@ ball_detector_B2 = txt_factory.camera_factory.create_ball_detector(0, 100, 320, 
 TXT_M_USB1_1_camera.add_detector(ball_detector_B2)
 txt_factory.initialized()
 time.sleep(0.1)
+
+
+def camera_initialized():
+    while True:
+        try:
+            ball_detector_B.detected()
+            ball_detector_B2.detected()
+            line_detector_L.detected()
+            line_detector_L2.detected()
+            color_detector_C2.detected()
+            color_detector_C3.detected()
+            motion_detector_M.detected()
+            motion_detector_M2.detected()
+            break
+        except Exception:
+            pass
 
 
 def ____motion():
@@ -102,64 +162,6 @@ def ____color():
         if display.get_attr("buttonRight.pressed"):
             break
     time.sleep(500/1000)
-
-def get_ball_information(detector):
-    if detector.detected():
-        return [detector.get_center_x(),
-                detector.get_center_y(),
-                detector.get_diameter()]
-    return [-1, -1, -1]
-
-def get_camera_colour(detector):
-    if detector.detected():
-        result = detector.get_result().value.get_hex()
-        return int(result[1:], 16)
-    else:
-        return -1
-
-def compare_colour(hex1, hex2, tolerance):
-    r1, g1, b1 = (hex1 >> i & 0xFF for i in (16, 8, 0))
-    r2, g2, b2 = (hex2 >> i & 0xFF for i in (16, 8, 0))
-    
-    hsv1 = colorsys.rgb_to_hsv(r1 / 255, g1 / 255, b1 / 255)
-    hsv2 = colorsys.rgb_to_hsv(r2 / 255, g2 / 255, b2 / 255)
-    
-    hue_diff = abs(hsv1[0] - hsv2[0])
-    if hue_diff > 0.5:
-        hue_diff = 1 - hue_diff
-    saturation_diff = abs(hsv1[1] - hsv2[1])
-    value_diff = abs(hsv1[2] - hsv2[2])
-    return (hue_diff <= (tolerance / 360) and saturation_diff <= 0.5 and value_diff <= 0.5)
-
-def get_line_colour(detector, index):
-    line = detector.get_line_by_index(index)
-    if line:
-        colour = line.color.get_hex()
-        return int(colour[1:], 16)
-    else:
-        return -1
-
-def get_line_information(detector, index):
-    line = detector.get_line_by_index(index)
-    if line is not None:
-        return [line.position, line.width]
-    else:
-        return [-1, -1]
-
-def camera_initialized():
-    while True:
-        try:
-            ball_detector_B.detected()
-            ball_detector_B2.detected()
-            line_detector_L.detected()
-            line_detector_L2.detected()
-            color_detector_C2.detected()
-            color_detector_C3.detected()
-            motion_detector_M.detected()
-            motion_detector_M2.detected()
-            break
-        except Exception:
-            pass
 
 def run():
     camera_initialized()

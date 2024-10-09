@@ -11,6 +11,7 @@ ___stringList = ["", "", ""]
 ___colorList = [(204, 0, 0), (204, 0, 0), (204, 0, 0)]
 ___numberVar = 0
 ___stringVar = ""
+
 def ____control():
     global ___booleanVarFalse, ___booleanVar, ___numberList, ___booleanList, ___stringList, ___colorList, ___numberVar, ___stringVar
     if ___booleanVarFalse:
@@ -55,6 +56,7 @@ def ____logic():
     cyberpi.console.println(False)
     cyberpi.console.println(None)
     cyberpi.console.println(___numberVar if ( ___booleanVar ) else ___booleanVar)
+
 
 def run():
     global ___booleanVarFalse, ___booleanVar, ___numberList, ___booleanList, ___stringList, ___colorList, ___numberVar, ___stringVar

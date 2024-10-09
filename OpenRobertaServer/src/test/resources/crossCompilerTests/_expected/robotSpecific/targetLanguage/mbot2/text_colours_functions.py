@@ -2,6 +2,16 @@ import cyberpi, mbuild
 import time
 import math, random
 
+def RGBAsString(rgb):
+    r, g, b = rgb
+    color_diffs = []
+    for color in _colors:
+        cr, cg, cb = _colors[color]
+        color_diff = math.sqrt(abs(r - cr)**2 + abs(g - cg)**2 + abs(b - cb)**2)
+        color_diffs.append((color_diff, color))
+    return min(color_diffs)[1]
+
+
 _colors = {
             "red": (204,0,0),
             "yellow": (255,255,0),
@@ -13,15 +23,6 @@ _colors = {
             "black": (0,0,0)
         }
 
-def RGBAsString(rgb):
-    r, g, b = rgb
-    color_diffs = []
-    for color in _colors:
-        cr, cg, cb = _colors[color]
-        color_diff = math.sqrt(abs(r - cr)**2 + abs(g - cg)**2 + abs(b - cb)**2)
-        color_diffs.append((color_diff, color))
-    return min(color_diffs)[1]
-
 
 ___colorVar = (204, 0, 0)
 ___stringVar = "1"
@@ -31,6 +32,7 @@ ___numberList = [0, 0, 0]
 ___booleanList = [True, True, True]
 ___stringList = ["", "", ""]
 ___colorList = [(204, 0, 0), (204, 0, 0), (204, 0, 0)]
+
 def ____colours():
     global ___colorVar, ___stringVar, ___booleanVar, ___numberVar, ___numberList, ___booleanList, ___stringList, ___colorList
     cyberpi.display.set_brush((204, 0, 0)[0], (204, 0, 0)[1], (204, 0, 0)[2])
@@ -163,6 +165,7 @@ def ____function_returnStringList():
 def ____function_returnColorList():
     global ___colorVar, ___stringVar, ___booleanVar, ___numberVar, ___numberList, ___booleanList, ___stringList, ___colorList
     return ___colorList
+
 
 def run():
     global ___colorVar, ___stringVar, ___booleanVar, ___numberVar, ___numberList, ___booleanList, ___stringList, ___colorList

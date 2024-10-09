@@ -11,6 +11,7 @@ np = neopixel.NeoPixel(calliopemini.pin_RGB, 3)
 
 
 ___color = (255, 0, 0)
+
 def ____wait():
     global timer1, ___color
     calliopemini.display.scroll("Next Color")
@@ -19,6 +20,7 @@ def ____wait():
             break
     calliopemini.display.scroll("Next Color")
     calliopemini.sleep(500)
+
 
 def run():
     global timer1, ___color

@@ -10,6 +10,7 @@ timer1 = calliopemini.running_time()
 
 ___numberVar = 0
 ___booleanVar = True
+
 def ____logic():
     global timer1, ___numberVar, ___booleanVar
     calliopemini.display.scroll(str(___numberVar == ___numberVar))
@@ -24,6 +25,7 @@ def ____logic():
     calliopemini.display.scroll(str(True))
     calliopemini.display.scroll(str(False))
     calliopemini.display.scroll(str(___numberVar if ( ___booleanVar ) else ___numberVar))
+
 
 def run():
     global timer1, ___numberVar, ___booleanVar

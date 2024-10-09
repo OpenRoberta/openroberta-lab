@@ -2,48 +2,6 @@ import microbit
 import random
 import math
 
-class BreakOutOfALoop(Exception): pass
-class ContinueLoop(Exception): pass
-
-microbit.i2c.init(freq=400000, sda=microbit.pin20, scl=microbit.pin19)
-microbit.i2c.write(0x70, b'\x00\x01')
-microbit.i2c.write(0x70, b'\xE8\xAA')
-
-timer1 = microbit.running_time()
-
-___leftInfraredTested = False
-___rightInfraredTested = False
-def run():
-    global timer1, ___leftInfraredTested, ___rightInfraredTested
-    # This program tests the infrared sensors on the left and right. Hold something in front of them to see the robot turning                         in the corresponding direction
-    while True:
-        if (not fetch_sensor_data(0x38)[5]):
-            # Robot turns left
-            microbit.display.show(microbit.Image('00900:00090:99909:00090:00900'))
-            drive(-50, 50)
-            microbit.sleep(1000)
-            drive(0, 0)
-            ___leftInfraredTested = True
-        elif (not fetch_sensor_data(0x38)[6]):
-            # Robot turns right
-            microbit.display.show(microbit.Image('00900:09000:90999:09000:00900'))
-            drive(50, -50)
-            microbit.sleep(1000)
-            drive(0, 0)
-            ___rightInfraredTested = True
-        else:
-            microbit.display.show(microbit.Image('99999:90009:90009:90009:99999'))
-            drive(0, 0)
-        if microbit.button_a.is_pressed():
-            break
-
-def main():
-    try:
-        run()
-    except Exception as e:
-        raise
-    finally:
-        drive(0, 0)
 
 def drive(speedLeft, speedRight):
     sR = scale(speedRight)
@@ -91,6 +49,50 @@ def scale(speed):
         return 0
     else:
         return round(abs(speed) * 446.25 / 255 + 80)
+
+class BreakOutOfALoop(Exception): pass
+class ContinueLoop(Exception): pass
+
+microbit.i2c.init(freq=400000, sda=microbit.pin20, scl=microbit.pin19)
+microbit.i2c.write(0x70, b'\x00\x01')
+microbit.i2c.write(0x70, b'\xE8\xAA')
+
+timer1 = microbit.running_time()
+
+___leftInfraredTested = False
+___rightInfraredTested = False
+
+def run():
+    global timer1, ___leftInfraredTested, ___rightInfraredTested
+    # This program tests the infrared sensors on the left and right. Hold something in front of them to see the robot turning                         in the corresponding direction
+    while True:
+        if (not fetch_sensor_data(0x38)[5]):
+            # Robot turns left
+            microbit.display.show(microbit.Image('00900:00090:99909:00090:00900'))
+            drive(-50, 50)
+            microbit.sleep(1000)
+            drive(0, 0)
+            ___leftInfraredTested = True
+        elif (not fetch_sensor_data(0x38)[6]):
+            # Robot turns right
+            microbit.display.show(microbit.Image('00900:09000:90999:09000:00900'))
+            drive(50, -50)
+            microbit.sleep(1000)
+            drive(0, 0)
+            ___rightInfraredTested = True
+        else:
+            microbit.display.show(microbit.Image('99999:90009:90009:90009:99999'))
+            drive(0, 0)
+        if microbit.button_a.is_pressed():
+            break
+
+def main():
+    try:
+        run()
+    except Exception as e:
+        raise
+    finally:
+        drive(0, 0)
 
 if __name__ == "__main__":
     main()

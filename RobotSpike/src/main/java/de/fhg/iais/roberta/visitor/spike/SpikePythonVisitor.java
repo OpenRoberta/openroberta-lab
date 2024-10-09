@@ -583,10 +583,7 @@ public final class SpikePythonVisitor extends AbstractSpikePythonVisitor {
     }
 
     @Override
-    protected void generateProgramPrefix(boolean withWrapping) {
-        if ( !withWrapping ) {
-            return;
-        }
+    protected void visitorGenerateImports() {
         UsedHardwareBean usedHardwareBean = this.getBean(UsedHardwareBean.class);
         this.src.add("import spike").nlI();
         this.src.add("import math").nlI();
@@ -597,9 +594,15 @@ public final class SpikePythonVisitor extends AbstractSpikePythonVisitor {
         if ( usedHardwareBean.isSensorUsed(SC.TIMER) ) {
             this.src.add(", Timer");
         }
-        if ( !usedHardwareBean.getUsedActors().isEmpty() && !usedHardwareBean.getUsedSensors().isEmpty() ) {
-            nlIndent();
+        nlIndent();
+        if ( usedHardwareBean.isActorUsed("DISPLAY") ) {
+            this.src.add("import hub as _hub").nlI();
         }
+    }
+
+    @Override
+    protected void visitorGenerateGlobalVariables() {
+        UsedHardwareBean usedHardwareBean = this.getBean(UsedHardwareBean.class);
         if ( usedHardwareBean.isActorUsed(SC.DIFFERENTIALDRIVE) ) {
             ConfigurationComponent diffDrive = this.configurationAst.optConfigurationComponentByType("DIFFERENTIALDRIVE");
             String leftPort = diffDrive.getComponentProperties().get("MOTOR_L");
@@ -641,7 +644,6 @@ public final class SpikePythonVisitor extends AbstractSpikePythonVisitor {
         }
         if ( usedHardwareBean.isActorUsed("DISPLAY") ) {
             nlIndent();
-            this.src.add("import hub as _hub").nlI();
             this.src.add("display = _hub.display").nlI();
             this.src.add("Image = _hub.Image");
         }
@@ -651,7 +653,6 @@ public final class SpikePythonVisitor extends AbstractSpikePythonVisitor {
         }
         nlIndent();
         this.src.add("hub = spike.PrimeHub()");
-        generateNNStuff("python");
     }
 
 }

@@ -30,6 +30,7 @@ ___booleanList = [True, True]
 ___stringList = ["", ""]
 ___colourList = ['white', 'white']
 ___connectionList = [___connectionVar, ___connectionVar]
+
 def ____control():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___connectionVar, ___numberList, ___booleanList, ___stringList, ___colourList, ___connectionList
     if ___booleanVar:
@@ -91,6 +92,7 @@ def ____logic():
     hal.drawText(str(False), ___numberVar, ___numberVar)
     hal.drawText(str(None), ___numberVar, ___numberVar)
     hal.drawText(str(___numberVar if ( ___booleanVar ) else ___numberVar), ___numberVar, ___numberVar)
+
 
 def run():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___connectionVar, ___numberList, ___booleanList, ___stringList, ___colourList, ___connectionList

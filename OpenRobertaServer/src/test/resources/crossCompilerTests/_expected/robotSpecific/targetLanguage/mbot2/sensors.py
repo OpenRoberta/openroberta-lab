@@ -23,6 +23,7 @@ ___numVar = 0
 ___colourVar = (204, 0, 0)
 ___numList = []
 ___booleanVar = True
+
 def ____sensors():
     global _timer1, _timer2, _timer3, _timer4, _timer5, ___numVar, ___colourVar, ___numList, ___booleanVar
     ___numVar = mbuild.ultrasonic2.get(2)
@@ -118,6 +119,7 @@ def ____wait_until():
     while True:
         if (mbot2.EM_get_angle("EM1") / 360) > 2:
             break
+
 
 def run():
     global _timer1, _timer2, _timer3, _timer4, _timer5, ___numVar, ___colourVar, ___numList, ___booleanVar

@@ -9,6 +9,7 @@ timer1 = calliopemini.running_time()
 
 
 ___Element = 0
+
 def ____macheEtwas():
     global timer1, ___Element
     calliopemini.display.scroll("Hallo")
@@ -17,6 +18,7 @@ def ____macheEtwas2():
     global timer1, ___Element
     calliopemini.display.scroll("Hallo")
     return 0
+
 
 def run():
     global timer1, ___Element

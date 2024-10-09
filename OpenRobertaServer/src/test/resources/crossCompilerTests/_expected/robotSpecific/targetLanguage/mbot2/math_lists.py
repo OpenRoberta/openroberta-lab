@@ -28,6 +28,7 @@ def _standard_deviation(l):
         sd += (i - mean)*(i - mean)
     return math.sqrt(sd / len(l))
 
+
 ___numberVar = 0
 ___booleanVar = True
 ___stringVar = ""
@@ -36,6 +37,7 @@ ___numberList = [0, 0, 0]
 ___booleanList = [True, True, True]
 ___stringList = ["", "", ""]
 ___colorList = [(204, 0, 0), (204, 0, 0), (204, 0, 0)]
+
 def ____lists():
     global ___numberVar, ___booleanVar, ___stringVar, ___colorVar, ___numberList, ___booleanList, ___stringList, ___colorList
     ___numberList = []
@@ -133,6 +135,7 @@ def ____math():
     cyberpi.console.println(random.random())
     cyberpi.console.println(str(___numberVar))
     cyberpi.console.println(chr((int)(___numberVar)))
+
 
 def run():
     global ___numberVar, ___booleanVar, ___stringVar, ___colorVar, ___numberList, ___booleanList, ___stringList, ___colorList

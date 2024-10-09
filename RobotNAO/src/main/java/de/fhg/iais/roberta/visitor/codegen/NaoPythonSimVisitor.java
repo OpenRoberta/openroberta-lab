@@ -440,6 +440,16 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
     }
 
     @Override
+    protected void visitorGenerateImports() {
+        //TODO
+    }
+
+    @Override
+    protected void visitorGenerateGlobalVariables() {
+        //TODO
+    }
+
+    @Override
     protected void generateProgramSuffix(boolean withWrapping) {
         if ( !withWrapping ) {
             return;

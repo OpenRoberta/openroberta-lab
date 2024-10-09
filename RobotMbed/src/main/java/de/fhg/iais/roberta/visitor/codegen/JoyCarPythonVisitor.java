@@ -27,10 +27,7 @@ import de.fhg.iais.roberta.syntax.action.sound.PlayFileAction;
 import de.fhg.iais.roberta.syntax.action.sound.PlayNoteAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
-import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
-import de.fhg.iais.roberta.syntax.lang.expr.RgbColor;
-import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GetLineSensor;
@@ -41,7 +38,6 @@ import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.syntax.SC;
 import de.fhg.iais.roberta.visitor.IJoyCarVisitor;
 import de.fhg.iais.roberta.visitor.JoycarMethods;
-import de.fhg.iais.roberta.visitor.MicrobitMethods;
 
 public class JoyCarPythonVisitor extends MicrobitV2PythonVisitor implements IJoyCarVisitor<Void> {
     /**
@@ -59,10 +55,7 @@ public class JoyCarPythonVisitor extends MicrobitV2PythonVisitor implements IJoy
     }
 
     @Override
-    protected void generateProgramPrefix(boolean withWrapping) {
-        if ( !withWrapping ) {
-            return;
-        }
+    protected void visitorGenerateImports() {
         this.src.add("import microbit");
         nlIndent();
         this.src.add("import random");
@@ -86,6 +79,10 @@ public class JoyCarPythonVisitor extends MicrobitV2PythonVisitor implements IJoy
             nlIndent();
         }
         nlIndent();
+    }
+
+    @Override
+    protected void visitorGenerateGlobalVariables() {
         this.src.add("class BreakOutOfALoop(Exception): pass");
         nlIndent();
         this.src.add("class ContinueLoop(Exception): pass");
@@ -119,22 +116,6 @@ public class JoyCarPythonVisitor extends MicrobitV2PythonVisitor implements IJoy
         }
     }
 
-    @Override
-    public Void visitMainTask(MainTask mainTask) {
-        this.usedGlobalVarInFunctions.clear();
-        this.usedGlobalVarInFunctions.add("timer1");
-        StmtList variables = mainTask.variables;
-        variables.accept(this);
-        generateUserDefinedMethods();
-        nlIndent();
-        this.src.add("def run():");
-        incrIndentation();
-        nlIndent();
-        if ( !this.usedGlobalVarInFunctions.isEmpty() ) {
-            this.src.add("global ", String.join(", ", this.usedGlobalVarInFunctions));
-        }
-        return null;
-    }
 
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor ultrasonicSensor) {
@@ -450,15 +431,6 @@ public class JoyCarPythonVisitor extends MicrobitV2PythonVisitor implements IJoy
         }
         decrIndentation();
         nlIndent();
-        if ( !this.getBean(CodeGeneratorSetupBean.class).getUsedMethods().isEmpty() ) {
-            String helperMethodImpls =
-                this
-                    .getBean(CodeGeneratorSetupBean.class)
-                    .getHelperMethodGenerator()
-                    .getHelperMethodDefinitions(this.getBean(CodeGeneratorSetupBean.class).getUsedMethods());
-            this.src.add(helperMethodImpls);
-        }
-
         nlIndent();
         this.src.add("if __name__ == \"__main__\":");
         incrIndentation();

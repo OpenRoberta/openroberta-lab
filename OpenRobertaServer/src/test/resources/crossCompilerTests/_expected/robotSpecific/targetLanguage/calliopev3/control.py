@@ -18,6 +18,7 @@ ___booleanList = [True, True]
 ___stringList = ["", ""]
 ___colourList = [(255, 0, 0), (255, 0, 0)]
 ___imageList = [calliopemini.Image.HEART, calliopemini.Image.HEART]
+
 def ____control():
     global timer1, ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___imageVar, ___numberList, ___booleanList, ___stringList, ___colourList, ___imageList
     if ___booleanVar:
@@ -61,6 +62,7 @@ def ____control():
     while True:
         if ___booleanVar:
             break
+
 
 def run():
     global timer1, ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___imageVar, ___numberList, ___booleanList, ___stringList, ___colourList, ___imageList

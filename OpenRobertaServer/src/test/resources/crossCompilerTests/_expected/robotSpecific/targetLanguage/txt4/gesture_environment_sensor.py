@@ -16,6 +16,7 @@ TXT_M_I2C_2_gesture_sensor.enable_proximity()
 time.sleep(0.1)
 
 
+
 def ____environmentalSensor():
     print("Environmental Sensor")
     print("starting calibration if needed this takes a few minutes")

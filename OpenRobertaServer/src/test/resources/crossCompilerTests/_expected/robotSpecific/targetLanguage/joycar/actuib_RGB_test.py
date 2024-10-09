@@ -3,6 +3,12 @@ import random
 import math
 import neopixel
 
+
+def led_set_colour(x, colour):
+    global np
+    np[x] = colour
+    np.show()
+
 class BreakOutOfALoop(Exception): pass
 class ContinueLoop(Exception): pass
 np = neopixel.NeoPixel(microbit.pin0, 8)
@@ -50,11 +56,6 @@ def main():
         run()
     except Exception as e:
         raise
-
-def led_set_colour(x, colour):
-    global np
-    np[x] = colour
-    np.show()
 
 if __name__ == "__main__":
     main()
