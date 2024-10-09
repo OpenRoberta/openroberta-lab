@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.antlr.v4.runtime.ParserRuleContext;
+
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
@@ -16,11 +18,16 @@ import de.fhg.iais.roberta.util.dbc.Assert;
 @NepoBasic(name = "STMT_LIST", category = "STMT", blocklyNames = {})
 public final class StmtList extends Stmt {
     public final List<Stmt> sl = new ArrayList<Stmt>();
+    private ParserRuleContext ctx;
 
     public StmtList() {
         super(BlocklyProperties.make("STMT_LIST", "1", null));
     }
 
+    public StmtList(ParserRuleContext ctx) {
+        super(BlocklyProperties.make("STMT_LIST", "1", ctx));
+        this.ctx = ctx;
+    }
 
     /**
      * Add new element to the list.

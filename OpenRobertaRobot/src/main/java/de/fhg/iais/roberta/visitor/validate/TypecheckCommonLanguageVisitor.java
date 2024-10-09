@@ -172,6 +172,7 @@ public abstract class TypecheckCommonLanguageVisitor extends BaseVisitor<Blockly
         for ( Expr expr : exprList.el ) {
             expr.accept(this);
         }
+
         return BlocklyType.VOID;
     }
 
@@ -369,6 +370,7 @@ public abstract class TypecheckCommonLanguageVisitor extends BaseVisitor<Blockly
 
     @Override
     public BlocklyType visitMethodReturn(MethodReturn methodReturn) {
+        methodReturn.returnValue.accept(this);
         methodReturn.body.accept(this);
         return BlocklyType.NOTHING;
     }

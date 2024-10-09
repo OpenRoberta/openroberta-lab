@@ -144,6 +144,7 @@ public class WedoValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
         String sensorType = SENSOR_COMPONENT_TYPE_MAP.get(sensor.getKind().getName());
         if ( !robotConfiguration.isComponentTypePresent(sensorType) ) {
             addErrorToPhrase(sensor, "CONFIGURATION_ERROR_SENSOR_MISSING");
+            sensor.addTextlyError("This sensor is not in the robot configuration", true);
         } else {
             Map<String, ConfigurationComponent> usedSensor = null;
             usedSensor = robotConfiguration.getAllConfigurationComponentByType(sensorType);
@@ -165,6 +166,7 @@ public class WedoValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
         String actuatorType = ACTOR_COMPONENT_TYPE_MAP.get(actor.getKind().getName());
         if ( !robotConfiguration.isComponentTypePresent(actuatorType) ) {
             addErrorToPhrase(actor, "CONFIGURATION_ERROR_ACTOR_MISSING");
+            actor.addTextlyError("This actuator is not configured. Please add the corresponding block in the configuration tab!", true);
         } else {
             Map<String, ConfigurationComponent> usedActuator;
             usedActuator = robotConfiguration.getAllConfigurationComponentByType(actuatorType);

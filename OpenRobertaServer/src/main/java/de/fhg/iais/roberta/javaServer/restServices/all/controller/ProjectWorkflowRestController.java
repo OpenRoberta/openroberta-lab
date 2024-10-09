@@ -1,5 +1,7 @@
 package de.fhg.iais.roberta.javaServer.restServices.all.controller;
 
+import java.util.List;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -350,6 +352,7 @@ public class ProjectWorkflowRestController {
             ProjectWorkflowRequest wfRequest = ProjectWorkflowRequest.make(fullRequest.getData());
             ProjectSourceResponse response = ProjectSourceResponse.make();
 
+
             Project project = request2project(wfRequest, dbSession, httpSessionState, this.robotCommunicator, true, false);
             project.setProgramAsTextly(wfRequest.getProgramTextly());
             ProjectService.executeWorkflow("textlyToNepo", project);
@@ -358,7 +361,8 @@ public class ProjectWorkflowRestController {
             response.setSourceCode(project.getSourceCodeBuilder().toString());
             response.setProgramAsTextly(project.getProgramAsTextly().toString());
             response.setProgXML(project.getProgramAsBlocklyXML());
-            response.setTextlyErrors(project.getTextlyErrors());
+            List<JSONObject> textlyErrors = project.getTextlyErrors();
+            response.setTextlyErrors(textlyErrors);
             response.setConfAnnos(new JSONObject(project.getConfAnnotationList()));
             addProjectResultToResponse(response, project);
             Statistics.info("setTextly", "success", project.hasSucceeded());

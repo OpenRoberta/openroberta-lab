@@ -8,31 +8,26 @@ import org.json.JSONObject;
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.syntax.Phrase;
-import de.fhg.iais.roberta.typecheck.NepoInfoProcessor;
+import de.fhg.iais.roberta.typecheck.InfoCollector;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.visitor.validate.TypecheckCommonLanguageVisitor;
 
 /**
  * Uses the {@link TypecheckCommonLanguageVisitor} to visit the current AST and typecheck all items contained.
  */
-public abstract class AbstractTypecheckWorker implements IWorker {
+public abstract class TypecheckWorker implements IWorker {
 
     @Override
     public final void execute(Project project) {
         UsedHardwareBean usedHardwareBean = project.getWorkerResult(UsedHardwareBean.class);
-        TypecheckCommonLanguageVisitor visitor = this.getVisitor(project, usedHardwareBean);
-
+        TypecheckCommonLanguageVisitor visitor = this.getVisitor(usedHardwareBean);
         int errors = 0;
-        List<JSONObject> textlyErrors = new ArrayList<>();
         for ( List<Phrase> listOfPhrases : project.getProgramAst().getTree() ) {
             for ( Phrase phrase : listOfPhrases ) {
                 phrase.accept(visitor);
-                int errorsOfThisPhrase = NepoInfoProcessor.collectNepoErrors(phrase).size();
-                errors += errorsOfThisPhrase;
-                textlyErrors.addAll(InfoCollector.collectTextlyErrorsAsJson(phrase));
+                errors += InfoCollector.collectInfos(phrase).size();
             }
         }
-        project.setTextlyErrors(textlyErrors);
         if ( errors > 0 ) {
             project.setResult(Key.PROGRAM_INVALID_STATEMETNS);
             project.addToErrorCounter(errors, null);
@@ -49,5 +44,6 @@ public abstract class AbstractTypecheckWorker implements IWorker {
      * @param usedHardwareBean the used hardware bean
      * @return the appropriate visitor for the current robot
      */
-    public abstract TypecheckCommonLanguageVisitor getVisitor(Project project, UsedHardwareBean usedHardwareBean);
+    // protected abstract TypecheckCommonLanguageVisitor getVisitor(Project project, UsedHardwareBean usedHardwareBean);
+    abstract TypecheckCommonLanguageVisitor getVisitor(UsedHardwareBean usedHardwareBean);
 }

@@ -125,6 +125,7 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
         }
         if ( !builder.containsInScopeVariable(variableName) ) {
             addErrorToPhrase(assignStmt, "SCOPE_ERROR");
+            assignStmt.addTextlyError("This variable is not accessible in the current context.", true);
         }
         return null;
     }
@@ -603,6 +604,7 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
         String variableName = var.name;
         if ( !(this.getBuilder(UsedHardwareBean.Builder.class).containsInScopeVariable(variableName)) ) {
             addErrorToPhrase(var, "SCOPE_ERROR");
+            var.addTextlyError("This variable is not accessible in the current context.", true);
         }
         return null;
     }

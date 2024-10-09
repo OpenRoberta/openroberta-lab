@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
+import de.fhg.iais.roberta.exprEvaluator.BlockEvalStmtErrorListener;
 import de.fhg.iais.roberta.exprEvaluator.EvalExprStmtErrorListener;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.textly.generated.TextlyJavaLexer;
@@ -93,7 +94,7 @@ public final class EvalExpr extends Expr {
 
         } else {
             Expr result = new EmptyExpr(BlocklyType.NOTHING);
-            result.addTextlyError("This robot does not support TextlyJava", false);
+            result.addTextlyError("This robot does not support TextlyJava", true);
             EvalExpr evalExpr = new EvalExpr(expr, result, type, properties);
             return evalExpr;
         }
@@ -104,7 +105,7 @@ public final class EvalExpr extends Expr {
      */
     private static Expr expr2AST(String exprAsString, Class<?> pluginClass) throws Exception {
         TextlyJavaParser parser = EvalExpr.mkParser(exprAsString);
-        EvalExprStmtErrorListener err = new EvalExprStmtErrorListener();
+        BlockEvalStmtErrorListener err = new BlockEvalStmtErrorListener();
         parser.removeErrorListeners();
         parser.addErrorListener(err);
         ExpressionContext expression = parser.expression();

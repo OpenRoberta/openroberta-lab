@@ -192,8 +192,13 @@ public abstract class MbedValidatorAndCollectorVisitor extends CommonNepoValidat
                 }
             } else if ( this.occupiedPins.contains(pin) ) {
                 addWarningToPhrase(pinValueSensor, "VALIDATION_PIN_TAKEN_BY_INTERNAL_COMPONENT");
-            } else if ( configurationComponent.componentType.equals(SC.KEY) ) {
+            } else if ( pinValueSensor instanceof MbedPinWriteValueAction && (!configurationComponent.componentType.equals(((MbedPinWriteValueAction) pinValueSensor).pinValue + "_INPUT")) ) {
                 pinValueSensor.addTextlyError("The defined actuator port: " + port + " is incorrect, please check the robot configuration", true);
+            } else if ( pinValueSensor instanceof PinGetValueSensor ) {
+                String sensorType = ((PinGetValueSensor) pinValueSensor).getMode().equals("ANALOG") ? "ANALOG_PIN" : "DIGITAL_PIN";
+                if ( !configurationComponent.componentType.equals(sensorType) ) {
+                    pinValueSensor.addTextlyError("The defined actuator port: " + port + " is incorrect, please check the robot configuration", true);
+                }
             }
         }
     }
@@ -271,6 +276,7 @@ public abstract class MbedValidatorAndCollectorVisitor extends CommonNepoValidat
         ConfigurationComponent usedActor = robotConfiguration.optConfigurationComponent(port);
         if ( usedActor == null ) {
             addErrorToPhrase(actor, "CONFIGURATION_ERROR_ACTOR_MISSING");
+            actor.addTextlyError("This actuator is not configured. Please add the corresponding block in the configuration tab!", true);
         }
         return usedActor;
     }
@@ -287,6 +293,7 @@ public abstract class MbedValidatorAndCollectorVisitor extends CommonNepoValidat
 
         if ( !robotConfiguration.isComponentTypePresent(sensorType) ) {
             addErrorToPhrase(sensor, "CONFIGURATION_ERROR_SENSOR_MISSING");
+            sensor.addTextlyError("This sensor is not in the robot configuration", true);
         } else {
             Map<String, ConfigurationComponent> usedSensor = null;
             usedSensor = robotConfiguration.getAllConfigurationComponentByType(sensorType);

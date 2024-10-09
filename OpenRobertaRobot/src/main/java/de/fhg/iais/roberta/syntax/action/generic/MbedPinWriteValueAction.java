@@ -37,4 +37,5 @@ public final class MbedPinWriteValueAction extends Action {
         this.value = value;
         setReadOnly();
     }
+
 }

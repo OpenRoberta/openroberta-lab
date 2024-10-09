@@ -466,13 +466,18 @@ function showTextly(programName, configName, xmlTextProgram, xmlTextConfig, SSID
     );
 }
 
-function setTextly(programName, xmlTextProgram, programAsText,successFn) {
+function setTextly(programName, configName, xmlTextProgram, xmlTextConfig, programAsText, SSID, password, language, successFn) {
     COMM.json(
         '/projectWorkflow/setTextly',
         {
             programName: programName,
+            configurationName: configName,
             progXML: xmlTextProgram,
             programAstText: programAsText,
+            confXML: xmlTextConfig,
+            SSID: SSID,
+            password: password,
+            language: language,
             //textlyErrors: textlyErrors,
         },
         successFn,

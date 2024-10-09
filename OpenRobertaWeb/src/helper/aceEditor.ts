@@ -229,6 +229,10 @@ export function setViewCode(sourceCode: string) {
     highlightEverySecondLine(codeView);
 }
 
+export function setTextlyAnnotations(annotations: any) {
+    editorTextly.session.setAnnotations(annotations);
+}
+
 export function setCodeLanguage(languageFileExtension: string) {
     let langToSet: string;
     switch (languageFileExtension) {

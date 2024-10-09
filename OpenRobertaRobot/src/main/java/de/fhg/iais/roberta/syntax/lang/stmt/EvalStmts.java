@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
+import de.fhg.iais.roberta.exprEvaluator.BlockEvalStmtErrorListener;
 import de.fhg.iais.roberta.exprEvaluator.EvalExprStmtErrorListener;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.textly.generated.TextlyJavaLexer;
@@ -78,7 +79,7 @@ public final class EvalStmts extends Stmt {
         } else {
             StmtList statementList = new StmtList();
             statementList.setReadOnly();
-            statementList.addTextlyError("This robot does not support Textly", false);
+            statementList.addTextlyError("This robot does not support Textly", true);
             EvalStmts evalStmts = new EvalStmts(stmtListAsString, statementList, type, properties);
             evalStmts.setReadOnly();
 
@@ -91,7 +92,7 @@ public final class EvalStmts extends Stmt {
      */
     private static StmtList stmtList2AST(String stmtListAsString, Class<?> pluginClass) throws Exception {
         TextlyJavaParser parser = EvalStmts.mkParser(stmtListAsString);
-        EvalExprStmtErrorListener err = new EvalExprStmtErrorListener();
+        BlockEvalStmtErrorListener err = new BlockEvalStmtErrorListener();
         parser.removeErrorListeners();
         parser.addErrorListener(err);
         TextlyJavaParser.StatementListContext statementListExpr = parser.statementList();

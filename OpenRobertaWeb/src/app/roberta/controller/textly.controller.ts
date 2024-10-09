@@ -70,47 +70,76 @@ function handleTabSwitch(reload: boolean, tabId: string) {
         let blocklyWorkspace = GUISTATE_C.getBlocklyWorkspace();
         let dom = Blockly.Xml.workspaceToDom(blocklyWorkspace);
         let xmlProgram: string = Blockly.Xml.domToText(dom);
+        let xmlConfigText: string = GUISTATE_C.getConfigurationXML();
+        let isNamedConfig: boolean = !GUISTATE_C.isConfigurationStandard() && !GUISTATE_C.isConfigurationAnonymous();
+        let configName: string = isNamedConfig ? GUISTATE_C.getConfigurationName() : undefined;
 
-        PROGRAM.setTextly(GUISTATE_C.getProgramName(), xmlProgram, previousTextlyCode, function (result: any) {
-            console.log(result.textlyErrors);
-            if (result.rc == 'ok') {
-                if (reload) {
-                    PROG_C.reloadProgram(result);
-                    // @ts-ignore
-                    $(tabId).tabWrapShow();
-                }
+        let language: string = GUISTATE_C.getLanguage();
 
-                GUISTATE_C.setState(result);
-                ACE_EDITOR.setTextlyEditorCode(result.programAsTextly);
-                ACE_EDITOR.setWasEditedByUser(false);
-            } else {
+        PROGRAM.setTextly(
+            GUISTATE_C.getProgramName(),
+            configName,
+            xmlProgram,
+            xmlConfigText,
+            previousTextlyCode,
+            PROG_C.getSSID(),
+            PROG_C.getPassword(),
+            language,
+            function (result: any) {
+                console.log(result.textlyErrors);
                 // @ts-ignore
-                $('#tabTextly').tabWrapShow();
-                $('#show-message-confirm').oneWrap('shown.bs.modal', function () {
-                    $('#confirm').off();
-                    $('#confirm').on('click', function (e) {
-                        e.preventDefault();
-                        ACE_EDITOR.setWasEditedByUser(false);
+
+                if (result.rc == 'ok') {
+                    if (reload) {
+                        PROG_C.reloadProgram(result);
                         // @ts-ignore
                         $(tabId).tabWrapShow();
-                    });
-                    $('#confirmCancel').off();
-                    $('#confirmCancel').on('click', function (e) {
-                        e.preventDefault();
-                        ACE_EDITOR.setTextlyEditorCode(previousTextlyCode);
-                        skipReload = true;
+                    }
 
-                        $('.modal').modal('hide');
+                    GUISTATE_C.setState(result);
+                    ACE_EDITOR.setTextlyEditorCode(result.programAsTextly);
+                    ACE_EDITOR.setWasEditedByUser(false);
+                } else {
+                    // @ts-ignore
+                    $('#tabTextly').tabWrapShow();
+                    $('#show-message-confirm').oneWrap('shown.bs.modal', function () {
+                        $('#confirm').off();
+                        $('#confirm').on('click', function (e) {
+                            e.preventDefault();
+                            ACE_EDITOR.setWasEditedByUser(false);
+                            // @ts-ignore
+                            $(tabId).tabWrapShow();
+                        });
+                        $('#confirmCancel').off();
+                        $('#confirmCancel').on('click', function (e) {
+                            e.preventDefault();
+                            ACE_EDITOR.setTextlyEditorCode(previousTextlyCode);
+                            skipReload = true;
+                            console.log(result.textlyErrors);
+                            var annotations = formatTextlyErrorsForAce(result.textlyErrors);
+                            ACE_EDITOR.setTextlyAnnotations(annotations);
+                            $('.modal').modal('hide');
+                        });
                     });
-                });
-                MSG.displayMessage('SOURCE_CODE_EDITOR_CLOSE_CONFIRMATION', 'POPUP', 'YOU HAVE AN ERROR IN TEXTLY', true, false);
+                    MSG.displayMessage('SOURCE_CODE_EDITOR_CLOSE_CONFIRMATION', 'POPUP', 'YOU HAVE AN ERROR IN TEXTLY', true, false);
 
-                return false;
+                    return false;
+                }
             }
-        });
+        );
     }
 }
 
+function formatTextlyErrorsForAce(textlyErrors: any): any[] {
+    return textlyErrors.map((error: any) => {
+        return {
+            row: error.line - 1,
+            column: error.charPositionInLine,
+            text: error.message,
+            type: 'error',
+        };
+    });
+}
 function getSourceCode(reload: boolean) {
     //TODO types for blockly
     let blocklyWorkspace = GUISTATE_C.getBlocklyWorkspace();

@@ -53,7 +53,9 @@ import de.fhg.iais.roberta.syntax.sensor.mbed.microbitV2.PinSetTouchMode;
 import de.fhg.iais.roberta.textly.generated.TextlyJavaParser;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyRegion;
 import de.fhg.iais.roberta.util.ast.ExternalSensorBean;
+import de.fhg.iais.roberta.util.ast.TextRegion;
 
 public class Microbitv2TextlyJavaVisitor<T> extends CommonTextlyJavaVisitor<T> {
 
@@ -89,7 +91,7 @@ public class Microbitv2TextlyJavaVisitor<T> extends CommonTextlyJavaVisitor<T> {
                 listHide.add(hide);
                 mutation.setMode("PRESSED");
                 ExternalSensorBean externalSensorBeanLogo = new ExternalSensorBean("_LO", "PRESSED", "- EMPTY_SLOT -", mutation, listHide);
-                return (T) new SensorExpr(new LogoTouchSensor(mkExternalProperty(ctx, "robsensors_logotouch_getsample"), externalSensorBeanLogo));
+                return (T) new SensorExpr(new LogoTouchSensor(makeForLogo("robsensors_logotouch_getsample", "1", ctx), externalSensorBeanLogo));
 
             case "compassSensor":
                 hide.setName("SENSORPORT");
@@ -177,13 +179,13 @@ public class Microbitv2TextlyJavaVisitor<T> extends CommonTextlyJavaVisitor<T> {
                     return (T) actionRadio;
                 } else {
                     Expr result = new EmptyExpr(BlocklyType.NOTHING);
-                    result.addTextlyError("Invalid type for recive message: " + type, false);
+                    result.addTextlyError("Invalid type for recive message: " + type, true);
                     return (T) result;
                 }
 
             default:
                 Expr result = new EmptyExpr(BlocklyType.NOTHING);
-                result.addTextlyError("Invalid function name " + sensor, false);
+                result.addTextlyError("Invalid function name " + sensor, true);
                 return (T) result;
         }
     }
@@ -206,7 +208,7 @@ public class Microbitv2TextlyJavaVisitor<T> extends CommonTextlyJavaVisitor<T> {
             default:
                 StmtList statementList = new StmtList();
                 statementList.setReadOnly();
-                statementList.addTextlyError("invalid sensor" + sensor, false);
+                statementList.addTextlyError("invalid sensor" + sensor, true);
                 return (T) statementList;
         }
     }
@@ -275,7 +277,7 @@ public class Microbitv2TextlyJavaVisitor<T> extends CommonTextlyJavaVisitor<T> {
                 return (T) actionStmtDisplayImageAn;
 
             case "clearDisplay":
-                ClearDisplayAction clearDisplayAction = new ClearDisplayAction(mkExternalProperty(ctx, "mbedActions_display_clear"), "- EMPTY_PORT -", hide);
+                ClearDisplayAction clearDisplayAction = new ClearDisplayAction(mkExternalProperty(ctx, "mbedActions_display_clear"), "- EMPTY_PORT -", null);
                 ActionStmt actionStmtClearDisplay = new ActionStmt(clearDisplayAction);
                 return (T) actionStmtClearDisplay;
 
@@ -289,7 +291,7 @@ public class Microbitv2TextlyJavaVisitor<T> extends CommonTextlyJavaVisitor<T> {
 
             case "showOnSerial":
                 Expr valueShowOnSerial = (Expr) visit(ctx.expr(0));
-                SerialWriteAction serialWriteAction = new SerialWriteAction(mkExternalProperty(ctx, "mbedActions_display_setPixel"), valueShowOnSerial);
+                SerialWriteAction serialWriteAction = new SerialWriteAction(mkExternalProperty(ctx, "robActions_serial_print"), valueShowOnSerial);
                 ActionStmt actionStmtShowOnSerial = new ActionStmt(serialWriteAction);
                 return (T) actionStmtShowOnSerial;
 
@@ -298,13 +300,13 @@ public class Microbitv2TextlyJavaVisitor<T> extends CommonTextlyJavaVisitor<T> {
                 if ( soundPattern != null ) {
                     hide.setName("ACTORPORT");
                     hide.setValue("_B");
-                    PlayFileAction playFileActionSound = new PlayFileAction(mkInlineProperty(ctx, "actions_play_file"), "- EMPTY_PORT -", soundPattern, hide);
+                    PlayFileAction playFileActionSound = new PlayFileAction(mkInlineProperty(ctx, "actions_play_expression"), "- EMPTY_PORT -", soundPattern, hide);
                     ActionStmt actionStmtPlayFileSound = new ActionStmt(playFileActionSound);
                     return (T) actionStmtPlayFileSound;
                 } else {
                     StmtList statementList = new StmtList();
                     statementList.setReadOnly();
-                    statementList.addTextlyError("Invalid sound file: " + ctx.NAME(0).getText(), false);
+                    statementList.addTextlyError("Invalid sound file: " + ctx.NAME(0).getText(), true);
                     return (T) statementList;
                 }
 
@@ -379,7 +381,7 @@ public class Microbitv2TextlyJavaVisitor<T> extends CommonTextlyJavaVisitor<T> {
             default:
                 StmtList statementList = new StmtList();
                 statementList.setReadOnly();
-                statementList.addTextlyError("Invalid actuator" + actuator, false);
+                statementList.addTextlyError("Invalid actuator" + actuator, true);
                 return (T) statementList;
         }
     }
@@ -465,6 +467,12 @@ public class Microbitv2TextlyJavaVisitor<T> extends CommonTextlyJavaVisitor<T> {
 
     private static BlocklyProperties mkExternalProperty(ParserRuleContext ctx, String type) {
         return BlocklyProperties.make(type, "1", false, ctx);
+    }
+
+    private static BlocklyProperties makeForLogo(String blockType, String blocklyId, ParserRuleContext ctx) {
+        TextRegion rg = ctx == null ? null : new TextRegion(ctx.start.getLine(), ctx.start.getStartIndex(), ctx.stop.getLine(), ctx.stop.getStopIndex());
+        BlocklyRegion br = new BlocklyRegion(false, false, null, null, null, true, null, null, null);
+        return new BlocklyProperties(blockType, blocklyId, br, rg);
     }
 
     public enum GestureModes {

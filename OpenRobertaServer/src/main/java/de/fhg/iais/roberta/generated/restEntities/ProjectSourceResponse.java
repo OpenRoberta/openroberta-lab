@@ -21,7 +21,7 @@ public class ProjectSourceResponse extends BaseResponse {
     protected String progXML;
     protected JSONObject confAnnos;
     private String programAsTextly;
-    private List<String> textlyErrors;
+    private List<JSONObject> textlyErrors;
 
     /**
      * the response for the /projectWorkflow/source REST request
@@ -66,7 +66,7 @@ public class ProjectSourceResponse extends BaseResponse {
         String sourceCode,
         String progXML,
         String programAsTextly,
-        List<String> textlyErrors,
+        List<JSONObject> textlyErrors,
         JSONObject confAnnos) {
         ProjectSourceResponse entity = new ProjectSourceResponse();
         entity.setCmd(cmd);
@@ -240,7 +240,7 @@ public class ProjectSourceResponse extends BaseResponse {
         return this;
     }
 
-    public ProjectSourceResponse setTextlyErrors(List<String> textlyErrors) {
+    public ProjectSourceResponse setTextlyErrors(List<JSONObject> textlyErrors) {
         if ( this.immutable ) {
             throw new RuntimeException("textly errors assigned to an immutable object: " + toString());
         }

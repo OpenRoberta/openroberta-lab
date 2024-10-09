@@ -125,7 +125,7 @@ public class WedoTextlyJavaVisitor<T> extends CommonTextlyJavaVisitor<T> {
             default:
                 StmtList statementList = new StmtList();
                 statementList.setReadOnly();
-                statementList.addTextlyError("invalid sensor" + sensor, false);
+                statementList.addTextlyError("invalid sensor" + sensor, true);
                 return (T) statementList;
 
         }
@@ -151,15 +151,18 @@ public class WedoTextlyJavaVisitor<T> extends CommonTextlyJavaVisitor<T> {
                 String port = ctx.NAME().getText();
                 Expr speed = (Expr) visit(ctx.expr(0));
                 MotorDuration motorDuration;
+                String blocklyName;
                 if ( ctx.expr(1) != null ) {
                     Expr time = (Expr) visit(ctx.expr(1));
                     motorDuration = new MotorDuration(null, time);
+                    blocklyName = "robActions_motor_on_for";
                 } else {
                     motorDuration = null;
+                    blocklyName = "robActions_motor_on";
                 }
 
                 MotionParam motionParam = new MotionParam.Builder().speed(speed).duration(motorDuration).build();
-                MotorOnAction motorOnAction = new MotorOnAction(port, motionParam, mkInlineProperty(ctx, "robActions_motor_on_for"));
+                MotorOnAction motorOnAction = new MotorOnAction(port, motionParam, mkInlineProperty(ctx, blocklyName));
                 ActionStmt actionStmtMotorOnAction = new ActionStmt(motorOnAction);
                 return (T) checkValidationName(actionStmtMotorOnAction, port, NameType.PORT);
 
@@ -170,7 +173,7 @@ public class WedoTextlyJavaVisitor<T> extends CommonTextlyJavaVisitor<T> {
                 return (T) checkValidationName(actionStmtMotorStopAction, portS, NameType.PORT);
 
             case "clearDisplay":
-                ClearDisplayAction clearDisplayAction = new ClearDisplayAction(mkExternalProperty(ctx, "robActions_display_clear"), "- EMPTY_PORT -", hide);
+                ClearDisplayAction clearDisplayAction = new ClearDisplayAction(mkExternalProperty(ctx, "robActions_display_clear"), "- EMPTY_PORT -", null);
                 ActionStmt actionStmtClearDisplay = new ActionStmt(clearDisplayAction);
                 return (T) actionStmtClearDisplay;
 
@@ -180,7 +183,7 @@ public class WedoTextlyJavaVisitor<T> extends CommonTextlyJavaVisitor<T> {
                 freq.setReadOnly();
                 Expr duration = (Expr) visit(ctx.expr(1));
                 duration.setReadOnly();
-                ToneAction toneAction = new ToneAction(mkInlineProperty(ctx, "robActions_play_tone"), freq, duration, portPitch, hide);
+                ToneAction toneAction = new ToneAction(mkInlineProperty(ctx, "robActions_play_tone"), freq, duration, portPitch, null);
                 ActionStmt actionStmtTone = new ActionStmt(toneAction);
                 return (T) checkValidationName(actionStmtTone, portPitch, NameType.PORT);
 
