@@ -580,6 +580,7 @@ export class SimulationRoberta implements Simulation {
             $('.huebee__container').on('mouseup touchend', (e) => {
                 sim.resetColorpickerCursor();
             });
+            $('.huebee').draggable({});
         };
     }
 
