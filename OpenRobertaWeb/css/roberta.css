@@ -822,7 +822,7 @@ button#simCustomObstacle.typcn:before {
 
 .huebee__container {
     position: absolute;
-    left: 0;
+    left: -50px;
     top: 6px;
     padding: 24px 10px 10px;
     background: #e7e7e7;
