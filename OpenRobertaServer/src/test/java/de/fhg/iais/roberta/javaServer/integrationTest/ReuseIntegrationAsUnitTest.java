@@ -312,11 +312,11 @@ public class ReuseIntegrationAsUnitTest {
         checkAndShowTestResult();
     }
 
-    // @Ignore
+    @Ignore
     @Test
     public void testOneRobotSpecificProgramAsUnitTests() throws Exception {
-        String robotName = "ev3dev";
-        String programName = "sensors_ht";
+        String robotName = "ev3lejosv1";
+        String programName = "textlyJava";
         LOG.info("========= testing program " + programName + " for robot " + robotName);
         final String resourceDirectory = setupRobotFactoryAndGetResourceDirForRobotSpecificTests(robotName);
         runRegenerateAndCodeGenerationForOneRobotSpecificProgram(resourceDirectory, programName + ".xml", robotName, Collections.emptyList());

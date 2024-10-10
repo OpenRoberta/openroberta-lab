@@ -55,9 +55,10 @@ public class TestToolboxBlocksAreUsedInTestFiles {
 
     private static Set<String> parseResourceFiles(Stream<Path> resources) throws IOException {
         return resources
-            .filter(file -> file.getFileName().toString().endsWith(".xml"))
-            .filter(file -> !file.getParent().startsWith("_"))
             .filter(file -> file.toFile().isFile())
+            .filter(file -> file.getFileName().toString().endsWith(".xml"))
+            .filter(file -> !file.getFileName().toString().toString().contains("/textly/"))
+            .filter(file -> !file.getParent().startsWith("_"))
             .map(file -> Util.readFileContent(file.toString()))
             .map(TestToolboxBlocksAreUsedInTestFiles::getBlockNamesFromContent)
             .flatMap(Collection::stream)
