@@ -28,6 +28,7 @@ import de.fhg.iais.roberta.syntax.action.sound.SetVolumeAction;
 import de.fhg.iais.roberta.syntax.action.sound.ToneAction;
 import de.fhg.iais.roberta.syntax.actors.edison.ReceiveIRAction;
 import de.fhg.iais.roberta.syntax.actors.edison.SendIRAction;
+import de.fhg.iais.roberta.syntax.lang.expr.Binary;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.sensor.generic.IRSeekerSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
@@ -48,6 +49,21 @@ public final class EdisonStackMachineVisitor extends AbstractStackMachineVisitor
     public EdisonStackMachineVisitor(ConfigurationAst configuration, List<List<Phrase>> phrases, UsedHardwareBean usedHardwareBean, NNBean nnBean) {
         super(configuration, usedHardwareBean, nnBean);
         Assert.isTrue(!phrases.isEmpty());
+    }
+
+    @Override
+    public final Void visitBinary(Binary binary) {
+        switch ( binary.op ) {
+            case DIVIDE:
+                binary.left.accept(this);
+                binary.getRight().accept(this);
+                JSONObject o;
+                o = makeNode(C.EXPR).put(C.EXPR, C.BINARY).put(C.OP, binary.op).put(C.TYPE, "INTEGER");
+                return add(o);
+            default:
+                return super.visitBinary(binary);
+        }
+
     }
 
     @Override

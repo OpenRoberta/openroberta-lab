@@ -1094,7 +1094,8 @@ export class Interpreter {
                 const subOp = expr[C.OP];
                 const right = this.state.pop();
                 const left = this.state.pop();
-                this.state.push(this.evalBinary(subOp, left, right));
+                const dataType = expr[C.TYPE]; // used by robots with integer arithmetic only
+                this.state.push(this.evalBinary(subOp, left, right, dataType));
                 break;
             }
             case C.NULL_CONST: {
@@ -1106,7 +1107,7 @@ export class Interpreter {
         }
     }
 
-    private evalBinary(subOp: string, left: any, right: any): any {
+    private evalBinary(subOp: string, left: any, right: any, dataType: string): any {
         let leftIsArray = Array.isArray(left);
         let rightIsArray = Array.isArray(right);
 
@@ -1117,7 +1118,7 @@ export class Interpreter {
                 case C.EQ:
                     if (leftLen === rightLen) {
                         for (var i = 0; i < leftLen; i++) {
-                            if (!this.evalBinary(subOp, left[i], right[i])) {
+                            if (!this.evalBinary(subOp, left[i], right[i], dataType)) {
                                 return false;
                             }
                         }
@@ -1128,7 +1129,7 @@ export class Interpreter {
                 case C.NEQ:
                     if (leftLen === rightLen) {
                         for (var i = 0; i < leftLen; i++) {
-                            if (this.evalBinary(subOp, left[i], right[i])) {
+                            if (this.evalBinary(subOp, left[i], right[i], dataType)) {
                                 return true;
                             }
                         }
@@ -1166,7 +1167,11 @@ export class Interpreter {
                 case C.MULTIPLY:
                     return 0 + left * right;
                 case C.DIVIDE:
-                    return 0 + left / right;
+                    if (dataType && dataType === 'INTEGER') {
+                        return Math.floor(0 + left / right);
+                    } else {
+                        return 0 + left / right;
+                    }
                 case C.POWER:
                     return Math.pow(left, right);
                 case C.MOD:

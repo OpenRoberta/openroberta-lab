@@ -299,7 +299,7 @@ public abstract class AbstractStackMachineVisitor extends BaseVisitor<Void> {
     }
 
     @Override
-    public final Void visitBinary(Binary binary) {
+    public Void visitBinary(Binary binary) {
         switch ( binary.op ) {
             case AND:
             case OR:
