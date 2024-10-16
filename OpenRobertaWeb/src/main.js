@@ -342,7 +342,7 @@ function initProgramming(robot, extensions, opt_callback, opt_params) {
     if (!mainCallbackCalled) {
         mainCallbackCalled = true;
         $.when(robotController.init(robot, extensions)).then(function () {
-            $('#tabProgram, #tabConfiguration').parent().removeClass('invisible');
+            $('.mainTab').parent().removeClass('invisible');
             $('.notStart').removeClass('disabled');
             $('#header').addClass('shadow');
             programController.init();
@@ -369,7 +369,7 @@ function initProgramming(robot, extensions, opt_callback, opt_params) {
         });
     } else {
         robotController.switchRobot(robot, extensions, null, function () {
-            $('#tabProgram, #tabConfiguration').parent().removeClass('invisible');
+            $('.mainTab').parent().removeClass('invisible');
             $('#header').addClass('shadow');
             $('.notStart').removeClass('disabled');
             $('#tabProgram').oneWrap('shown.bs.tab', function () {
