@@ -288,7 +288,7 @@ function initRobotList() {
     $('span#results').text(startRobots.length);
 }
 function initView() {
-    $('#tabProgram, #tabConfiguration').parent().addClass('invisible');
+    $('#tabProgram, #tabConfiguration, #tabNN, #tabNNlearn').parent().addClass('invisible');
     $('.notStart').addClass('disabled');
     $('#header').removeClass('shadow');
     GUISTATE_C.resetRobot();
