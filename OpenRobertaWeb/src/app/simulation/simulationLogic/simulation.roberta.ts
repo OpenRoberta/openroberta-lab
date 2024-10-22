@@ -821,8 +821,8 @@ export class SimulationRoberta implements Simulation {
     /** adds/removes the ability for a block to be a breakpoint to a block */
 
     updateBreakpointEvent() {
-        let sim = this;
         if (this.debugMode) {
+            let sim = this;
             Blockly.getMainWorkspace()
                 .getAllBlocks()
                 .forEach(function (block) {
@@ -857,16 +857,6 @@ export class SimulationRoberta implements Simulation {
                         sim.observers[block.id] = observer;
                         observer.observe(block.svgGroup_, { attributes: true });
                     }
-                }, sim);
-        } else {
-            Blockly.getMainWorkspace()
-                .getAllBlocks()
-                .forEach(function (block) {
-                    if (sim.observers.hasOwnProperty(block.id)) {
-                        sim.observers[block.id].disconnect();
-                    }
-                    $(block.svgPath_).removeClass('breakpoint').animate({ 'fill-opacity': '1' }, 0);
-                    sim.removeBreakPoint(block);
                 }, sim);
         }
     }
