@@ -25,16 +25,14 @@ function text(obj, marker) {
 }
 
 /**
- * log info text to a HTML-list with id #log or prepare it to be sent to the
- * server or do both or do nothing, depending on switches
+ * log info text
  */
 function info(obj) {
     text(obj, markerINFO);
 }
 
 /**
- * log error text to a HTML-list with id #log or prepare it to be sent to
- * the server or do both or do nothing, depending on switches
+ * log error text
  */
 function error(obj) {
     text(obj, markerERROR);
@@ -88,7 +86,7 @@ function reportToComm() {
 var logToggle = 'log0'; // for alternating css-classes
 
 /**
- * IMPLEMENTATION OF logging to a HTML-list with id #log. expect: HTML-list
+ * IMPLEMENTATION OF logging to a HTML-list with id #logTable. expect: HTML-list
  * with id #log expect: css-classes 'log0' and 'log1' and 'lERR'
  */
 function logLog(obj, marker) {
@@ -107,8 +105,7 @@ function logLog(obj, marker) {
 }
 
 /**
- * IMPLEMENTATION OF logging to a HTML-list with id #log. expect: HTML-list
- * with id #log expect: css-classes 'log0' and 'log1' and 'lERR'
+ * IMPLEMENTATION OF logging to the console
  */
 function logConsole(obj, marker) {
     if (typeof obj === 'object') {

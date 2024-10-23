@@ -27,9 +27,10 @@ function functionName(func) {
     var result = /^function\s+([\w\$]+)\s*\(/.exec(func.toString());
     return result ? result[1] : '<anonymous>'; // for an anonymous function there won't be a match
 }
+
 /**
- * wrap a function to catch and display errors. Calling wrapTotal with an arbitrary function with NEVER terminate with an exception.
- * An not undefined 2nd parameter is a messages that activates logging with time measuring
+ * wrap a function to catch and display errors. Calling wrapTotal with an arbitrary function will NEVER terminate with an exception.
+ * A not undefined 2nd parameter is a messages that activates logging with time measuring
  *
  * @memberof WRAP
  */
@@ -60,10 +61,10 @@ function wrapTotal(fnToBeWrapped, message) {
                         ' in function ' +
                         functionName(fnToBeWrapped) +
                         ' with stacktrace: ' +
-                        err.stack
+                        e.stack
                 );
             } else {
-                LOG.error('[[ERR ]] ' + elapsed + ' msec: in function ' + functionName(fnToBeWrapped) + ' EXCEPTION: ' + e + ' with stacktrace: ' + err.stack);
+                LOG.error('[[ERR ]] ' + elapsed + ' msec: in function ' + functionName(fnToBeWrapped) + ' EXCEPTION: ' + e + ' with stacktrace: ' + e.stack);
             }
         }
     };

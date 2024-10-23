@@ -81,17 +81,8 @@ public abstract class BaseVisitor<V> implements ILanguageVisitor<V> {
      */
     protected void postVisitCheck(Phrase visitable) {
     }
-
-    /**
-     * delegates visiting to the embedded sensor.<br>
-     * <b>TODO: rework! Cannot be final, because of problems with Edison</b>
-     *
-     * @param exprStmt
-     * @return
-     */
-    public V visitGetSampleSensor(GetSampleSensor sensorGetSample) {
-        return sensorGetSample.sensor.accept(this);
-    }
+    
+    /* default implementations for some AST classes. Make final, if possible! */
 
     public final V visitActionExpr(ActionExpr actionExpr) {
         return actionExpr.action.accept(this);
@@ -101,6 +92,41 @@ public abstract class BaseVisitor<V> implements ILanguageVisitor<V> {
         return actionStmt.action.accept(this);
     }
 
+    public final V visitLocation(Location location) {
+        return null;
+    }
+
+    public final V visitMethodExpr(MethodExpr methodExpr) {
+        return methodExpr.getMethod().accept(this);
+    }
+
+    public final V visitSensorExpr(SensorExpr sensorExpr) {
+        return sensorExpr.sensor.accept(this);
+    }
+
+    public final V visitSensorStmt(SensorStmt sensorStmt) {
+        return sensorStmt.sensor.accept(this);
+    }
+
+    public final V visitStmtExpr(StmtExpr stmtExpr) {
+        return stmtExpr.stmt.accept(this);
+    }
+    
+    public final V visitFunctionExpr(FunctionExpr functionExpr) {
+        return functionExpr.getFunction().accept(this);
+    }
+
+    /**
+     * delegates visiting to the embedded sensor.<br>
+     * <b>TODO: rework! Cannot be final, because of problems with Edison</b>
+     *
+     * @param sensorGetSample the get sample object to visit
+     * @return
+     */
+    public V visitGetSampleSensor(GetSampleSensor sensorGetSample) {
+        return sensorGetSample.sensor.accept(this);
+    }
+    
     /**
      * delegates visiting to the embedded expression.<br>
      * <b>TODO: rework! Cannot be final, because typechecking is not yet finalized</b>
@@ -134,38 +160,14 @@ public abstract class BaseVisitor<V> implements ILanguageVisitor<V> {
         return exprStmt.expr.accept(this);
     }
 
-    public final V visitFunctionExpr(FunctionExpr functionExpr) {
-        return functionExpr.getFunction().accept(this);
-    }
-
     /**
      * delegates visiting to the embedded function.<br>
      * <b>Cannot be final, because code generators need to suffix the expr with ';' to achieve correct syntax</b>
      *
-     * @param exprStmt
+     * @param functionStmt
      * @return
      */
     public V visitFunctionStmt(FunctionStmt functionStmt) {
         return functionStmt.function.accept(this);
-    }
-
-    public final V visitLocation(Location location) {
-        return null;
-    }
-
-    public final V visitMethodExpr(MethodExpr methodExpr) {
-        return methodExpr.getMethod().accept(this);
-    }
-
-    public final V visitSensorExpr(SensorExpr sensorExpr) {
-        return sensorExpr.sensor.accept(this);
-    }
-
-    public final V visitSensorStmt(SensorStmt sensorStmt) {
-        return sensorStmt.sensor.accept(this);
-    }
-
-    public final V visitStmtExpr(StmtExpr stmtExpr) {
-        return stmtExpr.stmt.accept(this);
     }
 }
