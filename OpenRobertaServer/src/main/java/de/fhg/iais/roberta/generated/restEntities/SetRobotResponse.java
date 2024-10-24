@@ -312,9 +312,9 @@ public class SetRobotResponse extends BaseResponse {
         if ( binaryFileExtension == null ) {
             _message = "required property binaryFileExtension of SetRobotResponse-object is not set: " + toString();
         }
-//        if ( !textlyDefined ) {
-//            _message = "required property textly of SetRobotResponse-object is not set: " + toString();
-//        }
+        if ( !textlyDefined ) {
+            _message = "required property textly of SetRobotResponse-object is not set: " + toString();
+        }
         if ( _message != null ) {
             this.immutable = false;
             throw new RuntimeException(_message);

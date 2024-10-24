@@ -5,17 +5,117 @@
 
 let codeView: AceAjax.Editor;
 let editor: AceAjax.Editor;
+let editorTextly: AceAjax.Editor;
 let currentLanguage: string;
 let wasEdited: boolean = false;
 let previousLineCount: number = 0;
 let initialized: boolean = false;
+
+var customCompleter = {
+    getCompletions: function (editor, session, pos, prefix, callback) {
+        var controlFlowKeywords = [
+            'if',
+            'else',
+            'else if',
+            '++',
+            'while',
+            'for',
+            'for each',
+            'break',
+            'continue',
+            'waitUntil',
+            'orWaitFor',
+            'wait ms',
+            'return',
+            'testme',
+        ];
+
+        var functionNames = [
+            'sin',
+            'cos',
+            'tan',
+            'asin',
+            'acos',
+            'atan',
+            'exp',
+            'square',
+            'sqrt',
+            'abs',
+            'log10',
+            'log',
+            'randomInt',
+            'randomFloat',
+            'randomItem',
+            'floor',
+            'ceil',
+            'round',
+            'isEven',
+            'isOdd',
+            'isPrime',
+            'isWhole',
+            'isEmpty',
+            'isPositive',
+            'isNegative',
+            'isDivisibleBy',
+            'sum',
+            'max',
+            'min',
+            'average',
+            'median',
+            'stddev',
+            'size',
+            'indexOfFirst',
+            'indexOfLast',
+            'get',
+            'getFromEnd',
+            'getFirst',
+            'getLast',
+            'getAndRemove',
+            'getAndRemoveFromEnd',
+            'getAndRemoveFirst',
+            'getAndRemoveLast',
+            'createListWith',
+            'subList',
+            'subListFromIndexToLast',
+            'subListFromIndexToEnd',
+            'subListFromFirstToIndex',
+            'subListFromFirstToLast',
+            'subListFromFirstToEnd',
+            'subListFromEndToIndex',
+            'subListFromEndToEnd',
+            'subListFromEndToLast',
+            'print',
+            'createTextWith',
+            'constrain',
+            'getRGB',
+        ];
+
+        var completions = [];
+        controlFlowKeywords.forEach(function (word) {
+            completions.push({
+                caption: word,
+                value: word,
+                meta: 'control',
+                score: 1000,
+            });
+        });
+        functionNames.forEach(function (word) {
+            completions.push({
+                caption: word,
+                value: word,
+                meta: 'function',
+                score: 1000,
+            });
+        });
+        callback(null, completions);
+    },
+};
 
 export function init() {
     if (initialized) return;
 
     initialized = true;
     ace.require('ace/ext/language_tools');
-
     codeView = ace.edit('codeContent');
     applyDefaultSettings(codeView);
     codeView.setOptions({
@@ -30,6 +130,20 @@ export function init() {
         enableBasicAutocompletion: true,
         enableSnippets: false,
         enableLiveAutocompletion: false,
+    });
+
+    editorTextly = ace.edit('aceTextlyEditor');
+    applyDefaultSettings(editorTextly);
+    editorTextly.session.setUseWrapMode(true);
+    editorTextly.setHighlightActiveLine(true);
+    editorTextly.setShowPrintMargin(false);
+    editorTextly.session.setMode('ace/mode/my-mode');
+    // @ts-ignore
+    aceTextlyEditor.completers = [customCompleter];
+    editorTextly.setOptions({
+        enableBasicAutocompletion: true,
+        enableSnippets: true,
+        enableLiveAutocompletion: true,
     });
 
     editor.session.on('change', function () {
@@ -56,6 +170,22 @@ export function init() {
         codeView.resize();
         editor.resize();
     });
+
+    editorTextly.session.on('change', function () {
+        if (previousLineCount !== editorTextly.session.getLength()) {
+            previousLineCount = editorTextly.session.getLength();
+            resetActiveLine(editorTextly);
+        }
+        wasEdited = true;
+    });
+
+    editorTextly.session.on('changeFold', () => {
+        resetActiveLine(editorTextly);
+    });
+
+    editorTextly.selection.on('changeSelection', () => {
+        resetActiveLine(editorTextly);
+    });
 }
 
 export function wasEditedByUser() {
@@ -74,6 +204,10 @@ export function getEditorCode() {
     return editor.getValue();
 }
 
+export function getTextlyEditorCode() {
+    return editorTextly.getValue();
+}
+
 export function setEditorCode(sourceCode: string) {
     editor.setValue(sourceCode, 0);
     editor.clearSelection();
@@ -81,11 +215,31 @@ export function setEditorCode(sourceCode: string) {
     resetActiveLine(editor);
 }
 
+export function setTextlyEditorCode(sourceCode: string) {
+    editorTextly.setValue(sourceCode, 0);
+    editorTextly.clearSelection();
+    editorTextly.focus();
+    resetActiveLine(editorTextly);
+}
+
 export function setViewCode(sourceCode: string) {
     codeView.setValue(sourceCode, 0);
     codeView.clearSelection();
     codeView.moveCursorTo(0, 0);
     highlightEverySecondLine(codeView);
+}
+
+export function setTextlyAnnotations(annotations: any) {
+    editorTextly.session.setAnnotations(annotations);
+}
+export function setTextlyEditable(editable) {
+    if (editable) {
+        editorTextly.setReadOnly(false);
+        editorTextly.getSession().setUseWorker(true);
+    } else {
+        editorTextly.setReadOnly(true);
+        editorTextly.getSession().setUseWorker(false);
+    }
 }
 
 export function setCodeLanguage(languageFileExtension: string) {

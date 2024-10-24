@@ -115,6 +115,11 @@ public class RobotFactory {
         return p == null ? "never" : p;
     }
 
+    public final String textlyProperty() {
+        String p = this.pluginProperties.getStringProperty("robot.textly");
+        return p == null ? "never" : p;
+    }
+
     public final JSONArray getNNActivations() {
         String values = this.pluginProperties.getStringProperty("robot.nn.activations");
         if ( values == null ) {

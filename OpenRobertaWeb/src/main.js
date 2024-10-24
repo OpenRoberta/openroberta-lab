@@ -68,6 +68,7 @@ require.config({
         'sourceCodeEditor.controller': 'js/app/roberta/controller/sourceCodeEditor.controller',
         'connection.interface': 'js/app/roberta/controller/connections/connection.interface',
         'abstract.connections': 'js/app/roberta/controller/connections/abstract.connections',
+        'textly.controller': 'js/app/roberta/controller/textly.controller',
         connections: 'js/app/roberta/controller/connections/connections',
         'connection.controller': 'js/app/roberta/controller/connection.controller',
         'webview.controller': 'js/app/roberta/controller/webview.controller',
@@ -240,6 +241,7 @@ require([
     'confVisualization',
     'robotBlock',
     'sourceCodeEditor.controller',
+    'textly.controller',
     'startView.controller',
     //start connections
     'connection.interface',
@@ -290,7 +292,7 @@ require([
     startViewController = require('startView.controller');
     connectionController = require('connection.controller');
     aceEditor = require('aceEditor');
-
+    textlyController = require('textly.controller');
     $(document).ready(WRAP.wrapTotal(init, 'page init'));
 });
 
@@ -362,6 +364,7 @@ function initProgramming(robot, extensions, opt_callback, opt_params) {
             progShareController.init();
             guiStateController.setInitialState();
             connectionController.initConnection(robot);
+            textlyController.init();
             $('#tabProgram').oneWrap('shown.bs.tab', function () {
                 callback && typeof callback === 'function' && callback(...params);
             });

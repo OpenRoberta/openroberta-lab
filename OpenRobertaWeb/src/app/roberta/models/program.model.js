@@ -449,6 +449,40 @@ export function externAPIRequest(urlAPI, data, successFn, errorFn) {
     COMM.externPost(urlAPI, data, successFn, errorFn);
 }
 
+function showTextly(programName, configName, xmlTextProgram, xmlTextConfig, SSID, password, language, successFn) {
+    COMM.json(
+        '/projectWorkflow/showTextly',
+        {
+            programName: programName,
+            configurationName: configName,
+            progXML: xmlTextProgram,
+            confXML: xmlTextConfig,
+            SSID: SSID,
+            password: password,
+            language: language,
+        },
+        successFn,
+        "show program as textly '" + programName + "'"
+    );
+}
+
+function setTextly(programName, configName, xmlTextProgram, xmlTextConfig, programAsText, SSID, password, language, successFn) {
+    COMM.json(
+        '/projectWorkflow/setTextly',
+        {
+            programName: programName,
+            configurationName: configName,
+            progXML: xmlTextProgram,
+            programAstText: programAsText,
+            confXML: xmlTextConfig,
+            SSID: SSID,
+            password: password,
+            language: language,
+        },
+        successFn,
+        'show program as textly '
+    );
+}
 export {
     saveAsProgramToServer,
     saveProgramToServer,
@@ -470,4 +504,6 @@ export {
     checkProgramCompatibility,
     likeProgram,
     resetProgram,
+    showTextly,
+    setTextly,
 };
