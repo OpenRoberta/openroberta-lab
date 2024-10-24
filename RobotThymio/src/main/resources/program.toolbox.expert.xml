@@ -595,6 +595,7 @@
     </category>
     <category name="TOOLBOX_TEXT" svg="true">
         <block type="text_comment"/>
+        <block type='robActions_eval_expr'></block>
     </category>
     <category name="TOOLBOX_VARIABLE" custom="VARIABLE" svg="true">
     </category>

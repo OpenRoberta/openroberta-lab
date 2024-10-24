@@ -228,6 +228,7 @@
         <block type="robText_append"></block>
         <block type="text_cast_string_toNumber"></block>
         <block type="text_cast_char_toNumber"></block>
+        <block type='robActions_eval_expr'></block>
     </category>
     <category name="TOOLBOX_LIST" svg="true">
         <block type="robLists_create_with">

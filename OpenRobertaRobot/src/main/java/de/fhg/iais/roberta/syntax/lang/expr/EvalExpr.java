@@ -16,7 +16,6 @@ import org.slf4j.LoggerFactory;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.exprEvaluator.BlockEvalStmtErrorListener;
-import de.fhg.iais.roberta.exprEvaluator.EvalExprStmtErrorListener;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.textly.generated.TextlyJavaLexer;
 import de.fhg.iais.roberta.textly.generated.TextlyJavaParser;
@@ -26,6 +25,7 @@ import de.fhg.iais.roberta.transformer.Jaxb2ProgramAst;
 import de.fhg.iais.roberta.transformer.forClass.NepoBasic;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
+import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.syntax.Assoc;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 
@@ -83,21 +83,16 @@ public final class EvalExpr extends Expr {
         BlocklyType type = BlocklyType.getByBlocklyName(typeAsString);
         BlocklyProperties properties = Jaxb2Ast.extractBlocklyProperties(block);
 
-        String pluginProperties = helper.getRobotFactory().getPluginProperties().getPluginProperties().getProperty("robot.class.textlyJava");
+        String textlyVisitorClass = helper.getRobotFactory().getPluginProperties().getPluginProperties().getProperty("robot.class.textlyJava");
 
-        if ( pluginProperties != null ) {
-            Class<?> pluginClass = Class.forName(pluginProperties);
-            Expr astOfExpr = EvalExpr.expr2AST(expr, pluginClass);
-            astOfExpr.setReadOnly();
-            EvalExpr evalExpr = new EvalExpr(expr, astOfExpr, type, properties);
-            return evalExpr;
-
-        } else {
-            Expr result = new EmptyExpr(BlocklyType.NOTHING);
-            result.addTextlyError("This robot does not support TextlyJava", true);
-            EvalExpr evalExpr = new EvalExpr(expr, result, type, properties);
-            return evalExpr;
+        if ( textlyVisitorClass == null ) {
+            throw new DbcException("robot.class.textlyJava property not set");
         }
+        Class<?> pluginClass = Class.forName(textlyVisitorClass);
+        Expr astOfExpr = EvalExpr.expr2AST(expr, pluginClass);
+        astOfExpr.setReadOnly();
+        EvalExpr evalExpr = new EvalExpr(expr, astOfExpr, type, properties);
+        return evalExpr;
     }
 
     /**

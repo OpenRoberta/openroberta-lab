@@ -189,6 +189,7 @@
     #end
     <category name="TOOLBOX_TEXT" svg="true">
         <block type="text_comment"></block>
+        <block type='robActions_eval_expr'></block>
     </category>
     <category name="TOOLBOX_LIST" svg="true">
         <block type="robLists_create_with">

@@ -83,7 +83,7 @@ import de.fhg.iais.roberta.util.ast.BlocklyRegion;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.syntax.FunctionNames;
 
-public abstract class CommonTextlyJavaVisitor<T> extends TextlyJavaBaseVisitor<T> {
+public class CommonTextlyJavaVisitor<T> extends TextlyJavaBaseVisitor<T> {
     private static final Pattern VAR_NAME = Pattern.compile("[a-zA-Z][a-zA-Z0-9_]*");
     private static final Pattern FUNCTION_NAME = Pattern.compile("[a-zA-Z][a-zA-Z0-9_]*");
     private static final Pattern BUTTONPORT_NAME = Pattern.compile("[a-zA-Z][a-zA-Z0-9_]*");
