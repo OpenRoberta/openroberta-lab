@@ -15,7 +15,6 @@ require.config({
         'jquery-scrollto': 'libs/jquery/jquery.scrollTo-2.1.2.min',
         'jquery-validate': 'libs/jquery/jquery.validate-1.17.0.min',
         'jquery-hotkeys': 'libs/jquery/jquery.hotkeys-0.2.0',
-        slick: 'libs/slick/slick.min',
         'socket.io': 'libs/socket.io/socket.io',
         'volume-meter': 'libs/sound/volume-meter',
         'neuralnetwork-lib': 'libs/neuralnetwork/lib',

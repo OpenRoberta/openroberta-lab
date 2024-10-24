@@ -10,14 +10,13 @@ import * as CONFIGURATION_C from 'configuration.controller';
 import * as IMPORT_C from 'import.controller';
 import * as TOUR_C from 'tour.controller';
 import * as SOURCECODE_C from 'sourceCodeEditor.controller';
-import * as $ from 'jquery';
-import * as Blockly from 'blockly';
-import 'slick';
 import * as TUTORIAL_C from 'progTutorial.controller';
 import * as UTIL from 'util.roberta';
 import * as CONNECTION_C from 'connection.controller';
+// @ts-ignore
+import * as Blockly from 'blockly';
 
-var n = 0;
+let n = 0;
 
 const QUERY_START = '?';
 const QUERY_DELIMITER = '&';
@@ -32,37 +31,35 @@ const Q_KIOSK = 'kiosk';
 const Q_EXAMPLE_VIEW = 'exampleView';
 const Q_LOAD_PROGRAM = 'loadProgram';
 const Q_EXTENSIONS = 'extensions';
-var mainCallback;
+let mainCallback: Function;
 
 // from https://stackoverflow.com/questions/19491336/get-url-parameter-jquery-or-how-to-get-query-string-values-in-js/21903119#21903119
-function getUrlParameter(sParam) {
-    var url = decodeURIComponent(document.location.toString());
-    var queryStart = url.indexOf('?');
+function getUrlParameter(sParam: string): string {
+    let url: string = decodeURIComponent(document.location.toString());
+    const queryStart: number = url.indexOf('?');
     url = url.substring(queryStart + 1);
-    var sPageURL = url;
-    var xmlStart = sPageURL.indexOf('<');
-    var lastParam;
+    let sPageURL: string = url;
+    const xmlStart: number = sPageURL.indexOf('<');
+    let lastParam: string;
     if (xmlStart >= 0) {
         sPageURL = url.substring(0, xmlStart);
         lastParam = url.substring(xmlStart);
     }
-    var sURLVariables = sPageURL.split(QUERY_DELIMITER),
-        sParameterName,
-        i;
-    for (i = 0; i < sURLVariables.length; i++) {
+    const sURLVariables: string[] = sPageURL.split(QUERY_DELIMITER);
+    let sParameterName: string[];
+    for (let i: number = 0; i < sURLVariables.length; i++) {
         sParameterName = sURLVariables[i].split(QUERY_ASSIGNMENT);
-
         if (sParameterName[0] === sParam) {
-            return sParameterName[1] === undefined ? true : sParameterName[0] === 'loadProgram' ? lastParam : sParameterName[1];
+            return sParameterName[1] === undefined ? undefined : sParameterName[0] === 'loadProgram' ? lastParam : sParameterName[1];
         }
     }
 }
 
 function handleQuery() {
-    let location = new URL(document.location);
-    let domain = location.protocol + '//' + location.host;
-    let oldStyle = (location.hash && location.toString().indexOf('#') <= domain.length + 1) || false;
-    let newStyle = location.search !== '' || false;
+    let location: URL = new URL(document.location.toString());
+    let domain: string = location.protocol + '//' + location.host;
+    let oldStyle: boolean = (location.hash && location.toString().indexOf('#') <= domain.length + 1) || false;
+    let newStyle: boolean = location.search !== '' || false;
     /* old style queries, start with # *** deprecated ***
         e.g.
         localhost:1999#overview
@@ -72,9 +69,9 @@ function handleQuery() {
         localhost:1999#tutorial&&bionics4education1&&kiosk
      */
     if (oldStyle) {
-        let deprecated = true;
-        let newUrl;
-        var target = decodeURI(document.location.hash).split('&&');
+        let deprecated: boolean = true;
+        let newUrl: string;
+        const target: string[] = decodeURI(document.location.hash).split('&&');
         if (target[0] === '#overview') {
             GUISTATE_C.setStartWithoutPopup();
             mainCallback('ev3lejosv1', {}, function () {
@@ -103,7 +100,7 @@ function handleQuery() {
                 }
             }
         }
-        let message;
+        let message: string;
         let germanDeprecated =
             'Die eingegebenen URL-Parameter sind in dieser Form veraltet und werden bald nicht mehr unterstützt.\nBitte verwende ab sofort nur noch folgende Schreibweise:\n';
         let englishDeprecated =
@@ -140,48 +137,42 @@ function handleQuery() {
         localhost:1999?loadSystem=ev3lejosv1&extensions=nn,...
      */
     if (newStyle) {
-        var forgotPasswort = getUrlParameter(Q_FORGOT_PASSWORD);
+        const forgotPasswort = getUrlParameter(Q_FORGOT_PASSWORD);
         if (forgotPasswort) {
             USER_C.showResetPassword(forgotPasswort);
         }
-        var activateAccount = getUrlParameter(Q_ACTIVATE_ACCOUNT);
+        const activateAccount = getUrlParameter(Q_ACTIVATE_ACCOUNT);
         if (activateAccount) {
             USER_C.activateAccount(activateAccount);
         }
-        var tour = getUrlParameter(Q_TOUR);
+        const tour = getUrlParameter(Q_TOUR);
         if (tour) {
             GUISTATE_C.setStartWithoutPopup();
-            mainCallback('ev3lejosv1', function () {
+            mainCallback('ev3lejosv1', {}, function () {
                 PROGRAM_C.newProgram(true);
                 TOUR_C.start(tour);
             });
         }
-        var loadSystem = getUrlParameter(Q_LOAD_SYSTEM);
-        if (loadSystem) {
+        let loadSystem = getUrlParameter(Q_LOAD_SYSTEM);
+        if (loadSystem !== undefined) {
             GUISTATE_C.setStartWithoutPopup();
-            let callback;
+            let callback: Function;
             let extend = {};
-            let parameter = [];
-            let tutorial = getUrlParameter(Q_TUTORIAL);
-            let loadProgram = getUrlParameter(Q_LOAD_PROGRAM);
-            let exampleView = getUrlParameter(Q_EXAMPLE_VIEW);
-            let gallery = getUrlParameter(Q_GALLERY);
-            let extensions = getUrlParameter(Q_EXTENSIONS);
+            let parameter: string[] = [];
+            let tutorial: string = getUrlParameter(Q_TUTORIAL);
+            let loadProgram: string = getUrlParameter(Q_LOAD_PROGRAM);
+            let exampleView: string = getUrlParameter(Q_EXAMPLE_VIEW);
+            let gallery: string = getUrlParameter(Q_GALLERY);
+            let extensions: string = getUrlParameter(Q_EXTENSIONS);
             if (tutorial) {
-                if (tutorial === 'true' || tutorial === true) {
-                    callback = function () {
-                        $('.navbar-nav a[href="#tutorialList"]').tab('show');
-                    };
-                } else {
-                    let kiosk = getUrlParameter(Q_KIOSK);
-                    if (kiosk && (kiosk === true || kiosk === 'true')) {
-                        GUISTATE_C.setKioskMode(true);
-                    }
-                    callback = function (tutorial) {
-                        TUTORIAL_C.loadFromTutorial(tutorial);
-                    };
-                    parameter.push(tutorial);
+                let kiosk = getUrlParameter(Q_KIOSK);
+                if (kiosk) {
+                    GUISTATE_C.setKioskMode(true);
                 }
+                callback = function (tutorial: any) {
+                    TUTORIAL_C.loadFromTutorial(tutorial);
+                };
+                parameter.push(tutorial);
             } else if (loadProgram) {
                 callback = IMPORT_C.loadProgramFromXML;
                 parameter.push('NEPOprog');
@@ -196,10 +187,10 @@ function handleQuery() {
                 };
             } else if (extensions) {
                 let extensionsArray = extensions.split(',');
-                extensionsArray.forEach(function (extension) {
+                extensionsArray.forEach(function (extension: string) {
                     // TODO remove this when the server can handle all extensions -> robot variants
                     if (loadSystem === 'calliope2017NoBlue' && extension === 'blue') {
-                        loadSystem === 'calliope2017';
+                        loadSystem = 'calliope2017';
                     } else {
                         extend[extension] = true;
                     }
@@ -212,7 +203,7 @@ function handleQuery() {
     }
 }
 
-export function init(callback) {
+export function init(callback: Function) {
     if (callback && callback instanceof Function) {
         mainCallback = callback;
     } else {
@@ -227,7 +218,7 @@ export function init(callback) {
         setTimeout(function () {
             n += 1000;
             if (n >= GUISTATE_C.getPingTime() && GUISTATE_C.doPing()) {
-                COMM.ping(function (result) {
+                COMM.ping(function (result: any) {
                     GUISTATE_C.setState(result);
                 });
                 n = 0;
@@ -259,7 +250,7 @@ function backToStartView() {
  */
 function initMenuEvents() {
     // TODO check if this prevents iPads and iPhones to only react on double clicks'
-    $('.navbar-collapse a:not(.dropdown-toggle)').click(function () {
+    $('.navbar-collapse a:not(.dropdown-toggle)').onWrap('click', function () {
         $('.dropdown-menu.show').collapse('hide');
         $('.navbar-collapse.show').collapse('hide');
     });
@@ -297,27 +288,27 @@ function initMenuEvents() {
     });
 
     $('.modal').onWrap('shown.bs.modal', function () {
-        $(this).find('[autofocus]').focus();
+        $(this).find('[autofocus]').trigger('focus');
     });
 
     /* TODO $('#navbarCollapse').collapse({
         toggle: false,
     });*/
 
-    $('.navbar-collapse').on('click', '.dropdown-menu a,.visible-xs', function (event) {
+    $('.navbar-collapse').on('click', '.dropdown-menu a,.visible-xs', function () {
         $('#navbarCollapse').collapse('hide');
     });
     // for gallery
-    $('#head-navigation-gallery').on('click', 'a,.visible-xs', function (event) {
+    $('#head-navigation-gallery').on('click', 'a,.visible-xs', function () {
         $('#navbarCollapse').collapse('hide');
     });
     if (GUISTATE_C.isPublicServerVersion()) {
-        var feedbackButton =
+        const feedbackButton =
             '<div href="#" id="feedbackButton" class="rightMenuButton" rel="tooltip" data-bs-original-title="" title="">' +
             '<span id="" class="feedbackButton typcn typcn-feedback"></span>' +
             '</div>';
         $('#rightMenuDiv').append(feedbackButton);
-        window.onmessage = function (msg) {
+        window.onmessage = function (msg: { data: string }) {
             if (msg.data === 'closeFeedback') {
                 $('#feedbackIframe').oneWrap('load', function () {
                     setTimeout(function () {
@@ -326,11 +317,11 @@ function initMenuEvents() {
                     }, 1000);
                 });
             } else if (msg.data.indexOf('feedbackHeight') >= 0) {
-                var height = msg.data.split(':')[1] || 400;
+                const height = msg.data.split(':')[1] || 400;
                 $('#feedbackIframe').height(height);
             }
         };
-        $('#feedbackButton').on('click', '', function (event) {
+        $('#feedbackButton').on('click', '', function () {
             $('#feedbackModal').on('show.bs.modal', function () {
                 if (GUISTATE_C.getLanguage().toLowerCase() === 'de') {
                     $('#feedbackIframe').attr('src', 'https://www.roberta-home.de/lab/feedback/');
@@ -344,8 +335,10 @@ function initMenuEvents() {
 
     // EDIT Menu  --- don't use onWrap here, because the export xml target must be enabled always
     $('#head-navigation-program-edit').on('click', '.dropdown-menu li:not(.disabled) a', function (event) {
-        var fn = function (event) {
-            var targetId = event.target.id || event.currentTarget.id;
+        const fn = function (event: Event) {
+            let target: HTMLElement = event.target as HTMLElement;
+            let currentTarget: HTMLElement = event.currentTarget as HTMLElement;
+            const targetId = target.id || currentTarget.id;
             switch (targetId) {
                 case 'menuRunProg':
                     RUN_C.runOnBrick();
@@ -354,6 +347,7 @@ function initMenuEvents() {
                     $('#simButton').clickWrap();
                     break;
                 case 'menuCheckProg':
+                    // @ts-ignore
                     PROGRAM_C.checkProgram();
                     break;
                 case 'menuNewProg':
@@ -408,87 +402,74 @@ function initMenuEvents() {
     });
 
     // CONF Menu
-    $('#head-navigation-configuration-edit').onWrap(
-        'click',
-        '.dropdown-menu li:not(.disabled) a',
-        function (event) {
-            $('.modal').modal('hide'); // close all opened popups
-            var targetId = event.target.id || event.currentTarget.id;
-            switch (targetId) {
-                case 'menuCheckConfig':
-                    MSG.displayMessage('MESSAGE_NOT_AVAILABLE', 'POPUP', '');
-                    break;
-                case 'menuNewConfig':
-                    CONFIGURATION_C.newConfiguration();
-                    break;
-                case 'menuListConfig':
-                    $('#tabConfList').tabWrapShow();
-                    break;
-                case 'menuSaveConfig':
-                    CONFIGURATION_C.saveToServer();
-                    break;
-                case 'menuSaveAsConfig':
-                    CONFIGURATION_C.showSaveAsModal();
-                    break;
-                default:
-                    break;
-            }
-        },
-        'configuration edit clicked'
-    );
+    $('#head-navigation-configuration-edit').onWrap('click', '.dropdown-menu li:not(.disabled) a', function (event: Event) {
+        let target: HTMLElement = event.target as HTMLElement;
+        let currentTarget: HTMLElement = event.currentTarget as HTMLElement;
+        $('.modal').modal('hide'); // close all opened popups
+        const targetId = target.id || currentTarget.id;
+        switch (targetId) {
+            case 'menuCheckConfig':
+                MSG.displayMessage('MESSAGE_NOT_AVAILABLE', 'POPUP', '', null, null);
+                break;
+            case 'menuNewConfig':
+                CONFIGURATION_C.newConfiguration();
+                break;
+            case 'menuListConfig':
+                $('#tabConfList').tabWrapShow();
+                break;
+            case 'menuSaveConfig':
+                CONFIGURATION_C.saveToServer();
+                break;
+            case 'menuSaveAsConfig':
+                CONFIGURATION_C.showSaveAsModal();
+                break;
+            default:
+                break;
+        }
+    });
 
     // ROBOT Menu
-    $('#head-navigation-robot').onWrap(
-        'click',
-        '.dropdown-menu li:not(.disabled) a',
-        function (event) {
-            $('.modal').modal('hide');
-            var domId = event.currentTarget.id;
-            if (domId === 'menuConnect') {
-                CONNECTION_C.getConnectionInstance().showConnectionModal();
-            } else if (domId === 'menuRobotInfo') {
-                CONNECTION_C.getConnectionInstance().showRobotInfo();
-            } else if (domId === 'menuWlan') {
-                CONNECTION_C.getConnectionInstance().showWlanModal();
-            } else if (domId === 'menuRobotSwitch') {
-                backToStartView();
-            }
-        },
-        'robot clicked'
-    );
+    $('#head-navigation-robot').onWrap('click', '.dropdown-menu li:not(.disabled) a', function (event: Event) {
+        $('.modal').modal('hide');
+        let target = event.currentTarget as HTMLElement;
+        if (target.id === 'menuConnect') {
+            CONNECTION_C.getConnectionInstance().showConnectionModal();
+        } else if (target.id === 'menuRobotInfo') {
+            CONNECTION_C.getConnectionInstance().showRobotInfo();
+        } else if (target.id === 'menuWlan') {
+            CONNECTION_C.getConnectionInstance().showWlanModal();
+        } else if (target.id === 'menuRobotSwitch') {
+            backToStartView();
+        }
+    });
 
-    $('#head-navigation-help').onWrap(
-        'click',
-        '.dropdown-menu li:not(.disabled) a',
-        function (event) {
-            $('.modal').modal('hide'); // close all opened popups
-            var domId = event.target.id;
-            if (domId === 'menuAbout') {
-                $('#version').text(GUISTATE_C.getServerVersion());
-                $('#show-about').modal('show');
-            } else if (domId === 'menuLogging') {
-                $('#tabLogList').tabWrapShow();
-            }
-        },
-        'help clicked'
-    );
+    $('#head-navigation-help').onWrap('click', '.dropdown-menu li:not(.disabled) a', function (event: Event) {
+        $('.modal').modal('hide'); // close all opened popups
+        let target: HTMLElement = event.target as HTMLElement;
+        if (target.id === 'menuAbout') {
+            $('#version').text(GUISTATE_C.getServerVersion());
+            $('#show-about').modal('show');
+        } else if (target.id === 'menuLogging') {
+            $('#tabLogList').tabWrapShow();
+        }
+    });
     $('.menuGeneral').onWrap(
         'click',
-        function (event) {
+        function () {
             window.open('https://jira.iais.fraunhofer.de/wiki/display/ORInfo');
         },
         'head navigation menu item general clicked'
     );
     $('.menuFaq').onWrap(
         'click',
-        function (event) {
+        function () {
             window.open('https://jira.iais.fraunhofer.de/wiki/display/ORInfo/FAQ');
         },
         'head navigation menu item faq clicked'
     );
     $('.menuAboutProject').onWrap(
         'click',
-        function (event) {
+        function () {
             if (GUISTATE_C.getLanguage() == 'de') {
                 window.open('https://www.roberta-home.de/index.php?id=135');
             } else {
@@ -499,64 +480,47 @@ function initMenuEvents() {
     );
     $('.menuShowStart').onWrap('click', () => backToStartView());
 
-    $('#head-navigation-user').onWrap(
-        'click',
-        '.dropdown-menu li:not(.disabled) a',
-        function (event) {
-            $('.modal').modal('hide'); // close all opened popups
-            switch (event.target.id) {
-                case 'menuUserGroupLogin':
-                    USER_C.showUserGroupLoginForm();
-                    break;
-                case 'menuLogout':
-                    USER_C.logout();
-                    break;
-                case 'menuGroupPanel':
-                    $('#tabUserGroupList').tabWrapShow();
-                    break;
-                case 'menuChangeUser':
-                    USER_C.showUserDataForm();
-                    break;
-                case 'menuDeleteUser':
-                    USER_C.showDeleteUserModal();
-                    break;
-                case 'menuStateInfo':
-                    USER_C.showUserInfo();
-                    break;
-                case 'menuNotification':
-                    NOTIFICATION_C.showNotificationModal();
-                    break;
-                default:
-                    break;
-            }
-            return false;
-        },
-        'user clicked'
-    );
+    $('#head-navigation-user').onWrap('click', '.dropdown-menu li:not(.disabled) a', function (event: Event) {
+        let target: HTMLElement = event.target as HTMLElement;
+        $('.modal').modal('hide'); // close all opened popups
+        switch (target.id) {
+            case 'menuUserGroupLogin':
+                USER_C.showUserGroupLoginForm();
+                break;
+            case 'menuLogout':
+                USER_C.logout();
+                break;
+            case 'menuGroupPanel':
+                $('#tabUserGroupList').tabWrapShow();
+                break;
+            case 'menuChangeUser':
+                USER_C.showUserDataForm();
+                break;
+            case 'menuDeleteUser':
+                USER_C.showDeleteUserModal();
+                break;
+            case 'menuStateInfo':
+                USER_C.showUserInfo();
+                break;
+            case 'menuNotification':
+                NOTIFICATION_C.showNotificationModal();
+                break;
+            default:
+                break;
+        }
+        return false;
+    });
     $('.menuLogin').onWrap(
         'click',
-        function (event) {
+        function () {
             USER_C.showLoginForm();
         },
         'head navigation menu item login clicked'
     );
 
-    $('#menuTabProgram').onWrap(
-        'click',
-        '',
-        function (event) {
-            if ($('#tabSimulation').hasClass('tabClicked')) {
-                $('.scroller-left').clickWrap();
-            }
-            $('.scroller-left').clickWrap();
-            $('#tabProgram').tabWrapShow();
-        },
-        'tabProgram clicked'
-    );
-
     $('#head-navigation-gallery').onWrap(
         'click',
-        function (event) {
+        function () {
             $('#tabGalleryList').tabWrapShow();
             return false;
         },
@@ -564,59 +528,15 @@ function initMenuEvents() {
     );
     $('#head-navigation-tutorial').onWrap(
         'click',
-        function (event) {
+        function () {
             $('#tabTutorialList').tabWrapShow();
             return false;
         },
         'tutorial clicked'
     );
 
-    $('#menuTabConfiguration').onWrap(
-        'click',
-        '',
-        function (event) {
-            if ($('#tabProgram').hasClass('tabClicked')) {
-                $('.scroller-right').clickWrap();
-            } else if ($('#tabConfiguration').hasClass('tabClicked')) {
-                $('.scroller-right').clickWrap();
-            }
-            $('#tabConfiguration').clickWrap();
-        },
-        'tabConfiguration clicked'
-    );
-    $('#menuTabNN').onWrap(
-        'click',
-        '',
-        function (event) {
-            if ($('#tabProgram').hasClass('tabClicked')) {
-                $('.scroller-right').clickWrap();
-            } else if ($('#tabConfiguration').hasClass('tabClicked')) {
-                $('.scroller-right').clickWrap();
-            } else if ($('#tabNN').hasClass('tabClicked')) {
-                $('.scroller-right').clickWrap();
-            }
-            $('#tabNN').clickWrap();
-        },
-        'tabNN clicked'
-    );
-    $('#menuTabNNLearn').onWrap(
-        'click',
-        '',
-        function (event) {
-            if ($('#tabProgram').hasClass('tabClicked')) {
-                $('.scroller-right').clickWrap();
-            } else if ($('#tabConfiguration').hasClass('tabClicked')) {
-                $('.scroller-right').clickWrap();
-            } else if ($('#tabNNlearn').hasClass('tabClicked')) {
-                $('.scroller-right').clickWrap();
-            }
-            $('#tabNNlearn').clickWrap();
-        },
-        'tabNNlearn clicked'
-    );
-
     // Close submenu on mouseleave
-    $('.navbar-fixed-top').on('mouseleave', function (event) {
+    $('.navbar-fixed-top').on('mouseleave', function () {
         $('.navbar-fixed-top .dropdown').removeClass('open');
     });
 
@@ -637,32 +557,22 @@ function initMenuEvents() {
         'hide show about clicked'
     );
 
-    $(window).on('beforeunload', function (e) {
-        return Blockly.Msg.POPUP_BEFOREUNLOAD;
-        // the following code doesn't work anymore, TODO check for a better solution.
-        //            if (!GUISTATE_C.isProgramSaved || !GUISTATE_C.isConfigurationSaved) {
-        //                if (GUISTATE_C.isUserLoggedIn()) {
-        //                    // Maybe a Firefox-Problem?                alert(Blockly.Msg['POPUP_BEFOREUNLOAD_LOGGEDIN']);
-        //                    return Blockly.Msg.POPUP_BEFOREUNLOAD_LOGGEDIN;
-        //                } else {
-        //                    // Maybe a Firefox-Problem?                alert(Blockly.Msg['POPUP_BEFOREUNLOAD']);
-        //                    return Blockly.Msg.POPUP_BEFOREUNLOAD;
-        //                }
-        //            }
+    $(window).on('beforeunload', function () {
+        return 'ok';
     });
 
-    // help Bootstrap to calculate the correct size for the collapse element when the screen height is smaller than the elements height.
+    // help Bootstrap to calculate the correct size for the collapse element when the screen height is smaller than the element's height.
     $('#navbarCollapse').on('shown.bs.collapse', function () {
-        var newHeight = Math.min($(this).height(), Math.max($('#blocklyDiv').height(), $('#brickly').height(), $('#nn').height()));
+        const newHeight = Math.min($(this).height(), Math.max($('#blocklyDiv').height(), $('#brickly').height(), $('#nn').height()));
         $(this).css('height', newHeight);
     });
 
-    $(document).onWrap('keydown', function (e) {
+    $(document).onWrap('keydown', function (e: any) {
         if (GUISTATE_C.getView() === 'tabProgram') {
             //Overriding the Ctrl + 2 for creating a debug block
             if ((e.metaKey || e.ctrlKey) && e.which == 50) {
                 e.preventDefault();
-                var debug = GUISTATE_C.getBlocklyWorkspace().newBlock('robActions_debug');
+                const debug = GUISTATE_C.getBlocklyWorkspace().newBlock('robActions_debug');
                 debug.initSvg();
                 debug.render();
                 debug.setInTask(false);
@@ -672,25 +582,25 @@ function initMenuEvents() {
             //Overriding the Ctrl + 3 for creating an assertion block
             if ((e.metaKey || e.ctrlKey) && e.which == 51) {
                 e.preventDefault();
-                var assert = GUISTATE_C.getBlocklyWorkspace().newBlock('robActions_assert');
+                const assert = GUISTATE_C.getBlocklyWorkspace().newBlock('robActions_assert');
                 assert.initSvg();
                 assert.setInTask(false);
                 assert.render();
-                var logComp = GUISTATE_C.getBlocklyWorkspace().newBlock('logic_compare');
+                const logComp = GUISTATE_C.getBlocklyWorkspace().newBlock('logic_compare');
                 logComp.initSvg();
                 logComp.setMovable(false);
                 logComp.setInTask(false);
                 logComp.setDeletable(false);
                 logComp.render();
-                var parentConnection = assert.getInput('OUT').connection;
-                var childConnection = logComp.outputConnection;
+                const parentConnection = assert.getInput('OUT').connection;
+                const childConnection = logComp.outputConnection;
                 parentConnection.connect(childConnection);
                 return false;
             }
             //Overriding the Ctrl + 4 for creating an evaluate expression block
             if ((e.metaKey || e.ctrlKey) && e.which == 52) {
                 e.preventDefault();
-                var expr = GUISTATE_C.getBlocklyWorkspace().newBlock('robActions_eval_expr');
+                let expr = GUISTATE_C.getBlocklyWorkspace().newBlock('robActions_eval_expr');
                 expr.initSvg();
                 expr.render();
                 expr.setInTask(false);
@@ -699,7 +609,7 @@ function initMenuEvents() {
             //Overriding the Ctrl + 5 for creating an evaluate statement block
             if ((e.metaKey || e.ctrlKey) && e.which == 53) {
                 e.preventDefault();
-                var expr = GUISTATE_C.getBlocklyWorkspace().newBlock('robActions_eval_stmt');
+                let expr = GUISTATE_C.getBlocklyWorkspace().newBlock('robActions_eval_stmt');
                 expr.initSvg();
                 expr.render();
                 expr.setInTask(false);
@@ -715,7 +625,7 @@ function initMenuEvents() {
                         PROGRAM_C.saveToServer();
                     }
                 } else {
-                    MSG.displayMessage('ORA_PROGRAM_GET_ONE_ERROR_NOT_LOGGED_IN', 'POPUP', '');
+                    MSG.displayMessage('ORA_PROGRAM_GET_ONE_ERROR_NOT_LOGGED_IN', 'POPUP', '', null, null);
                 }
             }
             //Overriding the Ctrl + R for running the program
@@ -732,7 +642,7 @@ function initMenuEvents() {
                     $('#progList').trigger('Programs');
                     $('#tabProgList').tabWrapShow();
                 } else {
-                    MSG.displayMessage('ORA_PROGRAM_GET_ONE_ERROR_NOT_LOGGED_IN', 'POPUP', '');
+                    MSG.displayMessage('ORA_PROGRAM_GET_ONE_ERROR_NOT_LOGGED_IN', 'POPUP', '', null, null);
                 }
             }
             //Overriding the Ctrl + I for importing NEPO Xml
@@ -759,7 +669,7 @@ function initMenuEvents() {
                             CONFIGURATION_C.saveToServer();
                         }
                     } else {
-                        MSG.displayMessage('ORA_PROGRAM_GET_ONE_ERROR_NOT_LOGGED_IN', 'POPUP', '');
+                        MSG.displayMessage('ORA_PROGRAM_GET_ONE_ERROR_NOT_LOGGED_IN', 'POPUP', '', null, null);
                     }
                 }
                 //Overriding the Ctrl + M for viewing all configurations
@@ -768,7 +678,7 @@ function initMenuEvents() {
                     if (GUISTATE_C.isUserLoggedIn()) {
                         $('#tabConfList').tabWrapShow();
                     } else {
-                        MSG.displayMessage('ORA_PROGRAM_GET_ONE_ERROR_NOT_LOGGED_IN', 'POPUP', '');
+                        MSG.displayMessage('ORA_PROGRAM_GET_ONE_ERROR_NOT_LOGGED_IN', 'POPUP', '', null, null);
                     }
                 }
             }

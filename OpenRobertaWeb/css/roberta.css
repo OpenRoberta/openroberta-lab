@@ -648,95 +648,6 @@ div.rightMenuButton:hover,
     padding: 8px;
 }
 
-#show-startup-message {
-    z-index: 1039;
-}
-
-#show-startup-message #popup-robot-container {
-    margin-left: 100px;
-    margin-right: 100px;
-}
-
-#show-startup-message .popup-robot {
-    background-color: #fff;
-    color: #333;
-}
-
-#show-startup-message .popup-robot.robotSpecial {
-    background-color: transparent;
-    color: #000;
-}
-
-#slick-container {
-    background: #33B8CA;
-}
-
-.slick-list {
-    padding-top: 12px !important;
-    padding-bottom: 12px !important;
-}
-
-.slick-dots {
-    bottom: inherit;
-    top: 160px;
-}
-
-#show-startup-message .slick-slide {
-    transform: scale(1);
-    transition: .3s ease-in-out all;
-    opacity: 1;
-}
-
-#show-startup-message .slick-slide.slick-center {
-    transform: scale(1.2);
-}
-
-#show-startup-message .slick-prev {
-    left: -100px;
-    top: 45%;
-}
-
-#show-startup-message .slick-next {
-    right: -100px;
-    top: 45%;
-}
-
-#show-startup-message .slick-next:before,
-#show-startup-message .slick-prev:before {
-    color: #000;
-    font-size: 25px;
-}
-
-#show-startup-message .popup-robot a {
-    position: relative;
-    bottom: 20px;
-    right: 75px;
-    color: #000;
-    font-size: 25px;
-}
-
-#show-startup-message .popup-robot.robotSpecial a {
-    left: 86px;
-    top: 20px;
-}
-
-#show-startup-message .robot-info {
-    font-size: 24px;
-    position: relative;
-}
-
-#startPopupBack {
-    font-size: 36px;
-    position: relative;
-    bottom: 50px;
-    text-decoration: none;
-    color: #333;
-}
-
-#show-startup-message .modal-dialog {
-    border: 2px solid #33B8CA;
-}
-
 .wait,
 .ok {
     color: #33B8CA;
@@ -1266,10 +1177,6 @@ button#simCustomObstacle.typcn:before {
     word-break: break-word;
 }
 
-#startup-message-statustext h4 {
-    font-weight: 500;
-}
-
 .modal-header,
 .modal-footer {
     border: none;
@@ -1497,22 +1404,6 @@ table:not(#robotTable) [data-bs-toggle="collapse"].collapsed:after {
 
 #popup-robot-main {
     visibility: hidden;
-}
-
-#popup-robot-main.slick-initialized {
-    visibility: visible;
-}
-
-.robot-container {
-    border-radius: 4px;
-    border: 1px solid #ddd;
-    width: 140px;
-    height: 88px;
-    display: inline-grid;
-    margin: 20px;
-    padding: 13px 0;
-    text-align: center;
-    cursor: pointer;
 }
 
 .startupImages {
@@ -2483,27 +2374,6 @@ section {
 }
 
 /*************************************
-***** Banner *****
-*************************************/
-
-#startup-message-statustext {
-    background: #39378B;
-    color: #fff;
-    position: absolute;
-    z-index: 999;
-    bottom: 50px;
-    right: 50px;
-    width: 100%;
-    max-width: 450px;
-    border-radius: 5px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.25);
-}
-
-#startup-message-statustext h4, #startup-message-statustext p {
-    padding: 20px;
-}
-
-/*************************************
 ***** NEPO Block in Colors *****
 *************************************/
 
@@ -3223,31 +3093,6 @@ img.img-responsive {
     margin: 0 auto;
 }
 
-@media only screen and (max-width: 768px) {
-    #show-startup-message .slick-prev {
-        left: -25px;
-    }
-
-    #show-startup-message .slick-next {
-        right: -25px;
-    }
-
-    #show-startup-message #popup-robot-container {
-        margin-left: 25px;
-        margin-right: 25px;
-    }
-}
-
-@media only screen and (max-width: 480px) {
-    #show-startup-message .slick-slide.slick-center {
-        transform: scale(1);
-    }
-
-    .robot-container {
-        margin: 20px 8px;
-    }
-}
-
 .enjoyhint_close_btn {
     border: 2px solid #BACC1E;
 }
@@ -3257,10 +3102,6 @@ img.img-responsive {
 }
 
 @media print {
-    div#show-startup-message {
-        display: none !important;
-    }
-
     svg.blocklySvg {
         overflow: visible;
     }

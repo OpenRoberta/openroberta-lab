@@ -16,4 +16,6 @@ interface JQuery {
     toggleSimPopup(position: Coordinates): void;
 
     bootstrapTable(option: any, ...args: any): any;
+
+    tabWrapShow(opt_callBack?): void;
 }

@@ -64,7 +64,7 @@ function loadProgramFromXMLStart(name, xml, opt_callback) {
         }
     }
     if (robotType) {
-        opt_callback && typeof opt_callback === 'function' && opt_callback(robotType, loadProgramFromXML, [name, xml]);
+        opt_callback && typeof opt_callback === 'function' && opt_callback(robotType, {}, loadProgramFromXML, [name, xml]);
     } else {
         MSG.displayInformation({ rx: 'error' }, '', Blockly.Msg.PROGRAM_IMPORT_ERROR_MISSING_ROBOT_TYPE, UTIL.getRobotGroupsPrettyPrint(robot));
     }

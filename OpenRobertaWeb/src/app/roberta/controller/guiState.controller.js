@@ -551,39 +551,19 @@ function setView(view) {
     if (view === 'tabConfiguration') {
         $('#head-navigation-program-edit').css('display', 'none');
         $('#head-navigation-configuration-edit').css('display', 'inline');
-        $('#menuTabProgram').parent().removeClass('disabled');
-        $('#menuTabNN').parent().removeClass('disabled');
-        $('#menuTabNNLearn').parent().removeClass('disabled');
-        $('#menuTabConfiguration').parent().addClass('disabled');
         UTIL.clearTabAlert(view);
     } else if (view === 'tabProgram') {
         $('#head-navigation-configuration-edit').css('display', 'none');
         $('#head-navigation-program-edit').css('display', 'inline');
-        $('#menuTabConfiguration').parent().removeClass('disabled');
-        $('#menuTabNN').parent().removeClass('disabled');
-        $('#menuTabNNLearn').parent().removeClass('disabled');
-        $('#menuTabProgram').parent().addClass('disabled');
     } else if (view === 'tabNN') {
         $('#head-navigation-configuration-edit').css('display', 'none');
         $('#head-navigation-program-edit').css('display', 'inline');
-        $('#menuTabConfiguration').parent().removeClass('disabled');
-        $('#menuTabProgram').parent().removeClass('disabled');
-        $('#menuTabNN').parent().addClass('disabled');
-        $('#menuTabNNLearn').parent().removeClass('disabled');
     } else if (view === 'tabNNlearn') {
         $('#head-navigation-configuration-edit').css('display', 'none');
         $('#head-navigation-program-edit').css('display', 'inline');
-        $('#menuTabConfiguration').parent().removeClass('disabled');
-        $('#menuTabProgram').parent().removeClass('disabled');
-        $('#menuTabNN').parent().removeClass('disabled');
-        $('#menuTabNNLearn').parent().addClass('disabled');
     } else if (view === 'tabSourceCodeEditor') {
         $('#head-navigation-configuration-edit').css('display', 'none');
         $('#head-navigation-program-edit').css('display', 'inline');
-        $('#menuTabProgram').parent().removeClass('disabled');
-        $('#menuTabConfiguration').parent().removeClass('disabled');
-        $('#menuTabNN').parent().removeClass('disabled');
-        $('#menuTabNNLearn').parent().removeClass('disabled');
         $('#head-navigation-program-edit').addClass('disabled');
         $('.robotType').addClass('disabled');
         $('#head-navi-tooltip-program').attr('data-bs-toggle', '');
