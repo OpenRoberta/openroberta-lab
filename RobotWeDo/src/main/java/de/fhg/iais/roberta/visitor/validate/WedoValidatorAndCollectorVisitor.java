@@ -176,7 +176,7 @@ public class WedoValidatorAndCollectorVisitor extends CommonNepoValidatorAndColl
                 }
             }
             if ( !portCorrect ) {
-                actor.addTextlyError("The defined actuator port: " + userPort + " is incorrect, please check the robot configuration", true);
+                addErrorToPhrase(actor, "CONFIGURATION_ERROR_ACTUATOR_WRONG");
             }
         }
     }

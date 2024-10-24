@@ -165,7 +165,7 @@ public final class MbedV2RegenerateTextlyJavaVisitor extends AbstractRegenerateT
     public Void visitRadioSendAction(RadioSendAction radioSendAction) {
         this.src.nlI().add("microbitv2.radioSend(").add(radioSendAction.type).add(",").add(radioSendAction.power).add(",");
         radioSendAction.message.accept(this);
-        this.src.add(")");
+        this.src.add(");");
         return null;
     }
 
@@ -177,7 +177,7 @@ public final class MbedV2RegenerateTextlyJavaVisitor extends AbstractRegenerateT
 
     @Override
     public Void visitDisplaySetPixelAction(DisplaySetPixelAction displaySetPixelAction) {
-        this.src.add("microbitv2.setLed(");
+        this.src.nlI().add("microbitv2.setLed(");
         displaySetPixelAction.brightness.accept(this);
         this.src.add(",");
         displaySetPixelAction.x.accept(this);
@@ -201,7 +201,7 @@ public final class MbedV2RegenerateTextlyJavaVisitor extends AbstractRegenerateT
     public Void visitRadioSetChannelAction(RadioSetChannelAction radioSetChannelAction) {
         this.src.nlI().add("microbitv2.radioSet(");
         radioSetChannelAction.channel.accept(this);
-        this.src.add(")");
+        this.src.add(");");
         return null;
     }
 
@@ -259,13 +259,13 @@ public final class MbedV2RegenerateTextlyJavaVisitor extends AbstractRegenerateT
 
     @Override
     public Void visitTimerSensor(TimerSensor timerSensor) {
-        this.src.add("microbitv2.timerSensor();");
+        this.src.add("microbitv2.timerSensor()");
         return null;
     }
 
     @Override
     public Void visitTimerReset(TimerReset timerReset) {
-        this.src.add("microbitv2.timerReset()");
+        this.src.nlI().add("microbitv2.timerReset();");
         return null;
     }
 
@@ -277,7 +277,7 @@ public final class MbedV2RegenerateTextlyJavaVisitor extends AbstractRegenerateT
 
     @Override
     public Void visitPinGetValueSensor(PinGetValueSensor pinValueSensor) {
-        this.src.add("microbitv2.pinGetValueSensor(").add(pinModes().get(pinValueSensor.getMode())).add(")");
+        this.src.add("microbitv2.pinGetValueSensor(").add(pinValueSensor.getUserDefinedPort(), ",", pinModes().get(pinValueSensor.getMode())).add(")");
         return null;
     }
 
@@ -299,7 +299,12 @@ public final class MbedV2RegenerateTextlyJavaVisitor extends AbstractRegenerateT
 
     @Override
     public Void visitPlayFileAction(PlayFileAction playFileAction) {
-        this.src.nlI().add("microbitv2.playFile(").add(playFileAction.fileName.toLowerCase()).add(");");
+        if ( playFileAction.getProperty().blockType.equals("actions_play_expression") ) {
+            this.src.nlI().add("microbitv2.playSound(").add(playFileAction.fileName.toLowerCase()).add(");");
+        } else {
+            this.src.nlI().add("microbitv2.playFile(").add(playFileAction.fileName.toLowerCase()).add(");");
+        }
+
         return null;
     }
 

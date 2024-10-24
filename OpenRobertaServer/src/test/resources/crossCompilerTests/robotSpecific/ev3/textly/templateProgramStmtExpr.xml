@@ -1,164 +1,37 @@
-<?xml version="1.0"?>
-<export xmlns="http://de.fhg.iais.roberta.blockly">
-    <program>
-        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="3.1" description="" tags="">
-            <instance x="84" y="46">
-                <block type="robControls_start" id="F`UH)b`s8[tMkDzhz~Q-" intask="true" deletable="false">
-                    <mutation declare="true"></mutation>
-                    <field name="DEBUG">TRUE</field>
-                    <data>
+<export xmlns="http://de.fhg.iais.roberta.blockly"><program><block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="3.1" description="" tags=""><instance x="347" y="1"><block type="robControls_start" id="F`UH)b`s8[tMkDzhz~Q-" intask="true" deletable="false"><mutation declare="true"></mutation><field name="DEBUG">TRUE</field><data>
                         {"learningRate":0.03,"regularizationRate":0,"noise":0,"batchSize":10,"discretize":false,"percTrainData":50,"activationKey":"linear","activation":{},"regularization":null,"initUntil":null,"collectStats":false,"numHiddenLayers":0,"networkShape":[],"weights":[[["1"]],[[]]],"biases":[["0"],["0"]],"precision":"2","weightArcMaxSize":8,"weightSuppressMultOp":true,"inputs":["n1"],"outputs":["n2"],"hiddenNeurons":[]}
-                    </data>
-                    <statement name="ST">
-                        <block type="robGlobalVariables_declare" id="z:|qo7n85yKS9/;Y4YUu" intask="true" deletable="false" movable="false">
-                            <mutation next="true" declaration_type="Number"></mutation>
-                            <field name="VAR">num</field>
-                            <field name="TYPE">Number</field>
-                            <value name="VALUE">
-                                <block type="math_number" id="o6n....Z^Q!`z%{%yzmz" intask="true">
-                                    <field name="NUM">0</field>
-                                </block>
-                            </value>
-                        </block>
-                        <block type="robGlobalVariables_declare" id="Pp8lK50o6vC:(-pu%,0p" intask="true" deletable="false" movable="false">
-                            <mutation next="true" declaration_type="Boolean"></mutation>
-                            <field name="VAR">boolT</field>
-                            <field name="TYPE">Boolean</field>
-                            <value name="VALUE">
-                                <block type="logic_boolean" id="wNJ|?qa*?r[]{rUic5K," intask="true">
-                                    <field name="BOOL">TRUE</field>
-                                </block>
-                            </value>
-                        </block>
-                        <block type="robGlobalVariables_declare" id="2;3,K?*CLu8|b~{tKM7P" intask="true" deletable="false" movable="false">
-                            <mutation next="true" declaration_type="Boolean"></mutation>
-                            <field name="VAR">boolF</field>
-                            <field name="TYPE">Boolean</field>
-                            <value name="VALUE">
-                                <block type="logic_boolean" id="e+-n=@%4w0Y1M4)g7[15" intask="true">
-                                    <field name="BOOL">FALSE</field>
-                                </block>
-                            </value>
-                        </block>
-                        <block type="robGlobalVariables_declare" id="l-T=pW?CG=cpsup(8C{E" intask="true" deletable="false" movable="false">
-                            <mutation next="true" declaration_type="Array_Number"></mutation>
-                            <field name="VAR">listN</field>
-                            <field name="TYPE">Array_Number</field>
-                            <value name="VALUE">
-                                <block type="robLists_create_with" id="}QBhFh[ZnsppB?ad;tW`" intask="true">
-                                    <mutation items="3" list_type="Number"></mutation>
-                                    <field name="LIST_TYPE">Number</field>
-                                    <value name="ADD0">
-                                        <block type="math_number" id="NyTY~To+/Q0Vyceh`F.:" intask="true">
-                                            <field name="NUM">0</field>
-                                        </block>
-                                    </value>
-                                    <value name="ADD1">
-                                        <block type="math_number" id="9zIn=Y=fE@q/k12:U)R#" intask="true">
-                                            <field name="NUM">0</field>
-                                        </block>
-                                    </value>
-                                    <value name="ADD2">
-                                        <block type="math_number" id="#37c^)B;uh`5gA0jU~GY" intask="true">
-                                            <field name="NUM">0</field>
-                                        </block>
-                                    </value>
-                                </block>
-                            </value>
-                        </block>
-                        <block type="robGlobalVariables_declare" id="jg82)v/FMn:u@@v}-7YH" intask="true" deletable="false" movable="false">
-                            <mutation next="true" declaration_type="String"></mutation>
-                            <field name="VAR">str</field>
-                            <field name="TYPE">String</field>
-                            <value name="VALUE">
-                                <block type="text" id="hikj%H_]lD[eSBJ*-Ho%" intask="true">
-                                    <field name="TEXT"></field>
-                                </block>
-                            </value>
-                        </block>
-                        <block type="robGlobalVariables_declare" id="si*e0uV9h1]T@^#Vi.{M" intask="true" deletable="false" movable="false">
-                            <mutation next="true" declaration_type="Array_Number"></mutation>
-                            <field name="VAR">listN2</field>
-                            <field name="TYPE">Array_Number</field>
-                            <value name="VALUE">
-                                <block type="robLists_create_with" id="KJVc-giBAw4NEav2NthY" intask="true">
-                                    <mutation items="6" list_type="Number"></mutation>
-                                    <field name="LIST_TYPE">Number</field>
-                                    <value name="ADD0">
-                                        <block type="math_number" id="Kk`PW,cAR[qt(|z1xROk" intask="true">
-                                            <field name="NUM">0</field>
-                                        </block>
-                                    </value>
-                                    <value name="ADD1">
-                                        <block type="math_number" id="CL`O6)U~Tja4VT0YFlI4" intask="true">
-                                            <field name="NUM">0</field>
-                                        </block>
-                                    </value>
-                                    <value name="ADD2">
-                                        <block type="math_number" id="iiZ:yeW[[_oV+-Epz5RO" intask="true">
-                                            <field name="NUM">0</field>
-                                        </block>
-                                    </value>
-                                    <value name="ADD3">
-                                        <block type="math_number" id="U}a#|GqzHzhIdE;VK7O^" intask="true">
-                                            <field name="NUM">0</field>
-                                        </block>
-                                    </value>
-                                    <value name="ADD4">
-                                        <block type="math_number" id="FU3m)s;5]0Z56D`r*vey" intask="true">
-                                            <field name="NUM">0</field>
-                                        </block>
-                                    </value>
-                                    <value name="ADD5">
-                                        <block type="math_number" id="1%r(bR=o);~|b.S^Ueyh" intask="true">
-                                            <field name="NUM">0</field>
-                                        </block>
-                                    </value>
-                                </block>
-                            </value>
-                        </block>
-                    </statement>
+                    </data><statement name="ST"><block type="robGlobalVariables_declare" id="z:|qo7n85yKS9/;Y4YUu" intask="true" deletable="false" movable="false"><mutation next="true" declaration_type="Number"></mutation><field name="VAR">num</field><field name="TYPE">Number</field><value name="VALUE"><block type="math_number" id="o6n....Z^Q!`z%{%yzmz" intask="true"><field name="NUM">0</field></block></value></block><block type="robGlobalVariables_declare" id="Pp8lK50o6vC:(-pu%,0p" intask="true" deletable="false" movable="false"><mutation next="true" declaration_type="Boolean"></mutation><field name="VAR">boolT</field><field name="TYPE">Boolean</field><value name="VALUE"><block type="logic_boolean" id="wNJ|?qa*?r[]{rUic5K," intask="true"><field name="BOOL">TRUE</field></block></value></block><block type="robGlobalVariables_declare" id="2;3,K?*CLu8|b~{tKM7P" intask="true" deletable="false" movable="false"><mutation next="true" declaration_type="Boolean"></mutation><field name="VAR">boolF</field><field name="TYPE">Boolean</field><value name="VALUE"><block type="logic_boolean" id="e+-n=@%4w0Y1M4)g7[15" intask="true"><field name="BOOL">FALSE</field></block></value></block><block type="robGlobalVariables_declare" id="l-T=pW?CG=cpsup(8C{E" intask="true" deletable="false" movable="false"><mutation next="true" declaration_type="Array_Number"></mutation><field name="VAR">listN</field><field name="TYPE">Array_Number</field><value name="VALUE"><block type="robLists_create_with" id="}QBhFh[ZnsppB?ad;tW`" intask="true"><mutation items="3" list_type="Number"></mutation><field name="LIST_TYPE">Number</field><value name="ADD0"><block type="math_number" id="NyTY~To+/Q0Vyceh`F.:" intask="true"><field name="NUM">0</field></block></value><value name="ADD1"><block type="math_number" id="9zIn=Y=fE@q/k12:U)R#" intask="true"><field name="NUM">0</field></block></value><value name="ADD2"><block type="math_number" id="#37c^)B;uh`5gA0jU~GY" intask="true"><field name="NUM">0</field></block></value></block></value></block><block type="robGlobalVariables_declare" id="jg82)v/FMn:u@@v}-7YH" intask="true" deletable="false" movable="false"><mutation next="true" declaration_type="String"></mutation><field name="VAR">str</field><field name="TYPE">String</field><value name="VALUE"><block type="text" id="hikj%H_]lD[eSBJ*-Ho%" intask="true"><field name="TEXT"></field></block></value></block><block type="robGlobalVariables_declare" id="si*e0uV9h1]T@^#Vi.{M" intask="true" deletable="false" movable="false"><mutation next="true" declaration_type="Array_Number"></mutation><field name="VAR">listN2</field><field name="TYPE">Array_Number</field><value name="VALUE"><block type="robLists_create_with" id="KJVc-giBAw4NEav2NthY" intask="true"><mutation items="6" list_type="Number"></mutation><field name="LIST_TYPE">Number</field><value name="ADD0"><block type="math_number" id="Kk`PW,cAR[qt(|z1xROk" intask="true"><field name="NUM">0</field></block></value><value name="ADD1"><block type="math_number" id="CL`O6)U~Tja4VT0YFlI4" intask="true"><field name="NUM">0</field></block></value><value name="ADD2"><block type="math_number" id="iiZ:yeW[[_oV+-Epz5RO" intask="true"><field name="NUM">0</field></block></value><value name="ADD3"><block type="math_number" id="U}a#|GqzHzhIdE;VK7O^" intask="true"><field name="NUM">0</field></block></value><value name="ADD4"><block type="math_number" id="FU3m)s;5]0Z56D`r*vey" intask="true"><field name="NUM">0</field></block></value><value name="ADD5"><block type="math_number" id="1%r(bR=o);~|b.S^Ueyh" intask="true"><field name="NUM">0</field></block></value></block></value></block><block type="robGlobalVariables_declare" id="6{6kEEg~MoEH7]XeLV!y" intask="true" deletable="false" movable="false"><mutation next="true" declaration_type="Connection"></mutation><field name="VAR">conn</field><field name="TYPE">Connection</field><value name="VALUE"><block type="logic_null" id="ge8PYKM;V9:ZOTgumFn(" intask="true"></block></value></block><block type="robGlobalVariables_declare" id="Q);(#yP90C1@Nr%*EzvJ" intask="true" deletable="false" movable="false"><mutation next="true" declaration_type="Array_Connection"></mutation><field name="VAR">listConn</field><field name="TYPE">Array_Connection</field><value name="VALUE"><block type="robLists_create_with" id="twz-otn)XSy[(WF2KGY]" intask="true"><mutation items="3" list_type="Connection"></mutation><field name="LIST_TYPE">Connection</field><value name="ADD0"><block type="logic_null" id=":6q!9QdCEJZ@aE:5mPhS" intask="true"></block></value><value name="ADD1"><block type="logic_null" id="i(Kp:ptYKXNH7wm|)A^-" intask="true"></block></value><value name="ADD2"><block type="logic_null" id="?-UqowmWp4eU]knvvy6y" intask="true"></block></value></block></value></block><block type="robGlobalVariables_declare" id="A8(nNHtG)w1;mQA~QAkc" intask="true" deletable="false" movable="false"><mutation next="true" declaration_type="Colour"></mutation><field name="VAR">color</field><field name="TYPE">Colour</field><value name="VALUE"><block type="robColour_picker" id="^WeW-g_bbt(8/:`tGSAa" intask="true"><field name="COLOUR">#FFFFFF</field></block></value></block><block type="robGlobalVariables_declare" id="P]waSOOai!=09Apgz%{@" intask="true" deletable="false" movable="false"><mutation next="false" declaration_type="Array_Colour"></mutation><field name="VAR">listColor</field><field name="TYPE">Array_Colour</field><value name="VALUE"><block type="robLists_create_with" id="23i?w#1csGbX@94llVbf" intask="true"><mutation items="3" list_type="Colour"></mutation><field name="LIST_TYPE">Colour</field><value name="ADD0"><block type="robColour_picker" id="HrF~yx%4h2G3%2@Lghl2" intask="true"><field name="COLOUR">#FFFFFF</field></block></value><value name="ADD1"><block type="robColour_picker" id="*AUE9vVpFv~m)+kAR#C0" intask="true"><field name="COLOUR">#FFFFFF</field></block></value><value name="ADD2"><block type="robColour_picker" id="}xRW+n)3F~se/%LigZtu" intask="true"><field name="COLOUR">#FFFFFF</field></block></value></block></value></block></statement></block><block type="robActions_eval_stmt" id="j9NR67FbYghDs0:r:@mU" intask="true"><field name="STMTEXPRESSION">--TO-BE-TESTED--</field></block></instance></block_set></program><config><block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="3.1" description="" tags="">
+    <instance x="213" y="213">
+        <block type="robBrick_EV3-Brick" id="1" intask="true" deletable="false">
+            <field name="WHEEL_DIAMETER">5.6</field>
+            <field name="TRACK_WIDTH">18</field>
+            <value name="S1">
+                <block type="robBrick_touch" id="2" intask="true"/>
+            </value>
+            <value name="S2">
+                <block type="robBrick_gyro" id="3" intask="true"/>
+            </value>
+            <value name="S3">
+                <block type="robBrick_colour" id="4" intask="true"/>
+            </value>
+            <value name="S4">
+                <block type="robBrick_ultrasonic" id="5" intask="true"/>
+            </value>
+            <value name="MB">
+                <block type="robBrick_motor_big" id="6" intask="true">
+                    <field name="MOTOR_REGULATION">TRUE</field>
+                    <field name="MOTOR_REVERSE">OFF</field>
+                    <field name="MOTOR_DRIVE">RIGHT</field>
                 </block>
-                <block type="robActions_eval_stmt" id="j9NR67FbYghDs0:r:@mU" intask="true">
-                    <field name="STMTEXPRESSION">--TO-BE-TESTED--</field>
+            </value>
+            <value name="MC">
+                <block type="robBrick_motor_big" id="7" intask="true">
+                    <field name="MOTOR_REGULATION">TRUE</field>
+                    <field name="MOTOR_REVERSE">OFF</field>
+                    <field name="MOTOR_DRIVE">LEFT</field>
                 </block>
-            </instance>
-        </block_set>
-    </program>
-    <config>
-        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="ev3" xmlversion="3.1" description="" tags="">
-            <instance x="213" y="213">
-                <block type="robBrick_EV3-Brick" id="1" intask="true" deletable="false">
-                    <field name="WHEEL_DIAMETER">5.6</field>
-                    <field name="TRACK_WIDTH">18</field>
-                    <value name="S1">
-                        <block type="robBrick_touch" id="2" intask="true"/>
-                    </value>
-                    <value name="S2">
-                        <block type="robBrick_gyro" id="3" intask="true"/>
-                    </value>
-                    <value name="S3">
-                        <block type="robBrick_colour" id="4" intask="true"/>
-                    </value>
-                    <value name="S4">
-                        <block type="robBrick_ultrasonic" id="5" intask="true"/>
-                    </value>
-                    <value name="MB">
-                        <block type="robBrick_motor_big" id="6" intask="true">
-                            <field name="MOTOR_REGULATION">TRUE</field>
-                            <field name="MOTOR_REVERSE">OFF</field>
-                            <field name="MOTOR_DRIVE">RIGHT</field>
-                        </block>
-                    </value>
-                    <value name="MC">
-                        <block type="robBrick_motor_big" id="7" intask="true">
-                            <field name="MOTOR_REGULATION">TRUE</field>
-                            <field name="MOTOR_REVERSE">OFF</field>
-                            <field name="MOTOR_DRIVE">LEFT</field>
-                        </block>
-                    </value>
-                </block>
-            </instance>
-        </block_set>
-    </config>
-</export>
+            </value>
+        </block>
+    </instance>
+</block_set>
+</config></export>

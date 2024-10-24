@@ -236,7 +236,9 @@ public abstract class TypecheckCommonLanguageVisitor extends BaseVisitor<Blockly
             expectedType = listCreate.getBlocklyType();
         } else {
             expectedType = listCreate.exprList.el.get(0).getBlocklyType();
-            if ( expectedType == BlocklyType.NULL || ((listCreate.exprList.el.get(0) instanceof ActionExpr) && expectedType.equalAsTypes(BlocklyType.CAPTURED_TYPE)) ) {
+            if ( listCreate.exprList.el.get(0) instanceof Var ) {
+                expectedType = usedHardwareBean.getTypeOfDeclaredVariable(((Var) listCreate.exprList.el.get(0)).name);
+            } else if ( expectedType == BlocklyType.NULL || ((listCreate.exprList.el.get(0) instanceof ActionExpr) && expectedType.equalAsTypes(BlocklyType.CAPTURED_TYPE)) ) {
                 expectedType = BlocklyType.CONNECTION;
             }
             for ( Phrase phrase : listCreate.exprList.get() ) {
@@ -369,6 +371,7 @@ public abstract class TypecheckCommonLanguageVisitor extends BaseVisitor<Blockly
 
     @Override
     public BlocklyType visitMethodReturn(MethodReturn methodReturn) {
+        methodReturn.returnValue.accept(this);
         methodReturn.body.accept(this);
         return BlocklyType.NOTHING;
     }

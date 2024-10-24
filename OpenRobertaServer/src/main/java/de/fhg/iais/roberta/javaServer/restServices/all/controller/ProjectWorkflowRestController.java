@@ -1,5 +1,7 @@
 package de.fhg.iais.roberta.javaServer.restServices.all.controller;
 
+import java.util.List;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -306,6 +308,77 @@ public class ProjectWorkflowRestController {
             return UtilForREST.makeBaseResponseForError(Key.SERVER_ERROR, httpSessionState, this.robotCommunicator);
         }
     }
+
+    @POST
+    @Path("/showTextly")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getTextly(@OraData DbSession dbSession, FullRestRequest fullRequest) {
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(dbSession, LOG, fullRequest, true);
+        try {
+            ProjectWorkflowRequest wfRequest = ProjectWorkflowRequest.make(fullRequest.getData());
+            ProjectSourceResponse response = ProjectSourceResponse.make();
+            response.setProgXML(wfRequest.getProgXML()); // always return the program, even if the workflow fails
+
+            Project project = request2project(wfRequest, dbSession, httpSessionState, this.robotCommunicator, true, false);
+            ProjectService.executeWorkflow("showsource", project);
+            // To make this compatible with old frontend we will have to use the old names...
+            response.setCmd("showTextly");
+            response.setSourceCode(project.getSourceCodeBuilder().toString());
+            response.setProgramAsTextly(project.getProgramAsTextly().toString());
+            response.setProgXML(project.getProgramAsBlocklyXML());
+            response.setConfAnnos(new JSONObject(project.getConfAnnotationList()));
+            addProjectResultToResponse(response, project);
+            Statistics.info("showTextly", "success", project.hasSucceeded());
+            return UtilForREST.responseWithFrontendInfo(response, httpSessionState, this.robotCommunicator);
+        } catch ( Exception e ) {
+            LOG.error("getSourceCode failed", e);
+            Statistics.info("ProgramSource", "success", false);
+            return UtilForREST.makeBaseResponseForError(Key.SERVER_ERROR, httpSessionState, this.robotCommunicator);
+        } finally {
+            if ( dbSession != null ) {
+                dbSession.close();
+            }
+        }
+    }
+
+    @POST
+    @Path("/setTextly")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response setTextly(@OraData DbSession dbSession, FullRestRequest fullRequest) {
+        HttpSessionState httpSessionState = UtilForREST.handleRequestInit(dbSession, LOG, fullRequest, true);
+        try {
+            ProjectWorkflowRequest wfRequest = ProjectWorkflowRequest.make(fullRequest.getData());
+            ProjectSourceResponse response = ProjectSourceResponse.make();
+
+
+            Project project = request2project(wfRequest, dbSession, httpSessionState, this.robotCommunicator, true, false);
+            project.setProgramAsTextly(wfRequest.getProgramTextly());
+            ProjectService.executeWorkflow("textlyToNepo", project);
+            // To make this compatible with old frontend we will have to use the old names...
+            response.setCmd("setTextly");
+            response.setSourceCode(project.getSourceCodeBuilder().toString());
+            response.setProgramAsTextly(project.getProgramAsTextly().toString());
+            response.setProgXML(project.getProgramAsBlocklyXML());
+            List<JSONObject> textlyErrors = project.getTextlyErrors();
+            response.setTextlyErrors(textlyErrors);
+            response.setConfAnnos(new JSONObject(project.getConfAnnotationList()));
+            addProjectResultToResponse(response, project);
+            Statistics.info("setTextly", "success", project.hasSucceeded());
+            return UtilForREST.responseWithFrontendInfo(response, httpSessionState, this.robotCommunicator);
+
+        } catch ( Exception e ) {
+            LOG.error("getSourceCode failed", e);
+            Statistics.info("setTextly", "success", false);
+            return UtilForREST.makeBaseResponseForError(Key.SERVER_ERROR, httpSessionState, this.robotCommunicator);
+        } finally {
+            if ( dbSession != null ) {
+                dbSession.close();
+            }
+        }
+    }
+
 
     private static <T extends BaseResponse> void addProjectResultToResponse(T response, Project project) {
         response.setRc(project.hasSucceeded() ? "ok" : "error");

@@ -192,8 +192,13 @@ public abstract class MbedValidatorAndCollectorVisitor extends CommonNepoValidat
                 }
             } else if ( this.occupiedPins.contains(pin) ) {
                 addWarningToPhrase(pinValueSensor, "VALIDATION_PIN_TAKEN_BY_INTERNAL_COMPONENT");
-            } else if ( configurationComponent.componentType.equals(SC.KEY) ) {
-                pinValueSensor.addTextlyError("The defined actuator port: " + port + " is incorrect, please check the robot configuration", true);
+            } else if ( pinValueSensor instanceof MbedPinWriteValueAction && (!configurationComponent.componentType.equals(((MbedPinWriteValueAction) pinValueSensor).pinValue + "_INPUT")) ) {
+                addErrorToPhrase(pinValueSensor, "CONFIGURATION_ERROR_ACTUATOR_WRONG");
+            } else if ( pinValueSensor instanceof PinGetValueSensor ) {
+                String sensorType = ((PinGetValueSensor) pinValueSensor).getMode().equals("ANALOG") ? "ANALOG_PIN" : "DIGITAL_PIN";
+                if ( !configurationComponent.componentType.equals(sensorType) ) {
+                    addErrorToPhrase(pinValueSensor, "CONFIGURATION_ERROR_ACTUATOR_WRONG");
+                }
             }
         }
     }

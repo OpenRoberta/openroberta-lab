@@ -40,6 +40,8 @@ public class SetRobotResponse extends BaseResponse {
     protected String firmwareDefault;
     protected String pluginSim;
     protected boolean pluginSimDefined;
+    protected boolean textly;
+    protected boolean textlyDefined = false;
 
     /**
      * the response for the /setRobot REST request
@@ -89,6 +91,7 @@ public class SetRobotResponse extends BaseResponse {
         boolean markerSim,
         String pluginSim,
         boolean nn,
+        boolean textly,
         JSONArray nnActivations,
         boolean webotsSim,
         String webotsUrl,
@@ -136,6 +139,7 @@ public class SetRobotResponse extends BaseResponse {
         entity.setBinaryFileExtension(binaryFileExtension);
         entity.setFirmwareDefault(firmwareDefault);
         entity.immutable();
+        entity.setTextly(textly);
         return entity;
     }
 
@@ -223,6 +227,8 @@ public class SetRobotResponse extends BaseResponse {
                     setBinaryFileExtension(jsonO.getString(key));
                 } else if ( "firmwareDefault".equals(key) ) {
                     setFirmwareDefault(jsonO.optString(key));
+                } else if ( "textly".equals(key) ) {
+                    setTextly(jsonO.getBoolean(key));
                 } else {
                     throw new RuntimeException("JSON parse error. Found invalid key: " + key + " in " + jsonO);
                 }
@@ -306,6 +312,9 @@ public class SetRobotResponse extends BaseResponse {
         if ( binaryFileExtension == null ) {
             _message = "required property binaryFileExtension of SetRobotResponse-object is not set: " + toString();
         }
+//        if ( !textlyDefined ) {
+//            _message = "required property textly of SetRobotResponse-object is not set: " + toString();
+//        }
         if ( _message != null ) {
             this.immutable = false;
             throw new RuntimeException(_message);
@@ -505,6 +514,18 @@ public class SetRobotResponse extends BaseResponse {
             throw new RuntimeException("nnActivations assigned to an immutable object: " + toString());
         }
         this.nnActivations = nnActivations;
+        return this;
+    }
+
+    /**
+     * SET textly extension. Object must be mutable.
+     */
+    public SetRobotResponse setTextly(boolean textly) {
+        if ( this.immutable ) {
+            throw new RuntimeException("textly assigned to an immutable object: " + toString());
+        }
+        this.textly = textly;
+        this.textlyDefined = true;
         return this;
     }
 

@@ -1,5 +1,6 @@
 package de.fhg.iais.roberta.visitor.validate;
 
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -105,7 +106,7 @@ public class Ev3ValidatorAndCollectorVisitor extends CommonNepoAndMotorValidator
 
     @Override
     public Void visitColorSensor(ColorSensor colorSensor) {
-        checkSensorPort(colorSensor);
+        checkSensorPort(colorSensor, SC.COLOR);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(colorSensor.getUserDefinedPort(), SC.COLOR, colorSensor.getMode()));
         return null;
     }
@@ -113,7 +114,7 @@ public class Ev3ValidatorAndCollectorVisitor extends CommonNepoAndMotorValidator
     @Override
     public Void visitCompassSensor(CompassSensor compassSensor) {
         addToPhraseIfUnsupportedInSim(compassSensor, true, isSim);
-        checkSensorPort(compassSensor);
+        checkSensorPort(compassSensor, SC.COMPASS);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(compassSensor.getUserDefinedPort(), SC.COMPASS, compassSensor.getMode()));
         return null;
     }
@@ -121,7 +122,7 @@ public class Ev3ValidatorAndCollectorVisitor extends CommonNepoAndMotorValidator
     @Override
     public Void visitCompassCalibrate(CompassCalibrate compassCalibrate) {
         addToPhraseIfUnsupportedInSim(compassCalibrate, true, isSim);
-        checkSensorPort(compassCalibrate);
+        checkSensorPort(compassCalibrate, SC.COMPASS);
         if ( this.robotConfiguration.getRobotName().equals("ev3dev") ) {
             addWarningToPhrase(compassCalibrate, "BLOCK_NOT_SUPPORTED");
         }
@@ -153,7 +154,7 @@ public class Ev3ValidatorAndCollectorVisitor extends CommonNepoAndMotorValidator
 
     @Override
     public Void visitGyroSensor(GyroSensor gyroSensor) {
-        checkSensorPort(gyroSensor);
+        checkSensorPort(gyroSensor, SC.GYRO);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(gyroSensor.getUserDefinedPort(), SC.GYRO, gyroSensor.getMode()));
         return null;
     }
@@ -167,21 +168,21 @@ public class Ev3ValidatorAndCollectorVisitor extends CommonNepoAndMotorValidator
     @Override
     public Void visitHTColorSensor(HTColorSensor htColorSensor) {
         addToPhraseIfUnsupportedInSim(htColorSensor, true, isSim);
-        checkSensorPort(htColorSensor);
+        checkSensorPort(htColorSensor, SC.HT_COLOR);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(htColorSensor.getUserDefinedPort(), SC.HT_COLOR, htColorSensor.getMode()));
         return null;
     }
 
     @Override
     public Void visitIRSeekerSensor(IRSeekerSensor irSeekerSensor) {
-        checkSensorPort(irSeekerSensor);
+        checkSensorPort(irSeekerSensor, SC.IRSEEKER);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(irSeekerSensor.getUserDefinedPort(), SC.IRSEEKER, irSeekerSensor.getMode()));
         return null;
     }
 
     @Override
     public Void visitInfraredSensor(InfraredSensor infraredSensor) {
-        checkSensorPort(infraredSensor);
+        checkSensorPort(infraredSensor, SC.INFRARED);
         String mode = infraredSensor.getMode();
         if ( infraredSensor.getMode().equals(SC.PRESENCE) ) {
             // TODO Why do we do this ?????
@@ -260,7 +261,7 @@ public class Ev3ValidatorAndCollectorVisitor extends CommonNepoAndMotorValidator
     @Override
     public Void visitSoundSensor(SoundSensor soundSensor) {
         addToPhraseIfUnsupportedInSim(soundSensor, true, isSim);
-        checkSensorPort(soundSensor);
+        checkSensorPort(soundSensor, SC.SOUND);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(soundSensor.getUserDefinedPort(), SC.SOUND, soundSensor.getMode()));
         return null;
     }
@@ -293,14 +294,14 @@ public class Ev3ValidatorAndCollectorVisitor extends CommonNepoAndMotorValidator
 
     @Override
     public Void visitTouchSensor(TouchSensor touchSensor) {
-        checkSensorPort(touchSensor);
+        checkSensorPort(touchSensor, SC.TOUCH);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(touchSensor.getUserDefinedPort(), SC.TOUCH, touchSensor.getMode()));
         return null;
     }
 
     @Override
     public Void visitUltrasonicSensor(UltrasonicSensor ultrasonicSensor) {
-        checkSensorPort(ultrasonicSensor);
+        checkSensorPort(ultrasonicSensor, SC.ULTRASONIC);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(ultrasonicSensor.getUserDefinedPort(), SC.ULTRASONIC, ultrasonicSensor.getMode()));
         return null;
     }
@@ -446,68 +447,21 @@ public class Ev3ValidatorAndCollectorVisitor extends CommonNepoAndMotorValidator
         }
     }
 
-    protected void checkSensorPort(ExternalSensor sensor) {
-        ConfigurationComponent usedSensor = this.robotConfiguration.optConfigurationComponent(sensor.getUserDefinedPort());
-        if ( usedSensor == null ) {
+    protected void checkSensorPort(ExternalSensor sensor, String sensorType) {
+        if ( !robotConfiguration.isComponentTypePresent(sensorType) ) {
             addErrorToPhrase(sensor, "CONFIGURATION_ERROR_SENSOR_MISSING");
         } else {
-            String type = usedSensor.componentType;
-            switch ( sensor.getKind().getName() ) {
-                case "COLOR_SENSING":
-                    if ( !type.equals("COLOR") ) {
-                        addErrorToPhrase(sensor, "CONFIGURATION_ERROR_SENSOR_WRONG");
-                    }
-                    break;
-                case "TOUCH_SENSING":
-                    if ( !type.equals("TOUCH") ) {
-                        addErrorToPhrase(sensor, "CONFIGURATION_ERROR_SENSOR_WRONG");
-                    }
-                    break;
-                case "ULTRASONIC_SENSING":
-                    if ( !type.equals("ULTRASONIC") ) {
-                        addErrorToPhrase(sensor, "CONFIGURATION_ERROR_SENSOR_WRONG");
-                    }
-                    break;
-                case "INFRARED_SENSING":
-                    if ( !type.equals("INFRARED") ) {
-                        addErrorToPhrase(sensor, "CONFIGURATION_ERROR_SENSOR_WRONG");
-                    }
-                    break;
-                case "GYRO_SENSING":
-                    if ( !type.equals("GYRO") ) {
-                        addErrorToPhrase(sensor, "CONFIGURATION_ERROR_SENSOR_WRONG");
-                    }
-                    break;
-                case "SOUND_SENSING":
-                    if ( !type.equals("SOUND") ) {
-                        addErrorToPhrase(sensor, "CONFIGURATION_ERROR_SENSOR_WRONG");
-                    }
-                    break;
-                case "LIGHT_SENSING":
-                    if ( !type.equals("LIGHT") ) {
-                        addErrorToPhrase(sensor, "CONFIGURATION_ERROR_SENSOR_WRONG");
-                    }
-                    break;
-                case "COMPASS_SENSING":
-                case "COMPASS_CALIBRATE":
-                    if ( !type.equals("COMPASS") ) {
-                        addErrorToPhrase(sensor, "CONFIGURATION_ERROR_SENSOR_WRONG");
-                    }
-                    break;
-                case "IRSEEKER_SENSING":
-                    if ( !type.equals("IRSEEKER") ) {
-                        addErrorToPhrase(sensor, "CONFIGURATION_ERROR_SENSOR_WRONG");
-                    }
-                    break;
-                case "HTCOLOR_SENSING":
-                    if ( !type.equals("HT_COLOR") ) {
-                        addErrorToPhrase(sensor, "CONFIGURATION_ERROR_SENSOR_WRONG");
-                    }
-                    break;
-                default:
-                    break;
+            Map<String, ConfigurationComponent> usedSensor = null;
+            usedSensor = robotConfiguration.getAllConfigurationComponentByType(sensorType);
+            boolean portCorrect = false;
+            for ( String portName : usedSensor.keySet() ) {
+                if ( portName.equals(sensor.getUserDefinedPort()) ) {
+                    portCorrect = true;
+                }
+            }
+            if ( !portCorrect ) {
+                addErrorToPhrase(sensor, "CONFIGURATION_ERROR_SENSOR_WRONG");
             }
         }
     }
-
 }

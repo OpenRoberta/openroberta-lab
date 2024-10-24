@@ -75,7 +75,9 @@ import de.fhg.iais.roberta.textly.generated.TextlyJavaParser;
 import de.fhg.iais.roberta.transformer.AnnotationHelper;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
+import de.fhg.iais.roberta.util.ast.BlocklyRegion;
 import de.fhg.iais.roberta.util.ast.ExternalSensorBean;
+import de.fhg.iais.roberta.util.ast.TextRegion;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 import de.fhg.iais.roberta.util.syntax.MotionParam;
@@ -131,7 +133,7 @@ public class Ev3TextlyJavaVisitor<T> extends CommonTextlyJavaVisitor<T> {
                 return (T) actionExprMotor;
 
             case "getVolume":
-                GetVolumeAction getVolumeAction = new GetVolumeAction(mkPropertyFromClass(ctx, GetVolumeAction.class), "- EMPTY_PORT -", hide);
+                GetVolumeAction getVolumeAction = new GetVolumeAction(mkExternalProperty(ctx, "robActions_play_getVolume"), "- EMPTY_PORT -", null);
                 ActionExpr actionExprVolume = new ActionExpr(getVolumeAction);
                 return (T) actionExprVolume;
 
@@ -329,7 +331,7 @@ public class Ev3TextlyJavaVisitor<T> extends CommonTextlyJavaVisitor<T> {
 
     private T validateSensorPortName(TextlyJavaParser.Ev3SensorStmtContext ctx, String port) {
         if ( port == null ) {
-            StmtList statementList = new StmtList();
+            StmtList statementList = new StmtList(ctx);
             statementList.setReadOnly();
             statementList.addTextlyError("Invalid Port for this sensor: " + ctx.NAME().getText(), true);
             return (T) statementList;
@@ -348,7 +350,7 @@ public class Ev3TextlyJavaVisitor<T> extends CommonTextlyJavaVisitor<T> {
 
     private T validateSensorPortNumber(TextlyJavaParser.Ev3SensorStmtContext ctx, String port) {
         if ( !validatePattern(port, NameType.EV3PORTNUMB) ) {
-            StmtList statementList = new StmtList();
+            StmtList statementList = new StmtList(ctx);
             statementList.setReadOnly();
             statementList.addTextlyError("Invalid Port for this sensor: " + ctx.INT().getText(), true);
             return (T) statementList;
@@ -365,11 +367,11 @@ public class Ev3TextlyJavaVisitor<T> extends CommonTextlyJavaVisitor<T> {
         return null;
     }
 
-    private T validateActuatorPortName(TextlyJavaParser.Ev3ActuatorStmtContext ctx, String port) {
+    private T validateActuatorPortName(TextlyJavaParser.Ev3ActuatorStmtContext ctx, String port, String textlyPortorType) {
         if ( port == null ) {
-            StmtList statementList = new StmtList();
+            StmtList statementList = new StmtList(ctx);
             statementList.setReadOnly();
-            statementList.addTextlyError("Invalid Port/Type for this actuator: " + ctx.NAME(0).getText(), true);
+            statementList.addTextlyError("Invalid Port/Type for this actuator: " + textlyPortorType, true);
             return (T) statementList;
         }
         return null;
@@ -400,11 +402,16 @@ public class Ev3TextlyJavaVisitor<T> extends CommonTextlyJavaVisitor<T> {
         String sensor = ctx.start.getText();
         switch ( sensor ) {
             case "timerReset":
-                String timerPort = ctx.INT().getText();
-                T resultValidateTimerPort = validateSensorPortNumber(ctx, timerPort);
-                if ( resultValidateTimerPort != null ) return resultValidateTimerPort;
-                TimerReset reset = new TimerReset(mkInlineProperty(ctx, "robSensors_timer_reset"), timerPort);
-                return (T) new SensorStmt(reset);
+                String portTimer = ctx.INT().getText();
+                if ( portTimer.matches("[1-5]") ) {
+                    TimerReset reset = new TimerReset(mkInlineProperty(ctx, "robSensors_timer_reset"), portTimer);
+                    return (T) new SensorStmt(reset);
+                } else {
+                    StmtList statementList = new StmtList(ctx);
+                    statementList.setReadOnly();
+                    statementList.addTextlyError("Invalid Port for this sensor: " + ctx.INT().getText() + " the port should be 1,2,3,4 or 5", true);
+                    return (T) statementList;
+                }
 
             case "encoderReset":
                 String encoderPort = PortsEv3.getPort(ctx.NAME().getText());
@@ -428,7 +435,7 @@ public class Ev3TextlyJavaVisitor<T> extends CommonTextlyJavaVisitor<T> {
                 ExternalSensorBean externalSensorBeanHTCompassCalibration = new ExternalSensorBean(htCompassPort, "DEFAULT", "- EMPTY_SLOT -", mutation, listHide);
                 return (T) new SensorStmt(new CompassCalibrate(mkPropertyFromClass(ctx, CompassCalibrate.class), externalSensorBeanHTCompassCalibration));
             default:
-                StmtList statementList = new StmtList();
+                StmtList statementList = new StmtList(ctx);
                 statementList.setReadOnly();
                 statementList.addTextlyError("Invalid Sensor textual representation", true);
                 return (T) statementList;
@@ -447,7 +454,7 @@ public class Ev3TextlyJavaVisitor<T> extends CommonTextlyJavaVisitor<T> {
         switch ( actuator ) {
             case "turnOnRegulatedMotor":
                 String portRegulatedMotor = PortsEv3.getPort(ctx.NAME(0).getText());
-                T resultValidatePortEncoder = validateActuatorPortName(ctx, portRegulatedMotor);
+                T resultValidatePortEncoder = validateActuatorPortName(ctx, portRegulatedMotor, ctx.NAME(0).getText());
                 if ( resultValidatePortEncoder != null ) return resultValidatePortEncoder;
                 Expr exprSpeed = (Expr) visit(ctx.expr(0));
                 MotionParam motionParam = new MotionParam.Builder().speed(exprSpeed).build();
@@ -455,10 +462,10 @@ public class Ev3TextlyJavaVisitor<T> extends CommonTextlyJavaVisitor<T> {
 
             case "rotateRegulatedMotor":
                 String portRegulatedMotor2 = PortsEv3.getPort(ctx.NAME(0).getText());
-                T resultValidatePortEncoder2 = validateActuatorPortName(ctx, portRegulatedMotor2);
+                T resultValidatePortEncoder2 = validateActuatorPortName(ctx, portRegulatedMotor2, ctx.NAME(0).getText());
                 if ( resultValidatePortEncoder2 != null ) return resultValidatePortEncoder2;
                 String motorType = MotorOnActionType.getAstType(ctx.NAME(1).getText());
-                T resultValidateMotorType = validateActuatorPortName(ctx, motorType);
+                T resultValidateMotorType = validateActuatorPortName(ctx, motorType, ctx.NAME(1).getText());
                 if ( resultValidateMotorType != null ) return resultValidateMotorType;
 
                 Expr exprSpeed2 = (Expr) visit(ctx.expr(0));
@@ -469,17 +476,17 @@ public class Ev3TextlyJavaVisitor<T> extends CommonTextlyJavaVisitor<T> {
 
             case "setRegulatedMotorSpeed":
                 String portMotorSet = PortsEv3.getPort(ctx.NAME(0).getText());
-                T resultValidateMotorPort = validateActuatorPortName(ctx, portMotorSet);
+                T resultValidateMotorPort = validateActuatorPortName(ctx, portMotorSet, ctx.NAME(0).getText());
                 if ( resultValidateMotorPort != null ) return resultValidateMotorPort;
                 Expr exprSpeed3 = (Expr) visit(ctx.expr(0));
                 return (T) new ActionStmt(new MotorSetPowerAction(mkPropertyFromClass(ctx, MotorSetPowerAction.class), exprSpeed3, portMotorSet));
 
             case "stopRegulatedMotor":
                 String portMotorStop = PortsEv3.getPort(ctx.NAME(0).getText());
-                T resultValidateMotorStop = validateActuatorPortName(ctx, portMotorStop);
+                T resultValidateMotorStop = validateActuatorPortName(ctx, portMotorStop, ctx.NAME(0).getText());
                 if ( resultValidateMotorStop != null ) return resultValidateMotorStop;
                 String modeMotorStop = MotorStopType.getAstType(ctx.NAME(1).getText());
-                T resultValidateMotorStopMode = validateActuatorPortName(ctx, modeMotorStop);
+                T resultValidateMotorStopMode = validateActuatorPortName(ctx, modeMotorStop, ctx.NAME(1).getText());
                 if ( resultValidateMotorStopMode != null ) return resultValidateMotorStopMode;
 
                 MotorStopAction motorStopAction = new MotorStopAction(portMotorStop, factory.getMotorStopMode(modeMotorStop), mkExternalProperty(ctx, "robActions_motor_stop"));
@@ -487,29 +494,32 @@ public class Ev3TextlyJavaVisitor<T> extends CommonTextlyJavaVisitor<T> {
 
             case "driveDistance":
                 String directionDrive = MotionDirection.getAstDirection(ctx.NAME(0).getText());
-                T resultValidateDriveDirection = validateActuatorPortName(ctx, directionDrive);
+                T resultValidateDriveDirection = validateActuatorPortName(ctx, directionDrive, ctx.NAME(0).getText());
                 if ( resultValidateDriveDirection != null ) return resultValidateDriveDirection;
 
                 Expr exprSpeedDrive = (Expr) visit(ctx.expr(0));
                 DriveDirection direction = (DriveDirection) factory.getDriveDirection(directionDrive);
                 MotionParam motionParamDrive;
+                String blocklyName;
                 if ( ctx.expr().size() == 2 ) {
                     Expr exprDistanceDrive = (Expr) visit(ctx.expr(1));
                     MotorDuration motorDurationDrive = new MotorDuration(factory.getMotorMoveMode(BlocklyConstants.DISTANCE), exprDistanceDrive);
                     motionParamDrive = new MotionParam.Builder().speed(exprSpeedDrive).duration(motorDurationDrive).build();
+                    blocklyName = "robActions_motorDiff_on_for";
                 } else {
                     motionParamDrive = new MotionParam.Builder().speed(exprSpeedDrive).build();
+                    blocklyName = "robActions_motorDiff_on";
                 }
 
-                DriveAction driveDirection = new DriveAction(direction, motionParamDrive, "- EMPTY_PORT -", hide, mkExternalProperty(ctx, "robActions_motorDiff_on_for"));
+                DriveAction driveDirection = new DriveAction(direction, motionParamDrive, "- EMPTY_PORT -", null, mkExternalProperty(ctx, blocklyName));
                 return (T) new ActionStmt(driveDirection);
 
             case "stopRegulatedDrive":
-                return (T) new ActionStmt(new MotorDriveStopAction(mkPropertyFromClass(ctx, MotorDriveStopAction.class), "- EMPTY_PORT -", hide));
+                return (T) new ActionStmt(new MotorDriveStopAction(mkPropertyFromClass(ctx, MotorDriveStopAction.class), "- EMPTY_PORT -", null));
 
             case "rotateDirectionAngle":
                 String directionAngle = MotionTurnDirection.getAstTurnDirection(ctx.NAME(0).getText());
-                T resultValidateDirectionAngle = validateActuatorPortName(ctx, directionAngle);
+                T resultValidateDirectionAngle = validateActuatorPortName(ctx, directionAngle, ctx.NAME(0).getText());
                 if ( resultValidateDirectionAngle != null ) return resultValidateDirectionAngle;
 
                 Expr exprSpeedAngle = (Expr) visit(ctx.expr(0));
@@ -517,22 +527,22 @@ public class Ev3TextlyJavaVisitor<T> extends CommonTextlyJavaVisitor<T> {
                 MotorDuration motorDurationAngle = new MotorDuration(factory.getMotorMoveMode("DEGREE"), exprDurationAngle);
                 MotionParam motionParamAngle = new MotionParam.Builder().speed(exprSpeedAngle).duration(motorDurationAngle).build();
 
-                TurnAction turnAction = new TurnAction(factory.getTurnDirection(directionAngle), motionParamAngle, "- EMPTY_PORT -", hide, mkExternalProperty(ctx, "robActions_motorDiff_turn_for"));
+                TurnAction turnAction = new TurnAction(factory.getTurnDirection(directionAngle), motionParamAngle, "- EMPTY_PORT -", null, mkExternalProperty(ctx, "robActions_motorDiff_turn_for"));
                 return (T) new ActionStmt(turnAction);
 
             case "rotateDirectionRegulated":
                 String directionAngleRegulated = MotionTurnDirection.getAstTurnDirection(ctx.NAME(0).getText());
-                T resultValidateDirectionAngleRegulated = validateActuatorPortName(ctx, directionAngleRegulated);
+                T resultValidateDirectionAngleRegulated = validateActuatorPortName(ctx, directionAngleRegulated, ctx.NAME(0).getText());
                 if ( resultValidateDirectionAngleRegulated != null ) return resultValidateDirectionAngleRegulated;
 
                 Expr exprSpeedAngleRegulated = (Expr) visit(ctx.expr(0));
                 MotionParam motionParamAngleRegulated = new MotionParam.Builder().speed(exprSpeedAngleRegulated).build();
-                TurnAction turnActionRegulated = new TurnAction(factory.getTurnDirection(directionAngleRegulated), motionParamAngleRegulated, "- EMPTY_PORT -", hide, mkExternalProperty(ctx, "robActions_motorDiff_turn"));
+                TurnAction turnActionRegulated = new TurnAction(factory.getTurnDirection(directionAngleRegulated), motionParamAngleRegulated, "- EMPTY_PORT -", null, mkExternalProperty(ctx, "robActions_motorDiff_turn"));
                 return (T) new ActionStmt(turnActionRegulated);
 
             case "driveInCurve":
                 String directionDriveInCurve = MotionDirection.getAstDirection(ctx.NAME(0).getText());
-                T resultValidateDirectionInCurve = validateActuatorPortName(ctx, directionDriveInCurve);
+                T resultValidateDirectionInCurve = validateActuatorPortName(ctx, directionDriveInCurve, ctx.NAME(0).getText());
                 if ( resultValidateDirectionInCurve != null ) return resultValidateDirectionInCurve;
 
                 Expr exprSpeedInCurveLeft = (Expr) visit(ctx.expr(0));
@@ -540,17 +550,20 @@ public class Ev3TextlyJavaVisitor<T> extends CommonTextlyJavaVisitor<T> {
 
                 MotionParam motionParamLeft;
                 MotionParam motionParamRight;
+                String blocklyNameDrive;
                 if ( ctx.expr().size() == 3 ) {
                     Expr exprDistanceInCurve = (Expr) visit(ctx.expr(2));
                     MotorDuration motorDurationInCurve = new MotorDuration(factory.getMotorMoveMode("DISTANCE"), exprDistanceInCurve);
                     motionParamLeft = new MotionParam.Builder().speed(exprSpeedInCurveLeft).duration(motorDurationInCurve).build();
                     motionParamRight = new MotionParam.Builder().speed(exprSpeedInCurveRight).duration(motorDurationInCurve).build();
+                    blocklyNameDrive = "robActions_motorDiff_curve_for";
                 } else {
                     motionParamLeft = new MotionParam.Builder().speed(exprSpeedInCurveLeft).build();
                     motionParamRight = new MotionParam.Builder().speed(exprSpeedInCurveRight).build();
+                    blocklyNameDrive = "robActions_motorDiff_curve";
                 }
 
-                CurveAction curveAction = new CurveAction(factory.getDriveDirection(directionDriveInCurve), motionParamLeft, motionParamRight, "- EMPTY_PORT -", hide, mkExternalProperty(ctx, "robActions_motorDiff_curve_for"));
+                CurveAction curveAction = new CurveAction(factory.getDriveDirection(directionDriveInCurve), motionParamLeft, motionParamRight, "- EMPTY_PORT -", null, mkExternalProperty(ctx, blocklyNameDrive));
                 return (T) new ActionStmt(curveAction);
 
             case "drawText":
@@ -563,7 +576,7 @@ public class Ev3TextlyJavaVisitor<T> extends CommonTextlyJavaVisitor<T> {
 
             case "drawPicture":
                 String pictureName = Ev3PredefinedImages.getAstNameImage(ctx.NAME(0).getText());
-                T resultValidatePicture = validateActuatorPortName(ctx, pictureName);
+                T resultValidatePicture = validateActuatorPortName(ctx, pictureName, ctx.NAME(0).getText());
                 if ( resultValidatePicture != null ) return resultValidatePicture;
 
                 Expr xx = new EmptyExpr(BlocklyType.NUMBER_INT);
@@ -571,7 +584,7 @@ public class Ev3TextlyJavaVisitor<T> extends CommonTextlyJavaVisitor<T> {
                 return (T) new ActionStmt(new ShowPictureAction(mkExternalProperty(ctx, "robActions_display_picture_new"), pictureName, xx, yy));
 
             case "clearDisplay":
-                ClearDisplayAction clearDisplayAction = new ClearDisplayAction(mkExternalProperty(ctx, "robActions_display_clear"), "- EMPTY_PORT -", hide);
+                ClearDisplayAction clearDisplayAction = new ClearDisplayAction(mkExternalProperty(ctx, "robActions_display_clear"), "- EMPTY_PORT -", null);
                 return (T) new ActionStmt(clearDisplayAction);
 
             case "playTone":
@@ -579,16 +592,19 @@ public class Ev3TextlyJavaVisitor<T> extends CommonTextlyJavaVisitor<T> {
                 freq.setReadOnly();
                 Expr duration = (Expr) visit(ctx.expr(1));
                 duration.setReadOnly();
-                ToneAction toneAction = new ToneAction(mkInlineProperty(ctx, "robActions_play_tone"), freq, duration, "- EMPTY_PORT -", hide);
+                ToneAction toneAction = new ToneAction(mkInlineProperty(ctx, "robActions_play_tone"), freq, duration, "- EMPTY_PORT -", null);
                 return (T) new ActionStmt(toneAction);
 
             case "playFile":
                 String fileName = ctx.INT().getText();
                 if ( fileName.matches("[1-5]") ) {
-                    PlayFileAction playFileAction = new PlayFileAction(mkInlineProperty(ctx, "robActions_play_file"), "- EMPTY_PORT -", fileName, hide);
+                    PlayFileAction playFileAction = new PlayFileAction(mkExternalProperty(ctx, "robActions_play_file"), "- EMPTY_PORT -", String.valueOf(Integer.parseInt(fileName) - 1), null);
                     return (T) new ActionStmt(playFileAction);
                 } else {
-
+                    StmtList statementList = new StmtList(ctx);
+                    statementList.setReadOnly();
+                    statementList.addTextlyError("Invalid Number of file " + fileName, true);
+                    return (T) statementList;
                 }
 
             case "setVolume":
@@ -601,7 +617,7 @@ public class Ev3TextlyJavaVisitor<T> extends CommonTextlyJavaVisitor<T> {
                 if ( language != Language.NOTSUPPORTED ) {
                     return (T) new ActionStmt(new SetLanguageAction(mkPropertyFromClass(ctx, SetLanguageAction.class), language));
                 } else {
-                    StmtList statementList = new StmtList();
+                    StmtList statementList = new StmtList(ctx);
                     statementList.setReadOnly();
                     statementList.addTextlyError("Invalid language or the language is not supported " + ctx.NAME(0).getText(), true);
                     return (T) statementList;
@@ -622,10 +638,12 @@ public class Ev3TextlyJavaVisitor<T> extends CommonTextlyJavaVisitor<T> {
             case "ledOn":
                 String ledMode = BrickLightModes.getAstNameImage(ctx.NAME(0).getText());
                 String colour = BrickLightColour.getAstColour(ctx.NAME(1).getText());
-                return (T) new ActionStmt(new BrickLightOnAction(mkPropertyFromClass(ctx, BrickLightOnAction.class), LightMode.valueOf(ledMode), BrickLedColor.valueOf(colour)));
+                return (T) new ActionStmt(new BrickLightOnAction(mkInlineProperty(ctx, "actions_brickLight_on_ev3"), LightMode.valueOf(ledMode), BrickLedColor.valueOf(colour)));
 
             case "ledOff":
-                return (T) new ActionStmt(new BrickLightOffAction(mkPropertyFromClass(ctx, BrickLightOffAction.class), "OFF"));
+                BlocklyRegion br = new BlocklyRegion(false, false, null, null, null, true, null, null, null);
+                TextRegion rg = ctx == null ? null : new TextRegion(ctx.start.getLine(), ctx.start.getStartIndex(), ctx.stop.getLine(), ctx.stop.getStopIndex());
+                return (T) new ActionStmt(new BrickLightOffAction(new BlocklyProperties("actions_brickLight_off_ev3", "1", br, rg), "OFF"));
             case "resetLed":
                 return (T) new ActionStmt(new BrickLightOffAction(mkPropertyFromClass(ctx, BrickLightOffAction.class), "RESET"));
 
@@ -637,9 +655,9 @@ public class Ev3TextlyJavaVisitor<T> extends CommonTextlyJavaVisitor<T> {
                 connection.setReadOnly();
                 mutation.setDatatype("String");
 
-                return (T) new ActionStmt(new BluetoothSendAction(mkPropertyFromClass(ctx, BrickLightOnAction.class), mutation, "String", "BLUETOOTH", "-1", "ev3", sendMessage, connection));
+                return (T) new ActionStmt(new BluetoothSendAction(mkInlineProperty(ctx, "robCommunication_sendBlock"), mutation, "String", "BLUETOOTH", "-1", "ev3", sendMessage, connection));
             default:
-                StmtList statementList = new StmtList();
+                StmtList statementList = new StmtList(ctx);
                 statementList.setReadOnly();
                 statementList.addTextlyError("Invalid Sensor textual representation", true);
                 return (T) statementList;
@@ -808,7 +826,7 @@ public class Ev3TextlyJavaVisitor<T> extends CommonTextlyJavaVisitor<T> {
 
     private enum MotorStopType {
         FLOAT("float"),
-        BRAKE("brake");
+        NONFLOAT("brake");
 
         private final String name;
 
@@ -834,7 +852,7 @@ public class Ev3TextlyJavaVisitor<T> extends CommonTextlyJavaVisitor<T> {
     }
 
     private enum MotionDirection {
-        FORWARD("forward"),
+        FOREWARD("forward"),
         BACKWARD("backward"),
         ;
 

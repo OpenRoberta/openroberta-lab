@@ -5,6 +5,8 @@
  */
 package de.fhg.iais.roberta.generated.restEntities;
 
+import java.util.List;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -17,6 +19,8 @@ public class ProjectSourceResponse extends BaseResponse {
     protected String sourceCode;
     protected String progXML;
     protected JSONObject confAnnos;
+    private String programAsTextly;
+    private List<JSONObject> textlyErrors;
 
     /**
      * the response for the /projectWorkflow/source REST request
@@ -60,6 +64,8 @@ public class ProjectSourceResponse extends BaseResponse {
         boolean notificationsAvailable,
         String sourceCode,
         String progXML,
+        String programAsTextly,
+        List<JSONObject> textlyErrors,
         JSONObject confAnnos) {
         ProjectSourceResponse entity = new ProjectSourceResponse();
         entity.setCmd(cmd);
@@ -82,6 +88,8 @@ public class ProjectSourceResponse extends BaseResponse {
         entity.setSourceCode(sourceCode);
         entity.setProgXML(progXML);
         entity.setConfAnnos(confAnnos);
+        entity.setProgramAsTextly(programAsTextly);
+        entity.setTextlyErrors(textlyErrors);
         entity.immutable();
         return entity;
     }
@@ -223,6 +231,22 @@ public class ProjectSourceResponse extends BaseResponse {
         return this;
     }
 
+    public ProjectSourceResponse setProgramAsTextly(String textly) {
+        if ( this.immutable ) {
+            throw new RuntimeException("sourceCode assigned to an immutable object: " + toString());
+        }
+        this.programAsTextly = textly;
+        return this;
+    }
+
+    public ProjectSourceResponse setTextlyErrors(List<JSONObject> textlyErrors) {
+        if ( this.immutable ) {
+            throw new RuntimeException("textly errors assigned to an immutable object: " + toString());
+        }
+        this.textlyErrors = textlyErrors;
+        return this;
+    }
+
     /**
      * GET progXML. Object must be immutable. Never return null or an undefined/default value.
      */
@@ -320,6 +344,8 @@ public class ProjectSourceResponse extends BaseResponse {
                 jsonO.put("notificationsAvailable", this.notificationsAvailable);
             }
             jsonO.put("sourceCode", this.sourceCode);
+            jsonO.put("programAsTextly", this.programAsTextly);
+            jsonO.put("textlyErrors", this.textlyErrors);
             jsonO.put("progXML", this.progXML);
             jsonO.put("confAnnos", this.confAnnos);
         } catch ( JSONException e ) {

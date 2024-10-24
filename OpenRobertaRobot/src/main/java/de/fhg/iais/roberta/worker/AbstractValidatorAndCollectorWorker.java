@@ -1,7 +1,10 @@
 package de.fhg.iais.roberta.worker;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import org.json.JSONObject;
 
 import com.google.common.collect.ClassToInstanceMap;
 import com.google.common.collect.ImmutableClassToInstanceMap;
@@ -15,6 +18,7 @@ import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.bean.UsedMethodBean;
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.typecheck.NepoInfoProcessor;
 import de.fhg.iais.roberta.util.Key;
 import de.fhg.iais.roberta.visitor.IVisitor;
 import de.fhg.iais.roberta.visitor.validate.CommonNepoValidatorAndCollectorVisitor;
@@ -48,15 +52,21 @@ public abstract class AbstractValidatorAndCollectorWorker implements IWorker {
         // workaround: because methods in the tree may use global variables before the main task is
         // reached within the tree, the variables may not exist yet and show up as not declared
         collectGlobalVariables(tree, visitor);
+        List<JSONObject> accumulatedTextlyErrors = new ArrayList<>();
         for ( List<Phrase> phrases : tree ) {
             for ( Phrase phrase : phrases ) {
                 if ( phrase.hasName("MAIN_TASK") ) {
                     usedHardwareBeanBuilder.setProgramEmpty(phrases.size() == 2);
+                    List<JSONObject> textlyErrors = NepoInfoProcessor.collectTextlyErrors(phrase);
+                    accumulatedTextlyErrors.addAll(textlyErrors);
                 } else {
                     phrase.accept(visitor);
+                    List<JSONObject> textlyErrors = NepoInfoProcessor.collectTextlyErrors(phrase);
+                    accumulatedTextlyErrors.addAll(textlyErrors);
                 }
             }
         }
+        project.setTextlyErrors(accumulatedTextlyErrors);
         usedMethodBeanBuilder.addAdditionalEnums(getAdditionalMethodEnums());
 
         project.addWorkerResult(map.get(UsedMethodBean.Builder.class).build());

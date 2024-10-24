@@ -1,6 +1,9 @@
 package de.fhg.iais.roberta.worker;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import org.json.JSONObject;
 
 import de.fhg.iais.roberta.bean.UsedHardwareBean;
 import de.fhg.iais.roberta.components.Project;
@@ -20,13 +23,16 @@ public abstract class AbstractTypecheckWorker implements IWorker {
         TypecheckCommonLanguageVisitor visitor = this.getVisitor(project, usedHardwareBean);
 
         int errors = 0;
+        List<JSONObject> textlyErrors = new ArrayList<>();
         for ( List<Phrase> listOfPhrases : project.getProgramAst().getTree() ) {
             for ( Phrase phrase : listOfPhrases ) {
                 phrase.accept(visitor);
                 int errorsOfThisPhrase = NepoInfoProcessor.collectNepoErrors(phrase).size();
                 errors += errorsOfThisPhrase;
+                textlyErrors.addAll(NepoInfoProcessor.collectTextlyErrors(phrase));
             }
         }
+        project.setTextlyErrors(textlyErrors);
         if ( errors > 0 ) {
             project.setResult(Key.PROGRAM_INVALID_STATEMETNS);
             project.addToErrorCounter(errors, null);

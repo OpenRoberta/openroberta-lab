@@ -17,10 +17,11 @@ import org.slf4j.LoggerFactory;
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.factory.RobotFactory;
 import de.fhg.iais.roberta.javaServer.restServices.all.service.ProjectService;
+import de.fhg.iais.roberta.mode.action.Language;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
-import de.fhg.iais.roberta.typecheck.NepoInfoProcessor;
 import de.fhg.iais.roberta.typecheck.NepoInfo;
+import de.fhg.iais.roberta.typecheck.NepoInfoProcessor;
 import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.ast.AstFactory;
 import de.fhg.iais.roberta.util.test.UnitTestHelper;
@@ -55,6 +56,9 @@ import de.fhg.iais.roberta.util.test.UnitTestHelper;
  * - `ima`: Represents an Image.
  * - `listIma`: Represents a list of Images.
  * - `color`: Represents a color.
+ * - `listColor`: Represents a list of Colors.
+ * - `conn`: Represents a connection.
+ * - `listConn`: Represents a list of Connections.
  * <p>
  * This allows for quick and consistent testing of various expressions and statements within the context
  * of the Blockly programs being evaluated.
@@ -391,14 +395,128 @@ public class TestTypecheck {
         "num = wedo.timerSensor();",
         "wedo.timerReset();",
         "wedo.showText(\"holis\");",
-        "wedo.motor.move(M,300,100);", // For test this actuator, change the robot configuration",
-        "wedo.motor.stop(M);", // For test actuator, change the robot configuration",
+        //"wedo.motor.move(M,300,100);", // For test this actuator, change the robot configuration",
+        //"wedo.motor.stop(M);", // For test actuator, change the robot configuration",
         "wedo.clearDisplay();",
         "wedo.pitch(S,300,300);",
         "wedo.turnRgbOn(R,#pink);",
         "wedo.turnRgbOff(R);"
     );
+    public static final List<String> EV3_SPECIFIC = Arrays.asList(
+        //ACTUATORS
+        "ev3.turnOnRegulatedMotor(B,30);",
+        "ev3.rotateRegulatedMotor(B, 30, rotations, 1);",
+        "ev3.rotateRegulatedMotor(B,30,degree,1);",
+        "ev3.rotateRegulatedMotor(B,30,degree,1);",
+        "num =ev3.getSpeedMotor(B);",
+        "ev3.setRegulatedMotorSpeed(B,30);",
+        "ev3.stopRegulatedMotor(B,float);",
+        "ev3.stopRegulatedMotor(B,brake);",
+        "ev3.driveDistance(forward,30,20);",
+        "ev3.driveDistance(forward,30);",
+        "ev3.driveDistance(backward,30,20);",
+        "ev3.driveDistance(backward,30);",
+        "ev3.stopRegulatedDrive();",
+        "ev3.rotateDirectionAngle(right,30,20);",
+        "ev3.rotateDirectionRegulated(right,30);",
+        "ev3.rotateDirectionAngle(left,30,20);",
+        "ev3.rotateDirectionRegulated(left,30);",
+        "ev3.driveInCurve(forward,10,30,20);",
+        "ev3.driveInCurve(backward,10,30,20);",
+        "ev3.driveInCurve(forward,10,30);",
+        "ev3.driveInCurve(backward,10,30);",
+        "ev3.drawText(\"Hallo\",0,0);",
+        "ev3.drawText(123, 0, 0);",
+        "ev3.drawPicture(oldGlasses);",
+        "ev3.drawPicture(eyesOpen);",
+        "ev3.drawPicture(eyesClosed);",
+        "ev3.drawPicture(flowers);",
+        "ev3.drawPicture(speedo);",
+        "ev3.clearDisplay();",
+        "ev3.playTone(300,100);",
+        "ev3.playFile(1);",
+        "ev3.playFile(2);",
+        "ev3.playFile(3);",
+        "ev3.playFile(4);",
+        "ev3.playFile(5);",
+        "ev3.setVolume(50);",
+        "num =ev3.getVolume();",
+        "ev3.setLanguage(de);",
+        "ev3.setLanguage(en);",
+        "ev3.setLanguage(fr);",
+        "ev3.setLanguage(es);",
+        "ev3.setLanguage(it);",
+        "ev3.setLanguage(nl);",
+        "ev3.setLanguage(fi);",
+        "ev3.setLanguage(pl);",
+        "ev3.setLanguage(ru);",
+        "ev3.setLanguage(te);",
+        "ev3.setLanguage(cs);",
+        "ev3.setLanguage(pt);",
+        "ev3.setLanguage(da);",
+        "ev3.sayText(\"Hallo\");",
+        "ev3.sayText(123);",
+        "ev3.sayText(\"Hallo\",30,50);",
+        "ev3.sayText(123,30,50);",
+        "ev3.ledOn(on,green);",
+        "ev3.ledOn(on,orange);",
+        "ev3.ledOn(on,red);",
+        "ev3.ledOn(flashing,green);",
+        "ev3.ledOn(flashing,orange);",
+        "ev3.ledOn(flashing,red);",
+        "ev3.ledOn(doubleFlashing,green);",
+        "ev3.ledOn(doubleFlashing,orange);",
+        "ev3.ledOn(doubleFlashing,red);",
+        "ev3.ledOff();",
+        "ev3.resetLed();",
+        //SENSORS
+        "boolT = ev3.touchSensor.isPressed(1);",
+        "num = ev3.ultrasonicSensor.getDistance(4);",
+        "boolT = ev3.ultrasonicSensor.getPresence(4);",
+        "color = ev3.colorSensor(colour,3);",
+        "num = ev3.colorSensor(light,3);",
+        "num = ev3.colorSensor(ambientlight,3);",
+        "listN = ev3.colorSensor(rgb,3);",
+        "ev3.encoderReset(B);",
+        "num =ev3.encoderSensor.getDegree(B);",
+        "num =ev3.encoderSensor.getRotation(B);",
+        "num =ev3.encoderSensor.getDistance(B);",
+        "boolT =ev3.keysSensor.isPressed(enter);",
+        "boolT =ev3.keysSensor.isPressed(up);",
+        "boolT =ev3.keysSensor.isPressed(down);",
+        "boolT =ev3.keysSensor.isPressed(left);",
+        "boolT =ev3.keysSensor.isPressed(right);",
+        "boolT =ev3.keysSensor.isPressed(escape);",
+        "boolT =ev3.keysSensor.isPressed(any);",
+        "ev3.gyroReset(2);",
+        "num =ev3.gyroSensor.getAngle(2);",
+        "num =ev3.gyroSensor.getRate(2);",
+        "num =ev3.timerSensor(1);",
+        "num =ev3.timerSensor(5);",
+        "ev3.timerReset(1);",
+        "ev3.timerReset(5);",
 
+        //TODO: For this expressions the configuration must be changed
+//        "num = ev3.infraredSensor.getDistance(1);",
+//        "listN =ev3.infraredSensor.getPresence(1);",
+//        "num =ev3.soundSensor.getSoundLevel(2);",
+//        "ev3.hiTecCompassStartCalibration(3);",
+//        "num =ev3.hiTechCompassSensor.getAngle(3);",
+//        "num =ev3.hiTechCompassSensor.getCompass(3);",
+//        "num = ev3.hiTechInfraredSensor.getModulated(4);",
+//        "num = ev3.hiTechInfraredSensor.getUnmodulated(4);",
+//
+//        "color = ev3.hiTechColorSensor(colour,4);",
+//        "num = ev3.hiTechColorSensor(light, 4);",
+//        "num =ev3.hiTechColorSensor(ambientlight,4);",
+//        "listN =ev3.hiTechColorSensor(rgb,4);",
+
+        //CONNECTIONS
+        "conn = ev3.connectToRobot(\"hola\");",
+        "ev3.sendMessage(\"hola\",conn);",
+        "str =ev3.receiveMessage(conn);",
+        "conn =ev3.waitForConnection();"
+    );
     List<String> PARSER_ERRORS = Arrays.asList(
         "num = 1,,;",
         "num = 1",
@@ -542,6 +660,27 @@ public class TestTypecheck {
         }
     }
 
+    @Test
+    public void testSuccessSpecificRobot() throws Exception {
+        List<Object[]> robotsWithSpecificTests = Arrays.asList(
+            new Object[] {"ev3lejosv1", EV3_SPECIFIC},
+            new Object[] {"microbitv2", MICROBITV2_SPECIFIC},
+            new Object[] {"wedo", WEDO_SPECIFIC}
+        );
+
+        for ( Object[] robotAndTests : robotsWithSpecificTests ) {
+            String robotName = (String) robotAndTests[0];
+            List<String> specificStatements = (List<String>) robotAndTests[1];
+            setupRobotFactoryForRobot(robotName);
+            for ( String statement : specificStatements ) {
+                LOG.info(String.format("%-16s s: %s", robotName, statement));
+                String xmlUnderTest = TestTypecheckUtil.getProgramUnderTestForEvalStmt(testFactory, statement);
+                typecheckAndCollectInfosForProgram(testFactory, xmlUnderTest);
+                checkMustSucceed();
+            }
+        }
+    }
+
     /**
      * parser errors are generic and tested for all robot plugins only by using microbitv2
      */
@@ -615,7 +754,7 @@ public class TestTypecheck {
         messages = new ArrayList<>();
 
         Project.Builder builder = UnitTestHelper.setupWithExportXML(factory, xmlUnderTest);
-        Project project = builder.build();
+        Project project = builder.setLanguage(Language.ENGLISH).build();
         ProjectService.executeWorkflow("showsource", project);
 
         for ( List<Phrase> listOfPhrases : project.getProgramAst().getTree() ) {

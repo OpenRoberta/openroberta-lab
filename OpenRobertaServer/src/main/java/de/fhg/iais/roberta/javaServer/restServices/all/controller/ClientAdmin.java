@@ -214,6 +214,8 @@ public class ClientAdmin {
                     response.setSourceCodeFileExtension(robotFactory.getSourceCodeFileExtension());
                     response.setBinaryFileExtension(robotFactory.getBinaryFileExtension());
                     response.setFirmwareDefault(robotFactory.getFirmwareDefaultProgramName());
+
+
                     LOG.info("set robot to {}", robot);
                     Statistics.info("ChangeRobot", "success", true, "robot", robot);
                 } else {

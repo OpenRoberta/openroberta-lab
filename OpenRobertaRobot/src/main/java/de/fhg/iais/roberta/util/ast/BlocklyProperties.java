@@ -59,4 +59,8 @@ public class BlocklyProperties {
             return " at " + this.textRegion.lineStart + ":" + this.textRegion.colStart + " - " + this.textRegion.lineStop + ":" + this.textRegion.colStop;
         }
     }
+
+    public TextRegion getTextRegion() {
+        return textRegion;
+    }
 }
