@@ -123,13 +123,8 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
 
     @Override
     public Void visitMainTask(MainTask mainTask) {
-        this.src.add("robot = Nao()");
-        nlIndent();
-        this.src.add("robot.load_motion_files()");
+        super.visitorGenerateUserVariablesAndMethods(mainTask);
         StmtList variables = mainTask.variables;
-        variables.accept(this);
-        generateUserDefinedMethods();
-        nlIndent();
         nlIndent();
         this.src.add("def run():");
         incrIndentation();
@@ -414,10 +409,7 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
     }
 
     @Override
-    protected void generateProgramPrefix(boolean withWrapping) {
-        if ( !withWrapping ) {
-            return;
-        }
+    protected void visitorGenerateImports() {
         this.src.add("#!/usr/bin/python");
         nlIndent();
         nlIndent();
@@ -440,13 +432,11 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
     }
 
     @Override
-    protected void visitorGenerateImports() {
-        //TODO
-    }
-
-    @Override
     protected void visitorGenerateGlobalVariables() {
-        //TODO
+        this.src.add("robot = Nao()");
+        nlIndent();
+        this.src.add("robot.load_motion_files()");
+        nlIndent();
     }
 
     @Override
