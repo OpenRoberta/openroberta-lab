@@ -22,6 +22,7 @@ let connectionInstance: ConnectionInterface;
  */
 function init(robot, extensions) {
     let ready = $.Deferred();
+    extend(robot, extensions);
     $.when(
         ROBOT.setRobot(robot, extensions, function (result) {
             if (result.rc == 'ok') {
@@ -392,19 +393,30 @@ function updateFirmware() {
     });
 }
 
+function extend(robot: string, extensions: object) {
+    let robots = GUISTATE_C.getRobots();
+    for (let key in Object.keys(robots)) {
+        let r = robots[key];
+        if (r.name === robot) {
+            for (const [key, value] of Object.entries(r.extensions)) {
+                if (value === 'always') {
+                    extensions[key] = true;
+                    break;
+                }
+            }
+            break;
+        }
+    }
+}
 /**
  * Switch robot
  */
 function switchRobot(robot: string, extensions: object, opt_continue?: boolean, opt_callback?: Function) {
-    // @ts-ignore
-    PROGRAM_C.SSID = null;
-    // @ts-ignore
-    PROGRAM_C.password = null;
-    // @ts-ignore
-    document.getElementById('wlanSsid').value = '';
-    // @ts-ignore
-    document.getElementById('wlanPassword').value = '';
-
+    PROGRAM_C['SSID'] = null;
+    PROGRAM_C['password'] = null;
+    $('#wlanSsid').text('');
+    $('#wlanPassword').text('');
+    extend(robot, extensions);
     let further;
     // no need to ask for saving programs if you switch the robot in between a group
     function hasSameRobotGroupAndExtensions(robot, extensions): boolean {

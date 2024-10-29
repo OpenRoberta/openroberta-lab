@@ -159,6 +159,9 @@ function initGalleryListViewEvents() {
         'back to program view'
     );
     $(window).onWrap('resize', () => refreshTable());
+    $('#galleryTable').onWrap('post-body.bs.table', function () {
+        refreshTable();
+    });
 }
 
 function refreshTable() {

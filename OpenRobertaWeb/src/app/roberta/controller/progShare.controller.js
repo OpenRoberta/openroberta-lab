@@ -121,6 +121,7 @@ function initView() {
                 formatter: formatLike,
             },
         ],
+        pagination: false,
         rowAttributes: rowAttributes,
         height: 410,
         search: false,

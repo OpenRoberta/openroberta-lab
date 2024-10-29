@@ -144,10 +144,12 @@ function initTutorialList() {
     };
     const options = { ...CommonTable.options, ...CardView.options, ...myOptions };
     $('#tutorialTable').bootstrapTable(options);
-    $('#tutorialTable').bootstrapTable('togglePagination');
 }
 
 function initTutorialListEvents() {
+    $('#tabTutorialList').off();
+    $('#tutorialTable').off();
+    $('#backTutorialList').off();
     $('#tabTutorialList').onWrap(
         'shown.bs.tab',
         function () {
@@ -157,19 +159,15 @@ function initTutorialListEvents() {
         },
         'tutorial clicked'
     );
-    $(window).resize(function () {
+    var resizeTable = function () {
         $('#tutorialTable').bootstrapTable('resetView', {
             height: UTIL.calcDataTableHeight(),
         });
-    });
-    $('#tutorialTable').onWrap(
-        'post-body.bs.table',
-        function (e) {
-            configureTagsInput();
-        },
-        'page-change tutorial list'
-    );
-
+        configureTagsInput();
+    };
+    $(window).off('resize', resizeTable);
+    $(window).on('resize', resizeTable);
+    $('#tutorialTable').onWrap('post-body.bs.table', resizeTable, 'page-change tutorial list');
     $('#tutorialList')
         .find('button[name="refresh"]')
         .onWrap(

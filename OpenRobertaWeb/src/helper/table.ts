@@ -27,6 +27,7 @@ export namespace CardView {
         cardView: 'true',
         pageList: [12, 24, 48, 96],
         pageSize: 12,
+        pagination: true,
         search: true,
         rowStyle: {
             classes: 'col-xxl-2 col-lg-3 col-md-4 col-sm-6',
