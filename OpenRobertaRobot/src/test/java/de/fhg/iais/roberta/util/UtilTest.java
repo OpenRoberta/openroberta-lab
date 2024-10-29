@@ -24,6 +24,11 @@ public class UtilTest {
         assertFalse(Util.isValidJavaIdentifier(" Pid"));
         assertFalse(Util.isValidJavaIdentifier("class"));
         assertFalse(Util.isValidJavaIdentifier("for"));
+        
+        assertTrue(Util.isSafeIdentifier("__üäö$€"));
+        assertTrue(Util.isSafeIdentifier("if"));
+        assertFalse(Util.isSafeIdentifier("x;y"));
+        assertFalse(Util.isSafeIdentifier("x\ny"));
     }
 
     @Test

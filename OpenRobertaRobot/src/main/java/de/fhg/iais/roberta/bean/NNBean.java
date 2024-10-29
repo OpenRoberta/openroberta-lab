@@ -193,7 +193,7 @@ public class NNBean implements IProjectBean {
             Set<String> set = new HashSet<>(l1);
             set.addAll(l2);
             for ( String s : set ) {
-                if ( s.isEmpty() || !Util.isValidJavaIdentifier(s) ) {
+                if ( s.isEmpty() || !Util.isSafeIdentifier(s) ) {
                     return false;
                 }
             }

@@ -78,6 +78,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.typecheck.NepoInfoProcessor;
+import de.fhg.iais.roberta.util.Util;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.syntax.FunctionNames;
 
@@ -604,11 +605,17 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
         if ( !(this.getBuilder(UsedHardwareBean.Builder.class).containsInScopeVariable(variableName)) ) {
             addErrorToPhrase(var, "SCOPE_ERROR");
         }
+        if (!Util.isSafeIdentifier(variableName)) {
+            addErrorToPhrase(var, "SCOPE_ERROR");
+        }
         return null;
     }
 
     @Override
     public Void visitVarDeclaration(VarDeclaration var) {
+        if (!Util.isSafeIdentifier(var.name)) {
+            addErrorToPhrase(var, "SCOPE_ERROR");
+        }
         if ( var.global ) {
             this.getBuilder(UsedHardwareBean.Builder.class).addVisitedVariable(var);
         }

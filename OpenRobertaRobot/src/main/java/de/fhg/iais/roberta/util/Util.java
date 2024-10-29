@@ -54,6 +54,7 @@ public class Util {
     private static final Pattern IFDEF_PATTERN = Pattern.compile("^\\s*#ifdef (.*)$");
     private static final Pattern END_PATTERN = Pattern.compile("^\\s*#end$");
     private static final Pattern HEX_VALUE_PATTERN = Pattern.compile("^#[0-9a-fA-F]+$");
+    private static final Pattern UNSAFE_CHAR_PATTERN = Pattern.compile("^.*[;,\n\t\r].*$", Pattern.MULTILINE);
     private static final String INVALID = "invalid";
     /**
      * YAML parser. NOT thread-safe!
@@ -281,7 +282,22 @@ public class Util {
     }
 
     /**
-     * Check whether a String is a valid Java identifier. It is checked, that no reserved word is used
+     * Check that a String does not contain problematic characters as ";" or "\n"
+     *
+     * @param s String to check
+     * @return <code>true</code> if the given String is safe; <code>false</code> otherwise.
+     */
+    public final static boolean isSafeIdentifier(String s) {
+        if ( s == null || s.length() == 0 ) {
+            return false;
+        } else if ( UNSAFE_CHAR_PATTERN.matcher(s).matches() ) {
+            return false;
+        }
+        return true;
+    }
+    
+    /**
+     * Check whether a String is a valid Java identifier. It is checked also, that no reserved word is used
      *
      * @param s String to check
      * @return <code>true</code> if the given String is a valid Java identifier; <code>false</code> otherwise.
@@ -322,8 +338,6 @@ public class Util {
     public static String getErrorTicketId() {
         return "E-" + Util.errorTicketNumber.incrementAndGet();
     }
-
-    private static List<String> EMPTY_STRING_LIST = new ArrayList<>();
 
     /**
      * read all lines from a resource, concatenate them to a string separated by a newline
