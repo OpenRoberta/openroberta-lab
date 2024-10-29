@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2024-10-10 15:37:43.429495",
+		"lastupdated": "2024-10-29 13:20:50.336506",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -908,10 +908,14 @@
 	"ORA_SERVER_ERROR": "Server-Error",
 	"ORA_ROBOT_SET_SUCCESS": "Switched to robot system »$«!",
 	"ORA_ROBOT_DOES_NOT_EXIST": "It seems that we do not support the desired robot system!<br>Please choose another one.",
+	"TAB_TEXTLYJAVA_EDITOR": "Textly Editor",
+	"TEXTLY_EDITOR_CLOSE_CONFIRMATION": "There are errors in the code!",
+	"POPUP_TEXTLY_CONFIRM_CONTINUE": "<br><br><i>Press »OK« to see the errors in the textly editor. Press »Cancel« to return to NEPOprog and discard your work.</i>",
 	"CONFIGURATION_ERROR_SENSOR_MISSING": "This sensor is not configured. Please add the corresponding block in the configuration tab!",
 	"CONFIGURATION_ERROR_ACTOR_MISSING": "This actuator is not configured. Please add the corresponding block in the configuration tab!",
 	"CONFIGURATION_ERROR_WLAN_MISSING": "WiFi is not configured. Please add the corresponding block in the configuration tab!",
 	"CONFIGURATION_ERROR_SENSOR_WRONG": "Connected wrong sensor to the given port!",
+	"CONFIGURATION_ERROR_ACTUATOR_WRONG": "The defined actuator port/name is wrong. Please check this in the configuration tab!",
 	"CONFIGURATION_ERROR_MOTOR_LEFT_MISSING": "Left motor missing in the configuration!",
 	"CONFIGURATION_ERROR_MOTOR_RIGHT_MISSING": "Right motor missing in the configuration!",
 	"CONFIGURATION_ERROR_MOTOR_MISSING": "Motor is missing on the given port!",
@@ -2165,6 +2169,7 @@
 	"START_NN": "Neural networks",
 	"START_POPULAR_ROBOTS": "Popular systems",
 	"START_ALL_ROBOTS": "All systems and filter options",
+	"START_TEXTLY": "NEPO Java",
 	"TITLE_GOAL": "Learning objective",
 	"TITLE_PREVIOUS": "Previous knowledge",
 	"OPTION_WEBUSB": "Connect your device to the computer<br><small>select it in the next popup and click »Connect«</small>",
@@ -2192,5 +2197,6 @@
 	"BLE_ERROR_CAPABILITIES": "Looks like the firmware version of your robot is not compatible with the Open Roberta Lab. Check out the <a href='https://wiki.open-roberta.org/' target='_blank'>Open Roberta Wiki</a> for more information under: Spike Prime / Robot Inventor -> Pybricks -> Set Up.",
 	"BLE_ERROR_STOP": "Stopping the program execution does not work, your robot is maybe disconnected?<br>You can always use the Center Button on the hub to stop the program yourself.",
 	"ORA_COMPILERWORKFLOW_ERROR_EXTERN_FAILED": "It looks like the external compilation service used for this robot is currently unavailable. Please try again later and report the problem if it persists.",
-	"WEBUSB_NOT_SUPPORTED": "Your browser does not support WebUSB. To download the programme to your robot, please switch to one of the following browsers: Chrome, Edge or Opera"
+	"WEBUSB_NOT_SUPPORTED": "Your browser does not support WebUSB. To download the programme to your robot, please switch to one of the following browsers: Chrome, Edge or Opera",
+	"SIM_VALUES_NEURON": "Output Neurons Values"
 }
