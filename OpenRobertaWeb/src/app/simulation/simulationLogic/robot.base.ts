@@ -342,11 +342,11 @@ export abstract class RobotBase implements IRobot, ISelectable {
         $neuronValuesView.html('');
         let network = this.interpreter.neuralNetwork;
         if (network) {
-            let neurons = network.getOutputNames();
+            let neurons = network.getInputNames().concat(network.getHiddenNeuronNamesFlattened(), network.getOutputNames());
             if (Object.keys(neurons).length > 0) {
                 neurons.forEach((n) => {
-                    let neuronOutputValue = network.getOutputNeuronVal(n);
-                    UTIL.addVariableValue($neuronValuesView, n, neuronOutputValue);
+                    let neuronValue = network.getNeuronVal(n);
+                    UTIL.addVariableValue($neuronValuesView, n, neuronValue);
                 });
             }
             $('#headingFive').parent().show();

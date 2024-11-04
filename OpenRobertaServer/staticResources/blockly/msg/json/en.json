@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2024-11-04 09:12:37.186302",
+		"lastupdated": "2024-11-04 14:33:51.984184",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -2201,5 +2201,5 @@
 	"BLE_ERROR_STOP": "Stopping the program execution does not work, your robot is maybe disconnected?<br>You can always use the Center Button on the hub to stop the program yourself.",
 	"ORA_COMPILERWORKFLOW_ERROR_EXTERN_FAILED": "It looks like the external compilation service used for this robot is currently unavailable. Please try again later and report the problem if it persists.",
 	"WEBUSB_NOT_SUPPORTED": "Your browser does not support WebUSB. To download the programme to your robot, please switch to one of the following browsers: Chrome, Edge or Opera",
-	"SIM_VALUES_NEURON": "Output Neurons Values"
+	"SIM_VALUES_NEURON": "Neuron Values"
 }

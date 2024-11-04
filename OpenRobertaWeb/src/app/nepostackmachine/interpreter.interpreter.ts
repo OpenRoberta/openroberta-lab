@@ -830,7 +830,7 @@ export class Interpreter {
                 break;
             }
             case C.NN_GETOUTPUTNEURON_VAL: {
-                this.state.push(this.neuralNetwork.getOutputNeuronVal(expr[C.NAME]));
+                this.state.push(this.neuralNetwork.getNeuronVal(expr[C.NAME]));
                 break;
             }
             case C.SINGLE_FUNCTION: {

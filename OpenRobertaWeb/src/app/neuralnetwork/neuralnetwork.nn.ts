@@ -548,6 +548,18 @@ export class Network {
         return hiddenNeuronNames;
     }
 
+    getHiddenNeuronNamesFlattened(): string[] {
+        let hiddenNeuronNames: string[] = [];
+        if (this.network != null && this.network.length > 2) {
+            for (let i = 1; i < this.network.length - 1; i++) {
+                for (let node of this.network[i]) {
+                    hiddenNeuronNames.push(node.id);
+                }
+            }
+        }
+        return hiddenNeuronNames;
+    }
+
     getOutputNames(): string[] {
         let outputNames: string[] = [];
         if (this.network != null && this.network.length > 0) {
@@ -564,7 +576,7 @@ export class Network {
         node.output = val;
     }
 
-    getOutputNeuronVal(id: String): number {
+    getNeuronVal(id: String): number {
         let node = this.getNeuronById(id);
         return node != null ? node.output : 0;
     }
