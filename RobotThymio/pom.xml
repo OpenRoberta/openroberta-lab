@@ -6,7 +6,7 @@
     <parent>
         <groupId>de.fhg.iais.openroberta</groupId>
         <artifactId>OpenRobertaParent</artifactId>
-        <version>5.2.23-SNAPSHOT</version>
+        <version>5.2.23</version>
     </parent>
 
     <artifactId>RobotThymio</artifactId>
