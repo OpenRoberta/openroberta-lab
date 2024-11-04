@@ -1,477 +1,266 @@
+h
 <head><title></title>
 <meta http-equiv='content-type' content='text/html; charset=utf-8'>
 </head>
 <body>
     <div id='helpContent'>
-        <div id='robControls_start' class='help beginner'><br>
-            <h3 id='BlockdescriptionTXT4.0Controller-»Programstart«'><span style='color:var(--ds-text,#333333);'>»Program start«</span><span
-                style='color:var(--ds-text,#333333);'> </span></h3>
-            <p>Each program starts with the red »Program start« block.</p>
-            <p>This block is always available in the Open Roberta Lab and cannot be deleted. The little triangle below the start block is called »sequence connector«. The first block you want to use will be connected by using the »sequence connector« at the start block. The sequence connector color changes to yellow when a suitable block comes into its range.</p>
+        <div id='robControls_start' class='help beginner'><h3 id='Blockdescriptionmicro:bitV2-»Programstart«'>»Program start «</h3>
+            <p>Each program starts with the »Program start block«, which cannot be deleted. The first block to be used is connected directly to the »Sequence connection« on the program start block.</p>
             <p>Settings:
             </p>
             <ul style='margin-top: 0; margin-bottom: 10px'>
-                <li class='typcn typcn-plus'>create a new global variable</li>
-                <li class='typcn typcn-minus'>delete the global variable</li>
-                <li class='typcn typcn-input-checked'>show sensor data - while running a program the current values of connected sensors will be shown on the display</li>
+                <li class='typcn typcn-plus'>Create a new global variable.</li>
+                <li class='typcn typcn-minus'>Remove the global variable.</li>
             </ul>
-            <br>
-            <p><span>If global variables have been created:</span>
+            <p class='auto-cursor-target'>If global variables have been created:
             </p>
             <ul style='margin-top: 0; margin-bottom: 10px'>
-                <li class='typcn typcn-pen'>Text, name of the variable</li>
-                <li class='typcn typcn-arrow-sorted-down'>Type of the variable, »Number«, »Boolean«, »String«, »Color«, »Connection«, »List Number«, »List Boolean«, »List String«, »List Connection«</li>
-                <li class='typcn typcn-arrow-left'>Value, that corresponds to the variable type. This is the initial value of the variable.</li>
+                <li class='typcn typcn-pen'>Text, name of the variable.</li>
+                <li class='typcn typcn-arrow-sorted-down'>Type of the variable.</li>
+                <li class='typcn typcn-arrow-left'>Value, initial value of the variable.</li>
             </ul>
             <br></div>
-        <div id='actions_motorOmniDiff_on_for_txt4' class='help beginner'><h3
-            id='BlockdescriptionTXT4.0Controller-»drive...speed%...distancecm...«'>»drive ... speed % ... distance cm ...«</h3>
-            <p>With the »drive distance« block you can program the direction and the speed of the robot. The speed of your robot is set in the »speed« parameter. Once the block has been executed the motors stop automatically.</p>
-            <p>»drive distance« controls both motors of the robot at the same time, meaning that the settings you make here apply to both motors of the robot. If the robot's actions don't correspond with the block's settings when running the program, check the robot configuration settings, especially the wheel diameter and the track width.</p>
-            <p>Settings and input values:
+        <div id='mbedActions_display_text' class='help beginner'><h3 id='Blockdescriptionmicro:bitV2-»Showtext...«'>»Show text ... «</h3>
+            <p>With this block you can output a text on the screen of the micro:bit.</p>
+            <p>Options and Input values:
             </p>
             <ul style='margin-top: 0; margin-bottom: 10px'>
-                <li class='typcn typcn-arrow-sorted-down'>Drive, »forwards« or »backwards«. Select a direction.</li>
-                <li class='typcn typcn-arrow-left'>Number, speed between -100 and 100. If the number is negative, the motors will rotate backwards. This value will be internally clipped to be between -100 and 100.</li>
-                <li class='typcn typcn-arrow-left'>Number, the distance to drive in cm.</li>
+                <li class='typcn typcn-arrow-sorted-down'>Option, the way you want the text to appear on the display. With »text« the text is displayed as a scrolling text from right to left, with »character« all characters are displayed one after the other on the screen.</li>
+                <li class='typcn typcn-arrow-left'>String, text that you want to display on your micro:bit.</li>
             </ul>
-            <br><br></div>
-        <div id='actions_motorOmniDiff_on_txt4' class='help beginner'><br>
-            <h3 id='BlockdescriptionTXT4.0Controller-»drive...speed%...«'>»drive ... speed % ...«</h3>
-            <p>With the »drive« block you can program the direction and also the speed (velocity) of your robot.
-                <span>Your robot moves  until it is stopped or another block specifies new driving parameters. The driving speed can be set in the field  »speed«.</span>
-            </p>
-            <p>Options and Arguments:
+        </div>
+        <div id='mbedActions_display_image' class='help beginner'><h3 id='Blockdescriptionmicro:bitV2-»Showimage...«'>»Show image ... «</h3>
+            <p>With this block you can display an image or animation on the micro:bit screen.</p>
+            <p>Options and Input values:
             </p>
             <ul style='margin-top: 0; margin-bottom: 10px'>
-                <li class='typcn typcn-arrow-sorted-down'>direction, forwards or backwards. Choose the direction.</li>
-                <li class='typcn typcn-arrow-left'>
-                    <span>number, speed between -100 to 100. 100 is the maximum speed. Negative values lets the motor rotate into the other direction. This value will be internally clipped to be between -100 and 100. </span>
-                </li>
+                <li class='typcn typcn-arrow-sorted-down'>Option, the way the image is to be displayed. With »image« only a single image is displayed, with »animation« a list of images is displayed one after the other.</li>
+                <li class='typcn typcn-arrow-left'>Image or list of images, the image or the list of images you want to be displayed on your micro:bit.</li>
             </ul>
-            <br></div>
-        <div id='actions_motorOmniDiff_stop_txt4' class='help beginner'><br>
-            <h3 id='BlockdescriptionTXT4.0Controller-»stop«'>»stop«</h3>
-            <p>The »stop« block stops the motors immediately.</p><br></div>
-        <div id='actions_motorOmniDiff_curve' class='help beginner'><h3 style='text-align: left;'
-            id='BlockdescriptionTXT4.0Controller-»steer...speedleft...speedright...«'>»steer ... speed left ... speed right ...«</h3>
-            <p style='text-align: left;'>The block »steer ... speed left ... speed right ...« programs the robot to drive a curve by setting different speeds for the left and right motor. The robot configuration influences the radius of the curve depending from wheel distance and wheel diameter. The turning direction will define the driving direction.</p>
-            <p style='text-align: left;'>Settings and input values:
+        </div>
+        <div id='mbedActions_display_clear' class='help beginner'><h3 id='Blockdescriptionmicro:bitV2-»Cleardisplay«'>»Clear display«</h3>
+            <p>With this block you can clear the display of your micro:bit, that means that all LEDs are turned off.</p></div>
+        <div id='mbedActions_display_setpixel' class='help expert'><h3
+            id='Blockdescriptionmicro:bitV2-»SetLEDx...y...brightness...«[Expert-block]'>»Set LED x ... y ... brightness ... « <span class='typcn typcn-star'></span>
+        </h3>
+            <p>With this block you can set the brightness of one specific LED to a desired value between 0 and 9, where 0 is off and 9 is the maximum brightness.</p>
+            <p>Options and input values
             </p>
             <ul style='margin-top: 0; margin-bottom: 10px'>
-                <li class='typcn typcn-arrow-sorted-down'>Turning direction, »forwards« or »backwards«. Select your desired moving direction.</li>
-                <li class='typcn typcn-arrow-left'>Number, speed between -100 and 100 for the left motor. If the number is negative the motor will run backwards. This value will be internally clipped to be between -100 and 100.</li>
-                <li class='typcn typcn-arrow-left'>Number, speed between -100 and 100 for the right motor. If the number is negative the motor will run backwards. This value will be internally clipped to be between -100 and 100.</li>
+                <li class='typcn typcn-arrow-left'>Number, x coordinate of the LED you want to control. The x-axis runs parallel to the long side ouf your micro:bit. Possible inputs are integers between 0 and 4.</li>
+                <li class='typcn typcn-arrow-left'>Number, y coordinate of the LED you want to control. The y-axis runs parallel to the short side of your micro:bit. Possible inputs are integers between 0 and 4.</li>
+                <li class='typcn typcn-arrow-left'>Number, desired brightness of the LED. 0 means off and 9 is the maximum brightness. This value will be internally clipped to be between 0 and 9.</li>
             </ul>
-            <br></div>
-        <div id='actions_motorOmniDiff_curve_for' class='help beginner'><h3 style='text-align: left;'
-            id='BlockdescriptionTXT4.0Controller-»steer...speedleft...speedright...distance...«'>»steer ... speed left ... speed right ... distance ...«</h3>
-            <p style='text-align: left;'>The block »steer ... speed left ... speed right ... distance ...« programs the robot to drive a curve by setting different speeds for the left and right motor and also a distance related to the middle between both wheels. The robot configuration influences the radius of the curve depending from wheel distance and wheel diameter. The turning direction will define the driving direction.</p>
-            <p style='text-align: left;'>Settings and input values:
+        </div>
+        <div id='mbedActions_display_getPixel' class='help expert'><h3
+            id='Blockdescriptionmicro:bitV2-»GetLEDbrightnessx...y...«[Expert-block]'>»Get LED brightness x ... y ... « <span class='typcn typcn-star'></span></h3>
+            <p>With this block you can querry the brightness of on of your micro:bits LEDs.</p>
+            <p>Options ans input values:
             </p>
             <ul style='margin-top: 0; margin-bottom: 10px'>
-                <li class='typcn typcn-arrow-sorted-down'>Turning direction, »forwards« or »backwards«. Select your desired moving direction.</li>
-                <li class='typcn typcn-arrow-left'>Number, speed between -100 and 100 for the left motor. If the number is negative the motor will run backwards. This value will be internally clipped to be between -100 and 100.</li>
-                <li class='typcn typcn-arrow-left'>Number, speed between -100 and 100 for the left motor. If the number is negative the motor will run backwards. This value will be internally clipped to be between -100 and 100.</li>
-                <li class='typcn typcn-arrow-left'>Number, the distance in cm to be driven.</li>
+                <li class='typcn typcn-arrow-left'>Number, x coordinate of the LED you want to control. The x-axis runs parallel to the long side ouf your micro:bit. Possible inputs are integers between 0 and 4.</li>
+                <li class='typcn typcn-arrow-left'>Number, y coordinate of the LED you want to control. The y-axis runs parallel to the short side of your micro:bit. Possible inputs are integers between 0 and 4.</li>
             </ul>
-            <br></div>
-        <div id='actions_motorOmniDiff_turn_for_txt4' class='help beginner'><br>
-            <h3 id='BlockdescriptionTXT4.0Controller-»turn...speed%...degree...«'>»turn ... speed % ... degree ...«</h3>
-            <p>With the »turn degree« block you program the direction (right/left) that your robot will turn. In addition to the direction you can also program the »degrees«, allowing you to program how many degrees your robot should rotate (around its axis). This means that you do a complete rotation by setting a 360 degree turn..</p>
-            <p>The »turn degree« block controls both motors of the robot in such a way that the robot turns around its own axis. If the robot's actions don't correspond with the block's settings when running the program, check the EV3 robot configuration settings, especially the wheel diameter and the track width.</p>
-            <p>Settings and input values:
+            <p class='auto-cursor-target'>Return value:
             </p>
             <ul style='margin-top: 0; margin-bottom: 10px'>
-                <li class='typcn typcn-arrow-sorted-down'>Turn, »right« or »left«. Select the desired direction for turning.</li>
-                <li class='typcn typcn-arrow-left'>Number, speed between -100 and 100. If the number is negative, the robot will turn the other way around. This value will be internally clipped to be between -100 and 100.</li>
-                <li class='typcn typcn-arrow-left'>Number, degrees the robot shall turn. Degree of 360 will perform a full turn around. Negative numbers are not allowed.</li>
+                <li class='typcn typcn-arrow-right'>Number, brightness of the chosen LED. This number can be an integer between 0 for off and 9 for maximum brightness.</li>
             </ul>
-            <br></div>
-        <div id='actions_motorOmniDiff_turn_txt4' class='help beginner'><h3 id='BlockdescriptionTXT4.0Controller-»turn...speed%...«'>»turn ... speed % ...«</h3>
-            <p>With the »turn« block you set the direction (right/left) which the robot will turn. Your robot turns until it is stopped or another block is used for driving. You can set the speed in the block parameter field »speed«.</p>
-            <p>»turn« controls both motors of the robot at the same time, therefore the robot turns on the spot. If the EV3 Robot's actions don't correspond with the block's settings when running the program, check the EV3 robot configuration settings, especially the wheel diameter and the track width.</p>
-            <p>Settings and input values:
+        </div>
+        <div id='robActions_serial_print' class='help expert'><h3 id='Blockdescriptionmicro:bitV2-»ShowonSerialMonitor...«[Expert-block]'>»Show on Serial Monitor ... «
+            <span class='typcn typcn-star'></span></h3>
+            <p>With this block you can display a text on your computer. This text is transferred to your computer via serial port. You can read how to set up a Serial Monitor
+                <a href='https://jira.iais.fraunhofer.de/wiki/display/ORInfo/Set+Up+Calliope+mini'>here</a>.</p>
+            <p>Options and input values:
             </p>
             <ul style='margin-top: 0; margin-bottom: 10px'>
-                <li class='typcn typcn-arrow-sorted-down'>Turn, »right« or »left«. Select the desired direction for turning.</li>
-                <li class='typcn typcn-arrow-left'>Number, speed between -100 and 100. If the number is negative, the robot will turn the other way around. This value will be internally clipped to be between -100 and 100.</li>
+                <li class='typcn typcn-arrow-left'>String, the String that you want to display on the connected computer.</li>
             </ul>
-            <div role='region' aria-label='Note' class='confluence-information-macro  confluence-information-macro-note'>
+        </div>
+        <div id='mbedActions_play_tone' class='help expert'><h3
+            id='Blockdescriptionmicro:bitV2-»playfrequencyHz...durationms...«[Expert-block]'>»play frequency Hz ... duration ms ...« <span
+            class='typcn typcn-star'></span></h3>
+            <p>With this block you can program the frequency (pitch of a tone) and the time (how long the tone is played). The sound is played through the built-in speaker of the
+                <span style='color:var(--ds-text,#333333);'>Joy-Car </span>chassis until the set duration is reached.</p>
+            <div role='region' aria-label='Info' class='confluence-information-macro  confluence-information-macro-information'>
                 <div class='confluence-information-macro-body'>
-                    <p>If your robot turns into the wrong direction, then the motors are connected to the wrong ports. Just swap the ports and your robot will turn into the right way.</p>
+                    <p>Please note that human hearing can perceive frequencies between about 30 Hz to about 15,000 Hz (15 kHz) - depending on the person and age, this may vary.</p>
                 </div>
             </div>
-            <br></div>
-        <div id='actions_motor_on_for_txt4' class='help expert'><br>
-            <h3 id='BlockdescriptionTXT4.0Controller-»motorport...onspeed%...forrotation/degree...«[Expertblock]'><span
-                style='color:var(--ds-text,#333333);'>»motor port ... on speed % ... for rotation/degree ...</span><span style='color:var(--ds-text,#333333);'>« <span
-                class='typcn typcn-star'></span></span></h3>
-            <p>With the »motor port ... rotation« block you can program the speed (velocity) of the selected motor. Your robot starts the selected motor and rotates the motor until the specified number of rotations or degrees is done. </p>
-            <p>Options and Arguments:
+            <p><span>Input values:</span>
             </p>
             <ul style='margin-top: 0; margin-bottom: 10px'>
-                <li class='typcn typcn-arrow-sorted-down'>motor port, choose the one where the motor that you want to program is connected to.</li>
-                <li class='typcn typcn-arrow-left'>number, spped between -100 and 100. 100 is the maximum speed. Negative values lets the motor rotate into the other direction. This value will be internally clipped to be between -100 and 100.</li>
-                <li class='typcn typcn-arrow-sorted-down'>rotation or degree. Choose the one which fits best. 1 rotation is the same than 360 degrees.</li>
-                <li class='typcn typcn-arrow-left'>number, rotations or degrees, only positive numbers are allowed.</li>
-            </ul>
-            <br></div>
-        <div id='actions_motor_on_txt4' class='help expert'><br>
-            <h3 id='BlockdescriptionTXT4.0Controller-»motorport...onspeed%...«[Expertblock]'><span
-                style='color:var(--ds-text,#333333);'>»motor port ... on speed % ...</span><span style='color:var(--ds-text,#333333);'>« <span
-                class='typcn typcn-star'></span></span></h3>
-            <p>With the »motor port ... on« block you can program the speed (velocity) of the selected motor. Your robot starts the selected motor, until it is stopped or another block specifies new moving parameters.</p>
-            <p>Options and Arguments:
-            </p>
-            <ul style='margin-top: 0; margin-bottom: 10px'>
-                <li class='typcn typcn-arrow-sorted-down'>motor port, choose the port where the motor is connected to.</li>
-                <li class='typcn typcn-arrow-left'>value, speed between -100 to 100. Negative values let the motor turn backwards. This value will be internally clipped to be between -100 and 100.</li>
-            </ul>
-            <br></div>
-        <div id='actions_motor_stop_txt4' class='help expert'><h3 id='BlockdescriptionTXT4.0Controller-»stopmotorport«[Expertblock]'><span
-            style='color:var(--ds-text,#333333);'>»stop motor port</span><span style='color:var(--ds-text,#333333);'>« <span class='typcn typcn-star'></span></span>
-        </h3>
-            <p>Using the block »s<span>top motor port</span><span> </span>« switches off one selected motor. You can decide the motor to run out slowly (float) or to break immediately
-            </p>
-            <p>Setting options:
-            </p>
-            <ul style='margin-top: 0; margin-bottom: 10px'>
-                <li class='typcn typcn-arrow-sorted-down'>motor port, <span>choose the port where the motor is connected to.</span></li>
-                <li class='typcn typcn-arrow-sorted-down'>float or brake; make your choice.</li>
+                <li class='typcn typcn-arrow-left'>Number, desired frequency in Hz (Hertz).</li>
+                <li class='typcn typcn-arrow-left'>Number, desired duration in milliseconds (ms).</li>
             </ul>
         </div>
-        <div id='robActions_servo_on_for_txt4' class='help expert'><h3
-            id='BlockdescriptionTXT4.0Controller-»setservomotorSG90...to°...«[Expert-block]'>»set servo motor SG90 ... to° ...« <span class='typcn typcn-star'></span>
-        </h3>
-            <p>This block controls the servo motors on your Robot. Choose what servo you want to actuate, and to what degree it should move.</p>
+        <div id='mbedActions_play_note' class='help beginner'><h3 id='Blockdescriptionmicro:bitV2-»play...note...«'>»play ... note ...«</h3>
+            <p>With this block you make your robot play a whole, half, quarter, eighth or sixteenth note.</p>
             <p>Options:
             </p>
             <ul style='margin-top: 0; margin-bottom: 10px'>
-                <li class='typcn typcn-arrow-sorted-down'>Servo port, which servo you want to actuate.</li>
-                <li class='normalBullet'>Number, to what angle you want to set your servo.</li>
+                <li class='typcn typcn-arrow-sorted-down'>Note length; select the length of the note that is going to be played.</li>
+                <li class='typcn typcn-arrow-left'>Note pitch; select the note that is going to be played.</li>
             </ul>
         </div>
-        <div id='actions_display_text_txt4' class='help beginner'><br>
-            <h3 id='BlockdescriptionTXT4.0Controller-»showtext...inrow...«'>»show text ... in row ...«</h3>
-            <p>With the »show text« block you can display text and numbers on the display of your robot. You can also specify in which column and row the text or numbers should be displayed on the robot screen.</p>
-            <p>Input values:
-            </p>
-            <ul style='margin-top: 0; margin-bottom: 10px'>
-                <li class='typcn typcn-arrow-left'>String, input of a text string to be shown in the display.</li>
-                <li class='typcn typcn-arrow-left'>Number, row for the text to start between 0 and 7.</li>
-            </ul>
-            <br></div>
-        <div id='robActions_display_clear' class='help beginner'><h3 id='BlockdescriptionTXT4.0Controller-»cleardisplay«'>»clear display«</h3>
-            <p>With this <span style='color:var(--ds-text-accent-blue,#0055cc);'><span
-                style='color:var(--ds-text,#333333);'>block, you can delete what is shown on the display</span></span>.</p></div>
-        <div id='robActions_serial_print' class='help expert'><h3 id='BlockdescriptionTXT4.0Controller-»showonSerialMonitor«[Expert-block]'>»show on Serial Monitor«
-            <span class='typcn typcn-star'></span></h3>
-            <p><span>With this block you can display text on a Serial Monitor through USB.</span></p>
-            <p>Input value:
-            </p>
-            <ul style='margin-top: 0; margin-bottom: 10px'>
-                <li class='typcn typcn-arrow-sorted-down'>String, the text or numbers that should be displayed on the Serial Monitor.</li>
-            </ul>
-        </div>
-        <div id='actions_play_file_txt4' class='help expert'><h3 style='text-align: left;'
-            id='BlockdescriptionTXT4.0Controller-»playfile...«[ExpertBlock]'>»play file ...« <span class='typcn typcn-star'></span></h3>
-            <p>With this block you can make the robot play a sound of your choice.</p>
-            <p>Options:
-            </p>
-            <ul style='margin-top: 0; margin-bottom: 10px'>
-                <li class='typcn typcn-arrow-sorted-down'>option, choose which Sound file you want to play.</li>
-            </ul>
-            <br></div>
-        <div id='actions_display_rgbLed_hidden_on_txt4' class='help beginner'><h3
-            id='BlockdescriptionTXT4.0Controller-»turnLEDondisplaycolour...«'>» turn LED on display colour ...«</h3>
-            <p>With this block you can turn on the LED on your robot's display to a certain colour.</p></div>
-        <div id='actions_display_rgbLed_hidden_off_txt4' class='help beginner'><h3
-            id='BlockdescriptionTXT4.0Controller-»turnLEDoffdisplay«'>»turn LED off display«</h3>
-            <p>With this block you can turn off the LED on your robot's display.</p></div>
-        <div id='actions_led_set_brightness' class='help expert'><h3
-            id='BlockdescriptionTXT4.0Controller-»setLEDbrightness%...«[Expertblock]'>»set LED brightness % ...« <span class='typcn typcn-star'></span></h3>
-            <p>Set the brightness of the robot's LED to a value from 0 to 100.</p>
-            <p>Settings:
-            </p>
-            <ul style='margin-top: 0; margin-bottom: 10px'>
-                <li class='typcn typcn-arrow-sorted-down'>Number, set the brightness with a Number from 0 to 100.</li>
-            </ul>
-        </div>
-        <div id='robSensors_key_getSample' class='help beginner'><h3 style='text-align: left;'
-            id='BlockdescriptionTXT4.0Controller-»displaybutton...pressed?«'>»display button ... pressed?«</h3>
-            <p>With this Block you can query one of the display buttons of your Robot, if it is currently being pressed.</p>
-            <p>Options:
-            </p>
-            <ul style='margin-top: 0; margin-bottom: 10px'>
-                <li class='typcn typcn-arrow-sorted-down'><span>Button, select which Button you want to query.</span></li>
-            </ul>
-            <p class='auto-cursor-target'>Return value:
-            </p>
-            <ul style='margin-top: 0; margin-bottom: 10px'>
-                <li class='typcn typcn-arrow-right'><span>Truth value, »True«, if the Button is pressed, else »False«.</span></li>
-            </ul>
-        </div>
-        <div id='robSensors_ultrasonic_getSample' class='help beginner'><h3
-            id='BlockdescriptionTXT4.0Controller-»getdistancecmultrasonicsensor...«'>»get distance cm ultrasonic sensor ...«</h3>
-            <p>With this Block you can query an ultrasonic sensor. This sensor measures the distance to the closest object, by sending ultrasonic waves and capturing reflections to calculate distance to objects.</p>
-            <p>Options:
-            </p>
-            <ul style='margin-top: 0; margin-bottom: 10px'>
-                <li class='typcn typcn-arrow-sorted-down'><span>Sensor, select which Ultrasonic sensor you want to query.</span></li>
-            </ul>
-            <p class='auto-cursor-target'>Return value:
-            </p>
-            <ul style='margin-top: 0; margin-bottom: 10px'>
-                <li class='typcn typcn-arrow-right'><span>Value, the distance to the nearest object in Centimeters.</span></li>
-            </ul>
-        </div>
-        <div id='robSensors_infrared_getSample' class='help beginner'><h3
-            id='BlockdescriptionTXT4.0Controller-»getlineinfraredsensor...«'>»get line infrared sensor ...«</h3>
-            <p>With this block you can use the infrared sensors of your robot to detect a line. A light area of the line is read as "0", a dark area is read as "1".</p>
-            <p>Options:
-            </p>
-            <ul style='margin-top: 0; margin-bottom: 10px'>
-                <li class='typcn typcn-arrow-sorted-down'><span>Sensor, choose which sensor you would like to use.</span></li>
-            </ul>
-            <p class='auto-cursor-target'>Returned Values:
-            </p>
-            <ul style='margin-top: 0; margin-bottom: 10px'>
-                <li class='typcn typcn-arrow-right'>Truth value, "true" if the sensor is above a black line, "false" otherwise.</li>
-            </ul>
-        </div>
-        <div id='robSensors_encoder_getSample' class='help beginner'><h3
-            id='BlockdescriptionTXT4.0Controller-»getrotation/degreeencoder...«'>»get rotation/degree encoder ...«</h3>
-            <p>With the block »get rotation/degree« you can "tell" another block the rotation of the motor. The distance is transmitted as a number (in cm). In addition, this block can be set to »degree« in the drop down menu. With this setting the number of degrees is transmitted instead of cm. This block can only be used in conjunction with another block, which requires a number as an input parameter.</p>
-            <p>Settings:
-            </p>
-            <ul style='margin-top: 0; margin-bottom: 10px'>
-                <li class='typcn typcn-arrow-sorted-down'>Measurement mode, »rotation«, »degree« or»distance«. Select your mode of measurement.</li>
-                <li class='typcn typcn-arrow-sorted-down'>Encoder port, select the sensor port where your motor/encoder is connected.</li>
-            </ul>
-            <br>
-            <p>Return value:
-            </p>
-            <ul style='margin-top: 0; margin-bottom: 10px'>
-                <li class='typcn typcn-arrow-right'>Number, that indicates according to the measurement mode the number of rotations, the degrees, or the distance in cm.</li>
-            </ul>
-        </div>
-        <div id='robSensors_encoder_reset_txt4' class='help beginner'><h3 id='BlockdescriptionTXT4.0Controller-»resetencoder«'>»reset encoder«</h3>
-            <p>With the block »reset encoder« the internal sensor (motor encoder) of a motor can be reset to 0 .</p>
-            <p>Setting:
-            </p>
-            <ul style='margin-top: 0; margin-bottom: 10px'>
-                <li class='typcn typcn-arrow-sorted-down'>Port, select the sensor port where your motor is connected.</li>
-            </ul>
-        </div>
-        <div id='robSensors_timer_getSample' class='help beginner'><h3 id='BlockdescriptionTXT4.0Controller-»getvaluemstimer«'>»get value ms timer«</h3>
-            <p>With the block »get value« you can "tell" another block the current time in milliseconds of the internal timer. 5 timers are available.</p>
-            <p>Setting:
-            </p>
-            <ul style='margin-top: 0; margin-bottom: 10px'>
-                <li class='typcn typcn-arrow-sorted-down'>Option, select the timer you want to read.</li>
-            </ul>
-            <br>
-            <p>Return value:
-            </p>
-            <ul style='margin-top: 0; margin-bottom: 10px'>
-                <li class='typcn typcn-arrow-right'>Number, milliseconds since program start or since the last reset of the selected timer.</li>
-            </ul>
-        </div>
-        <div id='robSensors_timer_reset' class='help beginner'><h3 id='BlockdescriptionTXT4.0Controller-»resettimer«'>»reset timer«</h3>
-            <p>With the block »reset timer« the internal timer (1 to 5) can be reset to the value 0.</p>
-            <p>Setting:
-            </p>
-            <ul style='margin-top: 0; margin-bottom: 10px'>
-                <li class='typcn typcn-arrow-sorted-down'>Timer number, select the timer you want to reset.</li>
-            </ul>
-        </div>
-        <div id='robSensors_key_getSample' class='help expert'><h3 id='BlockdescriptionTXT4.0Controller-»Mini-Switch...pressed?«[Expertblock]'><span
-            style='color:var(--ds-text,#333333);'>»Mini-Switch ... pressed?</span><span style='color:var(--ds-text,#333333);'>« <span class='typcn typcn-star'></span></span>
-        </h3>
-            <p>With the block »Mini-Switch ... pressed?« you can "tell" another block, whether the switch at a chosen port is currently being triggered or not.
-            </p>
-            <ul style='margin-top: 0; margin-bottom: 10px'>
-                <li class='typcn typcn-arrow-left'>Port, which Switch shall be checked</li>
-            </ul>
-            <ul style='margin-top: 0; margin-bottom: 10px'>
-                <li class='typcn typcn-arrow-right'>Truth value, »true«, if the switch is being triggered, »false«, if it is not being triggered</li>
-            </ul>
-        </div>
-        <div id='robSensors_light_getSample' class='help expert'><h3
-            id='BlockdescriptionTXT4.0Controller-»getvalue%lightsensor«[ExpertBlock]'>»get value % light sensor« <span class='typcn typcn-star'></span></h3>
-            <p>The »get value % light sensor« block can be used to tell another block how bright the light is that hits the robot's light sensor.</p>
-            <p>Return value:
-            </p>
-            <ul style='margin-top: 0; margin-bottom: 10px'>
-                <li class='typcn typcn-arrow-right'>Number, percentage of light intensity as a number from 0-100</li>
-            </ul>
-        </div>
-        <div id='robSensors_phototransistor_getSample' class='help expert'><h3
-            id='BlockdescriptionTXT4.0Controller-»getlightphototransistor«[Expertblock]'>»get light phototransistor« <span class='typcn typcn-star'></span></h3>
-            <p><span class='--l --r sentence_highlight'>This block uses the phototransistor that can be connected to the robot to tell another block whether it is bright. <br><br></span><span
-                class='--l --r sentence_highlight'>Return value:</span>
-            </p>
-            <ul style='margin-top: 0; margin-bottom: 10px'>
-                <li class='typcn typcn-arrow-right'><span class='--l --r sentence_highlight'>Truth value, whether it is bright or not</span></li>
-            </ul>
-        </div>
-        <div id='robSensors_temperature_getSample' class='help expert'><h3
-            id='BlockdescriptionTXT4.0Controller-»gettemperature°/resistanceΩ«[Expertblock]'>»get temperature ° <span><span>/</span><span> resistance </span></span>Ω «
-            <span class='typcn typcn-star'></span></h3>
-            <p><span class='--l --r sentence_highlight'>The NTC resistor contains a thermistor. </span><span
-                class='--l --r sentence_highlight'>This is characterised by the fact that it conducts electricity better at higher temperatures than at lower temperatures. </span><span
-                class='--l --r sentence_highlight'>The robot can therefore also calculate the temperature from the measured resistance. </span><span
-                class='--l --r sentence_highlight'>Both values can be returned with this block.</span></p>
-            <p>Return value:
-            </p>
-            <ul style='margin-top: 0; margin-bottom: 10px'>
-                <li class='typcn typcn-arrow-right'><span class='--l --r sentence_highlight'>Number, temperature in ºC or resistance in Ω</span></li>
-            </ul>
-        </div>
-        <div id='robSensors_environmental_getSample' class='help expert'><h3
-            id='BlockdescriptionTXT4.0Controller-»get...environmentalsensor«[ExpertBlock]'>»get ... environmental sensor« <span class='typcn typcn-star'></span>
-        </h3>With the block »get ... environmental sensor« block can be used to communicate a specific measured value of the environmental sensor to a block. The environmental sensor has various functions. It can measure the temperature, humidity, air pressure and indoor air quality.<br>
-            <p>Rückgabewert:
-            </p>
-            <ul style='margin-top: 0; margin-bottom: 10px'>
-                <li class='typcn typcn-arrow-right'>Temperature, number from -45° to 80° Celsius</li>
-                <li class='typcn typcn-arrow-right'>Humidity, number as a percentage of the humidity as a number from 0-100</li>
-                <li class='typcn typcn-arrow-right'>Air pressure, number indicates air pressure in hpa</li>
-                <li class='typcn typcn-arrow-right'>Indoor air quality, number indicates IAQ value of the air</li>
-                <li class='typcn typcn-arrow-right'>Accuracy, number indicates the accuracy of the sensor in per cent</li>
-                <li class='typcn typcn-arrow-right'>Calibration required, truth value outputs "true" if calibration of the sensor is required and "false" if not</li>
-            </ul>
-        </div>
-        <div id='robSensors_environmental_calibrate' class='help expert'><h3
-            id='BlockdescriptionTXT4.0Controller-»calibrateenvironmentalsensor«[ExpertBlock]'>»calibrate environmental sensor« <span class='typcn typcn-star'></span>
-        </h3>
-            <p>The »calibrate environmental sensor« block can be used to recalibrate the environmental sensor. This is necessary at the beginning and if it delivers inaccurate measured values. Calibration takes about 5 minutes.</p>
-        </div>
-        <div id='robSensors_gesture_getSample' class='help expert'><h3
-            id='BlockdescriptionTXT4.0Controller-»get...RGBgesturesensor«[ExpertBlock]'>»get ... RGB gesture sensor« <span class='typcn typcn-star'></span>
-        </h3>With the block »get ... RGB gesture sensor« can be used to communicate various return values of the RGB gesture sensor to another block. The sensor detects colour, ambient light, gesture, proximity and RGB.<br>
-            <p>Return value:
-            </p>
-            <ul style='margin-top: 0; margin-bottom: 10px'>
-                <li class='typcn typcn-arrow-right'>Colour, returns detected colour as colour type</li>
-                <li class='typcn typcn-arrow-right'>Ambient light, returns the strength of the ambient light as a number from 0-100</li>
-                <li class='typcn typcn-arrow-right'>Gesture, number encodes one of 6 possible recognisable gestures</li>
-                <li class='typcn typcn-arrow-right'>Proximity, returns the proximity of the object in front of the sensor as a number</li>
-                <li class='typcn typcn-arrow-right'>RGB, returns the RGB values of the object in front of the sensor as a list</li>
-            </ul>
-        </div>
-        <div id='robSensors_accelerometer_getSample' class='help expert'><h3
-            id='BlockdescriptionTXT4.0Controller-»getaccelerationgCombi-sensor...«[ExpertBlock]'>»get acceleration g Combi-sensor ...« <span
+        <div id='actions_play_file' class='help expert'><h3 id='Blockdescriptionmicro:bitV2-»playfile...«[Expert-block]'>»play file ...« <span
             class='typcn typcn-star'></span></h3>
-            <p>The »get acceleration g Combi-sensor« block can be used to tell another block how fast the robot equipped with the combi sensor is accelerating.</p>
-            <p>Input value:
+            <p>With this block you make your robot play a predefined sound file.</p>
+            <p>Options:
             </p>
             <ul style='margin-top: 0; margin-bottom: 10px'>
-                <li class='typcn typcn-arrow-left'>x, y, z, -direction, in which acceleration shall be measured</li>
+                <li class='typcn typcn-arrow-sorted-down'>File; select the file that will be played.</li>
+            </ul>
+        </div>
+        <div id='actions_play_expression' class='help expert'><h3 style='text-align: left;'
+            id='Blockdescriptionmicro:bitV2-»PlaySound...«[Experten-Block]'>»Play Sound ...« <span class='typcn typcn-star'></span></h3>
+            <p>With this block, you can let your robot play a predefined sound.</p>
+            <p>Options:
+            </p>
+            <ul style='margin-top: 0; margin-bottom: 10px'>
+                <br>
+                <li class='typcn typcn-arrow-sorted-down'>Sound; select the sound that will be played.</li>
+            </ul>
+        </div>
+        <div id='robActions_play_setVolume' class='help expert'><h3 id='Blockdescriptionmicro:bitV2-»setvolume%...«[Expert-block]'>»set volume % ...« <span
+            class='typcn typcn-star'></span></h3>
+            <p>With this block you can set the volume of your robots speaker.</p>
+            <p>Options:
+            </p>
+            <ul style='margin-top: 0; margin-bottom: 10px'>
+                <li class='typcn typcn-arrow-sorted-down'>Integer, from 0-100 as a percent of volume played.</li>
+            </ul>
+        </div>
+        <div id='mbedActions_write_to_pin' class='help expert'><h3 id='Blockdescriptionmicro:bitV2-»Write...valuetopin...«[Expert-block]'>»Write ... value to pin ... «
+            <span class='typcn typcn-star'></span></h3>
+            <p>With this block you can output either a digital or analog value on one of the pins of your micro:bit.</p>
+            <p>Options and input values:
+            </p>
+            <ul style='margin-top: 0; margin-bottom: 10px'>
+                <li class='typcn typcn-arrow-sorted-down'>Option, select whether you want to output a »digital« or »analog« value on your pin. »Digital« means either 0 or 1, »analog« means a number between 0 and 1023, i.e. a percentage of the total voltage of 3,3,V.</li>
+                <li class='typcn typcn-arrow-sorted-down'>Option, pin on which you want to output this value. Note that not all pins can output an "analog" value.</li>
+                <li class='typcn typcn-arrow-left'>Number, the value that you want to write to the pin. With »digital« this means either 0 or 1 and with »analog« this means a number between 0 and 1023. This value will be internally clipped to be between 0 and 1023.</li>
+            </ul>
+        </div>
+        <div id='mbedActions_switch_led_matrix' class='help expert'><h3 id='Blockdescriptionmicro:bitV2-»switchLEDmatrix...«[Expert-block]'>»switch LED matrix ...«
+            <span class='typcn typcn-star'></span></h3>
+            <p>With this block you can turn your LED matrix on and off.</p>
+            <p>Options:
+            </p>
+            <ul style='margin-top: 0; margin-bottom: 10px'>
+                <li class='typcn typcn-arrow-sorted-down'>List; should your LED matrix be on or off.</li>
+            </ul>
+        </div>
+        <div id='robSensors_key_getSample' class='help beginner'><h3 id='Blockdescriptionmicro:bitV2-»Button..pressed?«'>»Button .. pressed?«</h3>
+            <p>With this button you can check whether a button is currently being pressed.</p>
+            <p>Options:
+            </p>
+            <ul style='margin-top: 0; margin-bottom: 10px'>
+                <li class='typcn typcn-arrow-sorted-down'>option, the button that you want to check.</li>
             </ul>
             <p class='auto-cursor-target'>Return value:
             </p>
             <ul style='margin-top: 0; margin-bottom: 10px'>
-                <li class='typcn typcn-arrow-right'>Number, acceleration in g</li>
+                <li class='typcn typcn-arrow-right'>boolean, »true« if the button is being pressed, otherwise »false«</li>
             </ul>
         </div>
-        <div id='robSensors_compass_getSample' class='help expert'><h3
-            id='BlockdescriptionTXT4.0Controller-»getmagneticflux°Combi-sensor«[ExpertBlock]'>»get magnetic flux ° Combi-sensor« <span class='typcn typcn-star'></span>
-        </h3>
-            <p>The »get magnetic flux ° Combi-sensor« block can be used to determine the direction in which the robot is turned using the earth's magnetic field. </p>
+        <div id='robSensors_gesture_getSample' class='help beginner'><h3 id='Blockdescriptionmicro:bitV2-»Get...gesture«'>»Get ... gesture «</h3>
+            <p>With this block you can check whether your micro.bit is in a certain position or certain gesture is being done.</p>
+            <p>Options:
+            </p>
+            <ul style='margin-top: 0; margin-bottom: 10px'>
+                <li class='typcn typcn-arrow-sorted-down'>option, gesture or position that you want to check for.</li>
+            </ul>
+            <p class='auto-cursor-target'>Return value:
+            </p>
+            <ul style='margin-top: 0; margin-bottom: 10px'>
+                <li class='typcn typcn-arrow-right'>boolean, »true« if the micro:bit is in that position, »false« otherwise.</li>
+            </ul>
+        </div>
+        <div id='robSensors_compass_getSample' class='help beginner'><h3 id='Blockdescriptionmicro:bitV2-»getangle°compasssensor«'>»get angle ° compass sensor «</h3>
+            <p>With this block you can check the compass sensor of your micro:bits. This sensor can measure the angle by which your micro.bit has rotated.</p>
             <p>Return value:
             </p>
             <ul style='margin-top: 0; margin-bottom: 10px'>
-                <li class='typcn typcn-arrow-right'>Number, cardinal point as a degree</li>
+                <li class='typcn typcn-arrow-right'>number, angle by which your micro.bit has rotated. This value can be any number between 0 and 360 for a full rotation.</li>
             </ul>
         </div>
-        <div id='robSensors_gyro_getSample' class='help expert'><h3
-            id='BlockdescriptionTXT4.0Controller-»getgyroscope°Combi-sensor...«[ExpertBlock]'>»get gyroscope ° Combi-sensor ...« <span class='typcn typcn-star'></span>
-        </h3>
-            <p>The »get gyroscope ° Combi-sensor« block can be used to tell another block via the combination sensor how fast the robot is turning in a certain direction. The measured axis (x,y,z) must be specified.</p>
-            <p>Input value:
+        <div id='robSensors_timer_getSample' class='help beginner'><h3 id='Blockdescriptionmicro:bitV2-»getvaluetimer...«'>»get value timer ... «</h3>
+            <p>With this block you can query the value of a timer. The first timer is started automatically at the start of the program, all other timers have to be set first with the "Set timer ..." button. back " can be started.</p>
+            <p>Options:
             </p>
             <ul style='margin-top: 0; margin-bottom: 10px'>
-                <li class='typcn typcn-arrow-left'>x, y, z, Direction in which speed shall be measured</li>
+                <li class='typcn typcn-arrow-sorted-down'>option, choose the timer you want to check.</li>
             </ul>
-            Return value:<br>
+            <p class='auto-cursor-target'>Return value:
+            </p>
             <ul style='margin-top: 0; margin-bottom: 10px'>
-                <li class='typcn typcn-arrow-right'>Number, rotational speed in degrees</li>
+                <li class='typcn typcn-arrow-right'>number, time since the start or the last reset of the timer in millesconds.</li>
+            </ul>
+        </div>
+        <div id='mbedSensors_timer_reset' class='help beginner'><h3 id='Blockdescriptionmicro:bitV2-»resettimer...«'>»reset timer ... «</h3>
+            <p>With this block you can reset the timer of your micro:bit.</p></div>
+        <div id='robSensors_temperature_getSample' class='help beginner'><br>
+            <h3 id='Blockdescriptionmicro:bitV2-»getvalue°temperaturesensor«'>»get value ° temperature sensor «</h3>
+            <p>With this block you can check the temperature sensor for the ambient temperature.</p>
+            <p>Return value:
+            </p>
+            <ul style='margin-top: 0; margin-bottom: 10px'>
+                <li class='typcn typcn-arrow-right'>number, ambient temperature in degrees Celsius.</li>
+            </ul>
+        </div>
+        <div id='robSensors_pintouch_getSample' class='help beginner'><h3 id='Blockdescriptionmicro:bitV2-»pin..pressed?«'>»pin .. pressed? «</h3>
+            <p>With this block you can check whether the chosen pin is pressed by a person. But be aware that not all pins can check whether they are being pressed.</p>
+            <p>Options:
+            </p>
+            <ul style='margin-top: 0; margin-bottom: 10px'>
+                <li class='typcn typcn-arrow-sorted-down'>option, pin that you want to check.</li>
+            </ul>
+            <p class='auto-cursor-target'>Return value:
+            </p>
+            <ul style='margin-top: 0; margin-bottom: 10px'>
+                <li class='typcn typcn-arrow-right'>boolena, »true« if the pin is pressed, »false« otherwise.</li>
+            </ul>
+        </div>
+        <div id='robSensors_pin_getSample' class='help expert'><h3 id='Blockdescriptionmicro:bitV2-»get...valuepin...«[Expert-block]'>»get ... value pin ... « <span
+            class='typcn typcn-star'></span></h3>
+            <p>With this block you can read a value at one of the pins of the micro:bit. This value can be either »digital«, meaning 1 or 0, or the value can be »analog«, meaning between 0 and 1. You can also measure the time how long either a high, »pulse time HIGH«, or a low, »pulse time LOW«, was registered at the pin.</p>
+            <p>Options:
+            </p>
+            <ul style='margin-top: 0; margin-bottom: 10px'>
+                <li class='typcn typcn-arrow-sorted-down'>option, choose the type of value or which pulse time you want to check.</li>
+                <li class='typcn typcn-arrow-sorted-down'>option, select the pin you want to measure against. Note that not all pins can measure an analog value. You can see which pin can measure an analog value by selecting the analog value and then clicking on the list of pins.</li>
+            </ul>
+            <p class='auto-cursor-target'>Return value:
+            </p>
+            <ul style='margin-top: 0; margin-bottom: 10px'>
+                <li class='typcn typcn-arrow-right'>number, value measured. With a digital value this number is either 0 or 1, with an analog value this number is between 0 and 1 and with a pulse time it is the measured time in milliseconds.</li>
+            </ul>
+        </div>
+        <div id='robSensors_accelerometer_getSample' class='help beginner'><h3
+            id='Blockdescriptionmicro:bitV2-»getvaluemilli-gaccelerometer...«'>»get value milli-g accelerometer ... «</h3>
+            <p>With this sensor you can measure an acceleration that acts on your micro:bit. An acceleration is always expressed by an acting force. For example, if you push your micro:bit in one direction, you exert a force on it and thus an acceleration. The sensor can measure this acceleration and its value is measured in units of acceleration due to gravity. The following applies: 1000 milli-g = 1 g = 9.81 m/s²</p>
+            <p>Options:
+            </p>
+            <ul style='margin-top: 0; margin-bottom: 10px'>
+                <li class='typcn typcn-arrow-sorted-down'>option, direction in which you want to measure an acceleration. x is the left-right direction, y the front-back direction and z the top-down direction. »strength« is moreover the total measured acceleration of all axes together.</li>
+            </ul>
+            <p class='auto-cursor-target'>Return value:
+            </p>
+            <ul style='margin-top: 0; margin-bottom: 10px'>
+                <li class='typcn typcn-arrow-right'>number, measured acceleration as milli-g, i.e. as one thousandth of the acceleration due to gravity.</li>
+            </ul>
+        </div>
+        <div id='robSensors_light_getSample' class='help beginner'><h3 class='auto-cursor-target'
+            id='Blockdescriptionmicro:bitV2-»getvalue%lightsensor«'>»get value % light sensor«</h3>
+            <p>With this block you can query the value of your light sensor.</p>
+            <p>Return value:
+            </p>
+            <ul style='margin-top: 0; margin-bottom: 10px'>
+                <li class='typcn typcn-arrow-right'>Number, relative brightness of the robots surroundings.</li>
             </ul>
             <br></div>
-        <div id='robSensors_colour_getSample' class='help expert'><h3 id='BlockdescriptionTXT4.0Controller-»getcolourcolourdetector«[Expertblock]'><span
-            style='color:var(--ds-text,#333333);'>»get colour colour detector</span><span style='color:var(--ds-text,#333333);'>« <span
-            class='typcn typcn-star'></span></span></h3>
-            <p>With the block »get colour colour detector« you can "tell" another block the average colour of an area previously specified in the configurations.</p>
-            <p>Return value:
-            </p>
-            <ul style='margin-top: 0; margin-bottom: 10px'>
-                <li class='typcn typcn-arrow-right'>Colour, the average colour of the specified area.</li>
-            </ul>
-        </div>
-        <div id='robSensors_cameraline_getSample' class='help expert'><h3 id='BlockdescriptionTXT4.0Controller-»getnumberoflineslinedetector«[Expertblock]'><span
-            style='color:var(--ds-text,#333333);'>»get number of lines line detector</span><span style='color:var(--ds-text,#333333);'>« <span
-            class='typcn typcn-star'></span></span></h3>
-            <p>With the block »get number of lines detector« you can "tell" another block the number of lines recognised using the camera. The robot can recognise up to 4 different lines.</p>
-            <p>Return value:
-            </p>
-            <ul style='margin-top: 0; margin-bottom: 10px'>
-                <li class='typcn typcn-arrow-right'>Number, number of lines recognised by the robot (up to 4)</li>
-            </ul>
-        </div>
-        <div id='robSensors_get_line_camera_txt4' class='help expert'><h3 id='BlockdescriptionTXT4.0Controller-»getinformationbyline#«[Expertblock]'><span
-            style='color:var(--ds-text,#333333);'>»get information by line #</span><span style='color:var(--ds-text,#333333);'>« <span class='typcn typcn-star'></span></span>
-        </h3>
-            <p>With the block »get information by line #« you can "tell" another block the position of a chosen line as well as its' width. The up to 4 recognised lines are indexed by the numbers 0-3.</p>
-            <p>You have to keep in mind, that the first line is indexed by "0" and the last by "3".</p>
-            <p>Input value:
-            </p>
-            <ul style='margin-top: 0; margin-bottom: 10px'>
-                <li class='typcn typcn-arrow-left'>Number, index of the line of which the position, as well as the width, shall be returned</li>
-            </ul>
-            Return value:
-            <ul style='margin-top: 0; margin-bottom: 10px'>
-                <li class='typcn typcn-arrow-right'>List: position [x,y] and width of the line at the specific index</li>
-            </ul>
-        </div>
-        <div id='robSensors_get_line_colour_camera_txt4' class='help expert'><h3 id='BlockdescriptionTXT4.0Controller-»getcolourbyline#«[Expertblock]'><span
-            style='color:var(--ds-text,#333333);'>»get colour by line #</span><span style='color:var(--ds-text,#333333);'>« <span
-            class='typcn typcn-star'></span></span></h3>
-            <p>With the block »get colour by line #« you can "tell" another block the colour of a chosen line.The up to 4 recognised lines are indexed by the numbers 0-3.</p>
-            <p>You have to keep in mind, that the first line is indexed by "0" and the last by "3".</p>
-            <p>Input value:
-            </p>
-            <ul style='margin-top: 0; margin-bottom: 10px'>
-                <li class='typcn typcn-arrow-left'>Number, index of the line (0-3) of which the colour shall be returned</li>
-            </ul>
-            Return value:
-            <ul style='margin-top: 0; margin-bottom: 10px'>
-                <li class='typcn typcn-arrow-right'>Colour, colour of the chosen line</li>
-            </ul>
-        </div>
-        <div id='robSensors_ball_getSample' class='help expert'><h3 id='BlockdescriptionTXT4.0Controller-»getballinformation«[Expertblock]'><span
-            style='color:var(--ds-text,#333333);'>»get ball information</span><span style='color:var(--ds-text,#333333);'>« <span
-            class='typcn typcn-star'></span></span></h3>
-            <p>With the block »get ball information« you can "tell" another block the position of a ball in the robot's field of vision, as well as its' width</p>
-            <p>In order to recognise a ball, you need to specify the ball's colour in the configurations.</p>
-            <p>Return value:
-            </p>
-            <ul style='margin-top: 0; margin-bottom: 10px'>
-                <li class='typcn typcn-arrow-right'>List, position of the ball [x,y], as well as its' width</li>
-            </ul>
-        </div>
-        <div id='robSensors_motion_getSample' class='help expert'><h3 id='BlockdescriptionTXT4.0Controller-»getmotionmotiondetector«[Expertblock]'><span
-            style='color:var(--ds-text,#333333);'>»get motion motion detector</span><span style='color:var(--ds-text,#333333);'>« <span
-            class='typcn typcn-star'></span></span></h3>
-            <p>With the block »get motion motion detector« you can "tell" another bock, whether the camera detects motion or not.</p>
-            <p>Return value:
-            </p>
-            <ul style='margin-top: 0; margin-bottom: 10px'>
-                <li class='typcn typcn-arrow-right'>Truth value, »true«, if a motion is detected, »false«, if no motion is detected</li>
-            </ul>
-        </div>
-        <div id='robControls_if' class='help beginner'><h3 id='BlockdescriptionTXT4.0Controller-»ifdo«'>»if do«<strong><br></strong></h3>
+        <div id='robControls_if' class='help beginner'><h3 id='Blockdescriptionmicro:bitV2-»ifdo«'>»if do«<strong><br></strong></h3>
             <p>With the block »if do« you can selectively trigger actions to be executed by your robot. The »if do« block therefore requires a logical value as an input parameter, the condition. Only if the condition of the »if« statement is true, the inserted block will be executed. In a nested »if do« block, if a further distinction was added, the first »if« condition is queried. If it is not fulfilled (condition = false), the second »else if« condition will be checked. Also this second condition requires a logical value as an input parameter.</p>
             <p>The conditions may arbitrarily be expanded by clicking the "+" plus symbol. The "-" minus symbol reduces the block.</p>
             <p>Settings and input values:
@@ -483,7 +272,7 @@
                 <li class='typcn typcn-arrow-left'>Blocks that will be executed</li>
             </ul>
         </div>
-        <div id='robControls_ifElse' class='help beginner'><h3 id='BlockdescriptionTXT4.0Controller-»ifdoelse«'>»if do else«</h3>
+        <div id='robControls_ifElse' class='help beginner'><h3 id='Blockdescriptionmicro:bitV2-»ifdoelse«'>»if do else«</h3>
             <p>With the block »if do else« you can selectively trigger actions which are executed by your robot. The »if do then« block therefore requires a logical value as an input parameter. If the condition in »if« is true the inserted block will be executed, otherwise (condition is not fulfilled = false) the block connected to the »else« statement will be executed. In a nested »if do else« block with further distinctions added, the first »if« condition is queried. If it is not true, the second condition »else if« is checked. Also the second condition requires a logical value as an input parameter. Only when both conditions are not true, the block which is inserted at the »else« statement will be executed.</p>
             <p>The conditions may arbitrarily be expanded by clicking the "+" plus symbol. The "-" minus symbol reduces the block.</p>
             <p>Settings:
@@ -496,7 +285,7 @@
                 <li class='typcn typcn-arrow-left'>Else blocks that will be executed if the according condition evaluates to »false«.</li>
             </ul>
         </div>
-        <div id='robControls_loopForever' class='help beginner  notWedo'><h3 id='BlockdescriptionTXT4.0Controller-»repeatindefinitely«'>»repeat indefinitely«</h3>
+        <div id='robControls_loopForever' class='help beginner  notWedo'><h3 id='Blockdescriptionmicro:bitV2-»repeatindefinitely«'>»repeat indefinitely«</h3>
             <p>With the block »repeat indefinitely« you can endlessly run the blocks on your robot. All blocks which are within the »repeat indefinitely« block will be executed endlessly. The blocks are applied sequentially from top to bottom. Once the last block has been executed, the program repeats with the first block again. Therefore, this block is also called »loop«.</p>
             <p>Input:
             </p>
@@ -504,7 +293,7 @@
                 <li class='typcn typcn-arrow-left'>Blocks to be repeated indefinitely.</li>
             </ul>
             <br></div>
-        <div id='controls_repeat_ext' class='help beginner'><h3 id='BlockdescriptionTXT4.0Controller-»repeatntimes«'>»repeat n times«</h3>
+        <div id='controls_repeat_ext' class='help beginner'><h3 id='Blockdescriptionmicro:bitV2-»repeatntimes«'>»repeat n times«</h3>
             <p>With the block »repeat« you can run other block as many times as you like. All blocks in the »repeat« block will be executed as often as defined in the entry field. The blocks are applied sequentially from top to bottom. Once the last block has been executed, the program repeats with the first block again. Therefore, this block is also called »loop«.</p>
             <div role='region' aria-label='Info' class='confluence-information-macro  confluence-information-macro-information'>
                 <div class='confluence-information-macro-body'><p>Only integer values can be entered.</p></div>
@@ -516,7 +305,7 @@
                 <li class='typcn typcn-arrow-left'>Blocks to be repeated as often as defined.</li>
             </ul>
             <br></div>
-        <div id='robControls_wait_time' class='help beginner'><h3 id='BlockdescriptionTXT4.0Controller-»wait«'>»wait«</h3>
+        <div id='robControls_wait_time' class='help beginner'><h3 id='Blockdescriptionmicro:bitV2-»wait«'>»wait«</h3>
             <p>With the block »wait« you can "pause" your program at the point where you inserted the »wait« block. Your program will then remain for the specified duration at this point. After the specified time the next block will be executed. For example you can display text in the screen of your robot for exactly the time you specified in the »wait« block.</p>
             <p>Settings and input values:
             </p>
@@ -524,7 +313,7 @@
                 <li class='typcn typcn-arrow-sorted-down'>Number, waiting time in milliseconds.</li>
             </ul>
         </div>
-        <div id='robControls_wait' class='help beginner'><h3 id='BlockdescriptionTXT4.0Controller-»waituntil...«'>»wait until ...«</h3>
+        <div id='robControls_wait' class='help beginner'><h3 id='Blockdescriptionmicro:bitV2-»waituntil...«'>»wait until ...«</h3>
             <p>With the block »wait until« you can "stop" your program at the point you insert the »wait until« block. Your program then waits until the condition is true. The »wait until« block you can extended by click on "+" symbol. Your program then waits until (at least) one of the condition of your »wait until« block is true.</p>
             <p>Settings:
             </p>
@@ -534,7 +323,7 @@
                 <li class='typcn typcn-arrow-left'>Boolean value, »true« or »false«.</li>
             </ul>
         </div>
-        <div id='robControls_wait_for' class='help beginner'><h3 id='BlockdescriptionTXT4.0Controller-»waituntil...«.1'>»wait until ... «</h3>
+        <div id='robControls_wait_for' class='help beginner'><h3 id='Blockdescriptionmicro:bitV2-»waituntil...«.1'>»wait until ... «</h3>
             <p>With the block »wait until« you can "stop" your program at the point you insert the »wait until« block. Your program then waits until the condition is true. The »wait until« block you can extended by click on "+" symbol. Your program then waits until (at least) one of the condition of your »wait until« block is true.</p>
             <p>Settings:
             </p>
@@ -545,7 +334,7 @@
             </ul>
         </div>
         <div id='controls_flow_statements' class='help expert'><h3
-            id='BlockdescriptionTXT4.0Controller-»breakout/continuewithnextiterationofloop«[Expert-block]'>»break out/continue with next iteration of loop« <span
+            id='Blockdescriptionmicro:bitV2-»breakout/continuewithnextiterationofloop«[Expert-block]'>»break out/continue with next iteration of loop« <span
             class='typcn typcn-star'></span></h3>
             <p>With the block »break out/continue with next iteration of loop« a loop can be terminated ahead of schedule. As soon as the block is entered within a sequence of blocks, all further blocks up to the end of the loop will be ignored.</p>
             <p>Settings:
@@ -554,7 +343,7 @@
                 <li class='typcn typcn-arrow-sorted-down'>Type of breaking behavior, »break out« or »continue with next iteration«.</li>
             </ul>
         </div>
-        <div id='robControls_for' class='help expert'><h3 id='BlockdescriptionTXT4.0Controller-»countwithfromto«[Expert-block]'>»count with from to« <span
+        <div id='robControls_for' class='help expert'><h3 id='Blockdescriptionmicro:bitV2-»countwithfromto«[Expert-block]'>»count with from to« <span
             class='typcn typcn-star'></span></h3>
             <p>With the block »count with from to« you can run other block as many times as you like. All blocks in the »count with from to« block will be executed as long as the counting is in progress. The blocks are applied sequentially from top to bottom. Once the last block has been executed, the program repeats with the first block again if the counting is in progress. The last parameter declares the step width for counting.</p>
             <p>Settings:
@@ -568,7 +357,7 @@
             </ul>
         </div>
         <div id='robControls_forEach' class='help expert  notWedo notBob3'><h3
-            id='BlockdescriptionTXT4.0Controller-»foreachiteminlist«[Expert-block]'>»for each item in list« <span class='typcn typcn-star'></span></h3>
+            id='Blockdescriptionmicro:bitV2-»foreachiteminlist«[Expert-block]'>»for each item in list« <span class='typcn typcn-star'></span></h3>
             <p>With the block »for each item in list« all list items will successively be bound to a variable. The variable can be used within the loop. With each loop cycle the next item of the list will be bound until all list elements have been processed.</p>
             <p>Settings and input value:
             </p>
@@ -579,7 +368,7 @@
                 <li class='typcn typcn-arrow-left'>Blocks which will be executed as often as there are elements in the list.</li>
             </ul>
         </div>
-        <div id='controls_whileUntil' class='help expert'><h3 id='BlockdescriptionTXT4.0Controller-»repeatwhile/until«[Expert-block]'>»repeat while/until« <span
+        <div id='controls_whileUntil' class='help expert'><h3 id='Blockdescriptionmicro:bitV2-»repeatwhile/until«[Expert-block]'>»repeat while/until« <span
             class='typcn typcn-star'></span></h3>
             <p>With the block »repeat while/until« you can run other block as many times as you like. All blocks in the »repeat while/until« block will be executed as long as the condition in the entry field is true. The blocks are applied sequentially from top to bottom. Once the last block has been executed, the program repeats with the first block again if the condition is still true. Therefore, this block is also called »conditional loop«.</p>
             <p>Settings and input values:
@@ -590,7 +379,7 @@
                 <li class='typcn typcn-arrow-left'>Blocks that will be repeated while/until the condition evaluates to »true«.</li>
             </ul>
         </div>
-        <div id='logic_compare' class='help beginner'><h3 id='BlockdescriptionTXT4.0Controller-»comparison«'>»comparison«</h3>
+        <div id='logic_compare' class='help beginner'><h3 id='Blockdescriptionmicro:bitV2-»comparison«'>»comparison«</h3>
             <p>With the block »comparison« you can compare different parameters of the same type (number, color, logical value, text). This block can only be used in conjunction with another block which requires a logical value as an input parameter.</p>
             <p>Settings and input values:
             </p>
@@ -605,7 +394,7 @@
                 <li class='typcn typcn-arrow-right'>Boolean value, »true« or »false«.</li>
             </ul>
         </div>
-        <div id='logic_operation' class='help beginner'><h3 id='BlockdescriptionTXT4.0Controller-»and/or«'>»and/or«</h3>
+        <div id='logic_operation' class='help beginner'><h3 id='Blockdescriptionmicro:bitV2-»and/or«'>»and/or«</h3>
             <p>With the block »and/or« you can interrelate logical values with each other. The »and/or« block with the setting "and" will be true only if both logical parameters are "'true"'. If the block has the setting »or« it is sufficient if one of the two parameters is "true", so that the »and/or« block will return true.</p>
             <p>Settings:
             </p>
@@ -621,7 +410,7 @@
                 <li class='typcn typcn-arrow-right'>Boolean value »true« or»false«.</li>
             </ul>
         </div>
-        <div id='logic_boolean' class='help beginner'><h3 id='BlockdescriptionTXT4.0Controller-»true/false«'>»true/false«</h3>
+        <div id='logic_boolean' class='help beginner'><h3 id='Blockdescriptionmicro:bitV2-»true/false«'>»true/false«</h3>
             <p>With the block »true/false« you can return either the logical value »true« or »false« to another block.</p>
             <p>Settings:
             </p>
@@ -635,7 +424,7 @@
                 <li class='typcn typcn-arrow-right'>Boolean value, »true« or »false«.</li>
             </ul>
         </div>
-        <div id='logic_negate' class='help expert'><h3 id='BlockdescriptionTXT4.0Controller-»not«[Expert-block]'>»not« <span class='typcn typcn-star'></span></h3>
+        <div id='logic_negate' class='help expert'><h3 id='Blockdescriptionmicro:bitV2-»not«[Expert-block]'>»not« <span class='typcn typcn-star'></span></h3>
             <p>Using the »not« lets you invert a logical value and pass this value to another block.</p>
             <p>Input value:
             </p>
@@ -649,8 +438,8 @@
                 <li class='typcn typcn-arrow-right'>Boolean value, »true« or »false«; result of inverting.</li>
             </ul>
         </div>
-        <div id='logic_ternary' class='help expert notWedo'><h3 id='BlockdescriptionTXT4.0Controller-»test«[Expert-block]'>»test« <span
-            class='typcn typcn-star'></span></h3>
+        <div id='logic_ternary' class='help expert notWedo'><h3 id='Blockdescriptionmicro:bitV2-»test«[Expert-block]'>»test« <span class='typcn typcn-star'></span>
+        </h3>
             <p>Using the »test« block will perform a test and returns a value which depends on the test result.</p>
             <p>Input values:
             </p>
@@ -666,7 +455,7 @@
                 <li class='typcn typcn-arrow-right'>Value of arbitrary type.</li>
             </ul>
         </div>
-        <div id='logic_null' class='help expert'><h3 id='BlockdescriptionTXT4.0Controller-»null«[Expert-block]'>»null« <span class='typcn typcn-star'></span></h3>
+        <div id='logic_null' class='help expert'><h3 id='Blockdescriptionmicro:bitV2-»null«[Expert-block]'>»null« <span class='typcn typcn-star'></span></h3>
             <p style='text-align: left;'>The block »null« is a place holder for an input value that is not yet specified. If for instance a new connection variable has been created and is not yet bound, the initial value of this connection will be set to »null«.</p>
             <p style='text-align: left;'>Return value::
             </p>
@@ -674,7 +463,7 @@
                 <li class='typcn typcn-arrow-sorted-down'>Boolean value, »null«.</li>
             </ul>
         </div>
-        <div id='math_number' class='help beginner'><h3 id='BlockdescriptionTXT4.0Controller-»parameter«'>»parameter«</h3>
+        <div id='math_number' class='help beginner'><h3 id='Blockdescriptionmicro:bitV2-»parameter«'>»parameter«</h3>
             <p>With the block »parameter« you can send numbers to another block.</p>
             <p> Settings and input values:
             </p>
@@ -687,7 +476,7 @@
                 <li class='typcn typcn-arrow-right'> Number</li>
             </ul>
             <br></div>
-        <div id='math_arithmetic' class='help beginner'><h3 id='BlockdescriptionTXT4.0Controller-»calculating«'>»calculating«</h3>
+        <div id='math_arithmetic' class='help beginner'><h3 id='Blockdescriptionmicro:bitV2-»calculating«'>»calculating«</h3>
             <p>With the block »calculating« you can sum up, subtract, multiply, and divide numbers. This block can only be used in conjunction with another block which requires a number as an input parameter.</p>
             <p>Settings and input values:
             </p>
@@ -703,7 +492,7 @@
                 <li class='typcn typcn-arrow-sorted-down'>Number, result of the calculation.</li>
             </ul>
         </div>
-        <div id='math_single' class='help expert'><h3 id='BlockdescriptionTXT4.0Controller-»mathematicalfunction«[Expert-block]'>»mathematical function« <span
+        <div id='math_single' class='help expert'><h3 id='Blockdescriptionmicro:bitV2-»mathematicalfunction«[Expert-block]'>»mathematical function« <span
             class='typcn typcn-star'></span></h3>
             <p>With the block »mathematical function« some elementary mathematical functions may be calculated. Available functions are »square root«, »absolute«, »invert« (multiply by -1), »ln« (natural logarithm), »log10« (decadic logarithm), »e^« (exponential function), »10^« (base 10 exponent)</p>
             <p>Settings and input value:
@@ -719,7 +508,7 @@
                 <li class='typcn typcn-arrow-right'> Number, result of the function application.</li>
             </ul>
         </div>
-        <div id='math_trig' class='help expert'><h3 id='BlockdescriptionTXT4.0Controller-»trigonometricfunctions«[Expert-block]'>»trigonometric functions« <span
+        <div id='math_trig' class='help expert'><h3 id='Blockdescriptionmicro:bitV2-»trigonometricfunctions«[Expert-block]'>»trigonometric functions« <span
             class='typcn typcn-star'></span></h3>
             <p>With the block »trigonometric function« sine, cosine, tangent and their respective revers functions can be calculated. Input values are expected in radian measure(see hint above).</p>
             <p>Settings and input value:
@@ -735,8 +524,8 @@
                 <li class='typcn typcn-arrow-right'>Number, result of the trigonometric calculation.</li>
             </ul>
         </div>
-        <div id='math_constant' class='help expert'><h3 id='BlockdescriptionTXT4.0Controller-»constant«[Expert-block]'>»constant« <span
-            class='typcn typcn-star'></span></h3>
+        <div id='math_constant' class='help expert'><h3 id='Blockdescriptionmicro:bitV2-»constant«[Expert-block]'>»constant« <span class='typcn typcn-star'></span>
+        </h3>
             <p>With the »constant« block some mathematical constant values are available: »π« (3,1415...), »e« (2,718...), »φ« (1,618...), »sqrt(2)« (1,414...), »sqrt(½)« (0,7071...), »∞«</p>
             <p>Settings:
             </p>
@@ -750,7 +539,7 @@
                 <li class='typcn typcn-arrow-right'> Number, value of the selected mathematical constant. Infinity will return »infinity«.</li>
             </ul>
         </div>
-        <div id='math_number_property' class='help expert'><h3 id='BlockdescriptionTXT4.0Controller-»numberproperty«[Expert-block]'>»number property« <span
+        <div id='math_number_property' class='help expert'><h3 id='Blockdescriptionmicro:bitV2-»numberproperty«[Expert-block]'>»number property« <span
             class='typcn typcn-star'></span></h3>
             <p>With the block »number property« you check whether a given number has a specific property: »even«, »odd«, »prime«, »whole«, »positive«, »negative«, »divisible by«.</p>
             <p>Settings and input values:
@@ -767,7 +556,7 @@
                 <li class='typcn typcn-arrow-right'>Boolean value, »true« or »false«, depending on the selected property.</li>
             </ul>
         </div>
-        <div id='robMath_change' class='help expert'><h3 id='BlockdescriptionTXT4.0Controller-»changeby...«[Expert-block]'>»change by ... « <span
+        <div id='robMath_change' class='help expert'><h3 id='Blockdescriptionmicro:bitV2-»changeby...«[Expert-block]'>»change by ... « <span
             class='typcn typcn-star'></span></h3>
             <p>The block »change by ... « increments a numerical variable by a defined value.</p>
             <p>Settings and input values:
@@ -777,7 +566,7 @@
                 <li class='typcn typcn-arrow-left'>Number, given by a block.</li>
             </ul>
         </div>
-        <div id='math_round' class='help expert'><h3 id='BlockdescriptionTXT4.0Controller-»round«[Expert-block]'>»round« <span class='typcn typcn-star'></span></h3>
+        <div id='math_round' class='help expert'><h3 id='Blockdescriptionmicro:bitV2-»round«[Expert-block]'>»round« <span class='typcn typcn-star'></span></h3>
             <p>With the block »round« values may be rounded. Rounding will set the decimal places to 0. It depends on the value of the decimal places whether the block rounds up or down. You may also decide by settings to always round up or down.</p>
             <p>Settings and input value:
             </p>
@@ -792,7 +581,7 @@
                 <li class='typcn typcn-arrow-right'>Number, rounded whole number, according to the round mode.</li>
             </ul>
         </div>
-        <div id='math_on_list' class='help expert notWedo notBob3'><h3 id='BlockdescriptionTXT4.0Controller-»listevaluation«[Expert-block]'>»list evaluation« <span
+        <div id='math_on_list' class='help expert notWedo notBob3'><h3 id='Blockdescriptionmicro:bitV2-»listevaluation«[Expert-block]'>»list evaluation« <span
             class='typcn typcn-star'></span></h3>
             <p>With the block »list evaluation« you may analyse a list.</p>
             <p>Modes for list evaluation:
@@ -820,7 +609,7 @@
                 <li class='typcn typcn-arrow-right'>Number, calculated according to the selected list evaluation mode.</li>
             </ul>
         </div>
-        <div id='math_modulo' class='help expert'><h3 id='BlockdescriptionTXT4.0Controller-»remainderof«[Expert-block]'>»remainder of« <span
+        <div id='math_modulo' class='help expert'><h3 id='Blockdescriptionmicro:bitV2-»remainderof«[Expert-block]'>»remainder of« <span
             class='typcn typcn-star'></span></h3>
             <p>The block »remainder of« calculates a divison and returns the remainder of the division.</p>
             <p>Input values:
@@ -836,8 +625,8 @@
                 <li class='typcn typcn-arrow-right'>Number, rest of the division.</li>
             </ul>
         </div>
-        <div id='math_constrain' class='help expert'><h3 id='BlockdescriptionTXT4.0Controller-»constrain«[Expert-block]'>»constrain« <span
-            class='typcn typcn-star'></span></h3>
+        <div id='math_constrain' class='help expert'><h3 id='Blockdescriptionmicro:bitV2-»constrain«[Expert-block]'>»constrain« <span class='typcn typcn-star'></span>
+        </h3>
             <p>The block »constrain« ensures that given boundaries will not be exceeded.</p>
             <p>Input values:
             </p>
@@ -853,7 +642,7 @@
                 <li class='typcn typcn-arrow-right'>Number, constrained by the lower and the upper bound.</li>
             </ul>
         </div>
-        <div id='math_random_int' class='help expert'><h3 id='BlockdescriptionTXT4.0Controller-»randominteger«[Expert-block]'>»random integer« <span
+        <div id='math_random_int' class='help expert'><h3 id='Blockdescriptionmicro:bitV2-»randominteger«[Expert-block]'>»random integer« <span
             class='typcn typcn-star'></span></h3>
             <p>With the block »random integer« you may generate random integer numbers within defined limits</p>
             <p>Input values:
@@ -869,7 +658,7 @@
                 <li class='typcn typcn-arrow-right'>Number, a whole random number from within the upper and lower bounds.</li>
             </ul>
         </div>
-        <div id='math_random_float' class='help expert'><h3 id='BlockdescriptionTXT4.0Controller-»randomfraction«[Expert-block]'>»random fraction« <span
+        <div id='math_random_float' class='help expert'><h3 id='Blockdescriptionmicro:bitV2-»randomfraction«[Expert-block]'>»random fraction« <span
             class='typcn typcn-star'></span></h3>
             <p>With the block »random fraction« a random value between 0.0 and 1.0 is calculated.</p>
             <p>Return value:
@@ -879,7 +668,7 @@
             </ul>
         </div>
         <div id='math_cast_toString' class='help expert notWedo notNxt notBotnroll notNao notBob3 notSensebox notMbot notEdison notFestbionics notArduino'><h3
-            id='BlockdescriptionTXT4.0Controller-»cast...toString«[Expert-block]'>»cast ... to String« <span class='typcn typcn-star'></span></h3>
+            id='Blockdescriptionmicro:bitV2-»cast...toString«[Expert-block]'>»cast ... to String« <span class='typcn typcn-star'></span></h3>
             <p>This block converts a number into a string containing that number. So for example the number 123 would be converted into the string »123«.</p>
             <p><br>Options and input values:
             </p>
@@ -894,7 +683,7 @@
             </ul>
             <br></div>
         <div id='math_cast_toChar' class='help expert notWedo notNxt notBotnroll notNao notBob3 notSensebox notMbot notEdison notFestbionics notArduino'><h3
-            id='BlockdescriptionTXT4.0Controller-»cast...toChar«[Expert-block]'>»cast ... to Char« <span class='typcn typcn-star'></span></h3>
+            id='Blockdescriptionmicro:bitV2-»cast...toChar«[Expert-block]'>»cast ... to Char« <span class='typcn typcn-star'></span></h3>
             <p>This block converts a single number to the corresponding ASCII letter. If there is no associated ASCII character for this number, an empty string is passed on. So for example the number 97 gets converted into the lower-case letter »a«.</p>
             <p>Options and input values:
             </p>
@@ -908,12 +697,12 @@
                 <li class='typcn typcn-arrow-right'>String, a single character that corresponds to the selected ASCII number.</li>
             </ul>
             <br></div>
-        <div id='robActions_NNstep' class='help beginner nnTrue'><h3 id='BlockdescriptionTXT4.0Controller-»makeoneNNstep«'>»make one NN step«</h3>
+        <div id='robActions_NNstep' class='help beginner nnTrue'><h3 id='Blockdescriptionmicro:bitV2-»makeoneNNstep«'>»make one NN step«</h3>
             <p>With this block you perform a calculation step of your neural network. Before you use this block, you should set the values of the input neurons with the block "set value input neuron ...". The input values are given into the network and the values of the output neurons are calculated using the network from the tab »Neural Network«. A detailed description of the neural network can be found
                 <a href='https://jira.iais.fraunhofer.de/wiki/display/ORInfo/Artificial+Neural+Networks'>here</a>. You can query the values of the output neurons after the calculation with the block »gett value output neuron ...«.
             </p></div>
         <div id='robActions_set_inputneuron_val' class='help beginner nnTrue'><h3
-            id='BlockdescriptionTXT4.0Controller-»setvalueinputneuron...«'>»set value input neuron ... «</h3>
+            id='Blockdescriptionmicro:bitV2-»setvalueinputneuron...«'>»set value input neuron ... «</h3>
             <p>With this block you can set the value of an input neuron. You can use either variables, numbers, sensor data or mathematical operations as input values, e.g. the sum of two numbers.</p>
             <p>Options and input values:
             </p>
@@ -923,7 +712,7 @@
             </ul>
         </div>
         <div id='robSensors_get_outputneuron_val' class='help beginner nnTrue'><h3
-            id='BlockdescriptionTXT4.0Controller-»getvalueoutputneuron...«'>»get value output neuron ... «</h3>
+            id='Blockdescriptionmicro:bitV2-»getvalueoutputneuron...«'>»get value output neuron ... «</h3>
             <p>With this block you can query the value of an output neuron. You should only use this block after the block »make one NN step«, otherwise no value has been calculated for the output neurons and the value is defaulted to 0.</p>
             <p>Options:
             </p>
@@ -937,7 +726,7 @@
             </ul>
         </div>
         <div id='robActions_set_weight' class='help expert nnTrue'><h3
-            id='BlockdescriptionTXT4.0Controller-»setweightfrom...to...«[Expertblock]'>»set weight from ... to ... « <span class='typcn typcn-star'></span></h3>
+            id='Blockdescriptionmicro:bitV2-»setweightfrom...to...«[Expertblock]'>»set weight from ... to ... « <span class='typcn typcn-star'></span></h3>
             <p>With this block you can set the weight of a connection between two neurons that are directly connected.</p>
             <p>Options and input values:
             </p>
@@ -947,7 +736,7 @@
                 <li class='typcn typcn-arrow-left'>Number, the value to which the weight is to be set.</li>
             </ul>
         </div>
-        <div id='robActions_set_bias' class='help expert nnTrue'><h3 id='BlockdescriptionTXT4.0Controller-»setbias...«[Expertblock]'>»set bias ... « <span
+        <div id='robActions_set_bias' class='help expert nnTrue'><h3 id='Blockdescriptionmicro:bitV2-»setbias...«[Expertblock]'>»set bias ... « <span
             class='typcn typcn-star'></span></h3>
             <p>With this block you can set the bias of a neuron.</p>
             <p>Options and input values:
@@ -958,7 +747,7 @@
             </ul>
         </div>
         <div id='robSensors_get_weight' class='help expert nnTrue'><h3
-            id='BlockdescriptionTXT4.0Controller-»getweightfrom...to...«[Expertblock]'>»get weight from ... to ... « <span class='typcn typcn-star'></span></h3>
+            id='Blockdescriptionmicro:bitV2-»getweightfrom...to...«[Expertblock]'>»get weight from ... to ... « <span class='typcn typcn-star'></span></h3>
             <p>With this block you can query the current value of the weight of a connection between two neurons that are directly connected.</p>
             <p>Options:
             </p>
@@ -972,7 +761,7 @@
                 <li class='typcn typcn-arrow-right'>Number, the value of the weight between the two neurons.</li>
             </ul>
         </div>
-        <div id='robSensors_get_bias' class='help expert nnTrue'><h3 id='BlockdescriptionTXT4.0Controller-»getbias...«[Expertblock]'>»get bias ... « <span
+        <div id='robSensors_get_bias' class='help expert nnTrue'><h3 id='Blockdescriptionmicro:bitV2-»getbias...«[Expertblock]'>»get bias ... « <span
             class='typcn typcn-star'></span></h3>
             <p>With this block you can query the bias of a neuron.</p>
             <p>Options:
@@ -986,7 +775,7 @@
                 <li class='typcn typcn-arrow-right'>Number, the value of the bias of the selected neuron.</li>
             </ul>
         </div>
-        <div id='text' class='help beginner notBob3'><h3 id='BlockdescriptionTXT4.0Controller-»Text«'>»Text«</h3>
+        <div id='text' class='help beginner notBob3'><h3 id='Blockdescriptionmicro:bitV2-»Text«'>»Text«</h3>
             <p>The simple »Text« block creates a little text.</p>
             <p>Input value:
             </p>
@@ -1000,7 +789,7 @@
                 <li class='typcn typcn-arrow-right'>String, containing arbitrary characters.</li>
             </ul>
         </div>
-        <div id='text_comment' class='help beginner'><h3 class='auto-cursor-target' id='BlockdescriptionTXT4.0Controller-»comment«'>»comment«</h3>
+        <div id='text_comment' class='help beginner'><h3 class='auto-cursor-target' id='Blockdescriptionmicro:bitV2-»comment«'>»comment«</h3>
             <p>Document your program with this block, so that you and others will find it easier to understand your program later. This comment will also be visible in the generated source code. </p>
             <p>Input value:
             </p>
@@ -1008,7 +797,7 @@
                 <li class='typcn typcn-arrow-left'>String, containing arbitrary characters.</li>
             </ul>
         </div>
-        <div id='robText_join' class='help expert notBob3 notFestobionic'><h3 id='BlockdescriptionTXT4.0Controller-»createText«[Expert-block]'>»create Text« <span
+        <div id='robText_join' class='help expert notBob3 notFestobionic'><h3 id='Blockdescriptionmicro:bitV2-»createText«[Expert-block]'>»create Text« <span
             class='typcn typcn-star'></span></h3>
             <p>The »create text« block compiles a text from different input parameters. Using the + sign will insert further input slots. All input parameters will be connected one after the other. Essentially the »create text« block converts an arbitrary input value into a text string.</p>
             <p>Input values:
@@ -1024,7 +813,7 @@
             </ul>
         </div>
         <div id='robActions_eval_expr' class='help expert notRcj'><h3 style='text-align: left;'
-            id='BlockdescriptionTXT4.0Controller-»eval..as...«[ExpertBlock]'>»eval .. as ...« <span class='typcn typcn-star'></span></h3>
+            id='Blockdescriptionmicro:bitV2-»eval..as...«[ExpertBlock]'>»eval .. as ...« <span class='typcn typcn-star'></span></h3>
             <p>The »value ... as ...« block evaluates an expression entered as text (”expression") and returns the result. The expression can be “sqrt(a^2 + b^2)”, for example. It is evaluated to a number. The block is very powerful: almost all expressions that can be generated with Blockly blocks can also be written as text.</p>
             <p>How the expression can be constructed is described on a separate <span class='--l --r sentence_highlight'><a
                 href='https://github.com/OpenRoberta/openroberta-lab/wiki/Textly#expression-block' class='external-link' rel='nofollow'
@@ -1043,7 +832,7 @@
                 </li>
             </ul>
             <br></div>
-        <div id='robtext_append' class='help expert notWedo notBob3'><h3 id='BlockdescriptionTXT4.0Controller-»appendText«[Expert-block]'>»append Text« <span
+        <div id='robtext_append' class='help expert notWedo notBob3'><h3 id='Blockdescriptionmicro:bitV2-»appendText«[Expert-block]'>»append Text« <span
             class='typcn typcn-star'></span></h3>
             <p>The »append text« block will append some string to a given string, for instance to extend a message with a signature.</p>
             <p>Input values:
@@ -1054,7 +843,7 @@
             </ul>
         </div>
         <div id='text_cast_string_toNumber' class='help expert notWedo notNxt notBotnroll notNao notBob3 notSensebox notMbot notEdison notFestbionics notArduino'><h3
-            id='BlockdescriptionTXT4.0Controller-»cast...toNumber«[Expert-block]'>»cast ... to Number« <span class='typcn typcn-star'></span></h3>
+            id='Blockdescriptionmicro:bitV2-»cast...toNumber«[Expert-block]'>»cast ... to Number« <span class='typcn typcn-star'></span></h3>
             <p>This block converts a string into a number if this is possible. So if a string contains only numbers, this block can convert the string into a number. If the block does not contain numbers, this block will pass »NaN« when used in th Open Roberta Lab simulation and may have a different
                 <span style='letter-spacing: 0.0px;'>behavior depending on the programming language of the robot you are currently using. I</span><span
                     style='letter-spacing: 0.0px;'>f the string starts with numbers but then contains other characters that are not numbers, this block will pass only the numbers and stop as soon as the first character is in the string. So, as an example, this block makes the number 52 out of the string »52abcd«.</span>
@@ -1072,8 +861,7 @@
             </ul>
             <br></div>
         <div id='text_cast_char_toNumber' class='help expert notWedo notNxt notBotnroll notNao notBob3 notSensebox notMbot notEdison notFestbionics notArduino'><h3
-            id='BlockdescriptionTXT4.0Controller-»cast...atindex...toNumber«[Experten-Block]'>»cast ... at index ... to Number« <span class='typcn typcn-star'></span>
-        </h3>
+            id='Blockdescriptionmicro:bitV2-»cast...atindex...toNumber«[Experten-Block]'>»cast ... at index ... to Number« <span class='typcn typcn-star'></span></h3>
             <p>This block converts a letter or a character from a character string into the corresponding ASCII number. Each character has an associated number in the ASCII table. For example, a lower-case »a« is converted into the number 97.</p>
             <p>Options and input values:
             </p>
@@ -1088,7 +876,7 @@
                 <li class='typcn typcn-arrow-right'>Number, the ASCII number of to selected character. Number between 0 and 255.</li>
             </ul>
             <br></div>
-        <div id='robLists_create_with' class='help expert notWedo notBob3'><h3 id='BlockdescriptionTXT4.0Controller-»createlist«'>»create list«</h3>
+        <div id='robLists_create_with' class='help expert notWedo notBob3'><h3 id='Blockdescriptionmicro:bitV2-»createlist«'>»create list«</h3>
             <p>The block »empty list« creates a list with no content.The block »list« generates a list with some predefined values.</p>
             <p>This block may only be used in the context of a »set variable« block.</p>
             <p>Using »+« or »−« enables you to extend or reduce the list at its end.</p>
@@ -1107,7 +895,7 @@
                 <li class='typcn typcn-arrow-right'>Empty list or list, containing elements of the specified list type.</li>
             </ul>
         </div>
-        <div id='robLists_repeat' class='help expert notWedo notBob3'><h3 id='BlockdescriptionTXT4.0Controller-»repeatelementinlist«'>»repeat element in list«</h3>
+        <div id='robLists_repeat' class='help expert notWedo notBob3'><h3 id='Blockdescriptionmicro:bitV2-»repeatelementinlist«'>»repeat element in list«</h3>
             <p>The »repeat element in list« block generates a list of equal elements. </p>
             <p>Settings and input values:
             </p>
@@ -1123,7 +911,7 @@
                 <li class='typcn typcn-arrow-right'>List of the specified list type, containing the specified number of equal elements.</li>
             </ul>
         </div>
-        <div id='robLists_length' class='help expert notWedo notBob3'><h3 id='BlockdescriptionTXT4.0Controller-»lengthof«'>»length of«</h3>
+        <div id='robLists_length' class='help expert notWedo notBob3'><h3 id='Blockdescriptionmicro:bitV2-»lengthof«'>»length of«</h3>
             <p>The »length of« block returns a value which is the length of the list given as parameter. An empty list has a length of 0.</p>
             <p>Input value:
             </p>
@@ -1137,7 +925,7 @@
                 <li class='typcn typcn-arrow-right'>Number, number of list elements.</li>
             </ul>
             <br></div>
-        <div id='robLists_isEmpty' class='help expert notWedo notBob3'><h3 id='BlockdescriptionTXT4.0Controller-»isempty?«'>»is empty?«</h3>
+        <div id='robLists_isEmpty' class='help expert notWedo notBob3'><h3 id='Blockdescriptionmicro:bitV2-»isempty?«'>»is empty?«</h3>
             <p>A list given as parameter will be checked whether it is empty.</p>
             <p>Input value:
             </p>
@@ -1151,7 +939,7 @@
                 <li class='typcn typcn-arrow-right'>Boolean, either »true« or »false«.</li>
             </ul>
         </div>
-        <div id='roblists_indexOf' class='help expert notWedo notBob3'><h3 id='BlockdescriptionTXT4.0Controller-»findinlist«'>»find in list«</h3>
+        <div id='roblists_indexOf' class='help expert notWedo notBob3'><h3 id='Blockdescriptionmicro:bitV2-»findinlist«'>»find in list«</h3>
             <p>A list is searched for an item. If the item is in the list, the list position will be returned. If the item is not in the list the result is -1.</p>
             <p>Settings and input values:
             </p>
@@ -1168,7 +956,7 @@
                     <p>Note: Counting list positions will start with 0.</p></li>
             </ul>
         </div>
-        <div id='robLists_getIndex' class='help expert notWedo notBob3'><h3 id='BlockdescriptionTXT4.0Controller-»getlistelement«'>»get list element«</h3>
+        <div id='robLists_getIndex' class='help expert notWedo notBob3'><h3 id='Blockdescriptionmicro:bitV2-»getlistelement«'>»get list element«</h3>
             <p>This block accesses an item of a list. Depending on the settings this item may be altered.</p>
             <p>A list is given as parameter. Then a drop-down-list specifies what will happen to the list item under consideration.</p>
             <p>Settings:
@@ -1190,7 +978,7 @@
                     <p>With selection of »remove« there is no return value; instead the list will be shortened by this list element.</p></li>
             </ul>
         </div>
-        <div id='robLists_setIndex' class='help expert notWedo notBob3'><h3 id='BlockdescriptionTXT4.0Controller-»setlistelement«'>»set list element«</h3>
+        <div id='robLists_setIndex' class='help expert notWedo notBob3'><h3 id='Blockdescriptionmicro:bitV2-»setlistelement«'>»set list element«</h3>
             <p>In a list given as input parameter one specified element will be replaced by a new value.</p>
             <p>Settings and input values:
             </p>
@@ -1203,7 +991,7 @@
                 <li class='typcn typcn-arrow-left'>List element, that will be set or inserted at the selected list position.</li>
             </ul>
         </div>
-        <div id='robLists_getSublist' class='help expert notWedo notBob3'><h3 id='BlockdescriptionTXT4.0Controller-»getsublist«'>»get sublist«</h3>
+        <div id='robLists_getSublist' class='help expert notWedo notBob3'><h3 id='Blockdescriptionmicro:bitV2-»getsublist«'>»get sublist«</h3>
             <p>From a list given as parameter a sublist will be created. The sublist contains all those elements that match the further specifications of the block.</p>
             <p>Settings and input values:
             </p>
@@ -1225,7 +1013,7 @@
         </div>
         <div id='mbedColour_picker'
             class='help beginner notWedo notEv3 notNxt notMicrobit notBotnroll notNao notBob3 notArduino notSensebox notMbot notFestobionic notEdison'><h3
-            id='BlockdescriptionTXT4.0Controller-»Colourpicker«'>»Colour picker «</h3>
+            id='Blockdescriptionmicro:bitV2-»Colourpicker«'>»Colour picker «</h3>
             <p>With this block you can choose from a pool of predefined colours for your robot.</p>
             <p>options:
             </p>
@@ -1240,7 +1028,7 @@
             </ul>
             <br></div>
         <div id='robColour_picker' class='help beginner notMicrobit notNao notFestobionic notEdison notCalliope'><h3
-            id='BlockdescriptionTXT4.0Controller-»Colourpicker«.1'>»Colour picker «</h3>
+            id='Blockdescriptionmicro:bitV2-»Colourpicker«.1'>»Colour picker «</h3>
             <p>With this block you can choose from a pool of predefined colours for your robot.</p>
             <p>options:
             </p>
@@ -1256,7 +1044,7 @@
             <br></div>
         <div id='naoColour_picker'
             class='help beginner notWedo notEv3 notNxt notMicrobit notBotnroll notBob3 notArduino notSensebox notMbot notFestobionic notMicrobit notCalliope'><h3
-            id='BlockdescriptionTXT4.0Controller-»Colourpicker«.2'>»Colour picker «</h3>
+            id='Blockdescriptionmicro:bitV2-»Colourpicker«.2'>»Colour picker «</h3>
             <p>With this block you can choose from a pool of predefined colours for your robot.</p>
             <p>options:
             </p>
@@ -1272,7 +1060,7 @@
             <br></div>
         <div id='robColour_rgb'
             class='help expert notWedo notEv3 notNxt notMicrobit notBotnroll notNao notBob3 notArduino notSensebox notCalliope notFestobionic notEdison'><h3
-            id='BlockdescriptionTXT4.0Controller-»Colourwithred...green...blue...«[ExpertBlock]'>»Colour with red ... green ... blue ... « <span
+            id='Blockdescriptionmicro:bitV2-»Colourwithred...green...blue...«[ExpertBlock]'>»Colour with red ... green ... blue ... « <span
             class='typcn typcn-star'></span></h3>
             <p>With this block you can create your own colour by mixing red, green and blue.</p>
             <p>Input values:
@@ -1285,7 +1073,7 @@
             <br></div>
         <div id='colour_compare'
             class='help expert notWedo notEv3 notNxt notMicrobit notBotnroll notNao notBob3 notArduino notSensebox notCalliope notFestobionic notEdison'><h3
-            id='BlockdescriptionTXT4.0Controller-»HueTolerance«'>»Hue Tolerance«</h3>
+            id='Blockdescriptionmicro:bitV2-»HueTolerance«'>»Hue Tolerance«</h3>
             <p>Robots often do not recognise the exact colour tone precisely. The lighting conditions can cause a colour to be perceived as too dark or too light. This block allows you to set a tolerance range for the colour to be detected, so that every shade of red, for example, is detected as red.</p>
             <p>Input values:
             </p>
@@ -1299,7 +1087,7 @@
                 <li class='typcn typcn-arrow-right'>Truth value, ‘true’ if the colour is within the tolerance range, ‘false’ if the colour deviates too much.</li>
             </ul>
         </div>
-        <div id='variables_set' class='help beginner'><h3 id='BlockdescriptionTXT4.0Controller-»setvariable«'>»set variable«</h3>
+        <div id='variables_set' class='help beginner'><h3 id='Blockdescriptionmicro:bitV2-»setvariable«'>»set variable«</h3>
             <p>Using the block »set variable« will assign a value to a variable. Depending on the variable type the value may be assigned by an input connector.</p>
             <p>Settings and input value:
             </p>
@@ -1308,7 +1096,7 @@
                 <li class='typcn typcn-arrow-left'>Value, new value for the variable, evaluated from a suitable block.</li>
             </ul>
         </div>
-        <div id='variables_get' class='help beginner'><h3 id='BlockdescriptionTXT4.0Controller-»getvariable«'>»get variable«</h3>
+        <div id='variables_get' class='help beginner'><h3 id='Blockdescriptionmicro:bitV2-»getvariable«'>»get variable«</h3>
             <p>Using the block »get variable« returns the value of a variable to another block.The type of the output parameter is equal to the type that has been assigned to the variable in the »start« block.</p>
             <p><span>Settings:<br></span>
             </p>
@@ -1323,7 +1111,7 @@
             </ul>
             <span class='auto-cursor-target'> </span></div>
         <div id='robProcedures_defnoreturn' class='help expert'><h3
-            id='BlockdescriptionTXT4.0Controller-»Functionblockswith/withoutinputparametersandnoreturnstatement«'>»Function blocks with/without input parameters and no return statement«</h3>
+            id='Blockdescriptionmicro:bitV2-»Functionblockswith/withoutinputparametersandnoreturnstatement«'>»Function blocks with/without input parameters and no return statement«</h3>
             <p>In a function block with/without input parameter and without return parameter a sequence of program statements will be condensed. The input parameters will be determined by the local variables of the function block. Local variables may be generated by using the »+« sign of the function block. Local variables will not be initialized.</p>
             <p>If a function block contains an if-block the function may be terminated before reaching it's end.</p>
             <p>The function block is available in the »Functions« category immediately after its definition. Using function blocks improves the readability of complex programs.</p>
@@ -1348,7 +1136,7 @@
             </div>
         </div>
         <div id='robProcedures_defreturn' class='help expert'><h3
-            id='BlockdescriptionTXT4.0Controller-»Functionblockswith/withoutinputparameterswithreturnstatements«'>»Function blocks with/without input parameters with return statements«</h3>
+            id='Blockdescriptionmicro:bitV2-»Functionblockswith/withoutinputparameterswithreturnstatements«'>»Function blocks with/without input parameters with return statements«</h3>
             <p>In a function block with/without input parameter and with return parameter a sequence of program statements will be condensed. The input parameters will be determined by the local variables of the function block. Local variables may be generated by using the »+« sign of the function block. Local variables will not be initialized. After running through all the blocks of the function a value will be returned.</p>
             <p>If a function block contains an if-block the function may be terminated before reaching it's end. An alternative value may be returned by the if-block.</p>
             <p>The function block is available in the »Functions« category immediately after its definition. Using function blocks improves the readability of complex programs.</p>
@@ -1378,14 +1166,14 @@
             </div>
         </div>
         <div id='robProcedures_ifreturn' class='help expert'><h3
-            id='BlockdescriptionTXT4.0Controller-»ifblocktobeusedwithinafunction«'>»if block to be used within a function«</h3>
+            id='Blockdescriptionmicro:bitV2-»ifblocktobeusedwithinafunction«'>»if block to be used within a function«</h3>
             <p>The if statement within a function is of special importance. As the function sequence meets an if statement the validity of the condition will be checked.</p>
-            <h4 id='BlockdescriptionTXT4.0Controller-Ifstatementwithinafunctionwithreturnvalue:'>If statement within a function with return value:</h4>
+            <h4 id='Blockdescriptionmicro:bitV2-Ifstatementwithinafunctionwithreturnvalue:'>If statement within a function with return value:</h4>
             <ul>
                 <li>If the condition evaluates to »true« the rest of the function will be ignored and the function terminates. The second input value of the if statement will be returned. A possibly defined return value of the function will be ignored. The return value data type is determined by the return data type of the function definition.</li>
                 <li>If the condition evaluates to »false« the sequence of the function blocks will be continued. The return value of the function will be returned after reaching the end of the function.</li>
             </ul>
-            <h4 id='BlockdescriptionTXT4.0Controller-Ifstatementwithinafunctionwithnoreturnvalue:'>If statement within a function with no return value:</h4>
+            <h4 id='Blockdescriptionmicro:bitV2-Ifstatementwithinafunctionwithnoreturnvalue:'>If statement within a function with no return value:</h4>
             <ul>
                 <li>An if statement within a function without return value has just the if statement as input parameter.</li>
                 <li>If the condition evaluates to »true« the rest of the function will be ignored and the function terminates.</li>
@@ -1405,7 +1193,7 @@
             </ul>
             <br><br></div>
         <div id='robProcedures_callnoreturn' class='help expert'><h3
-            id='BlockdescriptionTXT4.0Controller-»functioncallwithoutreturnvalue«'>»function call without return value «</h3>
+            id='Blockdescriptionmicro:bitV2-»functioncallwithoutreturnvalue«'>»function call without return value «</h3>
             <p>With this block you can call a previous defined function in your program.</p>
             <p>Input values:
             </p>
@@ -1414,7 +1202,7 @@
             </ul>
         </div>
         <div id='robProcedures_callreturn' class='help expert'><h3 class='auto-cursor-target'
-            id='BlockdescriptionTXT4.0Controller-»functioncallwithreturnvalue«'>»function call with return value «</h3>
+            id='Blockdescriptionmicro:bitV2-»functioncallwithreturnvalue«'>»function call with return value «</h3>
             <p>With this block you can call a previous defined function in your program.</p>
             <p>Input values:
             </p>
@@ -1427,5 +1215,41 @@
                 <li class='typcn typcn-arrow-right'>element, depending on the return value of the function.</li>
             </ul>
         </div>
+        <div id='mbedCommunication_sendBlock' class='help expert'><h3 class='auto-cursor-target'
+            id='Blockdescriptionmicro:bitV2-»sendmessage...withstrength...«[expertblock]'>»send message ... with strength ... « <span class='typcn typcn-star'></span>
+        </h3>
+            <p>With this block you can send a message to other robots in your environment. The message can be either a number, a logical value or a string.</p>
+            <p>Options and input values:
+            </p>
+            <ul style='margin-top: 0; margin-bottom: 10px'>
+                <li class='typcn typcn-arrow-sorted-down'>option, choose the data type of the message that you want to send.</li>
+                <li class='typcn typcn-arrow-left'>element of the chosen data type, the message that you want to send to other robots.</li>
+                <li class='typcn typcn-arrow-sorted-down'>option, strength with which you want to send your message. The higher the strength, the further your message will be sent.</li>
+            </ul>
+            <br></div>
+        <div id='mbedCommunication_receiveBlock' class='help expert'><h3 class='auto-cursor-target'
+            id='Blockdescriptionmicro:bitV2-»receivemessage...«[expertblock]'>»receive message ... « <span class='typcn typcn-star'></span></h3>
+            <p>With this block you can receive messages from other robots. You can choose which data the message should contain.</p>
+            <p>Options:
+            </p>
+            <ul style='margin-top: 0; margin-bottom: 10px'>
+                <li class='typcn typcn-arrow-sorted-down'>option, data type of the message.</li>
+            </ul>
+            <br>
+            <p>Return values:
+            </p>
+            <ul style='margin-top: 0; margin-bottom: 10px'>
+                <li class='typcn typcn-arrow-sorted-down'>element of the data type, received message.</li>
+            </ul>
+            <br></div>
+        <div id='mbedCommunication_setChannel' class='help expert'><h3 class='auto-cursor-target'
+            id='Blockdescriptionmicro:bitV2-»setchannelto...«[expertblock]'>»set channel to ...« <span class='typcn typcn-star'></span></h3>
+            <p>With this block you can change the channel on which your robot sends and receives its messages. You can only communicate with other robots that send and receive on the same channel.</p>
+            <p>Input values:
+            </p>
+            <ul style='margin-top: 0; margin-bottom: 10px'>
+                <li class='typcn typcn-arrow-left'>number, channel that you want to communicate on with other robots.</li>
+            </ul>
+            <br></div>
     </div>
 </body>
