@@ -80,6 +80,7 @@ import de.fhg.iais.roberta.typecheck.BlocklyType;
 import de.fhg.iais.roberta.typecheck.Sig;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.ast.BlocklyRegion;
+import de.fhg.iais.roberta.util.ast.TextRegion;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.syntax.FunctionNames;
 
@@ -766,7 +767,7 @@ public abstract class CommonTextlyJavaVisitor<T> extends TextlyJavaBaseVisitor<T
             statementElseList.setReadOnly();
             listOfStatementList.remove(ctx.statementList().size() - 1);
         }
-        return (T) new IfStmt(mknullProperty(ctx, statementElseList.sl.size() >= 0 ? "robControls_ifElse" : "robControls_if"), conditionsList, listOfStatementList, statementElseList, statementElseList.sl.size(), listOfStatementList.size() - 1);
+        return (T) new IfStmt(mknullProperty(ctx, statementElseList.sl.size() > 0 ? "robControls_ifElse" : "robControls_if"), conditionsList, listOfStatementList, statementElseList, statementElseList.sl.size(), listOfStatementList.size() - 1);
 
     }
 
@@ -1062,7 +1063,7 @@ public abstract class CommonTextlyJavaVisitor<T> extends TextlyJavaBaseVisitor<T
             expr = new ListCreate(type.getMatchingElementTypeForArrayType(), (ExprList) expr, mkExternalProperty(ctx, "robLists_create_with"));
         }
         String nameVar = ctx.nameDecl().stop.getText();
-        VarDeclaration var = checkValidationName(new VarDeclaration(type, nameVar, expr, true, true, mkExternalProperty(ctx, "robGlobalVariables_declare")), nameVar, NameType.VAR);
+        VarDeclaration var = checkValidationName(new VarDeclaration(type, nameVar, expr, true, true, mkVariableDeclProperty(ctx, "robGlobalVariables_declare")), nameVar, NameType.VAR);
         var.setReadOnly();
 
         return (T) var;
@@ -1314,6 +1315,12 @@ public abstract class CommonTextlyJavaVisitor<T> extends TextlyJavaBaseVisitor<T
     private static BlocklyProperties mkMainTaskProperty(ParserRuleContext ctx, String type) {
         BlocklyRegion br = new BlocklyRegion(false, false, null, false, null, true, null, null, null);
         return new BlocklyProperties(type, "2", br, null);
+    }
+
+    private static BlocklyProperties mkVariableDeclProperty(ParserRuleContext ctx, String type) {
+        TextRegion rg = ctx == null ? null : new TextRegion(ctx.start.getLine(), ctx.start.getStartIndex(), ctx.stop.getLine(), ctx.stop.getStopIndex());
+        BlocklyRegion br = new BlocklyRegion(false, false, null, false, false, true, null, null, null);
+        return new BlocklyProperties(type, "2", br, rg);
     }
 
     @Override

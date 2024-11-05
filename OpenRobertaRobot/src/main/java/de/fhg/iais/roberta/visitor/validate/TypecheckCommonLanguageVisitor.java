@@ -391,6 +391,7 @@ public abstract class TypecheckCommonLanguageVisitor extends BaseVisitor<Blockly
                 break;
             }
         }
+
         if ( methodExists ) {
             return usedHardwareBean.getSignatureOfMethod(methodCall.getMethodName()).typeCheckPhraseList(methodCall, this, methodCall.getParametersValues().el);
         } else {
@@ -402,6 +403,7 @@ public abstract class TypecheckCommonLanguageVisitor extends BaseVisitor<Blockly
 
     @Override
     public BlocklyType visitMethodVoid(MethodVoid methodVoid) {
+        methodVoid.body.accept(this);
         return Sig.of(BlocklyType.VOID).typeCheckPhrases(methodVoid, this);
     }
 

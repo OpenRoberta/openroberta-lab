@@ -903,20 +903,27 @@ public abstract class AbstractRegenerateTextlyJavaVisitor extends BaseVisitor<Vo
         this.src.add(") ");
         this.src.add("return ");
         methodIfReturn.oraReturnValue.accept(this);
+        this.src.add(";");
         return null;
     }
 
     @Override
     public Void visitMethodStmt(MethodStmt methodStmt) {
-        this.src.nlI().nlI().accept(methodStmt.method, this).add(";");
+        this.src.nlI().accept(methodStmt.method, this);
         return null;
     }
 
     @Override
     public Void visitMethodCall(MethodCall methodCall) {
-        src.nlI().add(methodCall.getMethodName(), "(");
-        genExpressionList(methodCall.getParametersValues().el);
-        src.add(");");
+        if ( methodCall.oraReturnType.equalAsTypes(BlocklyType.VOID) ) {
+            src.nlI().add(methodCall.getMethodName(), "(");
+            genExpressionList(methodCall.getParametersValues().el);
+            src.add(");");
+        } else {
+            src.add(methodCall.getMethodName(), "(");
+            genExpressionList(methodCall.getParametersValues().el);
+            src.add(")");
+        }
         return null;
     }
 
