@@ -202,7 +202,7 @@ public class MbotStackMachineVisitor extends AbstractStackMachineVisitor impleme
         if ( speedOnly ) {
             return add(o.put(C.SET_TIME, false));
         } else {
-            add(o.put(C.SET_TIME, true));
+            o.put(C.SET_TIME, true);
             if ( duration.getType() == null ) {
                 o.put(C.MOTOR_DURATION, C.TIME);
 
