@@ -4,19 +4,7 @@
  */
 import * as UTIL from 'util.roberta';
 import * as $ from 'jquery';
-import {
-    BaseSimulationObject,
-    CircleSimulationObject,
-    Ground,
-    IMovable,
-    ISimulationObstacle,
-    MarkerSimulationObject,
-    RcjSimulationLabel,
-    RectangleSimulationObject,
-    SimObjectFactory,
-    SimObjectShape,
-    SimObjectType,
-} from 'simulation.objects';
+import { BaseSimulationObject, CircleSimulationObject, Ground, IMovable, ISimulationObstacle, MarkerSimulationObject, RcjSimulationLabel, RectangleSimulationObject, SimObjectFactory, SimObjectShape, SimObjectType } from 'simulation.objects';
 import simulationRoberta, { SimulationRoberta } from 'simulation.roberta';
 import { IDestroyable, RobotBase, RobotFactory } from 'robot.base';
 import { Interpreter } from 'interpreter.interpreter';
@@ -700,7 +688,6 @@ export class SimulationScene {
             $('#canvasDiv').hide();
             $('#simDiv>.pace').show();
             this.robots = [];
-            this.removeRcjScoringTool();
             // run with a different robot type or different number of robots
             RobotFactory.createRobots(interpreters, configurations, savedNames, this.sim.selectionListener, this.robotType).then((result) => {
                 this.robots = result.robots;
@@ -708,6 +695,7 @@ export class SimulationScene {
                 this.setRobotPoses(importPoses);
                 this.initViews();
                 if (switchRobot) {
+                    this.removeRcjScoringTool();
                     scene.imgBackgroundList = [];
                     scene.currentBackground = 0;
                     if (scene.obstacleList.length > 0) {
