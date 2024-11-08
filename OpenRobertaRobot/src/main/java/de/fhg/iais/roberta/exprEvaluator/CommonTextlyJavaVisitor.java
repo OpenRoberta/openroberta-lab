@@ -3,8 +3,12 @@ package de.fhg.iais.roberta.exprEvaluator;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 import org.antlr.v4.runtime.ParserRuleContext;
@@ -90,6 +94,38 @@ public abstract class CommonTextlyJavaVisitor<T> extends TextlyJavaBaseVisitor<T
     private static final Pattern BUTTONPORT_NAME = Pattern.compile("[a-zA-Z][a-zA-Z0-9_]*");
     private static final Pattern EV3_PORT_NUMBER = Pattern.compile("[1-4]");
     private static final Pattern EV3_PORT_NAME = Pattern.compile("[A-Da-d]");
+    private final Map<String, List<ParameterInfo>> functionSignatures = new HashMap<>();
+    private final Set<String> declaredVariableNames = new HashSet<>();
+    private final Set<String> userDefinedFunctionNames = new HashSet<>();
+
+    private static class ParameterInfo {
+        String name;
+        BlocklyType type;
+
+        ParameterInfo(String name, BlocklyType type) {
+            this.name = name;
+            this.type = type;
+        }
+    }
+
+    public void collectFunctionSignatures(TextlyJavaParser.ProgramContext programContext) {
+        for ( TextlyJavaParser.UserFuncContext userFunc : programContext.userFunc() ) {
+            if ( userFunc instanceof TextlyJavaParser.FuncUserContext ) {
+                TextlyJavaParser.FuncUserContext funcUser = (TextlyJavaParser.FuncUserContext) userFunc;
+                String functionName = funcUser.NAME().getText();
+                List<ParameterInfo> parametersInfo = new ArrayList<>();
+
+                for ( TextlyJavaParser.NameDeclContext paramCtx : funcUser.nameDecl() ) {
+                    String paramName = paramCtx.getToken(TextlyJavaParser.NAME, 0).getText();
+                    String typeText = paramCtx.getToken(TextlyJavaParser.PRIMITIVETYPE, 0).getText();
+                    BlocklyType paramType = BlocklyType.getByBlocklyName(textlyBlocklyType.getBlocklyType(typeText));
+                    parametersInfo.add(new ParameterInfo(paramName, paramType));
+                }
+
+                functionSignatures.put(functionName, parametersInfo);
+            }
+        }
+    }
 
     /**
      * @return AST instance for the whole expression
@@ -446,25 +482,25 @@ public abstract class CommonTextlyJavaVisitor<T> extends TextlyJavaBaseVisitor<T
                 case "size":
                     return (T) new FunctionExpr(new LengthOfListFunct(mkExternalProperty(ctx, "robLists_length"), args.get(0)));
                 case "indexOfFirst":
-                    return (T) new FunctionExpr(new IndexOfFunct(mkExternalProperty(ctx, "robLists_indexOf"), IndexLocation.FIRST, args.get(0), args.get(1)));
+                    return (T) new FunctionExpr(new IndexOfFunct(mkInlineProperty(ctx, "robLists_indexOf"), IndexLocation.FIRST, args.get(0), args.get(1)));
                 case "indexOfLast":
-                    return (T) new FunctionExpr(new IndexOfFunct(mkExternalProperty(ctx, "robLists_indexOf"), IndexLocation.LAST, args.get(0), args.get(1)));
+                    return (T) new FunctionExpr(new IndexOfFunct(mkInlineProperty(ctx, "robLists_indexOf"), IndexLocation.LAST, args.get(0), args.get(1)));
                 case "get":
-                    return (T) new FunctionExpr(new ListGetIndex(ListElementOperations.GET, IndexLocation.FROM_START, args, null, mkExternalProperty(ctx, "robLists_getIndex")));
+                    return (T) new FunctionExpr(new ListGetIndex(ListElementOperations.GET, IndexLocation.FROM_START, args, null, mkInlineProperty(ctx, "robLists_getIndex")));
                 case "getFromEnd":
-                    return (T) new FunctionExpr(new ListGetIndex(ListElementOperations.GET, IndexLocation.FROM_END, args, null, mkExternalProperty(ctx, "robLists_getIndex")));
+                    return (T) new FunctionExpr(new ListGetIndex(ListElementOperations.GET, IndexLocation.FROM_END, args, null, mkInlineProperty(ctx, "robLists_getIndex")));
                 case "getFirst":
-                    return (T) new FunctionExpr(new ListGetIndex(ListElementOperations.GET, IndexLocation.FIRST, args, null, mkExternalProperty(ctx, "robLists_getIndex")));
+                    return (T) new FunctionExpr(new ListGetIndex(ListElementOperations.GET, IndexLocation.FIRST, args, null, mkInlineProperty(ctx, "robLists_getIndex")));
                 case "getLast":
-                    return (T) new FunctionExpr(new ListGetIndex(ListElementOperations.GET, IndexLocation.LAST, args, null, mkExternalProperty(ctx, "robLists_getIndex")));
+                    return (T) new FunctionExpr(new ListGetIndex(ListElementOperations.GET, IndexLocation.LAST, args, null, mkInlineProperty(ctx, "robLists_getIndex")));
                 case "getAndRemove":
-                    return (T) new FunctionExpr(new ListGetIndex(ListElementOperations.GET_REMOVE, IndexLocation.FROM_START, args, null, mkExternalProperty(ctx, "robLists_getIndex")));
+                    return (T) new FunctionExpr(new ListGetIndex(ListElementOperations.GET_REMOVE, IndexLocation.FROM_START, args, null, mkInlineProperty(ctx, "robLists_getIndex")));
                 case "getAndRemoveFromEnd":
-                    return (T) new FunctionExpr(new ListGetIndex(ListElementOperations.GET_REMOVE, IndexLocation.FROM_END, args, null, mkExternalProperty(ctx, "robLists_getIndex")));
+                    return (T) new FunctionExpr(new ListGetIndex(ListElementOperations.GET_REMOVE, IndexLocation.FROM_END, args, null, mkInlineProperty(ctx, "robLists_getIndex")));
                 case "getAndRemoveFirst":
-                    return (T) new FunctionExpr(new ListGetIndex(ListElementOperations.GET_REMOVE, IndexLocation.FIRST, args, null, mkExternalProperty(ctx, "robLists_getIndex")));
+                    return (T) new FunctionExpr(new ListGetIndex(ListElementOperations.GET_REMOVE, IndexLocation.FIRST, args, null, mkInlineProperty(ctx, "robLists_getIndex")));
                 case "getAndRemoveLast":
-                    return (T) new FunctionExpr(new ListGetIndex(ListElementOperations.GET_REMOVE, IndexLocation.LAST, args, null, mkExternalProperty(ctx, "robLists_getIndex")));
+                    return (T) new FunctionExpr(new ListGetIndex(ListElementOperations.GET_REMOVE, IndexLocation.LAST, args, null, mkInlineProperty(ctx, "robLists_getIndex")));
                 case "createListWith":
                     return (T) new FunctionExpr(new ListRepeat(BlocklyType.VOID, args, mkExternalProperty(ctx, "robLists_repeat")));
                 case "createEmptyList":
@@ -473,23 +509,23 @@ public abstract class CommonTextlyJavaVisitor<T> extends TextlyJavaBaseVisitor<T
                     String listType = ctx.PRIMITIVETYPE().getText();
                     return (T) new ListCreate(BlocklyType.get(listType.toUpperCase()), emptyList, mkExternalProperty(ctx, "robLists_create_with"));
                 case "subList":
-                    return (T) new FunctionExpr(new GetSubFunct(FunctionNames.GET_SUBLIST, new ArrayList<IMode>(Arrays.asList(IndexLocation.FROM_START, IndexLocation.FROM_START)), args, mkExternalProperty(ctx, "robLists_getSublist")));
+                    return (T) new FunctionExpr(new GetSubFunct(FunctionNames.GET_SUBLIST, new ArrayList<IMode>(Arrays.asList(IndexLocation.FROM_START, IndexLocation.FROM_START)), args, mkInlineProperty(ctx, "robLists_getSublist")));
                 case "subListFromIndexToLast":
-                    return (T) new FunctionExpr(new GetSubFunct(FunctionNames.GET_SUBLIST, new ArrayList<IMode>(Arrays.asList(IndexLocation.FROM_START, IndexLocation.LAST)), args, mkExternalProperty(ctx, "robLists_getSublist")));
+                    return (T) new FunctionExpr(new GetSubFunct(FunctionNames.GET_SUBLIST, new ArrayList<IMode>(Arrays.asList(IndexLocation.FROM_START, IndexLocation.LAST)), args, mkInlineProperty(ctx, "robLists_getSublist")));
                 case "subListFromIndexToEnd":
-                    return (T) new FunctionExpr(new GetSubFunct(FunctionNames.GET_SUBLIST, new ArrayList<IMode>(Arrays.asList(IndexLocation.FROM_START, IndexLocation.FROM_END)), args, mkExternalProperty(ctx, "robLists_getSublist")));
+                    return (T) new FunctionExpr(new GetSubFunct(FunctionNames.GET_SUBLIST, new ArrayList<IMode>(Arrays.asList(IndexLocation.FROM_START, IndexLocation.FROM_END)), args, mkInlineProperty(ctx, "robLists_getSublist")));
                 case "subListFromFirstToIndex":
-                    return (T) new FunctionExpr(new GetSubFunct(FunctionNames.GET_SUBLIST, new ArrayList<IMode>(Arrays.asList(IndexLocation.FIRST, IndexLocation.FROM_START)), args, mkExternalProperty(ctx, "robLists_getSublist")));
+                    return (T) new FunctionExpr(new GetSubFunct(FunctionNames.GET_SUBLIST, new ArrayList<IMode>(Arrays.asList(IndexLocation.FIRST, IndexLocation.FROM_START)), args, mkInlineProperty(ctx, "robLists_getSublist")));
                 case "subListFromFirstToLast":
-                    return (T) new FunctionExpr(new GetSubFunct(FunctionNames.GET_SUBLIST, new ArrayList<IMode>(Arrays.asList(IndexLocation.FIRST, IndexLocation.LAST)), args, mkExternalProperty(ctx, "robLists_getSublist")));
+                    return (T) new FunctionExpr(new GetSubFunct(FunctionNames.GET_SUBLIST, new ArrayList<IMode>(Arrays.asList(IndexLocation.FIRST, IndexLocation.LAST)), args, mkInlineProperty(ctx, "robLists_getSublist")));
                 case "subListFromFirstToEnd":
-                    return (T) new FunctionExpr(new GetSubFunct(FunctionNames.GET_SUBLIST, new ArrayList<IMode>(Arrays.asList(IndexLocation.FIRST, IndexLocation.FROM_END)), args, mkExternalProperty(ctx, "robLists_getSublist")));
+                    return (T) new FunctionExpr(new GetSubFunct(FunctionNames.GET_SUBLIST, new ArrayList<IMode>(Arrays.asList(IndexLocation.FIRST, IndexLocation.FROM_END)), args, mkInlineProperty(ctx, "robLists_getSublist")));
                 case "subListFromEndToIndex":
-                    return (T) new FunctionExpr(new GetSubFunct(FunctionNames.GET_SUBLIST, new ArrayList<IMode>(Arrays.asList(IndexLocation.FROM_END, IndexLocation.FROM_START)), args, mkExternalProperty(ctx, "robLists_getSublist")));
+                    return (T) new FunctionExpr(new GetSubFunct(FunctionNames.GET_SUBLIST, new ArrayList<IMode>(Arrays.asList(IndexLocation.FROM_END, IndexLocation.FROM_START)), args, mkInlineProperty(ctx, "robLists_getSublist")));
                 case "subListFromEndToLast":
-                    return (T) new FunctionExpr(new GetSubFunct(FunctionNames.GET_SUBLIST, new ArrayList<IMode>(Arrays.asList(IndexLocation.FROM_END, IndexLocation.LAST)), args, mkExternalProperty(ctx, "robLists_getSublist")));
+                    return (T) new FunctionExpr(new GetSubFunct(FunctionNames.GET_SUBLIST, new ArrayList<IMode>(Arrays.asList(IndexLocation.FROM_END, IndexLocation.LAST)), args, mkInlineProperty(ctx, "robLists_getSublist")));
                 case "subListFromEndToEnd":
-                    return (T) new FunctionExpr(new GetSubFunct(FunctionNames.GET_SUBLIST, new ArrayList<IMode>(Arrays.asList(IndexLocation.FROM_END, IndexLocation.FROM_END)), args, mkExternalProperty(ctx, "robLists_getSublist")));
+                    return (T) new FunctionExpr(new GetSubFunct(FunctionNames.GET_SUBLIST, new ArrayList<IMode>(Arrays.asList(IndexLocation.FROM_END, IndexLocation.FROM_END)), args, mkInlineProperty(ctx, "robLists_getSublist")));
                 case "print":
                     return (T) new FunctionExpr(new TextPrintFunct(args, mkPropertyFromClass(ctx, TextPrintFunct.class)));
                 case "createTextWith":
@@ -895,15 +931,15 @@ public abstract class CommonTextlyJavaVisitor<T> extends TextlyJavaBaseVisitor<T
             el.setReadOnly();
             if ( el.el.get(1) instanceof NumConst && el.el.get(3) instanceof NumConst ) {
                 if ( ((NumConst) el.el.get(1)).value.equals("0") && ((NumConst) el.el.get(3)).value.equals("1") ) {
-                    return (T) new RepeatStmt(RepeatStmt.Mode.TIMES, el, statementList, mkExternalProperty(ctx, "controls_repeat_ext"));
+                    return (T) new RepeatStmt(RepeatStmt.Mode.TIMES, el, statementList, mkInlineProperty(ctx, "controls_repeat_ext"));
                 }
             }
             if ( ctx.op != null && ctx.op.getType() == TextlyJavaParser.STEP && el.el.get(3) instanceof Var ) {
                 if ( ((Var) el.el.get(3)).name.equals(nameVar) ) {
                     el.el.set(3, new NumConst(null, "1"));
-                    return (T) new RepeatStmt(RepeatStmt.Mode.FOR, el, statementList, mkExternalProperty(ctx, "robControls_for"));
+                    return (T) new RepeatStmt(RepeatStmt.Mode.FOR, el, statementList, mkInlineProperty(ctx, "robControls_for"));
                 } else {
-                    Stmt resultError = new RepeatStmt(RepeatStmt.Mode.FOR, el, statementList, mkExternalProperty(ctx, "robControls_for"));
+                    Stmt resultError = new RepeatStmt(RepeatStmt.Mode.FOR, el, statementList, mkInlineProperty(ctx, "robControls_for"));
                     resultError.addTextlyError("Variable name should be the same for ++ notation", true);
                     return (T) resultError;
                 }
@@ -914,13 +950,13 @@ public abstract class CommonTextlyJavaVisitor<T> extends TextlyJavaBaseVisitor<T
                 return (T) resultError;
             } else if ( ctx.op != null && ctx.op.getType() == TextlyJavaParser.SUB && el.el.get(3) instanceof NumConst ) {
                 el.el.set(3, new Unary((Unary.Op.NEG), el.el.get(3), mkInlineProperty(ctx, "math_single")));
-                return (T) new RepeatStmt(RepeatStmt.Mode.FOR, el, statementList, mkExternalProperty(ctx, "robControls_for"));
+                return (T) new RepeatStmt(RepeatStmt.Mode.FOR, el, statementList, mkInlineProperty(ctx, "robControls_for"));
             } else if ( ctx.op != null && ctx.op.getType() == TextlyJavaParser.ADD ) {
                 String nameVariable = ctx.NAME(2).getText();
                 Var var = checkValidationName(new Var(BlocklyType.NUMBER_INT, nameVariable, mkPropertyFromClass(ctx, Var.class)), nameVar, NameType.VAR);
-                return (T) new RepeatStmt(RepeatStmt.Mode.FOR, el, statementList, mkExternalProperty(ctx, "robControls_for"));
+                return (T) new RepeatStmt(RepeatStmt.Mode.FOR, el, statementList, mkInlineProperty(ctx, "robControls_for"));
             } else {
-                return (T) new RepeatStmt(RepeatStmt.Mode.FOR, el, statementList, mkExternalProperty(ctx, "robControls_for"));
+                return (T) new RepeatStmt(RepeatStmt.Mode.FOR, el, statementList, mkInlineProperty(ctx, "robControls_for"));
             }
         } else {
             StmtList statementList = new StmtList(ctx);
@@ -964,14 +1000,18 @@ public abstract class CommonTextlyJavaVisitor<T> extends TextlyJavaBaseVisitor<T
     public T visitParamsMethod(TextlyJavaParser.ParamsMethodContext ctx) throws UnsupportedOperationException {
 
         String typeAsString = ctx.PRIMITIVETYPE().getText();
-        BlocklyType type = BlocklyType.getByBlocklyName(textlyArray.getBlocklyType(typeAsString));
+        BlocklyType type = BlocklyType.getByBlocklyName(textlyBlocklyType.getBlocklyType(typeAsString));
         Phrase emptyExpression = new EmptyExpr(type);
         emptyExpression.setReadOnly();
         String nameVar = ctx.NAME().getText();
         boolean isLastParam = isLastParamsMethodContext(ctx);
         VarDeclaration var = checkValidationName(new VarDeclaration(type, nameVar, emptyExpression, isLastParam, false, mkExternalProperty(ctx, "robLocalVariables_declare")), nameVar, NameType.VAR);
         var.setReadOnly();
+        if ( declaredVariableNames.contains(nameVar) ) {
+            var.addTextlyError("The variable name is duplicated", true);
+        }
 
+        declaredVariableNames.add(nameVar);
         return (T) var;
     }
 
@@ -996,7 +1036,6 @@ public abstract class CommonTextlyJavaVisitor<T> extends TextlyJavaBaseVisitor<T
     public T visitFuncUser(TextlyJavaParser.FuncUserContext ctx) throws UnsupportedOperationException {
 
         String methodName = ctx.NAME().getText();
-
         if ( validatePattern(methodName, NameType.FUNCTIONNAME) ) {
             ExprList parameters = new ExprList();
             for ( TextlyJavaParser.NameDeclContext nameDeclContext : ctx.nameDecl() ) {
@@ -1014,14 +1053,28 @@ public abstract class CommonTextlyJavaVisitor<T> extends TextlyJavaBaseVisitor<T
             }
             statementList.setReadOnly();
 
-
             if ( ctx.op != null && ctx.op.getType() == TextlyJavaParser.RETURN ) {
-                BlocklyType returnType = BlocklyType.get(ctx.PRIMITIVETYPE().getText());
+                BlocklyType returnType = BlocklyType.get(textlyBlocklyType.getBlocklyType(ctx.PRIMITIVETYPE().getText()));
                 Expr returnExpr = (Expr) visit(ctx.expr());
                 returnExpr.setReadOnly();
-                return (T) new MethodReturn(methodName, parameters, statementList, returnType, returnExpr, mkExternalProperty(ctx, "robProcedures_defreturn"));
+                MethodReturn methodReturn = new MethodReturn(methodName, parameters, statementList, returnType, returnExpr, mkExternalProperty(ctx, "robProcedures_defreturn"));
+                if ( userDefinedFunctionNames.contains(methodName) ) {
+                    methodReturn.addTextlyError("Function name '" + methodName + "' is already defined", true);
+                    return (T) methodReturn;
+                } else {
+                    userDefinedFunctionNames.add(methodName);
+                    return (T) methodReturn;
+                }
+
             } else {
-                return (T) new MethodVoid(methodName, parameters, statementList, mkExternalProperty(ctx, "robProcedures_defnoreturn"));
+                MethodVoid methodVoid = new MethodVoid(methodName, parameters, statementList, mkExternalProperty(ctx, "robProcedures_defnoreturn"));
+                if ( userDefinedFunctionNames.contains(methodName) ) {
+                    methodVoid.addTextlyError("Function name '" + methodName + "' is already defined", true);
+                    return (T) methodVoid;
+                } else {
+                    userDefinedFunctionNames.add(methodName);
+                    return (T) methodVoid;
+                }
             }
 
         } else {
@@ -1056,7 +1109,7 @@ public abstract class CommonTextlyJavaVisitor<T> extends TextlyJavaBaseVisitor<T
     public T visitVariableDeclaration(TextlyJavaParser.VariableDeclarationContext ctx) throws UnsupportedOperationException {
 
         String typeAsString = ctx.nameDecl().start.getText();
-        BlocklyType type = BlocklyType.getByBlocklyName(textlyArray.getBlocklyType(typeAsString));
+        BlocklyType type = BlocklyType.getByBlocklyName(textlyBlocklyType.getBlocklyType(typeAsString));
         Expr expr = (Expr) visit(ctx.expr());
         if ( type.isArray() ) {
             expr.setReadOnly();
@@ -1064,8 +1117,12 @@ public abstract class CommonTextlyJavaVisitor<T> extends TextlyJavaBaseVisitor<T
         }
         String nameVar = ctx.nameDecl().stop.getText();
         VarDeclaration var = checkValidationName(new VarDeclaration(type, nameVar, expr, true, true, mkVariableDeclProperty(ctx, "robGlobalVariables_declare")), nameVar, NameType.VAR);
-        var.setReadOnly();
 
+        if ( declaredVariableNames.contains(nameVar) ) {
+            var.addTextlyError("The variable name is duplicated", true);
+        }
+        var.setReadOnly();
+        declaredVariableNames.add(nameVar);
         return (T) var;
     }
 
@@ -1074,6 +1131,7 @@ public abstract class CommonTextlyJavaVisitor<T> extends TextlyJavaBaseVisitor<T
      */
     @Override
     public T visitProgram(TextlyJavaParser.ProgramContext ctx) {
+        collectFunctionSignatures(ctx);
         List<Phrase> phrases = new ArrayList<>();
         StmtList variablesDec = new StmtList();
 
@@ -1106,11 +1164,23 @@ public abstract class CommonTextlyJavaVisitor<T> extends TextlyJavaBaseVisitor<T
         ExprList oraparameters = new ExprList();
         ExprList oraParametersValues = new ExprList();
         if ( validatePattern(oraMethodName, NameType.FUNCTIONNAME) ) {
+            List<ParameterInfo> parameterInfoList = functionSignatures.get(oraMethodName);
+            if ( parameterInfoList == null ) {
+                Expr result = new EmptyExpr(BlocklyType.NOTHING);
+                result.addTextlyError("Invalid function name '" + oraMethodName + "' - function not defined.", true);
+                return (T) result;
+            }
+            if ( ctx.expr().size() != parameterInfoList.size() ) {
+                Expr result = new EmptyExpr(BlocklyType.NOTHING);
+                result.addTextlyError("Incorrect number of arguments for function '" + oraMethodName + "'. Expected "
+                    + parameterInfoList.size() + " but got " + ctx.expr().size(), true);
+                return (T) result;
+            }
             int paramIndex = 0;
             for ( TextlyJavaParser.ExprContext expr : ctx.expr() ) {
                 Expr param = (Expr) visit(expr);
-                String nameParam = "parameter_" + paramIndex;
-                Var parametar = new Var(param.getBlocklyType(), nameParam, BlocklyProperties.make("PARAMETER", "1", null));
+                ParameterInfo paramInfo = parameterInfoList.get(paramIndex);
+                Var parametar = new Var(paramInfo.type, paramInfo.name, BlocklyProperties.make("PARAMETER", "1", null));
                 oraparameters.addExpr(parametar);
                 oraParametersValues.addExpr(param);
                 paramIndex++;
@@ -1127,8 +1197,6 @@ public abstract class CommonTextlyJavaVisitor<T> extends TextlyJavaBaseVisitor<T
             result.addTextlyError("Invalid name for Function", true);
             return (T) result;
         }
-
-
     }
 
     /**
@@ -1168,15 +1236,27 @@ public abstract class CommonTextlyJavaVisitor<T> extends TextlyJavaBaseVisitor<T
         String oraMethodName = ctx.NAME().getText();
         ExprList oraparameters = new ExprList();
         ExprList oraParametersValues = new ExprList();
+        List<ParameterInfo> parameterInfoList = functionSignatures.get(oraMethodName);
+        if ( parameterInfoList == null ) {
+            StmtList errorStmtList = new StmtList(ctx);
+            errorStmtList.addTextlyError("Function '" + oraMethodName + "' is not defined", true);
+            return (T) errorStmtList;
+        }
+        if ( ctx.expr().size() != parameterInfoList.size() ) {
+            StmtList errorStmtList = new StmtList(ctx);
+            errorStmtList.addTextlyError("Incorrect number of arguments for function '" + oraMethodName + "'. Expected "
+                + parameterInfoList.size() + " but got " + ctx.expr().size(), true);
+            return (T) errorStmtList;
+        }
         if ( validatePattern(oraMethodName, NameType.FUNCTIONNAME) ) {
-            int paramIndex = 0;
-            for ( TextlyJavaParser.ExprContext expr : ctx.expr() ) {
-                Expr param = (Expr) visit(expr);
-                String nameParam = "parameter_" + paramIndex;
-                Var parametar = new Var(param.getBlocklyType(), nameParam, BlocklyProperties.make("PARAMETER", "1", null));
-                oraparameters.addExpr(parametar);
-                oraParametersValues.addExpr(param);
-                paramIndex++;
+            for ( int paramIndex = 0; paramIndex < ctx.expr().size(); paramIndex++ ) {
+                Expr paramValue = (Expr) visit(ctx.expr(paramIndex));
+                ParameterInfo paramInfo = parameterInfoList.get(paramIndex);
+
+
+                Var paramVar = new Var(paramInfo.type, paramInfo.name, BlocklyProperties.make("PARAMETER", "1", null));
+                oraparameters.addExpr(paramVar);
+                oraParametersValues.addExpr(paramValue);
             }
             oraparameters.setReadOnly();
             oraParametersValues.setReadOnly();
@@ -1409,7 +1489,7 @@ public abstract class CommonTextlyJavaVisitor<T> extends TextlyJavaBaseVisitor<T
         return mkExternalProperty(ctx, blocklyNames[0]);
     }
 
-    private enum textlyArray {
+    private enum textlyBlocklyType {
         ARRAY_NUMBER("List<Number>"),
         ARRAY_BOOLEAN("List<Boolean>"),
         ARRAY_STRING("List<String>"),
@@ -1425,7 +1505,7 @@ public abstract class CommonTextlyJavaVisitor<T> extends TextlyJavaBaseVisitor<T
 
         private final String name;
 
-        textlyArray(String name) {
+        textlyBlocklyType(String name) {
             this.name = name;
         }
 
@@ -1437,7 +1517,7 @@ public abstract class CommonTextlyJavaVisitor<T> extends TextlyJavaBaseVisitor<T
          * @return the AST mode name
          */
         public static String getBlocklyType(String textlyName) {
-            for ( textlyArray arrayType : values() ) {
+            for ( textlyBlocklyType arrayType : values() ) {
                 if ( arrayType.name.equalsIgnoreCase(textlyName) ) {
                     return arrayType.name();
                 }

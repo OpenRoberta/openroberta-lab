@@ -383,16 +383,16 @@ public abstract class TypecheckCommonLanguageVisitor extends BaseVisitor<Blockly
 
     @Override
     public BlocklyType visitMethodCall(MethodCall methodCall) {
-        boolean methodExists = false;
         List<Method> methods = usedHardwareBean.getUserDefinedMethods();
+        Method methodSelected = null;
         for ( Method m : methods ) {
             if ( m.getMethodName().equals(methodCall.getMethodName()) ) {
-                methodExists = true;
+                methodSelected = m;
                 break;
             }
         }
 
-        if ( methodExists ) {
+        if ( methodSelected != null ) {
             return usedHardwareBean.getSignatureOfMethod(methodCall.getMethodName()).typeCheckPhraseList(methodCall, this, methodCall.getParametersValues().el);
         } else {
             methodCall.addTextlyError("Invalid Function name or Expression", true);

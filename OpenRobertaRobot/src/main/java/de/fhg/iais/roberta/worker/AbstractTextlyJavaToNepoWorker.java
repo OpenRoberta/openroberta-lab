@@ -58,12 +58,12 @@ public abstract class AbstractTextlyJavaToNepoWorker implements IWorker {
                 StmtList stmtList = (StmtList) mainPart.get(1);
 
                 List<JSONObject> textlyErrors = new ArrayList<>();
+                textlyErrors.addAll(NepoInfoProcessor.collectTextlyErrors(mainTask));
                 List<Phrase> phrases = new ArrayList<>(Arrays.asList(new Location("0", "0"), mainTask));
                 for ( int i = 0; i < stmtList.sl.size(); i++ ) {
                     phrases.add((Phrase) stmtList.sl.get(i));
-                    textlyErrors.addAll(NepoInfoProcessor.collectTextlyErrors(((Phrase) stmtList.sl.get(i))));
                 }
-
+                textlyErrors.addAll(NepoInfoProcessor.collectTextlyErrors(stmtList));
                 ProgramAst.Builder builder = new ProgramAst.Builder()
                     .setRobotType(project.getRobotFactory().getGroup())
                     .setXmlVersion(project.getProgramAst().getXmlVersion())
@@ -74,19 +74,27 @@ public abstract class AbstractTextlyJavaToNepoWorker implements IWorker {
                     List<Phrase> phrasesMethod;
                     if ( mainPart.get(i) instanceof MethodReturn ) {
                         MethodReturn methodReturn = (MethodReturn) mainPart.get(i);
+                        textlyErrors.addAll(NepoInfoProcessor.collectTextlyErrors(methodReturn));
+                        textlyErrors.addAll(NepoInfoProcessor.collectTextlyErrors(methodReturn.getParameters()));
                         phrasesMethod = new ArrayList<>(Arrays.asList(location, methodReturn));
                     } else {
                         MethodVoid methodVoid = (MethodVoid) mainPart.get(i);
+                        textlyErrors.addAll(NepoInfoProcessor.collectTextlyErrors(methodVoid));
+                        textlyErrors.addAll(NepoInfoProcessor.collectTextlyErrors(methodVoid.getParameters()));
                         phrasesMethod = new ArrayList<>(Arrays.asList(location, methodVoid));
                     }
+
                     builder.addToTree(phrasesMethod);
                     location = new Location(String.valueOf(i * 400), "0");
                 }
-
+                
                 project.setTextlyErrors(textlyErrors);
                 project.setProgramAst(builder.build());
+                if ( textlyErrors.size() > 0 ) {
+                    project.setResult(Key.PROGRAM_INVALID_STATEMETNS);
+                    project.addToErrorCounter(textlyErrors.size(), null);
+                }
             }
-
         } catch ( IOException e ) {
             throw new RuntimeException(e);
         }

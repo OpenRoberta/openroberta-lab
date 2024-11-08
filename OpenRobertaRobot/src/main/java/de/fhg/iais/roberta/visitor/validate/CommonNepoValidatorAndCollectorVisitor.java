@@ -605,7 +605,7 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
         if ( !(this.getBuilder(UsedHardwareBean.Builder.class).containsInScopeVariable(variableName)) ) {
             addErrorToPhrase(var, "SCOPE_ERROR");
         }
-        if (!Util.isSafeIdentifier(variableName)) {
+        if ( !Util.isSafeIdentifier(variableName) ) {
             addErrorToPhrase(var, "SCOPE_ERROR");
         }
         return null;
@@ -613,7 +613,7 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
 
     @Override
     public Void visitVarDeclaration(VarDeclaration var) {
-        if (!Util.isSafeIdentifier(var.name)) {
+        if ( !Util.isSafeIdentifier(var.name) ) {
             addErrorToPhrase(var, "SCOPE_ERROR");
         }
         if ( var.global ) {
@@ -638,6 +638,7 @@ public abstract class CommonNepoValidatorAndCollectorVisitor extends AbstractVal
         this.getBuilder(UsedHardwareBean.Builder.class).addGlobalVariable(var.name);
         this.getBuilder(UsedHardwareBean.Builder.class).addDeclaredVariable(var.name, var.getBlocklyType());
         this.getBuilder(UsedHardwareBean.Builder.class).addInScopeVariable(var.name);
+        
         return null;
     }
 
