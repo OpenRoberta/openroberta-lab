@@ -1126,10 +1126,12 @@ function drawTheNetwork(tabType: TabType, tabSuffix: string, options: object) {
                 if (nodesExplored.includes(node)) {
                     drawNodeOutput(container, nodeGroup, node, nodeType);
                 }
-                D3.select('#nn-show-next-neuron').html(
-                    currentDebugNode.id == flattenedNetwork[flattenedNetwork.length - 1].id ? '-' : flattenedNetwork[currentDebugNodeIndex].id
-                );
-                D3.select('#nn-show-iteration').html(`${currentInputRowForExploring + 1}/${userInputsForExploring.length}`);
+                if (currentDebugNode !== undefined && currentDebugNode !== null) {
+                    D3.select('#nn-show-next-neuron').html(
+                        currentDebugNode.id == flattenedNetwork[flattenedNetwork.length - 1].id ? '-' : flattenedNetwork[currentDebugNodeIndex].id
+                    );
+                    D3.select('#nn-show-iteration').html(`${currentInputRowForExploring + 1}/${userInputsForExploring.length}`);
+                }
                 break;
             default:
                 D3.select('#nn-show-next-neuron').html('');
@@ -1749,11 +1751,13 @@ function updateUI(tabSuffix: string) {
                 focusNode.id + ' = ' + (state.inputs.includes(focusNode.id) ? focusNode.output : focusNode.genMath(state.activationKey))
             );
         } else if (exploreType == ExploreType.NEURON) {
-            D3.select('#nn-show-math').html(
-                currentDebugNode.id +
+            if (currentDebugNode !== undefined && currentDebugNode !== null) {
+                D3.select('#nn-show-math').html(
+                    currentDebugNode.id +
                     ' = ' +
                     (state.inputs.includes(currentDebugNode.id) ? currentDebugNode.output : currentDebugNode.genMath(state.activationKey))
-            );
+                );
+            }
         } else {
             D3.select('#nn-show-math').html('');
         }
