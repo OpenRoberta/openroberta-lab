@@ -427,7 +427,7 @@ public final class SpikePythonVisitor extends AbstractSpikePythonVisitor {
     public Void visitPlayNoteAction(PlayNoteAction playNoteAction) {
         int midi = (int) Math.round(69 + (Math.log(Double.parseDouble(playNoteAction.frequency) / 440) / Math.log(2.0)) * 12);
         double duration = Double.parseDouble(playNoteAction.duration) / 1000.0;
-        this.src.add("hub.speaker.beep(").add(String.valueOf(midi)).add(", ").add(String.valueOf(duration)).add(");");
+        this.src.add("hub.speaker.beep(").add(String.valueOf(midi)).add(", ").add(String.valueOf(duration)).add(")");
         return null;
     }
 
@@ -437,7 +437,7 @@ public final class SpikePythonVisitor extends AbstractSpikePythonVisitor {
         playToneAction.frequency.accept(this);
         this.src.add("), ");
         playToneAction.duration.accept(this);
-        this.src.add(" / 1000);");
+        this.src.add(" / 1000)");
         return null;
     }
 
@@ -445,7 +445,7 @@ public final class SpikePythonVisitor extends AbstractSpikePythonVisitor {
     public Void visitRgbLedOnHiddenAction(RgbLedOnHiddenAction rgbLedOnHiddenAction) {
         this.src.add("set_status_light(");
         rgbLedOnHiddenAction.colour.accept(this);
-        this.src.add(");");
+        this.src.add(")");
         return null;
     }
 

@@ -14,7 +14,7 @@ def run():
     while True:
         if microbit.button_a.is_pressed():
             break
-    microbit.pin12.write_digital(1);
+    microbit.pin12.write_digital(1)
 
 def main():
     try:

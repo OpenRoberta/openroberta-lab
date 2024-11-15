@@ -485,7 +485,7 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
 
     @Override
     public Void visitPlayNoteAction(PlayNoteAction playNoteAction) {
-        src.add("hub.speaker.beep(").add(String.valueOf(playNoteAction.frequency)).add(", ").add(String.valueOf(playNoteAction.duration)).add(");");
+        src.add("hub.speaker.beep(").add(String.valueOf(playNoteAction.frequency)).add(", ").add(String.valueOf(playNoteAction.duration)).add(")");
         return null;
     }
 

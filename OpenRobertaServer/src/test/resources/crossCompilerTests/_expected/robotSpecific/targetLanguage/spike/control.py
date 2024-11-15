@@ -21,7 +21,7 @@ def run():
         if hub.right_button.is_pressed():
             break
     for ___Element in ___Element2:
-        set_status_light(___Element);
+        set_status_light(___Element)
         wait_for_seconds(500/1000)
 
 def main():

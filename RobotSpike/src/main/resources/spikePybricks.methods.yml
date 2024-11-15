@@ -138,7 +138,7 @@ IS_FREE_FALL:
         start = stopWatch.time()
         while stopWatch.time() - start < 333:
             if(get_acceleration() < threshold): 
-                return True;
+                return True
         return False
 
 IS_TAPPED:
@@ -193,7 +193,7 @@ TURN_FOR:
 SHOW_ANIMATION:
   PYTHON: |
     def show_animation(image_list):
-        hub.display.animate(image_list, 500);
+        hub.display.animate(image_list, 500)
         wait(500 * len(image_list) - 10)
         hub.display.icon(image_list[len(image_list)-1])
 

@@ -11,7 +11,7 @@ def display_text(text):
     hub.display.text("".join(text_list))
 
 def show_animation(image_list):
-    hub.display.animate(image_list, 500);
+    hub.display.animate(image_list, 500)
     wait(500 * len(image_list) - 10)
     hub.display.icon(image_list[len(image_list)-1])
 

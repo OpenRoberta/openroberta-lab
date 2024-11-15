@@ -20,7 +20,7 @@ def is_free_fall():
     start = stopWatch.time()
     while stopWatch.time() - start < 333:
         if(get_acceleration() < threshold): 
-            return True;
+            return True
     return False
 
 def is_shaken():

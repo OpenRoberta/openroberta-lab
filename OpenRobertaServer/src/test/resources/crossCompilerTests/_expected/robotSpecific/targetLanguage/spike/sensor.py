@@ -95,7 +95,7 @@ def run():
             break
         if timer.now() * 1000 > 500:
             break
-    set_status_light('pink');
+    set_status_light('pink')
 
 def main():
     try:

@@ -20,38 +20,38 @@ hub = spike.PrimeHub()
 
 def run():
     # sounds
-    hub.speaker.beep(65, 2.0);
-    hub.speaker.beep(67, 1.0);
-    hub.speaker.beep(69, 0.5);
-    hub.speaker.beep(71, 0.25);
-    hub.speaker.beep(72, 0.125);
-    hub.speaker.beep(get_midi_from(400), 100 / 1000);
+    hub.speaker.beep(65, 2.0)
+    hub.speaker.beep(67, 1.0)
+    hub.speaker.beep(69, 0.5)
+    hub.speaker.beep(71, 0.25)
+    hub.speaker.beep(72, 0.125)
+    hub.speaker.beep(get_midi_from(400), 100 / 1000)
     # lights
-    set_status_light('pink');
+    set_status_light('pink')
     wait_for_seconds(500/1000)
-    set_status_light('violet');
+    set_status_light('violet')
     wait_for_seconds(500/1000)
-    set_status_light('blue');
+    set_status_light('blue')
     wait_for_seconds(500/1000)
-    set_status_light('azure');
+    set_status_light('azure')
     wait_for_seconds(500/1000)
-    set_status_light('cyan');
+    set_status_light('cyan')
     wait_for_seconds(500/1000)
-    set_status_light('green');
+    set_status_light('green')
     wait_for_seconds(500/1000)
-    set_status_light('yellow');
+    set_status_light('yellow')
     wait_for_seconds(500/1000)
-    set_status_light('orange');
+    set_status_light('orange')
     wait_for_seconds(500/1000)
-    set_status_light('red');
+    set_status_light('red')
     wait_for_seconds(500/1000)
-    set_status_light('black');
+    set_status_light('black')
     wait_for_seconds(500/1000)
-    set_status_light('white');
+    set_status_light('white')
     wait_for_seconds(500/1000)
-    set_status_light(None);
+    set_status_light(None)
     wait_for_seconds(500/1000)
-    set_status_light('pink');
+    set_status_light('pink')
     wait_for_seconds(500/1000)
     hub.status_light.off()
 
