@@ -449,7 +449,7 @@ public class JoyCarPythonVisitor extends MicrobitV2PythonVisitor implements IJoy
         String valueType = mbedPinWriteValueAction.pinValue.equals(SC.DIGITAL) ? "digital(" : "analog(";
         this.src.add(".write_", valueType);
         mbedPinWriteValueAction.value.accept(this);
-        this.src.add(");");
+        this.src.add(")");
         return null;
     }
 
