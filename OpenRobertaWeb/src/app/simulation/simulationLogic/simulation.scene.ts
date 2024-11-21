@@ -4,7 +4,19 @@
  */
 import * as UTIL from 'util.roberta';
 import * as $ from 'jquery';
-import { BaseSimulationObject, CircleSimulationObject, Ground, IMovable, ISimulationObstacle, MarkerSimulationObject, RcjSimulationLabel, RectangleSimulationObject, SimObjectFactory, SimObjectShape, SimObjectType } from 'simulation.objects';
+import {
+    BaseSimulationObject,
+    CircleSimulationObject,
+    Ground,
+    IMovable,
+    ISimulationObstacle,
+    MarkerSimulationObject,
+    RcjSimulationLabel,
+    RectangleSimulationObject,
+    SimObjectFactory,
+    SimObjectShape,
+    SimObjectType,
+} from 'simulation.objects';
 import simulationRoberta, { SimulationRoberta } from 'simulation.roberta';
 import { IDestroyable, RobotBase, RobotFactory } from 'robot.base';
 import { Interpreter } from 'interpreter.interpreter';
@@ -27,6 +39,12 @@ export interface IObservableSimulationObject {
 
 export class RcjScoringTool implements IObserver {
     private MAX_TIME = 8;
+    private POINTS_OBSTACLE = 15;
+    private POINTS_GAP = 10;
+    private POINTS_INTERSECTION = 10;
+    private POINTS_VICTIM_MULTI = 1.4;
+    private POINTS_DEADONLY_VICTIM_MULTI = 1.2;
+    private POINTS_LINE: number[] = [5, 3, 1, 0];
     private configData: any;
     private running: boolean = false;
     private mins: number = 0;
@@ -48,9 +66,21 @@ export class RcjScoringTool implements IObserver {
     private prevNextCheckPoint: {};
     private programPaused: boolean = true;
     private victimsLocated: number = 0;
+    private linePoints: number = 1;
+    private obstaclePoints: number = 0;
+    private totalScore: number = 0;
+    private inAvoidanceMode: boolean;
+    private lastTile: any;
+    private countedTileIndices: number[];
+    private avoidanceGoalIndex: number = null;
+    private rescueMulti: number;
+    private lastCheckPointIndex: number;
+    private wasOnLineOnce: boolean = false;
 
     constructor(robot: RobotBase, configData: any) {
         this.configData = configData;
+        this.robot = robot as RobotBaseMobile;
+        this.init();
         let rcj = this;
         $('#rcjStartStop')
             .off()
@@ -66,7 +96,7 @@ export class RcjScoringTool implements IObserver {
                     $('#rcjStartStop').removeClass('running');
                     $('#rcjLoP').addClass('disabled');
                     $('#rcjNextCP').addClass('disabled');
-                    rcj.robot.interpreter.terminate();
+                    rcj.robot && rcj.robot.interpreter.terminate();
                     rcj.programPaused = true;
                     return false;
                 }
@@ -132,7 +162,11 @@ export class RcjScoringTool implements IObserver {
         this.csecs = 0;
         this.running = true;
         this.stopWatch = setInterval(this.timer.bind(this), 100);
-        if (this.robot && this.initialPose) {
+        let startTile = this.configData.tiles['' + this.configData.startTile.x + ',' + this.configData.startTile.y + ',0'];
+        this.initialPose = simulationRoberta.getTilePose(startTile, this.configData['tiles'][startTile['next']], null);
+        this.lastTile = startTile;
+        this.lastCheckPoint = startTile;
+        if (this.robot) {
             this.robot.initialPose = this.initialPose;
             this.robot.resetPose();
         }
@@ -140,6 +174,13 @@ export class RcjScoringTool implements IObserver {
         this.loPSum = 0;
         this.section = 0;
         this.victimsLocated = 0;
+        this.linePoints = 0;
+        this.obstaclePoints = 0;
+        this.totalScore = 0;
+        this.inAvoidanceMode = false;
+        this.countedTileIndices = [0];
+        this.lastCheckPointIndex = 0;
+        this.rescueMulti = 1;
     }
 
     timer() {
@@ -163,8 +204,27 @@ export class RcjScoringTool implements IObserver {
             if (this.mins >= this.MAX_TIME) {
                 $('#rcjStartStop').trigger('click');
             }
-            $('#rcjRescueMulti').text(this.victimsLocated);
+            $('#rcjRescueMulti').text(Math.round(this.rescueMulti * 100) / 100);
+            $('#rcjLinePoints').text(this.linePoints);
+            $('#rcjObstaclePoints').text(this.obstaclePoints);
+            $('#rcjTotalScore').text(this.totalScore);
         }
+    }
+
+    countObstaclePoints(tile: any) {
+        if (tile && !this.countedTileIndices.includes(tile.index[0])) {
+            if (tile.tileType.gaps > 0) {
+                this.obstaclePoints += this.POINTS_GAP;
+            }
+            if (tile.tileType.intersections > 0) {
+                this.obstaclePoints += this.POINTS_INTERSECTION;
+            }
+            this.countedTileIndices.push(tile.index[0]);
+        }
+    }
+
+    callAutoLoP() {
+        $('#rcjLoP').trigger('click');
     }
 
     update(simObject: RobotBaseMobile | CircleSimulationObject) {
@@ -190,27 +250,84 @@ export class RcjScoringTool implements IObserver {
             if (path == this.lastPath || path == this.lastPath + 1) {
                 this.path = path;
                 this.lastPath = path;
+                this.line = (robot as RobotRcj)['F'].lightValue < 70 ? true : false;
+                if (this.line) {
+                    this.wasOnLineOnce = true;
+                }
                 if ((tile && tile.checkPoint) || path == 0) {
                     if (this.lastCheckPoint != tile) {
-                        // TODO calculate passed section's scoring
+                        // calculate passed section's scoring
+                        let pointsIndex: number = this.loPCounter < this.POINTS_LINE.length ? this.loPCounter : this.POINTS_LINE.length - 1;
+                        this.linePoints += (tile.index[0] - this.lastCheckPointIndex) * this.POINTS_LINE[pointsIndex];
+
+                        // reset section variables
                         this.loPCounter = 0;
                         this.section += 1;
                         this.lastCheckPoint = tile;
+                        this.lastCheckPointIndex = tile.index[0];
                         this.setNextCheckPoint();
                     }
                 } else {
                     this.prevCheckPointTile = tile;
                 }
+                if (this.inAvoidanceMode && this.line && tile.index[0] == this.avoidanceGoalIndex) {
+                    if (!this.countedTileIndices.includes(tile.index[0])) {
+                        this.obstaclePoints += this.POINTS_OBSTACLE;
+                        this.countedTileIndices.push(this.avoidanceGoalIndex - 1);
+                    }
+                    this.avoidanceGoalIndex = null;
+                    this.inAvoidanceMode = false;
+                }
+                if (tile && tile !== this.lastTile) {
+                    if (!this.wasOnLineOnce && !this.inAvoidanceMode) {
+                        this.callAutoLoP();
+                    } else {
+                        this.countObstaclePoints(this.lastTile);
+                    }
+                    this.lastTile = tile;
+                    this.wasOnLineOnce = false;
+                }
             } else {
-                this.path = -1;
+                if (!this.inAvoidanceMode) {
+                    if (this.lastTile['next'].length > 0 && this.configData['tiles'][this.lastTile['next']]['items']['obstacles'] === 1) {
+                        this.inAvoidanceMode = true;
+                        this.path += 1;
+                        this.lastPath = this.path;
+                        this.avoidanceGoalIndex = this.lastTile.index[0] + 2;
+                    } else if (this.lastTile.items.obstacles > 0) {
+                        this.inAvoidanceMode = true;
+                        this.avoidanceGoalIndex = this.lastTile.index[0] + 1;
+                    } else {
+                        if (this.path != -1 && path) {
+                            this.callAutoLoP();
+                        }
+                        this.path = -1;
+                    }
+                }
+                this.line = false;
             }
-            this.line = this.path >= 0 ? ((robot as RobotRcj)['F'].lightValue < 100 ? true : false) : false;
+            this.totalScore = (this.linePoints + this.obstaclePoints) * this.rescueMulti;
+            this.totalScore = UTIL.round(this.totalScore, 2);
         } else if (simObject instanceof CircleSimulationObject) {
             let circle: CircleSimulationObject = simObject;
             if (circle.inEvacuationZone && circle.color === '#33B8CA') {
                 circle.selected = true;
                 $('#simDeleteObject').trigger('click');
+                this.rescueMulti *= this.POINTS_VICTIM_MULTI;
                 this.victimsLocated += 1;
+            }
+            if (circle.inEvacuationZone && circle.color === '#000000') {
+                circle.selected = true;
+                $('#simDeleteObject').trigger('click');
+                if (this.victimsLocated > 1) {
+                    this.rescueMulti *= this.POINTS_VICTIM_MULTI;
+                } else {
+                    this.rescueMulti *= this.POINTS_DEADONLY_VICTIM_MULTI;
+                }
+                this.victimsLocated += 1;
+            }
+            if (this.victimsLocated >= 3) {
+                $('#rcjStartStop').trigger('click');
             }
         }
     }
@@ -1123,6 +1240,7 @@ export class SimulationScene {
             }
         });
     }
+
     removeRcjScoringTool() {
         if (this.rcjScoringTool) {
             this.rcjScoringTool.destroy();
