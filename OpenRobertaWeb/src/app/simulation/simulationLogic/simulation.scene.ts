@@ -60,7 +60,7 @@ export class RcjScoringTool implements IObserver {
     private prevNextCheckPoint: {};
     private programPaused: boolean = true;
     private victimsLocated: number = 0;
-    private linePoints: number = 0;
+    private linePoints: number = 1;
     private obstaclePoints: number = 0;
     private totalScore: number = 0;
     private inAvoidanceMode: boolean;
@@ -218,6 +218,15 @@ export class RcjScoringTool implements IObserver {
                 if ((tile && tile.checkPoint) || path == 0) {
                     if (this.lastCheckPoint != tile) {
                         // TODO calculate passed section's scoring
+                        
+                        // TODO on start if robot is moved to nextCP and back to startTile, negative points are assigned when
+                        // when the robot program is started.
+                        let lastCheckPointIndex = 
+                            this.lastCheckPoint && 'index' in this.lastCheckPoint
+                                ? this.lastCheckPoint.index[0]
+                                : 0;
+                        this.linePoints += (tile.index[0] - lastCheckPointIndex) * (3 - this.loPCounter);
+
                         this.loPCounter = 0;
                         this.section += 1;
                         this.lastCheckPoint = tile;
