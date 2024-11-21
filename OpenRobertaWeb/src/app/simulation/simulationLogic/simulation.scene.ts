@@ -4,7 +4,19 @@
  */
 import * as UTIL from 'util.roberta';
 import * as $ from 'jquery';
-import { BaseSimulationObject, CircleSimulationObject, Ground, IMovable, ISimulationObstacle, MarkerSimulationObject, RcjSimulationLabel, RectangleSimulationObject, SimObjectFactory, SimObjectShape, SimObjectType } from 'simulation.objects';
+import {
+    BaseSimulationObject,
+    CircleSimulationObject,
+    Ground,
+    IMovable,
+    ISimulationObstacle,
+    MarkerSimulationObject,
+    RcjSimulationLabel,
+    RectangleSimulationObject,
+    SimObjectFactory,
+    SimObjectShape,
+    SimObjectType,
+} from 'simulation.objects';
 import simulationRoberta, { SimulationRoberta } from 'simulation.roberta';
 import { IDestroyable, RobotBase, RobotFactory } from 'robot.base';
 import { Interpreter } from 'interpreter.interpreter';
@@ -48,6 +60,11 @@ export class RcjScoringTool implements IObserver {
     private prevNextCheckPoint: {};
     private programPaused: boolean = true;
     private victimsLocated: number = 0;
+    private linePoints: number = 0;
+    private obstaclePoints: number = 0;
+    private totalScore: number = 0;
+    private inAvoidanceMode: boolean;
+    private lastTile: any;
 
     constructor(robot: RobotBase, configData: any) {
         this.configData = configData;
@@ -140,6 +157,11 @@ export class RcjScoringTool implements IObserver {
         this.loPSum = 0;
         this.section = 0;
         this.victimsLocated = 0;
+        this.linePoints = 0;
+        this.obstaclePoints = 0;
+        this.totalScore = 0;
+        this.inAvoidanceMode = false;
+        this.lastTile = null;
     }
 
     timer() {
@@ -164,6 +186,9 @@ export class RcjScoringTool implements IObserver {
                 $('#rcjStartStop').trigger('click');
             }
             $('#rcjRescueMulti').text(this.victimsLocated);
+            $('#rcjLinePoints').text(this.linePoints);
+            $('#rcjObstaclePoints').text(this.obstaclePoints);
+            $('#rcjTotalScore').text(this.totalScore);
         }
     }
 
@@ -201,8 +226,23 @@ export class RcjScoringTool implements IObserver {
                 } else {
                     this.prevCheckPointTile = tile;
                 }
+                if (this.inAvoidanceMode) {
+                    this.inAvoidanceMode = false;
+                    // TODO calculate here that the obstacle has successfully passed.
+                }
+                if (tile && tile !== this.lastTile) {
+                    this.lastTile = tile;
+                }
             } else {
-                this.path = -1;
+                if (!this.inAvoidanceMode) {
+                    if (this.configData['tiles'][this.lastTile['next']]['items']['obstacles'] === 1) {
+                        this.inAvoidanceMode = true;
+                        this.path += 1;
+                        this.lastPath = this.path;
+                    } else {
+                        this.path = -1;
+                    }
+                }
             }
             this.line = this.path >= 0 ? ((robot as RobotRcj)['F'].lightValue < 100 ? true : false) : false;
         } else if (simObject instanceof CircleSimulationObject) {
