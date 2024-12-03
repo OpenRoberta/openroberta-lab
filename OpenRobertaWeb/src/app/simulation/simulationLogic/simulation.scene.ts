@@ -39,6 +39,11 @@ export interface IObservableSimulationObject {
 
 export class RcjScoringTool implements IObserver {
     private MAX_TIME = 8;
+    private POINTS_OBSTACLE = 15;
+    private POINTS_GAP = 10;
+    private POINTS_INTERSECTION = 10;
+    private POINTS_VICTIM_MULTI = 1.4;
+    private POINTS_DEADONLY_VICTIM_MULTI = 1.2;
     private configData: any;
     private running: boolean = false;
     private mins: number = 0;
@@ -65,6 +70,9 @@ export class RcjScoringTool implements IObserver {
     private totalScore: number = 0;
     private inAvoidanceMode: boolean;
     private lastTile: any;
+    private countedTileIndices: number[];
+    private avoidanceGoalIndex: number = null;
+    private rescueMulti: number = 1;
 
     constructor(robot: RobotBase, configData: any) {
         this.configData = configData;
@@ -162,6 +170,7 @@ export class RcjScoringTool implements IObserver {
         this.totalScore = 0;
         this.inAvoidanceMode = false;
         this.lastTile = null;
+        this.countedTileIndices = [0];
     }
 
     timer() {
@@ -185,10 +194,26 @@ export class RcjScoringTool implements IObserver {
             if (this.mins >= this.MAX_TIME) {
                 $('#rcjStartStop').trigger('click');
             }
-            $('#rcjRescueMulti').text(this.victimsLocated);
+            $('#rcjRescueMulti').text(Math.round(this.rescueMulti * 100) / 100);
             $('#rcjLinePoints').text(this.linePoints);
             $('#rcjObstaclePoints').text(this.obstaclePoints);
             $('#rcjTotalScore').text(this.totalScore);
+        }
+    }
+
+    countObstaclePoints(tile: any) {
+        if (tile && !this.countedTileIndices.includes(tile.index[0])) {
+            if(tile.tileType.gaps > 0) {
+                this.obstaclePoints += this.POINTS_GAP;
+            }
+            if(tile.tileType.intersections > 0) {
+                this.obstaclePoints += this.POINTS_INTERSECTION;
+            }
+            if(tile.items.obstacles > 0) {
+                this.obstaclePoints += this.POINTS_OBSTACLE;
+            //TODO if robot has been on obstacle field the points are counted before it is on the line of the target field
+            }
+            this.countedTileIndices.push(tile.index[0]);
         }
     }
 
@@ -215,17 +240,24 @@ export class RcjScoringTool implements IObserver {
             if (path == this.lastPath || path == this.lastPath + 1) {
                 this.path = path;
                 this.lastPath = path;
+                this.line = (robot as RobotRcj)['F'].lightValue < 80 ? true : false;
                 if ((tile && tile.checkPoint) || path == 0) {
                     if (this.lastCheckPoint != tile) {
-                        // TODO calculate passed section's scoring
-
                         // TODO when robot enters EZ it crashes.
+                        
+                        // calculate passed section's scoring
                         let lastCheckPointIndex = 
-                            this.lastCheckPoint && 'index' in this.lastCheckPoint
-                                ? this.lastCheckPoint.index[0]
-                                : 0;
+                        this.lastCheckPoint && 'index' in this.lastCheckPoint
+                        ? this.lastCheckPoint.index[0]
+                        : 0;
                         this.linePoints += (path - lastCheckPointIndex) * (3 - this.loPCounter);
-
+                        
+                        // if (this.lastCheckPoint && 'index' in this.lastCheckPoint) {
+                            //     this.linePoints += (path - this.lastCheckPoint.index[0]) * (3 - this.loPCounter);
+                            // } else {
+                                //     this.linePoints += path * (3 - this.loPCounter);
+                                // }
+                                
                         this.loPCounter = 0;
                         this.section += 1;
                         this.lastCheckPoint = tile;
@@ -234,35 +266,58 @@ export class RcjScoringTool implements IObserver {
                 } else {
                     this.prevCheckPointTile = tile;
                 }
-                if (this.inAvoidanceMode) {
-                    this.inAvoidanceMode = false;
+                if (this.inAvoidanceMode && this.line && tile.index[0] == this.avoidanceGoalIndex) {
                     // TODO calculate here that the obstacle has successfully passed.
+                    if (!this.countedTileIndices.includes(tile.index[0])) {
+                        this.obstaclePoints += this.POINTS_OBSTACLE;  
+                        this.countedTileIndices.push(this.avoidanceGoalIndex - 1);
+                    } 
+                    this.avoidanceGoalIndex = null;
+                    this.inAvoidanceMode = false;
                 }
                 if (tile && tile !== this.lastTile) {
+                    this.countObstaclePoints(this.lastTile);                  
                     this.lastTile = tile;
                 }
             } else {
                 if (!this.inAvoidanceMode) {
-                    if (this.configData['tiles'][this.lastTile['next']]['items']['obstacles'] === 1) {
+                    if (this.lastTile['next'].length > 0 && this.configData['tiles'][this.lastTile['next']]['items']['obstacles'] === 1) {
                         this.inAvoidanceMode = true;
                         this.path += 1;
                         this.lastPath = this.path;
+                        this.avoidanceGoalIndex = this.lastTile.index[0] + 2;
+                        // this.countObstaclePoints(this.lastTile); // uncomment to give points when leaving the field
                     } else {
                         this.path = -1;
+                        
                     }
                 }
+                this.line = false;
             }
-            this.line = this.path >= 0 ? ((robot as RobotRcj)['F'].lightValue < 100 ? true : false) : false;
+            // this.line = this.path >= 0 ? ((robot as RobotRcj)['F'].lightValue < 100 ? true : false) : false;
+            this.totalScore = (this.linePoints + this.obstaclePoints) * this.rescueMulti;
+            this.totalScore = Math.round(this.totalScore * 100) / 100;
         } else if (simObject instanceof CircleSimulationObject) {
-            let circle: CircleSimulationObject = simObject;
-            if (circle.inEvacuationZone && circle.color === '#33B8CA') {
-                circle.selected = true;
-                $('#simDeleteObject').trigger('click');
-                this.victimsLocated += 1;
-            }
+                let circle: CircleSimulationObject = simObject;
+                if (circle.inEvacuationZone && circle.color === '#33B8CA') {
+                    circle.selected = true;
+                    $('#simDeleteObject').trigger('click');
+                    this.rescueMulti *= this.POINTS_VICTIM_MULTI;
+                    this.victimsLocated += 1;
+                }
+                if (circle.inEvacuationZone && circle.color === '#000000') {
+                    circle.selected = true;
+                    $('#simDeleteObject').trigger('click');
+                    if (this.victimsLocated > 1) {
+                        this.rescueMulti *= this.POINTS_VICTIM_MULTI;
+                    } else {
+                        this.rescueMulti *= this.POINTS_DEADONLY_VICTIM_MULTI;
+                    }
+                    this.victimsLocated += 1;
+                }
         }
     }
-
+    
     setNextCheckPoint() {
         let nextCP = this.configData['tiles'][this.lastCheckPoint['next']];
         while (nextCP && this.configData['tiles'][nextCP['next']]) {
@@ -279,13 +334,13 @@ export class RcjScoringTool implements IObserver {
             this.prevNextCheckPoint = null;
         }
     }
-
+    
     openClose() {
         let position = $('#simDiv').position();
         position.left = 12;
         $('#rcjScoringWindow').toggleSimPopup(position);
     }
-
+    
     destroy() {
         $('#rcjStartStop').html('Start<br>Scoring Run');
         $('#rcjStartStop').removeClass('running');
