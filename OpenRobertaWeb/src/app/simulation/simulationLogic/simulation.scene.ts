@@ -44,6 +44,7 @@ export class RcjScoringTool implements IObserver {
     private POINTS_INTERSECTION = 10;
     private POINTS_VICTIM_MULTI = 1.4;
     private POINTS_DEADONLY_VICTIM_MULTI = 1.2;
+    private POINTS_LINE: number[] = [5, 3, 1, 0];
     private configData: any;
     private running: boolean = false;
     private mins: number = 0;
@@ -72,7 +73,9 @@ export class RcjScoringTool implements IObserver {
     private lastTile: any;
     private countedTileIndices: number[];
     private avoidanceGoalIndex: number = null;
-    private rescueMulti: number = 1;
+    private rescueMulti: number;
+    private lastCheckPointIndex: number;
+    private wasOnLineOnce: boolean = false;
 
     constructor(robot: RobotBase, configData: any) {
         this.configData = configData;
@@ -171,6 +174,8 @@ export class RcjScoringTool implements IObserver {
         this.inAvoidanceMode = false;
         this.lastTile = null;
         this.countedTileIndices = [0];
+        this.lastCheckPointIndex = 0;
+        this.rescueMulti = 1;
     }
 
     timer() {
@@ -209,12 +214,17 @@ export class RcjScoringTool implements IObserver {
             if(tile.tileType.intersections > 0) {
                 this.obstaclePoints += this.POINTS_INTERSECTION;
             }
-            if(tile.items.obstacles > 0) {
-                this.obstaclePoints += this.POINTS_OBSTACLE;
-            //TODO if robot has been on obstacle field the points are counted before it is on the line of the target field
-            }
+            // if(tile.items.obstacles > 0) {
+            //     this.obstaclePoints += this.POINTS_OBSTACLE;
+            // //TODO if robot has been on obstacle field the points are counted before it is on the line of the target field
+            // }
             this.countedTileIndices.push(tile.index[0]);
         }
+    }
+
+    callAutoLoP() {
+        // TODO: call a lack of Progress when Auto LoP is activated.
+        this.linePoints += 1000; // remove this, this is just a flag to show functionality. 
     }
 
     update(simObject: RobotBaseMobile | CircleSimulationObject) {
@@ -240,34 +250,29 @@ export class RcjScoringTool implements IObserver {
             if (path == this.lastPath || path == this.lastPath + 1) {
                 this.path = path;
                 this.lastPath = path;
-                this.line = (robot as RobotRcj)['F'].lightValue < 80 ? true : false;
+                this.line = (robot as RobotRcj)['F'].lightValue < 70 ? true : false;
+                if (this.line) {
+                    this.wasOnLineOnce = true;
+                }
                 if ((tile && tile.checkPoint) || path == 0) {
                     if (this.lastCheckPoint != tile) {
-                        // TODO when robot enters EZ it crashes.
                         
                         // calculate passed section's scoring
-                        let lastCheckPointIndex = 
-                        this.lastCheckPoint && 'index' in this.lastCheckPoint
-                        ? this.lastCheckPoint.index[0]
-                        : 0;
-                        this.linePoints += (path - lastCheckPointIndex) * (3 - this.loPCounter);
+                        let pointsIndex: number = this.loPCounter < this.POINTS_LINE.length ? 
+                            this.loPCounter : this.POINTS_LINE.length - 1;
+                        this.linePoints += (tile.index[0] - this.lastCheckPointIndex) * this.POINTS_LINE[pointsIndex];
                         
-                        // if (this.lastCheckPoint && 'index' in this.lastCheckPoint) {
-                            //     this.linePoints += (path - this.lastCheckPoint.index[0]) * (3 - this.loPCounter);
-                            // } else {
-                                //     this.linePoints += path * (3 - this.loPCounter);
-                                // }
-                                
+                        // reset section variables
                         this.loPCounter = 0;
                         this.section += 1;
                         this.lastCheckPoint = tile;
+                        this.lastCheckPointIndex = tile.index[0];
                         this.setNextCheckPoint();
                     }
                 } else {
                     this.prevCheckPointTile = tile;
                 }
                 if (this.inAvoidanceMode && this.line && tile.index[0] == this.avoidanceGoalIndex) {
-                    // TODO calculate here that the obstacle has successfully passed.
                     if (!this.countedTileIndices.includes(tile.index[0])) {
                         this.obstaclePoints += this.POINTS_OBSTACLE;  
                         this.countedTileIndices.push(this.avoidanceGoalIndex - 1);
@@ -276,8 +281,13 @@ export class RcjScoringTool implements IObserver {
                     this.inAvoidanceMode = false;
                 }
                 if (tile && tile !== this.lastTile) {
-                    this.countObstaclePoints(this.lastTile);                  
+                    if (!this.wasOnLineOnce && !this.inAvoidanceMode) {
+                        this.callAutoLoP();
+                    } else {
+                        this.countObstaclePoints(this.lastTile);                  
+                    }
                     this.lastTile = tile;
+                    this.wasOnLineOnce = false;
                 }
             } else {
                 if (!this.inAvoidanceMode) {
@@ -286,10 +296,14 @@ export class RcjScoringTool implements IObserver {
                         this.path += 1;
                         this.lastPath = this.path;
                         this.avoidanceGoalIndex = this.lastTile.index[0] + 2;
-                        // this.countObstaclePoints(this.lastTile); // uncomment to give points when leaving the field
+                    } else if (this.lastTile.items.obstacles > 0 ) {
+                            this.inAvoidanceMode = true;
+                            this.avoidanceGoalIndex = this.lastTile.index[0] + 1;
                     } else {
+                        if (this.path != -1 && path) {
+                            this.callAutoLoP();
+                        }
                         this.path = -1;
-                        
                     }
                 }
                 this.line = false;
