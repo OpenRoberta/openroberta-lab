@@ -573,8 +573,8 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     @Override
     public Void visitMainTask(MainTask mainTask) {
         visitorGenerateUserVariablesAndMethods(mainTask);
-        nlIndent();
-        this.src.add("def run():");
+        this.src.addNLine(2, "def run():");
+
         incrIndentation();
         if ( !this.usedGlobalVarInFunctions.isEmpty() ) {
             nlIndent();
@@ -666,12 +666,13 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
         this.src.add("import os");
         nlIndent();
         this.src.add("import time");
-        nlIndent();
-        nlIndent();
     }
 
     @Override
     protected void visitorGenerateGlobalVariables() {
+        nlIndent();
+        nlIndent();
+        nlIndent();
         this.src.add("class BreakOutOfALoop(Exception): pass");
         nlIndent();
         this.src.add("class ContinueLoop(Exception): pass");

@@ -3,12 +3,12 @@ import random
 import math
 import neopixel
 
+
 class BreakOutOfALoop(Exception): pass
 class ContinueLoop(Exception): pass
 
 timer1 = calliopemini.running_time()
 np = neopixel.NeoPixel(calliopemini.pin_RGB, 3)
-
 
 def run():
     global timer1
@@ -25,7 +25,6 @@ def run():
             break
     np[0] = ((0, 0, 0))
     np.show()
-
     print("center LED RED")
     while True:
         if calliopemini.button_a.is_pressed() == True:
@@ -38,7 +37,6 @@ def run():
             break
     np[1] = ((0, 0, 0))
     np.show()
-
     print("right LED RED")
     while True:
         if calliopemini.button_a.is_pressed() == True:
@@ -51,7 +49,6 @@ def run():
             break
     np[2] = ((0, 0, 0))
     np.show()
-
     print("all LEDs RED")
     while True:
         if calliopemini.button_a.is_pressed() == True:
@@ -63,7 +60,6 @@ def run():
         if calliopemini.button_a.is_pressed() == True:
             break
     np.clear()
-
     print("right LED green")
     while True:
         if calliopemini.button_a.is_pressed() == True:

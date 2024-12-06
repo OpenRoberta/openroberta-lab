@@ -70,8 +70,8 @@ public abstract class AbstractSpikePythonVisitor extends AbstractPythonVisitor i
     public Void visitMainTask(MainTask mainTask) {
         visitorGenerateUserVariablesAndMethods(mainTask);
 
-        nlIndent();
-        this.src.add("def run():");
+        this.src.addNLine(1, "def run():");
+
         incrIndentation();
         if ( !this.usedGlobalVarInFunctions.isEmpty() ) {
             nlIndent();

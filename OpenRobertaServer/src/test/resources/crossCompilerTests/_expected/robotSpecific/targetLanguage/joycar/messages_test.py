@@ -3,7 +3,6 @@ import random
 import math
 import radio
 
-
 def receive_message(type):
     msg = radio.receive()
     if type == "Number":
@@ -17,11 +16,14 @@ def receive_message(type):
     elif type == "String":
         return ((lambda x: '' if x is None else x)(msg))
 
+
 class BreakOutOfALoop(Exception): pass
 class ContinueLoop(Exception): pass
 
+
 timer1 = microbit.running_time()
 radio.on()
+
 
 ___Element = 0
 

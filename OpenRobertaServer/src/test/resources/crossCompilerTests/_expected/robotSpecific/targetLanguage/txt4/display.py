@@ -3,7 +3,6 @@ from lib.display import display
 import math
 import time
 
-
 def clear_display():
     for i in range(8):
         display.set_attr("line" + str(i) + ".text", "")
@@ -26,10 +25,10 @@ def get_closest_color(hex_value):
         color_diffs.append((distance, name))
     return min(color_diffs)[1]
 
+
 txt_factory.init()
 txt_factory.init_input_factory()
 TXT_M = txt_factory.controller_factory.create_graphical_controller()
-
 txt_factory.initialized()
 time.sleep(0.1)
 current_led = "redLed"
@@ -49,7 +48,6 @@ def run():
     for color, value in led_colors.items():
         if color != "red":
             display.set_attr(color + "Led.visible", str(False).lower())
-
     print("Display Test")
     print("Show Text on Display ")
     display.set_attr("line" + str(0) + ".text", str("ROW 0"))

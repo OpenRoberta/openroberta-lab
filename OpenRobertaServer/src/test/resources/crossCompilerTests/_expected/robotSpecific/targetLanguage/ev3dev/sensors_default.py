@@ -7,6 +7,7 @@ import math
 import os
 import time
 
+
 class BreakOutOfALoop(Exception): pass
 class ContinueLoop(Exception): pass
 
@@ -24,6 +25,7 @@ _brickConfiguration = {
     },
 }
 hal = Hal(_brickConfiguration)
+
 
 ___numberVar = 0
 ___booleanVar = True

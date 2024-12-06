@@ -128,10 +128,10 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
 
     @Override
     public Void visitMainTask(MainTask mainTask) {
-        super.visitorGenerateUserVariablesAndMethods(mainTask);
         StmtList variables = mainTask.variables;
-        nlIndent();
-        this.src.add("def run():");
+
+        visitorGenerateUserVariablesAndMethods(mainTask);
+        this.src.addNLine(2, "def run():");
         incrIndentation();
         if ( mainTask.debug.equals("TRUE") ) {
             nlIndent();
@@ -921,23 +921,23 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
         this.src.add("import random");
         nlIndent();
         this.src.add("from roberta import Hal");
-        nlIndent();
     }
 
     @Override
     protected void visitorGenerateGlobalVariables() {
+        nlIndent();
+        nlIndent();
+        nlIndent();
         this.src.add("h = Hal()");
-        nlIndent();
         generateSensors();
-        nlIndent();
 
         if ( !this.getBean(UsedHardwareBean.class).getLoopsLabelContainer().isEmpty() ) {
+            nlIndent();
+            nlIndent();
             nlIndent();
             this.src.add("class BreakOutOfALoop(Exception): pass");
             nlIndent();
             this.src.add("class ContinueLoop(Exception): pass");
-            nlIndent();
-            nlIndent();
         }
     }
 
@@ -966,8 +966,8 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
         nlIndent();
         this.src.add("finally:");
         incrIndentation();
-        nlIndent();
         removeSensors();
+        nlIndent();
         this.src.add("h.myBroker.shutdown()");
         decrIndentation();
         decrIndentation();
@@ -992,19 +992,18 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
         for ( UsedSensor usedSensor : this.getBean(UsedHardwareBean.class).getUsedSensors() ) {
             switch ( usedSensor.getType() ) {
                 case SC.ULTRASONIC:
-                    this.src.add("h.sonar.subscribe(\"OpenRobertaApp\")");
                     nlIndent();
+                    this.src.add("h.sonar.subscribe(\"OpenRobertaApp\")");
                     break;
                 case SC.DETECT_MARK:
-                    this.src.add("h.mark.subscribe(\"RobertaLab\", 500, 0.0)");
                     nlIndent();
+                    this.src.add("h.mark.subscribe(\"RobertaLab\", 500, 0.0)");
                     break;
                 case SC.NAO_FACE:
                     nlIndent();
                     this.src.add("from roberta import FaceRecognitionModule");
                     nlIndent();
                     this.src.add("faceRecognitionModule = FaceRecognitionModule(\"faceRecognitionModule\")");
-                    nlIndent();
                     break;
                 case SC.NAO_SPEECH:
                     nlIndent();
@@ -1013,7 +1012,6 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
                     this.src.add("speechRecognitionModule = SpeechRecognitionModule(\"speechRecognitionModule\")");
                     nlIndent();
                     this.src.add("speechRecognitionModule.pauseASR()");
-                    nlIndent();
                     break;
                 case SC.COLOR:
                 case SC.INFRARED:
@@ -1039,20 +1037,20 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
                 case BlocklyConstants.INFRARED:
                     break;
                 case BlocklyConstants.ULTRASONIC:
-                    this.src.add("h.sonar.unsubscribe(\"OpenRobertaApp\")");
                     nlIndent();
+                    this.src.add("h.sonar.unsubscribe(\"OpenRobertaApp\")");
                     break;
                 case BlocklyConstants.DETECT_MARK:
-                    this.src.add("h.mark.unsubscribe(\"RobertaLab\")");
                     nlIndent();
+                    this.src.add("h.mark.unsubscribe(\"RobertaLab\")");
                     break;
                 case BlocklyConstants.NAO_FACE:
-                    this.src.add("faceRecognitionModule.unsubscribe()");
                     nlIndent();
+                    this.src.add("faceRecognitionModule.unsubscribe()");
                     break;
                 case BlocklyConstants.NAO_SPEECH:
-                    this.src.add("speechRecognitionModule.unsubscribe()");
                     nlIndent();
+                    this.src.add("speechRecognitionModule.unsubscribe()");
                     break;
                 case BlocklyConstants.LIGHT:
                 case BlocklyConstants.COMPASS:

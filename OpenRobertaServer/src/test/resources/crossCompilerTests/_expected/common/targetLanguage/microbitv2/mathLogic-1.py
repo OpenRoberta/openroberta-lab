@@ -2,7 +2,6 @@ import microbit
 import random
 import math
 
-
 def _isPrime(number):
     if(number == 0 or number == 1):
         return False
@@ -12,10 +11,12 @@ def _isPrime(number):
             return False
     return True
 
+
 class BreakOutOfALoop(Exception): pass
 class ContinueLoop(Exception): pass
 
 timer1 = microbit.running_time()
+
 
 ___r1 = 0
 ___r2 = 0

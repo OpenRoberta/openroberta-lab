@@ -7,7 +7,6 @@ import math
 import os
 import time
 
-
 def _isPrime(number):
     if(number == 0 or number == 1):
         return False
@@ -27,6 +26,7 @@ def _randInt(min_val, max_val):
 def _randDouble():
     return 1.0*int.from_bytes(os.urandom(4), byteorder='big') / 0xffffffff
 
+
 class BreakOutOfALoop(Exception): pass
 class ContinueLoop(Exception): pass
 
@@ -40,11 +40,13 @@ _brickConfiguration = {
 }
 hal = Hal(_brickConfiguration)
 
+
 ___r1 = 0
 ___r2 = 0
 ___b1 = True
 ___r3 = 0
 ___sim = True
+
 
 def run():
     global ___r1, ___r2, ___b1, ___r3, ___sim

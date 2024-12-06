@@ -4,12 +4,13 @@ import math
 import time
 import random
 from roberta import Hal
+
+
 h = Hal()
 
 
 class BreakOutOfALoop(Exception): pass
 class ContinueLoop(Exception): pass
-
 
 
 ___numberVar = 0

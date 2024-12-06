@@ -12,6 +12,7 @@ def RGBAsString(rgb):
     return min(color_diffs)[1]
 
 
+
 _colors = {
             "red": (204,0,0),
             "yellow": (255,255,0),

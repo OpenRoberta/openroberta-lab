@@ -4,7 +4,6 @@ from lib.display import display
 import math
 import time
 
-
 def motor_start(motor, speed):
     motor.set_speed(speed_to_pwm(speed), Motor.CCW)
     motor.start()
@@ -13,12 +12,12 @@ def speed_to_pwm(speed):
     speed = max(min(speed, 100), -100)
     return int((speed / 100) * 512)
 
+
 txt_factory.init()
 txt_factory.init_input_factory()
 txt_factory.init_motor_factory()
 txt_factory.init_counter_factory()
 TXT_M = txt_factory.controller_factory.create_graphical_controller()
-
 TXT_M_M2_motor = txt_factory.motor_factory.create_encodermotor(TXT_M, 2)
 TXT_M_C2_motor_step_counter = txt_factory.counter_factory.create_encodermotor_counter(TXT_M, 2)
 TXT_M_C2_motor_step_counter.set_motor(TXT_M_M2_motor)
@@ -35,18 +34,17 @@ TXT_M_I3_ultrasonic_distance_meter = txt_factory.input_factory.create_ultrasonic
 txt_factory.initialized()
 time.sleep(0.1)
 STEPS_PER_ROTATION = 128
-
 _timer1 = time.time()
 _timer2 = time.time()
 _timer3 = time.time()
 _timer4 = time.time()
 _timer5 = time.time()
 
+
 def run():
     global _timer1, _timer2, _timer3, _timer4, _timer5
     while not(TXT_M_I3_ultrasonic_distance_meter):
         pass
-
     print("SENSOR TEST")
     print("Press right button on Display to continue")
     print("Ultrasonic distance on port I3")

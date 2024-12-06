@@ -10,8 +10,6 @@ def display_text(text):
             text_list[idx] = '?'
     hub.display.text("".join(text_list))
 
-
-
 hub = PrimeHub()
 
 

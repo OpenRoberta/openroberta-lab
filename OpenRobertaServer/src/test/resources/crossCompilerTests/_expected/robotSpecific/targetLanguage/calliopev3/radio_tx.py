@@ -13,8 +13,8 @@ timer1 = calliopemini.running_time()
 np = neopixel.NeoPixel(calliopemini.pin_RGB, 3)
 brightness = 9
 rssi = 0
-
 radio.on()
+
 
 ___colours = [(255, 0, 0), (255, 153, 0), (255, 255, 0), (51, 255, 51), (102, 204, 204)]
 ___idx = 0

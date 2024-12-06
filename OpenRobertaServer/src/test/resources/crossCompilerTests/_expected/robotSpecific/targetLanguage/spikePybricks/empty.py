@@ -3,9 +3,7 @@ from pybricks.tools import Matrix
 import umath as math
 import urandom as random
 
-
 hub = PrimeHub()
-
 
 def run():
     pass

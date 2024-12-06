@@ -2,6 +2,7 @@ import calliopemini
 import random
 import math
 
+
 class BreakOutOfALoop(Exception): pass
 class ContinueLoop(Exception): pass
 
@@ -62,7 +63,6 @@ def ____control():
     while True:
         if ___booleanVar:
             break
-
 
 def run():
     global timer1, ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___imageVar, ___numberList, ___booleanList, ___stringList, ___colourList, ___imageList

@@ -7,7 +7,6 @@ import math
 import os
 import time
 
-
 def _busyWait():
     time.sleep(0.0)
 
@@ -50,6 +49,7 @@ def _driveInCurve(direction, left_port, left_speed_pct, right_port, right_speed_
 def _scaleSpeed(m, speed_pct):
     return int(speed_pct * m.max_speed / 100.0)
 
+
 class BreakOutOfALoop(Exception): pass
 class ContinueLoop(Exception): pass
 
@@ -74,6 +74,7 @@ _brickConfiguration = {
 }
 hal = Hal(_brickConfiguration)
 hal.setLanguage("en")
+
 
 ___numberVar = 0
 ___booleanVar = True

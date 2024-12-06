@@ -99,14 +99,11 @@ MAXROTATION = 0.57
 _digitalPinValues = [0 for i in range(8)]
 currentSpeed = [0, 0, 0]
 
-
-
 def run(RV):
     time.sleep(1)
     resetOdometry(RV, 0, 0, 0)
-
     driveForDistance(RV, 30, 0, 30)
-    time.sleep(500/1000)
+    time.sleep(500 / 1000)
     turnForDegrees(RV, -30, 20)
     driveToPosition(RV, 10, 10, 30)
     setSpeedOmnidrivePercent(30, 0, 0)
@@ -114,8 +111,10 @@ def run(RV):
     print("Hallo")
     setDigitalPin(1, True)
 
+
 def step(RV):
     postVel()
+
 
 def main(RV):
     try:
@@ -134,9 +133,10 @@ def start(RV):
     motorDaemon2 = threading.Thread(target=main, daemon=True, args=(RV,), name='mainProgram')
     motorDaemon2.start()
 
+
 def stop(RV):
     pass
 
+
 def cleanup(RV):
     pass
-

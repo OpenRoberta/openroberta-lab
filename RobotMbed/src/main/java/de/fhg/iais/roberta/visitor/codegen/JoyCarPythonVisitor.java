@@ -61,52 +61,54 @@ public class JoyCarPythonVisitor extends MicrobitV2PythonVisitor implements IJoy
         this.src.add("import random");
         nlIndent();
         this.src.add("import math");
-        nlIndent();
         if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.RGBLED) ) {
-            this.src.add("import neopixel");
             nlIndent();
+            this.src.add("import neopixel");
         }
         if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.RADIO) ) {
-            this.src.add("import radio");
             nlIndent();
+            this.src.add("import radio");
         }
         if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.MUSIC) ) {
-            this.src.add("import music");
             nlIndent();
+            this.src.add("import music");
         }
         if ( this.getBean(UsedHardwareBean.class).isSensorUsed(SC.ULTRASONIC) ) {
-            this.src.add("import machine");
             nlIndent();
+            this.src.add("import machine");
         }
-        nlIndent();
     }
 
     @Override
     protected void visitorGenerateGlobalVariables() {
+        nlIndent();
+        nlIndent();
+        nlIndent();
         this.src.add("class BreakOutOfALoop(Exception): pass");
         nlIndent();
         this.src.add("class ContinueLoop(Exception): pass");
+
+        nlIndent();
         nlIndent();
         if ( (this.getBean(UsedHardwareBean.class).isActorUsed("I2C")) ) {
             nlIndent();
             this.src.add("microbit.i2c.init(freq=400000, sda=microbit.pin20, scl=microbit.pin19)");
-            nlIndent();
         }
         if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.DIFFERENTIALDRIVE) || (this.getBean(UsedHardwareBean.class).isActorUsed(SC.MOTOR)) ) {
+            nlIndent();
             this.src.add("microbit.i2c.write(0x70, b'\\x00\\x01')");
             nlIndent();
             this.src.add("microbit.i2c.write(0x70, b'\\xE8\\xAA')");
-            nlIndent();
         }
         if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.SERVOMOTOR) ) {
+            nlIndent();
             this.src.add("microbit.pin1.set_analog_period(20)");
             nlIndent();
             this.src.add("microbit.pin13.set_analog_period(20)");
-            nlIndent();
         }
         if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.RGBLED) ) {
-            this.src.add("np = neopixel.NeoPixel(microbit.pin0, 8)");
             nlIndent();
+            this.src.add("np = neopixel.NeoPixel(microbit.pin0, 8)");
         }
         nlIndent();
         this.src.add("timer1 = microbit.running_time()");

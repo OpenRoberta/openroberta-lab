@@ -5,7 +5,6 @@ import colorsys
 import math
 import time
 
-
 def get_ball_information(detector):
     if detector.detected():
         return [detector.get_center_x(),
@@ -49,10 +48,10 @@ def get_line_information(detector, index):
     else:
         return [-1, -1]
 
+
 txt_factory.init()
 txt_factory.init_input_factory()
 TXT_M = txt_factory.controller_factory.create_graphical_controller()
-
 txt_factory.init_usb_factory()
 txt_factory.init_camera_factory()
 TXT_M_USB1_1_camera = txt_factory.usb_factory.create_camera(TXT_M, 1)
@@ -61,7 +60,6 @@ TXT_M_USB1_1_camera.set_height(240)
 TXT_M_USB1_1_camera.set_width(320)
 TXT_M_USB1_1_camera.set_fps(15)
 TXT_M_USB1_1_camera.start()
-
 motion_detector_M = txt_factory.camera_factory.create_motion_detector(0, 100, 320, 20, 100)
 TXT_M_USB1_1_camera.add_detector(motion_detector_M)
 motion_detector_M2 = txt_factory.camera_factory.create_motion_detector(0, 100, 320, 20, 49)
@@ -81,7 +79,6 @@ TXT_M_USB1_1_camera.add_detector(ball_detector_B2)
 txt_factory.initialized()
 time.sleep(0.1)
 
-
 def camera_initialized():
     while True:
         try:
@@ -96,7 +93,6 @@ def camera_initialized():
             break
         except Exception:
             pass
-
 
 def ____motion():
     print("Motiondetectors")
@@ -162,6 +158,7 @@ def ____color():
         if display.get_attr("buttonRight.pressed"):
             break
     time.sleep(500/1000)
+
 
 def run():
     camera_initialized()

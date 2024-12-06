@@ -47,7 +47,6 @@ _colors = {
             "black": (0,0,0)
         }
 
-
 def ____action():
     ____drive()
     ____move()

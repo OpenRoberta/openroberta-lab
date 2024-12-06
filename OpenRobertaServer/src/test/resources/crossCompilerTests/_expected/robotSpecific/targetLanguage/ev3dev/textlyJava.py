@@ -7,7 +7,6 @@ import math
 import os
 import time
 
-
 def _isPrime(number):
     if(number == 0 or number == 1):
         return False
@@ -23,6 +22,7 @@ def _randInt(min_val, max_val):
         return min_val + (val % ((max_val - min_val) + 1))
     else:
         return max_val + (val % ((min_val - max_val) + 1))
+
 
 class BreakOutOfALoop(Exception): pass
 class ContinueLoop(Exception): pass
@@ -41,6 +41,7 @@ _brickConfiguration = {
 }
 hal = Hal(_brickConfiguration)
 
+
 ___num = 0
 ___boolT = True
 ___str = ""
@@ -51,6 +52,7 @@ ___listN = [0, 0, 0]
 ___listN2 = [0, 0, 0]
 ___listConn = [None, None, None]
 ___listColor = ['white', 'white', 'white']
+
 
 def run():
     global ___num, ___boolT, ___str, ___color, ___boolF, ___conn, ___listN, ___listN2, ___listConn, ___listColor

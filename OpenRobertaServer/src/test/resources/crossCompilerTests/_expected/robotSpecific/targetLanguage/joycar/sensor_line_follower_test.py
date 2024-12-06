@@ -2,7 +2,6 @@ import microbit
 import random
 import math
 
-
 def drive(speedLeft, speedRight):
     sR = scale(speedRight)
     sL = scale(speedLeft)
@@ -50,14 +49,16 @@ def scale(speed):
     else:
         return round(abs(speed) * 446.25 / 255 + 80)
 
+
 class BreakOutOfALoop(Exception): pass
 class ContinueLoop(Exception): pass
+
 
 microbit.i2c.init(freq=400000, sda=microbit.pin20, scl=microbit.pin19)
 microbit.i2c.write(0x70, b'\x00\x01')
 microbit.i2c.write(0x70, b'\xE8\xAA')
-
 timer1 = microbit.running_time()
+
 
 ___speedLeft = 60
 ___speedRight = 60
@@ -101,7 +102,6 @@ def ____followLineTest():
             ___speedLeft = 40
             ___speedRight = 20
         drive(___speedLeft, ___speedRight)
-
 
 def run():
     global timer1, ___speedLeft, ___speedRight

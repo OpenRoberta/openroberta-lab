@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import math, random, time, requests, threading, sys, io
+
 sys.stdout = io.StringIO()
 sys.stderr = io.StringIO()
 ROBOTINOIP = "127.0.0.1:80"
@@ -20,20 +21,21 @@ def run(RV):
     global ___Element, ___Element2, ___Element3, ___Element4, ___Element5, _timer1
     time.sleep(1)
     _timer1 = time.time()
-    ___Element = ((time.time() - _timer1)/1000)
-    ___Element2 = ((time.time() - _timer1)/1000)
-    ___Element3 = ((time.time() - _timer1)/1000)
-    ___Element4 = ((time.time() - _timer1)/1000)
-    ___Element5 = ((time.time() - _timer1)/1000)
-
+    ___Element = ((time.time() - _timer1) / 1000)
+    ___Element2 = ((time.time() - _timer1) / 1000)
+    ___Element3 = ((time.time() - _timer1) / 1000)
+    ___Element4 = ((time.time() - _timer1) / 1000)
+    ___Element5 = ((time.time() - _timer1) / 1000)
     _timer1 = time.time()
     _timer2 = time.time()
     _timer3 = time.time()
     _timer4 = time.time()
     _timer5 = time.time()
 
+
 def step(RV):
     pass
+
 
 def main(RV):
     try:
@@ -42,13 +44,15 @@ def main(RV):
         print(e)
         raise
 
+
 def start(RV):
     motorDaemon2 = threading.Thread(target=main, daemon=True, args=(RV,), name='mainProgram')
     motorDaemon2.start()
 
+
 def stop(RV):
     pass
 
+
 def cleanup(RV):
     pass
-

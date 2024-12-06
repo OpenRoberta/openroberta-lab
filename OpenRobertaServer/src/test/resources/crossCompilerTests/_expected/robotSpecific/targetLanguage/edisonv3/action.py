@@ -96,6 +96,7 @@ def _motorOn(motor, power, distance):
 def _shorten(num): 
     return ((num+5)/10)
 
+
 Ed.EdisonVersion = Ed.V2
 Ed.DistanceUnits = Ed.CM
 Ed.Tempo = Ed.TEMPO_SLOW
@@ -104,6 +105,7 @@ Ed.LineTrackerLed(Ed.ON)
 Ed.ReadClapSensor()
 Ed.ReadLineState()
 Ed.TimeWait(250, Ed.TIME_MILLISECONDS)
+
 
 ___n = 1000
 ___b = True
@@ -186,4 +188,3 @@ Ed.PlayTune(___soundfile2)
 while (Ed.ReadMusicEnd() == Ed.MUSIC_NOT_FINISHED):
     pass
 Ed.ReadClapSensor()
-

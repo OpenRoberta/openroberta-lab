@@ -3,12 +3,12 @@ import random
 import math
 from callibot2 import Callibot2
 
+
 class BreakOutOfALoop(Exception): pass
 class ContinueLoop(Exception): pass
 
 timer1 = calliopemini.running_time()
 callibot = Callibot2()
-
 
 def ____wait():
     global timer1
@@ -16,7 +16,6 @@ def ____wait():
     while True:
         if calliopemini.button_a.is_pressed() == True:
             break
-
 
 def run():
     global timer1

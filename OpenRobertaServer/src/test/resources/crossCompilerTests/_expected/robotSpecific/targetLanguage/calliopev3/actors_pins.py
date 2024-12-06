@@ -2,6 +2,7 @@ import calliopemini
 import random
 import math
 
+
 class BreakOutOfALoop(Exception): pass
 class ContinueLoop(Exception): pass
 
@@ -100,7 +101,6 @@ def ____wait():
         if calliopemini.button_a.is_pressed() == True:
             break
     calliopemini.sleep(800)
-
 
 def run():
     global timer1, ___off, ___on, ___analogon

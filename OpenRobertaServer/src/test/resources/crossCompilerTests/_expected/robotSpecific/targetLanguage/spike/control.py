@@ -11,6 +11,7 @@ def set_status_light(color):
 touch_sensor_B = spike.ForceSensor('F')
 hub = spike.PrimeHub()
 
+
 ___Element2 = ['pink', 'azure', 'black']
 
 def run():

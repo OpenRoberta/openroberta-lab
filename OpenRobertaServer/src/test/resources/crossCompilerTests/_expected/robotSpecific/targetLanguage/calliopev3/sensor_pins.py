@@ -3,11 +3,11 @@ import random
 import math
 import machine
 
+
 class BreakOutOfALoop(Exception): pass
 class ContinueLoop(Exception): pass
 
 timer1 = calliopemini.running_time()
-
 
 def ____sensors():
     global timer1
@@ -178,7 +178,6 @@ def ____sensorsWaitUntil():
     while True:
         if machine.time_pulse_us(calliopemini.pin19, 0) < 30:
             break
-
 
 def run():
     global timer1

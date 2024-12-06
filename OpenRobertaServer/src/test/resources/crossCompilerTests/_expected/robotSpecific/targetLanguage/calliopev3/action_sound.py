@@ -3,6 +3,7 @@ import random
 import math
 import music
 
+
 class BreakOutOfALoop(Exception): pass
 class ContinueLoop(Exception): pass
 
@@ -19,7 +20,6 @@ def ____sounds():
     music.pitch(329, 500)
     music.pitch(349, 250)
     music.pitch(391, 125)
-
 
 def run():
     global timer1, ___n

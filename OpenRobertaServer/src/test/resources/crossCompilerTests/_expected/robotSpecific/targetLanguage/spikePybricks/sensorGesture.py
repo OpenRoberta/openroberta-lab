@@ -56,12 +56,9 @@ def is_tapped(threshold = 5000):
     wait(20)
     return False
 
-
-
 stopWatch = StopWatch()
 hub = PrimeHub()
 hub.imu.reset_heading(0)
-
 
 def run():
     display_text(str((hub.imu.up() == Side.TOP)))

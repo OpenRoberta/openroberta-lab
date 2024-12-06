@@ -3,7 +3,6 @@ import random
 import math
 import music
 
-
 def drive(speedLeft, speedRight):
     sR = scale(speedRight)
     sL = scale(speedLeft)
@@ -31,14 +30,16 @@ def scale(speed):
     else:
         return round(abs(speed) * 446.25 / 255 + 80)
 
+
 class BreakOutOfALoop(Exception): pass
 class ContinueLoop(Exception): pass
+
 
 microbit.i2c.init(freq=400000, sda=microbit.pin20, scl=microbit.pin19)
 microbit.i2c.write(0x70, b'\x00\x01')
 microbit.i2c.write(0x70, b'\xE8\xAA')
-
 timer1 = microbit.running_time()
+
 
 ___speed = 0
 
@@ -165,7 +166,6 @@ def ____steerDriveTest():
     drive(-0, -50)
     drive(0, 0)
     music.pitch(261, 250, microbit.pin16)
-
 
 def run():
     global timer1, ___speed

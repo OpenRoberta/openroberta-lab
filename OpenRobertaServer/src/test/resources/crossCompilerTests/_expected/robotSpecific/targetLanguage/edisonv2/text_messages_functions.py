@@ -17,6 +17,7 @@ def _irSend(payload):
         obstacleDetectionOn = False
     Ed.SendIRData(payload)
 
+
 Ed.EdisonVersion = Ed.V2
 Ed.DistanceUnits = Ed.CM
 Ed.Tempo = Ed.TEMPO_SLOW
@@ -25,6 +26,7 @@ Ed.LineTrackerLed(Ed.ON)
 Ed.ReadClapSensor()
 Ed.ReadLineState()
 Ed.TimeWait(250, Ed.TIME_MILLISECONDS)
+
 
 ___numberVar = 0
 ___booleanVar = True
@@ -62,4 +64,3 @@ ____function_parameters(___numberVar, ___booleanVar, ___numberList)
 ___numberVar = ____function_return_numberVar()
 ___booleanVar = ____function_return_booleanVar()
 ___numberList = ____function_return_numberList()
-

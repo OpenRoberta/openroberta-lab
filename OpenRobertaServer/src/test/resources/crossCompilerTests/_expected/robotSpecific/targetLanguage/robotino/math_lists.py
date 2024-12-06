@@ -26,13 +26,13 @@ def _standard_deviation(l):
     for i in l:
         sd += (i - mean)*(i - mean)
     return math.sqrt(sd / len(l))
+
 sys.stdout = io.StringIO()
 sys.stderr = io.StringIO()
 ROBOTINOIP = "127.0.0.1:80"
 PARAMS = {'sid':'robertaProgram'}
 MAXSPEED = 0.5
 MAXROTATION = 0.57
-
 
 
 ___booleanFalse = None
@@ -107,7 +107,6 @@ def ____math():
     ___string = str(___number)
     ___string = chr((int)(___number))
 
-
 def run(RV):
     global ___booleanFalse, ___booleanTrue, ___number, ___numberList, ___string, ___numberlist2
     time.sleep(1)
@@ -117,12 +116,13 @@ def run(RV):
     ___numberList = [0, 0, 0]
     ___string = ""
     ___numberlist2 = []
-
     ____math()
     ____lists()
 
+
 def step(RV):
     pass
+
 
 def main(RV):
     try:
@@ -131,13 +131,15 @@ def main(RV):
         print(e)
         raise
 
+
 def start(RV):
     motorDaemon2 = threading.Thread(target=main, daemon=True, args=(RV,), name='mainProgram')
     motorDaemon2.start()
 
+
 def stop(RV):
     pass
 
+
 def cleanup(RV):
     pass
-

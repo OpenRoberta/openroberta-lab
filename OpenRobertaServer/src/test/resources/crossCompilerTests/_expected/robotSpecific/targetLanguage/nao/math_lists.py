@@ -30,8 +30,9 @@ def _standard_deviation(l):
     for i in l:
         sd += (i - mean)*(i - mean)
     return math.sqrt(sd / len(l))
-h = Hal()
 
+
+h = Hal()
 
 
 ___numberVar = 0

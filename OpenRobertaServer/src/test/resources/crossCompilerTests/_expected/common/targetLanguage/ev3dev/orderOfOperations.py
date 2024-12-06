@@ -7,7 +7,6 @@ import math
 import os
 import time
 
-
 def _randInt(min_val, max_val):
     val = int.from_bytes(os.urandom(4), byteorder='big')
     if min_val < max_val:
@@ -17,6 +16,7 @@ def _randInt(min_val, max_val):
 
 def _randDouble():
     return 1.0*int.from_bytes(os.urandom(4), byteorder='big') / 0xffffffff
+
 
 class BreakOutOfALoop(Exception): pass
 class ContinueLoop(Exception): pass
@@ -30,6 +30,7 @@ _brickConfiguration = {
     },
 }
 hal = Hal(_brickConfiguration)
+
 
 ___item = 0
 

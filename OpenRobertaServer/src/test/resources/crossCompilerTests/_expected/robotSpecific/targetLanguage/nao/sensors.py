@@ -4,18 +4,17 @@ import math
 import time
 import random
 from roberta import Hal
+
+
 h = Hal()
 h.sonar.subscribe("OpenRobertaApp")
 h.mark.subscribe("RobertaLab", 500, 0.0)
-
 from roberta import FaceRecognitionModule
 faceRecognitionModule = FaceRecognitionModule("faceRecognitionModule")
-
 from roberta import SpeechRecognitionModule
 speechRecognitionModule = SpeechRecognitionModule("speechRecognitionModule")
 speechRecognitionModule.pauseASR()
 h.sonar.subscribe("OpenRobertaApp")
-
 
 
 ___numberVar = 0

@@ -46,6 +46,7 @@ def sum(list):
         listSum = (listSum + list[i])
     return listSum
 
+
 Ed.EdisonVersion = Ed.V2
 Ed.DistanceUnits = Ed.CM
 Ed.Tempo = Ed.TEMPO_SLOW
@@ -54,6 +55,7 @@ Ed.LineTrackerLed(Ed.ON)
 Ed.ReadClapSensor()
 Ed.ReadLineState()
 Ed.TimeWait(250, Ed.TIME_MILLISECONDS)
+
 
 ___numberVar = 0
 ___booleanVar = True
@@ -95,4 +97,3 @@ def ____lists():
 
 ____math()
 ____lists()
-

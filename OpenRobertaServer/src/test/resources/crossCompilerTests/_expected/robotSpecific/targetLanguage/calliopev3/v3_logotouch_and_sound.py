@@ -3,11 +3,11 @@ import random
 import math
 import music
 
+
 class BreakOutOfALoop(Exception): pass
 class ContinueLoop(Exception): pass
 
 timer1 = calliopemini.running_time()
-
 
 def run():
     global timer1

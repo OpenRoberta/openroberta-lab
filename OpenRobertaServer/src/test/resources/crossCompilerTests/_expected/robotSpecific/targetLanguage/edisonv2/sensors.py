@@ -17,6 +17,7 @@ def _obstacleDetection(mode):
         obstacleDetectionOn = True
     return Ed.ReadObstacleDetection() == mode
 
+
 Ed.EdisonVersion = Ed.V2
 Ed.DistanceUnits = Ed.CM
 Ed.Tempo = Ed.TEMPO_SLOW
@@ -25,6 +26,7 @@ Ed.LineTrackerLed(Ed.ON)
 Ed.ReadClapSensor()
 Ed.ReadLineState()
 Ed.TimeWait(250, Ed.TIME_MILLISECONDS)
+
 
 ___numberVar = 0
 ___booleanVar = True
@@ -99,4 +101,3 @@ def ____sensorWaitUntil():
 
 ____sensors()
 ____sensorWaitUntil()
-

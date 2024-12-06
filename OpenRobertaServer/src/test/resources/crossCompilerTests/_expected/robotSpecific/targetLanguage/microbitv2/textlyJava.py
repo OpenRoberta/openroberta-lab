@@ -3,7 +3,6 @@ import random
 import math
 import radio
 
-
 def _isPrime(number):
     if(number == 0 or number == 1):
         return False
@@ -26,11 +25,13 @@ def receive_message(type):
     elif type == "String":
         return ((lambda x: '' if x is None else x)(msg))
 
+
 class BreakOutOfALoop(Exception): pass
 class ContinueLoop(Exception): pass
 
 timer1 = microbit.running_time()
 radio.on()
+
 
 ___num = 0
 ___boolT = True

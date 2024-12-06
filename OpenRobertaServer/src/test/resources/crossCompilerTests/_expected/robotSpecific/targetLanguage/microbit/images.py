@@ -2,10 +2,12 @@ import microbit
 import random
 import math
 
+
 class BreakOutOfALoop(Exception): pass
 class ContinueLoop(Exception): pass
 
 timer1 = microbit.running_time()
+
 
 ___Element = microbit.Image('90009:09090:00900:09090:90009')
 ___Element2 = [microbit.Image.HEART, microbit.Image.ASLEEP, microbit.Image.SAD]

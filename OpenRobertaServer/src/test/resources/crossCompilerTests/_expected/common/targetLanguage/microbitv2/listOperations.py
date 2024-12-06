@@ -2,7 +2,6 @@ import microbit
 import random
 import math
 
-
 def _median(l):
     l = sorted(l)
     l_len = len(l)
@@ -19,10 +18,13 @@ def _standard_deviation(l):
     for i in l:
         sd += (i - mean)*(i - mean)
     return math.sqrt(sd / len(l))
+
+
 class BreakOutOfALoop(Exception): pass
 class ContinueLoop(Exception): pass
 
 timer1 = microbit.running_time()
+
 
 ___input = [1, 2, 3, 4, 3]
 ___input2 = []

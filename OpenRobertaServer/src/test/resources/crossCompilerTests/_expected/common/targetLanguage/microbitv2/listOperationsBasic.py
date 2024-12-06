@@ -8,6 +8,7 @@ class ContinueLoop(Exception): pass
 
 timer1 = microbit.running_time()
 
+
 ___initialEmptyNumbers = []
 ___initialEmptyBoolean = []
 ___initialEmptyStrings = []

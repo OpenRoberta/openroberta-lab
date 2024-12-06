@@ -11,11 +11,8 @@ def display_text(text):
             text_list[idx] = '?'
     hub.display.text("".join(text_list))
 
-
-
 hub = PrimeHub()
 hub.imu.reset_heading(0)
-
 
 def run():
     while True:

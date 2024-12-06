@@ -123,7 +123,7 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
 
     @Override
     public Void visitMainTask(MainTask mainTask) {
-        super.visitorGenerateUserVariablesAndMethods(mainTask);
+        visitorGenerateUserVariablesAndMethods(mainTask);
         StmtList variables = mainTask.variables;
         nlIndent();
         this.src.add("def run():");

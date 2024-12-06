@@ -6,8 +6,6 @@ from ev3dev import ev3 as ev3dev
 import math
 import os
 import time
-
-
 ____n1 = 0
 ____n3 = 0
 ____h1n1 = 0
@@ -34,6 +32,9 @@ def ____nnStep():
     ____h1n2 = ____b_h1n2 + ____n1 * ____w_n1_h1n2 + ____n3 * ____w_n3_h1n2
     ____n2 = ____b_n2 + ____h1n1 * ____w_h1n1_n2 + ____h1n2 * ____w_h1n2_n2
     ____n4 = ____b_n4 + ____h1n1 * ____w_h1n1_n4 + ____h1n2 * ____w_h1n2_n4
+
+
+
 class BreakOutOfALoop(Exception): pass
 class ContinueLoop(Exception): pass
 
@@ -46,6 +47,7 @@ _brickConfiguration = {
     },
 }
 hal = Hal(_brickConfiguration)
+
 
 ___n = 0
 

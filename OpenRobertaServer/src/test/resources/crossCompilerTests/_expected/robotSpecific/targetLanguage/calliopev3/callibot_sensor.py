@@ -3,12 +3,12 @@ import random
 import math
 from callibot2 import Callibot2
 
+
 class BreakOutOfALoop(Exception): pass
 class ContinueLoop(Exception): pass
 
 timer1 = calliopemini.running_time()
 callibot = Callibot2()
-
 
 def run():
     global timer1

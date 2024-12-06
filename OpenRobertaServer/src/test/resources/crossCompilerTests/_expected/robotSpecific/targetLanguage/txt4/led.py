@@ -2,6 +2,7 @@ import fischertechnik.factories as txt_factory
 import math
 import time
 
+
 txt_factory.init()
 txt_factory.init_input_factory()
 txt_factory.init_output_factory()

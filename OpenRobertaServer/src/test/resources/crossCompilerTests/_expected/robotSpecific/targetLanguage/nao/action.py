@@ -4,11 +4,11 @@ import math
 import time
 import random
 from roberta import Hal
-h = Hal()
 
+
+h = Hal()
 from roberta import FaceRecognitionModule
 faceRecognitionModule = FaceRecognitionModule("faceRecognitionModule")
-
 
 
 ___numberVar = 0

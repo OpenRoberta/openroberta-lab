@@ -104,7 +104,7 @@ public abstract class AbstractLanguageVisitor extends BaseVisitor<Void> {
         generateProgramSuffix(withWrapping);
     }
 
-    private void generateProgramMainBody() {
+    protected void generateProgramMainBody() {
         this.programPhrases
             .stream()
             .filter(phrase -> phrase.getKind().getCategory() != Category.METHOD || phrase.getKind().hasName("METHOD_CALL"))

@@ -4,6 +4,7 @@ import math
 import machine
 from sht31 import SHT31
 
+
 class BreakOutOfALoop(Exception): pass
 class ContinueLoop(Exception): pass
 
@@ -100,7 +101,6 @@ def ____sensorsWaitUntil():
     while True:
         if sht31.get_temp_humi("t") < 30:
             break
-
 
 def run():
     global timer1, ___colourVar, ___numberList

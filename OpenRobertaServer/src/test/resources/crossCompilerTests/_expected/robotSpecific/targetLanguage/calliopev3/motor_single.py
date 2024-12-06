@@ -2,7 +2,6 @@ import calliopemini
 import random
 import math
 
-
 def set_motor(port, speed):
     digit = 0
     if (speed < 0):
@@ -16,6 +15,7 @@ def set_motor(port, speed):
     else:
         calliopemini.pin_M1_DIR.write_digital(digit)
         calliopemini.pin_M1_SPEED.write_analog(speed)
+
 
 class BreakOutOfALoop(Exception): pass
 class ContinueLoop(Exception): pass

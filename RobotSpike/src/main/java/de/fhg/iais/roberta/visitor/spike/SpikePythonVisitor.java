@@ -585,31 +585,43 @@ public final class SpikePythonVisitor extends AbstractSpikePythonVisitor {
     @Override
     protected void visitorGenerateImports() {
         UsedHardwareBean usedHardwareBean = this.getBean(UsedHardwareBean.class);
-        this.src.add("import spike").nlI();
-        this.src.add("import math").nlI();
+        this.src.add("import spike");
+
+        nlIndent();
+        this.src.add("import math");
+
         if ( usedHardwareBean.isActorUsed(C.RANDOM) || usedHardwareBean.isActorUsed(C.RANDOM_DOUBLE) ) {
-            this.src.add("import random").nlI();
+            nlIndent();
+            this.src.add("import random");
         }
+
+        nlIndent();
         this.src.add("from spike.control import wait_for_seconds, wait_until");
         if ( usedHardwareBean.isSensorUsed(SC.TIMER) ) {
             this.src.add(", Timer");
         }
-        nlIndent();
+
         if ( usedHardwareBean.isActorUsed("DISPLAY") ) {
-            this.src.add("import hub as _hub").nlI();
+            nlIndent();
+            this.src.add("import hub as _hub");
         }
     }
 
     @Override
     protected void visitorGenerateGlobalVariables() {
+        nlIndent();
+        nlIndent();
+
         UsedHardwareBean usedHardwareBean = this.getBean(UsedHardwareBean.class);
         if ( usedHardwareBean.isActorUsed(SC.DIFFERENTIALDRIVE) ) {
             ConfigurationComponent diffDrive = this.configurationAst.optConfigurationComponentByType("DIFFERENTIALDRIVE");
             String leftPort = diffDrive.getComponentProperties().get("MOTOR_L");
             String rightPort = diffDrive.getComponentProperties().get("MOTOR_R");
             nlIndent();
-            this.src.add("TRACKWIDTH = ").add(diffDrive.getComponentProperties().get("BRICK_TRACK_WIDTH")).nlI();
-            this.src.add("diff_drive = spike.MotorPair('").add(leftPort).add("', '").add(rightPort).add("')").nlI();
+            this.src.add("TRACKWIDTH = ").add(diffDrive.getComponentProperties().get("BRICK_TRACK_WIDTH"));
+            nlIndent();
+            this.src.add("diff_drive = spike.MotorPair('").add(leftPort).add("', '").add(rightPort).add("')");
+            nlIndent();
             this.src.add("diff_drive.set_motor_rotation(").add(diffDrive.getComponentProperties().get("BRICK_WHEEL_DIAMETER")).add(" * math.pi, 'cm')");
         }
         if ( usedHardwareBean.isActorUsed(SC.MOTOR) ) {
@@ -644,7 +656,8 @@ public final class SpikePythonVisitor extends AbstractSpikePythonVisitor {
         }
         if ( usedHardwareBean.isActorUsed("DISPLAY") ) {
             nlIndent();
-            this.src.add("display = _hub.display").nlI();
+            this.src.add("display = _hub.display");
+            nlIndent();
             this.src.add("Image = _hub.Image");
         }
         if ( usedHardwareBean.isSensorUsed(SC.TIMER) ) {

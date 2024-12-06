@@ -21,9 +21,11 @@ _brickConfiguration = {
 }
 hal = Hal(_brickConfiguration)
 
+
 ___text = "start:"
 ___eight = " eight"
 ___number = 0
+
 
 def run():
     global ___text, ___eight, ___number

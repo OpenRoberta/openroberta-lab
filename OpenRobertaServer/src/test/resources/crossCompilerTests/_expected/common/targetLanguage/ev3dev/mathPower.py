@@ -21,7 +21,9 @@ _brickConfiguration = {
 }
 hal = Hal(_brickConfiguration)
 
+
 ___result = False
+
 
 def run():
     global ___result

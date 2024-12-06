@@ -3,6 +3,7 @@ import random
 import math
 import neopixel
 
+
 class BreakOutOfALoop(Exception): pass
 class ContinueLoop(Exception): pass
 
@@ -20,7 +21,6 @@ def ____wait():
             break
     calliopemini.display.scroll("Next Color")
     calliopemini.sleep(500)
-
 
 def run():
     global timer1, ___color

@@ -2,7 +2,6 @@ import calliopemini
 import random
 import math
 
-
 def servo_get_angle(angle):
     if (angle < 0): 
         angle = 0
@@ -40,6 +39,7 @@ def set_motor(port, speed):
     else:
         calliopemini.pin_M1_DIR.write_digital(digit)
         calliopemini.pin_M1_SPEED.write_analog(speed)
+
 
 class BreakOutOfALoop(Exception): pass
 class ContinueLoop(Exception): pass
@@ -138,7 +138,6 @@ def ____wait():
         if calliopemini.button_a.is_pressed() == True:
             break
     calliopemini.sleep(700)
-
 
 def run():
     global timer1, ___n

@@ -8,8 +8,6 @@ def show_animation(image_list):
     wait(500 * len(image_list) - 10)
     hub.display.icon(image_list[len(image_list)-1])
 
-
-
 hub = PrimeHub()
 hub.speaker.volume(15)
 

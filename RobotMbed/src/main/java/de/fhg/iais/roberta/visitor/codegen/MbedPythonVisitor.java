@@ -251,8 +251,7 @@ public abstract class MbedPythonVisitor extends AbstractPythonVisitor implements
     @Override
     public Void visitMainTask(MainTask mainTask) {
         visitorGenerateUserVariablesAndMethods(mainTask);
-        nlIndent();
-        this.src.add("def run():");
+        this.src.addNLine(1,"def run():");
         incrIndentation();
         nlIndent();
         if ( !this.usedGlobalVarInFunctions.isEmpty() ) {
@@ -410,49 +409,52 @@ public abstract class MbedPythonVisitor extends AbstractPythonVisitor implements
         this.src.add("import random");
         nlIndent();
         this.src.add("import math");
-        nlIndent();
+
         if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.RADIO) ) {
-            this.src.add("import radio");
             nlIndent();
+            this.src.add("import radio");
         }
         if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.MUSIC) ) {
-            this.src.add("import music");
             nlIndent();
+            this.src.add("import music");
         }
         if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.PIN_VALUE) ) {
-            this.src.add("import machine");
             nlIndent();
+            this.src.add("import machine");
         }
         if ( this.firmware == "calliopemini" ) {
             if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.RGBLED) ) {
-                this.src.add("import neopixel");
                 nlIndent();
+                this.src.add("import neopixel");
             }
             if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.ULTRASONIC) ) {
-                this.src.add("from machine import time_pulse_us");
                 nlIndent();
+                this.src.add("from machine import time_pulse_us");
             }
             if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.FOUR_DIGIT_DISPLAY) ) {
-                this.src.add("from tm1637 import TM1637");
                 nlIndent();
+                this.src.add("from tm1637 import TM1637");
             }
             if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.CALLIBOT) ) {
-                this.src.add("from callibot2 import Callibot2");
                 nlIndent();
+                this.src.add("from callibot2 import Callibot2");
             }
             if ( this.getBean(UsedHardwareBean.class).isSensorUsed(SC.COLOR) ) {
-                this.src.add("from tcs3472 import tcs3472");
                 nlIndent();
+                this.src.add("from tcs3472 import tcs3472");
             }
             if ( this.getBean(UsedHardwareBean.class).isSensorUsed(SC.HUMIDITY) ) {
+                nlIndent();
                 this.src.add("from sht31 import SHT31");
             }
         }
-        nlIndent();
     }
 
     @Override
     protected void visitorGenerateGlobalVariables() {
+        nlIndent();
+        nlIndent();
+        nlIndent();
         this.src.add("class BreakOutOfALoop(Exception): pass");
         nlIndent();
         this.src.add("class ContinueLoop(Exception): pass");
@@ -460,36 +462,35 @@ public abstract class MbedPythonVisitor extends AbstractPythonVisitor implements
         nlIndent();
         this.src.add("timer1 = " + this.firmware + ".running_time()");
         if ( this.firmware == "calliopemini" ) {
-            nlIndent();
             if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.RGBLED) ) {
-                this.src.add("np = neopixel.NeoPixel(" + this.firmware + ".pin_RGB, 3)");
                 nlIndent();
+                this.src.add("np = neopixel.NeoPixel(" + this.firmware + ".pin_RGB, 3)");
             }
             if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.FOUR_DIGIT_DISPLAY) ) {
-                this.src.add("fdd = TM1637()");
                 nlIndent();
+                this.src.add("fdd = TM1637()");
             }
             if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.DISPLAY_GRAYSCALE) ) {
-                this.src.add("brightness = 9");
                 nlIndent();
+                this.src.add("brightness = 9");
             }
             if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.CALLIBOT) ) {
-                this.src.add("callibot = Callibot2()");
                 nlIndent();
+                this.src.add("callibot = Callibot2()");
             }
             if ( this.getBean(UsedHardwareBean.class).isSensorUsed(SC.COLOR) ) {
+                nlIndent();
                 this.src.add("color_sensor = tcs3472()");
                 nlIndent();
                 this.src.add("LIGHT_CONST = 40");
-                nlIndent();
             }
             if ( this.getBean(UsedHardwareBean.class).isSensorUsed(SC.HUMIDITY) ) {
-                this.src.add("sht31 = SHT31()");
                 nlIndent();
+                this.src.add("sht31 = SHT31()");
             }
             if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.RADIO) ) {
-                this.src.add("rssi = 0");
                 nlIndent();
+                this.src.add("rssi = 0");
             }
         }
         if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.RADIO) ) {
@@ -562,6 +563,5 @@ public abstract class MbedPythonVisitor extends AbstractPythonVisitor implements
         }
         return null;
     }
-
 
 }

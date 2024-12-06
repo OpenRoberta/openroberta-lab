@@ -3,17 +3,19 @@ import random
 import math
 import neopixel
 
-
 def led_set_colour(x, colour):
     global np
     np[x] = colour
     np.show()
 
+
 class BreakOutOfALoop(Exception): pass
 class ContinueLoop(Exception): pass
-np = neopixel.NeoPixel(microbit.pin0, 8)
 
+
+np = neopixel.NeoPixel(microbit.pin0, 8)
 timer1 = microbit.running_time()
+
 
 ___item = [(255, 20, 150), (204, 0, 0), (255, 204, 0), (51, 102, 255), (51, 0, 51), (0, 0, 0), (102, 255, 255), (255, 204, 255)]
 

@@ -150,25 +150,26 @@ def run(RV):
     ___Element14 = getOdometry('rot') * (180 / math.pi)
     ___Element15 = getDistance(1)
     ___Element16 = isBumped()
-    ___Element = ((time.time() - _timer1)/1000)
-    ___Element17 = ((time.time() - _timer2)/1000)
-    ___Element18 = ((time.time() - _timer3)/1000)
-    ___Element19 = ((time.time() - _timer4)/1000)
-    ___Element20 = ((time.time() - _timer5)/1000)
+    ___Element = ((time.time() - _timer1) / 1000)
+    ___Element17 = ((time.time() - _timer2) / 1000)
+    ___Element18 = ((time.time() - _timer3) / 1000)
+    ___Element19 = ((time.time() - _timer4) / 1000)
+    ___Element20 = ((time.time() - _timer5) / 1000)
     ___Element2 = getColourBlob(RV, [40, 56, 42, 100, 53, 100])
-
     resetOdometry(RV, 0, RV.readFloatVector(1)[1], RV.readFloatVector(1)[2])
     resetOdometry(RV, RV.readFloatVector(1)[0], 0, RV.readFloatVector(1)[2])
     resetOdometry(RV, RV.readFloatVector(1)[0], RV.readFloatVector(1)[1], 0)
     resetOdometry(RV, 0, 0, 0)
     ___Element2 = getMarkers(RV)
-    time.sleep(500/1000)
+    time.sleep(500 / 1000)
     ___Element2 = getMarkerInformation(RV, 0)
     RV.writeFloat(4, 100)
     time.sleep(0.005)
 
+
 def step(RV):
     pass
+
 
 def main(RV):
     try:
@@ -177,13 +178,15 @@ def main(RV):
         print(e)
         raise
 
+
 def start(RV):
     motorDaemon2 = threading.Thread(target=main, daemon=True, args=(RV,), name='mainProgram')
     motorDaemon2.start()
 
+
 def stop(RV):
     pass
 
+
 def cleanup(RV):
     pass
-

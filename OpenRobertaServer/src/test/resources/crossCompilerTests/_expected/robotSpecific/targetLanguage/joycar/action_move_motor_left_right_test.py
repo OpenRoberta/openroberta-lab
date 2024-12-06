@@ -2,7 +2,6 @@ import microbit
 import random
 import math
 
-
 def scale(speed):
     if speed == 0:
         return 0
@@ -26,14 +25,16 @@ def setSpeed(port, speed):
             microbit.i2c.write(0x70, b'\x04' + bytes([0]))
             microbit.i2c.write(0x70, b'\x05' + bytes([s]))
 
+
 class BreakOutOfALoop(Exception): pass
 class ContinueLoop(Exception): pass
+
 
 microbit.i2c.init(freq=400000, sda=microbit.pin20, scl=microbit.pin19)
 microbit.i2c.write(0x70, b'\x00\x01')
 microbit.i2c.write(0x70, b'\xE8\xAA')
-
 timer1 = microbit.running_time()
+
 
 ___speed = -100
 
@@ -63,7 +64,6 @@ def ____motorLeftRightOn():
         ___speed = ___speed + 10
     setSpeed("MOT_R", 0)
     setSpeed("MOT_L", 0)
-
 
 def run():
     global timer1, ___speed

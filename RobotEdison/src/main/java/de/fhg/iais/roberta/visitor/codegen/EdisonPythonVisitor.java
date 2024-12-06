@@ -76,11 +76,13 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     @Override
     protected void visitorGenerateImports() {
         this.src.add("import Ed");
-        nlIndent();
     }
 
     @Override
     protected void visitorGenerateGlobalVariables() {
+        nlIndent();
+        nlIndent();
+        nlIndent();
         this.src.add("Ed.EdisonVersion = Ed.V2");
         nlIndent();
         this.src.add("Ed.DistanceUnits = Ed.CM");
@@ -110,8 +112,6 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
             return;
         }
         decrIndentation(); // everything is still indented from main program
-        nlIndent(); //new line for helper methods
-        nlIndent();
     }
 
     @Override
@@ -300,6 +300,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     @Override
     public Void visitMainTask(MainTask mainTask) {
         visitorGenerateUserVariablesAndMethods(mainTask);
+        src.ensureBlankLines(2);
         return null;
     }
 

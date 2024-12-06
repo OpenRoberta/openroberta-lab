@@ -3,7 +3,6 @@ from fischertechnik.controller.Motor import Motor
 import math
 import time
 
-
 def motor_start(motor, speed):
     motor.set_speed(speed_to_pwm(speed), Motor.CCW)
     motor.start()
@@ -80,12 +79,12 @@ def speed_to_pwm(speed):
     speed = max(min(speed, 100), -100)
     return int((speed / 100) * 512)
 
+
 txt_factory.init()
 txt_factory.init_input_factory()
 txt_factory.init_motor_factory()
 txt_factory.init_counter_factory()
 TXT_M = txt_factory.controller_factory.create_graphical_controller()
-
 TXT_M_M3_motor = txt_factory.motor_factory.create_encodermotor(TXT_M, 3)
 TXT_M_C3_motor_step_counter = txt_factory.counter_factory.create_encodermotor_counter(TXT_M, 3)
 TXT_M_C3_motor_step_counter.set_motor(TXT_M_M3_motor)

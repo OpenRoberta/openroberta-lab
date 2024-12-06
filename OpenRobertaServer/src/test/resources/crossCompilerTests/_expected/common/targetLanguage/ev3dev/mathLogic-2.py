@@ -21,11 +21,13 @@ _brickConfiguration = {
 }
 hal = Hal(_brickConfiguration)
 
+
 ___r1 = 0
 ___r2 = 0
 ___b1 = True
 ___r3 = 0
 ___sim = True
+
 
 def run():
     global ___r1, ___r2, ___b1, ___r3, ___sim

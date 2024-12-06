@@ -7,6 +7,7 @@ import music
 class BreakOutOfALoop(Exception): pass
 class ContinueLoop(Exception): pass
 
+
 timer1 = microbit.running_time()
 
 def run():

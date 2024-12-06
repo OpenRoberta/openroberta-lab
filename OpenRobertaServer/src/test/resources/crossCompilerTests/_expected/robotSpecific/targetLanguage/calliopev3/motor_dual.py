@@ -2,7 +2,6 @@ import calliopemini
 import random
 import math
 
-
 def set_both_motors(speed_A, speed_B):
     digit_0 = 0
     digit_1 = 0
@@ -34,11 +33,11 @@ def set_motor(port, speed):
         calliopemini.pin_M1_DIR.write_digital(digit)
         calliopemini.pin_M1_SPEED.write_analog(speed)
 
+
 class BreakOutOfALoop(Exception): pass
 class ContinueLoop(Exception): pass
 
 timer1 = calliopemini.running_time()
-
 
 def run():
     global timer1

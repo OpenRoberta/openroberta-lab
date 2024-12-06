@@ -5,10 +5,8 @@ from pybricks.tools import Matrix, wait
 import umath as math
 import urandom as random
 
-
 touch_sensor_B = ForceSensor(Port.F)
 hub = PrimeHub()
-
 
 def run():
     while True:

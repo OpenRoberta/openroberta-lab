@@ -7,7 +7,6 @@ import math
 import os
 import time
 
-
 def _median(l):
     l = sorted(l)
     l_len = len(l)
@@ -24,6 +23,8 @@ def _standard_deviation(l):
     for i in l:
         sd += (i - mean)*(i - mean)
     return math.sqrt(sd / len(l))
+
+
 class BreakOutOfALoop(Exception): pass
 class ContinueLoop(Exception): pass
 
@@ -37,11 +38,13 @@ _brickConfiguration = {
 }
 hal = Hal(_brickConfiguration)
 
+
 ___l1 = [0, 0, 0, 0]
 ___x = 0
 ___item3 = 0
 ___l2 = []
 ___b = True
+
 
 def run():
     global ___l1, ___x, ___item3, ___l2, ___b

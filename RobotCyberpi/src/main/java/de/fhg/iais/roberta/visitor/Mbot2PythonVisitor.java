@@ -103,12 +103,36 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
         this.src.add("import time");
         nlIndent();
         this.src.add("import math, random");
-        nlIndent();
+    }
+
+    private boolean hasDiffDrive(){
+        return this.getBean(UsedHardwareBean.class).isActorUsed(SC.DIFFERENTIALDRIVE);
+    }
+
+    private boolean hasTimerVariables(){
+        return !this.getBean(UsedHardwareBean.class)
+            .getUsedSensors()
+            .stream()
+            .filter(usedSensor -> usedSensor.getType().equals(SC.TIMER))
+            .collect(Collectors.groupingBy(UsedSensor::getPort)).isEmpty();
+    }
+
+    private boolean hasColors(){
+        return this.getBean(UsedHardwareBean.class).getUsedSensors()
+            .stream()
+            .filter(usedSensor -> usedSensor.getType().equals(CyberpiConstants.QUADRGB)
+                && usedSensor.getMode().equals(SC.COLOUR) || usedSensor.getMode().equals(SC.LED))
+            .count() != 0;
     }
 
     @Override
     protected void visitorGenerateGlobalVariables() {
-        if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.DIFFERENTIALDRIVE) ) {
+        if(hasDiffDrive() || hasTimerVariables() || hasColors()){
+            nlIndent();
+            nlIndent();
+        }
+
+        if (hasDiffDrive()) {
             appendRobotVariables();
         }
         generateTimerVariables();
@@ -118,9 +142,9 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
     private void appendRobotVariables() {
         ConfigurationComponent diffDrive = getDiffDrive();
         if ( diffDrive != null ) {
-            nlIndent();
             double circumference = Double.parseDouble(diffDrive.getComponentProperties().get(CyberpiConstants.DIFF_WHEEL_DIAMETER)) * Math.PI;
             double trackWidth = Double.parseDouble(diffDrive.getComponentProperties().get(CyberpiConstants.DIFF_TRACK_WIDTH));
+            nlIndent();
             this.src.add("_trackWidth = ");
             this.src.add(trackWidth);
             nlIndent();
@@ -129,7 +153,6 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
             nlIndent();
             this.src.add("_diffPortsSwapped = ");
             this.src.add(this.rightMotorPort.equals("EM1") ? "True" : "False");
-            nlIndent();
         }
     }
 
@@ -148,26 +171,24 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
     }
 
     private void generateTimerVariables() {
-        this.getBean(UsedHardwareBean.class)
-            .getUsedSensors()
-            .stream()
-            .filter(usedSensor -> usedSensor.getType().equals(SC.TIMER))
-            .collect(Collectors.groupingBy(UsedSensor::getPort))
-            .keySet()
-            .forEach(port -> {
-                this.src.add("_timer", port, " = cyberpi.timer.get()");
-                nlIndent();
-            });
+        if(hasTimerVariables()){
+            nlIndent();
+            this.getBean(UsedHardwareBean.class)
+                .getUsedSensors()
+                .stream()
+                .filter(usedSensor -> usedSensor.getType().equals(SC.TIMER))
+                .collect(Collectors.groupingBy(UsedSensor::getPort))
+                .keySet()
+                .forEach(port -> {
+                    nlIndent();
+                    this.src.add("_timer", port, " = cyberpi.timer.get()");
+                });
+        }
     }
 
     private void addColors() {
-        int colorBlocks = (int) this.getBean(UsedHardwareBean.class).getUsedSensors()
-            .stream()
-            .filter(usedSensor -> usedSensor.getType().equals(CyberpiConstants.QUADRGB)
-                && usedSensor.getMode().equals(SC.COLOUR) || usedSensor.getMode().equals(SC.LED))
-            .count();
-
-        if ( colorBlocks != 0 ) {
+        if ( hasColors() ) {
+            nlIndent();
             nlIndent();
             this.src.add("_colors = {\n",
                 "            \"red\": (204,0,0),\n",
@@ -179,16 +200,14 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
                 "            \"white\": (255,255,255),\n",
                 "            \"black\": (0,0,0)\n",
                 "        }");
-            nlIndent();
         }
     }
-
 
     @Override
     public Void visitMainTask(MainTask mainTask) {
         visitorGenerateUserVariablesAndMethods(mainTask);
-        nlIndent();
-        this.src.add("def run():");
+
+        this.src.addNLine(2, "def run():");
         incrIndentation();
         if ( !this.usedGlobalVarInFunctions.isEmpty() ) {
             nlIndent();

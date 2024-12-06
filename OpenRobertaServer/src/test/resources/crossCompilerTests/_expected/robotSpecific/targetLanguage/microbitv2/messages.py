@@ -3,7 +3,6 @@ import random
 import math
 import radio
 
-
 def receive_message(type):
     msg = radio.receive()
     if type == "Number":
@@ -16,6 +15,7 @@ def receive_message(type):
         return ((lambda x: False if x is None else x == 'True')(msg))
     elif type == "String":
         return ((lambda x: '' if x is None else x)(msg))
+
 
 class BreakOutOfALoop(Exception): pass
 class ContinueLoop(Exception): pass
