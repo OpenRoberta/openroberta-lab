@@ -1637,7 +1637,9 @@ legend {
 .bootstrap-table .fixed-table-toolbar .float-left, .bootstrap-table .fixed-table-toolbar .float-right {
     margin-top: 0;
 }
-
+#nn-explore-table-user-input, #nn-learn-table-user-input {
+    margin-top: -46px !important;
+}
 .bs-bars.float-left {
     width: 100%;
 }
