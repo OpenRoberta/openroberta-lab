@@ -16,7 +16,7 @@ import org.json.JSONObject;
 import de.fhg.iais.roberta.components.ProgramAst;
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.exprEvaluator.CommonTextlyJavaVisitor;
-import de.fhg.iais.roberta.exprEvaluator.EvalExprStmtErrorListener;
+import de.fhg.iais.roberta.exprEvaluator.TextlyEditorErrorListener;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.Location;
 import de.fhg.iais.roberta.syntax.lang.blocksequence.MainTask;
@@ -40,7 +40,7 @@ public abstract class AbstractTextlyJavaToNepoWorker implements IWorker {
         TextlyJavaParser parser = null;
         try {
             parser = mkParser(project.getProgramAsTextly());
-            EvalExprStmtErrorListener err = new EvalExprStmtErrorListener();
+            TextlyEditorErrorListener err = new TextlyEditorErrorListener();
             parser.removeErrorListeners();
             parser.addErrorListener(err);
             TextlyJavaParser.ProgramContext program = parser.program();
@@ -54,8 +54,13 @@ public abstract class AbstractTextlyJavaToNepoWorker implements IWorker {
             } else {
                 List<Phrase> mainPart = (List<Phrase>) ((TextlyJavaBaseVisitor<?>) visitor).visitProgram(program);
 
+                MainTask myMainTask = (MainTask) mainPart.get(0);
+                ProgramAst tempProg = project.getProgramAst();
+                myMainTask.setData(((MainTask) tempProg.getTree().get(0).get(1)).data);
+
                 Task mainTask = (MainTask) mainPart.get(0);
                 StmtList stmtList = (StmtList) mainPart.get(1);
+
 
                 List<JSONObject> textlyErrors = new ArrayList<>();
                 textlyErrors.addAll(NepoInfoProcessor.collectTextlyErrors(mainTask));
@@ -87,7 +92,7 @@ public abstract class AbstractTextlyJavaToNepoWorker implements IWorker {
                     builder.addToTree(phrasesMethod);
                     location = new Location(String.valueOf(i * 400), "0");
                 }
-                
+
                 project.setTextlyErrors(textlyErrors);
                 project.setProgramAst(builder.build());
                 if ( textlyErrors.size() > 0 ) {

@@ -7,10 +7,14 @@ import * as MSG from 'message';
 // @ts-ignore
 import * as Blockly from 'blockly';
 import * as ACE_EDITOR from 'aceEditor';
+import * as UTIL from 'util.roberta';
+import { State } from 'neuralnetwork.uistate';
 
 var skipReload = false;
 var previousTextlyCode = '';
 let previousBlockCoordinates = [];
+let nnStateAsJson;
+let state: State = null;
 export function init() {
     initView();
     initEvents();
@@ -106,6 +110,8 @@ function handleTabSwitch(reload: boolean, tabId: string) {
                         $(tabId).tabWrapShow();
                     }
                     GUISTATE_C.setState(result);
+                    var startBlock = UTIL.getTheStartBlock();
+                    startBlock.data = JSON.stringify(nnStateAsJson);
                     ACE_EDITOR.setTextlyEditorCode(result.programAsTextly);
                     ACE_EDITOR.setWasEditedByUser(false);
                 } else {
@@ -162,7 +168,7 @@ function getSourceCode(reload: boolean) {
     let configName: string = isNamedConfig ? GUISTATE_C.getConfigurationName() : undefined;
     let xmlConfigText: string = GUISTATE_C.isConfigurationAnonymous() ? GUISTATE_C.getConfigurationXML() : undefined;
     let language: string = GUISTATE_C.getLanguage();
-
+    extractNNstateAsJson();
     PROGRAM.showTextly(
         GUISTATE_C.getProgramName(),
         configName,
@@ -175,7 +181,6 @@ function getSourceCode(reload: boolean) {
         //TODO propper result types
         function (result: any) {
             PROG_C.reloadProgram(result);
-
             if (result.rc == 'ok') {
                 if (reload) {
                     // @ts-ignore
@@ -203,4 +208,12 @@ function restoreBlockCoordinates(blocklyWorkspace) {
             block.moveBy(dx, dy);
         }
     });
+}
+export function extractNNstateAsJson() {
+    var startBlock = UTIL.getTheStartBlock();
+    try {
+        nnStateAsJson = JSON.parse(startBlock.data);
+    } catch (e) {
+        // nnStateAsJson remains null
+    }
 }

@@ -16,7 +16,6 @@ import org.slf4j.LoggerFactory;
 import de.fhg.iais.roberta.blockly.generated.Block;
 import de.fhg.iais.roberta.blockly.generated.Field;
 import de.fhg.iais.roberta.exprEvaluator.BlockEvalStmtErrorListener;
-import de.fhg.iais.roberta.exprEvaluator.EvalExprStmtErrorListener;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.textly.generated.TextlyJavaLexer;
 import de.fhg.iais.roberta.textly.generated.TextlyJavaParser;

@@ -23,7 +23,7 @@ import de.fhg.iais.roberta.util.syntax.BlocklyConstants;
 public final class MainTask extends Task {
     public final StmtList variables;
     public final String debug;
-    public final Data data;
+    public Data data;
 
     public MainTask(BlocklyProperties properties, StmtList variables, String debug, Data data) {
         super(properties);
@@ -42,6 +42,10 @@ public final class MainTask extends Task {
     @Override
     public Assoc getAssoc() {
         return null;
+    }
+
+    public void setData(Data data) {
+        this.data = data;
     }
 
     @Override

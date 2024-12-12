@@ -11,7 +11,7 @@ import org.antlr.v4.runtime.Recognizer;
 import org.json.JSONObject;
 
 
-public class EvalExprStmtErrorListener extends BaseErrorListener {
+public class TextlyEditorErrorListener extends BaseErrorListener {
     private final List<JSONObject> errors = new LinkedList<>();
     private List<String> stackRule = new LinkedList<>();
 
