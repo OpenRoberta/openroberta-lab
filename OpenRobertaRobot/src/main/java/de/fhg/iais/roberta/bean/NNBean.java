@@ -140,7 +140,7 @@ public class NNBean implements IProjectBean {
          * data contains the NN definition. Save it for later usage.
          */
         public String setNN(Data data) {
-            if ( data == null ) {
+            if ( data == null || data.getValue().equals("null") ) {
                 this.weights = new JSONArray();
                 this.bias = new JSONArray();
                 return null;

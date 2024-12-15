@@ -123,6 +123,7 @@ public class NepoInfoProcessor {
                 if ( currentTextRegion != null ) {
                     lastValidTextRegion = currentTextRegion;
                 }
+                List<NepoInfo> parseErrors = new ArrayList<>();
 
                 for ( NepoInfo info : phrase.getInfos().getInfos() ) {
                     if ( collectTextlyErrors ) {
@@ -138,9 +139,14 @@ public class NepoInfoProcessor {
                             }
                         }
                     } else {
-                        infos.add(info);
+                        if ( info.getMessage().contains("PROGRAM_ERROR_EXPRBLOCK_PARSE") ) {
+                            parseErrors.add(info);
+                        } else {
+                            infos.add(info);
+                        }
                     }
                 }
+                infos.addAll(parseErrors);
                 if ( deleteOldInfo ) {
                     phrase.getInfos().clear();
                 }

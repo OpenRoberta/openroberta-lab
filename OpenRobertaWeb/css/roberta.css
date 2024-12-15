@@ -393,7 +393,6 @@ canvas.border {
 }
 
 #sourceTextlyEditor {
-    margin-top: 20px;
     height: calc(100% - 100px);
     height: -moz-calc(100% - 100px);
     height: -webkit-calc(100% - 100px);
@@ -434,6 +433,11 @@ canvas.border {
 
 .ace_gutter-active-line {
     background-color: #c3e3efb3 !important;
+}
+
+.ace-tm .ace_gutter {
+    background: #e9ecef !important;
+    color: #333 !important;
 }
 
 .ace_lineBackgroundGrey {

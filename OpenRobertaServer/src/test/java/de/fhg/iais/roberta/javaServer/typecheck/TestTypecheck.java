@@ -801,7 +801,7 @@ public class TestTypecheck {
                 LOG.info(message);
             }
         }
-        Assert.assertTrue("parse error was expeced", parserErrorCount != 0);
+        Assert.assertTrue("parse error was expected", parserErrorCount != 0);
     }
 
 
