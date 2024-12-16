@@ -17,7 +17,7 @@ import * as HUEBEE from 'huebee';
 // @ts-ignore
 import * as Blockly from 'blockly';
 import * as NN_CTRL from 'nn.controller';
-import { SimulationScene } from 'simulation.scene';
+import { IObservableSimulationObject, SimulationScene } from 'simulation.scene';
 import { SelectionListener } from 'robot.base';
 import {
     BaseSimulationObject,
@@ -30,6 +30,7 @@ import {
 } from 'simulation.objects';
 import { Pose } from 'robot.base.mobile';
 import { Simulation } from 'progSim.controller';
+import * as SIMATH from 'simulation.math';
 
 export class SimulationRoberta implements Simulation {
     private static _instance: SimulationRoberta;
@@ -1011,15 +1012,25 @@ export class SimulationRoberta implements Simulation {
                 let victims = configData.victims;
                 let rcjVictimsList = [];
                 let zone: Rectangle = {
-                    x: Math.min(evacuationZone[0], evacuationZone[2]) * sim.TILE_SIZE,
-                    y: Math.min(evacuationZone[1], evacuationZone[3]) * sim.TILE_SIZE,
-                    w: (Math.max(evacuationZone[0], evacuationZone[2]) - Math.min(evacuationZone[0], evacuationZone[2]) + 1) * sim.TILE_SIZE,
-                    h: (Math.max(evacuationZone[1], evacuationZone[3]) - Math.min(evacuationZone[1], evacuationZone[3]) + 1) * sim.TILE_SIZE,
+                    x: Math.min(evacuationZone[0], evacuationZone[2]) * sim.TILE_SIZE - sim.TILE_SIZE / 2,
+                    y: Math.min(evacuationZone[1], evacuationZone[3]) * sim.TILE_SIZE - sim.TILE_SIZE / 2,
+                    w: (Math.max(evacuationZone[0], evacuationZone[2]) - Math.min(evacuationZone[0], evacuationZone[2]) + 1) * sim.TILE_SIZE + sim.TILE_SIZE,
+                    h: (Math.max(evacuationZone[1], evacuationZone[3]) - Math.min(evacuationZone[1], evacuationZone[3]) + 1) * sim.TILE_SIZE + sim.TILE_SIZE,
                 };
                 const createVictim = (color) => {
+                    let p = { x: zone.x + Math.random() * zone.w, y: zone.y + Math.random() * zone.h };
+                    let i = 0;
+                    while (i < rcjVictimsList.length) {
+                        if (SIMATH.getDistance(p, rcjVictimsList[i].p) < 200) {
+                            p = { x: zone.x + Math.random() * zone.w, y: zone.y + Math.random() * zone.h };
+                            i = 0;
+                        } else {
+                            i++;
+                        }
+                    }
                     let victim = {
                         id: sim.scene.uniqueObjectId,
-                        p: { x: zone.x + Math.random() * zone.w, y: zone.y + Math.random() * zone.h },
+                        p: p,
                         params: [7, 1], // 7 is the radius, 1 is movable = true
                         theta: 0,
                         color: color,
@@ -1047,6 +1058,24 @@ export class SimulationRoberta implements Simulation {
                 image.height = canvas.height;
                 return image;
             };
+            let evacuationVictimsZone = [];
+            const resetVictims = () => {
+                let obstaclesToDelete: BaseSimulationObject[] = sim.scene.obstacleList.filter((obstacle) => {
+                    return obstacle.movable;
+                });
+                obstaclesToDelete.forEach((obstacle) => {
+                    obstacle.selected = true;
+                    (obstacle as any as IObservableSimulationObject).removeObserver(sim.scene.rcjScoringTool);
+                    sim.scene.deleteSelectedObject();
+                });
+                let newVictims = getRcjVictims(evacuationVictimsZone);
+                sim.scene.addSomeObstacles(newVictims);
+                sim.scene.obstacleList.forEach((obstacle) => {
+                    if (obstacle['addObserver'] && typeof obstacle['addObserver'] === 'function') {
+                        (obstacle as CircleSimulationObject).addObserver(sim.scene.rcjScoringTool);
+                    }
+                });
+            };
             preloadAll(imgArray).then(
                 function (images) {
                     let ctx = canvas.getContext('2d');
@@ -1057,14 +1086,13 @@ export class SimulationRoberta implements Simulation {
                     let evacuationBottom = [];
                     let evacuationLeft = [];
                     let importObstacles = [];
-                    let evacuationVctimsZone = [];
                     imgArray.forEach((img, index) => {
                         if (img['tileType']['image'].startsWith('ev')) {
                             let ev = img['tileType']['image'].replace('.png', '');
                             switch (ev) {
                                 case 'ev1':
-                                    evacuationVctimsZone.push(img['x']);
-                                    evacuationVctimsZone.push(img['y']);
+                                    evacuationVictimsZone.push(img['x']);
+                                    evacuationVictimsZone.push(img['y']);
                                     // evacuation zone tile without walls
                                     break;
                                 case 'ev2': // one wall
@@ -1236,12 +1264,12 @@ export class SimulationRoberta implements Simulation {
                         let image = createBackgroundImage();
                         sim.scene.imgBackgroundList.push(image);
                         sim.setBackground(sim.scene.imgBackgroundList.length - 1);
-                        sim.scene.addImportObstacle(importObstacles.concat(getRcjVictims(evacuationVctimsZone)));
+                        sim.scene.addImportObstacle(importObstacles.concat(getRcjVictims(evacuationVictimsZone)));
                         sim.scene.addImportRcjLabel(rcjLabel);
                         sim.scene.drawRcjLabel();
                         sim.importPoses = [[startPose, startPose]];
                         sim.scene.setRobotPoses(sim.importPoses);
-                        sim.scene.setRcjScoringTool(sim.scene.robots[0], configData);
+                        sim.scene.setRcjScoringTool(sim.scene.robots[0], configData, resetVictims);
                         $('#simCompetition').show();
                         resolve(result);
                     } else {

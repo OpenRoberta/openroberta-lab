@@ -656,6 +656,7 @@ export class CircleSimulationObject extends BaseSimulationObject implements IMov
     corners: Corner[] = [];
     private collisions: Point[] = [];
     private lastMoveBumped: boolean = false;
+    private lastMoveBumpedOld: boolean = false;
     private lastMove: Point;
     private observers: IObserver[] = [];
     inEvacuationZone: boolean = false;
@@ -870,6 +871,10 @@ export class CircleSimulationObject extends BaseSimulationObject implements IMov
                 this.x += dx;
                 this.y += dy;
                 this.updateCorners();
+                if (this.movable) {
+                    this.lastMoveBumpedOld = false;
+                    this.lastMoveBumped = false;
+                }
                 //TODO redraw
             }
         }
@@ -912,8 +917,7 @@ export class CircleSimulationObject extends BaseSimulationObject implements IMov
             return false;
         }
         this.collisions.push(dist);
-        if (this.lastMoveBumped) {
-            //this.lastMoveBumped = false;
+        if (this.lastMoveBumpedOld) {
             return false;
         }
         return true;
@@ -923,6 +927,8 @@ export class CircleSimulationObject extends BaseSimulationObject implements IMov
         if (!this.movable) {
             return;
         }
+        this.lastMoveBumpedOld = this.lastMoveBumped;
+        this.lastMoveBumped = false;
         let locationColor = uCtx.getImageData(this.x, this.y, 1, 1).data;
         this.inEvacuationZone = locationColor.toString() === [0, 0, 0, 255].toString();
 
@@ -981,7 +987,6 @@ export class CircleSimulationObject extends BaseSimulationObject implements IMov
                     this.moveTo({ x: this.x + diffP.x, y: this.y + diffP.y });
                 }
             } else {
-                this.lastMoveBumped = false;
                 this.moveTo({ x: this.x + diffP.x, y: this.y + diffP.y });
             }
         }

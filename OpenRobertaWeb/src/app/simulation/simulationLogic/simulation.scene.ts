@@ -76,10 +76,12 @@ export class RcjScoringTool implements IObserver {
     private rescueMulti: number;
     private lastCheckPointIndex: number;
     private wasOnLineOnce: boolean = false;
+    private resetObstaclesCallback: Function;
 
-    constructor(robot: RobotBase, configData: any) {
+    constructor(robot: RobotBase, configData: any, resetObstaclesCallback: Function) {
         this.configData = configData;
         this.robot = robot as RobotBaseMobile;
+        this.resetObstaclesCallback = resetObstaclesCallback;
         this.init();
         let rcj = this;
         $('#rcjStartStop')
@@ -88,6 +90,7 @@ export class RcjScoringTool implements IObserver {
                 if ($(this).text().indexOf('Start') >= 0) {
                     $(this).html('Stop<br>Scoring Run');
                     rcj.init();
+                    rcj.resetObstaclesCallback();
                     $('#rcjStartStop').addClass('running');
                     return false;
                 } else {
@@ -427,7 +430,7 @@ export class SimulationScene {
     private readonly aCtx: CanvasRenderingContext2D;
     private readonly udCanvas: HTMLCanvasElement;
     readonly uCanvas: HTMLCanvasElement;
-    private rcjScoringTool: RcjScoringTool;
+    rcjScoringTool: RcjScoringTool;
     private _scoring: boolean = false;
 
     constructor(sim: SimulationRoberta) {
@@ -562,6 +565,24 @@ export class SimulationScene {
             newObstacleList.push(newObject);
         });
         this.obstacleList = newObstacleList;
+    }
+
+    addSomeObstacles(importObstacleList: any[]) {
+        let that = this;
+        importObstacleList.forEach((obj) => {
+            let newObject = SimObjectFactory.getSimObject(
+                obj.id,
+                this,
+                this.sim.selectionListener,
+                obj.shape,
+                SimObjectType.Obstacle,
+                obj.p,
+                null,
+                obj.color,
+                ...obj.params
+            );
+            that.obstacleList.push(newObject);
+        });
     }
 
     addImportRcjLabel(importRcjLabelList: any[]) {
@@ -1225,8 +1246,8 @@ export class SimulationScene {
         this._redrawMarkers = true;
     }
 
-    setRcjScoringTool(robot: RobotBase, configData) {
-        this.rcjScoringTool = new RcjScoringTool(robot, configData);
+    setRcjScoringTool(robot: RobotBase, configData, resetObstacles: Function) {
+        this.rcjScoringTool = new RcjScoringTool(robot, configData, resetObstacles);
         this.scoring = true;
         let scene = this;
         $('#simCompetition').show();
