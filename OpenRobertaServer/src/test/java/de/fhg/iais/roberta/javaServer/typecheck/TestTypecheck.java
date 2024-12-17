@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.json.JSONObject;
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -85,6 +86,11 @@ public class TestTypecheck {
     private int typecheckErrorCount = 0;
     private int parserErrorCount = 0;
     private List<String> messages = null;
+
+    private static int tp = 0;
+    private static int tn = 0;
+    private static int fp = 0;
+    private static int fn = 0;
 
     private static class TC {
         public final BlocklyType resultType;
@@ -285,238 +291,299 @@ public class TestTypecheck {
         TC.of(BlocklyType.VOID, "while(true){continue;};", ROBOTS_ALL)
     );
 
-    public static final List<String> MICROBITV2_SPECIFIC = Arrays.asList(
-        "ima = image(heart); ima = image(heartSmall); ima = image(happy); ima = image(smile); ima = image(sad); ima = image(confused); ima = image(angry); ima = image(asleep); ima = image(surprised); ima = image(silly); ima = image(fabulous); ima = image(meh); ima = image(yes); ima = image(no); ima = image(triangle); ima = image(triangleLeft); ima = image(chessboard); ima = image(diamond); ima = image(diamondSmall); ima = image(squareBig);",
-        "ima = image(squareSmall); ima = image(rabbit); ima = image(cow); ima = image(musicCrotchet); ima = image(musicQuaver); ima = image(musicQuavers); ima = image(pitchfork); ima = image(xmas); ima = image(pacman); ima = image(target); ima = image(tshirt); ima = image(rollerskate); ima = image(duck); ima = image(house); ima = image(tortoise); ima = image(butterfly); ima = image(stickFigure); ima = image(ghost); ima = image(sword);",
-        "ima = image(giraffe); ima = image(skull); ima = image(umbrella); ima = image(snake);",
-        "microbitv2.showText(\"hola\");",
-        "microbitv2.showCharacter(\"hola\");",
-        "microbitv2.pitch(200,300);",
-        "microbitv2.playFile(dadadadum);",
-        "microbitv2.playFile(entertainer);",
-        "microbitv2.playFile(prelude);",
-        "microbitv2.playFile(ode);",
-        "microbitv2.playFile(nyan);",
-        "microbitv2.playFile(ringtone);",
-        "microbitv2.playFile(funk);",
-        "microbitv2.playFile(blues);",
-        "microbitv2.playFile(birthday);",
-        "microbitv2.playFile(wedding);",
-        "microbitv2.playFile(funeral);",
-        "microbitv2.playFile(punchline);",
-        "microbitv2.playFile(python);",
-        "microbitv2.playFile(baddy);",
-        "microbitv2.playFile(chase);",
-        "microbitv2.playFile(ba_ding);",
-        "microbitv2.playFile(wawawawaa);",
-        "microbitv2.playFile(jump_up);",
-        "microbitv2.playFile(jump_down);",
-        "microbitv2.playFile(power_up);",
-        "microbitv2.playFile(power_down);",
-        "microbitv2.showImage(image(smile));",
-        "microbitv2.showImage(image.define([0,0,0,0,#][0,0,0,0,#][0,0,0,0,#][0,0,0,0,#][0,0,0,0,#]));",
-        "microbitv2.showAnimation(listIma);",
-        "microbitv2.clearDisplay();",
-        "microbitv2.setLed(30,30,500);",
-        "microbitv2.showOnSerial(\"Halloooo\");",
-        "microbitv2.playSound(giggle);",
-        "microbitv2.playSound(Happy);",
-        "microbitv2.playSound(hello);",
-        "microbitv2.playSound(mysterious);",
-        "microbitv2.playSound(sad);",
-        "microbitv2.playSound(slide);",
-        "microbitv2.playSound(soaring);",
-        "microbitv2.playSound(spring);",
-        "microbitv2.playSound(twinkle);",
-        "microbitv2.playSound(yawn);",
-        "microbitv2.setVolume(30);",
-        "microbitv2.speaker(on);",
-        "microbitv2.speaker(off);",
-        "microbitv2.writeValuePin(digital, A2, 10);",
-        "microbitv2.switchLed(on);",
-        "microbitv2.switchLed(off);",
-        "num = microbitv2.getLedBrigthness(300,500);",
-        "num = microbitv2.accelerometerSensor(x);",
-        "boolT = microbitv2.logoTouchSensor.isPressed();",
-        "num = microbitv2.compassSensor.getAngle();",
-        "boolT = microbitv2.gestureSensor.currentGesture(up);",
-        "boolT = microbitv2.gestureSensor.currentGesture(down);",
-        "boolT = microbitv2.gestureSensor.currentGesture(faceDown);",
-        "boolT = microbitv2.gestureSensor.currentGesture(faceUp);",
-        "boolT = microbitv2.gestureSensor.currentGesture(shake);",
-        "boolT = microbitv2.gestureSensor.currentGesture(freefall);",
-        "boolT = microbitv2.keysSensor.isPressed(A);",
-        "boolT = microbitv2.keysSensor.isPressed(B);",
-        "num = microbitv2.lightSensor.getLevel();",
-        "num = microbitv2.pinGetValueSensor(S, analog);",
-        "num = microbitv2.pinGetValueSensor(S2, digital);",
-        "num = microbitv2.pinGetValueSensor(S2, pulseHigh);",
-        "num = microbitv2.pinGetValueSensor(S2, pulseLow);",
-        "boolT = microbitv2.pinTouchSensor.isPressed(0);",
-        "boolT = microbitv2.pinTouchSensor.isPressed(1);",
-        "boolT = microbitv2.pinTouchSensor.isPressed(2);",
-        "num = microbitv2.soundSensor.microphone.soundLevel();",
-        "num = microbitv2.temperatureSensor();",
-        "num = microbitv2.timerSensor();",
-        "microbitv2.pinSetTouchMode(1, capacitive);",
-        "microbitv2.timerReset();",
-        "microbitv2.radioSend(String, 7, \"asd\");",
-        "microbitv2.radioSend(Number, 7, 2);",
-        "microbitv2.radioSend(Boolean, 7, false);",
-        "microbitv2.radioSet(2);",
-        "boolT = microbitv2.receiveMessage(Boolean);",
-        "ima = image.invert(ima);",
-        "ima = image.shift(right, ima, 1);",
-        "ima = image.shift(left, image(smile), 1);",
-        "ima = image.shift(up, ima, 1);",
-        "ima = image.shift(down, image.define([0,0,0,0,#][0,0,0,0,#][0,0,0,0,#][0,0,0,0,#][0,0,0,0,#]), 1);"
-    );
+    private static final Map<String, List<String>> MICROBITV2_SPECIFIC = new HashMap<>();
+    static {
+        MICROBITV2_SPECIFIC.put("default", Arrays.asList(
+            //"ima = image(heart); ima = image(heartSmall); ima = image(happy); ima = image(smile); ima = image(sad); ima = image(confused); ima = image(angry); ima = image(asleep); ima = image(surprised); ima = image(silly); ima = image(fabulous); ima = image(meh); ima = image(yes); ima = image(no); ima = image(triangle); ima = image(triangleLeft); ima = image(chessboard); ima = image(diamond); ima = image(diamondSmall); ima = image(squareBig);",
+            //"ima = image(squareSmall); ima = image(rabbit); ima = image(cow); ima = image(musicCrotchet); ima = image(musicQuaver); ima = image(musicQuavers); ima = image(pitchfork); ima = image(xmas); ima = image(pacman); ima = image(target); ima = image(tshirt); ima = image(rollerskate); ima = image(duck); ima = image(house); ima = image(tortoise); ima = image(butterfly); ima = image(stickFigure); ima = image(ghost); ima = image(sword);",
+            //"ima = image(giraffe); ima = image(skull); ima = image(umbrella); ima = image(snake);",
+            "ima = image(heart);",
+            "ima = image(heartSmall);",
+            "ima = image(happy);",
+            "ima = image(smile);",
+            "ima = image(sad);",
+            "ima = image(confused);",
+            "ima = image(angry);",
+            "ima = image(asleep);",
+            "ima = image(surprised);",
+            "ima = image(silly);",
+            "ima = image(fabulous);",
+            "ima = image(meh);",
+            "ima = image(yes);",
+            "ima = image(no);",
+            "ima = image(triangle);",
+            "ima = image(triangleLeft);",
+            "ima = image(chessboard);",
+            "ima = image(diamond);",
+            "ima = image(diamondSmall);",
+            "ima = image(squareBig);",
+            "ima = image(squareSmall);",
+            "ima = image(rabbit);",
+            "ima = image(cow);",
+            "ima = image(musicCrotchet);",
+            "ima = image(musicQuaver);",
+            "ima = image(musicQuavers);",
+            "ima = image(pitchfork);",
+            "ima = image(xmas);",
+            "ima = image(pacman);",
+            "ima = image(target);",
+            "ima = image(tshirt);",
+            "ima = image(rollerskate);",
+            "ima = image(duck);",
+            "ima = image(house);",
+            "ima = image(tortoise);",
+            "ima = image(butterfly);",
+            "ima = image(stickFigure);",
+            "ima = image(ghost);",
+            "ima = image(sword);",
+            "ima = image(giraffe);",
+            "ima = image(skull);",
+            "ima = image(umbrella);",
+            "ima = image(snake);",
+            "microbitv2.showText(\"hola\");",
+            "microbitv2.showCharacter(\"hola\");",
+            "microbitv2.pitch(200,300);",
+            "microbitv2.playFile(dadadadum);",
+            "microbitv2.playFile(entertainer);",
+            "microbitv2.playFile(prelude);",
+            "microbitv2.playFile(ode);",
+            "microbitv2.playFile(nyan);",
+            "microbitv2.playFile(ringtone);",
+            "microbitv2.playFile(funk);",
+            "microbitv2.playFile(blues);",
+            "microbitv2.playFile(birthday);",
+            "microbitv2.playFile(wedding);",
+            "microbitv2.playFile(funeral);",
+            "microbitv2.playFile(punchline);",
+            "microbitv2.playFile(python);",
+            "microbitv2.playFile(baddy);",
+            "microbitv2.playFile(chase);",
+            "microbitv2.playFile(ba_ding);",
+            "microbitv2.playFile(wawawawaa);",
+            "microbitv2.playFile(jump_up);",
+            "microbitv2.playFile(jump_down);",
+            "microbitv2.playFile(power_up);",
+            "microbitv2.playFile(power_down);",
+            "microbitv2.showImage(image(smile));",
+            "microbitv2.showImage(image.define([0,0,0,0,#][0,0,0,0,#][0,0,0,0,#][0,0,0,0,#][0,0,0,0,#]));",
+            "microbitv2.showAnimation(listIma);",
+            "microbitv2.clearDisplay();",
+            "microbitv2.setLed(30,30,500);",
+            "microbitv2.showOnSerial(\"Halloooo\");",
+            "microbitv2.playSound(giggle);",
+            "microbitv2.playSound(Happy);",
+            "microbitv2.playSound(hello);",
+            "microbitv2.playSound(mysterious);",
+            "microbitv2.playSound(sad);",
+            "microbitv2.playSound(slide);",
+            "microbitv2.playSound(soaring);",
+            "microbitv2.playSound(spring);",
+            "microbitv2.playSound(twinkle);",
+            "microbitv2.playSound(yawn);",
+            "microbitv2.setVolume(30);",
+            "microbitv2.speaker(on);",
+            "microbitv2.speaker(off);",
+            "microbitv2.writeValuePin(digital, A2, 10);",
+            "microbitv2.switchLed(on);",
+            "microbitv2.switchLed(off);",
+            "num = microbitv2.getLedBrigthness(300,500);",
+            "num = microbitv2.accelerometerSensor(x);",
+            "boolT = microbitv2.logoTouchSensor.isPressed();",
+            "num = microbitv2.compassSensor.getAngle();",
+            "boolT = microbitv2.gestureSensor.currentGesture(up);",
+            "boolT = microbitv2.gestureSensor.currentGesture(down);",
+            "boolT = microbitv2.gestureSensor.currentGesture(faceDown);",
+            "boolT = microbitv2.gestureSensor.currentGesture(faceUp);",
+            "boolT = microbitv2.gestureSensor.currentGesture(shake);",
+            "boolT = microbitv2.gestureSensor.currentGesture(freefall);",
+            "boolT = microbitv2.keysSensor.isPressed(A);",
+            "boolT = microbitv2.keysSensor.isPressed(B);",
+            "num = microbitv2.lightSensor.getLevel();",
+            "num = microbitv2.pinGetValueSensor(S, analog);",
+            "num = microbitv2.pinGetValueSensor(S2, digital);",
+            "num = microbitv2.pinGetValueSensor(S2, pulseHigh);",
+            "num = microbitv2.pinGetValueSensor(S2, pulseLow);",
+            "boolT = microbitv2.pinTouchSensor.isPressed(0);",
+            "boolT = microbitv2.pinTouchSensor.isPressed(1);",
+            "boolT = microbitv2.pinTouchSensor.isPressed(2);",
+            "num = microbitv2.soundSensor.microphone.soundLevel();",
+            "num = microbitv2.temperatureSensor();",
+            "num = microbitv2.timerSensor();",
+            "microbitv2.pinSetTouchMode(1, capacitive);",
+            "microbitv2.timerReset();",
+            "microbitv2.radioSend(String, 7, \"asd\");",
+            "microbitv2.radioSend(Number, 7, 2);",
+            "microbitv2.radioSend(Boolean, 7, false);",
+            "microbitv2.radioSet(2);",
+            "boolT = microbitv2.receiveMessage(Boolean);",
+            "ima = image.invert(ima);",
+            "ima = image.shift(right, ima, 1);",
+            "ima = image.shift(left, image(smile), 1);",
+            "ima = image.shift(up, ima, 1);",
+            "ima = image.shift(down, image.define([0,0,0,0,#][0,0,0,0,#][0,0,0,0,#][0,0,0,0,#][0,0,0,0,#]), 1);"
+        ));
+    }
+    private static final Map<String, List<String>> WEDO_SPECIFIC = new HashMap<>();
+    static {
+        WEDO_SPECIFIC.put("default", Arrays.asList(
+            "color = color;",
+            "color = #rgb(ff1493); color = #pink;",
+            "color = #rgb(800080); color = #purple;",
+            "color = #rgb(4876ff); color = #blue;",
+            "color = #rgb(00ffff); color = #cyan;",
+            "color = #rgb(90ee90); color = #lightgreen;",
+            "color = #rgb(008000); color = #green;",
+            "color = #rgb(ffff00); color = #yellow;",
+            "color = #rgb(ffa500); color = #orange;",
+            "color = #rgb(ff0000); color = #red;",
+            "color = #rgb(fffffe); color = #white;",
+            "num = wedo.infraredSensor(I);",
+            "boolT = wedo.keysSensor.isPressed(T);",
+            "num = wedo.timerSensor();",
+            "wedo.timerReset();",
+            "wedo.showText(\"holis\");",
+            "wedo.motor.move(M,300,100);", // For test this actuator, change the robot configuration",
+            "wedo.motor.stop(M);", // For test actuator, change the robot configuration",
+            "wedo.clearDisplay();",
+            "wedo.pitch(S,300,300);",
+            "wedo.turnRgbOn(R,#pink);",
+            "wedo.turnRgbOff(R);"
+        ));
+        WEDO_SPECIFIC.put("configuration2", Arrays.asList(
+            "boolT = wedo.gyroSensor.isTilted(T2,up);",
+            "boolT = wedo.gyroSensor.isTilted(T2,down);",
+            "boolT = wedo.gyroSensor.isTilted(T2,back);",
+            "boolT = wedo.gyroSensor.isTilted(T2,front);",
+            "boolT = wedo.gyroSensor.isTilted(T2,no);",
+            "boolT = wedo.gyroSensor.isTilted(T2,any);"
+        ));
+    }
+    private static final Map<String, List<String>> EV3_SPECIFIC = new HashMap<>();
+    static {
+        EV3_SPECIFIC.put("default", Arrays.asList(
+            //ACTUATORS
+            "ev3.turnOnRegulatedMotor(B,30);",
+            "ev3.rotateRegulatedMotor(B, 30, rotations, 1);",
+            "ev3.rotateRegulatedMotor(B,30,degree,1);",
+            "ev3.rotateRegulatedMotor(B,30,degree,1);",
+            "num =ev3.getSpeedMotor(B);",
+            "ev3.setRegulatedMotorSpeed(B,30);",
+            "ev3.stopRegulatedMotor(B,float);",
+            "ev3.stopRegulatedMotor(B,brake);",
+            "ev3.driveDistance(forward,30,20);",
+            "ev3.driveDistance(forward,30);",
+            "ev3.driveDistance(backward,30,20);",
+            "ev3.driveDistance(backward,30);",
+            "ev3.stopRegulatedDrive();",
+            "ev3.rotateDirectionAngle(right,30,20);",
+            "ev3.rotateDirectionRegulated(right,30);",
+            "ev3.rotateDirectionAngle(left,30,20);",
+            "ev3.rotateDirectionRegulated(left,30);",
+            "ev3.driveInCurve(forward,10,30,20);",
+            "ev3.driveInCurve(backward,10,30,20);",
+            "ev3.driveInCurve(forward,10,30);",
+            "ev3.driveInCurve(backward,10,30);",
+            "ev3.drawText(\"Hallo\",0,0);",
+            "ev3.drawText(123, 0, 0);",
+            "ev3.drawPicture(oldGlasses);",
+            "ev3.drawPicture(eyesOpen);",
+            "ev3.drawPicture(eyesClosed);",
+            "ev3.drawPicture(flowers);",
+            "ev3.drawPicture(speedo);",
+            "ev3.clearDisplay();",
+            "ev3.playTone(300,100);",
+            "ev3.playFile(1);",
+            "ev3.playFile(2);",
+            "ev3.playFile(3);",
+            "ev3.playFile(4);",
+            "ev3.playFile(5);",
+            "ev3.setVolume(50);",
+            "num =ev3.getVolume();",
+            "ev3.setLanguage(de);",
+            "ev3.setLanguage(en);",
+            "ev3.setLanguage(fr);",
+            "ev3.setLanguage(es);",
+            "ev3.setLanguage(it);",
+            "ev3.setLanguage(nl);",
+            "ev3.setLanguage(fi);",
+            "ev3.setLanguage(pl);",
+            "ev3.setLanguage(ru);",
+            "ev3.setLanguage(te);",
+            "ev3.setLanguage(cs);",
+            "ev3.setLanguage(pt);",
+            "ev3.setLanguage(da);",
+            "ev3.sayText(\"Hallo\");",
+            "ev3.sayText(123);",
+            "ev3.sayText(\"Hallo\",30,50);",
+            "ev3.sayText(123,30,50);",
+            "ev3.ledOn(on,green);",
+            "ev3.ledOn(on,orange);",
+            "ev3.ledOn(on,red);",
+            "ev3.ledOn(flashing,green);",
+            "ev3.ledOn(flashing,orange);",
+            "ev3.ledOn(flashing,red);",
+            "ev3.ledOn(doubleFlashing,green);",
+            "ev3.ledOn(doubleFlashing,orange);",
+            "ev3.ledOn(doubleFlashing,red);",
+            "ev3.ledOff();",
+            "ev3.resetLed();",
+            //SENSORS
+            "boolT = ev3.touchSensor.isPressed(1);",
+            "num = ev3.ultrasonicSensor.getDistance(4);",
+            "boolT = ev3.ultrasonicSensor.getPresence(4);",
+            "color = ev3.colorSensor(colour,3);",
+            "num = ev3.colorSensor(light,3);",
+            "num = ev3.colorSensor(ambientlight,3);",
+            "listN = ev3.colorSensor(rgb,3);",
+            "ev3.encoderReset(B);",
+            "num =ev3.encoderSensor.getDegree(B);",
+            "num =ev3.encoderSensor.getRotation(B);",
+            "num =ev3.encoderSensor.getDistance(B);",
+            "boolT =ev3.keysSensor.isPressed(enter);",
+            "boolT =ev3.keysSensor.isPressed(up);",
+            "boolT =ev3.keysSensor.isPressed(down);",
+            "boolT =ev3.keysSensor.isPressed(left);",
+            "boolT =ev3.keysSensor.isPressed(right);",
+            "boolT =ev3.keysSensor.isPressed(escape);",
+            "boolT =ev3.keysSensor.isPressed(any);",
+            "ev3.gyroReset(2);",
+            "num =ev3.gyroSensor.getAngle(2);",
+            "num =ev3.gyroSensor.getRate(2);",
+            "num =ev3.timerSensor(1);",
+            "num =ev3.timerSensor(5);",
+            "ev3.timerReset(1);",
+            "ev3.timerReset(5);",
+            "ev3.setInputNeuron(n1,2);",
+            "num = ev3.getOutputNeuron(n2);",
+            "ev3.setWeight(n1,n2,3);",
+            "ev3.setBias(n2,4);",
+            "num = ev3.getWeight(n1,n2);",
+            "num = ev3.getBias(n2);",
+            " ev3.nnStep();",
+            //CONNECTIONS
+            "conn = ev3.connectToRobot(\"hola\");",
+            "ev3.sendMessage(\"hola\",conn);",
+            "str =ev3.receiveMessage(conn);",
+            "conn =ev3.waitForConnection();"
+        ));
+        EV3_SPECIFIC.put("configuration2", Arrays.asList(
+            "num = ev3.infraredSensor.getDistance(1);",
+            "listN =ev3.infraredSensor.getPresence(1);",
+            "num =ev3.soundSensor.getSoundLevel(2);",
+            "ev3.hiTecCompassStartCalibration(3);",
+            "num =ev3.hiTechCompassSensor.getAngle(3);",
+            "num =ev3.hiTechCompassSensor.getCompass(3);",
+            "num = ev3.hiTechInfraredSensor.getModulated(4);",
+            "num = ev3.hiTechInfraredSensor.getUnmodulated(4);"
+        ));
+        EV3_SPECIFIC.put("configuration3", Arrays.asList(
+            "color = ev3.hiTechColorSensor(colour,4);",
+            "num = ev3.hiTechColorSensor(light, 4);",
+            "num =ev3.hiTechColorSensor(ambientlight,4);",
+            "listN =ev3.hiTechColorSensor(rgb,4);"
+        ));
 
-    public static final List<String> WEDO_SPECIFIC = Arrays.asList(
-        "color = color;",
-        "color = #rgb(ff1493); color = #pink;",
-        "color = #rgb(800080); color = #purple;",
-        "color = #rgb(4876ff); color = #blue;",
-        "color = #rgb(00ffff); color = #cyan;",
-        "color = #rgb(90ee90); color = #lightgreen;",
-        "color = #rgb(008000); color = #green;",
-        "color = #rgb(ffff00); color = #yellow;",
-        "color = #rgb(ffa500); color = #orange;",
-        "color = #rgb(ff0000); color = #red;",
-        "color = #rgb(fffffe); color = #white;",
-        "boolT = wedo.gyroSensor.isTilted(T2,up);",
-        "boolT = wedo.gyroSensor.isTilted(T2,down);",
-        "boolT = wedo.gyroSensor.isTilted(T2,back);",
-        "boolT = wedo.gyroSensor.isTilted(T2,front);",
-        "boolT = wedo.gyroSensor.isTilted(T2,no);",
-        "boolT = wedo.gyroSensor.isTilted(T2,any);",
-        "num = wedo.infraredSensor(I);",
-        "boolT = wedo.keysSensor.isPressed(T);",
-        "num = wedo.timerSensor();",
-        "wedo.timerReset();",
-        "wedo.showText(\"holis\");",
-        //"wedo.motor.move(M,300,100);", // For test this actuator, change the robot configuration",
-        //"wedo.motor.stop(M);", // For test actuator, change the robot configuration",
-        "wedo.clearDisplay();",
-        "wedo.pitch(S,300,300);",
-        "wedo.turnRgbOn(R,#pink);",
-        "wedo.turnRgbOff(R);"
-    );
-    public static final List<String> EV3_SPECIFIC = Arrays.asList(
-        //ACTUATORS
-        "ev3.turnOnRegulatedMotor(B,30);",
-        "ev3.rotateRegulatedMotor(B, 30, rotations, 1);",
-        "ev3.rotateRegulatedMotor(B,30,degree,1);",
-        "ev3.rotateRegulatedMotor(B,30,degree,1);",
-        "num =ev3.getSpeedMotor(B);",
-        "ev3.setRegulatedMotorSpeed(B,30);",
-        "ev3.stopRegulatedMotor(B,float);",
-        "ev3.stopRegulatedMotor(B,brake);",
-        "ev3.driveDistance(forward,30,20);",
-        "ev3.driveDistance(forward,30);",
-        "ev3.driveDistance(backward,30,20);",
-        "ev3.driveDistance(backward,30);",
-        "ev3.stopRegulatedDrive();",
-        "ev3.rotateDirectionAngle(right,30,20);",
-        "ev3.rotateDirectionRegulated(right,30);",
-        "ev3.rotateDirectionAngle(left,30,20);",
-        "ev3.rotateDirectionRegulated(left,30);",
-        "ev3.driveInCurve(forward,10,30,20);",
-        "ev3.driveInCurve(backward,10,30,20);",
-        "ev3.driveInCurve(forward,10,30);",
-        "ev3.driveInCurve(backward,10,30);",
-        "ev3.drawText(\"Hallo\",0,0);",
-        "ev3.drawText(123, 0, 0);",
-        "ev3.drawPicture(oldGlasses);",
-        "ev3.drawPicture(eyesOpen);",
-        "ev3.drawPicture(eyesClosed);",
-        "ev3.drawPicture(flowers);",
-        "ev3.drawPicture(speedo);",
-        "ev3.clearDisplay();",
-        "ev3.playTone(300,100);",
-        "ev3.playFile(1);",
-        "ev3.playFile(2);",
-        "ev3.playFile(3);",
-        "ev3.playFile(4);",
-        "ev3.playFile(5);",
-        "ev3.setVolume(50);",
-        "num =ev3.getVolume();",
-        "ev3.setLanguage(de);",
-        "ev3.setLanguage(en);",
-        "ev3.setLanguage(fr);",
-        "ev3.setLanguage(es);",
-        "ev3.setLanguage(it);",
-        "ev3.setLanguage(nl);",
-        "ev3.setLanguage(fi);",
-        "ev3.setLanguage(pl);",
-        "ev3.setLanguage(ru);",
-        "ev3.setLanguage(te);",
-        "ev3.setLanguage(cs);",
-        "ev3.setLanguage(pt);",
-        "ev3.setLanguage(da);",
-        "ev3.sayText(\"Hallo\");",
-        "ev3.sayText(123);",
-        "ev3.sayText(\"Hallo\",30,50);",
-        "ev3.sayText(123,30,50);",
-        "ev3.ledOn(on,green);",
-        "ev3.ledOn(on,orange);",
-        "ev3.ledOn(on,red);",
-        "ev3.ledOn(flashing,green);",
-        "ev3.ledOn(flashing,orange);",
-        "ev3.ledOn(flashing,red);",
-        "ev3.ledOn(doubleFlashing,green);",
-        "ev3.ledOn(doubleFlashing,orange);",
-        "ev3.ledOn(doubleFlashing,red);",
-        "ev3.ledOff();",
-        "ev3.resetLed();",
-        //SENSORS
-        "boolT = ev3.touchSensor.isPressed(1);",
-        "num = ev3.ultrasonicSensor.getDistance(4);",
-        "boolT = ev3.ultrasonicSensor.getPresence(4);",
-        "color = ev3.colorSensor(colour,3);",
-        "num = ev3.colorSensor(light,3);",
-        "num = ev3.colorSensor(ambientlight,3);",
-        "listN = ev3.colorSensor(rgb,3);",
-        "ev3.encoderReset(B);",
-        "num =ev3.encoderSensor.getDegree(B);",
-        "num =ev3.encoderSensor.getRotation(B);",
-        "num =ev3.encoderSensor.getDistance(B);",
-        "boolT =ev3.keysSensor.isPressed(enter);",
-        "boolT =ev3.keysSensor.isPressed(up);",
-        "boolT =ev3.keysSensor.isPressed(down);",
-        "boolT =ev3.keysSensor.isPressed(left);",
-        "boolT =ev3.keysSensor.isPressed(right);",
-        "boolT =ev3.keysSensor.isPressed(escape);",
-        "boolT =ev3.keysSensor.isPressed(any);",
-        "ev3.gyroReset(2);",
-        "num =ev3.gyroSensor.getAngle(2);",
-        "num =ev3.gyroSensor.getRate(2);",
-        "num =ev3.timerSensor(1);",
-        "num =ev3.timerSensor(5);",
-        "ev3.timerReset(1);",
-        "ev3.timerReset(5);",
-
-        //TODO: For this expressions the configuration must be changed
-//        "num = ev3.infraredSensor.getDistance(1);",
-//        "listN =ev3.infraredSensor.getPresence(1);",
-//        "num =ev3.soundSensor.getSoundLevel(2);",
-//        "ev3.hiTecCompassStartCalibration(3);",
-//        "num =ev3.hiTechCompassSensor.getAngle(3);",
-//        "num =ev3.hiTechCompassSensor.getCompass(3);",
-//        "num = ev3.hiTechInfraredSensor.getModulated(4);",
-//        "num = ev3.hiTechInfraredSensor.getUnmodulated(4);",
-//
-//        "color = ev3.hiTechColorSensor(colour,4);",
-//        "num = ev3.hiTechColorSensor(light, 4);",
-//        "num =ev3.hiTechColorSensor(ambientlight,4);",
-//        "listN =ev3.hiTechColorSensor(rgb,4);",
-
-        //CONNECTIONS
-        "conn = ev3.connectToRobot(\"hola\");",
-        "ev3.sendMessage(\"hola\",conn);",
-        "str =ev3.receiveMessage(conn);",
-        "conn =ev3.waitForConnection();"
-    );
+    }
     List<String> PARSER_ERRORS = Arrays.asList(
         "num = 1,,;",
         "num = 1",
@@ -621,6 +688,34 @@ public class TestTypecheck {
         robotsFromTestSpec = testSpecification.getJSONObject("robots");
     }
 
+    @BeforeClass
+    public static void resetCounters() {
+        tp = 0;
+        tn = 0;
+        fp = 0;
+        fn = 0;
+    }
+
+    @AfterClass
+    public static void printMetricsSummary() {
+        int totalTests = tp + tn + fp + fn;
+        double accuracy = (double) (tp + tn) / totalTests;
+        double precision = tp + fp > 0 ? (double) tp / (tp + fp) : 1.0;
+        double recall = tp + fn > 0 ? (double) tp / (tp + fn) : 1.0;
+        double f1Score = precision + recall > 0 ? 2 * (precision * recall) / (precision + recall) : 1.0;
+
+        System.out.println("==== METRICS SUMMARY ====");
+        System.out.printf("Total Tests: %d%n", totalTests);
+        System.out.printf("True Positives (TP): %d%n", tp);
+        System.out.printf("True Negatives (TN): %d%n", tn);
+        System.out.printf("False Positives (FP): %d%n", fp);
+        System.out.printf("False Negatives (FN): %d%n", fn);
+        System.out.printf("Accuracy: %.2f%n", accuracy);
+        System.out.printf("Precision: %.2f%n", precision);
+        System.out.printf("Recall: %.2f%n", recall);
+        System.out.printf("F1 Score: %.2f%n", f1Score);
+    }
+
     private void setupRobotFactoryForRobot(String robotName) {
         testFactory = robotFactories.getOrDefault(robotName, null);
         if ( testFactory == null ) {
@@ -643,6 +738,7 @@ public class TestTypecheck {
                 String xmlUnderTest2 = TestTypecheckUtil.getProgramUnderTestForEvalStmt(testFactory, statement);
                 typecheckAndCollectInfosForProgram(testFactory, xmlUnderTest2);
                 checkMustSucceed();
+                tp++;
             }
         }
     }
@@ -656,27 +752,35 @@ public class TestTypecheck {
                 String xmlUnderTest = TestTypecheckUtil.getProgramUnderTestForEvalStmt(testFactory, testSpec.underTest);
                 typecheckAndCollectInfosForProgram(testFactory, xmlUnderTest);
                 checkMustSucceed();
+                tp++;
             }
         }
     }
 
     @Test
-    public void testSuccessSpecificRobot() throws Exception {
-        List<Object[]> robotsWithSpecificTests = Arrays.asList(
-            new Object[] {"ev3lejosv1", EV3_SPECIFIC},
-            new Object[] {"microbitv2", MICROBITV2_SPECIFIC},
-            new Object[] {"wedo", WEDO_SPECIFIC}
-        );
+    public void testSuccessSpecificRobottestSuccessSpecificRobot() throws Exception {
+        Map<String, Map<String, List<String>>> robotsWithSpecificTests = new HashMap<>();
+        robotsWithSpecificTests.put("ev3lejosv1", EV3_SPECIFIC);
+        robotsWithSpecificTests.put("microbitv2", MICROBITV2_SPECIFIC);
+        robotsWithSpecificTests.put("wedo", WEDO_SPECIFIC);
 
-        for ( Object[] robotAndTests : robotsWithSpecificTests ) {
-            String robotName = (String) robotAndTests[0];
-            List<String> specificStatements = (List<String>) robotAndTests[1];
+        for ( Map.Entry<String, Map<String, List<String>>> robotEntry : robotsWithSpecificTests.entrySet() ) {
+            String robotName = robotEntry.getKey();
+            Map<String, List<String>> specificExpressions = robotEntry.getValue();
             setupRobotFactoryForRobot(robotName);
-            for ( String statement : specificStatements ) {
-                LOG.info(String.format("%-16s s: %s", robotName, statement));
-                String xmlUnderTest = TestTypecheckUtil.getProgramUnderTestForEvalStmt(testFactory, statement);
-                typecheckAndCollectInfosForProgram(testFactory, xmlUnderTest);
-                checkMustSucceed();
+
+            for ( Map.Entry<String, List<String>> configEntry : specificExpressions.entrySet() ) {
+                String configKey = configEntry.getKey();
+                List<String> expressions = configEntry.getValue();
+
+
+                for ( String expression : expressions ) {
+                    LOG.info(String.format("Testing %s with %s configuration: %s", robotName, configKey, expression));
+                    String xmlUnderTest = TestTypecheckUtil.getProgramWithConfiguration(testFactory, expression, configKey);
+                    typecheckAndCollectInfosForProgram(testFactory, xmlUnderTest);
+                    checkMustSucceed();
+                    tp++;
+                }
             }
         }
     }
@@ -696,6 +800,7 @@ public class TestTypecheck {
             String xmlUnderTest = TestTypecheckUtil.getProgramUnderTestForEvalStmt(testFactory, underTest);
             typecheckAndCollectInfosForProgram(testFactory, xmlUnderTest);
             checkMustHaveParseErrors();
+            tn++;
         }
     }
 
@@ -710,6 +815,7 @@ public class TestTypecheck {
                 String xmlUnderTest = TestTypecheckUtil.getProgramUnderTestForEvalStmt(testFactory, testSpec.underTest);
                 typecheckAndCollectInfosForProgram(testFactory, xmlUnderTest);
                 checkMustHaveTypeErrors();
+                tn++;
             }
         }
     }
@@ -719,13 +825,13 @@ public class TestTypecheck {
     public void testSingleStmt() throws Exception {
         String robotName = "ev3lejosv1";
         setupRobotFactoryForRobot(robotName);
-        String statement = "undef = 4;";
+        String statement = "ev3.ledOn(on,green);";
         LOG.info("expect a typecheck error for robot: " + robotName + " statement: " + statement);
 
         String xmlUnderTest = TestTypecheckUtil.getProgramUnderTestForEvalStmt(testFactory, statement);
         typecheckAndCollectInfosForProgram(testFactory, xmlUnderTest);
-        checkMustHaveTypeErrors(); // check if the stmt should fail
-        //checkMustSucceed(); // check if the stmt should not fail
+        //checkMustHaveTypeErrors(); // check if the stmt should fail
+        checkMustSucceed(); // check if the stmt should not fail
     }
 
     @Ignore
@@ -754,7 +860,7 @@ public class TestTypecheck {
         messages = new ArrayList<>();
 
         Project.Builder builder = UnitTestHelper.setupWithExportXML(factory, xmlUnderTest);
-        Project project = builder.setLanguage(Language.ENGLISH).build();
+        Project project = builder.setLanguage(Language.ENGLISH).setRobot(factory.getPluginProperties().getRobotName()).build();
         ProjectService.executeWorkflow("showsource", project);
 
         for ( List<Phrase> listOfPhrases : project.getProgramAst().getTree() ) {
@@ -803,6 +909,4 @@ public class TestTypecheck {
         }
         Assert.assertTrue("parse error was expected", parserErrorCount != 0);
     }
-
-
 }

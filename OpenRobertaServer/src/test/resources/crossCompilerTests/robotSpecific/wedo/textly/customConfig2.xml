@@ -1,0 +1,41 @@
+<config>
+    <block_set
+            xmlns="http://de.fhg.iais.roberta.blockly" robottype="wedo" xmlversion="3.1" description="" tags="">
+        <instance x="42" y="10">
+            <block type="robBrick_WeDo-Brick" id="1" intask="true" deletable="false">
+                <field name="VAR">W</field>
+            </block>
+        </instance>
+        <instance x="40" y="83">
+            <block type="robConf_motor" id="UBt%!|u#iOxVPD;%x:Hv" intask="true">
+                <field name="NAME">M</field>
+                <field name="VAR">W</field>
+                <field name="CONNECTOR">1</field>
+            </block>
+        </instance>
+        <instance x="38" y="182">
+            <block type="robConf_buzzer" id="3" intask="true">
+                <field name="NAME">S</field>
+                <field name="VAR">W</field>
+            </block>
+        </instance>
+        <instance x="43" y="257">
+            <block type="robConf_rgbled" id="4" intask="true">
+                <field name="NAME">R</field>
+            </block>
+        </instance>
+        <instance x="45" y="327">
+            <block type="robConf_key" id="5" intask="true">
+                <field name="NAME">T</field>
+                <field name="VAR">W</field>
+            </block>
+        </instance>
+        <instance x="31" y="390">
+            <block type="robConf_gyro" id="@uQ1zmGU~]zuM*2g05z[" intask="true">
+                <field name="NAME">T2</field>
+                <field name="VAR">W</field>
+                <field name="CONNECTOR">1</field>
+            </block>
+        </instance>
+    </block_set>
+</config>

@@ -65,10 +65,18 @@
         </block_set>
     </program>
     <config>
-        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="wedo" xmlversion="3.1" description="" tags="">
+        <block_set
+                xmlns="http://de.fhg.iais.roberta.blockly" robottype="wedo" xmlversion="3.1" description="" tags="">
             <instance x="42" y="10">
                 <block type="robBrick_WeDo-Brick" id="1" intask="true" deletable="false">
                     <field name="VAR">W</field>
+                </block>
+            </instance>
+            <instance x="40" y="83">
+                <block type="robConf_motor" id="UBt%!|u#iOxVPD;%x:Hv" intask="true">
+                    <field name="NAME">M</field>
+                    <field name="VAR">W</field>
+                    <field name="CONNECTOR">1</field>
                 </block>
             </instance>
             <instance x="38" y="182">
@@ -93,13 +101,6 @@
                     <field name="NAME">I</field>
                     <field name="VAR">W</field>
                     <field name="CONNECTOR">2</field>
-                </block>
-            </instance>
-            <instance x="43" y="525">
-                <block type="robConf_gyro" id="a[{cEi^6i^o3jj67-HA5" intask="true">
-                    <field name="NAME">T2</field>
-                    <field name="VAR">W</field>
-                    <field name="CONNECTOR">1</field>
                 </block>
             </instance>
         </block_set>
