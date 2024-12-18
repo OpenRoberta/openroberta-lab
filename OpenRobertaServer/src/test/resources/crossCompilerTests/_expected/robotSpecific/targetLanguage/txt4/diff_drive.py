@@ -3,7 +3,6 @@ from fischertechnik.controller.Motor import Motor
 import math
 import time
 
-
 def diffdrive_turn_degrees(speed, degrees):
     if degrees < 0:
         speed = -speed
@@ -78,7 +77,6 @@ right_motor = TXT_M_M2_motor
 WHEEL_DIAMETER = 6
 TRACK_WIDTH = 15
 STEPS_PER_ROTATION = 128
-
 
 def run():
     print("Driving Forwards")

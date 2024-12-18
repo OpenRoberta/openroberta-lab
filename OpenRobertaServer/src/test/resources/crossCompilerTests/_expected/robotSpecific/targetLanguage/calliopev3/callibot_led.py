@@ -9,14 +9,12 @@ class ContinueLoop(Exception): pass
 timer1 = calliopemini.running_time()
 callibot = Callibot2()
 
-
 def ____wait():
     global timer1
     calliopemini.sleep(700)
     while True:
         if calliopemini.button_a.is_pressed() == True:
             break
-
 
 def run():
     global timer1
@@ -63,7 +61,6 @@ def main():
         raise
     finally:
         callibot.stop()
-
 
 if __name__ == "__main__":
     main()

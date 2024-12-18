@@ -11,7 +11,6 @@ def RGBAsString(rgb):
         color_diffs.append((color_diff, color))
     return min(color_diffs)[1]
 
-
 _colors = {
             "red": (204,0,0),
             "yellow": (255,255,0),
@@ -22,7 +21,6 @@ _colors = {
             "white": (255,255,255),
             "black": (0,0,0)
         }
-
 
 ___colorVar = (204, 0, 0)
 ___stringVar = "1"
@@ -166,7 +164,6 @@ def ____function_returnColorList():
     global ___colorVar, ___stringVar, ___booleanVar, ___numberVar, ___numberList, ___booleanList, ___stringList, ___colorList
     return ___colorList
 
-
 def run():
     global ___colorVar, ___stringVar, ___booleanVar, ___numberVar, ___numberList, ___booleanList, ___stringList, ___colorList
     ____colours()
@@ -188,4 +185,5 @@ def main():
         cyberpi.display.show_label("Exeption on Mbot 2", 16, int(8 * 0 + 5), int(17 * 0))
         cyberpi.display.show_label(e, 16, int(8 * 0 + 5), int(17 * 1))
         raise
+
 main()

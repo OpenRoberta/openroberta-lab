@@ -12,19 +12,16 @@ def hub_light_on(color):
     elif color == Color.WHITE :
         hub.light.on(Color(0,0,100))
 
-
-Color.MAGENTA = Color(315,50,15)
-Color.BLUE = Color(225,20,20)
-Color.AZURE = Color(200,20,20)
-Color.CYAN = Color(150,20,20)
-Color.YELLOW = Color(55,35,35)
-Color.RED = Color(350,35,35)
-Color.BLACK = Color(0,10,10)
-Color.WHITE = Color(0,0,70)
-
+Color.MAGENTA = Color(315, 50, 15)
+Color.BLUE = Color(225, 20, 20)
+Color.AZURE = Color(200, 20, 20)
+Color.CYAN = Color(150, 20, 20)
+Color.YELLOW = Color(55, 35, 35)
+Color.RED = Color(350, 35, 35)
+Color.BLACK = Color(0, 10, 10)
+Color.WHITE = Color(0, 0, 70)
 
 hub = PrimeHub()
-
 
 def run():
     hub_light_on(Color.MAGENTA)

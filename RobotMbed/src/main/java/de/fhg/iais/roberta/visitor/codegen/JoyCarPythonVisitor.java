@@ -57,62 +57,48 @@ public class JoyCarPythonVisitor extends MicrobitV2PythonVisitor implements IJoy
     @Override
     protected void visitorGenerateImports() {
         this.src.add("import microbit");
-        nlIndent();
-        this.src.add("import random");
-        nlIndent();
-        this.src.add("import math");
-        nlIndent();
+        this.src.addLine("import random");
+        this.src.addLine("import math");
         if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.RGBLED) ) {
-            this.src.add("import neopixel");
-            nlIndent();
+            this.src.addLine("import neopixel");
         }
         if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.RADIO) ) {
-            this.src.add("import radio");
-            nlIndent();
+            this.src.addLine("import radio");
         }
         if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.MUSIC) ) {
-            this.src.add("import music");
-            nlIndent();
+            this.src.addLine("import music");
         }
         if ( this.getBean(UsedHardwareBean.class).isSensorUsed(SC.ULTRASONIC) ) {
-            this.src.add("import machine");
-            nlIndent();
+            this.src.addLine("import machine");
         }
-        nlIndent();
     }
 
     @Override
     protected void visitorGenerateGlobalVariables() {
-        this.src.add("class BreakOutOfALoop(Exception): pass");
-        nlIndent();
-        this.src.add("class ContinueLoop(Exception): pass");
-        nlIndent();
+        this.src.ensureBlankLines(1);
+        this.src.addLine("class BreakOutOfALoop(Exception): pass");
+        this.src.addLine("class ContinueLoop(Exception): pass");
+
+       this.src.ensureBlankLines(1);
         if ( (this.getBean(UsedHardwareBean.class).isActorUsed("I2C")) ) {
-            nlIndent();
-            this.src.add("microbit.i2c.init(freq=400000, sda=microbit.pin20, scl=microbit.pin19)");
-            nlIndent();
+            this.src.addLine("microbit.i2c.init(freq=400000, sda=microbit.pin20, scl=microbit.pin19)");
         }
         if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.DIFFERENTIALDRIVE) || (this.getBean(UsedHardwareBean.class).isActorUsed(SC.MOTOR)) ) {
-            this.src.add("microbit.i2c.write(0x70, b'\\x00\\x01')");
-            nlIndent();
-            this.src.add("microbit.i2c.write(0x70, b'\\xE8\\xAA')");
-            nlIndent();
+            this.src.addLine("microbit.i2c.write(0x70, b'\\x00\\x01')");
+            this.src.addLine("microbit.i2c.write(0x70, b'\\xE8\\xAA')");
         }
         if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.SERVOMOTOR) ) {
-            this.src.add("microbit.pin1.set_analog_period(20)");
-            nlIndent();
-            this.src.add("microbit.pin13.set_analog_period(20)");
-            nlIndent();
+            this.src.addLine("microbit.pin1.set_analog_period(20)");
+            this.src.addLine("microbit.pin13.set_analog_period(20)");
         }
         if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.RGBLED) ) {
-            this.src.add("np = neopixel.NeoPixel(microbit.pin0, 8)");
-            nlIndent();
+            this.src.addLine("np = neopixel.NeoPixel(microbit.pin0, 8)");
         }
-        nlIndent();
-        this.src.add("timer1 = microbit.running_time()");
+
+        this.src.ensureBlankLines(1);
+        this.src.addLine("timer1 = microbit.running_time()");
         if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.RADIO) ) {
-            nlIndent();
-            this.src.add("radio.on()");
+            this.src.addLine("radio.on()");
         }
     }
 
@@ -134,12 +120,10 @@ public class JoyCarPythonVisitor extends MicrobitV2PythonVisitor implements IJoy
         driveAction.param.getSpeed().accept(this);
         this.src.add(")");
         if ( hasDuration ) {
-            nlIndent();
-            this.src.add("microbit.sleep(");
+            this.src.addLine("microbit.sleep(");
             driveAction.param.getDuration().getValue().accept(this);
             this.src.add(")");
-            nlIndent();
-            this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(JoycarMethods.DIFFDRIVE), "(0, 0)");
+            this.src.addLine(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(JoycarMethods.DIFFDRIVE), "(0, 0)");
         }
         return null;
     }
@@ -205,12 +189,10 @@ public class JoyCarPythonVisitor extends MicrobitV2PythonVisitor implements IJoy
         this.src.add(")");
 
         if ( hasDuration ) {
-            nlIndent();
-            this.src.add("microbit.sleep(");
+            this.src.addLine("microbit.sleep(");
             turnAction.param.getDuration().getValue().accept(this);
             this.src.add(")");
-            nlIndent();
-            this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(JoycarMethods.DIFFDRIVE), "(0, 0)");
+            this.src.addLine(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(JoycarMethods.DIFFDRIVE), "(0, 0)");
         }
         return null;
     }
@@ -228,12 +210,10 @@ public class JoyCarPythonVisitor extends MicrobitV2PythonVisitor implements IJoy
         this.src.add(")");
 
         if ( hasDuration ) {
-            nlIndent();
-            this.src.add("microbit.sleep(");
+            this.src.addLine("microbit.sleep(");
             curveAction.paramRight.getDuration().getValue().accept(this);
             this.src.add(")");
-            nlIndent();
-            this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(JoycarMethods.DIFFDRIVE), "(0, 0)");
+            this.src.addLine(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(JoycarMethods.DIFFDRIVE), "(0, 0)");
         }
         return null;
     }
@@ -399,43 +379,33 @@ public class JoyCarPythonVisitor extends MicrobitV2PythonVisitor implements IJoy
             return;
         }
         decrIndentation(); // everything is still indented from main program
-        nlIndent();
-        nlIndent();
-        this.src.add("def main():");
+        this.src.ensureBlankLines(1);
+        this.src.addLine("def main():");
         incrIndentation();
-        nlIndent();
-        this.src.add("try:");
+        this.src.addLine("try:");
         incrIndentation();
-        nlIndent();
-        this.src.add("run()");
+        this.src.addLine("run()");
         decrIndentation();
-        nlIndent();
-        this.src.add("except Exception as e:");
+        this.src.addLine("except Exception as e:");
         incrIndentation();
-        nlIndent();
-        this.src.add("raise");
+        this.src.addLine("raise");
         decrIndentation();
         if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.DIFFERENTIALDRIVE) || this.getBean(UsedHardwareBean.class).isActorUsed(SC.MOTOR) ) {
-            nlIndent();
-            this.src.add("finally:");
+            this.src.addLine("finally:");
             incrIndentation();
-            nlIndent();
             if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.DIFFERENTIALDRIVE) ) {
-                this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(JoycarMethods.DIFFDRIVE), "(0, 0)");
+                this.src.addLine(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(JoycarMethods.DIFFDRIVE), "(0, 0)");
             } else if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.MOTOR) ) {
-                this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(JoycarMethods.SETSPEED), "(\"MOT_L\", ", "0)");
-                nlIndent();
-                this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(JoycarMethods.SETSPEED), "(\"MOT_R\", ", "0)");
+                this.src.addLine(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(JoycarMethods.SETSPEED), "(\"MOT_L\", ", "0)");
+                this.src.addLine(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(JoycarMethods.SETSPEED), "(\"MOT_R\", ", "0)");
             }
             decrIndentation();
         }
         decrIndentation();
-        nlIndent();
-        nlIndent();
-        this.src.add("if __name__ == \"__main__\":");
+        this.src.ensureBlankLines(1);
+        this.src.addLine("if __name__ == \"__main__\":");
         incrIndentation();
-        nlIndent();
-        this.src.add("main()");
+        this.src.addLine("main()");
         decrIndentation();
     }
 

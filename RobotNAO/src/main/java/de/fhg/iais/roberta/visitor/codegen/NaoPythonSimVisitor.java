@@ -123,17 +123,15 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
 
     @Override
     public Void visitMainTask(MainTask mainTask) {
-        super.visitorGenerateUserVariablesAndMethods(mainTask);
+        visitorGenerateUserVariablesAndMethods(mainTask);
         StmtList variables = mainTask.variables;
-        nlIndent();
-        this.src.add("def run():");
+        this.src.ensureBlankLines(1);
+        this.src.addLine("def run():");
         incrIndentation();
-        nlIndent();
-        this.src.add("robot.step(robot.timeStep)");
+        this.src.addLine("robot.step(robot.timeStep)");
 
         List<Stmt> variableList = variables.get();
         if ( !variableList.isEmpty() ) {
-            nlIndent();
             // insert global statement for all variables
             // TODO: there must be an easier way without the casts
             // TODO: we'd only list variables that we change, ideally we'd do this in
@@ -141,7 +139,7 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
             // would need the list of mainTask variables (store in the class?)
             // TODO: I could store the names as a list in the instance and filter it against the parameters
             // in visitMethodVoid, visitMethodReturn
-            this.src.add("global ");
+            this.src.addLine("global ");
             boolean first = true;
             for ( Stmt s : variables.get() ) {
                 ExprStmt es = (ExprStmt) s;
@@ -410,24 +408,19 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
 
     @Override
     protected void visitorGenerateImports() {
-        this.src.add("#!/usr/bin/python");
-        nlIndent();
-        nlIndent();
+        this.src.addLine("#!/usr/bin/python");
 
         Set<Enum<?>> usedMethods = new HashSet<>();
         usedMethods.add(NaoSimMethods.MOTIONS);
         usedMethods.add(NaoSimMethods.TEMPLATE);
         String template = this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodDefinitions(usedMethods);
-        this.src.add(template);
-        nlIndent();
+        this.src.ensureBlankLines(1);
+        this.src.addLine(template);
 
         if ( !this.getBean(UsedHardwareBean.class).getLoopsLabelContainer().isEmpty() ) {
-            nlIndent();
-            this.src.add("class BreakOutOfALoop(Exception): pass");
-            nlIndent();
-            this.src.add("class ContinueLoop(Exception): pass");
-            nlIndent();
-            nlIndent();
+            this.src.ensureBlankLines(1);
+            this.src.addLine("class BreakOutOfALoop(Exception): pass");
+            this.src.addLine("class ContinueLoop(Exception): pass");
         }
     }
 
@@ -444,30 +437,21 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
         if ( !withWrapping ) {
             return;
         }
-        nlIndent();
-        this.src.add("wait(robot, 3000)"); // give the simulation time to render all
-        nlIndent();
-        this.src.add("print(\"finished\")");
+        this.src.addLine("wait(robot, 3000)"); // give the simulation time to render all
+        this.src.addLine("print(\"finished\")");
         decrIndentation(); // everything is still indented from main program
-        nlIndent();
-        nlIndent();
-        this.src.add("def main():");
+        this.src.ensureBlankLines(1);
+        this.src.addLine("def main():");
         incrIndentation();
-        nlIndent();
-        this.src.add("try:");
+        this.src.addLine("try:");
         incrIndentation();
-        nlIndent();
-        this.src.add("run()");
+        this.src.addLine("run()");
         decrIndentation();
-        nlIndent();
-        this.src.add("except Exception as e:");
+        this.src.addLine("except Exception as e:");
         incrIndentation();
-        nlIndent();
-        this.src.add("raise");
+        this.src.addLine("raise");
         decrIndentation();
-        nlIndent();
         decrIndentation();
-        nlIndent();
         super.generateProgramSuffix(withWrapping);
     }
 

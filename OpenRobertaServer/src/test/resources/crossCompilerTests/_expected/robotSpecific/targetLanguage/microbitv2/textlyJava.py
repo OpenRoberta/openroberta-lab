@@ -3,7 +3,6 @@ import random
 import math
 import radio
 
-
 def _isPrime(number):
     if(number == 0 or number == 1):
         return False

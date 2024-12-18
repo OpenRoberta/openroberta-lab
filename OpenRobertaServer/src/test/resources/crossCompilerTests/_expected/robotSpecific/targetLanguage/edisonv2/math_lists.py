@@ -92,7 +92,5 @@ def ____lists():
     ___numberVar = ___numberList[___numberVar]
     ___numberList[___numberVar] = ___numberVar
 
-
 ____math()
 ____lists()
-

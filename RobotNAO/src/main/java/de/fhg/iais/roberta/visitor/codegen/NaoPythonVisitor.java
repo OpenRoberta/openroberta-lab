@@ -128,21 +128,19 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
 
     @Override
     public Void visitMainTask(MainTask mainTask) {
-        super.visitorGenerateUserVariablesAndMethods(mainTask);
         StmtList variables = mainTask.variables;
-        nlIndent();
-        this.src.add("def run():");
+
+        visitorGenerateUserVariablesAndMethods(mainTask);
+        this.src.ensureBlankLines(1);
+        this.src.addLine("def run():");
         incrIndentation();
         if ( mainTask.debug.equals("TRUE") ) {
-            nlIndent();
-            this.src.add("h.setAutonomousLife('ON')");
+            this.src.addLine("h.setAutonomousLife('ON')");
         } else {
-            nlIndent();
-            this.src.add("h.setAutonomousLife('OFF')");
+            this.src.addLine("h.setAutonomousLife('OFF')");
         }
         List<Stmt> variableList = variables.get();
         if ( !variableList.isEmpty() ) {
-            nlIndent();
             // insert global statement for all variables
             // TODO: there must be an easier way without the casts
             // TODO: we'd only list variables that we change, ideally we'd do this in
@@ -150,7 +148,7 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
             // would need the list of mainTask variables (store in the class?)
             // TODO: I could store the names as a list in the instance and filter it against the parameters
             // in visitMethodVoid, visitMethodReturn
-            this.src.add("global ");
+            this.src.addLine("global ");
             boolean first = true;
             for ( Stmt s : variables.get() ) {
                 ExprStmt es = (ExprStmt) s;
@@ -912,32 +910,23 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
     @Override
     protected void visitorGenerateImports() {
         this.src.add("#!/usr/bin/python");
-        nlIndent();
-        nlIndent();
-        this.src.add("import math");
-        nlIndent();
-        this.src.add("import time");
-        nlIndent();
-        this.src.add("import random");
-        nlIndent();
-        this.src.add("from roberta import Hal");
-        nlIndent();
+        this.src.ensureBlankLines(1);
+        this.src.addLine("import math");
+        this.src.addLine("import time");
+        this.src.addLine("import random");
+        this.src.addLine("from roberta import Hal");
     }
 
     @Override
     protected void visitorGenerateGlobalVariables() {
-        this.src.add("h = Hal()");
-        nlIndent();
+        this.src.ensureBlankLines(1);
+        this.src.addLine("h = Hal()");
         generateSensors();
-        nlIndent();
 
         if ( !this.getBean(UsedHardwareBean.class).getLoopsLabelContainer().isEmpty() ) {
-            nlIndent();
-            this.src.add("class BreakOutOfALoop(Exception): pass");
-            nlIndent();
-            this.src.add("class ContinueLoop(Exception): pass");
-            nlIndent();
-            nlIndent();
+            this.src.ensureBlankLines(1);
+            this.src.addLine("class BreakOutOfALoop(Exception): pass");
+            this.src.addLine("class ContinueLoop(Exception): pass");
         }
     }
 
@@ -947,31 +936,23 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
             return;
         }
         decrIndentation(); // everything is still indented from main program
-        nlIndent();
-        nlIndent();
-        this.src.add("def main():");
+        this.src.ensureBlankLines(1);
+        this.src.addLine("def main():");
         incrIndentation();
-        nlIndent();
-        this.src.add("try:");
+        this.src.addLine("try:");
         incrIndentation();
-        nlIndent();
-        this.src.add("run()");
+        this.src.addLine("run()");
         decrIndentation();
-        nlIndent();
-        this.src.add("except Exception as e:");
+        this.src.addLine("except Exception as e:");
         incrIndentation();
-        nlIndent();
-        this.src.add("h.say(\"Error!\" + str(e))");
+        this.src.addLine("h.say(\"Error!\" + str(e))");
         decrIndentation();
-        nlIndent();
-        this.src.add("finally:");
+        this.src.addLine("finally:");
         incrIndentation();
-        nlIndent();
         removeSensors();
-        this.src.add("h.myBroker.shutdown()");
+        this.src.addLine("h.myBroker.shutdown()");
         decrIndentation();
         decrIndentation();
-        nlIndent();
 
         super.generateProgramSuffix(withWrapping);
     }
@@ -992,28 +973,19 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
         for ( UsedSensor usedSensor : this.getBean(UsedHardwareBean.class).getUsedSensors() ) {
             switch ( usedSensor.getType() ) {
                 case SC.ULTRASONIC:
-                    this.src.add("h.sonar.subscribe(\"OpenRobertaApp\")");
-                    nlIndent();
+                    this.src.addLine("h.sonar.subscribe(\"OpenRobertaApp\")");
                     break;
                 case SC.DETECT_MARK:
-                    this.src.add("h.mark.subscribe(\"RobertaLab\", 500, 0.0)");
-                    nlIndent();
+                    this.src.addLine("h.mark.subscribe(\"RobertaLab\", 500, 0.0)");
                     break;
                 case SC.NAO_FACE:
-                    nlIndent();
-                    this.src.add("from roberta import FaceRecognitionModule");
-                    nlIndent();
-                    this.src.add("faceRecognitionModule = FaceRecognitionModule(\"faceRecognitionModule\")");
-                    nlIndent();
+                    this.src.addLine("from roberta import FaceRecognitionModule");
+                    this.src.addLine("faceRecognitionModule = FaceRecognitionModule(\"faceRecognitionModule\")");
                     break;
                 case SC.NAO_SPEECH:
-                    nlIndent();
-                    this.src.add("from roberta import SpeechRecognitionModule");
-                    nlIndent();
-                    this.src.add("speechRecognitionModule = SpeechRecognitionModule(\"speechRecognitionModule\")");
-                    nlIndent();
-                    this.src.add("speechRecognitionModule.pauseASR()");
-                    nlIndent();
+                    this.src.addLine("from roberta import SpeechRecognitionModule");
+                    this.src.addLine("speechRecognitionModule = SpeechRecognitionModule(\"speechRecognitionModule\")");
+                    this.src.addLine("speechRecognitionModule.pauseASR()");
                     break;
                 case SC.COLOR:
                 case SC.INFRARED:
@@ -1039,20 +1011,16 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
                 case BlocklyConstants.INFRARED:
                     break;
                 case BlocklyConstants.ULTRASONIC:
-                    this.src.add("h.sonar.unsubscribe(\"OpenRobertaApp\")");
-                    nlIndent();
+                    this.src.addLine("h.sonar.unsubscribe(\"OpenRobertaApp\")");
                     break;
                 case BlocklyConstants.DETECT_MARK:
-                    this.src.add("h.mark.unsubscribe(\"RobertaLab\")");
-                    nlIndent();
+                    this.src.addLine("h.mark.unsubscribe(\"RobertaLab\")");
                     break;
                 case BlocklyConstants.NAO_FACE:
-                    this.src.add("faceRecognitionModule.unsubscribe()");
-                    nlIndent();
+                    this.src.addLine("faceRecognitionModule.unsubscribe()");
                     break;
                 case BlocklyConstants.NAO_SPEECH:
-                    this.src.add("speechRecognitionModule.unsubscribe()");
-                    nlIndent();
+                    this.src.addLine("speechRecognitionModule.unsubscribe()");
                     break;
                 case BlocklyConstants.LIGHT:
                 case BlocklyConstants.COMPASS:

@@ -91,7 +91,6 @@ def ____getBrightness():
         microbit.display.scroll(str(microbit.display.get_pixel(0, 0)))
     microbit.display.clear()
 
-
 def run():
     global timer1, ___Animation
     # This program tests all display blocks (except the serial monitor)

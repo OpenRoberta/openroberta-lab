@@ -8,7 +8,6 @@ class ContinueLoop(Exception): pass
 timer1 = calliopemini.running_time()
 brightness = 9
 
-
 def run():
     global timer1
     calliopemini.display.show(calliopemini.Image('00000:00000:00000:00000:00000'))

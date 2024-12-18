@@ -4,9 +4,8 @@ import math
 import time
 import random
 from roberta import Hal
+
 h = Hal()
-
-
 
 ___numberVar = 0
 ___booleanVar = True
@@ -132,7 +131,6 @@ def ____function_return_stringList():
 def ____function_return_colourList():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___numberList, ___booleanList, ___stringList, ___colourList
     return ___colourList
-
 
 def run():
     h.setAutonomousLife('ON')

@@ -8,7 +8,6 @@ class ContinueLoop(Exception): pass
 
 timer1 = calliopemini.running_time()
 
-
 ___n = 0
 
 def ____sounds():
@@ -19,7 +18,6 @@ def ____sounds():
     music.pitch(329, 500)
     music.pitch(349, 250)
     music.pitch(391, 125)
-
 
 def run():
     global timer1, ___n

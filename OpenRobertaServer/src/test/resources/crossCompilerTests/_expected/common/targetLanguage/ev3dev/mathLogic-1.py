@@ -7,7 +7,6 @@ import math
 import os
 import time
 
-
 def _isPrime(number):
     if(number == 0 or number == 1):
         return False

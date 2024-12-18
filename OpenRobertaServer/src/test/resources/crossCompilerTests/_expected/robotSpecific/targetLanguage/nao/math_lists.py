@@ -30,9 +30,8 @@ def _standard_deviation(l):
     for i in l:
         sd += (i - mean)*(i - mean)
     return math.sqrt(sd / len(l))
+
 h = Hal()
-
-
 
 ___numberVar = 0
 ___booleanVar = True
@@ -131,7 +130,6 @@ def ____lists():
     h.say(str(___numberList[0:___numberVar]))
     h.say(str(___numberList[0:-1 -___numberVar]))
     h.say(str(___numberList[0:]))
-
 
 def run():
     h.setAutonomousLife('ON')

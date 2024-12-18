@@ -9,7 +9,6 @@ class ContinueLoop(Exception): pass
 timer1 = calliopemini.running_time()
 callibot = Callibot2()
 
-
 def run():
     global timer1
     print("callibiot sensor tests press a to go through")
@@ -41,7 +40,6 @@ def main():
         raise
     finally:
         callibot.stop()
-
 
 if __name__ == "__main__":
     main()

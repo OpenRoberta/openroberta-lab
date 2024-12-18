@@ -136,7 +136,6 @@ def ____math():
     cyberpi.console.println(str(___numberVar))
     cyberpi.console.println(chr((int)(___numberVar)))
 
-
 def run():
     global ___numberVar, ___booleanVar, ___stringVar, ___colorVar, ___numberList, ___booleanList, ___stringList, ___colorList
     ____math()
@@ -149,4 +148,5 @@ def main():
         cyberpi.display.show_label("Exeption on Mbot 2", 16, int(8 * 0 + 5), int(17 * 0))
         cyberpi.display.show_label(e, 16, int(8 * 0 + 5), int(17 * 1))
         raise
+
 main()

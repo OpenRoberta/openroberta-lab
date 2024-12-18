@@ -4,7 +4,6 @@ from lib.display import display
 import math
 import time
 
-
 def motor_start(motor, speed):
     motor.set_speed(speed_to_pwm(speed), Motor.CCW)
     motor.start()

@@ -99,16 +99,33 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
         if ( this.getBean(UsedHardwareBean.class).isSensorUsed(CyberpiConstants.MBUILDSENSOR) ) {
             this.src.add(", mbuild");
         }
-        nlIndent();
-        this.src.add("import time");
-        nlIndent();
-        this.src.add("import math, random");
-        nlIndent();
+        this.src.addLine("import time");
+        this.src.addLine("import math, random");
+    }
+
+    private boolean hasDiffDrive(){
+        return this.getBean(UsedHardwareBean.class).isActorUsed(SC.DIFFERENTIALDRIVE);
+    }
+
+    private boolean hasTimerVariables(){
+        return !this.getBean(UsedHardwareBean.class)
+            .getUsedSensors()
+            .stream()
+            .filter(usedSensor -> usedSensor.getType().equals(SC.TIMER))
+            .collect(Collectors.groupingBy(UsedSensor::getPort)).isEmpty();
+    }
+
+    private boolean hasColors(){
+        return this.getBean(UsedHardwareBean.class).getUsedSensors()
+            .stream()
+            .filter(usedSensor -> usedSensor.getType().equals(CyberpiConstants.QUADRGB)
+                && usedSensor.getMode().equals(SC.COLOUR) || usedSensor.getMode().equals(SC.LED))
+            .count() != 0;
     }
 
     @Override
     protected void visitorGenerateGlobalVariables() {
-        if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.DIFFERENTIALDRIVE) ) {
+        if (hasDiffDrive()) {
             appendRobotVariables();
         }
         generateTimerVariables();
@@ -118,18 +135,15 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
     private void appendRobotVariables() {
         ConfigurationComponent diffDrive = getDiffDrive();
         if ( diffDrive != null ) {
-            nlIndent();
+            this.src.ensureBlankLines(1);
             double circumference = Double.parseDouble(diffDrive.getComponentProperties().get(CyberpiConstants.DIFF_WHEEL_DIAMETER)) * Math.PI;
             double trackWidth = Double.parseDouble(diffDrive.getComponentProperties().get(CyberpiConstants.DIFF_TRACK_WIDTH));
-            this.src.add("_trackWidth = ");
+            this.src.addLine("_trackWidth = ");
             this.src.add(trackWidth);
-            nlIndent();
-            this.src.add("_circumference = ");
+            this.src.addLine("_circumference = ");
             this.src.add(circumference);
-            nlIndent();
-            this.src.add("_diffPortsSwapped = ");
+            this.src.addLine("_diffPortsSwapped = ");
             this.src.add(this.rightMotorPort.equals("EM1") ? "True" : "False");
-            nlIndent();
         }
     }
 
@@ -148,28 +162,24 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
     }
 
     private void generateTimerVariables() {
-        this.getBean(UsedHardwareBean.class)
-            .getUsedSensors()
-            .stream()
-            .filter(usedSensor -> usedSensor.getType().equals(SC.TIMER))
-            .collect(Collectors.groupingBy(UsedSensor::getPort))
-            .keySet()
-            .forEach(port -> {
-                this.src.add("_timer", port, " = cyberpi.timer.get()");
-                nlIndent();
-            });
+        if(hasTimerVariables()){
+            this.src.ensureBlankLines(1);
+            this.getBean(UsedHardwareBean.class)
+                .getUsedSensors()
+                .stream()
+                .filter(usedSensor -> usedSensor.getType().equals(SC.TIMER))
+                .collect(Collectors.groupingBy(UsedSensor::getPort))
+                .keySet()
+                .forEach(port -> {
+                    this.src.addLine("_timer", port, " = cyberpi.timer.get()");
+                });
+        }
     }
 
     private void addColors() {
-        int colorBlocks = (int) this.getBean(UsedHardwareBean.class).getUsedSensors()
-            .stream()
-            .filter(usedSensor -> usedSensor.getType().equals(CyberpiConstants.QUADRGB)
-                && usedSensor.getMode().equals(SC.COLOUR) || usedSensor.getMode().equals(SC.LED))
-            .count();
-
-        if ( colorBlocks != 0 ) {
-            nlIndent();
-            this.src.add("_colors = {\n",
+        if ( hasColors() ) {
+            this.src.ensureBlankLines(1);
+            this.src.addLine("_colors = {\n",
                 "            \"red\": (204,0,0),\n",
                 "            \"yellow\": (255,255,0),\n",
                 "            \"green\": (51,204,0),\n",
@@ -179,20 +189,18 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
                 "            \"white\": (255,255,255),\n",
                 "            \"black\": (0,0,0)\n",
                 "        }");
-            nlIndent();
         }
     }
-
 
     @Override
     public Void visitMainTask(MainTask mainTask) {
         visitorGenerateUserVariablesAndMethods(mainTask);
-        nlIndent();
-        this.src.add("def run():");
+
+        this.src.ensureBlankLines(1);
+        this.src.addLine("def run():");
         incrIndentation();
         if ( !this.usedGlobalVarInFunctions.isEmpty() ) {
-            nlIndent();
-            this.src.add("global ", String.join(", ", this.usedGlobalVarInFunctions));
+            this.src.addLine("global ", String.join(", ", this.usedGlobalVarInFunctions));
         }
 
         return null;
@@ -204,40 +212,30 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
             return;
         }
         decrIndentation(); // everything is still indented from main program
-        nlIndent();
-        nlIndent();
-        this.src.add("def main():");
+        this.src.ensureBlankLines(1);
+        this.src.addLine("def main():");
         incrIndentation();
-        nlIndent();
-        this.src.add("try:");
+        this.src.addLine("try:");
         incrIndentation();
-        nlIndent();
-        this.src.add("run()");
+        this.src.addLine("run()");
         decrIndentation();
-        nlIndent();
-        this.src.add("except Exception as e:");
+        this.src.addLine("except Exception as e:");
         incrIndentation();
-        nlIndent();
-        this.src.add("cyberpi.display.show_label(\"Exeption on Mbot 2\", 16, int(8 * 0 + 5), int(17 * 0))");
-        nlIndent();
-        this.src.add("cyberpi.display.show_label(e, 16, int(8 * 0 + 5), int(17 * 1))");
-        nlIndent();
-        this.src.add("raise");
+        this.src.addLine("cyberpi.display.show_label(\"Exeption on Mbot 2\", 16, int(8 * 0 + 5), int(17 * 0))");
+        this.src.addLine("cyberpi.display.show_label(e, 16, int(8 * 0 + 5), int(17 * 1))");
+        this.src.addLine("raise");
         decrIndentation();
         if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.ENCODER) ) {
-            nlIndent();
-            this.src.add("finally:");
+            this.src.addLine("finally:");
             incrIndentation();
-            nlIndent();
-            this.src.add("mbot2.motor_stop(\"all\")");
-            nlIndent();
-            this.src.add("mbot2.EM_stop(\"all\")");
+            this.src.addLine("mbot2.motor_stop(\"all\")");
+            this.src.addLine("mbot2.EM_stop(\"all\")");
             decrIndentation();
         }
         decrIndentation();
-        nlIndent();
 
-        this.src.add("main()");
+        this.src.ensureBlankLines(1);
+        this.src.addLine("main()");
     }
 
     @Override

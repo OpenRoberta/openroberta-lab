@@ -3,7 +3,6 @@ import random
 import math
 from tm1637 import TM1637
 
-
 def set_brightness(val):
     global brightness
     if val < 0 or val >= 10:
@@ -19,7 +18,6 @@ class ContinueLoop(Exception): pass
 timer1 = calliopemini.running_time()
 fdd = TM1637()
 brightness = 9
-
 
 ___n = 0
 ___b = True
@@ -56,7 +54,6 @@ def ____display():
 def ____action():
     global timer1, ___n, ___b, ___s, ___c, ___i, ___nl, ___bl, ___sl, ___cl, ___il
     ____display()
-
 
 def run():
     global timer1, ___n, ___b, ___s, ___c, ___i, ___nl, ___bl, ___sl, ___cl, ___il

@@ -2,7 +2,6 @@ import microbit
 import random
 import math
 
-
 def scale(speed):
     if speed == 0:
         return 0
@@ -63,7 +62,6 @@ def ____motorLeftRightOn():
         ___speed = ___speed + 10
     setSpeed("MOT_R", 0)
     setSpeed("MOT_L", 0)
-
 
 def run():
     global timer1, ___speed

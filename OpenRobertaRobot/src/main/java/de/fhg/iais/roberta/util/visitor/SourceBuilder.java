@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 import de.fhg.iais.roberta.syntax.Phrase;
+import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.visitor.IVisitor;
 
 public class SourceBuilder {
@@ -58,6 +59,61 @@ public class SourceBuilder {
         this.sb.append("\n");
         indent();
         return this;
+    }
+
+    /**
+     * Append N new lines if not already present and Vals to SourceBuilder
+     *
+     * @param numOfLines make sure to have atleast this many new lines before adding Vals, must >= 0
+     * @param vals Vals to be appended
+     * @return SourceBuilder
+     */
+    public SourceBuilder addNLine(int numOfLines, Object... vals) {
+        Assert.isTrue(numOfLines >= 0);
+
+        //if we want 2 blank lines we need 3 new lines
+        numOfLines += 1;
+
+        final String sourceStringTrimmed = this.sb.toString().replace(" ", "");
+        int newLineCounter = 0;
+
+        //an Empty SourceBuilder does not have to go to the next line to ensure given number of new lines
+        if(sourceStringTrimmed.isEmpty())
+            newLineCounter++;
+
+        for(int i=0; (i < numOfLines) && (sourceStringTrimmed.length() - 1 - i >= 0); i++){
+            if(sourceStringTrimmed.charAt(sourceStringTrimmed.length() - 1 - i) == '\n') {
+                newLineCounter++;
+            }else {
+                break;
+            }
+        }
+
+        for(int i=0; (i < (numOfLines - newLineCounter)); i++){
+            nlI();
+        }
+
+        add(vals);
+        return this;
+    }
+
+    public SourceBuilder addLine(Object... vals) {
+        return addNLine(0, vals);
+    }
+
+    /**
+     * Makes sure there are a given amount of new Lines, 0 will make sure we are in the next
+     * Line 1 will make sure we have one Line white space, etc.,
+     *
+     * @param numOfLines to ensure are there, will add additional new Lines if needed
+     * @return SourceBuilder
+     */
+    public SourceBuilder ensureBlankLines(int numOfLines) {
+        return addNLine(numOfLines, "");
+    }
+
+    public SourceBuilder ensureNextLine() {
+        return ensureBlankLines(0);
     }
 
     public SourceBuilder add(Object... vals) {

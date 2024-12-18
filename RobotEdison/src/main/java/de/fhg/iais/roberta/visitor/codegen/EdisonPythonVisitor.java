@@ -75,27 +75,20 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
 
     @Override
     protected void visitorGenerateImports() {
-        this.src.add("import Ed");
-        nlIndent();
+        this.src.addLine("import Ed");
     }
 
     @Override
     protected void visitorGenerateGlobalVariables() {
-        this.src.add("Ed.EdisonVersion = Ed.V2");
-        nlIndent();
-        this.src.add("Ed.DistanceUnits = Ed.CM");
-        nlIndent();
-        this.src.add("Ed.Tempo = Ed.TEMPO_SLOW");
-        nlIndent();
-        this.src.add("obstacleDetectionOn = False");
-        nlIndent();
-        this.src.add("Ed.LineTrackerLed(Ed.ON)");
-        nlIndent();
-        this.src.add("Ed.ReadClapSensor()");
-        nlIndent(); //zur Sicherheit -- um den Sensor zurückzusetzen
-        this.src.add("Ed.ReadLineState()");
-        nlIndent();
-        this.src.add("Ed.TimeWait(250, Ed.TIME_MILLISECONDS)"); //möglicherweise überflüssig
+        this.src.ensureBlankLines(1);
+        this.src.addLine("Ed.EdisonVersion = Ed.V2");
+        this.src.addLine("Ed.DistanceUnits = Ed.CM");
+        this.src.addLine("Ed.Tempo = Ed.TEMPO_SLOW");
+        this.src.addLine("obstacleDetectionOn = False");
+        this.src.addLine("Ed.LineTrackerLed(Ed.ON)");
+        this.src.addLine("Ed.ReadClapSensor()");
+        this.src.addLine("Ed.ReadLineState()");
+        this.src.addLine("Ed.TimeWait(250, Ed.TIME_MILLISECONDS)"); //möglicherweise überflüssig
     }
 
     /**
@@ -110,8 +103,6 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
             return;
         }
         decrIndentation(); // everything is still indented from main program
-        nlIndent(); //new line for helper methods
-        nlIndent();
     }
 
     @Override
@@ -300,6 +291,7 @@ public class EdisonPythonVisitor extends AbstractPythonVisitor implements IEdiso
     @Override
     public Void visitMainTask(MainTask mainTask) {
         visitorGenerateUserVariablesAndMethods(mainTask);
+        src.ensureBlankLines(1);
         return null;
     }
 

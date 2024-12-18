@@ -2,7 +2,6 @@ import calliopemini
 import random
 import math
 
-
 def _median(l):
     l = sorted(l)
     l_len = len(l)
@@ -28,11 +27,11 @@ def _standard_deviation(l):
     for i in l:
         sd += (i - mean)*(i - mean)
     return math.sqrt(sd / len(l))
+
 class BreakOutOfALoop(Exception): pass
 class ContinueLoop(Exception): pass
 
 timer1 = calliopemini.running_time()
-
 
 ___numberVar = 0
 ___numberList = [0, 0]
@@ -84,8 +83,6 @@ def ____math():
     calliopemini.display.scroll(str(float(sum(___numberList))/len(___numberList)))
     calliopemini.display.scroll(str(_median(___numberList)))
     calliopemini.display.scroll(str(_standard_deviation(___numberList)))
-
-
 
 def run():
     global timer1, ___numberVar, ___numberList

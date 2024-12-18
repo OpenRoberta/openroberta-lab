@@ -573,12 +573,12 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
     @Override
     public Void visitMainTask(MainTask mainTask) {
         visitorGenerateUserVariablesAndMethods(mainTask);
-        nlIndent();
-        this.src.add("def run():");
+        this.src.ensureBlankLines(1);
+        this.src.addLine( "def run():");
+
         incrIndentation();
         if ( !this.usedGlobalVarInFunctions.isEmpty() ) {
-            nlIndent();
-            this.src.add("global ", String.join(", ", this.usedGlobalVarInFunctions));
+            this.src.addLine("global ", String.join(", ", this.usedGlobalVarInFunctions));
         } else {
             addPassIfProgramIsEmpty();
         }
@@ -652,38 +652,29 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
 
     @Override
     protected void visitorGenerateImports() {
-        this.src.add("#!/usr/bin/python");
-        nlIndent();
-        nlIndent();
-        this.src.add("from __future__ import absolute_import");
-        nlIndent();
-        this.src.add("from roberta.ev3 import Hal");
-        nlIndent();
-        this.src.add("from ev3dev import ev3 as ev3dev");
-        nlIndent();
-        this.src.add("import math");
-        nlIndent();
-        this.src.add("import os");
-        nlIndent();
-        this.src.add("import time");
-        nlIndent();
-        nlIndent();
+        this.src.addLine("#!/usr/bin/python");
+        this.src.ensureBlankLines(1);
+        this.src.addLine("from __future__ import absolute_import");
+        this.src.addLine("from roberta.ev3 import Hal");
+        this.src.addLine("from ev3dev import ev3 as ev3dev");
+        this.src.addLine("import math");
+        this.src.addLine("import os");
+        this.src.addLine("import time");
     }
 
     @Override
     protected void visitorGenerateGlobalVariables() {
-        this.src.add("class BreakOutOfALoop(Exception): pass");
-        nlIndent();
-        this.src.add("class ContinueLoop(Exception): pass");
-        nlIndent();
-        nlIndent();
-        this.src.add(generateUsedImages());
-        this.src.add(generateRegenerateConfiguration());
-        nlIndent();
-        this.src.add("hal = Hal(_brickConfiguration)");
+        this.src.ensureBlankLines(1);
+        this.src.addLine("class BreakOutOfALoop(Exception): pass");
+        this.src.addLine("class ContinueLoop(Exception): pass");
+
+        this.src.addLine(generateUsedImages());
+        this.src.ensureBlankLines(1);
+        this.src.addLine(generateRegenerateConfiguration());
+        this.src.addLine("hal = Hal(_brickConfiguration)");
 
         if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.VOICE) ) {
-            nlIndent();
+            this.src.ensureNextLine();
             this.src.add("hal.setLanguage(\"");
             this.src.add(TTSLanguageMapper.getLanguageString(this.language));
             this.src.add("\")");
@@ -696,36 +687,24 @@ public final class Ev3PythonVisitor extends AbstractPythonVisitor implements IEv
             return;
         }
         decrIndentation(); // everything is still indented from main program
-        nlIndent();
-        nlIndent();
-        this.src.add("def main():");
+        this.src.ensureBlankLines(1);
+        this.src.addLine("def main():");
         incrIndentation();
-        nlIndent();
-        this.src.add("try:");
+        this.src.addLine("try:");
         incrIndentation();
-        nlIndent();
-        this.src.add("run()");
+        this.src.addLine("run()");
         decrIndentation();
-        nlIndent();
-        this.src.add("except Exception as e:");
+        this.src.addLine("except Exception as e:");
         incrIndentation();
-        nlIndent();
-        this.src.add("hal.drawText('Fehler im EV3', 0, 0)");
-        nlIndent();
-        this.src.add("hal.drawText(e.__class__.__name__, 0, 1)");
-        nlIndent();
+        this.src.addLine("hal.drawText('Fehler im EV3', 0, 0)");
+        this.src.addLine("hal.drawText(e.__class__.__name__, 0, 1)");
         // FIXME: we can only print about 30 chars
-        this.src.add("hal.drawText(str(e), 0, 2)");
-        nlIndent();
-        this.src.add("hal.drawText('Press any key', 0, 4)");
-        nlIndent();
-        this.src.add("while not hal.isKeyPressed('any'): hal.waitFor(500)");
-        nlIndent();
-        this.src.add("raise");
+        this.src.addLine("hal.drawText(str(e), 0, 2)");
+        this.src.addLine("hal.drawText('Press any key', 0, 4)");
+        this.src.addLine("while not hal.isKeyPressed('any'): hal.waitFor(500)");
+        this.src.addLine("raise");
         decrIndentation();
         decrIndentation();
-        nlIndent();
-
         super.generateProgramSuffix(withWrapping);
     }
 

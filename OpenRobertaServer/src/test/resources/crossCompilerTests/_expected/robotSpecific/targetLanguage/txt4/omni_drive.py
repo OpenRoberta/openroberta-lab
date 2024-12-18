@@ -3,7 +3,6 @@ from fischertechnik.controller.Motor import Motor
 import math
 import time
 
-
 def motor_start(motor, speed):
     motor.set_speed(speed_to_pwm(speed), Motor.CCW)
     motor.start()
@@ -109,7 +108,6 @@ WHEEL_DIAMETER = 6
 TRACK_WIDTH = 15
 WHEEL_BASE = 10.2
 STEPS_PER_ROTATION = 128
-
 
 def run():
     print("Driving Forwards")

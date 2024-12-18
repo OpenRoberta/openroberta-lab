@@ -65,26 +65,20 @@ public final class RobotinoPythonVisitor extends AbstractPythonVisitor implement
     }
 
     private void generateVariables() {
-        this.src.add("sys.stdout = io.StringIO()\nsys.stderr = io.StringIO()");
-        nlIndent();
-        this.src.add("ROBOTINOIP = \"127.0.0.1:80\"");
-        nlIndent();
-        this.src.add("PARAMS = {'sid':'robertaProgram'}");
-        nlIndent();
-        this.src.add("MAXSPEED = 0.5");
-        nlIndent();
-        this.src.add("MAXROTATION = 0.57");
+        this.src.addLine("sys.stdout = io.StringIO()\nsys.stderr = io.StringIO()");
+        this.src.addLine("ROBOTINOIP = \"127.0.0.1:80\"");
+        this.src.addLine("PARAMS = {'sid':'robertaProgram'}");
+        this.src.addLine("MAXSPEED = 0.5");
+        this.src.addLine("MAXROTATION = 0.57");
         generateOptionalVariables();
     }
 
     private void generateOptionalVariables() {
         if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.DIGITAL_PIN) ) {
-            nlIndent();
-            this.src.add("_digitalPinValues = [0 for i in range(8)]");
+            this.src.addLine("_digitalPinValues = [0 for i in range(8)]");
         }
         if ( this.getBean(UsedHardwareBean.class).isActorUsed(RobotinoConstants.OMNIDRIVE) ) {
-            nlIndent();
-            this.src.add("currentSpeed = [0, 0, 0]");
+            this.src.addLine("currentSpeed = [0, 0, 0]");
         }
     }
 
@@ -112,72 +106,54 @@ public final class RobotinoPythonVisitor extends AbstractPythonVisitor implement
 
     @Override
     protected void visitorGenerateImports() {
-        this.src.add("#!/usr/bin/env python3");
-        nlIndent();
-        this.src.add("import math, random, time, requests, threading, sys, io");
-        nlIndent();
+        this.src.addLine("#!/usr/bin/env python3");
+        this.src.addLine("import math, random, time, requests, threading, sys, io");
     }
 
     @Override
     protected void visitorGenerateGlobalVariables() {
+        this.src.ensureBlankLines(1);
         generateVariables();
-        nlIndent();
+        this.src.ensureBlankLines(1);
         generateTimerVariables(false);
-        nlIndent();
     }
 
     @Override
     public Void visitMainTask(MainTask mainTask) {
         visitorGenerateUserVariablesAndMethods(mainTask);
-        nlIndent();
 
-        this.src.add("def run(RV):");
+        this.src.addNLine(1, "def run(RV):");
         incrIndentation();
         generateGlobalVariables();
-        this.src.add("time.sleep(1)");
+        this.src.addLine("time.sleep(1)");
         if ( this.getBean(UsedHardwareBean.class).isSensorUsed(RobotinoConstants.ODOMETRY) ) {
-            nlIndent();
             //odometrieReset
-            this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(RobotinoMethods.RESETODOMETRY), "(RV, 0, 0, 0)");
+            this.src.addLine(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(RobotinoMethods.RESETODOMETRY), "(RV, 0, 0, 0)");
         }
         if ( this.getBean(UsedHardwareBean.class).isSensorUsed(RobotinoConstants.CAMERA) ) {
             //default threshold
-            nlIndent();
-            this.src.add("RV.writeFloat(4, 100) ");
-            nlIndent();
-            this.src.add("time.sleep(0.05)");
+            this.src.addLine("RV.writeFloat(4, 100) ");
+            this.src.addLine("time.sleep(0.05)");
         }
         generateTimerVariables(true);
         for ( VarDeclaration var : varDeclarations ) {
             nlIndent();
             declareGlobalVariable(var);
         }
-
-        nlIndent();
         return null;
     }
 
-    private boolean hasUserdefinedMethods() {
-        return this.programPhrases
-            .stream().anyMatch(phrase -> phrase.getKind().getCategory() == Category.METHOD && !phrase.getKind().hasName("METHOD_CALL"));
-    }
-
     private void generateMain() {
-        this.src.add("def main(RV):");
+        this.src.addNLine(1, "def main(RV):");
         incrIndentation();
-        nlIndent();
-        this.src.add("try:");
+        this.src.addLine("try:");
         incrIndentation();
-        nlIndent();
-        this.src.add("run(RV)");
+        this.src.addLine("run(RV)");
         decrIndentation();
-        nlIndent();
-        this.src.add("except Exception as e:");
+        this.src.addLine("except Exception as e:");
         incrIndentation();
-        nlIndent();
-        this.src.add("print(e)");
-        nlIndent();
-        this.src.add("raise");
+        this.src.addLine("print(e)");
+        this.src.addLine("raise");
         decrIndentation();
         nlIndent();
         generateFinally();
@@ -186,10 +162,9 @@ public final class RobotinoPythonVisitor extends AbstractPythonVisitor implement
     }
 
     private void generateStart() {
-        this.src.add("def start(RV):");
+        this.src.addNLine(1,"def start(RV):");
         incrIndentation();
-        nlIndent();
-        this.src.add("motorDaemon2 = threading.Thread(target=main, daemon=True, args=(RV,), name='mainProgram')\n    motorDaemon2.start()");
+        this.src.addLine("motorDaemon2 = threading.Thread(target=main, daemon=True, args=(RV,), name='mainProgram')\n    motorDaemon2.start()");
         decrIndentation();
         nlIndent();
     }
@@ -201,10 +176,8 @@ public final class RobotinoPythonVisitor extends AbstractPythonVisitor implement
     private void generateGlobalVariables() {
         //add usermade global variables
         if ( !this.usedGlobalVarInFunctions.isEmpty() ) {
-            nlIndent();
-            this.src.add("global ", String.join(", ", this.usedGlobalVarInFunctions));
+            this.src.addLine("global ", String.join(", ", this.usedGlobalVarInFunctions));
         }
-        nlIndent();
     }
 
     @Override
@@ -213,40 +186,31 @@ public final class RobotinoPythonVisitor extends AbstractPythonVisitor implement
             return;
         }
         decrIndentation(); // everything is still indented from main program
-        nlIndent();
-        nlIndent();
         appendViewMethods();
         decrIndentation();
-        nlIndent();
     }
 
     private void appendViewMethods() {
-        this.src.add("def step(RV):");
+        this.src.addNLine(1,"def step(RV):");
         incrIndentation();
         if ( this.getBean(UsedHardwareBean.class).isActorUsed(RobotinoConstants.OMNIDRIVE) ) {
-            nlIndent();
-            this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(RobotinoMethods.POSTVEL), "()");
+            this.src.addLine(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(RobotinoMethods.POSTVEL), "()");
         } else {
-            nlIndent();
-            this.src.add("pass");
+            this.src.addLine("pass");
         }
         decrIndentation();
         nlIndent();
         nlIndent();
         generateMain();
         generateStart();
-        nlIndent();
-        this.src.add("def stop(RV):");
+        this.src.addNLine(1,"def stop(RV):");
         incrIndentation();
-        nlIndent();
-        this.src.add("pass");
+        this.src.addLine("pass");
         decrIndentation();
         nlIndent();
-        nlIndent();
-        this.src.add("def cleanup(RV):");
+        this.src.addNLine(1,"def cleanup(RV):");
         incrIndentation();
-        nlIndent();
-        this.src.add("pass");
+        this.src.addLine("pass");
         decrIndentation();
         nlIndent();
     }
@@ -287,7 +251,7 @@ public final class RobotinoPythonVisitor extends AbstractPythonVisitor implement
         switch ( timerSensor.getMode() ) {
             case SC.DEFAULT:
             case SC.VALUE:
-                this.src.add("((time.time() - _timer", timerSensor.getUserDefinedPort(), ")/1000)");
+                this.src.add("((time.time() - _timer", timerSensor.getUserDefinedPort(), ") / 1000)");
                 break;
             case SC.RESET:
                 this.src.add("_timer", timerSensor.getUserDefinedPort(), " = time.time()");
@@ -313,11 +277,10 @@ public final class RobotinoPythonVisitor extends AbstractPythonVisitor implement
             .keySet()
             .forEach(port -> {
                 this.usedGlobalVarInFunctions.add("_timer" + port);
-                nlIndent();
                 if ( decleration ) {
-                    this.src.add("_timer", port, " = time.time()");
+                    this.src.addLine("_timer", port, " = time.time()");
                 } else {
-                    this.src.add("_timer", port, " = None");
+                    this.src.addLine("_timer", port, " = None");
                 }
             });
     }
@@ -337,7 +300,7 @@ public final class RobotinoPythonVisitor extends AbstractPythonVisitor implement
     public Void visitWaitTimeStmt(WaitTimeStmt waitTimeStmt) {
         this.src.add("time.sleep(");
         waitTimeStmt.time.accept(this);
-        this.src.add("/1000)");
+        this.src.add(" / 1000)");
         return null;
     }
 

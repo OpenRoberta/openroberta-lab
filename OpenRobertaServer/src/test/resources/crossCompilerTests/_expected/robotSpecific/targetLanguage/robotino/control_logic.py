@@ -18,7 +18,6 @@ MAXSPEED = 0.5
 MAXROTATION = 0.57
 
 
-
 ___booleanFalse = None
 ___booleanTrue = None
 ___number = None
@@ -69,12 +68,11 @@ def ____control():
         if ___booleanTrue:
             break
         time.sleep(0.2)
-    time.sleep(500/1000)
+    time.sleep(500 / 1000)
     while True:
         if isBumped() == True:
             break
         time.sleep(0.2)
-
 
 def run(RV):
     global ___booleanFalse, ___booleanTrue, ___number, ___numberList
@@ -83,7 +81,6 @@ def run(RV):
     ___booleanTrue = True
     ___number = 0
     ___numberList = [0, 0, 0]
-
     ____control()
     ____logic()
 
@@ -106,4 +103,3 @@ def stop(RV):
 
 def cleanup(RV):
     pass
-

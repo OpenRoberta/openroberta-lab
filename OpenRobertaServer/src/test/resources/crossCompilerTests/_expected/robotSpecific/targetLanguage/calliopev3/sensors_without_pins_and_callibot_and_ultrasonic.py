@@ -15,7 +15,6 @@ color_sensor = tcs3472()
 LIGHT_CONST = 40
 sht31 = SHT31()
 
-
 def ____buttons():
     global timer1
     print("Button A (B to Cancel)")
@@ -209,7 +208,6 @@ def ____external():
         calliopemini.sleep(100)
         if calliopemini.button_a.is_pressed():
             break
-
 
 def run():
     global timer1

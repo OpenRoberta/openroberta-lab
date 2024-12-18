@@ -7,7 +7,6 @@ import math
 import os
 import time
 
-
 def _median(l):
     l = sorted(l)
     l_len = len(l)
@@ -43,6 +42,7 @@ def _standard_deviation(l):
     for i in l:
         sd += (i - mean)*(i - mean)
     return math.sqrt(sd / len(l))
+
 class BreakOutOfALoop(Exception): pass
 class ContinueLoop(Exception): pass
 
@@ -155,7 +155,6 @@ def ____lists():
     hal.drawText(str(___numberList[-1 -___numberVar:___numberVar]), ___numberVar, ___numberVar)
     hal.drawText(str(___numberList[-1 -___numberVar:-1 -___numberVar]), ___numberVar, ___numberVar)
     hal.drawText(str(___numberList[-1 -___numberVar:]), ___numberVar, ___numberVar)
-
 
 def run():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___connectionVar, ___numberList, ___booleanList, ___stringList, ___colourList, ___connectionList

@@ -15,7 +15,6 @@ def set_status_light(color):
         color = 'black'
     hub.status_light.on(color)
 
-
 hub = spike.PrimeHub()
 
 def run():

@@ -2,7 +2,6 @@ import calliopemini
 import random
 import math
 
-
 def servo_get_angle(angle):
     if (angle < 0): 
         angle = 0
@@ -30,7 +29,6 @@ class ContinueLoop(Exception): pass
 timer1 = calliopemini.running_time()
 calliopemini.pin_A1_RX.set_analog_period(20)
 calliopemini.pin_A1_TX.set_analog_period(20)
-
 
 ___off = 0
 ___max = 100
@@ -115,7 +113,6 @@ def ____wait():
         if calliopemini.button_a.is_pressed() == True:
             break
     calliopemini.sleep(500)
-
 
 def run():
     global timer1, ___off, ___max, ___negative

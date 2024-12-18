@@ -7,7 +7,6 @@ def set_status_light(color):
         color = 'black'
     hub.status_light.on(color)
 
-
 touch_sensor_B = spike.ForceSensor('F')
 hub = spike.PrimeHub()
 

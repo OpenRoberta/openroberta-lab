@@ -4,12 +4,10 @@ import math
 import time
 import random
 from roberta import Hal
-h = Hal()
 
+h = Hal()
 from roberta import FaceRecognitionModule
 faceRecognitionModule = FaceRecognitionModule("faceRecognitionModule")
-
-
 
 ___numberVar = 0
 ___booleanVar = True
@@ -215,7 +213,6 @@ def ____lights():
     h.ledReset("AllLeds")
     h.randomEyes(___numberVar)
     h.rasta(___numberVar)
-
 
 def run():
     h.setAutonomousLife('ON')

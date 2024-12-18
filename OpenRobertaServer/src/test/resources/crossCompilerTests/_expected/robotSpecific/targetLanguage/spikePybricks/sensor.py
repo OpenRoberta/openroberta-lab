@@ -52,18 +52,16 @@ def hsv2rgb(color):
     elif 0.0 <= h < 360:
         rgb = (c, 0, x)
 
-    return list(map(lambda n: (n + m) * 255, rgb))  
+    return list(map(lambda n: (n + m) * 255, rgb))
 
-
-Color.MAGENTA = Color(315,50,15)
-Color.BLUE = Color(225,20,20)
-Color.AZURE = Color(200,20,20)
-Color.CYAN = Color(150,20,20)
-Color.YELLOW = Color(55,35,35)
-Color.RED = Color(350,35,35)
-Color.BLACK = Color(0,10,10)
-Color.WHITE = Color(0,0,70)
-
+Color.MAGENTA = Color(315, 50, 15)
+Color.BLUE = Color(225, 20, 20)
+Color.AZURE = Color(200, 20, 20)
+Color.CYAN = Color(150, 20, 20)
+Color.YELLOW = Color(55, 35, 35)
+Color.RED = Color(350, 35, 35)
+Color.BLACK = Color(0, 10, 10)
+Color.WHITE = Color(0, 0, 70)
 
 touch_sensor_B = ForceSensor(Port.F)
 touch_sensor_B = ForceSensor(Port.F)
@@ -72,7 +70,6 @@ color_sensor_F = ColorSensor(Port.C)
 color_sensor_F.detectable_colors([Color.MAGENTA, Color.BLUE, Color.AZURE, Color.CYAN, Color.YELLOW, Color.RED, Color.BLACK, Color.WHITE, Color.NONE])
 stopWatch = StopWatch()
 hub = PrimeHub()
-
 
 def run():
     display_text(str((Button.LEFT in hub.buttons.pressed())))
@@ -103,15 +100,15 @@ def run():
             break
     display_text(str("Ambient Light Above 30%"))
     while True:
-        if int(hsv2rgb(color_sensor_F.hsv())[0]/2.55) < 30:
+        if int(hsv2rgb(color_sensor_F.hsv())[0] / 2.55) < 30:
             break
     display_text(str("Red Above 30%"))
     while True:
-        if int(hsv2rgb(color_sensor_F.hsv())[1]/2.55) < 30:
+        if int(hsv2rgb(color_sensor_F.hsv())[1] / 2.55) < 30:
             break
     display_text(str("Green Above 30%"))
     while True:
-        if int(hsv2rgb(color_sensor_F.hsv())[2]/2.55) < 30:
+        if int(hsv2rgb(color_sensor_F.hsv())[2] / 2.55) < 30:
             break
     display_text(str("Blue Above 30%"))
     while True:

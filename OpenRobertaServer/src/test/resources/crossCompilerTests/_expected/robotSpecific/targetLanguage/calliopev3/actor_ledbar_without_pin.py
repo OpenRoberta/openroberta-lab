@@ -2,7 +2,6 @@ import calliopemini
 import random
 import math
 
-
 def write16(di, dcki, data):
     state = dcki.read_digital()
     for i in range(15,-1,-1):
@@ -37,13 +36,11 @@ class ContinueLoop(Exception): pass
 
 timer1 = calliopemini.running_time()
 
-
 ___n = 0
 
 def ____lights():
     global timer1, ___n
     set_led(___n,___n)
-
 
 def run():
     global timer1, ___n

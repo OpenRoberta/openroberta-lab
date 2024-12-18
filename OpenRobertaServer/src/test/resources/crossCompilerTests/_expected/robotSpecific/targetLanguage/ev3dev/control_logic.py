@@ -93,7 +93,6 @@ def ____logic():
     hal.drawText(str(None), ___numberVar, ___numberVar)
     hal.drawText(str(___numberVar if ( ___booleanVar ) else ___numberVar), ___numberVar, ___numberVar)
 
-
 def run():
     global ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___connectionVar, ___numberList, ___booleanList, ___stringList, ___colourList, ___connectionList
     ____control()

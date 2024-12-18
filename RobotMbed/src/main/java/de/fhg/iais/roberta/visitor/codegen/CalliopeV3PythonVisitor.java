@@ -115,15 +115,12 @@ public class CalliopeV3PythonVisitor extends MbedV2PythonVisitor implements ICal
             Map<String, ConfigurationComponent> a = robotConfiguration.getAllConfigurationComponentByType(SC.SERVOMOTOR);
             a.forEach((s, configurationComponent) -> {
                 String port = configurationComponent.getComponentProperties().get("PIN1");
-                this.src.add(this.firmware, ".", PIN_MAP.get(port), ".set_analog_period(20)");
-                nlIndent();
+                this.src.addLine(this.firmware, ".", PIN_MAP.get(port), ".set_analog_period(20)");
             });
         }
         if ( this.getBean(UsedHardwareBean.class).isActorUsed("MOTIONKIT") ) {
-            this.src.add(this.firmware, ".", PIN_MAP.get("C16"), ".set_analog_period(20)");
-            nlIndent();
-            this.src.add(this.firmware, ".", PIN_MAP.get("C17"), ".set_analog_period(20)");
-            nlIndent();
+            this.src.addLine(this.firmware, ".", PIN_MAP.get("C16"), ".set_analog_period(20)");
+            this.src.addLine(this.firmware, ".", PIN_MAP.get("C17"), ".set_analog_period(20)");
         }
     }
 

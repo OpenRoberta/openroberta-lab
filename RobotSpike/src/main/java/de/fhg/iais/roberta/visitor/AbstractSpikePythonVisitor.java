@@ -37,28 +37,23 @@ public abstract class AbstractSpikePythonVisitor extends AbstractPythonVisitor i
             return;
         }
         decrIndentation(); // everything is still indented from main program
-        nlIndent();
-        nlIndent();
-        this.src.add("def main():");
+        this.src.ensureBlankLines(1);
+        this.src.addLine("def main():");
         incrIndentation();
-        nlIndent();
-        this.src.add("try:");
+        this.src.addLine("try:");
         incrIndentation();
-        nlIndent();
-        this.src.add("run()");
+        this.src.addLine("run()");
         decrIndentation();
-        nlIndent();
-        this.src.add("except Exception as e:");
+        this.src.addLine("except Exception as e:");
         incrIndentation();
         nlIndent();
         addExceptionSadFaceToCode();
         decrIndentation();
         //TODO finally close open ports
         decrIndentation();
-        nlIndent();
-        nlIndent();
 
-        this.src.add("main()");
+        this.src.ensureBlankLines(1);
+        this.src.addLine("main()");
     }
 
     /**
@@ -69,9 +64,9 @@ public abstract class AbstractSpikePythonVisitor extends AbstractPythonVisitor i
     @Override
     public Void visitMainTask(MainTask mainTask) {
         visitorGenerateUserVariablesAndMethods(mainTask);
+        this.src.ensureBlankLines(1);
+        this.src.addLine("def run():");
 
-        nlIndent();
-        this.src.add("def run():");
         incrIndentation();
         if ( !this.usedGlobalVarInFunctions.isEmpty() ) {
             nlIndent();

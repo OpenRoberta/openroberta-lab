@@ -117,22 +117,23 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
         if ( usedHardwareBean.isSensorUsed(FischertechnikConstants.CAMERA) ) {
             cameraInitialized(usedHardwareBean);
         }
-        nlIndent();
+
         visitorGenerateUserVariablesAndMethods(mainTask);
-        this.src.add("def run():");
+
+        this.src.ensureBlankLines(1);
+        this.src.addLine( "def run():");
         incrIndentation();
         if ( !this.usedGlobalVarInFunctions.isEmpty() ) {
-            nlIndent();
-            this.src.add("global ", String.join(", ", this.usedGlobalVarInFunctions));
+            this.src.addLine("global ", String.join(", ", this.usedGlobalVarInFunctions));
         } else {
             addPassIfProgramIsEmpty();
         }
         if ( usedHardwareBean.isSensorUsed(FischertechnikConstants.CAMERA) ) {
-            nlIndent();
-            this.src.add("camera_initialized()");
+            this.src.addLine("camera_initialized()");
         }
+
         if ( usedHardwareBean.isSensorUsed(SC.ULTRASONIC) ) {
-            nlIndent();
+            this.src.ensureNextLine();
             this.src.add("while not(");
             for ( int i = 0; i < ultrasonicSensors.size(); i++ ) {
                 String name = ultrasonicSensors.get(i);
@@ -143,46 +144,38 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
             }
             this.src.add("):");
             incrIndentation();
-            nlIndent();
-            this.src.add("pass");
+
+            this.src.addLine("pass");
             decrIndentation();
-            nlIndent();
+            this.src.ensureBlankLines(1);
         }
 
         if ( usedHardwareBean.isActorUsed(FischertechnikConstants.DISPLAYLED) ) {
-            nlIndent();
+            this.src.addLine("for color, value in led_colors.items():");
             incrIndentation();
-            this.src.add("for color, value in led_colors.items():").nlI();
+            this.src.addLine("if color != \"red\":");
             incrIndentation();
-            this.src.add("if color != \"red\":").nlI();
-            this.src.add("display.set_attr(color + \"Led.visible\", str(False).lower())").nlI();
+            this.src.addLine("display.set_attr(color + \"Led.visible\", str(False).lower())");
             decrIndentation();
             decrIndentation();
         }
         return null;
     }
 
-    private void getUltrasonicSensors() {
-
-    }
-
     private void cameraInitialized(UsedHardwareBean usedHardwareBean) {
-        nlIndent();
-        this.src.add("def camera_initialized():");
+        this.src.ensureBlankLines(1);
+        this.src.addLine("def camera_initialized():");
         incrIndentation();
-        nlIndent();
-        this.src.add("while True:");
+        this.src.addLine("while True:");
         incrIndentation();
-        nlIndent();
-        this.src.add("try:");
+        this.src.addLine("try:");
         incrIndentation();
-        nlIndent();
         Map<String, List<ConfigurationComponent>> detectors = getDetectorsMap();
         if ( usedHardwareBean.isSensorUsed(FischertechnikConstants.BALL) ) {
             List<ConfigurationComponent> balldetectors = detectors.get("CAMERA_BALLDETECTOR");
             for ( ConfigurationComponent detector : balldetectors ) {
                 {
-                    this.src.add("ball_detector_" + detector.userDefinedPortName + ".detected()").nlI();
+                    this.src.addLine("ball_detector_" + detector.userDefinedPortName + ".detected()");
                 }
             }
         }
@@ -190,7 +183,7 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
             List<ConfigurationComponent> linedetectors = detectors.get("CAMERA_LINE");
             for ( ConfigurationComponent detector : linedetectors ) {
                 {
-                    this.src.add("line_detector_" + detector.userDefinedPortName + ".detected()").nlI();
+                    this.src.addLine("line_detector_" + detector.userDefinedPortName + ".detected()");
                 }
             }
         }
@@ -198,7 +191,7 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
             List<ConfigurationComponent> colordetectors = detectors.get("CAMERA_COLORDETECTOR");
             for ( ConfigurationComponent detector : colordetectors ) {
                 {
-                    this.src.add("color_detector_" + detector.userDefinedPortName + ".detected()").nlI();
+                    this.src.addLine("color_detector_" + detector.userDefinedPortName + ".detected()");
                 }
             }
         }
@@ -206,22 +199,19 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
             List<ConfigurationComponent> motiondetectors = detectors.get("CAMERA_MOTIONDETECTOR");
             for ( ConfigurationComponent detector : motiondetectors ) {
                 {
-                    this.src.add("motion_detector_" + detector.userDefinedPortName + ".detected()").nlI();
+                    this.src.addLine("motion_detector_" + detector.userDefinedPortName + ".detected()");
                 }
             }
         }
-        this.src.add("break");
+        this.src.addLine("break");
         decrIndentation();
-        nlIndent();
-        this.src.add("except Exception:");
+        this.src.addLine("except Exception:");
         incrIndentation();
-        nlIndent();
-        this.src.add("pass");
+        this.src.addLine("pass");
         decrIndentation();
         decrIndentation();
         decrIndentation();
-        nlIndent();
-
+        this.src.ensureBlankLines(1);
     }
 
     public Void visitMotorOnAction(MotorOnAction motorOnAction) {
@@ -900,66 +890,65 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
     @Override
     protected void visitorGenerateImports() {
         UsedHardwareBean usedHardwareBean = this.getBean(UsedHardwareBean.class);
-        this.src.add("import fischertechnik.factories as txt_factory").nlI();
+        this.src.addLine("import fischertechnik.factories as txt_factory");
 
         //only motor
         if ( usedHardwareBean.isActorUsed(SC.MOTOR) || usedHardwareBean.isActorUsed(FischertechnikConstants.ENCODERMOTOR) ) {
-            this.src.add("from fischertechnik.controller.Motor import Motor").nlI();
+            this.src.addLine("from fischertechnik.controller.Motor import Motor");
         }
         if ( usedHardwareBean.isActorUsed(C.RANDOM) || usedHardwareBean.isActorUsed(C.RANDOM_DOUBLE) ) {
-            this.src.add("import random").nlI();
+            this.src.addLine("import random");
         }
         if ( usedHardwareBean.isActorUsed(SC.DISPLAY) ) {
-            this.src.add("from lib.display import display").nlI();
+            this.src.addLine("from lib.display import display");
         }
         if ( usedHardwareBean.isSensorUsed(SC.COLOUR) ) {
-            this.src.add("from fischertechnik.models.Color import Color").nlI();
+            this.src.addLine("from fischertechnik.models.Color import Color");
         }
         if ( usedHardwareBean.isSensorUsed(FischertechnikConstants.COLOURCOMPARE) ) {
-            this.src.add("import colorsys").nlI();
+            this.src.addLine("import colorsys");
         }
-
-        this.src.add("import math").nlI();
-        this.src.add("import time").nlI().nlI();
+        this.src.addLine("import math");
+        this.src.addLine("import time");
     }
 
     @Override
     protected void visitorGenerateGlobalVariables() {
         UsedHardwareBean usedHardwareBean = this.getBean(UsedHardwareBean.class);
 
-        this.src.add("txt_factory.init()").nlI();
-        this.src.add("txt_factory.init_input_factory()").nlI();
+        this.src.ensureBlankLines(1);
+        this.src.addLine("txt_factory.init()");
+        this.src.addLine("txt_factory.init_input_factory()");
         if ( usedHardwareBean.isActorUsed(SC.LED) ) {
-            this.src.add("txt_factory.init_output_factory()").nlI();
+            this.src.addLine("txt_factory.init_output_factory()");
         }
         if ( usedHardwareBean.isActorUsed(SC.MOTOR) || usedHardwareBean.isActorUsed(FischertechnikConstants.ENCODERMOTOR) ) {
-            this.src.add("txt_factory.init_motor_factory()").nlI();
+            this.src.addLine("txt_factory.init_motor_factory()");
         }
         if ( usedHardwareBean.isSensorUsed(SC.ENCODER) ) {
-            this.src.add("txt_factory.init_counter_factory()").nlI();
+            this.src.addLine("txt_factory.init_counter_factory()");
         }
         if ( usedHardwareBean.isActorUsed(SC.SERVOMOTOR) ) {
-            this.src.add("txt_factory.init_servomotor_factory()").nlI();
+            this.src.addLine("txt_factory.init_servomotor_factory()");
         }
         if ( usedHardwareBean.isSensorUsed("I2C") ) {
-            this.src.add("txt_factory.init_i2c_factory()").nlI();
+            this.src.addLine("txt_factory.init_i2c_factory()");
         }
-        this.src.add("TXT_M = txt_factory.controller_factory.create_graphical_controller()").nlI();
+        this.src.addLine("TXT_M = txt_factory.controller_factory.create_graphical_controller()");
 
-        if ( !usedHardwareBean.getUsedActors().isEmpty() && !usedHardwareBean.getUsedSensors().isEmpty() ) {
-            nlIndent();
-        }
+        this.src.ensureBlankLines(1);
         initActors(usedHardwareBean);
         initSensors(usedHardwareBean);
         initCamera(usedHardwareBean);
-        this.src.add("txt_factory.initialized()").nlI();
+        this.src.addLine("txt_factory.initialized()");
         enableSensors();
-        this.src.add("time.sleep(0.1)").nlI();
+        this.src.addLine("time.sleep(0.1)");
         generateVariables(usedHardwareBean);
         generateTimerVariables();
     }
 
     private void generateTimerVariables() {
+        this.src.ensureBlankLines(1);
         this.getBean(UsedHardwareBean.class)
             .getUsedSensors()
             .stream()
@@ -968,8 +957,7 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
             .keySet()
             .forEach(port -> {
                 this.usedGlobalVarInFunctions.add("_timer" + port);
-                nlIndent();
-                this.src.add("_timer", port, " = time.time()");
+                this.src.addLine("_timer", port, " = time.time()");
             });
     }
 
@@ -977,20 +965,20 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
         for ( ConfigurationComponent component : this.configurationAst.getConfigurationComponents().values() ) {
             if ( component.componentType.equals(SC.MOTOR) && usedHardwareBean.isActorUsed(SC.MOTOR) ) {
                 String port = component.getOptProperty("PORT").substring(1);
-                this.src.add("TXT_M_M", port, "_motor = txt_factory.motor_factory.create_motor(TXT_M, ", port, ")").nlI();
+                this.src.addLine("TXT_M_M", port, "_motor = txt_factory.motor_factory.create_motor(TXT_M, ", port, ")");
             }
             if ( component.componentType.equals(FischertechnikConstants.ENCODERMOTOR) ) {
                 String port = component.getOptProperty("PORT").substring(1);
                 if ( usedHardwareBean.isActorUsed(FischertechnikConstants.ENCODERMOTOR) ) {
-                    this.src.add("TXT_M_M", port, "_motor = txt_factory.motor_factory.create_encodermotor(TXT_M, ", port, ")").nlI();
+                    this.src.addLine("TXT_M_M", port, "_motor = txt_factory.motor_factory.create_encodermotor(TXT_M, ", port, ")");
                 }
                 if ( usedHardwareBean.isSensorUsed(SC.ENCODER) ) {
                     try {
                         ConfigurationComponent encoder = component.getSubComponents().get(SC.ENCODER).get(0);
                         String counterPort = encoder.getOptProperty("PORT").substring(1);
-                        this.src.add("TXT_M_C", counterPort, "_motor_step_counter = txt_factory.counter_factory.create_encodermotor_counter(TXT_M, ", counterPort, ")").nlI();
+                        this.src.addLine("TXT_M_C", counterPort, "_motor_step_counter = txt_factory.counter_factory.create_encodermotor_counter(TXT_M, ", counterPort, ")");
                         if ( usedHardwareBean.isActorUsed(FischertechnikConstants.ENCODERMOTOR) ) {
-                            this.src.add("TXT_M_C", counterPort, "_motor_step_counter.set_motor(TXT_M_M", port, "_motor)").nlI();
+                            this.src.addLine("TXT_M_C", counterPort, "_motor_step_counter.set_motor(TXT_M_M", port, "_motor)");
                         }
                     } catch ( UnsupportedOperationException ignored ) {
 
@@ -999,11 +987,11 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
             }
             if ( component.componentType.equals(SC.SERVOMOTOR) && usedHardwareBean.isActorUsed(SC.SERVOMOTOR) ) {
                 String port = component.getOptProperty("PORT").substring(1);
-                this.src.add("TXT_M_S", port, "_servomotor = txt_factory.servomotor_factory.create_servomotor(TXT_M, ", port, ")").nlI();
+                this.src.addLine("TXT_M_S", port, "_servomotor = txt_factory.servomotor_factory.create_servomotor(TXT_M, ", port, ")");
             }
             if ( component.componentType.equals(SC.LED) && usedHardwareBean.isActorUsed(SC.LED) ) {
                 String port = component.getOptProperty("PORT").substring(1);
-                this.src.add("TXT_M_O", port, "_led = txt_factory.output_factory.create_led(TXT_M, " + port + ")").nlI();
+                this.src.addLine("TXT_M_O", port, "_led = txt_factory.output_factory.create_led(TXT_M, " + port + ")");
             }
         }
     }
@@ -1012,44 +1000,44 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
         for ( ConfigurationComponent component : this.configurationAst.getConfigurationComponents().values() ) {
             if ( component.componentType.equals(SC.KEY) && usedHardwareBean.isSensorUsed(SC.KEY) ) {
                 String port = component.getOptProperty("PORT").substring(1);
-                this.src.add("TXT_M_I", port, "_mini_switch = txt_factory.input_factory.create_mini_switch(TXT_M, ", port, ")").nlI();
+                this.src.addLine("TXT_M_I", port, "_mini_switch = txt_factory.input_factory.create_mini_switch(TXT_M, ", port, ")");
             } else if ( component.componentType.equals(SC.ULTRASONIC) && usedHardwareBean.isSensorUsed(SC.ULTRASONIC) ) {
                 String port = component.getOptProperty("PORT").substring(1);
                 String ultraSonicName = "TXT_M_I" + port + "_ultrasonic_distance_meter";
                 ultrasonicSensors.add(ultraSonicName);
-                this.src.add(ultraSonicName, " = txt_factory.input_factory.create_ultrasonic_distance_meter(TXT_M, ", port, ")").nlI();
+                this.src.addLine(ultraSonicName, " = txt_factory.input_factory.create_ultrasonic_distance_meter(TXT_M, ", port, ")");
             } else if ( component.componentType.equals(SC.INFRARED) && usedHardwareBean.isSensorUsed(SC.INFRARED) ) {
                 String portLeft = component.getOptProperty("PORTL").substring(1);
                 String portRight = component.getOptProperty("PORTR").substring(1);
-                this.src.add("TXT_M_I", portLeft, "_trail_follower = txt_factory.input_factory.create_trail_follower(TXT_M, ", portLeft, ")").nlI();
-                this.src.add("TXT_M_I", portRight, "_trail_follower = txt_factory.input_factory.create_trail_follower(TXT_M, ", portRight, ")").nlI();
+                this.src.addLine("TXT_M_I", portLeft, "_trail_follower = txt_factory.input_factory.create_trail_follower(TXT_M, ", portLeft, ")");
+                this.src.addLine("TXT_M_I", portRight, "_trail_follower = txt_factory.input_factory.create_trail_follower(TXT_M, ", portRight, ")");
             } else if ( component.componentType.equals(SC.LIGHT) && usedHardwareBean.isSensorUsed(SC.LIGHT) ) {
                 String port = component.getOptProperty("PORT").substring(1);
-                this.src.add("TXT_M_I", port, "_color_sensor = txt_factory.input_factory.create_color_sensor(TXT_M, ", port, ")").nlI();
+                this.src.addLine("TXT_M_I", port, "_color_sensor = txt_factory.input_factory.create_color_sensor(TXT_M, ", port, ")");
             } else if ( component.componentType.equals(SC.TEMPERATURE) && usedHardwareBean.isSensorUsed(SC.TEMPERATURE) ) {
                 String port = component.getOptProperty("PORT").substring(1);
-                this.src.add("TXT_M_I", port, "_ntc_resistor = txt_factory.input_factory.create_ntc_resistor(TXT_M, ", port, ")").nlI();
+                this.src.addLine("TXT_M_I", port, "_ntc_resistor = txt_factory.input_factory.create_ntc_resistor(TXT_M, ", port, ")");
             } else if ( component.componentType.equals(FischertechnikConstants.PHOTOTRANSISTOR) && usedHardwareBean.isSensorUsed(FischertechnikConstants.PHOTOTRANSISTOR) ) {
                 String port = component.getOptProperty("PORT").substring(1);
-                this.src.add("TXT_M_I", port, "_photo_transistor = txt_factory.input_factory.create_photo_transistor(TXT_M, ", port, ")").nlI();
+                this.src.addLine("TXT_M_I", port, "_photo_transistor = txt_factory.input_factory.create_photo_transistor(TXT_M, ", port, ")");
             } else if ( component.componentType.equals("I2C") && usedHardwareBean.isSensorUsed("I2C") ) {
                 if ( usedHardwareBean.isSensorUsed("IMU") ) {
                     int index = getSensorNumber("TXT_IMU");
                     this.IMU = "TXT_M_I2C_" + index + "_combined_sensor_6pin";
-                    this.src.add(IMU, " = txt_factory.i2c_factory.create_combined_sensor_6pin(TXT_M, ", index, ")").nlI();
+                    this.src.addLine(IMU, " = txt_factory.i2c_factory.create_combined_sensor_6pin(TXT_M, ", index, ")");
                 }
                 if ( usedHardwareBean.isSensorUsed(FischertechnikConstants.GESTURE) ) {
                     int index = getSensorNumber(FischertechnikConstants.GESTURE);
                     this.gesture = "TXT_M_I2C_" + index + "_gesture_sensor";
-                    this.src.add(gesture, " = txt_factory.i2c_factory.create_gesture_sensor(TXT_M, ", index, ")").nlI();
+                    this.src.addLine(gesture, " = txt_factory.i2c_factory.create_gesture_sensor(TXT_M, ", index, ")");
                 }
                 if ( usedHardwareBean.isSensorUsed(SC.ENVIRONMENTAL) ) {
                     int index = getSensorNumber(SC.ENVIRONMENTAL);
-                    this.src.add("TXT_M_I2C_", index, "_environment_sensor = txt_factory.i2c_factory.create_environment_sensor(TXT_M, ", index, ")").nlI();
+                    this.src.addLine("TXT_M_I2C_", index, "_environment_sensor = txt_factory.i2c_factory.create_environment_sensor(TXT_M, ", index, ")");
                 }
             } else if ( component.componentType.equals(SC.ENCODER) && usedHardwareBean.isSensorUsed(SC.ENCODER) ) {
                 String port = component.getOptProperty("PORT").substring(1);
-                this.src.add("TXT_M_C", port, "_motor_step_counter = txt_factory.counter_factory.create_encodermotor_counter(TXT_M, ", port, ")").nlI();
+                this.src.addLine("TXT_M_C", port, "_motor_step_counter = txt_factory.counter_factory.create_encodermotor_counter(TXT_M, ", port, ")");
             }
         }
     }
@@ -1059,21 +1047,22 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
             .anyMatch(usedSensor -> usedSensor.getType().equals(FischertechnikConstants.GESTURE) && usedSensor.getMode().equals(mode));
     }
 
+
     private void enableSensors() {
         if ( !this.IMU.isEmpty() ) {
-            this.src.add(IMU, ".init_accelerometer(2, 1.5625)").nlI();
-            this.src.add(IMU, ".init_magnetometer(25)").nlI();
-            this.src.add(IMU, ".init_gyrometer(250, 12.5)").nlI();
+            this.src.addLine(IMU, ".init_accelerometer(2, 1.5625)");
+            this.src.addLine(IMU, ".init_magnetometer(25)");
+            this.src.addLine(IMU, ".init_gyrometer(250, 12.5)");
         }
         if ( !this.gesture.isEmpty() ) {
             if ( gestureModeIsUsed(FischertechnikConstants.GESTURE) ) {
-                this.src.add(gesture, ".enable_gesture()").nlI();
+                this.src.addLine(gesture, ".enable_gesture()");
             }
             if ( gestureModeIsUsed(SC.AMBIENTLIGHT) || gestureModeIsUsed(SC.COLOUR) || gestureModeIsUsed(SC.RGB) ) {
-                this.src.add(gesture, ".enable_light()").nlI();
+                this.src.addLine(gesture, ".enable_light()");
             }
             if ( gestureModeIsUsed("PROXIMITY") ) {
-                this.src.add(gesture, ".enable_proximity()").nlI();
+                this.src.addLine(gesture, ".enable_proximity()");
             }
         }
     }
@@ -1084,15 +1073,14 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
             String usbPort = camera.getOptProperty("PORT").substring(3);
             String[] resolution = camera.getOptProperty("RESOLUTION").split("x");
             String cameraVariable = "TXT_M_USB1_" + usbPort + "_camera";
-            this.src.add("txt_factory.init_usb_factory()").nlI();
-            this.src.add("txt_factory.init_camera_factory()").nlI();
-            this.src.add(cameraVariable + " = txt_factory.usb_factory.create_camera(TXT_M, " + usbPort + ")").nlI();
-            this.src.add(cameraVariable + ".set_rotate(False)").nlI();
-            this.src.add(cameraVariable + ".set_height(" + resolution[1] + ")").nlI();
-            this.src.add(cameraVariable + ".set_width(" + resolution[0] + ")").nlI();
-            this.src.add(cameraVariable + ".set_fps(15)").nlI();
-            this.src.add(cameraVariable + ".start()").nlI();
-            nlIndent();
+            this.src.addLine("txt_factory.init_usb_factory()");
+            this.src.addLine("txt_factory.init_camera_factory()");
+            this.src.addLine(cameraVariable + " = txt_factory.usb_factory.create_camera(TXT_M, " + usbPort + ")");
+            this.src.addLine(cameraVariable + ".set_rotate(False)");
+            this.src.addLine(cameraVariable + ".set_height(" + resolution[1] + ")");
+            this.src.addLine(cameraVariable + ".set_width(" + resolution[0] + ")");
+            this.src.addLine(cameraVariable + ".set_fps(15)");
+            this.src.addLine(cameraVariable + ".start()");
             initDetectors(usedHardwareBean, camera);
         }
     }
@@ -1107,12 +1095,13 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
             for ( ConfigurationComponent detector : motiondetectors ) {
                 detectorRegion = getDetectorregion(detector);
 
-                this.src.add("motion_detector_", detector.userDefinedPortName,
+                this.src.addLine("motion_detector_", detector.userDefinedPortName,
                     " = txt_factory.camera_factory.create_motion_detector(",
                     detectorRegion.get("startX"), ", ", detectorRegion.get("startY"), ", ", detectorRegion.get("width"), ", ", detectorRegion.get("height"), ", ",
-                    detector.getOptProperty("TOLERANCE"), ")").nlI();
-                this.src.add(cameraVariable, ".add_detector(motion_detector_", detector.userDefinedPortName,
-                    ")").nlI();
+                    detector.getOptProperty("TOLERANCE"), ")");
+
+                this.src.addLine(cameraVariable, ".add_detector(motion_detector_", detector.userDefinedPortName,
+                    ")");
             }
         }
         if ( usedHardwareBean.isSensorUsed(SC.COLOUR) ) {
@@ -1120,11 +1109,12 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
             for ( ConfigurationComponent detector : colordetectors ) {
                 detectorRegion = getDetectorregion(detector);
 
-                this.src.add("color_detector_", detector.userDefinedPortName,
+                this.src.addLine("color_detector_", detector.userDefinedPortName,
                     " = txt_factory.camera_factory.create_color_detector(",
                     detectorRegion.get("startX"), ", ", detectorRegion.get("startY"), ", ", detectorRegion.get("width"), ", ", detectorRegion.get("height"),
-                    ", 1)").nlI();
-                this.src.add(cameraVariable, ".add_detector(color_detector_", detector.userDefinedPortName, ")").nlI();
+                    ", 1)");
+
+                this.src.addLine(cameraVariable, ".add_detector(color_detector_", detector.userDefinedPortName, ")");
             }
         }
         if ( usedHardwareBean.isSensorUsed(FischertechnikConstants.LINE) ) {
@@ -1132,13 +1122,14 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
             for ( ConfigurationComponent detector : linedetectors ) {
                 detectorRegion = getDetectorregion(detector);
 
-                this.src.add("line_detector_", detector.userDefinedPortName,
+                this.src.addLine("line_detector_", detector.userDefinedPortName,
                     " = txt_factory.camera_factory.create_line_detector(",
                     detectorRegion.get("startX"), ", ", detectorRegion.get("startY"), ", ", detectorRegion.get("width"), ", ", detectorRegion.get("height"), ", ",
                     detector.getOptProperty("MINIMUM"), ", ", detector.getOptProperty("MAXIMUM"),
                     ", -100, 100, ",
-                    detector.getOptProperty("NUMBERLINES"), ")").nlI();
-                this.src.add(cameraVariable, ".add_detector(line_detector_", detector.userDefinedPortName, ")").nlI();
+                    detector.getOptProperty("NUMBERLINES"), ")");
+
+                this.src.addLine(cameraVariable, ".add_detector(line_detector_", detector.userDefinedPortName, ")");
             }
         }
         if ( usedHardwareBean.isSensorUsed(FischertechnikConstants.BALL) ) {
@@ -1146,14 +1137,15 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
             for ( ConfigurationComponent detector : balldetectors ) {
                 detectorRegion = getDetectorregion(detector);
 
-                this.src.add("ball_detector_", detector.userDefinedPortName,
+                this.src.addLine("ball_detector_", detector.userDefinedPortName,
                     " = txt_factory.camera_factory.create_ball_detector(",
                     detectorRegion.get("startX"), ", ", detectorRegion.get("startY"), ", ", detectorRegion.get("width"), ", ", detectorRegion.get("height"), ", ",
                     detector.getOptProperty("MINIMUM"), ",", detector.getOptProperty("MAXIMUM"),
                     ", -100, 100, ",
                     hexToRgb(detector.getOptProperty("COLOUR")), ", ",
-                    detector.getOptProperty("TOLERANCE"), ")").nlI();
-                this.src.add(cameraVariable, ".add_detector(ball_detector_", detector.userDefinedPortName, ")").nlI();
+                    detector.getOptProperty("TOLERANCE"), ")");
+
+                this.src.addLine(cameraVariable, ".add_detector(ball_detector_", detector.userDefinedPortName, ")");
             }
         }
     }
@@ -1206,34 +1198,34 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
         if ( usedHardwareBean.isActorUsed(FischertechnikConstants.OMNIDRIVE) ) {
             ConfigurationComponent omniDrive = getOmniDrive();
             if ( omniDrive != null ) {
-                this.src.add("#init omnidrive").nlI();
-                this.src.add("front_left_motor = ", "TXT_M_" + omniDrive.getOptProperty("MOTOR_FL") + "_motor").nlI();
-                this.src.add("front_right_motor = ", "TXT_M_" + omniDrive.getOptProperty("MOTOR_FR") + "_motor").nlI();
-                this.src.add("rear_left_motor = ", "TXT_M_" + omniDrive.getOptProperty("MOTOR_RL") + "_motor").nlI();
-                this.src.add("rear_right_motor = ", "TXT_M_" + omniDrive.getOptProperty("MOTOR_RR") + "_motor").nlI();
-                this.src.add("WHEEL_DIAMETER = ", omniDrive.getOptProperty("BRICK_WHEEL_DIAMETER")).nlI();
-                this.src.add("TRACK_WIDTH = ", omniDrive.getOptProperty("BRICK_TRACK_WIDTH")).nlI();
-                this.src.add("WHEEL_BASE = ", omniDrive.getOptProperty("WHEEL_BASE")).nlI();
+                this.src.addLine("#init omnidrive");
+                this.src.addLine("front_left_motor = ", "TXT_M_" + omniDrive.getOptProperty("MOTOR_FL") + "_motor");
+                this.src.addLine("front_right_motor = ", "TXT_M_" + omniDrive.getOptProperty("MOTOR_FR") + "_motor");
+                this.src.addLine("rear_left_motor = ", "TXT_M_" + omniDrive.getOptProperty("MOTOR_RL") + "_motor");
+                this.src.addLine("rear_right_motor = ", "TXT_M_" + omniDrive.getOptProperty("MOTOR_RR") + "_motor");
+                this.src.addLine("WHEEL_DIAMETER = ", omniDrive.getOptProperty("BRICK_WHEEL_DIAMETER"));
+                this.src.addLine("TRACK_WIDTH = ", omniDrive.getOptProperty("BRICK_TRACK_WIDTH"));
+                this.src.addLine("WHEEL_BASE = ", omniDrive.getOptProperty("WHEEL_BASE"));
                 this.drive = FischertechnikConstants.OMNIDRIVE;
             }
         } else if ( usedHardwareBean.isActorUsed(SC.DIFFERENTIALDRIVE) ) {
             ConfigurationComponent diffDrive = getDifferentialDrive();
             if ( diffDrive != null ) {
                 drive = SC.DIFFERENTIAL_DRIVE;
-                this.src.add("#init differentialDrive").nlI();
-                this.src.add("left_motor = ", "TXT_M_" + diffDrive.getOptProperty("MOTOR_L") + "_motor").nlI();
-                this.src.add("right_motor = ", "TXT_M_" + diffDrive.getOptProperty("MOTOR_R") + "_motor").nlI();
-                this.src.add("WHEEL_DIAMETER = ", diffDrive.getOptProperty("BRICK_WHEEL_DIAMETER")).nlI();
-                this.src.add("TRACK_WIDTH = ", diffDrive.getOptProperty("BRICK_TRACK_WIDTH")).nlI();
+                this.src.addLine("#init differentialDrive");
+                this.src.addLine("left_motor = ", "TXT_M_" + diffDrive.getOptProperty("MOTOR_L") + "_motor");
+                this.src.addLine("right_motor = ", "TXT_M_" + diffDrive.getOptProperty("MOTOR_R") + "_motor");
+                this.src.addLine("WHEEL_DIAMETER = ", diffDrive.getOptProperty("BRICK_WHEEL_DIAMETER"));
+                this.src.addLine("TRACK_WIDTH = ", diffDrive.getOptProperty("BRICK_TRACK_WIDTH"));
             }
         }
         if ( usedHardwareBean.isSensorUsed(SC.ENCODER) ) {
-            this.src.add("STEPS_PER_ROTATION = 128").nlI();
+            this.src.addLine("STEPS_PER_ROTATION = 128");
         }
         if ( usedHardwareBean.isActorUsed(FischertechnikConstants.DISPLAYLED) ) {
-            this.src.add("current_led = \"redLed\"").nlI();
+            this.src.addLine("current_led = \"redLed\"");
 
-            this.src.add("led_colors = {\n" +
+            this.src.addLine("led_colors = {\n" +
                 "    \"red\": 0xcc0000,\n" +
                 "    \"yellow\": 0xffff00,\n" +
                 "    \"green\": 0x33cc00,\n" +
@@ -1242,7 +1234,7 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
                 "    \"purple\": 0xcc33cc,\n" +
                 "    \"white\": 0xffffff,\n" +
                 "    \"black\": 0x000000\n" +
-                "}").nlI();
+                "}");
         }
     }
 
@@ -1252,27 +1244,21 @@ public final class Txt4PythonVisitor extends AbstractPythonVisitor implements IT
             return;
         }
         decrIndentation(); // everything is still indented from main program
-        nlIndent();
-        nlIndent();
-        this.src.add("def main():");
+        this.src.ensureBlankLines(1);
+        this.src.addLine("def main():");
         incrIndentation();
-        nlIndent();
-        this.src.add("try:");
+        this.src.addLine("try:");
         incrIndentation();
-        nlIndent();
-        this.src.add("run()");
+        this.src.addLine("run()");
         decrIndentation();
-        nlIndent();
-        this.src.add("except Exception as e:");
+        this.src.addLine("except Exception as e:");
         incrIndentation();
-        nlIndent();
-        this.src.add("print(e)");
+        this.src.addLine("print(e)");
         decrIndentation();
         decrIndentation();
-        nlIndent();
-        nlIndent();
 
-        this.src.add("main()");
+        this.src.ensureBlankLines(1);
+        this.src.addLine("main()");
     }
 
     private String getPortFromConfig(String name) {

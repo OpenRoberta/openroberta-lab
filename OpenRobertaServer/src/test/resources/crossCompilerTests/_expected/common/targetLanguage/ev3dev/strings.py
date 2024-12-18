@@ -7,7 +7,6 @@ import math
 import os
 import time
 
-
 class BreakOutOfALoop(Exception): pass
 class ContinueLoop(Exception): pass
 

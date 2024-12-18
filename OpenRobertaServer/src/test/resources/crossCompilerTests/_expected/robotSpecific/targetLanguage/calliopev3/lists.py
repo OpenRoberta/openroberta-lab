@@ -2,12 +2,10 @@ import calliopemini
 import random
 import math
 
-
 class BreakOutOfALoop(Exception): pass
 class ContinueLoop(Exception): pass
 
 timer1 = calliopemini.running_time()
-
 
 ___numberVar = 0
 ___booleanVar = True
@@ -56,7 +54,6 @@ def ____lists():
     ___numberList = ___numberList[0:___numberVar]
     ___numberList = ___numberList[0:-1 -___numberVar]
     ___numberList = ___numberList[0:]
-
 
 def run():
     global timer1, ___numberVar, ___booleanVar, ___stringVar, ___colourVar, ___imageVar, ___numberList, ___booleanList, ___stringList, ___colourList, ___imageList, ___item2

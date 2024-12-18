@@ -251,12 +251,11 @@ public abstract class MbedPythonVisitor extends AbstractPythonVisitor implements
     @Override
     public Void visitMainTask(MainTask mainTask) {
         visitorGenerateUserVariablesAndMethods(mainTask);
-        nlIndent();
-        this.src.add("def run():");
+        this.src.ensureBlankLines(1);
+        this.src.addLine("def run():");
         incrIndentation();
-        nlIndent();
         if ( !this.usedGlobalVarInFunctions.isEmpty() ) {
-            this.src.add("global ", String.join(", ", this.usedGlobalVarInFunctions));
+            this.src.addLine("global ", String.join(", ", this.usedGlobalVarInFunctions));
         }
 //        TODO add as soon as robot runtime is updated
 //        if ( this.robotConfiguration.isComponentTypePresent(SC.DIGITAL_PIN) ) {
@@ -285,33 +284,24 @@ public abstract class MbedPythonVisitor extends AbstractPythonVisitor implements
             return;
         }
         decrIndentation(); // everything is still indented from main program
-        nlIndent();
-        nlIndent();
-        this.src.add("def main():");
+        this.src.ensureBlankLines(1);
+        this.src.addLine("def main():");
         incrIndentation();
-        nlIndent();
-        this.src.add("try:");
+        this.src.addLine("try:");
         incrIndentation();
-        nlIndent();
-        this.src.add("run()");
+        this.src.addLine("run()");
         decrIndentation();
-        nlIndent();
-        this.src.add("except Exception as e:");
+        this.src.addLine("except Exception as e:");
         incrIndentation();
-        nlIndent();
-        this.src.add("raise");
+        this.src.addLine("raise");
         decrIndentation();
         if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.CALLIBOT) ) {
-            nlIndent();
-            this.src.add("finally:");
+            this.src.addLine("finally:");
             incrIndentation();
-            nlIndent();
-            this.src.add("callibot.stop()");
-            nlIndent();
+            this.src.addLine("callibot.stop()");
             decrIndentation();
         }
         decrIndentation();
-        nlIndent();
 
         super.generateProgramSuffix(withWrapping);
     }
@@ -346,8 +336,7 @@ public abstract class MbedPythonVisitor extends AbstractPythonVisitor implements
     @Override
     public Void visitRadioSendAction(RadioSendAction radioSendAction) {
         this.src.add("radio.config(power=", radioSendAction.power, ")");
-        nlIndent();
-        this.src.add("radio.send(str(");
+        this.src.addLine("radio.send(str(");
         radioSendAction.message.accept(this);
         this.src.add("))");
         return null;
@@ -406,95 +395,73 @@ public abstract class MbedPythonVisitor extends AbstractPythonVisitor implements
     @Override
     protected void visitorGenerateImports() {
         this.src.add("import " + this.firmware);
-        nlIndent();
-        this.src.add("import random");
-        nlIndent();
-        this.src.add("import math");
-        nlIndent();
+        this.src.addLine("import random");
+        this.src.addLine("import math");
+
         if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.RADIO) ) {
-            this.src.add("import radio");
-            nlIndent();
+            this.src.addLine("import radio");
         }
         if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.MUSIC) ) {
-            this.src.add("import music");
-            nlIndent();
+            this.src.addLine("import music");
         }
         if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.PIN_VALUE) ) {
-            this.src.add("import machine");
-            nlIndent();
+            this.src.addLine("import machine");
         }
         if ( this.firmware == "calliopemini" ) {
             if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.RGBLED) ) {
-                this.src.add("import neopixel");
-                nlIndent();
+                this.src.addLine("import neopixel");
             }
             if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.ULTRASONIC) ) {
-                this.src.add("from machine import time_pulse_us");
-                nlIndent();
+                this.src.addLine("from machine import time_pulse_us");
             }
             if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.FOUR_DIGIT_DISPLAY) ) {
-                this.src.add("from tm1637 import TM1637");
-                nlIndent();
+                this.src.addLine("from tm1637 import TM1637");
             }
             if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.CALLIBOT) ) {
-                this.src.add("from callibot2 import Callibot2");
-                nlIndent();
+                this.src.addLine("from callibot2 import Callibot2");
             }
             if ( this.getBean(UsedHardwareBean.class).isSensorUsed(SC.COLOR) ) {
-                this.src.add("from tcs3472 import tcs3472");
-                nlIndent();
+                this.src.addLine("from tcs3472 import tcs3472");
             }
             if ( this.getBean(UsedHardwareBean.class).isSensorUsed(SC.HUMIDITY) ) {
-                this.src.add("from sht31 import SHT31");
+                this.src.addLine("from sht31 import SHT31");
             }
         }
-        nlIndent();
     }
 
     @Override
     protected void visitorGenerateGlobalVariables() {
-        this.src.add("class BreakOutOfALoop(Exception): pass");
-        nlIndent();
-        this.src.add("class ContinueLoop(Exception): pass");
-        nlIndent();
-        nlIndent();
-        this.src.add("timer1 = " + this.firmware + ".running_time()");
+        this.src.ensureBlankLines(1);
+        this.src.addLine("class BreakOutOfALoop(Exception): pass");
+        this.src.addLine("class ContinueLoop(Exception): pass");
+        this.src.ensureBlankLines(1);
+        this.src.addLine("timer1 = " + this.firmware + ".running_time()");
         if ( this.firmware == "calliopemini" ) {
-            nlIndent();
             if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.RGBLED) ) {
-                this.src.add("np = neopixel.NeoPixel(" + this.firmware + ".pin_RGB, 3)");
-                nlIndent();
+                this.src.addLine("np = neopixel.NeoPixel(" + this.firmware + ".pin_RGB, 3)");
             }
             if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.FOUR_DIGIT_DISPLAY) ) {
-                this.src.add("fdd = TM1637()");
-                nlIndent();
+                this.src.addLine("fdd = TM1637()");
             }
             if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.DISPLAY_GRAYSCALE) ) {
-                this.src.add("brightness = 9");
-                nlIndent();
+                this.src.addLine("brightness = 9");
             }
             if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.CALLIBOT) ) {
-                this.src.add("callibot = Callibot2()");
-                nlIndent();
+                this.src.addLine("callibot = Callibot2()");
             }
             if ( this.getBean(UsedHardwareBean.class).isSensorUsed(SC.COLOR) ) {
-                this.src.add("color_sensor = tcs3472()");
-                nlIndent();
-                this.src.add("LIGHT_CONST = 40");
-                nlIndent();
+                this.src.addLine("color_sensor = tcs3472()");
+                this.src.addLine("LIGHT_CONST = 40");
             }
             if ( this.getBean(UsedHardwareBean.class).isSensorUsed(SC.HUMIDITY) ) {
-                this.src.add("sht31 = SHT31()");
-                nlIndent();
+                this.src.addLine("sht31 = SHT31()");
             }
             if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.RADIO) ) {
-                this.src.add("rssi = 0");
-                nlIndent();
+                this.src.addLine("rssi = 0");
             }
         }
         if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.RADIO) ) {
-            nlIndent();
-            this.src.add("radio.on()");
+            this.src.addLine("radio.on()");
         }
     }
 
@@ -562,6 +529,5 @@ public abstract class MbedPythonVisitor extends AbstractPythonVisitor implements
         }
         return null;
     }
-
 
 }

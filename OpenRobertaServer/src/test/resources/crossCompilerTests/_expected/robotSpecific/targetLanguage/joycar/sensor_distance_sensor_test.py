@@ -4,7 +4,6 @@ import math
 import music
 import machine
 
-
 def ultrasonic_get_distance(echo, trigger):
     trigger.write_digital(0)
     microbit.sleep(2)
@@ -15,7 +14,7 @@ def ultrasonic_get_distance(echo, trigger):
     duration = machine.time_pulse_us(echo, 1)  
     distance = duration * 0.0343 / 2  
 
-    return round(distance, 2)   
+    return round(distance, 2)
 
 class BreakOutOfALoop(Exception): pass
 class ContinueLoop(Exception): pass

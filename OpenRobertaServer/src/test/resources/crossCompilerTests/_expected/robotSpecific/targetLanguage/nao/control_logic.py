@@ -4,13 +4,11 @@ import math
 import time
 import random
 from roberta import Hal
-h = Hal()
 
+h = Hal()
 
 class BreakOutOfALoop(Exception): pass
 class ContinueLoop(Exception): pass
-
-
 
 ___numberVar = 0
 ___booleanVar = True
@@ -76,7 +74,6 @@ def ____logic():
     h.say(str(False))
     h.say(str(None))
     h.say(str(___numberVar if ( ___booleanVar ) else ___numberVar))
-
 
 def run():
     h.setAutonomousLife('ON')

@@ -2,7 +2,6 @@ import microbit
 import random
 import math
 
-
 def drive(speedLeft, speedRight):
     sR = scale(speedRight)
     sL = scale(speedLeft)

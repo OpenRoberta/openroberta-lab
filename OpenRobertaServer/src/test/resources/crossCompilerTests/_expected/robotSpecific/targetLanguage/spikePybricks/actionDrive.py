@@ -102,16 +102,13 @@ def turn_for(power, degrees, direction):
     drive_base.settings(turn_rate = tr)
     drive_base.turn( sign * degrees * direction )
 
-
 left_motor = Motor(Port.A, Direction.COUNTERCLOCKWISE)
 right_motor = Motor(Port.B)
 TRACKWIDTH = 11.5 * 10
 WHEEL_DIAMETER = 56
 drive_base = DriveBase(left_motor, right_motor, wheel_diameter=WHEEL_DIAMETER, axle_track=TRACKWIDTH)
-drive_base.settings(straight_acceleration=810*10, turn_acceleration=810*10)
-
+drive_base.settings(straight_acceleration=810 * 10, turn_acceleration=810 * 10)
 hub = PrimeHub()
-
 
 def run():
     drive_straight(30,10)
@@ -127,7 +124,7 @@ def run():
     wait(500)
     diff_drive(-30, -30, False)
     wait(500)
-    drive_base.drive(0,0)
+    drive_base.drive(0, 0)
     wait(500)
     turn_for(30,20,1)
     turn_for(30,20,-1)

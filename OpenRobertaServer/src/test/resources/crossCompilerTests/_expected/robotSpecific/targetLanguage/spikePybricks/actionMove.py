@@ -12,12 +12,9 @@ def get_deg_sec_from_percent(percent):
         percent = 100
     return int(810.0 * (percent/100.0))
 
-
 motorA = Motor(Port.A)
 motorB = Motor(Port.B)
-
 hub = PrimeHub()
-
 
 def run():
     motorA.run_angle(rotation_angle = 360 * 1, speed = get_deg_sec_from_percent(30))

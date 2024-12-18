@@ -585,74 +585,70 @@ public final class SpikePythonVisitor extends AbstractSpikePythonVisitor {
     @Override
     protected void visitorGenerateImports() {
         UsedHardwareBean usedHardwareBean = this.getBean(UsedHardwareBean.class);
-        this.src.add("import spike").nlI();
-        this.src.add("import math").nlI();
+        this.src.addLine("import spike");
+
+        this.src.addLine("import math");
+
         if ( usedHardwareBean.isActorUsed(C.RANDOM) || usedHardwareBean.isActorUsed(C.RANDOM_DOUBLE) ) {
-            this.src.add("import random").nlI();
+            this.src.addLine("import random");
         }
-        this.src.add("from spike.control import wait_for_seconds, wait_until");
+
+        this.src.addLine("from spike.control import wait_for_seconds, wait_until");
         if ( usedHardwareBean.isSensorUsed(SC.TIMER) ) {
             this.src.add(", Timer");
         }
-        nlIndent();
+
         if ( usedHardwareBean.isActorUsed("DISPLAY") ) {
-            this.src.add("import hub as _hub").nlI();
+            this.src.addLine("import hub as _hub");
         }
     }
 
     @Override
     protected void visitorGenerateGlobalVariables() {
+        this.src.ensureBlankLines(1);
         UsedHardwareBean usedHardwareBean = this.getBean(UsedHardwareBean.class);
         if ( usedHardwareBean.isActorUsed(SC.DIFFERENTIALDRIVE) ) {
             ConfigurationComponent diffDrive = this.configurationAst.optConfigurationComponentByType("DIFFERENTIALDRIVE");
             String leftPort = diffDrive.getComponentProperties().get("MOTOR_L");
             String rightPort = diffDrive.getComponentProperties().get("MOTOR_R");
-            nlIndent();
-            this.src.add("TRACKWIDTH = ").add(diffDrive.getComponentProperties().get("BRICK_TRACK_WIDTH")).nlI();
-            this.src.add("diff_drive = spike.MotorPair('").add(leftPort).add("', '").add(rightPort).add("')").nlI();
-            this.src.add("diff_drive.set_motor_rotation(").add(diffDrive.getComponentProperties().get("BRICK_WHEEL_DIAMETER")).add(" * math.pi, 'cm')");
+            this.src.addLine("TRACKWIDTH = ").add(diffDrive.getComponentProperties().get("BRICK_TRACK_WIDTH"));
+            this.src.addLine("diff_drive = spike.MotorPair('").add(leftPort).add("', '").add(rightPort).add("')");
+            this.src.addLine("diff_drive.set_motor_rotation(").add(diffDrive.getComponentProperties().get("BRICK_WHEEL_DIAMETER")).add(" * math.pi, 'cm')");
         }
         if ( usedHardwareBean.isActorUsed(SC.MOTOR) ) {
             usedHardwareBean.getUsedActors().stream().filter(usedActor -> usedActor.getType().equals("MOTOR")).forEach(motor -> {
-                nlIndent();
-                this.src.add("motor").add(motor.getPort()).add(" = spike.Motor('").add(motor.getPort()).add("')");
+                this.src.addLine("motor").add(motor.getPort()).add(" = spike.Motor('").add(motor.getPort()).add("')");
             });
         }
         if ( usedHardwareBean.isSensorUsed(SC.TOUCH) ) {
             usedHardwareBean.getUsedSensors().stream().filter(usedActor -> usedActor.getType().equals("TOUCH")).forEach(sensor -> {
                 if ( configurationAst.optConfigurationComponent(sensor.getPort()) != null ) {
-                    nlIndent();
-                    this.src.add("touch_sensor_").add(sensor.getPort()).add(" = spike.ForceSensor('").add(getPortFromConfig(sensor.getPort())).add("')");
+                    this.src.addLine("touch_sensor_").add(sensor.getPort()).add(" = spike.ForceSensor('").add(getPortFromConfig(sensor.getPort())).add("')");
                 }
             });
         }
         if ( usedHardwareBean.isSensorUsed(SC.ULTRASONIC) ) {
             usedHardwareBean.getUsedSensors().stream().filter(usedActor -> usedActor.getType().equals("ULTRASONIC")).forEach(sensor -> {
                 if ( configurationAst.optConfigurationComponent(sensor.getPort()) != null ) {
-                    nlIndent();
-                    this.src.add("ultrasonic_sensor_").add(sensor.getPort()).add(" = spike.DistanceSensor('").add(getPortFromConfig(sensor.getPort())).add("')");
+                    this.src.addLine("ultrasonic_sensor_").add(sensor.getPort()).add(" = spike.DistanceSensor('").add(getPortFromConfig(sensor.getPort())).add("')");
                 }
             });
         }
         if ( usedHardwareBean.isSensorUsed(SC.COLOR) ) {
             usedHardwareBean.getUsedSensors().stream().filter(usedActor -> usedActor.getType().equals("COLOR")).forEach(sensor -> {
                 if ( configurationAst.optConfigurationComponent(sensor.getPort()) != null ) {
-                    nlIndent();
-                    this.src.add("color_sensor_").add(sensor.getPort()).add(" = spike.ColorSensor('").add(getPortFromConfig(sensor.getPort())).add("')");
+                    this.src.addLine("color_sensor_").add(sensor.getPort()).add(" = spike.ColorSensor('").add(getPortFromConfig(sensor.getPort())).add("')");
                 }
             });
         }
         if ( usedHardwareBean.isActorUsed("DISPLAY") ) {
-            nlIndent();
-            this.src.add("display = _hub.display").nlI();
-            this.src.add("Image = _hub.Image");
+            this.src.addLine("display = _hub.display");
+            this.src.addLine("Image = _hub.Image");
         }
         if ( usedHardwareBean.isSensorUsed(SC.TIMER) ) {
-            nlIndent();
-            this.src.add("timer = Timer()");
+            this.src.addLine("timer = Timer()");
         }
-        nlIndent();
-        this.src.add("hub = spike.PrimeHub()");
+        this.src.addLine("hub = spike.PrimeHub()");
     }
 
 }

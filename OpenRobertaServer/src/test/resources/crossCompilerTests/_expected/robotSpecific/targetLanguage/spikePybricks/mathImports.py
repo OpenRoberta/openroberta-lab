@@ -10,10 +10,7 @@ def display_text(text):
             text_list[idx] = '?'
     hub.display.text("".join(text_list))
 
-
-
 hub = PrimeHub()
-
 
 ___item = 0
 
@@ -24,7 +21,7 @@ def run():
     # thjs is a J
     display_text(str(chr((int)(74))))
     ___item = math.sqrt(math.pi) + math.sin(math.e)
-    ___item = - (10 **math.e**math.log(math.log(abs((1 + 5 ** 0.5) / 2 * (1 + 5 ** 0.5) / 2 + math.cos(math.sqrt(2)))))/math.log(10))
+    ___item = - (10 ** math.e**math.log(math.log(abs((1 + 5 ** 0.5) / 2 * (1 + 5 ** 0.5) / 2 + math.cos(math.sqrt(2))))) / math.log(10))
     ___item += 1
     display_text(str(min(max(( ( math.ceil(___item) ) % ( math.floor(___item) ) ), 1), 2)))
     display_text(str(random.randint(1, 100)))

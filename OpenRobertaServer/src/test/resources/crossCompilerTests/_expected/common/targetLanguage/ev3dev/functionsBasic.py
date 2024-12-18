@@ -49,7 +49,6 @@ def ____retNumber2(___x):
     ___x = ___x / float(2)
     return ___x
 
-
 def run():
     global ___n1, ___b, ___n2, ___n3
     # Basic Functions START

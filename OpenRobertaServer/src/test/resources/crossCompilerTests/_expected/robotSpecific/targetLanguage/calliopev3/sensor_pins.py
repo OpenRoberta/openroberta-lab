@@ -8,7 +8,6 @@ class ContinueLoop(Exception): pass
 
 timer1 = calliopemini.running_time()
 
-
 def ____sensors():
     global timer1
     calliopemini.display.scroll(str(calliopemini.pin1.read_analog()))
@@ -178,7 +177,6 @@ def ____sensorsWaitUntil():
     while True:
         if machine.time_pulse_us(calliopemini.pin19, 0) < 30:
             break
-
 
 def run():
     global timer1

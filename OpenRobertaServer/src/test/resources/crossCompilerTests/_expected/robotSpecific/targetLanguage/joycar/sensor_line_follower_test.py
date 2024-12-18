@@ -2,7 +2,6 @@ import microbit
 import random
 import math
 
-
 def drive(speedLeft, speedRight):
     sR = scale(speedRight)
     sL = scale(speedLeft)
@@ -101,7 +100,6 @@ def ____followLineTest():
             ___speedLeft = 40
             ___speedRight = 20
         drive(___speedLeft, ___speedRight)
-
 
 def run():
     global timer1, ___speedLeft, ___speedRight

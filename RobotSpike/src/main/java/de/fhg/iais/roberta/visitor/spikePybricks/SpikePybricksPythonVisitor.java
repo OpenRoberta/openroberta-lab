@@ -252,17 +252,17 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
             case "REDCHANNEL":
                 src.add("int(hsv2rgb(");
                 src.add("color_sensor_").add(sensorPort).add(".hsv()");
-                src.add(")[0]/2.55)");
+                src.add(")[0] / 2.55)");
                 break;
             case "GREENCHANNEL":
                 src.add("int(hsv2rgb(");
                 src.add("color_sensor_").add(sensorPort).add(".hsv()");
-                src.add(")[1]/2.55)");
+                src.add(")[1] / 2.55)");
                 break;
             case "BLUECHANNEL":
                 src.add("int(hsv2rgb(");
                 src.add("color_sensor_").add(sensorPort).add(".hsv()");
-                src.add(")[2]/2.55)");
+                src.add(")[2] / 2.55)");
                 break;
             default:
                 throw new DbcException("Invalid color sensor mode: " + colorSensor.getMode());
@@ -399,7 +399,7 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
         switch ( motorDiffStopAction.control ) {
             case "BRAKE":
                 //making the motor drive at speed 0 is the same as breaking
-                src.add(".drive(0,0)");
+                src.add(".drive(0, 0)");
                 break;
             case "COAST":
                 //default option stop is coast
@@ -654,10 +654,10 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
             case LOG10:
                 src.add("math.log(");
                 mathSingleFunct.param.get(0).accept(this);
-                src.add(")/math.log(10)");
+                src.add(") / math.log(10)");
                 break;
             case POW10:
-                src.add("10 **");
+                src.add("10 ** ");
                 mathSingleFunct.param.get(0).accept(this);
                 break;
             case ROUND:
@@ -684,7 +684,7 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
 
     @Override
     protected void visitorGenerateImports() {
-        src.add("from pybricks.hubs import PrimeHub").nlI();
+        src.addLine("from pybricks.hubs import PrimeHub");
         importPubDevices();
         importParameters();
         importTools();
@@ -694,9 +694,11 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
 
     @Override
     protected void visitorGenerateGlobalVariables() {
+        src.ensureBlankLines(1);
         changeColors();
+        src.ensureBlankLines(1);
         instantiateComponents();
-        src.add("hub = PrimeHub()").nlI();
+        src.addLine("hub = PrimeHub()");
         prepareComponents();
     }
 
@@ -730,8 +732,7 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
         //substring to remove first ","
         pubDevicesImportString = "from pybricks.pupdevices import" + pubDevicesImportString.substring(1);
 
-        src.add(pubDevicesImportString);
-        src.nlI();
+        src.addLine(pubDevicesImportString);
     }
 
     private void importParameters() {
@@ -764,8 +765,7 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
         //substring to remove first ","
         parameterImportString = "from pybricks.parameters import" + parameterImportString.substring(1);
 
-        src.add(parameterImportString);
-        src.nlI();
+        src.addLine(parameterImportString);
     }
 
     private void importTools() {
@@ -783,13 +783,13 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
         //Matrix always has to be imported, we need this for the exception sad face
         toolsImportString = "from pybricks.tools import Matrix" + toolsImportString;
 
-        src.add(toolsImportString);
-        src.nlI();
+        src.addLine(toolsImportString);
     }
 
     private void importRobotics() {
-        if ( usedHardwareBean.isActorUsed(SC.DIFFERENTIALDRIVE) )
-            src.add("from pybricks.robotics import DriveBase").nlI();
+        if ( usedHardwareBean.isActorUsed(SC.DIFFERENTIALDRIVE) ){
+            src.addLine("from pybricks.robotics import DriveBase");
+        }
     }
 
     /**
@@ -797,36 +797,30 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
      * python import math doesn't exist in pybricks context
      */
     private void importMathFunctions() {
-        src.add("import umath as math").nlI();
-        src.add("import urandom as random").nlI();
+        src.addLine("import umath as math");
+        src.addLine("import urandom as random");
     }
 
     private void changeColors() {
         if ( usedHardwareBean.isImportUsed(SC.COlOR_IMPORT) ) {
-            nlIndent();
-            src.add("Color.MAGENTA = Color(315,50,15)").nlI();
-            src.add("Color.BLUE = Color(225,20,20)").nlI();
-            src.add("Color.AZURE = Color(200,20,20)").nlI();
-            src.add("Color.CYAN = Color(150,20,20)").nlI();
-            src.add("Color.YELLOW = Color(55,35,35)").nlI();
-            src.add("Color.RED = Color(350,35,35)").nlI();
-            src.add("Color.BLACK = Color(0,10,10)").nlI();
-            src.add("Color.WHITE = Color(0,0,70)").nlI();
-            //Color.NONE
+            src.addLine("Color.MAGENTA = Color(315, 50, 15)");
+            src.addLine("Color.BLUE = Color(225, 20, 20)");
+            src.addLine("Color.AZURE = Color(200, 20, 20)");
+            src.addLine("Color.CYAN = Color(150, 20, 20)");
+            src.addLine("Color.YELLOW = Color(55, 35, 35)");
+            src.addLine("Color.RED = Color(350, 35, 35)");
+            src.addLine("Color.BLACK = Color(0, 10, 10)");
+            src.addLine("Color.WHITE = Color(0, 0, 70)");
         }
     }
 
     private void instantiateComponents() {
-        nlIndent();
-
         instantiateDifferentialDrive();
         instantiateMotors();
         instantiateTouchSensor();
         instantiateUltrasonicSensor();
         instantiateColorSensor();
         instantiateTimer();
-
-        nlIndent();
     }
 
     private void instantiateDifferentialDrive() {
@@ -835,14 +829,14 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
             String leftPort = diffDrive.getComponentProperties().get("MOTOR_L"); //Port
             String rightPort = diffDrive.getComponentProperties().get("MOTOR_R"); // Port
 
-            src.add("left_motor = Motor(Port." + leftPort + ", Direction.COUNTERCLOCKWISE)").nlI();
-            src.add("right_motor = Motor(Port." + rightPort + ")").nlI();
+            src.addLine("left_motor = Motor(Port." + leftPort + ", Direction.COUNTERCLOCKWISE)");
+            src.addLine("right_motor = Motor(Port." + rightPort + ")");
 
-            src.add("TRACKWIDTH = ").add(diffDrive.getComponentProperties().get("BRICK_TRACK_WIDTH")).add(" * 10").nlI();
-            src.add("WHEEL_DIAMETER = 56").nlI();
-            src.add("drive_base = DriveBase(left_motor, right_motor, wheel_diameter=WHEEL_DIAMETER, axle_track=TRACKWIDTH)").nlI();
+            src.addLine("TRACKWIDTH = ").add(diffDrive.getComponentProperties().get("BRICK_TRACK_WIDTH")).add(" * 10");
+            src.addLine("WHEEL_DIAMETER = 56");
+            src.addLine("drive_base = DriveBase(left_motor, right_motor, wheel_diameter=WHEEL_DIAMETER, axle_track=TRACKWIDTH)");
             //accelerate to max speed within 0.1 seconds, this value is subject to change
-            src.add("drive_base.settings(straight_acceleration=810*10, turn_acceleration=810*10)").nlI();
+            src.addLine("drive_base.settings(straight_acceleration=810 * 10, turn_acceleration=810 * 10)");
         }
     }
 
@@ -853,13 +847,13 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
                 usedHardwareBean.getLockedComponent().forEach(
                     (component, port) -> {
                         if ( (motor.getPort()).equals(port) ) {
-                            src.add("motor").add(motor.getPort()).add(" = left_motor").nlI();
+                            src.addLine("motor").add(motor.getPort()).add(" = left_motor");
                             componentLocked.set(true);
                         }
                     }
                 );
                 if ( !componentLocked.get() ) {
-                    src.add("motor").add(motor.getPort()).add(" = Motor(Port.").add(motor.getPort()).add(")").nlI();
+                    src.addLine("motor").add(motor.getPort()).add(" = Motor(Port.").add(motor.getPort()).add(")");
                 }
             });
         }
@@ -869,8 +863,7 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
         if ( usedHardwareBean.isSensorUsed(SC.TOUCH) ) {
             usedHardwareBean.getUsedSensors().stream().filter(usedActor -> usedActor.getType().equals("TOUCH")).forEach(sensor -> {
                 if ( configurationAst.optConfigurationComponent(sensor.getPort()) != null ) {
-                    nlIndent();
-                    src.add("touch_sensor_").add(sensor.getPort()).add(" = ForceSensor(Port.").add(getPortFromConfig(sensor.getPort())).add(")");
+                    src.addLine("touch_sensor_").add(sensor.getPort()).add(" = ForceSensor(Port.").add(getPortFromConfig(sensor.getPort())).add(")");
                 }
             });
         }
@@ -880,8 +873,7 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
         if ( usedHardwareBean.isSensorUsed(SC.ULTRASONIC) ) {
             usedHardwareBean.getUsedSensors().stream().filter(usedActor -> usedActor.getType().equals("ULTRASONIC")).forEach(sensor -> {
                 if ( configurationAst.optConfigurationComponent(sensor.getPort()) != null ) {
-                    nlIndent();
-                    src.add("ultrasonic_sensor_").add(sensor.getPort()).add(" = UltrasonicSensor(Port.").add(getPortFromConfig(sensor.getPort())).add(")");
+                    src.addLine("ultrasonic_sensor_").add(sensor.getPort()).add(" = UltrasonicSensor(Port.").add(getPortFromConfig(sensor.getPort())).add(")");
                 }
             });
         }
@@ -891,9 +883,8 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
         if ( usedHardwareBean.isSensorUsed(SC.COLOR) ) {
             usedHardwareBean.getUsedSensors().stream().filter(usedActor -> usedActor.getType().equals("COLOR")).forEach(sensor -> {
                 if ( configurationAst.optConfigurationComponent(sensor.getPort()) != null ) {
-                    nlIndent();
-                    src.add("color_sensor_").add(sensor.getPort()).add(" = ColorSensor(Port.").add(getPortFromConfig(sensor.getPort())).add(")").nlI();
-                    src.add("color_sensor_").add(sensor.getPort()).add(".detectable_colors([Color.MAGENTA, Color.BLUE, Color.AZURE, Color.CYAN, Color.YELLOW, Color.RED, Color.BLACK, Color.WHITE, Color.NONE])");
+                    src.addLine("color_sensor_").add(sensor.getPort()).add(" = ColorSensor(Port.").add(getPortFromConfig(sensor.getPort())).add(")");
+                    src.addLine("color_sensor_").add(sensor.getPort()).add(".detectable_colors([Color.MAGENTA, Color.BLUE, Color.AZURE, Color.CYAN, Color.YELLOW, Color.RED, Color.BLACK, Color.WHITE, Color.NONE])");
                 }
             });
         }
@@ -901,18 +892,17 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
 
     private void instantiateTimer() {
         if ( usedHardwareBean.isSensorUsed(SC.TIMER) ) {
-            nlIndent();
-            src.add("stopWatch = StopWatch()");
+            src.addLine("stopWatch = StopWatch()");
         }
     }
 
     private void prepareComponents() {
         if ( usedHardwareBean.isSensorUsed(SC.GYRO) ) {
-            src.add("hub.imu.reset_heading(0)").nlI();
+            src.addLine("hub.imu.reset_heading(0)");
         }
         if ( usedHardwareBean.isActorUsed(SC.SPEAKER) ) {
             //TODO make volume be settings controlled
-            src.add("hub.speaker.volume(15)").nlI();
+            src.addLine("hub.speaker.volume(15)");
         }
     }
 }

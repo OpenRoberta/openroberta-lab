@@ -55,11 +55,9 @@ def ____function_return_numberList():
     global ___numberVar, ___booleanVar, ___numberList
     return ___numberList
 
-
 ____text()
 ____messages()
 ____function_parameters(___numberVar, ___booleanVar, ___numberList)
 ___numberVar = ____function_return_numberVar()
 ___booleanVar = ____function_return_booleanVar()
 ___numberList = ____function_return_numberList()
-

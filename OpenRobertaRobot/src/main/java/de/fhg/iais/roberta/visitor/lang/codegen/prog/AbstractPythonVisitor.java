@@ -705,7 +705,6 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
 
     @Override
     public Void visitMethodVoid(MethodVoid methodVoid) {
-        nlIndent();
         this.src.add("def ", methodVoid.getCodeSafeMethodName(), '(');
         List<String> paramList = new ArrayList<>();
         for ( Expr l : methodVoid.getParameters().get() ) {
@@ -731,7 +730,6 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
 
     @Override
     public Void visitMethodReturn(MethodReturn methodReturn) {
-        nlIndent();
         this.src.add("def ", methodReturn.getCodeSafeMethodName(), '(');
         List<String> paramList = new ArrayList<>();
         for ( Expr l : methodReturn.getParameters().get() ) {
@@ -859,8 +857,7 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
 
     protected void addPassIfProgramIsEmpty() {
         if ( this.getBean(UsedHardwareBean.class).isProgramEmpty() ) {
-            nlIndent();
-            this.src.add("pass");
+            this.src.addLine("pass");
         }
     }
 
@@ -1024,11 +1021,10 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
 
     @Override
     protected void generateProgramSuffix(boolean withWrapping) {
-        nlIndent();
-        this.src.add("if __name__ == \"__main__\":");
+        this.src.ensureBlankLines(1);
+        this.src.addLine("if __name__ == \"__main__\":");
         incrIndentation();
-        nlIndent();
-        this.src.add("main()");
+        this.src.addLine("main()");
         decrIndentation();
     }
 
@@ -1043,15 +1039,6 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
         visitorGenerateGlobalVariables();
     }
 
-    @Override
-    protected void generateUserDefinedMethods() {
-        super.generateUserDefinedMethods();
-        if ( this.programPhrases.stream().filter(phrase -> phrase.getKind().getCategory() == Category.METHOD && !phrase.getKind().hasName("METHOD_CALL")).count() > 0 ) {
-            nlIndent();
-        }
-    }
-
-
     protected void collectVariablesForFunctionGlobals() {
         //since we are not in a scope yet these will be out global variables
         this.getBean(UsedHardwareBean.class).getInScopeVariables().forEach(s -> {
@@ -1061,7 +1048,80 @@ public abstract class AbstractPythonVisitor extends AbstractLanguageVisitor {
 
     @Override
     protected void visitorGenerateNN() {
+        this.src.ensureBlankLines(1);
         generateNNStuff("python");
+    }
+
+    //TODO Python-Code generation now always uses preceeding new line
+    //move these functions to abstarct language visitor once all other visiros are also changed
+    @Override
+    protected void generateProgramMainBody() {
+        //this is fine since MainTask[] will add a new line(this is a empty line when we add it to our code)
+        //we dont need an additional nlIndent() at the beginning of this
+        this.programPhrases
+            .stream()
+            .filter(phrase -> phrase.getKind().getCategory() != Category.METHOD || phrase.getKind().hasName("METHOD_CALL"))
+            .forEach(p -> {
+                src.ensureNextLine();
+                p.accept(this);
+            });
+    }
+
+    @Override
+    protected void generateUserDefinedMethods() {
+        boolean isEmpty = this.programPhrases.stream().filter(phrase -> phrase.getKind().getCategory() == Category.METHOD && !phrase.getKind().hasName("METHOD_CALL")).count() == 0;
+        if ( !isEmpty ) {
+            this.programPhrases
+                .stream()
+                .filter(phrase -> phrase.getKind().getCategory() == Category.METHOD && !phrase.getKind().hasName("METHOD_CALL"))
+                .forEach(e -> {
+                    src.ensureBlankLines(1);
+                    e.accept(this);
+                });
+            //we dont want to add training new lines anymore, but this is the easiest way to do it - python method style guide 2 new lines before and after method declaration
+            src.ensureBlankLines(1);
+        }
+    }
+
+    /**
+     * this function should not be changed for a consitant behavour, this  may lead to minor changes in visitors
+     * right now most visitors to this in the suffix, but some in the prefix -- make sure to remove helper function logic from visitor or methods will be
+     * generated more than once
+     *
+     * @return returns true if helper-methods were added
+     */
+    @Override
+    protected void visitorGenerateHelperMethods(){
+        String helperMethodImpls =
+            this
+                .getBean(CodeGeneratorSetupBean.class)
+                .getHelperMethodGenerator()
+                .getHelperMethodDefinitions(this.getBean(CodeGeneratorSetupBean.class).getUsedMethods(), 1)
+                .trim();
+
+        boolean hasMethods = helperMethodImpls != null && !helperMethodImpls.isEmpty();
+
+        if ( hasMethods ) {
+            this.src.ensureBlankLines(1);
+            this.src.addLine(helperMethodImpls);
+            this.src.ensureBlankLines(1);
+        }
+    }
+
+    /**
+     * this will be called from inside MaiNTask since we need the variable list, right now a lot of visitors to bascially this with some varaition
+     * please unify this to one function
+     * @return was a user-method or variable added to the code
+     */
+    @Override
+    protected void visitorGenerateUserVariablesAndMethods(MainTask mainTask) {
+        StmtList variables = mainTask.variables;
+        boolean hasVariables = !(variables.get().isEmpty());
+        if ( hasVariables ) {
+            this.src.ensureNextLine();
+            variables.accept(this);
+        }
+        generateUserDefinedMethods();
     }
 
 }

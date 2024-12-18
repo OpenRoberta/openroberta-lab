@@ -2,7 +2,6 @@ import calliopemini
 import random
 import math
 
-
 def set_motor(port, speed):
     digit = 0
     if (speed < 0):
@@ -21,7 +20,6 @@ class BreakOutOfALoop(Exception): pass
 class ContinueLoop(Exception): pass
 
 timer1 = calliopemini.running_time()
-
 
 ___item = -100
 

@@ -3,7 +3,6 @@ import random
 import math
 import radio
 
-
 def receive_message(type):
     msg = radio.receive()
     if type == "Number":

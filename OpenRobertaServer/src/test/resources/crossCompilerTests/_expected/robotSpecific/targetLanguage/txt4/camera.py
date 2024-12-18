@@ -5,7 +5,6 @@ import colorsys
 import math
 import time
 
-
 def get_ball_information(detector):
     if detector.detected():
         return [detector.get_center_x(),
@@ -61,7 +60,6 @@ TXT_M_USB1_1_camera.set_height(240)
 TXT_M_USB1_1_camera.set_width(320)
 TXT_M_USB1_1_camera.set_fps(15)
 TXT_M_USB1_1_camera.start()
-
 motion_detector_M = txt_factory.camera_factory.create_motion_detector(0, 100, 320, 20, 100)
 TXT_M_USB1_1_camera.add_detector(motion_detector_M)
 motion_detector_M2 = txt_factory.camera_factory.create_motion_detector(0, 100, 320, 20, 49)
@@ -81,7 +79,6 @@ TXT_M_USB1_1_camera.add_detector(ball_detector_B2)
 txt_factory.initialized()
 time.sleep(0.1)
 
-
 def camera_initialized():
     while True:
         try:
@@ -96,7 +93,6 @@ def camera_initialized():
             break
         except Exception:
             pass
-
 
 def ____motion():
     print("Motiondetectors")

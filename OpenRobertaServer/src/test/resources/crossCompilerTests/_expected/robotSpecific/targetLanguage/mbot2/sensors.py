@@ -1,6 +1,7 @@
 import cyberpi, mbot2, mbuild
 import time
 import math, random
+
 _timer1 = cyberpi.timer.get()
 _timer2 = cyberpi.timer.get()
 _timer3 = cyberpi.timer.get()
@@ -17,7 +18,6 @@ _colors = {
             "white": (255,255,255),
             "black": (0,0,0)
         }
-
 
 ___numVar = 0
 ___colourVar = (204, 0, 0)
@@ -120,7 +120,6 @@ def ____wait_until():
         if (mbot2.EM_get_angle("EM1") / 360) > 2:
             break
 
-
 def run():
     global _timer1, _timer2, _timer3, _timer4, _timer5, ___numVar, ___colourVar, ___numList, ___booleanVar
     ____sensors()
@@ -136,4 +135,5 @@ def main():
     finally:
         mbot2.motor_stop("all")
         mbot2.EM_stop("all")
+
 main()

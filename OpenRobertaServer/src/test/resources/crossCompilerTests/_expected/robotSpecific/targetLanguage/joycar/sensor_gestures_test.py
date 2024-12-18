@@ -3,7 +3,6 @@ import random
 import math
 import music
 
-
 class BreakOutOfALoop(Exception): pass
 class ContinueLoop(Exception): pass
 

@@ -3,7 +3,6 @@ from fischertechnik.controller.Motor import Motor
 import math
 import time
 
-
 def motor_start(motor, speed):
     motor.set_speed(speed_to_pwm(speed), Motor.CCW)
     motor.start()
@@ -45,7 +44,6 @@ TXT_M_C1_motor_step_counter.set_motor(TXT_M_M1_motor)
 txt_factory.initialized()
 time.sleep(0.1)
 STEPS_PER_ROTATION = 128
-
 
 def run():
     print("Moving Motors")

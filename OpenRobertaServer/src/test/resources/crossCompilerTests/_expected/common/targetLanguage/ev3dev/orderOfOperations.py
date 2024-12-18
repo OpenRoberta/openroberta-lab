@@ -7,7 +7,6 @@ import math
 import os
 import time
 
-
 def _randInt(min_val, max_val):
     val = int.from_bytes(os.urandom(4), byteorder='big')
     if min_val < max_val:
@@ -77,7 +76,6 @@ def ____divisionOperations(___item5):
     ___item5 = ( ( 6 / float(math.pi) ) % ( round(float(7.8)) ) )
     ___item5 = ( ( 6 / float(_randInt(10 - 1, 100 - 1)) ) % ( 5 ) )
     ___item5 = ( ( _randDouble() / float(5) ) % ( 5 ) )
-
 
 def run():
     global ___item

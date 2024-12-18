@@ -14,6 +14,7 @@ import java.util.stream.IntStream;
 import org.json.JSONObject;
 
 import de.fhg.iais.roberta.mode.general.ListElementOperations;
+import de.fhg.iais.roberta.util.dbc.Assert;
 import de.fhg.iais.roberta.util.dbc.DbcException;
 import de.fhg.iais.roberta.util.syntax.FunctionNames;
 
@@ -137,6 +138,17 @@ public class HelperMethodGenerator {
      * @return the helper method definitions
      */
     public String getHelperMethodDefinitions(Set<? extends Enum<?>> usedMethods) {
+        return getHelperMethodDefinitions(usedMethods, 1);
+    }
+
+    /**
+     * Same as getHelperMethodDefinitions(Set<? extends Enum<?>> usedMethods)
+     * but allows specifiying number of newLines
+     *
+     */
+    public String getHelperMethodDefinitions(Set<? extends Enum<?>> usedMethods, int numOfNewLines) {
+        Assert.isTrue((numOfNewLines > 0));
+
         StringBuilder sb = new StringBuilder();
 
         // guarantee order of methods for tests & consistency
@@ -149,7 +161,9 @@ public class HelperMethodGenerator {
         for ( int sortedIndex : sortedIndices ) {
             String implementation = this.helperMethods.get(usedMethodsList.get(sortedIndex));
             if ( implementation != null ) { // no implementation necessary for this method
-                sb.append('\n');
+                for(int i =0; i<numOfNewLines;i++){
+                    sb.append('\n');
+                }
                 sb.append(implementation);
             }
         }

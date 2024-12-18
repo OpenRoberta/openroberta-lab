@@ -1,4 +1,5 @@
 import Ed
+
 Ed.EdisonVersion = Ed.V2
 Ed.DistanceUnits = Ed.CM
 Ed.Tempo = Ed.TEMPO_SLOW
@@ -54,7 +55,5 @@ def ____logic():
     ___booleanVar = True
     ___booleanVar = False
 
-
 ____control()
 ____logic()
-

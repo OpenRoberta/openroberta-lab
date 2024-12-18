@@ -3,7 +3,6 @@ from lib.display import display
 import math
 import time
 
-
 def clear_display():
     for i in range(8):
         display.set_attr("line" + str(i) + ".text", "")
@@ -44,12 +43,10 @@ led_colors = {
     "black": 0x000000
 }
 
-
 def run():
     for color, value in led_colors.items():
         if color != "red":
             display.set_attr(color + "Led.visible", str(False).lower())
-
     print("Display Test")
     print("Show Text on Display ")
     display.set_attr("line" + str(0) + ".text", str("ROW 0"))

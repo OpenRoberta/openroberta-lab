@@ -57,7 +57,6 @@ def ____logic():
     cyberpi.console.println(None)
     cyberpi.console.println(___numberVar if ( ___booleanVar ) else ___booleanVar)
 
-
 def run():
     global ___booleanVarFalse, ___booleanVar, ___numberList, ___booleanList, ___stringList, ___colorList, ___numberVar, ___stringVar
     ____control()
@@ -70,4 +69,5 @@ def main():
         cyberpi.display.show_label("Exeption on Mbot 2", 16, int(8 * 0 + 5), int(17 * 0))
         cyberpi.display.show_label(e, 16, int(8 * 0 + 5), int(17 * 1))
         raise
+
 main()

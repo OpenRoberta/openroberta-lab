@@ -31,7 +31,6 @@ def RGBAsString(rgb):
         color_diffs.append((color_diff, color))
     return min(color_diffs)[1]
 
-
 _trackWidth = 11.5
 _circumference = 20.420352248333657
 _diffPortsSwapped = False
@@ -46,7 +45,6 @@ _colors = {
             "white": (255,255,255),
             "black": (0,0,0)
         }
-
 
 def ____action():
     ____drive()
@@ -123,7 +121,6 @@ def ____lights():
     mbuild.quad_rgb_sensor.set_led(RGBAsString((204, 0, 0)), 1)
     mbuild.quad_rgb_sensor.off_led(1)
 
-
 def run():
     ____action()
 
@@ -137,4 +134,5 @@ def main():
     finally:
         mbot2.motor_stop("all")
         mbot2.EM_stop("all")
+
 main()

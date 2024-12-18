@@ -2,7 +2,6 @@ import microbit
 import random
 import math
 
-
 def servo_set_angle(pin, angle):
     if (angle < 0): angle = 0
     if (angle > 180): angle = 180
@@ -14,6 +13,7 @@ def servo_set_angle(pin, angle):
 
 class BreakOutOfALoop(Exception): pass
 class ContinueLoop(Exception): pass
+
 microbit.pin1.set_analog_period(20)
 microbit.pin13.set_analog_period(20)
 

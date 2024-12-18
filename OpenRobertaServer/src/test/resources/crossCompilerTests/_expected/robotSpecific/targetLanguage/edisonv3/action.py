@@ -174,7 +174,6 @@ def ____move():
     Ed.DriveRightMotor(Ed.STOP, Ed.SPEED_1, 1)
     Ed.ReadClapSensor()
 
-
 ____action()
 ___soundfile1 = Ed.TuneString(7,"c8e8g8z")
 Ed.PlayTune(___soundfile1)
@@ -186,4 +185,3 @@ Ed.PlayTune(___soundfile2)
 while (Ed.ReadMusicEnd() == Ed.MUSIC_NOT_FINISHED):
     pass
 Ed.ReadClapSensor()
-

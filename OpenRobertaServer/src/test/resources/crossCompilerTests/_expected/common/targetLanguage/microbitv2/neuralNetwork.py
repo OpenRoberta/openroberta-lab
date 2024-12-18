@@ -29,6 +29,7 @@ def ____nnStep():
     ____h1n2 = ____b_h1n2 + ____n1 * ____w_n1_h1n2 + ____n3 * ____w_n3_h1n2
     ____n2 = ____b_n2 + ____h1n1 * ____w_h1n1_n2 + ____h1n2 * ____w_h1n2_n2
     ____n4 = ____b_n4 + ____h1n1 * ____w_h1n1_n4 + ____h1n2 * ____w_h1n2_n4
+
 class BreakOutOfALoop(Exception): pass
 class ContinueLoop(Exception): pass
 
@@ -46,7 +47,6 @@ def ____runNN():
     ____b_n4 = ____b_h1n2
     ____nnStep()
     ___n = ____n2
-
 
 def run():
     global timer1, ___n, ____n1, ____n3, ____h1n1, ____h1n2, ____b_h1n1, ____w_n1_h1n1, ____w_n3_h1n1, ____b_h1n2, ____w_n1_h1n2, ____w_n3_h1n2, ____b_n2, ____w_h1n1_n2, ____w_h1n2_n2, ____b_n4, ____w_h1n1_n4, ____w_h1n2_n4

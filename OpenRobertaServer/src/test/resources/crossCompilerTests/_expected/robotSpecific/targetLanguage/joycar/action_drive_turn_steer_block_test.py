@@ -3,7 +3,6 @@ import random
 import math
 import music
 
-
 def drive(speedLeft, speedRight):
     sR = scale(speedRight)
     sL = scale(speedLeft)
@@ -165,7 +164,6 @@ def ____steerDriveTest():
     drive(-0, -50)
     drive(0, 0)
     music.pitch(261, 250, microbit.pin16)
-
 
 def run():
     global timer1, ___speed
