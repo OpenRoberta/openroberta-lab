@@ -310,7 +310,7 @@ public abstract class AbstractRegenerateTextlyJavaVisitor extends BaseVisitor<Vo
 
     @Override
     public Void visitStmtTextComment(StmtTextComment stmtTextComment) {
-        this.src.nlI().add("// ", stmtTextComment.textComment);
+        this.src.nlI().add("//", stmtTextComment.textComment);
         return null;
     }
 

@@ -10,23 +10,23 @@ nameDecl                : PRIMITIVETYPE NAME                                    
 
 // Statements block rules
 
-statementList           : (stmt';')*
+statementList           : (stmt|commentStatement)*
                         ;
 
-stmt                    : FNAMESTMT '(' ( expr (',' expr)* )? ')'                                                                                                                       # StmtFunc
-                        | NAME '(' ( expr* (',' expr)* )? ')'                                                                                                                           # StmtUsedDefCall
-                        | NAME op = SET  expr                                                                                                                                           # BinaryVarAssign
-                        | IF '(' expr ')' '{' statementList '}' ( ELSEIF '(' expr ')' '{' statementList '}' )* (op = ELSE '{' statementList '}')?                                       # ConditionStatementBlock
-                        | REPEATFOR '('nameDecl '=' expr ';' NAME '<' expr ';' (expr op = STEP |NAME '=' NAME op = (ADD | SUB) expr |NAME '=' expr)? ')' '{' statementList '}'          # RepeatFor
-                        | WHILE'(' expr ')' '{' statementList '}'                                                                                                                       # RepeatStatement
-                        | REPEATFOREACH '(' nameDecl ':' expr ')' '{' statementList '}'                                                                                                 # RepeatForEach
-                        | WAIT '(' expr ')' '{' statementList '}' (op = ORWAITFOR '(' expr ')' '{' statementList '}' )*                                                                 # WaitStatement
-                        | op = ( BREAK | CONTINUE )                                                                                                                                     # FlowControl
-                        | WAITMS '(' expr ')'                                                                                                                                           # WaitTimeStatement
-                        | IF '(' expr ')' RETURN (NAME | expr)                                                                                                                          # UserFuncIfStmt
-                        | robotStmt                                                                                                                                                     # RobotStatement
+stmt                    : FNAMESTMT '(' ( expr (',' expr)* )? ')' ';'                                                                                                                      # StmtFunc
+                        | NAME '(' ( expr* (',' expr)* )? ')' ';'                                                                                                                          # StmtUsedDefCall
+                        | NAME op = SET  expr ';'                                                                                                                                          # BinaryVarAssign
+                        | IF '(' expr ')' '{' statementList '}' ( ELSEIF '(' expr ')' '{' statementList '}' )* (op = ELSE '{' statementList '}')? (';')?                                   # ConditionStatementBlock
+                        | REPEATFOR '('nameDecl '=' expr ';' NAME '<' expr ';' (expr op = STEP |NAME '=' NAME op = (ADD | SUB) expr |NAME '=' expr)? ')' '{' statementList '}' (';')?      # RepeatFor
+                        | WHILE'(' expr ')' '{' statementList '}' (';')?                                                                                                                   # RepeatStatement
+                        | REPEATFOREACH '(' nameDecl ':' expr ')' '{' statementList '}' (';')?                                                                                             # RepeatForEach
+                        | WAIT '(' expr ')' '{' statementList '}' (op = ORWAITFOR '(' expr ')' '{' statementList '}' )*  (';')?                                                            # WaitStatement
+                        | op = ( BREAK | CONTINUE ) ';'                                                                                                                                    # FlowControl
+                        | WAITMS '(' expr ')' ';'                                                                                                                                          # WaitTimeStatement
+                        | IF '(' expr ')' RETURN (NAME | expr)  ';'                                                                                                                        # UserFuncIfStmt
+                        | robotStmt ';'                                                                                                                                                    # RobotStatement
                         ;
-
+commentStatement        : SL_COMMENT                                                                                                                                                       # CommentLine;
 robotStmt               : robotMicrobitv2Stmt
                         | robotWeDoStmt
                         | robotEv3Stmt
@@ -256,7 +256,9 @@ PRIMITIVETYPE   : 'Number'
 VOID            : 'void';
 NEWLINE         :   '\r'? '\n'  -> skip;
 
+SL_COMMENT      : '//' .*? '\n';
 WS              :   (' '|'\t')+ -> skip;
+
 
 FNAME           : 'sin'
                 | 'cos'
@@ -526,4 +528,7 @@ MUL     : '*';
 DIV     : '/';
 ADD     : '+';
 SUB     : '-';
+
+
+
 

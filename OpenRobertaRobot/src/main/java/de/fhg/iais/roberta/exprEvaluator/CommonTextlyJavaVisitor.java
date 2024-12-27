@@ -72,6 +72,7 @@ import de.fhg.iais.roberta.syntax.lang.stmt.RepeatStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.Stmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtFlowCon;
 import de.fhg.iais.roberta.syntax.lang.stmt.StmtList;
+import de.fhg.iais.roberta.syntax.lang.stmt.StmtTextComment;
 import de.fhg.iais.roberta.syntax.lang.stmt.TernaryExpr;
 import de.fhg.iais.roberta.syntax.lang.stmt.TextAppendStmt;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitStmt;
@@ -1091,14 +1092,17 @@ public abstract class CommonTextlyJavaVisitor<T> extends TextlyJavaBaseVisitor<T
     @Override
     public T visitMainFunc(TextlyJavaParser.MainFuncContext ctx) throws UnsupportedOperationException {
         StmtList statementList = new StmtList();
-
-        for ( TextlyJavaParser.StmtContext stmt : ctx.statementList().stmt() ) {
-            Stmt statement = (Stmt) visit(stmt);
-            statement.setReadOnly();
-            statementList.addStmt(statement);
+        for ( ParseTree stmt : ctx.statementList().children ) {
+            if ( stmt instanceof TextlyJavaParser.StmtContext ) {
+                Stmt statement = (Stmt) visit(stmt);
+                statement.setReadOnly();
+                statementList.addStmt(statement);
+            } else if ( stmt instanceof TextlyJavaParser.CommentStatementContext ) {
+                Stmt statement = (Stmt) visit(stmt);
+                statement.setReadOnly();
+                statementList.addStmt(statement);
+            }
         }
-        statementList.setReadOnly();
-
         return (T) statementList;
     }
 
@@ -1124,6 +1128,13 @@ public abstract class CommonTextlyJavaVisitor<T> extends TextlyJavaBaseVisitor<T
         var.setReadOnly();
         declaredVariableNames.add(nameVar);
         return (T) var;
+    }
+
+    @Override
+    public T visitCommentLine(TextlyJavaParser.CommentLineContext ctx) {
+        String comment = ctx.getText().replace("//", "");
+        StmtTextComment stmtTextComment = new StmtTextComment(mkInlineProperty(ctx, "text_comment"), comment);
+        return (T) stmtTextComment;
     }
 
     /**
