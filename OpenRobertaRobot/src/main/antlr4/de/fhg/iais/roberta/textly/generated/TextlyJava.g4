@@ -26,7 +26,8 @@ stmt                    : FNAMESTMT '(' ( expr (',' expr)* )? ')' ';'           
                         | IF '(' expr ')' RETURN (NAME | expr)  ';'                                                                                                                        # UserFuncIfStmt
                         | robotStmt ';'                                                                                                                                                    # RobotStatement
                         ;
-commentStatement        : SL_COMMENT                                                                                                                                                       # CommentLine;
+commentStatement        : SL_COMMENT                                                                                                                                                       # CommentLine
+                        ;
 robotStmt               : robotMicrobitv2Stmt
                         | robotWeDoStmt
                         | robotEv3Stmt

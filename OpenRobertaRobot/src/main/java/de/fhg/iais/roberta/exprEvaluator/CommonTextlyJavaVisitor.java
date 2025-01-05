@@ -1092,15 +1092,17 @@ public abstract class CommonTextlyJavaVisitor<T> extends TextlyJavaBaseVisitor<T
     @Override
     public T visitMainFunc(TextlyJavaParser.MainFuncContext ctx) throws UnsupportedOperationException {
         StmtList statementList = new StmtList();
-        for ( ParseTree stmt : ctx.statementList().children ) {
-            if ( stmt instanceof TextlyJavaParser.StmtContext ) {
-                Stmt statement = (Stmt) visit(stmt);
-                statement.setReadOnly();
-                statementList.addStmt(statement);
-            } else if ( stmt instanceof TextlyJavaParser.CommentStatementContext ) {
-                Stmt statement = (Stmt) visit(stmt);
-                statement.setReadOnly();
-                statementList.addStmt(statement);
+        if ( ctx.statementList() != null && ctx.statementList().children != null ) {
+            for ( ParseTree stmt : ctx.statementList().children ) {
+                if ( stmt instanceof TextlyJavaParser.StmtContext ) {
+                    Stmt statement = (Stmt) visit(stmt);
+                    statement.setReadOnly();
+                    statementList.addStmt(statement);
+                } else if ( stmt instanceof TextlyJavaParser.CommentStatementContext ) {
+                    Stmt statement = (Stmt) visit(stmt);
+                    statement.setReadOnly();
+                    statementList.addStmt(statement);
+                }
             }
         }
         return (T) statementList;
