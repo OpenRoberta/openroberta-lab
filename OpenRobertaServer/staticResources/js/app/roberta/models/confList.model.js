@@ -1,19 +1,3 @@
-/**
- * Rest calls to the server related to program operations (save, delete,
- * share...)
- *
- * @module rest/program
- */
-define(["require", "exports", "comm"], function (require, exports, COMM) {
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.loadConfList = void 0;
-    /**
-     * Refresh program list
-     */
-    function loadConfList(successFn) {
-        COMM.json('/conf/loadCN', {
-            cmd: 'loadCN'
-        }, successFn, 'refresh configuration list');
-    }
-    exports.loadConfList = loadConfList;
-});
+define(["require","exports","comm"],(function(o,e,n){Object.defineProperty(e,"__esModule",{value:!0}),e.loadConfList=void 0,e.loadConfList=function(o){n.json("/conf/loadCN",{cmd:"loadCN"},o,"refresh configuration list")}}));
+//# sourceMappingURL=confList.model.js.map
+//# sourceMappingURL=confList.model.js.map

@@ -1,26 +1,3 @@
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    };
-    return function (d, b) {
-        if (typeof b !== "function" && b !== null)
-            throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-define(["require", "exports", "robot.ev3"], function (require, exports, robot_ev3_1) {
-    Object.defineProperty(exports, "__esModule", { value: true });
-    var RobotXnn = /** @class */ (function (_super) {
-        __extends(RobotXnn, _super);
-        function RobotXnn() {
-            return _super !== null && _super.apply(this, arguments) || this;
-        }
-        return RobotXnn;
-    }(robot_ev3_1.default));
-    exports.default = RobotXnn;
-});
+var __extends=this&&this.__extends||function(){var t=function(e,n){return t=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(t,e){t.__proto__=e}||function(t,e){for(var n in e)Object.prototype.hasOwnProperty.call(e,n)&&(t[n]=e[n])},t(e,n)};return function(e,n){if("function"!=typeof n&&null!==n)throw new TypeError("Class extends value "+String(n)+" is not a constructor or null");function o(){this.constructor=e}t(e,n),e.prototype=null===n?Object.create(n):(o.prototype=n.prototype,new o)}}();define(["require","exports","robot.ev3"],(function(t,e,n){Object.defineProperty(e,"__esModule",{value:!0});var o=function(t){function e(){return null!==t&&t.apply(this,arguments)||this}return __extends(e,t),e}(n.default);e.default=o}));
+//# sourceMappingURL=robot.xnn.js.map
+//# sourceMappingURL=robot.xnn.js.map

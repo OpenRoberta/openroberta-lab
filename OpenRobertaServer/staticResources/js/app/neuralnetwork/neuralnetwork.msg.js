@@ -1,17 +1,3 @@
-define(["require", "exports", "blockly"], function (require, exports, Blockly) {
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.get = void 0;
-    function get(key) {
-        var text = toIntegrateIntoBlocklyMsg[key];
-        if (text != undefined) {
-            return text;
-        }
-        var text = Blockly.Msg[key];
-        if (text != undefined) {
-            return text;
-        }
-        return key;
-    }
-    exports.get = get;
-    var toIntegrateIntoBlocklyMsg = {};
-});
+define(["require","exports","blockly"],(function(e,n,r){Object.defineProperty(n,"__esModule",{value:!0}),n.get=void 0,n.get=function(e){var n;return null!=(n=l[e])||null!=(n=r.Msg[e])?n:e};var l={}}));
+//# sourceMappingURL=neuralnetwork.msg.js.map
+//# sourceMappingURL=neuralnetwork.msg.js.map

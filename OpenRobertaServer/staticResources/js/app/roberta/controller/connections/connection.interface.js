@@ -1,3 +1,3 @@
-define(["require", "exports"], function (require, exports) {
-    Object.defineProperty(exports, "__esModule", { value: true });
-});
+define(["require","exports"],(function(e,r){Object.defineProperty(r,"__esModule",{value:!0})}));
+//# sourceMappingURL=connection.interface.js.map
+//# sourceMappingURL=connection.interface.js.map

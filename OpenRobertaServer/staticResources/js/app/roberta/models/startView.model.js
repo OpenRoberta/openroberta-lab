@@ -1,16 +1,3 @@
-define(["require", "exports", "jquery"], function (require, exports, $) {
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.fetchRSS = void 0;
-    /**
-     * Fetch RSS from the roberta homepage
-     */
-    function fetchRSS(successFn, errorFn) {
-        $.ajax({
-            url: 'https://www.roberta-home.de/?type=9818',
-            dataType: 'xml',
-            error: errorFn,
-            success: successFn,
-        });
-    }
-    exports.fetchRSS = fetchRSS;
-});
+define(["require","exports","jquery"],(function(e,r,t){Object.defineProperty(r,"__esModule",{value:!0}),r.fetchRSS=void 0,r.fetchRSS=function(e,r){t.ajax({url:"https://www.roberta-home.de/?type=9818",dataType:"xml",error:r,success:e})}}));
+//# sourceMappingURL=startView.model.js.map
+//# sourceMappingURL=startView.model.js.map
