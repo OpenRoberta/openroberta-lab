@@ -17,7 +17,8 @@ export default class RobotMbot extends RobotBaseMobile {
         configuration['WHEELDIAMETER'] = 6.5;
 
         this.chassis = new MbotChassis(this.id, configuration, 3, this.pose);
-        this.RGBLedLeft = new MbotRGBLed({ x: 20, y: -10 }, true, '2');
+        //order is important here, only the later RBG should have the reset flag set!
+        this.RGBLedLeft = new MbotRGBLed({ x: 20, y: -10 }, false, '2');
         this.RGBLedRight = new MbotRGBLed({ x: 20, y: 10 }, true, '1');
         this.display = new MbotDisplay(this.id, { x: 15, y: 50 });
         let sensors: object = configuration['SENSORS'];
