@@ -227,7 +227,9 @@ export class RcjScoringTool implements IObserver {
     }
 
     callAutoLoP() {
-        $('#rcjLoP').trigger('click');
+        if ($('#autoLoP').prop('checked')) {
+            $('#rcjLoP').trigger('click');
+        }
     }
 
     update(simObject: RobotBaseMobile | CircleSimulationObject) {
@@ -1238,7 +1240,6 @@ export class SimulationScene {
         this.robots.forEach((robot) => (robot as RobotBaseMobile).resetPose());
         this.dCtx.canvas.width = this.dCtx.canvas.width;
         this.udCtx.canvas.width = this.udCtx.canvas.width;
-        this.rcjCtx.canvas.width = this.rcjCtx.canvas.width;
     }
 
     addMarker(markerId: number) {
