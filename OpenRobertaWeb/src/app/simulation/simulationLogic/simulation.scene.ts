@@ -281,7 +281,7 @@ export class RcjScoringTool implements IObserver {
                 this.lastPath = path;
                 this.line = (() => {
                     for (let sensor of this.lineSensors) {
-                        if (sensor['lightValue'] < 90) {
+                        if (sensor['lightValue'] < 80) {
                             return true;
                         }
                     }
