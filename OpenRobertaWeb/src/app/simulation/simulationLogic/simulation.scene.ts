@@ -21,6 +21,7 @@ import simulationRoberta, { SimulationRoberta } from 'simulation.roberta';
 import { IDestroyable, RobotBase, RobotFactory } from 'robot.base';
 import { Interpreter } from 'interpreter.interpreter';
 import { Pose, RobotBaseMobile } from 'robot.base.mobile';
+import { ColorSensorHex } from 'robot.sensors';
 
 const RESIZE_CONST: number = 3;
 
@@ -417,7 +418,7 @@ export class RcjScoringTool implements IObserver {
         this.lineSensors = [];
         for (let key in robot) {
             if (robot.hasOwnProperty(key)) {
-                if (robot[key].constructor.name === 'ColorSensorHex') {
+                if (robot[key] instanceof ColorSensorHex) {
                     this.lineSensors.push(robot[key]);
                 }
             }
