@@ -21,7 +21,6 @@ import simulationRoberta, { SimulationRoberta } from 'simulation.roberta';
 import { IDestroyable, RobotBase, RobotFactory } from 'robot.base';
 import { Interpreter } from 'interpreter.interpreter';
 import { Pose, RobotBaseMobile } from 'robot.base.mobile';
-import RobotRcj from 'robot.rcj';
 
 const RESIZE_CONST: number = 3;
 
@@ -77,16 +76,18 @@ export class RcjScoringTool implements IObserver {
     private lastCheckPointIndex: number;
     private wasOnLineOnce: boolean = false;
     private resetObstaclesCallback: Function;
+    private lineSensors: string[] = [];
 
     constructor(robot: RobotBase, configData: any, resetObstaclesCallback: Function) {
         this.configData = configData;
-        this.robot = robot as RobotBaseMobile;
+        this.setRobot(robot as RobotBaseMobile);
         this.resetObstaclesCallback = resetObstaclesCallback;
         this.init();
         let rcj = this;
         $('#rcjStartStop')
             .off()
-            .on('click', function () {
+            .on('click', function (e) {
+                e.preventDefault();
                 if ($(this).text().indexOf('Start') >= 0) {
                     $(this).html('Stop<br>Scoring Run');
                     rcj.init();
@@ -107,6 +108,7 @@ export class RcjScoringTool implements IObserver {
         $('#rcjLoP')
             .off()
             .on('click', function (e) {
+                e.preventDefault();
                 rcj.robot.interpreter.terminate();
                 rcj.programPaused = true;
                 $('#rcjLoP').addClass('disabled');
@@ -118,8 +120,13 @@ export class RcjScoringTool implements IObserver {
                 );
                 rcj.robot.pose = new Pose(lastCheckPointPose.x, lastCheckPointPose.y, lastCheckPointPose.theta);
                 rcj.robot.initialPose = new Pose(lastCheckPointPose.x, lastCheckPointPose.y, lastCheckPointPose.theta);
+                rcj.wasOnLineOnce = true;
+                rcj.line = true;
                 rcj.path = rcj.lastCheckPoint['index'][0];
                 rcj.lastPath = rcj.path;
+                let x = Math.floor((rcj.robot.pose.x - 10) / 90);
+                let y = Math.floor((rcj.robot.pose.y - 10) / 90);
+                rcj.lastTile = rcj.configData.tiles['' + x + ',' + y + ',0'];
                 rcj.loPCounter += 1;
                 rcj.loPSum += 1;
                 if (rcj.nextCheckPoint && rcj.loPCounter >= 3) {
@@ -130,6 +137,7 @@ export class RcjScoringTool implements IObserver {
         $('#rcjNextCP')
             .off()
             .on('click', function (e) {
+                e.preventDefault();
                 rcj.robot.interpreter.terminate();
                 rcj.programPaused = true;
                 $('#rcjLoP').addClass('disabled');
@@ -142,6 +150,11 @@ export class RcjScoringTool implements IObserver {
                     );
                     rcj.robot.pose = new Pose(nextCheckPointPose.x, nextCheckPointPose.y, nextCheckPointPose.theta);
                     rcj.robot.initialPose = new Pose(nextCheckPointPose.x, nextCheckPointPose.y, nextCheckPointPose.theta);
+                    let x = Math.floor((rcj.robot.pose.x - 10) / 90);
+                    let y = Math.floor((rcj.robot.pose.y - 10) / 90);
+                    rcj.lastTile = rcj.configData.tiles['' + x + ',' + y + ',0'];
+                    rcj.wasOnLineOnce = true;
+                    rcj.line = true;
                     rcj.path = rcj.nextCheckPoint['index'][0];
                     rcj.lastPath = rcj.path;
                     rcj.loPCounter = 0;
@@ -149,6 +162,7 @@ export class RcjScoringTool implements IObserver {
                     rcj.lastCheckPoint = rcj.nextCheckPoint;
                     rcj.setNextCheckPoint();
                 }
+                return false;
             });
         $('#rcjName').text(configData.name);
         $('#rcjTeam').text(robot.interpreter.name);
@@ -159,6 +173,7 @@ export class RcjScoringTool implements IObserver {
         this.path = 0;
         this.lastPath = 0;
         this.line = true;
+        this.wasOnLineOnce = true;
         clearInterval(this.stopWatch);
         this.mins = 0;
         this.secs = 0;
@@ -169,9 +184,11 @@ export class RcjScoringTool implements IObserver {
         this.initialPose = simulationRoberta.getTilePose(startTile, this.configData['tiles'][startTile['next']], null);
         this.lastTile = startTile;
         this.lastCheckPoint = startTile;
+        this.setNextCheckPoint();
         if (this.robot) {
             this.robot.initialPose = this.initialPose;
             this.robot.resetPose();
+            this.wasOnLineOnce = true;
         }
         this.loPCounter = 0;
         this.loPSum = 0;
@@ -239,13 +256,19 @@ export class RcjScoringTool implements IObserver {
         if (simObject instanceof RobotBaseMobile) {
             let robot: RobotBaseMobile = simObject;
             if (this.robot != robot) {
-                this.robot = robot;
-                this.initialPose = this.robot.initialPose;
+                this.setRobot(robot);
+            }
+            if (this.robot.interpreter.isTerminated()) {
+                this.programPaused = true;
+                return;
             }
             if (this.programPaused) {
-                this.programPaused = false;
                 $('#rcjLoP').removeClass('disabled');
                 $('#rcjNextCP').addClass('disabled');
+                if (this.nextCheckPoint && this.loPCounter >= 3) {
+                    $('#rcjNextCP').removeClass('disabled');
+                }
+                this.programPaused = false;
             }
             this.pose = robot.pose;
             let x = Math.floor((this.pose.x - 10) / 90);
@@ -255,7 +278,14 @@ export class RcjScoringTool implements IObserver {
             if (path == this.lastPath || path == this.lastPath + 1) {
                 this.path = path;
                 this.lastPath = path;
-                this.line = (robot as RobotRcj)['F'].lightValue < 70 ? true : false;
+                this.line = (() => {
+                    for (let sensor of this.lineSensors) {
+                        if (sensor['lightValue'] < 90) {
+                            return true;
+                        }
+                    }
+                    return false;
+                })();
                 if (this.line) {
                     this.wasOnLineOnce = true;
                 }
@@ -286,6 +316,7 @@ export class RcjScoringTool implements IObserver {
                 if (tile && tile !== this.lastTile) {
                     if (!this.wasOnLineOnce && !this.inAvoidanceMode) {
                         this.callAutoLoP();
+                        return;
                     } else {
                         this.countObstaclePoints(this.lastTile);
                     }
@@ -305,6 +336,7 @@ export class RcjScoringTool implements IObserver {
                     } else {
                         if (this.path != -1 && path) {
                             this.callAutoLoP();
+                            return;
                         }
                         this.path = -1;
                     }
@@ -377,6 +409,19 @@ export class RcjScoringTool implements IObserver {
         $('#rcjTeam').text('');
         $('#rcjTime').text('00:00:0');
         $('#rcjRescueMulti').text('');
+    }
+
+    private setRobot(robot: RobotBaseMobile) {
+        this.robot = robot;
+        this.initialPose = this.robot.initialPose;
+        this.lineSensors = [];
+        for (let key in robot) {
+            if (robot.hasOwnProperty(key)) {
+                if (robot[key].constructor.name === 'ColorSensorHex') {
+                    this.lineSensors.push(robot[key]);
+                }
+            }
+        }
     }
 }
 

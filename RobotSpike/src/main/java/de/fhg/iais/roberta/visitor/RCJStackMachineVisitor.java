@@ -151,7 +151,8 @@ public class RCJStackMachineVisitor extends AbstractStackMachineVisitor implemen
 
     @Override
     public Void visitMotorStopAction(de.fhg.iais.roberta.syntax.action.spike.MotorStopAction motorStopAction) {
-        String port = motorStopAction.getUserDefinedPort();
+        String name = motorStopAction.getUserDefinedPort();
+        String port = this.configuration.getConfigurationComponent(name).componentProperties.get("PORT");
         JSONObject o = makeNode(C.MOTOR_STOP).put(C.PORT, port.toLowerCase());
         return add(o);
     }
