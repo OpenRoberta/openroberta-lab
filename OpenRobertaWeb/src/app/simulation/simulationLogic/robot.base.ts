@@ -280,7 +280,7 @@ export abstract class RobotBase implements IRobot, ISelectable {
         $('#robotLayer').off('.R' + this.id);
     }
 
-    private addMouseEvents() {
+    protected addMouseEvents() {
         let $robotLayer = $('#robotLayer');
         $robotLayer.on('mousedown.R' + this.id + ' touchstart.R' + this.id, this.handleMouseDown.bind(this));
         $robotLayer.on('mousemove.R' + this.id + ' touchmove.R' + this.id, this.handleMouseMove.bind(this));

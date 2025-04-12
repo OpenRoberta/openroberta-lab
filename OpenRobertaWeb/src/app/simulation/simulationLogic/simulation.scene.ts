@@ -74,7 +74,6 @@ export class RcjScoringTool implements IObserver {
     private countedTileIndices: number[];
     private avoidanceGoalIndex: number = null;
     private rescueMulti: number;
-    private lastCheckPointIndex: number;
     private wasOnLineOnce: boolean = false;
     private resetObstaclesCallback: Function;
     private lineSensors: string[] = [];
@@ -85,6 +84,7 @@ export class RcjScoringTool implements IObserver {
         this.resetObstaclesCallback = resetObstaclesCallback;
         this.init();
         let rcj = this;
+        $('#rcjScoringWindow').off('keydown.rcj').on('keydown.rcj', this.handleShortCuts.bind(this));
         $('#rcjStartStop')
             .off()
             .on('click', function (e) {
@@ -109,6 +109,9 @@ export class RcjScoringTool implements IObserver {
         $('#rcjLoP')
             .off()
             .on('click', function (e) {
+                if ($('#rcjLoP').hasClass('disabled')) {
+                    return;
+                }
                 e.preventDefault();
                 rcj.robot.interpreter.terminate();
                 rcj.programPaused = true;
@@ -138,6 +141,9 @@ export class RcjScoringTool implements IObserver {
         $('#rcjNextCP')
             .off()
             .on('click', function (e) {
+                if ($('#rcjLoP').hasClass('disabled')) {
+                    return;
+                }
                 e.preventDefault();
                 rcj.robot.interpreter.terminate();
                 rcj.programPaused = true;
@@ -170,6 +176,50 @@ export class RcjScoringTool implements IObserver {
         $('#rcjTime').text('00:00:0');
     }
 
+    private handleShortCuts(event: JQuery.KeyDownEvent) {
+        let code: string = '';
+        if (event.key !== undefined) {
+            code = event.key;
+        } else if (event.which !== undefined) {
+            switch (event.which) {
+                case 32: // Blank
+                    code = ' ';
+                    break;
+                case 76: // L
+                    code = 'l';
+                    break;
+                case 83: // S
+                    code = 's';
+                    break;
+                case 74: // J
+                    code = 'j';
+                    break;
+                default:
+                //
+            }
+        }
+        switch (code) {
+            case ' ': // Blank
+                $('#simControl').trigger('click');
+                event.preventDefault();
+                break;
+            case 'l':
+                $('#rcjLoP').trigger('click');
+                event.preventDefault();
+                break;
+            case 's':
+                $('#rcjStartStop').trigger('click');
+                event.preventDefault();
+                break;
+            case 'j':
+                $('#rcjNextCP').trigger('click');
+                event.preventDefault();
+                break;
+            default:
+            //
+        }
+    }
+
     private init() {
         this.path = 0;
         this.lastPath = 0;
@@ -200,7 +250,6 @@ export class RcjScoringTool implements IObserver {
         this.totalScore = 0;
         this.inAvoidanceMode = false;
         this.countedTileIndices = [0];
-        this.lastCheckPointIndex = 0;
         this.rescueMulti = 1;
     }
 
@@ -293,14 +342,14 @@ export class RcjScoringTool implements IObserver {
                 if ((tile && tile.checkPoint) || path == 0) {
                     if (this.lastCheckPoint != tile) {
                         // calculate passed section's scoring
+                        let lastCheckPointIndex = this.lastCheckPoint['index'][0];
                         let pointsIndex: number = this.loPCounter < this.POINTS_LINE.length ? this.loPCounter : this.POINTS_LINE.length - 1;
-                        this.linePoints += (tile.index[0] - this.lastCheckPointIndex) * this.POINTS_LINE[pointsIndex];
+                        this.linePoints += (tile.index[0] - lastCheckPointIndex) * this.POINTS_LINE[pointsIndex];
 
                         // reset section variables
                         this.loPCounter = 0;
                         this.section += 1;
                         this.lastCheckPoint = tile;
-                        this.lastCheckPointIndex = tile.index[0];
                         this.setNextCheckPoint();
                     }
                 } else {

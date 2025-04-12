@@ -156,6 +156,15 @@ export abstract class RobotBaseMobile extends RobotBase implements IObservableSi
         }
     }
 
+    override addMouseEvents(): void {
+        super.addMouseEvents();
+        $('#robotLayer').on('mouseleave.R' + this.id + '', this.handleMouseLeave.bind(this));
+    }
+
+    handleMouseLeave() {
+        this.selected = false;
+    }
+
     handleMouseDown(e: JQuery.TouchEventBase) {
         SIMATH.transform(this.pose, this.mouse);
         if (e && !(e as unknown as SimMouseEvent).startX) {

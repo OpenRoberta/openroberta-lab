@@ -745,7 +745,7 @@ limitations under the License.
                     <canvas class='canvasSim' height='1' id='rcjLayer' style='z-index: 4' width='1'></canvas>
                     <canvas class='canvasSim' height='1' id='arucoMarkerLayer' style='z-index: 5' width='1'></canvas>
                     <canvas class='canvasSim' height='1' id='objectLayer' style='z-index: 5' width='1'></canvas>
-                    <canvas class='canvasSim' height='1' id='robotLayer' style='z-index: 6' width='1'></canvas>
+                    <canvas class='canvasSim' tabindex='0' height='1' id='robotLayer' style='z-index: 6' width='1'></canvas>
                 </div>
                 <div class='simMobile simNotWebots' id='simEditButtons'>
                     <button class='blbtn simScene typcn typcn-image' data-bs-original-title='' id='simScene'
@@ -831,7 +831,7 @@ limitations under the License.
                         <button class='blbtn dropdown-toggle' data-bs-auto-close='outside' data-bs-toggle='dropdown'
                             id='simCustomObstacle' type='button' data-bs-original-title=''
                             lkey='Blockly.Msg.MENU_SIM_ADD_OBSTACLE_TOOLTIP' rel='tooltip'>
-                            <span class='typcn typcn-box' ></span>
+                            <span class='typcn typcn-box'></span>
                         </button>
                         <ul class='dropdown-menu'>
                             <li>
@@ -854,7 +854,7 @@ limitations under the License.
                         <button class='blbtn dropdown-toggle' data-bs-auto-close='outside' data-bs-toggle='dropdown'
                             id='simCustomColorObject' type='button' data-bs-original-title=''
                             lkey='Blockly.Msg.MENU_SIM_ADD_COLOR_OBJECT_TOOLTIP' rel='tooltip'>
-                        <span class='typcn typcn-media-stop' ></span>
+                            <span class='typcn typcn-media-stop'></span>
                         </button>
                         <ul class='dropdown-menu'>
                             <li>
@@ -2377,7 +2377,7 @@ limitations under the License.
         </div>
     </div>
 
-    <div class='simWindow slide-in' data-bs-backdrop='false' id='rcjScoringWindow'>
+    <div class='simWindow slide-in' data-bs-backdrop='false' tabindex='0' id='rcjScoringWindow'>
         <button aria-label='Close' class='btn-close close' data-bs-dismiss='modal' type='button'></button>
         <div class='valuesContent'>
             <table id='rcjScoringTable'>
