@@ -141,7 +141,7 @@ export class RcjScoringTool implements IObserver {
         $('#rcjNextCP')
             .off()
             .on('click', function (e) {
-                if ($('#rcjLoP').hasClass('disabled')) {
+                if ($('#rcjNextCP').hasClass('disabled')) {
                     return;
                 }
                 e.preventDefault();
