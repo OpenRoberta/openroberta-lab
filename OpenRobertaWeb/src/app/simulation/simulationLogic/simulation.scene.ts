@@ -288,6 +288,7 @@ export class RcjScoringTool implements IObserver {
             }
             if (tile.tileType.intersections > 0) {
                 this.obstaclePoints += this.POINTS_INTERSECTION;
+                this.obstaclePoints += tile.tileType.intersections * this.POINTS_INTERSECTION;
             }
             this.countedTileIndices.push(tile.index[0]);
         }
