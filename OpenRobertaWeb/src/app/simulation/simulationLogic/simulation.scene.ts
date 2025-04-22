@@ -39,11 +39,11 @@ export interface IObservableSimulationObject {
 
 export class RcjScoringTool implements IObserver {
     private MAX_TIME = 8;
-    private POINTS_OBSTACLE = 15;
+    private POINTS_OBSTACLE = 20;
     private POINTS_GAP = 10;
     private POINTS_INTERSECTION = 10;
     private POINTS_VICTIM_MULTI = 1.4;
-    private POINTS_DEADONLY_VICTIM_MULTI = 1.2;
+    private POINTS_DEADONLY_VICTIM_MULTI = 1.25;
     private POINTS_LINE: number[] = [5, 3, 1, 0];
     private configData: any;
     private running: boolean = false;
@@ -66,7 +66,7 @@ export class RcjScoringTool implements IObserver {
     private prevNextCheckPoint: {};
     private programPaused: boolean = true;
     private victimsLocated: number = 0;
-    private linePoints: number = 1;
+    private linePoints: number = 5;
     private obstaclePoints: number = 0;
     private totalScore: number = 0;
     private inAvoidanceMode: boolean;
@@ -245,7 +245,7 @@ export class RcjScoringTool implements IObserver {
         this.loPSum = 0;
         this.section = 0;
         this.victimsLocated = 0;
-        this.linePoints = 0;
+        this.linePoints = 5;
         this.obstaclePoints = 0;
         this.totalScore = 0;
         this.inAvoidanceMode = false;
@@ -271,13 +271,13 @@ export class RcjScoringTool implements IObserver {
             $('#rcjLoPpS').text(this.loPCounter);
             $('#rcjLoPCount').text(this.loPSum);
             $('#rcjLine').text(this.line ? 'yes' : 'no');
-            if (this.mins >= this.MAX_TIME) {
-                $('#rcjStartStop').trigger('click');
-            }
             $('#rcjRescueMulti').text(Math.round(this.rescueMulti * 100) / 100);
             $('#rcjLinePoints').text(this.linePoints);
             $('#rcjObstaclePoints').text(this.obstaclePoints);
             $('#rcjTotalScore').text(this.totalScore);
+            if (this.mins >= this.MAX_TIME || this.victimsLocated >= 3) {
+                $('#rcjStartStop').trigger('click');
+            }
         }
     }
 
@@ -397,24 +397,22 @@ export class RcjScoringTool implements IObserver {
             this.totalScore = UTIL.round(this.totalScore, 2);
         } else if (simObject instanceof CircleSimulationObject) {
             let circle: CircleSimulationObject = simObject;
+            const factor = Math.max(this.POINTS_VICTIM_MULTI - 0.05 * this.loPCounter, 1.25);
             if (circle.inEvacuationZone && circle.color === '#33B8CA') {
                 circle.selected = true;
                 $('#simDeleteObject').trigger('click');
-                this.rescueMulti *= this.POINTS_VICTIM_MULTI;
+                this.rescueMulti *= factor;
                 this.victimsLocated += 1;
             }
             if (circle.inEvacuationZone && circle.color === '#000000') {
                 circle.selected = true;
                 $('#simDeleteObject').trigger('click');
                 if (this.victimsLocated > 1) {
-                    this.rescueMulti *= this.POINTS_VICTIM_MULTI;
+                    this.rescueMulti *= factor;
                 } else {
                     this.rescueMulti *= this.POINTS_DEADONLY_VICTIM_MULTI;
                 }
                 this.victimsLocated += 1;
-            }
-            if (this.victimsLocated >= 3) {
-                $('#rcjStartStop').trigger('click');
             }
         }
     }
