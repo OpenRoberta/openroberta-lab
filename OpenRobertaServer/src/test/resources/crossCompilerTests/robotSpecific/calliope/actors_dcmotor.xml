@@ -419,7 +419,7 @@
 					intask="true">
 					<field name="NAME">DCM2</field>
 					<field name="I2CADDRESS">0x62</field>
-					<field name="PLUG">4</field>
+					<field name="PLUG">A0</field>
 				</block>
 			</instance>
 			<instance x="866" y="135">
@@ -427,7 +427,7 @@
 					intask="true">
 					<field name="NAME">DCM1</field>
 					<field name="I2CADDRESS">0x61</field>
-					<field name="PLUG">4</field>
+					<field name="PLUG">A0</field>
 				</block>
 			</instance>
 			<instance x="867" y="53">
@@ -435,7 +435,7 @@
 					intask="true">
 					<field name="NAME">DCM0</field>
 					<field name="I2CADDRESS">0x60</field>
-					<field name="PLUG">4</field>
+					<field name="PLUG">A0</field>
 				</block>
 			</instance>
 		</block_set>
