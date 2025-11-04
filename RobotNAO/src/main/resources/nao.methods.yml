@@ -19,6 +19,13 @@ SAY_TEXT:
         if message.startswith("finish"):
           break
 
+#newmethod
+A_TEST:
+  PYTHON: |
+    def test(robot, input):
+      print("test method")
+
+
 WALK_DISTANCE:
   PYTHON: |
     def walk(robot, distance):

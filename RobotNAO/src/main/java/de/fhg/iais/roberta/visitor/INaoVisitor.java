@@ -24,6 +24,9 @@ import de.fhg.iais.roberta.syntax.action.nao.Stop;
 import de.fhg.iais.roberta.syntax.action.nao.TakePicture;
 import de.fhg.iais.roberta.syntax.action.nao.TurnDegrees;
 import de.fhg.iais.roberta.syntax.action.nao.WalkAsync;
+//newMethod
+import de.fhg.iais.roberta.syntax.action.nao.ATesting;
+//----------
 import de.fhg.iais.roberta.syntax.action.nao.WalkDistance;
 import de.fhg.iais.roberta.syntax.action.nao.WalkTo;
 import de.fhg.iais.roberta.syntax.action.speech.SayTextAction;
@@ -69,6 +72,10 @@ public interface INaoVisitor<V> extends IVisitor<V> {
     V visitMoveJoint(MoveJoint moveJoint);
 
     V visitWalkDistance(WalkDistance walkDistance);
+
+    // newMethod
+    V visitATesting(ATesting test);
+    //--------------
 
     V visitTurnDegrees(TurnDegrees turnDegrees);
 

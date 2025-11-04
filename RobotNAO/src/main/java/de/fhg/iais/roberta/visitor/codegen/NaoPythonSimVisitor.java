@@ -16,6 +16,8 @@ import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.light.LedAction;
 import de.fhg.iais.roberta.syntax.action.light.RgbLedOnAction;
+//newmethod
+import de.fhg.iais.roberta.syntax.action.nao.ATesting;
 import de.fhg.iais.roberta.syntax.action.nao.Animation;
 import de.fhg.iais.roberta.syntax.action.nao.ApplyPosture;
 import de.fhg.iais.roberta.syntax.action.nao.Autonomous;
@@ -281,13 +283,30 @@ public final class NaoPythonSimVisitor extends AbstractPythonVisitor implements 
         return null;
     }
 
+    //newMethod
+    @Override
+    public Void visitATesting(ATesting test){
+        this.src.add("test(robot, ");
+        //add 'input' value to string?
+        test.input.accept(this);
+        // close string parenthesis
+        this.src.add(")");
+        return null;
+    }
+
     @Override
     public Void visitWalkDistance(WalkDistance walkDistance) {
         this.src.add("walk(robot, ");
         if ( walkDistance.walkDirection == DriveDirection.BACKWARD ) {
             this.src.add("-");
         }
-        walkDistance.distanceToWalk.accept(this);
+        walkDistance.distanceToWalk.accept(this); //guessing this adds the distanceToWalk expr to the string?
+        //walk(robot, distanceToWalk). But what does it mean to accept the visitor?
+        //maybe its bc distanceToWalk is an Expr type? 
+        //the default 'walk distance' block creates this code:
+        // h.walk(50, 0, 0)
+        //this corresponds to a method in nao.methods.yml:
+        // def walk(robot, distance):
         this.src.add(")");
         return null;
     }
