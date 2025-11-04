@@ -8,8 +8,6 @@ OpenRoberta DOES actually have custom blocks! They're called 'functions' and are
 
 Most changes I've made in this code have the comment 'newmethod' over them. This is so it's easier to search for those changes within the code, if anyone wants to look at it.
 
-**There is currently an error with the Action toolbox in NAO. I'm trying to fix this**
-
 ### How to run the OpenRoberta-Lab project
 **I use bash to run all commands!**
 First, check the Prerequisites in the README.md in the root folder. 
@@ -47,10 +45,7 @@ python2.7 build.py
 
 Replace the blockly_compressed.js in this code (OpenRobertaServer\staticResources\blockly\blockly_compressed.js), with the file from the blockly git.
 
-Replace the OpenRobertaServer\staticResources\blockly\msg folder in this code with the msg-folder from the blockly git. 
-
-After this, repeat the steps in "How to run the OpenRoberta-Lab project".
-**I'll check whether it's necessary to re-generate the server and build the frontend every time we update the blockly_compressed.js later**
+**You DON'T need to re-generate the server after replacing the blocky_compressed.js file. Simply start the server**
 
 ### TO-DO
 Overall, we're trying to do X things:
@@ -64,3 +59,7 @@ Overall, we're trying to do X things:
 - Add feature to let the end-user create a custom block with few clicks (They must specify block name, variables, and where the variables are used. The feature takes care of moving the duplicate chunk into a custom block, and replacing the chunks with the new block).
 
 - Change the name from 'Functions' to something more user-friendly
+
+- Connect our OpenRoberta to the cobot simulator
+    * We need to create blocks for the actions defined in the cobot-code. 
+    * We should also ask the teacher whether it's ok for us to remove blocks from OpenRoberta which functionality we do not support (like the Sensors toolbox, as the cobot simulator doesn't have any sensor functionality). 
