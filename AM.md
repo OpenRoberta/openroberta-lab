@@ -62,3 +62,5 @@ Overall, we're trying to do X things:
     + Add feature that explains why the chunks are being highlighted (let the user know why they should care about this).
 
 - Add feature to let the end-user create a custom block with few clicks (They must specify block name, variables, and where the variables are used. The feature takes care of moving the duplicate chunk into a custom block, and replacing the chunks with the new block).
+
+- Change the name from 'Functions' to something more user-friendly
