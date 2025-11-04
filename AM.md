@@ -13,6 +13,7 @@ Most changes I've made in this code have the comment 'newmethod' over them. This
 
 
 ### How to run the OpenRoberta-Lab project
+**I use bash to run all commands!**
 First, check the Prerequisites in the README.md in the root folder. 
 
 To (re)generate the server, run these two commands from root folder (SEE NOTES BELOW!):
