@@ -23,3 +23,6 @@ OpenRobertaServer/db-*
 dbIptoCountry/
 **/notifications.json
 **/data/test/output/*
+mj_pick_and_place/venv
+mj_pick_and_place/node_modules
+mj_pick_and_place/__pychache__
