@@ -38,19 +38,19 @@
 
     <modules>
         <module>OpenRobertaRobot</module>
-        <module>RobotEV3</module>
+        <!--<module>RobotEV3</module>
         <module>RobotNXT</module>
-        <module>RobotArdu</module>
+        <module>RobotArdu</module>-->
         <module>RobotNAO</module>
-        <module>RobotMbed</module>
+        <!--<module>RobotMbed</module>
         <module>RobotWeDo</module>
-        <module>RobotEdison</module>
+        <module>RobotEdison</module>-->
         <module>OpenRobertaServer</module>
         <module>RobotCyberpi</module>
-        <module>RobotThymio</module>
+        <!--<module>RobotThymio</module>
         <module>RobotRobotino</module>
         <module>RobotSpike</module>
-        <module>RobotFischertechnik</module>
+        <module>RobotFischertechnik</module>-->
     </modules>
     <pluginRepositories>
         <pluginRepository>
@@ -77,7 +77,7 @@
                 <artifactId>OpenRobertaRobot</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            <dependency>
+            <!--<dependency>
                 <groupId>de.fhg.iais.openroberta</groupId>
                 <artifactId>RobotArdu</artifactId>
                 <version>${project.version}</version>
@@ -91,23 +91,23 @@
                 <groupId>de.fhg.iais.openroberta</groupId>
                 <artifactId>RobotMbed</artifactId>
                 <version>${project.version}</version>
-            </dependency>
+            </dependency>-->
             <dependency>
                 <groupId>de.fhg.iais.openroberta</groupId>
                 <artifactId>RobotNAO</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            <dependency>
+            <!--<dependency>
                 <groupId>de.fhg.iais.openroberta</groupId>
                 <artifactId>RobotNXT</artifactId>
                 <version>${project.version}</version>
-            </dependency>
+            </dependency>-->
             <dependency>
                 <groupId>de.fhg.iais.openroberta</groupId>
                 <artifactId>RaspberryPi</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            <dependency>
+            <!--<dependency>
                 <groupId>de.fhg.iais.openroberta</groupId>
                 <artifactId>RobotWeDo</artifactId>
                 <version>${project.version}</version>
@@ -116,13 +116,13 @@
                 <groupId>de.fhg.iais.openroberta</groupId>
                 <artifactId>RobotEdison</artifactId>
                 <version>${project.version}</version>
-            </dependency>
+            </dependency>-->
             <dependency>
                 <groupId>de.fhg.iais.openroberta</groupId>
                 <artifactId>RobotCyberpi</artifactId>
                 <version>${project.version}</version>
             </dependency>
-            <dependency>
+            <!--<dependency>
                 <groupId>de.fhg.iais.openroberta</groupId>
                 <artifactId>RobotThymio</artifactId>
                 <version>${project.version}</version>
@@ -141,7 +141,7 @@
                 <groupId>de.fhg.iais.openroberta</groupId>
                 <artifactId>RobotFischertechnik</artifactId>
                 <version>${project.version}</version>
-            </dependency>
+            </dependency>-->
             <dependency>
                 <groupId>de.fhg.iais.openroberta</groupId>
                 <artifactId>OpenRobertaRobot</artifactId>

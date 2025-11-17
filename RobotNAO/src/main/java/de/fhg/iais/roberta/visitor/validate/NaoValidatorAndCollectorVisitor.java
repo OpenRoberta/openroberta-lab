@@ -13,6 +13,8 @@ import de.fhg.iais.roberta.syntax.action.nao.Autonomous;
 import de.fhg.iais.roberta.syntax.action.nao.ForgetFace;
 import de.fhg.iais.roberta.syntax.action.nao.GetLanguage;
 import de.fhg.iais.roberta.syntax.action.nao.GetVolume;
+//newmethod
+import de.fhg.iais.roberta.syntax.action.nao.ATesting;
 import de.fhg.iais.roberta.syntax.action.nao.Hand;
 import de.fhg.iais.roberta.syntax.action.nao.LearnFace;
 import de.fhg.iais.roberta.syntax.action.nao.MoveJoint;
@@ -100,6 +102,13 @@ public class NaoValidatorAndCollectorVisitor extends CommonNepoValidatorAndColle
     @Override
     public Void visitMoveJoint(MoveJoint moveJoint) {
         requiredComponentVisited(moveJoint, moveJoint.degrees);
+        return null;
+    }
+
+    //newMethod
+    @Override
+    public Void visitATesting(ATesting test){
+        requiredComponentVisited(test, test.input);
         return null;
     }
 

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 **/target
 **/bin
 **/*.class
@@ -23,3 +24,33 @@ OpenRobertaServer/db-*
 dbIptoCountry/
 **/notifications.json
 **/data/test/output/*
+mj_pick_and_place/venv
+mj_pick_and_place/node_modules
+mj_pick_and_place/__pychache__
+=======
+**/target
+**/bin
+**/*.class
+**/dependency-reduced-pom.xml
+**/phantomjsdriver.log
+**/.classpath
+**/.project
+**/.settings
+**/.pydevproject
+**/.vscode
+**/node_modules
+OpenRobertaServer/db-*
+.DS_Store
+.idea
+*.iml
+**/*.log
+**/*.log.zip
+**/admin
+**/*.pyc
+**/*.py~
+**/*.csv
+**/*.map
+dbIptoCountry/
+**/notifications.json
+**/data/test/output/*
+>>>>>>> 19cec2fcb738346b9d7f6674287a52ddcc2c75c0
