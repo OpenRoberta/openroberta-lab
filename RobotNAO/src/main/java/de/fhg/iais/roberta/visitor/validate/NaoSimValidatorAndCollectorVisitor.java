@@ -21,6 +21,8 @@ import de.fhg.iais.roberta.syntax.action.nao.Hand;
 import de.fhg.iais.roberta.syntax.action.nao.LearnFace;
 import de.fhg.iais.roberta.syntax.action.nao.MoveJoint;
 import de.fhg.iais.roberta.syntax.action.nao.NaoLedOnAction;
+//newMethod
+import de.fhg.iais.roberta.syntax.action.nao.ATesting;
 import de.fhg.iais.roberta.syntax.action.nao.PlayFile;
 import de.fhg.iais.roberta.syntax.action.nao.PointLookAt;
 import de.fhg.iais.roberta.syntax.action.nao.RandomEyesDuration;
@@ -140,6 +142,15 @@ public class NaoSimValidatorAndCollectorVisitor extends NaoValidatorAndCollector
     public Void visitMoveJoint(MoveJoint moveJoint) {
         usedMethodBuilder.addUsedMethod(NaoSimMethods.MOVE_JOINT);
         return super.visitMoveJoint(moveJoint);
+    }
+
+    //newMethod
+    @Override
+    public Void visitATesting(ATesting test){
+        //so it adds the method defined in nao.methods.yml here
+        //the method name must be defined in NaoSimMethods.java 
+        usedMethodBuilder.addUsedMethod(NaoSimMethods.A_TEST);
+        return super.visitATesting(test);
     }
 
     @Override

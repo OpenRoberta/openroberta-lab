@@ -15,6 +15,8 @@ import de.fhg.iais.roberta.mode.action.Language;
 import de.fhg.iais.roberta.mode.action.TurnDirection;
 import de.fhg.iais.roberta.syntax.Phrase;
 import de.fhg.iais.roberta.syntax.action.light.LedAction;
+//newmethod
+import de.fhg.iais.roberta.syntax.action.nao.ATesting;
 import de.fhg.iais.roberta.syntax.action.light.RgbLedOnAction;
 import de.fhg.iais.roberta.syntax.action.nao.Animation;
 import de.fhg.iais.roberta.syntax.action.nao.ApplyPosture;
@@ -401,6 +403,17 @@ public final class NaoPythonVisitor extends AbstractPythonVisitor implements INa
             default:
                 throw new DbcException("Invalid MoveJoint MODE: " + moveJoint.relativeAbsolute);
         }
+        return null;
+    }
+
+    //newmethod
+    @Override
+    public Void visitATesting(ATesting test){
+        this.src.add("h.test(");
+        //add 'input' value to string?
+        test.input.accept(this);
+        // close string parenthesis
+        this.src.add(")");
         return null;
     }
 
