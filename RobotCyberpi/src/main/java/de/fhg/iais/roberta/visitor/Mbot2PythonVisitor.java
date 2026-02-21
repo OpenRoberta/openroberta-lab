@@ -419,6 +419,10 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
                     getRGBString("green", index, quadRGBSensor), ", ", getRGBString("blue", index, quadRGBSensor),
                     "]");
                 break;
+            case SC.LINE:
+                this.src.add("mbuild.quad_rgb_sensor.is_line(\"", quadRGBSensor.getSlot(), "\", ", index, ")");
+                break;
+
         }
         return null;
     }
@@ -426,7 +430,16 @@ public final class Mbot2PythonVisitor extends AbstractPythonVisitor implements I
     @Override
     public Void visitGetLineSensor(GetLineSensor getLineSensor) {
         int index = getSensorNumber(CyberpiConstants.MBUILD_QUADRGB, getLineSensor.getUserDefinedPort());
-        this.src.add("mbuild.quad_rgb_sensor.get_line_sta(\"all\", ", index, ")");
+        String mode = getLineSensor.getMode();
+
+        switch (mode) {
+            case SC.LINE:
+                this.src.add("mbuild.quad_rgb_sensor.get_line_sta(\"all\", ", index, ")");
+                break;
+            case SC.LINE_STATE:
+                this.src.add("mbuild.quad_rgb_sensor.get_offset_track(", index, ")");
+                break;
+        }
         return null;
     }
 

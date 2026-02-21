@@ -143,4 +143,7 @@ public interface SC {
     String WAIT = "WAIT";
     String PORT = "PORT";
     String SPEAKER = "SPEAKER";
+
+    String LINE = "LINE";
+    String LINE_STATE = "LINE_STATE";
 }

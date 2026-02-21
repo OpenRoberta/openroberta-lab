@@ -6,7 +6,7 @@ import de.fhg.iais.roberta.transformer.forClass.NepoExpr;
 import de.fhg.iais.roberta.util.ast.BlocklyProperties;
 import de.fhg.iais.roberta.util.ast.ExternalSensorBean;
 
-@NepoExpr(sampleValues = {@F2M(field = "LINE", mode = "LINE"), @F2M(field = "QUADRGB_LINE", mode = "LINE")}, name = "LINE_SENSING", category = "SENSOR", blocklyNames = {"robSensors_line_getSample"})
+@NepoExpr(sampleValues = {@F2M(field = "LINE", mode = "LINE"), @F2M(field = "QUADRGB_LINE", mode = "LINE"), @F2M(field = "QUADRGB_LINE_STATE", mode = "LINE_STATE")}, name = "LINE_SENSING", category = "SENSOR", blocklyNames = {"robSensors_line_getSample"})
 
 public final class GetLineSensor extends ExternalSensor {
 
