@@ -68,6 +68,7 @@ require.config({
         'sourceCodeEditor.controller': 'js/app/roberta/controller/sourceCodeEditor.controller',
         'connection.interface': 'js/app/roberta/controller/connections/connection.interface',
         'abstract.connections': 'js/app/roberta/controller/connections/abstract.connections',
+
         connections: 'js/app/roberta/controller/connections/connections',
         'connection.controller': 'js/app/roberta/controller/connection.controller',
         'webview.controller': 'js/app/roberta/controller/webview.controller',
@@ -202,6 +203,72 @@ require.config({
     },
 });
 
+/* FIX Issue #1736 : map PointerEvents to MouseEvents for Blockly drag support */
+(function () {
+    var forwarding = false;
+
+    function isBlocklyTarget(target) {
+        if (!target || !target.closest) {
+            return false;
+        }
+        return !!target.closest('.blocklySvg, .blocklyFlyout, .blocklyWidgetDiv, .blocklyToolboxDiv');
+    }
+
+    function pointerToMouseAdapter(e) {
+        if (forwarding) {
+            return;
+        }
+        if (e.pointerType !== 'mouse') {
+            return;
+        }
+        if (!isBlocklyTarget(e.target)) {
+            return;
+        }
+
+        var typeMap = {
+            pointerdown: 'mousedown',
+            pointerup: 'mouseup',
+            pointermove: 'mousemove',
+            pointercancel: 'mouseup'
+        };
+
+        var mouseType = typeMap[e.type];
+        if (!mouseType) {
+            return;
+        }
+
+        var mouseEvent = new MouseEvent(mouseType, {
+            bubbles: true,
+            cancelable: true,
+            view: window,
+            clientX: e.clientX,
+            clientY: e.clientY,
+            screenX: e.screenX,
+            screenY: e.screenY,
+            button: e.button,
+            buttons: e.buttons,
+            ctrlKey: e.ctrlKey,
+            shiftKey: e.shiftKey,
+            altKey: e.altKey,
+            metaKey: e.metaKey
+        });
+
+        forwarding = true;
+        try {
+            e.preventDefault();
+            e.stopPropagation();
+            e.target.dispatchEvent(mouseEvent);
+        } finally {
+            forwarding = false;
+        }
+    }
+
+    document.addEventListener('pointerdown', pointerToMouseAdapter, true);
+    document.addEventListener('pointerup', pointerToMouseAdapter, true);
+    document.addEventListener('pointermove', pointerToMouseAdapter, true);
+    document.addEventListener('pointercancel', pointerToMouseAdapter, true);
+})();
+
 require([
     'require',
     'huebee',
@@ -213,11 +280,11 @@ require([
     'progList.controller',
     'logList.controller',
     'confList.controller',
-    'progDelete.controller',
     'confDelete.controller',
     'progShare.controller',
     'menu.controller',
     'user.controller',
+    'galleryList.controller',
     'nn.controller',
     'robot.controller',
     'program.controller',
@@ -239,7 +306,6 @@ require([
     'sourceCodeEditor.controller',
     'confVisualization',
     'robotBlock',
-    'sourceCodeEditor.controller',
     'startView.controller',
     //start connections
     'connection.interface',
