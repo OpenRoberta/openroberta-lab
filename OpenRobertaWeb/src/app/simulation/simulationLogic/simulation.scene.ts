@@ -66,6 +66,7 @@ export class RcjScoringTool implements IObserver {
     private prevNextCheckPoint: {};
     private programPaused: boolean = true;
     private victimsLocated: number = 0;
+    private victimsLiveLocated: number = 0;
     private linePoints: number = 5;
     private obstaclePoints: number = 0;
     private totalScore: number = 0;
@@ -96,13 +97,32 @@ export class RcjScoringTool implements IObserver {
                     $('#rcjStartStop').addClass('running');
                     return false;
                 } else {
-                    $(this).html('Start<br>Scoring Run');
+                    rcj.programPaused = true;
                     clearInterval(rcj.stopWatch);
+                    const factor = Math.max(rcj.POINTS_VICTIM_MULTI - 0.05 * rcj.loPCounter, 1.25);
+                    for (let i = 0; i < rcj.victimsLocated; i++) {
+                        if (rcj.victimsLiveLocated > 0) {
+                            rcj.rescueMulti *= factor;
+                        }
+                        else {
+                            rcj.rescueMulti *= rcj.POINTS_DEADONLY_VICTIM_MULTI;
+                        }
+                    }
+                    rcj.totalScore = (rcj.linePoints + rcj.obstaclePoints) * rcj.rescueMulti;
+                    rcj.totalScore = UTIL.round(rcj.totalScore, 2);
+
+                    $('#rcjLoPpS').text(rcj.loPCounter);
+                    $('#rcjLoPCount').text(rcj.loPSum);
+                    $('#rcjRescueMulti').text(Math.round(rcj.rescueMulti * 100) / 100);
+                    $('#rcjLinePoints').text(rcj.linePoints);
+                    $('#rcjObstaclePoints').text(rcj.obstaclePoints);
+                    $('#rcjTotalScore').text(rcj.totalScore);
+
+                    $(this).html('Start<br>Scoring Run');
                     $('#rcjStartStop').removeClass('running');
                     $('#rcjLoP').addClass('disabled');
                     $('#rcjNextCP').addClass('disabled');
                     rcj.robot && rcj.robot.interpreter.terminate();
-                    rcj.programPaused = true;
                     return false;
                 }
             });
@@ -245,6 +265,7 @@ export class RcjScoringTool implements IObserver {
         this.loPSum = 0;
         this.section = 0;
         this.victimsLocated = 0;
+        this.victimsLiveLocated = 0;
         this.linePoints = 5;
         this.obstaclePoints = 0;
         this.totalScore = 0;
@@ -397,21 +418,15 @@ export class RcjScoringTool implements IObserver {
             this.totalScore = UTIL.round(this.totalScore, 2);
         } else if (simObject instanceof CircleSimulationObject) {
             let circle: CircleSimulationObject = simObject;
-            const factor = Math.max(this.POINTS_VICTIM_MULTI - 0.05 * this.loPCounter, 1.25);
             if (circle.inEvacuationZone && circle.color === '#33B8CA') {
                 circle.selected = true;
                 $('#simDeleteObject').trigger('click');
-                this.rescueMulti *= factor;
                 this.victimsLocated += 1;
+                this.victimsLiveLocated += 1;
             }
             if (circle.inEvacuationZone && circle.color === '#000000') {
                 circle.selected = true;
                 $('#simDeleteObject').trigger('click');
-                if (this.victimsLocated > 1) {
-                    this.rescueMulti *= factor;
-                } else {
-                    this.rescueMulti *= this.POINTS_DEADONLY_VICTIM_MULTI;
-                }
                 this.victimsLocated += 1;
             }
         }
