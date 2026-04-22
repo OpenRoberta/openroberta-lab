@@ -1,5 +1,11 @@
 package de.fhg.iais.roberta.util.basic;
 
+/* Attention: 
+/* This file is no longer automatically generated. Please edit manually and make sure it is kept up to date in sync with 
+/* OpenRobertaRobot/constantsSource.txt and 
+/* OpenRobertaWeb/src/app/nepostackmachine/interpreter.constants.ts.
+*/
+
 public class C {
     public static final String ADD = "ADD";
     public static final String ALWAYS = "always";

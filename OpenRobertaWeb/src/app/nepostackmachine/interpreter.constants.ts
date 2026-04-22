@@ -1,4 +1,8 @@
-
+/* Attention: 
+/* This file is no longer automatically generated. Please edit manually and make sure it is kept up to date in sync with 
+/* OpenRobertaRobot/constantsSource.txt and 
+/* OpenRobertaRobot/src/main/java/de/fhg/iais/roberta/util/basic/C.java.
+*/
 export const ADD: string = "ADD";
 export const ALWAYS: string = "always";
 export const AMBIENTLIGHT: string = "ambientlight";
