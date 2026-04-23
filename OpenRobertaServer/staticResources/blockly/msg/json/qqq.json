@@ -628,6 +628,7 @@
 	"MODE_LIGHT": "",
 	"MODE_UVLIGHT": "",
 	"MODE_LINE": "",
+	"MODE_LINE_STATE": "",
 	"MODE_RGB": "",
 	"MODE_AMBIENTLIGHT": "",
 	"MODE_REFLEXION": "",

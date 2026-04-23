@@ -929,6 +929,7 @@ Blockly.Msg.MODE_INFO = "information";
 Blockly.Msg.MODE_LATITUDE = "latitude";
 Blockly.Msg.MODE_LIGHT = "light";
 Blockly.Msg.MODE_LINE = "line";
+Blockly.Msg.MODE_LINE_STATE = "line following state";
 Blockly.Msg.MODE_LONGITUDE = "longitude";
 Blockly.Msg.MODE_MAGNETICFIELD = "mag field";
 Blockly.Msg.MODE_MAGNETICFLUX = "magnetic flux";
