@@ -213,6 +213,7 @@
         <block type="robSensors_ultrasonic_getSample"></block>
         <block type="robSensors_infrared_getSample"></block>
         <block type="robSensors_colourtcs3472_getSample"></block>
+        <block type="robSensors_scd40_getSample"></block>
         <block type='robSensors_keyc_getSample'></block>
     </category>
     <category name="TOOLBOX_CONTROL" svg="true">

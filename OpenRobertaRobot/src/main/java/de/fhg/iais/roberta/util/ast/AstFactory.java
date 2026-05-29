@@ -53,7 +53,7 @@ public class AstFactory {
      * the list of all legal modes used in the blockly frontend
      */
     private static final String[] allLegalModesArray = {
-        "ALTITUDE", "AMBIENTLIGHT", "ANALOG", "ANGLE", "BACKWARD", "BALL", "CALIBRATE", "CALIBRATION", "CLOSING", "CO2EQUIVALENT", "COLOUR", "COMPASS",
+        "ALTITUDE", "AMBIENTLIGHT", "ANALOG", "ANGLE", "BACKWARD", "BALL", "CALIBRATE", "CALIBRATION", "CLOSING", "CO2", "CO2EQUIVALENT", "COLOUR", "COMPASS",
         "DATE", "DEFAULT", "DEGREE", "DIGITAL", "DISTANCE", "DOWN", "EDISON_CODE", "FACE_DOWN", "FACE_UP", "FOREWARD", "FREEFALL",
         "G3", "G6", "G8", "HUMIDITY", "IAQ", "IDALL", "IDONE", "LATITUDE", "LEFT", "LIGHT", "LIGHT_VALUE", "LINE", "LONGITUDE", "MODULATED", "MOTION",
         "NAMEALL", "NAMEONE", "NONE", "OBSTACLE", "OFF", "OPENING", "NUMBERLINES", "PM10", "PM25", "PRESENCE", "PRESSED", "PRESSURE", "PULSEHIGH", "PULSELOW", "RATE",
