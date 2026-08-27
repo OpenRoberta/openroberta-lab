@@ -1374,8 +1374,8 @@ Blockly.Msg.PLAY_TOOLTIP = "rappresenta un segnale acustico.";
 Blockly.Msg.PLAY_VOLUME = "volume";
 Blockly.Msg.PLAY_WHOLE = "nota intera";
 Blockly.Msg.POPUP_ABOUT_JOIN = "voglio aiutare";
-Blockly.Msg.POPUP_ABOUT_TEXT = "Open Roberta Lab è un ambiente di programmazione integrato basato su cloud che consente a bambini e adolescenti di programmare facilmente diversi sistemi robot / microcontrollori. Questa piattaforma è completamente open source, quindi è stimolante e facile partecipare! Sia il software che gli strumenti di sviluppo open source sono disponibili tramite i server Fraunhofer.";
-Blockly.Msg.POPUP_ABOUT_TEXT_DEV = "Open Roberta Lab è una piattaforma di programmazione open source sviluppata da Fraunhofer IAIS nell'ambito dell'iniziativa <a href='http://www.roberta-home.de/\" target=\"_blank\"> »Roberta - Imparare con i robot« < / a>";
+Blockly.Msg.POPUP_ABOUT_TEXT = "Open Roberta Lab è un ambiente di programmazione grafica basato sul cloud che consente a bambini e giovani di programmare robot e microcontrollori senza barriere tecniche. La piattaforma è open source: il suo codice sorgente è disponibile pubblicamente e i contributi e i suggerimenti della comunità sono benvenuti.";
+Blockly.Msg.POPUP_ABOUT_TEXT_EDUCATION = "Roberta Education gGmbH gestisce Open Roberta Lab su server situati in Germania e sviluppa continuamente la piattaforma. Le modifiche al codice sorgente vengono esaminate e testate prima del rilascio.";
 Blockly.Msg.POPUP_ABOUT_TEXT_GOOG = "Open Roberta è stato avviato in collaborazione con Google Germania per ridurre gli ostacoli per studenti, insegnanti e scuole che programmano robot educativi. </a>";
 Blockly.Msg.POPUP_ABOUT_TEXT_NRW = "As part of the project »AI Algorithms in Computer Science Education«, the Ministry for Schools and Education of the State of North Rhine-Westphalia is funding the integration of Artificial Neural Networks into the Open Roberta Lab as well as the development of suitable learning content and materials on Artificial Intelligence.";  // untranslated
 Blockly.Msg.POPUP_AGE = "età";

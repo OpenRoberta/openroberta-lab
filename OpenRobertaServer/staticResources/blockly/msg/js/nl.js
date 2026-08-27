@@ -1374,8 +1374,8 @@ Blockly.Msg.PLAY_TOOLTIP = "Represents a buzzer.";  // untranslated
 Blockly.Msg.PLAY_VOLUME = "volume";
 Blockly.Msg.PLAY_WHOLE = "hele noot";
 Blockly.Msg.POPUP_ABOUT_JOIN = "Ik wil hulp";
-Blockly.Msg.POPUP_ABOUT_TEXT = "The Open Roberta Lab is a cloud-based integrated programming environment that enables children and adolescents to program easily different robot/microcontroller systems. This platform is completely open source so taking part is desirable! Both the software and the open source developer tools are available via Fraunhofer servers.";  // untranslated
-Blockly.Msg.POPUP_ABOUT_TEXT_DEV = "The Open Roberta Lab is an open-source programming platform developed by Fraunhofer IAIS within the initiative <a href='http://www.roberta-home.de/' target='_blank'>»Roberta – Learning with Robots«</a>";  // untranslated
+Blockly.Msg.POPUP_ABOUT_TEXT = "Open Roberta Lab is een cloudgebaseerde grafische programmeeromgeving waarmee kinderen en jongeren zonder technische barrières robots en microcontrollers kunnen programmeren. Het platform is open source: de broncode is openbaar beschikbaar en bijdragen en suggesties vanuit de gemeenschap zijn welkom.";
+Blockly.Msg.POPUP_ABOUT_TEXT_EDUCATION = "Roberta Education gGmbH beheert Open Roberta Lab op servers in Duitsland en ontwikkelt het platform voortdurend verder. Wijzigingen in de broncode worden beoordeeld en getest voordat ze worden uitgebracht.";
 Blockly.Msg.POPUP_ABOUT_TEXT_GOOG = "Open Roberta was initiated in collaboration with Google Germany to reduce the hurdles for students, teachers and schools programming educational robots.</a>";  // untranslated
 Blockly.Msg.POPUP_ABOUT_TEXT_NRW = "As part of the project »AI Algorithms in Computer Science Education«, the Ministry for Schools and Education of the State of North Rhine-Westphalia is funding the integration of Artificial Neural Networks into the Open Roberta Lab as well as the development of suitable learning content and materials on Artificial Intelligence.";  // untranslated
 Blockly.Msg.POPUP_AGE = "Age";  // untranslated

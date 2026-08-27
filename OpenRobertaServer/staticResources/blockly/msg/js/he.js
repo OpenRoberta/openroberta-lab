@@ -1374,8 +1374,8 @@ Blockly.Msg.PLAY_TOOLTIP = "Represents a buzzer.";  // untranslated
 Blockly.Msg.PLAY_VOLUME = "volume";
 Blockly.Msg.PLAY_WHOLE = "whole note";
 Blockly.Msg.POPUP_ABOUT_JOIN = "I want to help";
-Blockly.Msg.POPUP_ABOUT_TEXT = "The Open Roberta Lab is a cloud-based integrated programming environment that enables children and adolescents to program easily different robot/microcontroller systems. This platform is completely open source so taking part is desirable! Both the software and the open source developer tools are available via Fraunhofer servers.";
-Blockly.Msg.POPUP_ABOUT_TEXT_DEV = "The Open Roberta Lab is an open-source programming platform developed by Fraunhofer IAIS within the initiative <a href=\"http://www.roberta-home.de/\" target=\"_blank\">»Roberta – Learning with Robots«</a>";
+Blockly.Msg.POPUP_ABOUT_TEXT = "Open Roberta Lab היא סביבת תכנות גרפית מבוססת ענן המאפשרת לילדים ולצעירים לתכנת רובוטים ומיקרו-בקרים ללא חסמים טכניים. הפלטפורמה היא בקוד פתוח: קוד המקור שלה זמין לציבור, ותרומות והצעות מהקהילה מתקבלות בברכה.";
+Blockly.Msg.POPUP_ABOUT_TEXT_EDUCATION = "Roberta Education gGmbH מפעילה את Open Roberta Lab בשרתים בגרמניה ומפתחת את הפלטפורמה באופן מתמשך. שינויים בקוד המקור נסקרים ונבדקים לפני פרסומם.";
 Blockly.Msg.POPUP_ABOUT_TEXT_GOOG = "Open Roberta was initiated in collaboration with Google Germany to reduce the hurdles for students, teachers and schools programming educational robots.</a>";
 Blockly.Msg.POPUP_ABOUT_TEXT_NRW = "As part of the project »AI Algorithms in Computer Science Education«, the Ministry for Schools and Education of the State of North Rhine-Westphalia is funding the integration of Artificial Neural Networks into the Open Roberta Lab as well as the development of suitable learning content and materials on Artificial Intelligence.";  // untranslated
 Blockly.Msg.POPUP_AGE = "Age";

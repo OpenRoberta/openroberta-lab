@@ -1374,8 +1374,8 @@ Blockly.Msg.PLAY_TOOLTIP = "Reprezintă  o sirenă.(difuzor)";
 Blockly.Msg.PLAY_VOLUME = "volum";
 Blockly.Msg.PLAY_WHOLE = "toată nota";
 Blockly.Msg.POPUP_ABOUT_JOIN = "Vreau să ajut.";
-Blockly.Msg.POPUP_ABOUT_TEXT = "Open Roberta Lab este un mediu de programare integrat bazat pe cloud care permite copiilor și adolescenților să programeze cu ușurință diferite sisteme robot / microcontroller. Această platformă este complet open source, așa că participarea este de dorit! Atât software-ul, cât și instrumentele de dezvoltator open source sunt disponibile prin serverele Fraunhofer.";
-Blockly.Msg.POPUP_ABOUT_TEXT_DEV = "Open Roberta Lab este o platformă de programare open-source dezvoltată de Fraunhofer IAIS în cadrul inițiativei <a href='http://www.roberta-home.de/\" target=\"_blank\"> »Roberta - Învață cu roboții« < / a>";
+Blockly.Msg.POPUP_ABOUT_TEXT = "Open Roberta Lab este un mediu grafic de programare bazat pe cloud, care le permite copiilor și tinerilor să programeze roboți și microcontrolere fără bariere tehnice. Platforma este open source: codul său sursă este disponibil public, iar contribuțiile și sugestiile comunității sunt binevenite.";
+Blockly.Msg.POPUP_ABOUT_TEXT_EDUCATION = "Roberta Education gGmbH operează Open Roberta Lab pe servere din Germania și dezvoltă continuu platforma. Modificările codului sursă sunt revizuite și testate înainte de a fi publicate.";
 Blockly.Msg.POPUP_ABOUT_TEXT_GOOG = "Open Roberta a fost inițiată în colaborare cu Google Germania pentru a reduce obstacolele pentru studenți, profesori și școli care programează roboți educaționali. </a>";
 Blockly.Msg.POPUP_ABOUT_TEXT_NRW = "As part of the project »AI Algorithms in Computer Science Education«, the Ministry for Schools and Education of the State of North Rhine-Westphalia is funding the integration of Artificial Neural Networks into the Open Roberta Lab as well as the development of suitable learning content and materials on Artificial Intelligence.";  // untranslated
 Blockly.Msg.POPUP_AGE = "Varsta";

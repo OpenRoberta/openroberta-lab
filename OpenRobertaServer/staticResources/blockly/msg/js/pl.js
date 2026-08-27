@@ -1374,8 +1374,8 @@ Blockly.Msg.PLAY_TOOLTIP = "Represents a buzzer.";  // untranslated
 Blockly.Msg.PLAY_VOLUME = "głośność";
 Blockly.Msg.PLAY_WHOLE = "cała nuta";
 Blockly.Msg.POPUP_ABOUT_JOIN = "Chcę pomóc.";
-Blockly.Msg.POPUP_ABOUT_TEXT = "Open Roberta Lab to bazujące na chmurze, zintegrowane środowisko programowania, któro umożliwia dzieciom i dorosłym łatwe programowanie różnych robotów i mikrokontrolerów. Platforma jest w pełni oparta na oprogramowaniu otwartoźródłowym i branie udziału w jego rozwoju jest wysoce pożądane! Zarówno oprogramowanie jak i narzędzia deweloperskie dostępne są na serwerach Fraunhofera.";
-Blockly.Msg.POPUP_ABOUT_TEXT_DEV = "Open Roberta Lab to otwartoźródłowa platforma programistyczna rozwijana przez Fraunhofer IAIS wraz z inicjatywą <a href=\"http://www.roberta-home.de/\" target=\"_blank\">»Roberta – Nauka z Robotyką«</a>";
+Blockly.Msg.POPUP_ABOUT_TEXT = "Open Roberta Lab to oparte na chmurze graficzne środowisko programistyczne, które umożliwia dzieciom i młodzieży programowanie robotów i mikrokontrolerów bez barier technicznych. Platforma jest oprogramowaniem typu open source: jej kod źródłowy jest publicznie dostępny, a wkład i sugestie społeczności są mile widziane.";
+Blockly.Msg.POPUP_ABOUT_TEXT_EDUCATION = "Roberta Education gGmbH obsługuje Open Roberta Lab na serwerach w Niemczech i stale rozwija platformę. Zmiany w kodzie źródłowym są sprawdzane i testowane przed ich opublikowaniem.";
 Blockly.Msg.POPUP_ABOUT_TEXT_GOOG = "Open Roberta została rozpoczęta we współpracy z niemieckim oddziałem Google aby maksymalnie ułatwić prograowanie edukacyjnych robotów dla studentów, nauczycieli i szkół.</a>";
 Blockly.Msg.POPUP_ABOUT_TEXT_NRW = "As part of the project »AI Algorithms in Computer Science Education«, the Ministry for Schools and Education of the State of North Rhine-Westphalia is funding the integration of Artificial Neural Networks into the Open Roberta Lab as well as the development of suitable learning content and materials on Artificial Intelligence.";  // untranslated
 Blockly.Msg.POPUP_AGE = "Wiek";

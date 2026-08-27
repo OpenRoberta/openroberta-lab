@@ -1374,8 +1374,8 @@ Blockly.Msg.PLAY_TOOLTIP = "Represents a buzzer.";  // untranslated
 Blockly.Msg.PLAY_VOLUME = "Siddet";
 Blockly.Msg.PLAY_WHOLE = "whole note";  // untranslated
 Blockly.Msg.POPUP_ABOUT_JOIN = "Yardim etmek istiyorum.";
-Blockly.Msg.POPUP_ABOUT_TEXT = "Open Roberta Lab, cocuklara ve yetiskinlere, farkli robot sistemlerini kolayca programlamayi saglayan, bulut bilisim entegrasyonlu bir programlama ortamidir. Bu platform, tamamen acik kaynak kodludur bu yüzden katkida bulunulmasi arzulanir! Yazilim ve acik kaynak kod gelistirme araclarinin ikisi de Fraunhofer sunuculari araciligiyla ulasilinabilir.";
-Blockly.Msg.POPUP_ABOUT_TEXT_DEV = "Open Roberta Lab, <a href='http://www.roberta-home.de/'>»Roberta – Robotlarla Ögrenme«</a> girisimiyle Fraunhofer IAIS tarafindan gelistirilen  acik kaynak kodlu bir programlama platformudur.";
+Blockly.Msg.POPUP_ABOUT_TEXT = "Open Roberta Lab, çocukların ve gençlerin robotları ve mikrodenetleyicileri teknik engeller olmadan programlamalarını sağlayan bulut tabanlı grafiksel bir programlama ortamıdır. Platform açık kaynaklıdır: Kaynak kodu herkese açıktır ve topluluğun katkı ve önerileri memnuniyetle karşılanır.";
+Blockly.Msg.POPUP_ABOUT_TEXT_EDUCATION = "Roberta Education gGmbH, Open Roberta Lab'i Almanya'daki sunucularda işletir ve platformu sürekli geliştirir. Kaynak kodundaki değişiklikler yayımlanmadan önce incelenir ve test edilir.";
 Blockly.Msg.POPUP_ABOUT_TEXT_GOOG = "Open Roberta, Google Almanya ile birlikte, ögrencilerin, ögretmenlerin, ve okullarin egitimsel robotlari programlamadaki engellerini azaltmak icin baslatilmistir. Open Roberta, Google.org (2014-2015) tarafindan 1 Milyon Euro'yla finanse edilmistir.";
 Blockly.Msg.POPUP_ABOUT_TEXT_NRW = "As part of the project »AI Algorithms in Computer Science Education«, the Ministry for Schools and Education of the State of North Rhine-Westphalia is funding the integration of Artificial Neural Networks into the Open Roberta Lab as well as the development of suitable learning content and materials on Artificial Intelligence.";  // untranslated
 Blockly.Msg.POPUP_AGE = "Age";  // untranslated

@@ -467,17 +467,6 @@ function initMenuEvents() {
         },
         'head navigation menu item faq clicked'
     );
-    $('.menuAboutProject').onWrap(
-        'click',
-        function () {
-            if (GUISTATE_C.getLanguage() == 'de') {
-                window.open('https://www.roberta-home.de/index.php?id=135');
-            } else {
-                window.open('https://www.roberta-home.de/index.php?id=135&L=1');
-            }
-        },
-        'head navigation menu item about clicked'
-    );
     $('.menuShowStart').onWrap('click', () => backToStartView());
 
     $('#head-navigation-user').onWrap('click', '.dropdown-menu li:not(.disabled) a', function (event: Event) {

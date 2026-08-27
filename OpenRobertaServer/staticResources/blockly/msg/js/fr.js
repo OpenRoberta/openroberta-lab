@@ -1374,8 +1374,8 @@ Blockly.Msg.PLAY_TOOLTIP = "Represents a buzzer.";  // untranslated
 Blockly.Msg.PLAY_VOLUME = "volume";
 Blockly.Msg.PLAY_WHOLE = "pendant quatre temps la note";
 Blockly.Msg.POPUP_ABOUT_JOIN = "je souhaite aider";
-Blockly.Msg.POPUP_ABOUT_TEXT = "Open Roberta Lab est un environnement de programmation online pour les jeunes qui permet de façon simplifiée et sans obstacles techniques la programmation d'un robot. <br /> L'environnement de programmation est complètement »open source«, Vous pouvez l'améliorer!  Les Open-Source-developpertools sont à votre disposition sur le serveur Fraunhofer";
-Blockly.Msg.POPUP_ABOUT_TEXT_DEV = "Open Roberta Lab a été développé par Fraunhofer-Instituts IAIS dans le cadre de l'iInitiative  <a href='http://www.roberta-home.de/'>»Roberta – apprendre grâce aux robots«</a>";
+Blockly.Msg.POPUP_ABOUT_TEXT = "Open Roberta Lab est un environnement graphique de programmation basé sur le cloud qui permet aux enfants et aux jeunes de programmer des robots et des microcontrôleurs sans obstacles techniques. La plateforme est open source : son code source est accessible au public, et les contributions et suggestions de la communauté sont les bienvenues.";
+Blockly.Msg.POPUP_ABOUT_TEXT_EDUCATION = "Roberta Education gGmbH exploite Open Roberta Lab sur des serveurs situés en Allemagne et développe continuellement la plateforme. Les modifications du code source sont examinées et testées avant leur publication.";
 Blockly.Msg.POPUP_ABOUT_TEXT_GOOG = "Open Roberta a été créé en coopération avec Google Deutschland afin de permettre un approche simple de la programmation pour les élèves et les professeurs. Open Roberta a été financé par Google.org (2014 - 2015) à hauteur de 1Mio Euro. </a>";
 Blockly.Msg.POPUP_ABOUT_TEXT_NRW = "As part of the project »AI Algorithms in Computer Science Education«, the Ministry for Schools and Education of the State of North Rhine-Westphalia is funding the integration of Artificial Neural Networks into the Open Roberta Lab as well as the development of suitable learning content and materials on Artificial Intelligence.";  // untranslated
 Blockly.Msg.POPUP_AGE = "Age";  // untranslated

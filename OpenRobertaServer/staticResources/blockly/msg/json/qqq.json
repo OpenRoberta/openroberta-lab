@@ -775,7 +775,7 @@
 	"TAB_PROGRAM": "",
 	"TAB_CONFIGURATION": "",
 	"POPUP_ABOUT_TEXT": "",
-	"POPUP_ABOUT_TEXT_DEV": "",
+	"POPUP_ABOUT_TEXT_EDUCATION": "about dialog text - Explains who operates and develops the Open Roberta Lab and how source code changes are released.",
 	"POPUP_ABOUT_TEXT_GOOG": "",
 	"POPUP_ABOUT_TEXT_NRW": "",
 	"POPUP_STARTUP_START": "",

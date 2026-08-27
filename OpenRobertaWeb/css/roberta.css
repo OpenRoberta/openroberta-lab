@@ -173,6 +173,10 @@ body.blocklyMinimalBody * {
     background: url(../css/svg/logo-word.svg) no-repeat;
 }
 
+.robertaEducationLogo {
+    background: url(../css/svg/roberta-education.svg) no-repeat;
+}
+
 .fraunhoferLogo {
     background: url(../css/img/iais_logo.gif) no-repeat;
 }
@@ -2391,7 +2395,7 @@ section {
     bottom: 50px;
     right: 50px;
     width: 100%;
-    max-width: 450px;
+    max-width: 470px;
     border-radius: 5px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.25);
 }
@@ -2465,6 +2469,17 @@ section {
 
 #start footer img {
     width: 100%;
+}
+
+#start footer .footer-provider-logo {
+    display: block;
+    width: 180px;
+    max-width: 100%;
+}
+
+#start footer .footer-provider-logo img {
+    display: block;
+    height: auto;
 }
 
 #start footer p,
@@ -3692,20 +3707,22 @@ pre code {
     bottom: 60px;
     z-index: 2999;
     padding: 16px;
-    background-color: #FBDE00;
+    padding-right: 48px;
+    background-color: #FDC300;
     border: 1px solid #d8d8d8;
+    border-radius: 5px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.25);
 }
 
 #releaseInfo > span {
     display: inline-block !important;
     vertical-align: middle;
-    padding-right: 16px;
 }
 
 #releaseInfo > .no-button {
     position: absolute;
-    top: 0;
-    right: 0;
+    top: 16px;
+    right: 16px;
 }
 
 @media (max-width: 60em), (max-width: 800px) {

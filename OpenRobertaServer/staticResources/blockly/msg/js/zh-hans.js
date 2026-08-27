@@ -1374,8 +1374,8 @@ Blockly.Msg.PLAY_TOOLTIP = "表示蜂鸣器。";
 Blockly.Msg.PLAY_VOLUME = "音量";
 Blockly.Msg.PLAY_WHOLE = "全音符";
 Blockly.Msg.POPUP_ABOUT_JOIN = "我想帮忙";
-Blockly.Msg.POPUP_ABOUT_TEXT = "Open Roberta实验室是一个基于云的集成编程环境, 使儿童和青少年能够轻松地编程不同的机器人/微控制器系统。这个平台是完全开源的, 所以参与是可取的!软件和开源开发者工具都可以通过Fraunhofer服务器提供。";
-Blockly.Msg.POPUP_ABOUT_TEXT_DEV = "Open Roberta实验室是一个开源的编程平台, 由Fraunhofer IAIS在倡议中开发<a href=\"http://www.roberta-home.de/\" target=\"_blank\">»Roberta-学习机器人«</a>";
+Blockly.Msg.POPUP_ABOUT_TEXT = "Open Roberta Lab 是一个基于云的图形化编程环境，让儿童和青少年能够无技术障碍地对机器人和微控制器进行编程。该平台是开源的：其源代码公开可用，并欢迎社区贡献和提出建议。";
+Blockly.Msg.POPUP_ABOUT_TEXT_EDUCATION = "Roberta Education gGmbH 在位于德国的服务器上运营 Open Roberta Lab，并持续开发该平台。源代码的更改在发布前都会经过审查和测试。";
 Blockly.Msg.POPUP_ABOUT_TEXT_GOOG = "Open Roberta是与谷歌德国合作发起的, 用于减少学生、教师和学校机器人编程教育的障碍。";
 Blockly.Msg.POPUP_ABOUT_TEXT_NRW = "As part of the project »AI Algorithms in Computer Science Education«, the Ministry for Schools and Education of the State of North Rhine-Westphalia is funding the integration of Artificial Neural Networks into the Open Roberta Lab as well as the development of suitable learning content and materials on Artificial Intelligence.";  // untranslated
 Blockly.Msg.POPUP_AGE = "年龄";
