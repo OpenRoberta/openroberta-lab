@@ -1,8 +1,11 @@
 package de.fhg.iais.roberta.javaServer.basics.restInterface;
 
+import javax.mail.MessagingException;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import de.fhg.iais.roberta.util.Key;
 
@@ -20,6 +23,7 @@ public class UserRestTest extends AbstractRestInterfaceTest {
         updateUser();
         changeUserPassword();
         loginLogoutPid();
+        createUserWhenActivationMailFails();
     }
 
     /**
@@ -195,4 +199,11 @@ public class UserRestTest extends AbstractRestInterfaceTest {
         Assert.assertTrue(this.sPid.isUserLoggedIn() && this.sMinscha.isUserLoggedIn());
     }
 
+
+    private void createUserWhenActivationMailFails() throws Exception {
+        long userCountBefore = this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from USER");
+        Mockito.doThrow(new MessagingException("Test activation mail failure")).when(this.mailManagement).send(Mockito.anyString(), Mockito.eq("activate"), Mockito.any(String[].class), Mockito.anyString(), Mockito.anyBoolean(), Mockito.anyString());
+        restUser(this.sPid, "{'cmd':'createUser';'accountName':'mailFailUser';'userName':'Mail Fail';'password':'1234';'userEmail':'mailfail@example.com';'role':'STUDENT', 'isYoungerThen14': false, 'language': 'de'}", "ok", Key.USER_CREATE_SUCCESS_ACTIVATION_MAIL_FAIL);
+        Assert.assertEquals(userCountBefore + 1, this.memoryDbSetup.getOneBigIntegerAsLong("select count(*) from USER"));
+    }
 }

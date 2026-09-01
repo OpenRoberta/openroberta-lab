@@ -367,6 +367,12 @@ public class ClientUser {
                 String lang = request.getLanguage();
                 PendingEmailConfirmations confirmation = pendingConfirmationProcessor.createEmailConfirmation(newUser);
                 sendActivationMail(up, confirmation.getUrlPostfix(), account, email, lang, isYoungerThen14, httpSessionState.getUrl());
+                if ( up.getMessage() == Key.USER_ACTIVATION_SENT_MAIL_FAIL ) {
+                    up.setStatus(
+                        ProcessorStatus.SUCCEEDED,
+                        Key.USER_CREATE_SUCCESS_ACTIVATION_MAIL_FAIL,
+                        new HashMap<>());
+                }
             }
             Statistics.info("UserCreate", "success", up.succeeded());
             UtilForREST.addResultInfo(response, up);

@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2024-11-04 14:33:51.984184",
+		"lastupdated": "2026-09-01 13:28:18.722290",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1397,6 +1397,7 @@
 	"OLDER_THEN_14": "I am 16 or older than 16!",
 	"ORA_USER_ACTIVATION_SENT_MAIL_SUCCESS": "We send a mail to you, please check your mailbox!",
 	"ORA_USER_ACTIVATION_SENT_MAIL_FAIL": "Sorry, we cannot send a mail to you, please contact »support-o-r@iais.fraunhofer.de«",
+	"ORA_USER_CREATE_SUCCESS_ACTIVATION_MAIL_FAIL": "Your account was created, but the activation email could not be sent. You can update your email or resend the activation link under Login → Change.",
 	"ORA_USER_ACTIVATION_SUCCESS": "Your account is successfully verified! Please login!",
 	"ORA_ACCOUNT_NOT_ACTIVATED_TO_SHARE": "Your are not allowed to share. Please activate your account! <br><a href='https://www.roberta-home.de/index.php?id=138&L=1' target='_blank'>Further information ...</a>",
 	"ORA_USER_DEACTIVATION_SUCCESS": "Your account is currently not verified, please check your mailbox!",

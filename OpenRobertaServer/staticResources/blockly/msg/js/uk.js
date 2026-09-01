@@ -1318,6 +1318,7 @@ Blockly.Msg.ORA_USER_CREATE_ERROR_CONTAINS_SPECIAL_CHARACTERS = "Ви викор
 Blockly.Msg.ORA_USER_CREATE_ERROR_MISSING_REQ_FIELDS = "Будь ласка, переконайтеся, що ви заповнили всі необхідні поля! Ваш акаунт не може бути створений.";
 Blockly.Msg.ORA_USER_CREATE_ERROR_NOT_SAVED_TO_DB = "Це ім'я користувача вже існує в базі даних, будь ласка, виберіть інше ім'я користувача.";
 Blockly.Msg.ORA_USER_CREATE_SUCCESS = "Ваш акаунт »$« успішно створено!";
+Blockly.Msg.ORA_USER_CREATE_SUCCESS_ACTIVATION_MAIL_FAIL = "Ваш обліковий запис створено, але лист для активації не вдалося надіслати. У розділі Вхід → Змінити можна оновити адресу електронної пошти або повторно надіслати посилання для активації.";
 Blockly.Msg.ORA_USER_DEACTIVATION_SUCCESS = "Ваш акаунт ще не підтверджено, будь ласка, перевірте свою поштову скриньку!";
 Blockly.Msg.ORA_USER_DELETE_ERROR_HAS_GROUPS = "You have user groups associated with your account. Please delete them first, before you delete your account.";  // untranslated
 Blockly.Msg.ORA_USER_DELETE_ERROR_ID_NOT_FOUND = "Помилка при видаленні користувача.";

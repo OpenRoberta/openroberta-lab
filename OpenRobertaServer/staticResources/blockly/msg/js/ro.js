@@ -1318,6 +1318,7 @@ Blockly.Msg.ORA_USER_CREATE_ERROR_CONTAINS_SPECIAL_CHARACTERS = "Folosiți carac
 Blockly.Msg.ORA_USER_CREATE_ERROR_MISSING_REQ_FIELDS = "Contul nu a putut fi creat. Te rugăm să completezi toate câmpurile obligatorii.";
 Blockly.Msg.ORA_USER_CREATE_ERROR_NOT_SAVED_TO_DB = "Numele de utilizator mai există în baza de date, alegeți un alt nume de utilizator.";
 Blockly.Msg.ORA_USER_CREATE_SUCCESS = "Contul dvs. de utilizator »$« a fost creat cu succes!";
+Blockly.Msg.ORA_USER_CREATE_SUCCESS_ACTIVATION_MAIL_FAIL = "Contul tău a fost creat, dar e-mailul de activare nu a putut fi trimis. În Autentificare → Modificare poți actualiza adresa de e-mail sau retrimite linkul de activare.";
 Blockly.Msg.ORA_USER_DEACTIVATION_SUCCESS = "În prezent contul dvs. nu este verificat, vă rugăm să verificați căsuța poștală!";
 Blockly.Msg.ORA_USER_DELETE_ERROR_HAS_GROUPS = "You have user groups associated with your account. Please delete them first, before you delete your account.";  // untranslated
 Blockly.Msg.ORA_USER_DELETE_ERROR_ID_NOT_FOUND = "Eroare la ștergerea utilizatorului.";

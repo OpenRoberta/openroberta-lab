@@ -1318,6 +1318,7 @@ Blockly.Msg.ORA_USER_CREATE_ERROR_CONTAINS_SPECIAL_CHARACTERS = "You are using s
 Blockly.Msg.ORA_USER_CREATE_ERROR_MISSING_REQ_FIELDS = "Проверить, все ли необходимые поля ввода были заполнены.";
 Blockly.Msg.ORA_USER_CREATE_ERROR_NOT_SAVED_TO_DB = "Данное имя пользователя уже существует в базе данных. Пожалуйста, выберите другое имя пользователя.";
 Blockly.Msg.ORA_USER_CREATE_SUCCESS = "Пользователь был успешно создан";
+Blockly.Msg.ORA_USER_CREATE_SUCCESS_ACTIVATION_MAIL_FAIL = "Ваша учётная запись создана, но письмо для активации не удалось отправить. В разделе Вход → Изменить можно обновить адрес электронной почты или повторно отправить ссылку активации.";
 Blockly.Msg.ORA_USER_DEACTIVATION_SUCCESS = "Your account is currently not verified, please check your mailbox!";  // untranslated
 Blockly.Msg.ORA_USER_DELETE_ERROR_HAS_GROUPS = "You have user groups associated with your account. Please delete them first, before you delete your account.";  // untranslated
 Blockly.Msg.ORA_USER_DELETE_ERROR_ID_NOT_FOUND = "Ошибка при удалении пользователя.";

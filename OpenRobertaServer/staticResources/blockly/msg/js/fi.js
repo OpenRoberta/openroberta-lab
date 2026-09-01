@@ -1318,6 +1318,7 @@ Blockly.Msg.ORA_USER_CREATE_ERROR_CONTAINS_SPECIAL_CHARACTERS = "You are using s
 Blockly.Msg.ORA_USER_CREATE_ERROR_MISSING_REQ_FIELDS = "Please make sure you have filled in all required fields! Your account couldn't be created.";  // untranslated
 Blockly.Msg.ORA_USER_CREATE_ERROR_NOT_SAVED_TO_DB = "The given user name already exists in the database, please choose another user name.";  // untranslated
 Blockly.Msg.ORA_USER_CREATE_SUCCESS = "Your user account »$« was successfully created!";  // untranslated
+Blockly.Msg.ORA_USER_CREATE_SUCCESS_ACTIVATION_MAIL_FAIL = "Tilisi luotiin, mutta aktivointisähköpostia ei voitu lähettää. Kohdassa Kirjautuminen → Muuta voit päivittää sähköpostiosoitteesi tai lähettää aktivointilinkin uudelleen.";
 Blockly.Msg.ORA_USER_DEACTIVATION_SUCCESS = "Your account is currently not verified, please check your mailbox!";  // untranslated
 Blockly.Msg.ORA_USER_DELETE_ERROR_HAS_GROUPS = "You have user groups associated with your account. Please delete them first, before you delete your account.";  // untranslated
 Blockly.Msg.ORA_USER_DELETE_ERROR_ID_NOT_FOUND = "Error while deleting user.";  // untranslated

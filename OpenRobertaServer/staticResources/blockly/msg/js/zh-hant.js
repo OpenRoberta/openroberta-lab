@@ -1318,6 +1318,7 @@ Blockly.Msg.ORA_USER_CREATE_ERROR_CONTAINS_SPECIAL_CHARACTERS = "您的帳戶名
 Blockly.Msg.ORA_USER_CREATE_ERROR_MISSING_REQ_FIELDS = "請確保您已填寫所有必要欄位!無法創建您的帳戶。";
 Blockly.Msg.ORA_USER_CREATE_ERROR_NOT_SAVED_TO_DB = "資料庫中已存在給定的使用者名, 請選擇其他使用者名。";
 Blockly.Msg.ORA_USER_CREATE_SUCCESS = "您的使用者帳戶»$«已成功創建!";
+Blockly.Msg.ORA_USER_CREATE_SUCCESS_ACTIVATION_MAIL_FAIL = "您的帳戶已建立，但無法傳送啟用電子郵件。您可以在「登入 → 變更」中更新電子郵件地址或重新傳送啟用連結。";
 Blockly.Msg.ORA_USER_DEACTIVATION_SUCCESS = "您的帳戶當前未被驗證, 請檢查您的郵箱!";
 Blockly.Msg.ORA_USER_DELETE_ERROR_HAS_GROUPS = "You have user groups associated with your account. Please delete them first, before you delete your account.";  // untranslated
 Blockly.Msg.ORA_USER_DELETE_ERROR_ID_NOT_FOUND = "刪除使用者時出錯。";
