@@ -1,0 +1,109 @@
+<export xmlns="http://de.fhg.iais.roberta.blockly">
+    <program>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="3.1" description="" tags="">
+            <instance x="247" y="50">
+                <block type="robControls_start" id="start" intask="true" deletable="false">
+                    <mutation declare="false"></mutation>
+                    <field name="DEBUG"></field>
+                </block>
+                <block type="robActions_serial_print" id="print-co2" intask="true">
+                    <value name="OUT">
+                        <block type="robSensors_scd40_getSample" id="scd40-co2" intask="true">
+                            <mutation mode="CO2"></mutation>
+                            <field name="MODE">CO2</field>
+                            <field name="SENSORPORT">SCD</field>
+                            <field name="SLOT"></field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robActions_serial_print" id="print-temp" intask="true">
+                    <value name="OUT">
+                        <block type="robSensors_scd40_getSample" id="scd40-temp" intask="true">
+                            <mutation mode="TEMPERATURE"></mutation>
+                            <field name="MODE">TEMPERATURE</field>
+                            <field name="SENSORPORT">SCD</field>
+                            <field name="SLOT"></field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robActions_serial_print" id="print-humidity" intask="true">
+                    <value name="OUT">
+                        <block type="robSensors_scd40_getSample" id="scd40-humidity" intask="true">
+                            <mutation mode="HUMIDITY"></mutation>
+                            <field name="MODE">HUMIDITY</field>
+                            <field name="SENSORPORT">SCD</field>
+                            <field name="SLOT"></field>
+                        </block>
+                    </value>
+                </block>
+            </instance>
+        </block_set>
+    </program>
+    <config>
+        <block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="calliope" xmlversion="3.1" description="" tags="">
+            <instance x="-34" y="120">
+                <block type="robConf_key" id="key-b" intask="true" deletable="false">
+                    <field name="NAME">B</field>
+                    <field name="PIN1">B</field>
+                </block>
+            </instance>
+            <instance x="197" y="162">
+                <block type="robConf_sound" id="sound" intask="true" deletable="false">
+                    <field name="NAME">_S</field>
+                </block>
+            </instance>
+            <instance x="580" y="159">
+                <block type="robConf_scd40" id="scd40-conf" intask="true">
+                    <field name="NAME">SCD</field>
+                    <field name="PIN1">A0</field>
+                </block>
+            </instance>
+            <instance x="197" y="190">
+                <block type="robConf_light" id="light" intask="true" deletable="false">
+                    <field name="NAME">_L</field>
+                </block>
+            </instance>
+            <instance x="80" y="211">
+                <block type="robConf_gyro" id="gyro" intask="true" deletable="false">
+                    <field name="NAME">_G</field>
+                </block>
+            </instance>
+            <instance x="80" y="239">
+                <block type="robConf_compass" id="compass" intask="true" deletable="false">
+                    <field name="NAME">_C</field>
+                </block>
+            </instance>
+            <instance x="250" y="250">
+                <block type="robConf_robot" id="robot" intask="false" deletable="false">
+                    <field name="ROBOT">undefined</field>
+                </block>
+            </instance>
+            <instance x="-34" y="270">
+                <block type="robConf_key" id="key-a" intask="true" deletable="false">
+                    <field name="NAME">A</field>
+                    <field name="PIN1">A</field>
+                </block>
+            </instance>
+            <instance x="80" y="268">
+                <block type="robConf_accelerometer" id="accelerometer" intask="true" deletable="false">
+                    <field name="NAME">_A</field>
+                </block>
+            </instance>
+            <instance x="80" y="378">
+                <block type="robConf_temperature" id="temperature" intask="true" deletable="false">
+                    <field name="NAME">_T</field>
+                </block>
+            </instance>
+            <instance x="-34" y="422">
+                <block type="robConf_rgbledh" id="rgbled" intask="true" deletable="false">
+                    <field name="NAME">_R</field>
+                </block>
+            </instance>
+            <instance x="-34" y="450">
+                <block type="robConf_buzzer" id="buzzer" intask="true" deletable="false">
+                    <field name="NAME">_B</field>
+                </block>
+            </instance>
+        </block_set>
+    </config>
+</export>

@@ -39,6 +39,7 @@
         <block type="mbedSensors_timer_reset"></block>
         <block type="robSensors_temperature_getSample"></block>
         <block type="robSensors_light_getSample"></block>
+        <block type="robSensors_scd40_getSample"></block>
     </category>
     <category name="TOOLBOX_CONTROL" svg="true">
         <block type="robControls_if"></block>

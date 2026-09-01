@@ -34,6 +34,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.MoistureSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.Scd40Sensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.CallibotKeysSensor;
@@ -183,6 +184,11 @@ public class CalliopeStackMachineVisitor extends MbedV2StackMachineVisitor imple
 
     @Override
     public Void visitHumiditySensor(HumiditySensor humiditySensor) {
+        return null;
+    }
+
+    @Override
+    public Void visitScd40Sensor(Scd40Sensor scd40Sensor) {
         return null;
     }
 

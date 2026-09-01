@@ -16,7 +16,7 @@ import de.fhg.iais.roberta.visitor.validate.CalliopeValidatorAndCollectorVisitor
 import de.fhg.iais.roberta.visitor.validate.CommonNepoValidatorAndCollectorVisitor;
 
 public class CalliopeValidatorAndCollectorWorker extends MbedV2ValidatorAndCollectorWorker {
-    public static final List<String> FREE_PINS = Stream.of("A", "B", "0", "1", "2", "3", "4", "5", "C04", "C05", "C06", "C07", "C08", "C09", "C10", "C11", "C12", "C16", "C17", "C18", "C19").collect(Collectors.toList());
+    public static final List<String> FREE_PINS = Stream.of("A", "B", "A0", "0", "1", "2", "3", "4", "5", "C04", "C05", "C06", "C07", "C08", "C09", "C10", "C11", "C12", "C16", "C17", "C18", "C19").collect(Collectors.toList());
     public static final List<String> DEFAULT_PROPERTIES = Stream.of("KEY", "ACCELEROMETER", "RGBLED", "SOUND", "COMPASS", "BUZZER", "TEMPERATURE", "GYRO", "LIGHT", "ROBOT", "LOGOTOUCH").collect(Collectors.toList());
     public static final HashMap<String, String> MAP_CORRECT_CONFIG_PINS = new HashMap<String, String>() {{
         put(SC.ULTRASONIC, "5");
