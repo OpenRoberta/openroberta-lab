@@ -1318,6 +1318,7 @@ Blockly.Msg.ORA_USER_CREATE_ERROR_CONTAINS_SPECIAL_CHARACTERS = "You are using s
 Blockly.Msg.ORA_USER_CREATE_ERROR_MISSING_REQ_FIELDS = "Desaparecidos los campos necesarios";
 Blockly.Msg.ORA_USER_CREATE_ERROR_NOT_SAVED_TO_DB = "Error al almacenar el usuario";
 Blockly.Msg.ORA_USER_CREATE_SUCCESS = "El usuario ha sido creado con éxito";
+Blockly.Msg.ORA_USER_CREATE_SUCCESS_ACTIVATION_MAIL_FAIL = "El teu compte s'ha creat, però no s'ha pogut enviar el correu d'activació. A Inici de sessió → Canvia pots actualitzar l'adreça electrònica o tornar a enviar l'enllaç d'activació.";
 Blockly.Msg.ORA_USER_DEACTIVATION_SUCCESS = "Your account is currently not verified, please check your mailbox!";  // untranslated
 Blockly.Msg.ORA_USER_DELETE_ERROR_HAS_GROUPS = "You have user groups associated with your account. Please delete them first, before you delete your account.";  // untranslated
 Blockly.Msg.ORA_USER_DELETE_ERROR_ID_NOT_FOUND = "Error al borrar un usuario.";

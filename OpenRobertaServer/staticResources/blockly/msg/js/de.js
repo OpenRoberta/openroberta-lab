@@ -1318,6 +1318,7 @@ Blockly.Msg.ORA_USER_CREATE_ERROR_CONTAINS_SPECIAL_CHARACTERS = "Bitte benutze k
 Blockly.Msg.ORA_USER_CREATE_ERROR_MISSING_REQ_FIELDS = "Schaue nach, ob du alle Felder ausgefüllt hast. Das Benutzerkonto konnte nicht erstellt werden.";
 Blockly.Msg.ORA_USER_CREATE_ERROR_NOT_SAVED_TO_DB = "Es gibt bereits einen Benutzer mit diesem Namen, versuche es mit einem anderen Benutzernamen.";
 Blockly.Msg.ORA_USER_CREATE_SUCCESS = "Das Benutzerkonto »$« wurde für dich angelegt!";
+Blockly.Msg.ORA_USER_CREATE_SUCCESS_ACTIVATION_MAIL_FAIL = "Dein Konto wurde erstellt, aber die Aktivierungs-E-Mail konnte nicht gesendet werden. Unter Login → Ändern kannst du deine E-Mail-Adresse aktualisieren oder den Aktivierungslink erneut senden.";
 Blockly.Msg.ORA_USER_DEACTIVATION_SUCCESS = "Dein Benutzerkonto ist nicht mehr verifiziert. Bitte schaue in deinem Postfach nach!";
 Blockly.Msg.ORA_USER_DELETE_ERROR_HAS_GROUPS = "Bevor du dein Benutzerkonto löschen kannst, musst zu erst alle Gruppen löschen, die du mit diesem Benutzer erstellt hast.";
 Blockly.Msg.ORA_USER_DELETE_ERROR_ID_NOT_FOUND = "Ein Fehler ist beim Löschen des Benutzers »$« aufgetreten.";

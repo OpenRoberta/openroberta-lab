@@ -1318,6 +1318,7 @@ Blockly.Msg.ORA_USER_CREATE_ERROR_CONTAINS_SPECIAL_CHARACTERS = "You are using s
 Blockly.Msg.ORA_USER_CREATE_ERROR_MISSING_REQ_FIELDS = "Vérifie si toutes les cases ont été remplies.";
 Blockly.Msg.ORA_USER_CREATE_ERROR_NOT_SAVED_TO_DB = "Erreur de sauvegarde; l'utilisateur existe déjà ou réesaie !";
 Blockly.Msg.ORA_USER_CREATE_SUCCESS = "L'utilisateur a été créé !";
+Blockly.Msg.ORA_USER_CREATE_SUCCESS_ACTIVATION_MAIL_FAIL = "Votre compte a été créé, mais l’e-mail d’activation n’a pas pu être envoyé. Sous Connexion → Modifier, vous pouvez mettre à jour votre adresse e-mail ou renvoyer le lien d’activation.";
 Blockly.Msg.ORA_USER_DEACTIVATION_SUCCESS = "Your account is currently not verified, please check your mailbox!";  // untranslated
 Blockly.Msg.ORA_USER_DELETE_ERROR_HAS_GROUPS = "You have user groups associated with your account. Please delete them first, before you delete your account.";  // untranslated
 Blockly.Msg.ORA_USER_DELETE_ERROR_ID_NOT_FOUND = "Erreur lors de la suppression de l'utilisateur $.";

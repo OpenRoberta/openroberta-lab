@@ -1318,6 +1318,7 @@ Blockly.Msg.ORA_USER_CREATE_ERROR_CONTAINS_SPECIAL_CHARACTERS = "You are using s
 Blockly.Msg.ORA_USER_CREATE_ERROR_MISSING_REQ_FIELDS = "Mangler obligatorisk felt.";
 Blockly.Msg.ORA_USER_CREATE_ERROR_NOT_SAVED_TO_DB = "Kunne ikke gemme bruger.";
 Blockly.Msg.ORA_USER_CREATE_SUCCESS = "Bruger oprettet";
+Blockly.Msg.ORA_USER_CREATE_SUCCESS_ACTIVATION_MAIL_FAIL = "Din konto blev oprettet, men aktiveringsmailen kunne ikke sendes. Under Login → Rediger kan du opdatere din e-mailadresse eller sende aktiveringslinket igen.";
 Blockly.Msg.ORA_USER_DEACTIVATION_SUCCESS = "Your account is currently not verified, please check your mailbox!";  // untranslated
 Blockly.Msg.ORA_USER_DELETE_ERROR_HAS_GROUPS = "You have user groups associated with your account. Please delete them first, before you delete your account.";  // untranslated
 Blockly.Msg.ORA_USER_DELETE_ERROR_ID_NOT_FOUND = "Kunne ikke slette bruger.";

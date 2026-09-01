@@ -113,6 +113,8 @@ public abstract class AbstractRestInterfaceTest {
 
     protected Map<String, RobotFactory> robotPlugins;
 
+    protected MailManagement mailManagement;
+
     //this is the setup class and should be called before testing
     protected void setup() throws Exception {
         ServerStarter.initLoggingBeforeFirstUse(new String[0]);
@@ -122,8 +124,8 @@ public abstract class AbstractRestInterfaceTest {
 
         this.robotCommunicator = new RobotCommunicator();
 
-        MailManagement mailManagement = Mockito.mock(MailManagement.class);
-        this.restUser = new ClientUser(this.robotCommunicator, this.serverProperties, mailManagement);
+        this.mailManagement = Mockito.mock(MailManagement.class);
+        this.restUser = new ClientUser(this.robotCommunicator, this.serverProperties, this.mailManagement);
 
         tc = TestConfiguration.setup();
         tc.deleteAllFromUserAndProgramTmpPasswords();

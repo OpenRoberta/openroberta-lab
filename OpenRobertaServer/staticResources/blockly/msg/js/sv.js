@@ -1318,6 +1318,7 @@ Blockly.Msg.ORA_USER_CREATE_ERROR_CONTAINS_SPECIAL_CHARACTERS = "Du använder en
 Blockly.Msg.ORA_USER_CREATE_ERROR_MISSING_REQ_FIELDS = "Vänligen se till att du har fyllt i alla obligatoriska fält! Ditt konto kunde inte skapas.";
 Blockly.Msg.ORA_USER_CREATE_ERROR_NOT_SAVED_TO_DB = "Det angivna användarnamnet finns redan i databasen, var god välj ett annat användarnamn.";
 Blockly.Msg.ORA_USER_CREATE_SUCCESS = "Ditt användarkonto »$« har skapats!";
+Blockly.Msg.ORA_USER_CREATE_SUCCESS_ACTIVATION_MAIL_FAIL = "Ditt konto har skapats, men aktiveringsmejlet kunde inte skickas. Under Logga in → Ändra kan du uppdatera din e-postadress eller skicka aktiveringslänken igen.";
 Blockly.Msg.ORA_USER_DEACTIVATION_SUCCESS = "Ditt konto är för närvarande inte verifierat, vänligen kontrollera din brevlåda!";
 Blockly.Msg.ORA_USER_DELETE_ERROR_HAS_GROUPS = "You have user groups associated with your account. Please delete them first, before you delete your account.";  // untranslated
 Blockly.Msg.ORA_USER_DELETE_ERROR_ID_NOT_FOUND = "Fel vid borttagning av användare.";

@@ -1318,6 +1318,7 @@ Blockly.Msg.ORA_USER_CREATE_ERROR_CONTAINS_SPECIAL_CHARACTERS = "Používáte je
 Blockly.Msg.ORA_USER_CREATE_ERROR_MISSING_REQ_FIELDS = "Zkontrolujte, zda všechna požadovaná pole byla vyplněna. Váš účet nemohl být vytvořen.";
 Blockly.Msg.ORA_USER_CREATE_ERROR_NOT_SAVED_TO_DB = "Zadané uživatelské jméno již existuje v databázi, zvolte prosím jiné jméno.";
 Blockly.Msg.ORA_USER_CREATE_SUCCESS = "Váš uživatelský účet »$« byl úspěšně vytvořen!";
+Blockly.Msg.ORA_USER_CREATE_SUCCESS_ACTIVATION_MAIL_FAIL = "Váš účet byl vytvořen, ale aktivační e-mail se nepodařilo odeslat. V části Přihlášení → Změnit můžete upravit e-mailovou adresu nebo znovu odeslat aktivační odkaz.";
 Blockly.Msg.ORA_USER_DEACTIVATION_SUCCESS = "Váš účet není ověřen, zkontrolujte si prosím emailovou schránku!";
 Blockly.Msg.ORA_USER_DELETE_ERROR_HAS_GROUPS = "You have user groups associated with your account. Please delete them first, before you delete your account.";  // untranslated
 Blockly.Msg.ORA_USER_DELETE_ERROR_ID_NOT_FOUND = "Chyba při mazání uživatele.";
