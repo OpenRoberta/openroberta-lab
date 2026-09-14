@@ -14,6 +14,7 @@ def set_status_light(color):
     hub.status_light.on(color)
 
 
+motorA = spike.Motor('A')
 touch_sensor_B = spike.ForceSensor('F')
 touch_sensor_B = spike.ForceSensor('F')
 ultrasonic_sensor_U = spike.DistanceSensor('D')
@@ -24,6 +25,10 @@ hub = spike.PrimeHub()
 def run():
     # sensors
     timer.reset()
+    motorA.set_degrees_counted(0)
+    print(motorA.get_degrees_counted())
+    print((motorA.get_degrees_counted() / 360.0))
+    print((motorA.get_degrees_counted() * math.pi * 5.6 / 360.0))
     print(color_sensor_F.get_color())
     print(color_sensor_F.get_reflected_light())
     print(color_sensor_F.get_red() / 10.24)

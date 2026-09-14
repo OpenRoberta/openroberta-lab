@@ -108,6 +108,24 @@ public abstract class AbstractSpikePythonVisitor extends AbstractPythonVisitor i
         return block.getComponentProperties().get("PORT");
     }
 
+    protected final String getMotorPort(String userDefinedOrPhysicalPort) {
+        ConfigurationComponent block = this.configurationAst.optConfigurationComponent(userDefinedOrPhysicalPort);
+        if ( block != null ) {
+            String port = block.getComponentProperties().get("PORT");
+            if ( port != null ) {
+                return port;
+            }
+        }
+        for ( java.util.Map.Entry<String, ConfigurationComponent> entry : this.configurationAst.getConfigurationComponents().entrySet() ) {
+            ConfigurationComponent comp = entry.getValue();
+            String port = comp.getComponentProperties().get("PORT");
+            if ( port != null && port.equals(userDefinedOrPhysicalPort) ) {
+                return port;
+            }
+        }
+        return userDefinedOrPhysicalPort;
+    }
+
 }
 
 

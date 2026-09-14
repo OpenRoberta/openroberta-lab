@@ -1,6 +1,6 @@
 from pybricks.hubs import PrimeHub
-from pybricks.pupdevices import ColorSensor, UltrasonicSensor, ForceSensor
-from pybricks.parameters import Port, Color, Button
+from pybricks.pupdevices import Motor, ColorSensor, UltrasonicSensor, ForceSensor
+from pybricks.parameters import Port, Color, Button, Direction
 from pybricks.tools import Matrix, wait, StopWatch
 import umath as math
 import urandom as random
@@ -64,6 +64,7 @@ Color.RED = Color(350,35,35)
 Color.BLACK = Color(0,10,10)
 Color.WHITE = Color(0,0,70)
 
+motorA = Motor(Port.A)
 
 touch_sensor_B = ForceSensor(Port.F)
 touch_sensor_B = ForceSensor(Port.F)
@@ -123,6 +124,10 @@ def run():
             break
     display_text(str("Button Right Pressed"))
     stopWatch.reset()
+    motorA.reset_angle(0)
+    display_text(str(motorA.angle()))
+    display_text(str((motorA.angle() / 360.0)))
+    display_text(str((motorA.angle() * math.pi * 5.6 / 360.0)))
     wait(500)
     display_text(str("".join(str(arg) for arg in ["Timer:", stopWatch.time()])))
 

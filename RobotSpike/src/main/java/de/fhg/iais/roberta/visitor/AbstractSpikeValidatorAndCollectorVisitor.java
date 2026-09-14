@@ -33,6 +33,8 @@ import de.fhg.iais.roberta.syntax.lang.functions.MathRandomFloatFunct;
 import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.EncoderReset;
+import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
@@ -240,6 +242,40 @@ public abstract class AbstractSpikeValidatorAndCollectorVisitor extends CommonNe
 
     @Override
     public Void visitGyroSensor(GyroSensor gyroSensor) {
+        return null;
+    }
+
+    @Override
+    public Void visitEncoderSensor(EncoderSensor encoderSensor) {
+        ConfigurationComponent motor = this.robotConfiguration.optConfigurationComponent(encoderSensor.getUserDefinedPort());
+        if ( motor == null ) {
+            motor = getMotorFromUserName(encoderSensor.getUserDefinedPort());
+        }
+        if ( motor == null ) {
+            addErrorToPhrase(encoderSensor, "CONFIGURATION_ERROR_MOTOR_MISSING");
+        } else {
+            usedHardwareBuilder.addUsedActor(new UsedActor(motor.getOptProperty("PORT"), SC.MOTOR));
+            if ( encoderSensor.getMode().equals("DISTANCE") ) {
+                ConfigurationComponent diffDrive = this.robotConfiguration.optConfigurationComponentByType("DIFFERENTIALDRIVE");
+                if ( diffDrive == null ) {
+                    addErrorToPhrase(encoderSensor, "CONFIGURATION_ERROR_ACTOR_MISSING");
+                }
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitEncoderReset(EncoderReset encoderReset) {
+        ConfigurationComponent motor = this.robotConfiguration.optConfigurationComponent(encoderReset.sensorPort);
+        if ( motor == null ) {
+            motor = getMotorFromUserName(encoderReset.sensorPort);
+        }
+        if ( motor == null ) {
+            addErrorToPhrase(encoderReset, "CONFIGURATION_ERROR_MOTOR_MISSING");
+        } else {
+            usedHardwareBuilder.addUsedActor(new UsedActor(motor.getOptProperty("PORT"), SC.MOTOR));
+        }
         return null;
     }
 

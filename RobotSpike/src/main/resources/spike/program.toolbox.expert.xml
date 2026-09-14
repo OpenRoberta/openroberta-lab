@@ -142,6 +142,8 @@
         <block type="robSensors_touch_getSample"/>
         <block type="robSensors_colour_getSample"/>
         <block type="robSensors_ultrasonic_getSample"/>
+        <block type="robSensors_encoder_reset"/>
+        <block type="robSensors_encoder_getSample"/>
         <block type="robSensors_key_getSample"/>
         <block type="robSensors_timer_getSample"/>
         <block type="robSensors_timer_reset"/>
