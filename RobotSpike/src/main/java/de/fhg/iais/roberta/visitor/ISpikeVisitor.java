@@ -23,6 +23,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.GyroReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TouchSensor;
@@ -66,6 +67,8 @@ public interface ISpikeVisitor<V> extends IVisitor<V> {
     V visitTouchSensor(TouchSensor touchSensor);
 
     V visitGyroSensor(GyroSensor gyroSensor);
+
+    V visitGyroReset(GyroReset gyroReset);
 
     V visitEncoderSensor(EncoderSensor encoderSensor);
 

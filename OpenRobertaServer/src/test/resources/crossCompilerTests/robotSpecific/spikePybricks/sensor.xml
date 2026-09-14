@@ -403,6 +403,9 @@
                         </block>
                     </value>
                 </block>
+                <block type="robSensors_gyro_reset" id="gyroResetPB" intask="true">
+                    <field name="SENSORPORT">_K</field>
+                </block>
                 <block type="robControls_wait_time" id="E6B47so,f(N73hQbqm(s" intask="true">
                     <value name="WAIT">
                         <block type="math_number" id="mutp09/,?Be=^yvl7awQ" intask="true">

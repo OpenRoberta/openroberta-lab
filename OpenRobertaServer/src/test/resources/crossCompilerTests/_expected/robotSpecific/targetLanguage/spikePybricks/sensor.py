@@ -128,6 +128,7 @@ def run():
     display_text(str(motorA.angle()))
     display_text(str((motorA.angle() / 360.0)))
     display_text(str((motorA.angle() * math.pi * 5.6 / 360.0)))
+    hub.imu.reset_heading(0)
     wait(500)
     display_text(str("".join(str(arg) for arg in ["Timer:", stopWatch.time()])))
 

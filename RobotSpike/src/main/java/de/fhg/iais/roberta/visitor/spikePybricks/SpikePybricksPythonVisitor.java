@@ -34,6 +34,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.GyroReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
@@ -333,6 +334,12 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
     public Void visitEncoderReset(EncoderReset encoderReset) {
         String motorPort = getMotorPort(encoderReset.sensorPort);
         this.src.add("motor").add(motorPort).add(".reset_angle(0)");
+        return null;
+    }
+
+    @Override
+    public Void visitGyroReset(GyroReset gyroReset) {
+        this.src.add("hub.imu.reset_heading(0)");
         return null;
     }
 

@@ -45,6 +45,9 @@
                         </block>
                     </value>
                 </block>
+                <block type="robSensors_gyro_reset" id="gyroReset1" intask="true">
+                    <field name="SENSORPORT">_K</field>
+                </block>
                 <block type="robActions_debug" id="P_tLjXNRUHL.1rCr.p53" intask="true">
                     <value name="OUT">
                         <block type="robSensors_colour_getSample" id=")dDyF4pz?][#qt.P?^90" intask="true">
