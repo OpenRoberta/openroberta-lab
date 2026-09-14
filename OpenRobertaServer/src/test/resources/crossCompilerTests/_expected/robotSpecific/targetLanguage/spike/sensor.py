@@ -24,6 +24,7 @@ hub = spike.PrimeHub()
 def run():
     # sensors
     timer.reset()
+    hub.motion_sensor.reset_yaw_angle()
     print(color_sensor_F.get_color())
     print(color_sensor_F.get_reflected_light())
     print(color_sensor_F.get_red() / 10.24)

@@ -46,5 +46,6 @@ WaitStmt [
 )]
 DisplayTextAction[displayTextMode: TEXT, textToDisplay: StringConst[value: Button Right Pressed]]
 TimerReset[sensorPort: 1]
+GyroReset[sensorPort: _K]
 WaitTimeStmt[time: NumConst[value: 500]]
 DisplayTextAction[displayTextMode: TEXT, textToDisplay: FunctionExpr [TextJoinFunct [StringConst[value: Timer:], SensorExpr [TimerSensor [1, VALUE, - EMPTY_SLOT -]]]]]
