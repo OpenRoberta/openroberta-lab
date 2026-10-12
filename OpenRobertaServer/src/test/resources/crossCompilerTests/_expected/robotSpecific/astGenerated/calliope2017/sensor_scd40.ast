@@ -1,0 +1,3 @@
+SerialWriteAction[value: SensorExpr [Scd40Sensor [SCD, CO2, - EMPTY_SLOT -]]]
+SerialWriteAction[value: SensorExpr [Scd40Sensor [SCD, TEMPERATURE, - EMPTY_SLOT -]]]
+SerialWriteAction[value: SensorExpr [Scd40Sensor [SCD, HUMIDITY, - EMPTY_SLOT -]]]

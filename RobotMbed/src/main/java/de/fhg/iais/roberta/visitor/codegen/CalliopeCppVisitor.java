@@ -99,6 +99,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.LightSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.MoistureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinTouchSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.Scd40Sensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
@@ -176,6 +177,23 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
     public CalliopeCppVisitor(List<List<Phrase>> programPhrases, ConfigurationAst robotConfiguration, ClassToInstanceMap<IProjectBean> beans) {
         super(programPhrases, beans);
         this.robotConfiguration = robotConfiguration;
+    }
+
+    private boolean usesCalliopeI2c() {
+        return this.getBean(UsedHardwareBean.class).isActorUsed(SC.CALLIBOT)
+            || this.getBean(UsedHardwareBean.class).isSensorUsed(SC.COLOR)
+            || this.getBean(UsedHardwareBean.class).isSensorUsed(SC.SCD40);
+    }
+
+    private int getCalliopeI2cBufferSize() {
+        int bufferSize = 0;
+        if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.CALLIBOT) ) {
+            bufferSize = Math.max(bufferSize, 5);
+        }
+        if ( this.getBean(UsedHardwareBean.class).isSensorUsed(SC.COLOR) ) {
+            bufferSize = Math.max(bufferSize, 8);
+        }
+        return bufferSize;
     }
 
     private static String getCallibotPin(ConfigurationComponent confComp, String port) {
@@ -1255,18 +1273,22 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
         if ( this.getBean(UsedHardwareBean.class).isSensorUsed(SC.HUMIDITY) ) {
             this.src.add("Sht31 _sht31 = Sht31(MICROBIT_PIN_P8, MICROBIT_PIN_P2);\n");
         }
-        if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.CALLIBOT) ) {
+        if ( usesCalliopeI2c() ) {
             this.src.add("MicroBitI2C _i2c(MICROBIT_PIN_P20, MICROBIT_PIN_P19);");
             nlIndent();
-            this.src.add("char _buf[5] = { 0, 0, 0, 0, 0 };");
+        }
+        int i2cBufferSize = getCalliopeI2cBufferSize();
+        if ( i2cBufferSize > 0 ) {
+            this.src.add("char _buf[", i2cBufferSize, "] = { ", String.join(", ", Collections.nCopies(i2cBufferSize, "0")), " };");
             nlIndent();
+        }
+        if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.CALLIBOT) ) {
             this.src.add("uint8_t _cbLedState = 0x00;");
         }
         if ( this.getBean(UsedHardwareBean.class).isSensorUsed(SC.COLOR) ) {
-            this.src.add("MicroBitI2C _i2c(MICROBIT_PIN_P20, MICROBIT_PIN_P19);");
-            nlIndent();
-            this.src.add("char _buf[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };");
-            nlIndent();
+            if ( this.getBean(UsedHardwareBean.class).isActorUsed(SC.CALLIBOT) ) {
+                nlIndent();
+            }
             this.src.add("std::list<double> _TCS3472_rgb;");
             nlIndent();
             this.src.add("MicroBitColor _TCS3472_color;");
@@ -1576,6 +1598,26 @@ public final class CalliopeCppVisitor extends AbstractCppVisitor implements ICal
             default:
                 throw new UnsupportedOperationException("Mode " + colorSensor.getMode() + " not supported!");
         }
+        return null;
+    }
+
+    @Override
+    public Void visitScd40Sensor(Scd40Sensor scd40Sensor) {
+        this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(CalliopeMethods.SCD40_GET_SAMPLE), "(");
+        switch ( scd40Sensor.getMode() ) {
+            case SC.CO2:
+                this.src.add("0");
+                break;
+            case SC.TEMPERATURE:
+                this.src.add("1");
+                break;
+            case SC.HUMIDITY:
+                this.src.add("2");
+                break;
+            default:
+                throw new UnsupportedOperationException("Mode " + scd40Sensor.getMode() + " not supported!");
+        }
+        this.src.add(")");
         return null;
     }
 

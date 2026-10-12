@@ -21,6 +21,7 @@ public interface SC {
     String ULTRASONIC = "ULTRASONIC";
     String SOUND = "SOUND";
     String DISTANCE = "DISTANCE";
+    String CO2 = "CO2";
     String RESET = "RESET";
     String ROTATION = "ROTATION";
     String DEGREE = "DEGREE";
@@ -128,6 +129,7 @@ public interface SC {
     String MUSIC = "MUSIC";
     String ENVIRONMENTAL = "ENVIRONMENTAL";
     String COLOURTCS3472 = "COLOURTCS3472";
+    String SCD40 = "SCD40";
     String LED_BUILTIN = "LED_BUILTIN";
     String GREEN = "GREEN";
     String BLUE = "BLUE";

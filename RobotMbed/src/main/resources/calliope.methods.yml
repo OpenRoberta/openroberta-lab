@@ -147,3 +147,100 @@ GET_ROTATION:
             if factor != 0:
                 pitch = math.atan(-x / (factor))            
                 return math.floor((360*pitch)/(2*math.pi))
+
+SCD40_GET_SAMPLE:
+  PYTHON: |
+    def scd40_get_sample(mode):
+        global _scd40_i2c_initialized, _scd40_started, _scd40_values
+        try:
+            _scd40_started
+        except NameError:
+            _scd40_i2c_initialized = False
+            _scd40_started = False
+            _scd40_values = (0, 0, 0)
+
+        def scd40_crc(data):
+            crc = 0xff
+            for byte in data:
+                crc ^= byte
+                for _ in range(8):
+                    if crc & 0x80:
+                        crc = ((crc << 1) ^ 0x31) & 0xff
+                    else:
+                        crc = (crc << 1) & 0xff
+            return crc
+
+        if not _scd40_i2c_initialized:
+            try:
+                if hasattr(calliopemini, "pin_A0_SCL") and hasattr(calliopemini, "pin_A0_SDA"):
+                    calliopemini.i2c.init(freq=400000, scl=calliopemini.pin_A0_SCL, sda=calliopemini.pin_A0_SDA)
+                elif hasattr(calliopemini, "pin_C19") and hasattr(calliopemini, "pin_C20"):
+                    calliopemini.i2c.init(freq=400000, scl=calliopemini.pin_C19, sda=calliopemini.pin_C20)
+            except Exception:
+                pass
+            _scd40_i2c_initialized = True
+
+        try:
+            if not _scd40_started:
+                calliopemini.i2c.write(0x62, b'\x21\xb1')
+                calliopemini.sleep(5000)
+                _scd40_started = True
+
+            calliopemini.i2c.write(0x62, b'\xec\x05')
+            calliopemini.sleep(1)
+            data = calliopemini.i2c.read(0x62, 9)
+        except Exception:
+            return _scd40_values[mode]
+
+        if len(data) >= 9 and scd40_crc(data[0:2]) == data[2] and scd40_crc(data[3:5]) == data[5] and scd40_crc(data[6:8]) == data[8]:
+            co2 = (data[0] << 8) | data[1]
+            raw_temperature = (data[3] << 8) | data[4]
+            raw_humidity = (data[6] << 8) | data[7]
+            _scd40_values = (co2, -45 + 175 * raw_temperature / 65535, 100 * raw_humidity / 65535)
+
+        return _scd40_values[mode]
+  C: |
+    double scd40_get_sample(int mode) {
+        static bool started = false;
+        static double values[3] = { 0, 0, 0 };
+        const int address = 0x62 << 1;
+        if ( !started ) {
+            char startCommand[2] = { 0x21, (char) 0xb1 };
+            _i2c.write(address, startCommand, 2);
+            _uBit.sleep(5000);
+            started = true;
+        }
+
+        char readCommand[2] = { (char) 0xec, 0x05 };
+        char data[9] = { 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+        _i2c.write(address, readCommand, 2);
+        _uBit.sleep(1);
+        if ( _i2c.read(address, data, 9) == 0 ) {
+            bool crcValid = true;
+            for ( int word = 0; word < 3; word++ ) {
+                uint8_t crc = 0xff;
+                for ( int i = 0; i < 2; i++ ) {
+                    crc ^= (uint8_t) data[word * 3 + i];
+                    for ( int bit = 0; bit < 8; bit++ ) {
+                        if ( crc & 0x80 ) {
+                            crc = (uint8_t) ((crc << 1) ^ 0x31);
+                        } else {
+                            crc = (uint8_t) (crc << 1);
+                        }
+                    }
+                }
+                if ( crc != (uint8_t) data[word * 3 + 2] ) {
+                    crcValid = false;
+                }
+            }
+            if ( crcValid ) {
+                uint16_t co2 = ((uint8_t) data[0] << 8) | (uint8_t) data[1];
+                uint16_t rawTemperature = ((uint8_t) data[3] << 8) | (uint8_t) data[4];
+                uint16_t rawHumidity = ((uint8_t) data[6] << 8) | (uint8_t) data[7];
+                values[0] = co2;
+                values[1] = -45.0 + 175.0 * rawTemperature / 65535.0;
+                values[2] = 100.0 * rawHumidity / 65535.0;
+            }
+        }
+        return values[mode];
+    }

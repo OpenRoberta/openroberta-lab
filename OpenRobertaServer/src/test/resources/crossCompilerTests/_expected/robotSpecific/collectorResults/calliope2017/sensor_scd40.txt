@@ -1,0 +1,6 @@
+Sensors: 
+[UsedSensor [SCD, SCD40, CO2], UsedSensor [SCD, SCD40, TEMPERATURE], UsedSensor [SCD, SCD40, HUMIDITY]]
+Actors: 
+[]
+Methods: 
+[SCD40_GET_SAMPLE]
