@@ -55,13 +55,13 @@
     </instance>
     <instance x="136" y="440">
         <block type="robConf_key" id="](;J)ShyJ;~HcwPOpoZQ" intask="true" deletable="false">
-            <field name="NAME">links</field>
+            <field name="NAME">left</field>
             <field name="PIN1">LEFT</field>
         </block>
     </instance>
     <instance x="560" y="438">
         <block type="robConf_key" id="aCW;Mk]1|#;zP8{)Ax*;" intask="true" deletable="false">
-            <field name="NAME">rechts</field>
+            <field name="NAME">right</field>
             <field name="PIN1">RIGHT</field>
         </block>
     </instance>

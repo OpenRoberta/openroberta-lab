@@ -84,6 +84,7 @@ require.config({
         'robot.ev3': 'js/app/simulation/simulationLogic/robot.ev3',
         'robot.nxt': 'js/app/simulation/simulationLogic/robot.nxt',
         'robot.rcj': 'js/app/simulation/simulationLogic/robot.rcj',
+        'robot.spike': 'js/app/simulation/simulationLogic/robot.spike',
         'robot.xnn': 'js/app/simulation/simulationLogic/robot.xnn',
         'robot.thymio': 'js/app/simulation/simulationLogic/robot.thymio',
         'robot.edison': 'js/app/simulation/simulationLogic/robot.edison',

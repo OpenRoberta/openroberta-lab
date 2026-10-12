@@ -32,7 +32,7 @@ export class RobotSimBehaviour extends ARobotBehaviour {
         if (sensor === undefined) {
             return 'undefined';
         }
-        let value: string = sensor;
+        let value: any = sensor;
         if (port !== undefined) {
             value = value[port];
         }

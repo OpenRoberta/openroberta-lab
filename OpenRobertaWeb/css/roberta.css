@@ -1637,9 +1637,11 @@ legend {
 .bootstrap-table .fixed-table-toolbar .float-left, .bootstrap-table .fixed-table-toolbar .float-right {
     margin-top: 0;
 }
+
 #nn-explore-table-user-input, #nn-learn-table-user-input {
     margin-top: -46px !important;
 }
+
 .bs-bars.float-left {
     width: 100%;
 }
@@ -4397,4 +4399,25 @@ g.column rect {
 
 #rcjStartStop.running {
     background-color: #e2001a;
+}
+
+.spike-robot-view {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    width: max-content;
+}
+
+.spike-robot-view > svg {
+    flex-shrink: 0;
+}
+
+.spike-robot-view > .spike-gesture-panel {
+    flex-shrink: 0;
+    width: auto;
+}
+
+.spike-gesture-panel #mbed-form,
+.spike-gesture-panel #mbedButtons {
+    width: 194px;
 }

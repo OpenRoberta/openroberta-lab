@@ -1179,6 +1179,180 @@ export class EV3Chassis extends LegoChassis {
     }
 }
 
+export class SpikeChassis extends LegoChassis {
+    override geom: Geometry = {
+        x: -25,
+        y: -14,
+        w: 46.5,
+        h: 28,
+        radius: 2.5,
+        color: '#eeeeee',
+    };
+    override backLeft: PointRobotWorldBumped = {
+        x: this.geom.x,
+        y: this.geom.y,
+        rx: 0,
+        ry: 0,
+        bumped: false,
+    };
+    override backMiddle: PointRobotWorldBumped = {
+        x: this.geom.x,
+        y: 0,
+        rx: 0,
+        ry: 0,
+        bumped: false,
+    };
+    override backRight: PointRobotWorldBumped = {
+        x: this.geom.x,
+        y: this.geom.y * -1,
+        rx: 0,
+        ry: 0,
+        bumped: false,
+    };
+    override frontLeft: PointRobotWorldBumped = {
+        x: 25,
+        y: this.geom.y - 3,
+        rx: 0,
+        ry: 0,
+        bumped: false,
+    };
+    override frontMiddle: PointRobotWorldBumped = {
+        x: 25,
+        y: 0,
+        rx: 0,
+        ry: 0,
+        bumped: false,
+    };
+    override frontRight: PointRobotWorldBumped = {
+        x: 25,
+        y: this.geom.y * -1 + 3,
+        rx: 0,
+        ry: 0,
+        bumped: false,
+    };
+    override wheelBack: Geometry = {
+        x: -27,
+        y: -2,
+        w: 2,
+        h: 4,
+        color: '#000000',
+    };
+    override wheelLeft: Geometry = {
+        x: 0,
+        y: 0,
+        w: 0,
+        h: 6,
+        color: '#000000',
+    };
+    override wheelRight: Geometry = {
+        x: 0,
+        y: 0,
+        w: 0,
+        h: 6,
+        color: '#000000',
+    };
+    override axisDiff: number = 0;
+    topView: string;
+
+    constructor(id: number, configuration: {}, maxRotation: number, pose: Pose) {
+        super(id, configuration, maxRotation, pose);
+        this.transformNewPose(pose, this);
+        const wheelDiameter = configuration['WHEELDIAMETER'] || 5.6;
+        const wheelSeparator = 4;
+        this.wheelLeft.w = wheelDiameter * 3;
+        this.wheelLeft.x = -this.wheelLeft.w / 2;
+        this.wheelRight.w = wheelDiameter * 3;
+        this.wheelRight.x = -this.wheelRight.w / 2;
+        this.wheelLeft.y = -this.TRACKWIDTH / 2 - 3 - wheelSeparator;
+        this.wheelRight.y = this.TRACKWIDTH / 2 - 3 + wheelSeparator;
+        this.wheelFrontRight.x = this.wheelRight.x + this.wheelRight.w;
+        this.wheelFrontRight.y = this.wheelRight.y + this.wheelRight.h;
+        this.wheelBackRight.x = this.wheelRight.x;
+        this.wheelBackRight.y = this.wheelRight.y + this.wheelRight.h;
+        this.wheelFrontLeft.x = this.wheelLeft.x + this.wheelLeft.w;
+        this.wheelFrontLeft.y = this.wheelLeft.y;
+        this.wheelBackLeft.x = this.wheelLeft.x;
+        this.wheelBackLeft.y = this.wheelLeft.y;
+        SIMATH.transform(pose, this.wheelFrontRight);
+        SIMATH.transform(pose, this.wheelBackRight);
+        SIMATH.transform(pose, this.wheelFrontLeft);
+        SIMATH.transform(pose, this.wheelBackLeft);
+        this.topView = this.buildTopView(id);
+        $('#simRobotContent').append(this.topView);
+        $('#simRobotWindow button').removeClass('btn-close-white');
+        $('#brick' + this.id).hide();
+    }
+
+    private buildTopView(id: number): string {
+        let svg =
+            '<svg id="brick' +
+            id +
+            '" xmlns="http://www.w3.org/2000/svg" width="300" height="440" viewBox="0 0 300 440">' +
+            '<defs>' +
+            '<filter id="spikeGlow' +
+            id +
+            '" x="-20%" y="-20%" width="140%" height="140%">' +
+            '<feGaussianBlur stdDeviation="3" result="blur"/>' +
+            '<feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>' +
+            '</filter>' +
+            '</defs>' +
+            '<rect x="10" y="10" width="280" height="420" rx="20" ry="20" fill="#F8D42A" stroke="#222" stroke-width="2"/>' +
+            '<rect x="35" y="30" width="230" height="380" rx="12" ry="12" fill="#FAFAFA" stroke="#D0D0D0" stroke-width="1.5"/>' +
+            '<text x="18" y="80" font-family="Arial, sans-serif" font-weight="bold" font-size="14" fill="#222">A</text>' +
+            '<text x="18" y="180" font-family="Arial, sans-serif" font-weight="bold" font-size="14" fill="#222">B</text>' +
+            '<text x="18" y="280" font-family="Arial, sans-serif" font-weight="bold" font-size="14" fill="#222">C</text>' +
+            '<text x="272" y="80" font-family="Arial, sans-serif" font-weight="bold" font-size="14" fill="#222">D</text>' +
+            '<text x="272" y="180" font-family="Arial, sans-serif" font-weight="bold" font-size="14" fill="#222">E</text>' +
+            '<text x="272" y="280" font-family="Arial, sans-serif" font-weight="bold" font-size="14" fill="#222">F</text>';
+
+        for (let row = 0; row < 5; row++) {
+            for (let col = 0; col < 5; col++) {
+                let x = 65 + col * 36;
+                let y = 55 + row * 36;
+                svg +=
+                    '<rect id="spike_led_' +
+                    col +
+                    '_' +
+                    row +
+                    id +
+                    '" x="' +
+                    x +
+                    '" y="' +
+                    y +
+                    '" width="26" height="26" rx="3" ry="3" fill="#3A3A3A" stroke="#222" stroke-width="1"/>';
+            }
+        }
+
+        svg +=
+            '<circle id="rgbLed' +
+            id +
+            '" cx="150" cy="285" r="28" fill="none" stroke="#EBC300" stroke-width="4"/>' +
+            '<g id="left' +
+            id +
+            '" class="simKey" style="cursor:pointer;">' +
+            '<rect x="60" y="265" width="40" height="40" rx="8" ry="8" fill="#E8E8E8" stroke="#888" stroke-width="1.5"/>' +
+            '<text x="74" y="291" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="#333">&lt;</text>' +
+            '</g>' +
+            '<g id="center' +
+            id +
+            '" class="simKey" style="cursor:pointer;">' +
+            '<circle cx="150" cy="285" r="22" fill="#E0E0E0" stroke="#888" stroke-width="1.5"/>' +
+            '<circle cx="150" cy="285" r="9" fill="none" stroke="#666" stroke-width="2"/>' +
+            '</g>' +
+            '<g id="right' +
+            id +
+            '" class="simKey" style="cursor:pointer;">' +
+            '<rect x="200" y="265" width="40" height="40" rx="8" ry="8" fill="#E8E8E8" stroke="#888" stroke-width="1.5"/>' +
+            '<text x="214" y="291" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="#333">&gt;</text>' +
+            '</g>' +
+            '<circle cx="150" cy="360" r="10" fill="#E0E0E0" stroke="#BBB"/>' +
+            '<text x="150" y="364" font-family="Arial, sans-serif" font-size="12" fill="#666" text-anchor="middle">⚡</text>' +
+            '</svg>';
+
+        return svg;
+    }
+}
+
 export class NXTChassis extends LegoChassis {
     geom: Geometry = {
         x: -30,
@@ -3286,6 +3460,124 @@ export class MbotDisplay extends MatrixDisplay {
     }
 }
 
+export class SpikeDisplay extends MatrixDisplay implements ISensor {
+    leds: number[][] = [
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+    ];
+    brightness: number = 255;
+    override color: string[] = [
+        '255, 238, 170',
+        '255, 235, 160',
+        '255, 232, 150',
+        '255, 229, 140',
+        '255, 226, 130',
+        '255, 223, 120',
+        '255, 220, 110',
+        '255, 217, 100',
+        '255, 214, 90',
+        '255, 210, 80',
+    ];
+    dx: number = 4;
+    dy: number = 4;
+    pixelSize: number = 3.2;
+    x: number;
+    y: number;
+    r: number = 1.6;
+    override wireFrame: boolean = true;
+    private robotId: number;
+
+    constructor(id: number, location: Point) {
+        super();
+        this.robotId = id;
+        this.x = location.x;
+        this.y = location.y;
+        this.imageTranspose = true;
+    }
+
+    override draw(rCtx: CanvasRenderingContext2D, myRobot: RobotBase): void {
+        rCtx.save();
+        rCtx.beginPath();
+        rCtx.globalAlpha = 1;
+        for (let i = 0; i < this.leds.length; i++) {
+            for (let j = 0; j < this.leds[i].length; j++) {
+                const thisLED = Math.min(this.leds[i][j], this.brightness);
+                const colorIndex = UTIL.round(thisLED / C.BRIGHTNESS_MULTIPLIER, 0);
+                const px = this.x + (2 - j) * this.dx;
+                const py = this.y + (i - 2) * this.dy;
+                const size = this.pixelSize;
+
+                if (colorIndex > 0) {
+                    rCtx.save();
+                    rCtx.fillStyle = 'rgba(' + this.color[colorIndex] + ', 1)';
+                    rCtx.shadowColor = 'rgba(255, 200, 50, 0.85)';
+                    rCtx.shadowBlur = 4;
+                    rCtx.beginPath();
+                    if ((rCtx as any).roundRect) {
+                        (rCtx as any).roundRect(px - size / 2, py - size / 2, size, size, 0.6);
+                    } else {
+                        rCtx.rect(px - size / 2, py - size / 2, size, size);
+                    }
+                    rCtx.fill();
+                    rCtx.restore();
+                } else if (this.wireFrame) {
+                    rCtx.save();
+                    rCtx.fillStyle = '#eeeeee';
+                    rCtx.beginPath();
+                    if ((rCtx as any).roundRect) {
+                        (rCtx as any).roundRect(px - size / 2, py - size / 2, size, size, 0.6);
+                    } else {
+                        rCtx.rect(px - size / 2, py - size / 2, size, size);
+                    }
+                    rCtx.fill();
+                    rCtx.restore();
+                }
+            }
+        }
+        rCtx.restore();
+
+        this.updateSvg();
+    }
+
+    private updateSvg(): void {
+        for (let i = 0; i < 5; i++) {
+            for (let j = 0; j < 5; j++) {
+                const $led = $('#spike_led_' + i + '_' + j + this.robotId);
+                if ($led.length) {
+                    const thisLED = Math.min(this.leds[i][j], this.brightness);
+                    const colorIndex = UTIL.round(thisLED / C.BRIGHTNESS_MULTIPLIER, 0);
+                    if (colorIndex > 0) {
+                        $led.attr('fill', 'rgb(' + this.color[colorIndex] + ')');
+                        $led.attr('filter', 'url(#spikeGlow' + this.robotId + ')');
+                    } else {
+                        $led.attr('fill', '#3A3A3A');
+                        $led.removeAttr('filter');
+                    }
+                }
+            }
+        }
+    }
+
+    updateSensor(
+        running: boolean,
+        dt: number,
+        myRobot: RobotBase,
+        values: object,
+        uCtx: CanvasRenderingContext2D,
+        udCtx: CanvasRenderingContext2D,
+        personalObstacleList: any[],
+        markerList: MarkerSimulationObject[],
+        collisionList: ISimulationObstacle[]
+    ): void {
+        values['display'] = values['display'] || {};
+        values['display']['pixel'] = this.leds.map((col) => col.map((row) => Math.round(row / C.BRIGHTNESS_MULTIPLIER)));
+        values['display']['brightness'] = Math.round(this.brightness / C.BRIGHTNESS_MULTIPLIER);
+    }
+}
+
 export class RGBLed implements IUpdateAction, IDrawable, IReset {
     color: any = 'grey';
     r: number = 20;
@@ -3382,6 +3674,58 @@ export class Txt4RGBLed extends RGBLed {
             $('#stopOn' + this.id).css({ 'stop-color': '#666666', 'stop-opacity': 1 });
             $('#stopOff' + this.id).css({ 'stop-color': '#666666', 'stop-opacity': 1 });
         }
+    }
+}
+
+export class SpikeRGBLed extends RGBLed {
+    override color: any = '#EBC300';
+    override resetColor: string = '#EBC300';
+
+    constructor(id: number, p: Point, reset: boolean, port?: string, radius?: number) {
+        super(p, reset, port, radius);
+        this.id = id;
+    }
+
+    override draw(rCtx: CanvasRenderingContext2D, myRobot: RobotBase) {
+        rCtx.save();
+        rCtx.beginPath();
+        rCtx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+        if (this.color !== this.resetColor) {
+            let col = this.color;
+            if (Array.isArray(col)) {
+                col = 'rgb(' + col[0] + ',' + col[1] + ',' + col[2] + ')';
+            }
+            rCtx.fillStyle = col;
+            rCtx.shadowColor = col;
+            rCtx.shadowBlur = 6;
+            rCtx.fill();
+        } else {
+            rCtx.fillStyle = '#eeeeee';
+            rCtx.fill();
+        }
+        rCtx.shadowBlur = 0;
+        rCtx.strokeStyle = '#dddddd';
+        rCtx.lineWidth = 1;
+        rCtx.stroke();
+        rCtx.restore();
+        this.change();
+    }
+
+    override reset(): void {
+        this.color = this.resetColor;
+        this.change();
+    }
+
+    change(): void {
+        let strokeCol = this.resetColor;
+        if (this.color !== this.resetColor) {
+            if (Array.isArray(this.color)) {
+                strokeCol = 'rgb(' + this.color[0] + ',' + this.color[1] + ',' + this.color[2] + ')';
+            } else {
+                strokeCol = this.color;
+            }
+        }
+        $('#rgbLed' + this.id).attr('stroke', strokeCol);
     }
 }
 

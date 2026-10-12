@@ -1,7 +1,7 @@
 {
 	"@metadata": {
 		"author": "Ellen Spertus <ellen.spertus@gmail.com>",
-		"lastupdated": "2026-09-01 13:28:18.722290",
+		"lastupdated": "2026-09-21 15:51:08.559471",
 		"locale": "en",
 		"messagedocumentation" : "qqq"
 	},
@@ -1542,6 +1542,11 @@
 	"SENSOR_GESTURE_FACE_DOWN_GETSAMPLE_TOOLTIP": "Returns »true« if the posture is face down.",
 	"SENSOR_GESTURE_SHAKE_GETSAMPLE_TOOLTIP": "Returns »true« if it is shaken.",
 	"SENSOR_GESTURE_FREEFALL_GETSAMPLE_TOOLTIP": "Returns »true« if it is free falling.",
+	"SENSOR_GESTURE_FRONT_GETSAMPLE_TOOLTIP": "Returns »true« if the posture is on the front side.",
+	"SENSOR_GESTURE_BACK_GETSAMPLE_TOOLTIP": "Returns »true« if the posture is on the back side.",
+	"SENSOR_GESTURE_LEFT_GETSAMPLE_TOOLTIP": "Returns »true« if the posture is tilted to the left.",
+	"SENSOR_GESTURE_RIGHT_GETSAMPLE_TOOLTIP": "Returns »true« if the posture is tilted to the right.",
+	"SENSOR_GESTURE_TAPPED_GETSAMPLE_TOOLTIP": "Returns »true« if it is tapped.",
 	"RIGHT": "right",
 	"LEFT": "left",
 	"BOTTOM_RIGHT": "bottom right",

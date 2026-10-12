@@ -194,6 +194,9 @@
       "robot.rcj": [
         "app/simulation/simulationLogic/robot.rcj"
       ],
+      "robot.spike": [
+        "app/simulation/simulationLogic/robot.spike"
+      ],
       "robot.txt4": [
         "app/simulation/simulationLogic/robot.txt4"
       ],
