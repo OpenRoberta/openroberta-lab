@@ -123,6 +123,7 @@ def run():
             break
     display_text(str("Button Right Pressed"))
     stopWatch.reset()
+    hub.imu.reset_heading(0)
     wait(500)
     display_text(str("".join(str(arg) for arg in ["Timer:", stopWatch.time()])))
 

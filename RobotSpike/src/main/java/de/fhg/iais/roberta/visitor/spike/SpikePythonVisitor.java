@@ -30,6 +30,7 @@ import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.GyroReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
@@ -250,6 +251,12 @@ public final class SpikePythonVisitor extends AbstractSpikePythonVisitor {
             default:
                 throw new DbcException("Invalid gyro sensor slot: " + gyroSensor.getSlot());
         }
+        return null;
+    }
+
+    @Override
+    public Void visitGyroReset(GyroReset gyroReset) {
+        this.src.add("hub.motion_sensor.reset_yaw_angle()");
         return null;
     }
 

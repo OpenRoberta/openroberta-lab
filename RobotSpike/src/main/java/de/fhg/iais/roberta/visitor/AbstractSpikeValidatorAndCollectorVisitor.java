@@ -34,6 +34,7 @@ import de.fhg.iais.roberta.syntax.lang.functions.MathRandomIntFunct;
 import de.fhg.iais.roberta.syntax.sensor.ExternalSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.GyroReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
@@ -240,6 +241,11 @@ public abstract class AbstractSpikeValidatorAndCollectorVisitor extends CommonNe
 
     @Override
     public Void visitGyroSensor(GyroSensor gyroSensor) {
+        return null;
+    }
+
+    @Override
+    public Void visitGyroReset(GyroReset gyroReset) {
         return null;
     }
 

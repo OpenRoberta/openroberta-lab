@@ -31,6 +31,7 @@ import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.GyroReset;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
@@ -328,6 +329,13 @@ public class SpikeStackMachineVisitor extends AbstractStackMachineVisitor implem
     public Void visitGyroSensor(GyroSensor gyroSensor) {
         String mode = gyroSensor.getMode().toLowerCase();
         JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.GYRO).put(C.MODE, mode);
+        return add(o);
+    }
+
+    @Override
+    public Void visitGyroReset(GyroReset gyroReset) {
+        String port = gyroReset.sensorPort.toLowerCase();
+        JSONObject o = makeNode(C.GYRO_SENSOR_RESET).put(C.PORT, port).put(C.NAME, "spike");
         return add(o);
     }
 
