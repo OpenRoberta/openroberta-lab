@@ -384,8 +384,8 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
     @Override
     public Void visitKeysSensor(KeysSensor keysSensor) {
         String portName = keysSensor.getUserDefinedPort();
-        ConfigurationComponent configurationComponent = this.configurationAst.getConfigurationComponent(portName);
-        String port = configurationComponent.getProperty("PIN1");
+        ConfigurationComponent configurationComponent = this.configurationAst.optConfigurationComponent(portName);
+        String port = configurationComponent != null ? configurationComponent.getProperty("PIN1") : portName.toUpperCase();
 
         switch ( port ) {
             case "RIGHT":
@@ -890,7 +890,11 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
                 usedHardwareBean.getLockedComponent().forEach(
                     (component, port) -> {
                         if ( (motor.getPort()).equals(port) ) {
-                            src.add("motor").add(motor.getPort()).add(" = left_motor").nlI();
+                            if ( component.equals("MOTOR_R") ) {
+                                src.add("motor").add(motor.getPort()).add(" = right_motor").nlI();
+                            } else {
+                                src.add("motor").add(motor.getPort()).add(" = left_motor").nlI();
+                            }
                             componentLocked.set(true);
                         }
                     }

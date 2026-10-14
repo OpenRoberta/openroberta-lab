@@ -3,12 +3,8 @@ package de.fhg.iais.roberta.worker;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import de.fhg.iais.roberta.components.Project;
 import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
@@ -39,12 +35,23 @@ public abstract class AbstractSpikeValidatorAndCollectorWorker extends AbstractV
             boolean rightMotorMissing = true;
             boolean leftMotorMissing = true;
             for ( ConfigurationComponent configComp : project.getConfigurationAst().getConfigurationComponents().values() ) {
+                String compPort = configComp.getOptProperty("PORT");
+                if (compPort == null) {
+                    continue;
+                }
                 if ( configComp.componentType.equals("MOTOR") ) {
-                    if ( configComp.getProperty("PORT").equals(diffDrive.getProperty("MOTOR_R")) ) {
+                    if ( compPort.equals(diffDrive.getProperty("MOTOR_R")) ) {
                         rightMotorMissing = false;
                     }
-                    if ( configComp.getProperty("PORT").equals(diffDrive.getProperty("MOTOR_L")) ) {
+                    if ( compPort.equals(diffDrive.getProperty("MOTOR_L")) ) {
                         leftMotorMissing = false;
+                    }
+                } else {
+                    if ( compPort.equals(diffDrive.getProperty("MOTOR_R")) || compPort.equals(diffDrive.getProperty("MOTOR_L")) ) {
+                        BlocklyProperties compProps = configComp.getProperty();
+                        project.addToErrorCounter(1, null);
+                        project.setResult(Key.PROGRAM_INVALID_STATEMETNS);
+                        project.addToConfAnnotationList(compProps.blocklyId, NepoInfo.error("CONFIGURATION_ERROR_OVERLAPPING_PORTS"));
                     }
                 }
             }

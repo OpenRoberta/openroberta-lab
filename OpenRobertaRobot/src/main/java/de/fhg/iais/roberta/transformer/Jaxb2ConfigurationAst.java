@@ -130,14 +130,16 @@ public final class Jaxb2ConfigurationAst {
     private static ConfigurationComponent block2NewConfigComp(Block block, BlocklyDropdownFactory factory, String x, String y) {
         String componentType = factory.getConfigurationComponentTypeByBlocklyName(block.getType());
         String category = factory.getConfigurationComponentCategoryByBlocklyName(block.getType());
-        String userDefinedName = block.getField().get(0).getValue();
+        String userDefinedName = block.getField().get(0).getValue() != null ? block.getField().get(0).getValue() : "";
         Map<String, String> map = new LinkedHashMap<>();
         for ( int i = 1; i < block.getField().size(); i++ ) {
-            map.put(block.getField().get(i).getName(), block.getField().get(i).getValue());
+            String fieldVal = block.getField().get(i).getValue();
+            map.put(block.getField().get(i).getName(), fieldVal != null ? fieldVal : "");
         }
         for ( Value value : block.getValue() ) {
             String name = value.getName();
-            String val = value.getBlock().getField().get(0).getValue().toString();
+            String fieldVal = value.getBlock().getField().get(0).getValue();
+            String val = fieldVal != null ? fieldVal : "";
             map.put(name, val);
         }
         LinkedHashMap<String, List<ConfigurationComponent>> subcomponents = new LinkedHashMap<>();
@@ -178,14 +180,16 @@ public final class Jaxb2ConfigurationAst {
         Block firstBlock = instance.getBlock().get(0);
         String componentType = factory.getConfigurationComponentTypeByBlocklyName(firstBlock.getType());
         String category = factory.getConfigurationComponentCategoryByBlocklyName(firstBlock.getType());
-        String userDefinedName = firstBlock.getField().get(0).getValue();
+        String userDefinedName = firstBlock.getField().get(0).getValue() != null ? firstBlock.getField().get(0).getValue() : "";
         Map<String, String> map = new LinkedHashMap<>();
         for ( int i = 1; i < firstBlock.getField().size(); i++ ) {
-            map.put(firstBlock.getField().get(i).getName(), firstBlock.getField().get(i).getValue());
+            String fieldVal = firstBlock.getField().get(i).getValue();
+            map.put(firstBlock.getField().get(i).getName(), fieldVal != null ? fieldVal : "");
         }
         for ( Value value : firstBlock.getValue() ) {
             String name = value.getName();
-            String val = value.getBlock().getField().get(0).getValue().toString();
+            String fieldVal = value.getBlock().getField().get(0).getValue();
+            String val = fieldVal != null ? fieldVal : "";
             map.put(name, val);
         }
         // TODO in order to avoid robot specific workarounds in the Robot project:

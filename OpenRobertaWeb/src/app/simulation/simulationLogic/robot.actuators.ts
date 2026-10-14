@@ -126,6 +126,7 @@ export abstract class ChassisDiffDrive extends ChassisMobile {
         leftAngle: 0,
     };
     protected manipulator: { port: string; speed: number; angle: number };
+    protected auxMotors: { [port: string]: { port: string; speed: number; angle: number; encoder: number } } = {};
     protected readonly TRACKWIDTH: number;
     protected readonly WHEELDIAMETER: number;
 
@@ -133,6 +134,8 @@ export abstract class ChassisDiffDrive extends ChassisMobile {
         super(id);
         if (configuration['TRACKWIDTH'] === 0 && configuration['WHEELDIAMETER'] === 0) {
             // new configuration!
+            this.TRACKWIDTH = 11.5 * 3;
+            this.WHEELDIAMETER = 5.6;
             for (const conf in configuration['ACTUATORS']) {
                 let myConf = configuration['ACTUATORS'][conf];
                 if (myConf['TYPE'] && myConf['TYPE'] === 'DIFFERENTIALDRIVE') {
@@ -147,7 +150,9 @@ export abstract class ChassisDiffDrive extends ChassisMobile {
             for (const conf in configuration['ACTUATORS']) {
                 let myConf = configuration['ACTUATORS'][conf];
                 if (myConf['TYPE'] && myConf['TYPE'] === 'MOTOR' && myConf['PORT'] !== this.right.port && myConf['PORT'] !== this.left.port) {
-                    this.manipulator = { port: myConf['PORT'], speed: 0, angle: 0 };
+                    const aux = { port: myConf['PORT'], speed: 0, angle: null, encoder: 0 };
+                    this.auxMotors[myConf['PORT']] = aux;
+                    this.manipulator = aux;
                 }
             }
         } else {
@@ -262,23 +267,30 @@ export abstract class ChassisDiffDrive extends ChassisMobile {
                     angle = (motors[C.DISTANCE] / Math.PI / this.WHEELDIAMETER / 360) * 3;
                 }
                 for (let motor in motors) {
-                    if (motor.toLowerCase() === this.left.port.toLowerCase()) {
+                    if (this.left.port && motor.toLowerCase() === this.left.port.toLowerCase()) {
                         left = motors[motor];
                         if (angle) {
                             this.encoder.leftAngle = angle;
                         }
                     }
-                    if (motor.toLowerCase() === this.right.port.toLowerCase()) {
+                    if (this.right.port && motor.toLowerCase() === this.right.port.toLowerCase()) {
                         right = motors[motor];
                         if (angle) {
                             this.encoder.rightAngle = angle;
                         }
                     }
-                    if (this.manipulator) {
-                        if (motor.toLowerCase() === this.manipulator.port.toLowerCase()) {
-                            this.manipulator.speed = motors[motor];
+                    for (const portKey in this.auxMotors) {
+                        const auxMotor = this.auxMotors[portKey];
+                        if (motor.toLowerCase() === auxMotor.port.toLowerCase()) {
+                            let speed = motors[motor];
+                            if (speed > 100) {
+                                speed = 100;
+                            } else if (speed < -100) {
+                                speed = -100;
+                            }
+                            auxMotor.speed = speed * this.MAXPOWER;
                             if (angle) {
-                                this.manipulator.angle = angle;
+                                auxMotor.angle = Math.abs(angle);
                             }
                         }
                     }
@@ -303,6 +315,12 @@ export abstract class ChassisDiffDrive extends ChassisMobile {
         }
         let tempRight = (this.right.speed = interpreterRunning ? this.right.speed : 0);
         let tempLeft = (this.left.speed = interpreterRunning ? this.left.speed : 0);
+        if (!interpreterRunning) {
+            for (const portKey in this.auxMotors) {
+                this.auxMotors[portKey].speed = 0;
+                this.auxMotors[portKey].angle = null;
+            }
+        }
 
         if ((this.frontLeft.bumped || this.wheelFrontLeft.bumped) && this.left.speed > 0) {
             tempLeft *= -1;
@@ -392,6 +410,18 @@ export abstract class ChassisDiffDrive extends ChassisMobile {
             if (this.encoder.rightAngle < 0) {
                 this.encoder.rightAngle = null;
                 resetSpeed();
+            }
+        }
+        for (const portKey in this.auxMotors) {
+            const auxMotor = this.auxMotors[portKey];
+            if (auxMotor.angle != null) {
+                const deltaAngle = auxMotor.speed * dt * this.ENC;
+                auxMotor.angle -= Math.abs(deltaAngle);
+                if (auxMotor.angle < 0) {
+                    auxMotor.angle = null;
+                    auxMotor.speed = 0;
+                    myRobot.interpreter.getRobotBehaviour().setBlocking(false);
+                }
             }
         }
         this.transformNewPose(myRobot.pose, this);
@@ -884,19 +914,33 @@ export abstract class EncoderChassisDiffDrive extends ChassisDiffDrive {
         this.encoder.right = 0;
         this.left.speed = 0;
         this.right.speed = 0;
+        for (const portKey in this.auxMotors) {
+            this.auxMotors[portKey].encoder = 0;
+            this.auxMotors[portKey].speed = 0;
+            this.auxMotors[portKey].angle = null;
+        }
     }
 
     override updateAction(myRobot: RobotBaseMobile, dt: number, interpreterRunning: boolean): void {
         super.updateAction(myRobot, dt, interpreterRunning);
         this.encoder.left += this.left.speed * dt;
         this.encoder.right += this.right.speed * dt;
+        for (const portKey in this.auxMotors) {
+            this.auxMotors[portKey].encoder += this.auxMotors[portKey].speed * dt;
+        }
         const encoder = myRobot.interpreter.getRobotBehaviour().getActionState('encoder', true);
         if (encoder) {
-            if (encoder[this.left.port.toLowerCase()] && encoder[this.left.port.toLowerCase()] === 'reset') {
+            if (this.left.port && encoder[this.left.port.toLowerCase()] && encoder[this.left.port.toLowerCase()] === 'reset') {
                 this.encoder.left = 0;
             }
-            if (encoder[this.right.port.toLowerCase()] && encoder[this.right.port.toLowerCase()] === 'reset') {
+            if (this.right.port && encoder[this.right.port.toLowerCase()] && encoder[this.right.port.toLowerCase()] === 'reset') {
                 this.encoder.right = 0;
+            }
+            for (const portKey in this.auxMotors) {
+                const auxPort = this.auxMotors[portKey].port.toLowerCase();
+                if (encoder[auxPort] && encoder[auxPort] === 'reset') {
+                    this.auxMotors[portKey].encoder = 0;
+                }
             }
         }
     }
@@ -921,16 +965,28 @@ export abstract class EncoderChassisDiffDrive extends ChassisDiffDrive {
     private updateEncoders(running: boolean, values: any) {
         if (running) {
             values.encoder = {};
-            values.encoder[this.left.port.toLowerCase()] = {};
-            values.encoder[this.right.port.toLowerCase()] = {};
-            values.encoder[this.left.port.toLowerCase()][C.DEGREE] = this.encoder.left * this.ENC;
-            values.encoder[this.right.port.toLowerCase()][C.DEGREE] = this.encoder.right * this.ENC;
-            values.encoder[this.left.port.toLowerCase()][C.ROTATION] = (this.encoder.left * this.ENC) / 360;
-            values.encoder[this.right.port.toLowerCase()][C.ROTATION] = (this.encoder.right * this.ENC) / 360;
-            values.encoder[this.left.port.toLowerCase()][C.ROTATION] = (this.encoder.left * this.ENC) / 360;
-            values.encoder[this.right.port.toLowerCase()][C.ROTATION] = (this.encoder.right * this.ENC) / 360;
-            values.encoder[this.left.port.toLowerCase()][C.DISTANCE] = this.encoder.left / 3;
-            values.encoder[this.right.port.toLowerCase()][C.DISTANCE] = this.encoder.right / 3;
+            if (this.left.port) {
+                const leftKey = this.left.port.toLowerCase();
+                values.encoder[leftKey] = {};
+                values.encoder[leftKey][C.DEGREE] = this.encoder.left * this.ENC;
+                values.encoder[leftKey][C.ROTATION] = (this.encoder.left * this.ENC) / 360;
+                values.encoder[leftKey][C.DISTANCE] = this.encoder.left / 3;
+            }
+            if (this.right.port) {
+                const rightKey = this.right.port.toLowerCase();
+                values.encoder[rightKey] = {};
+                values.encoder[rightKey][C.DEGREE] = this.encoder.right * this.ENC;
+                values.encoder[rightKey][C.ROTATION] = (this.encoder.right * this.ENC) / 360;
+                values.encoder[rightKey][C.DISTANCE] = this.encoder.right / 3;
+            }
+            for (const portKey in this.auxMotors) {
+                const auxMotor = this.auxMotors[portKey];
+                const auxKey = auxMotor.port.toLowerCase();
+                values.encoder[auxKey] = {};
+                values.encoder[auxKey][C.DEGREE] = auxMotor.encoder * this.ENC;
+                values.encoder[auxKey][C.ROTATION] = (auxMotor.encoder * this.ENC) / 360;
+                values.encoder[auxKey][C.DISTANCE] = auxMotor.encoder / 3;
+            }
         }
     }
 }
@@ -1031,26 +1087,43 @@ export abstract class LegoChassis extends EncoderChassisDiffDrive implements ILa
     }
 
     getLabel(): string {
-        return (
-            '<div><label>' +
-            this.left.port +
-            ' ' +
-            Blockly.Msg['SENSOR_ENCODER'] +
-            ' ' +
-            Blockly.Msg.LEFT +
-            '</label><span>' +
-            UTIL.round(this.encoder.left * this.ENC, 0) +
-            '°</span></div>' +
-            '<div><label>' +
-            this.right.port +
-            ' ' +
-            Blockly.Msg['SENSOR_ENCODER'] +
-            ' ' +
-            Blockly.Msg.RIGHT +
-            '</label><span>' +
-            UTIL.round(this.encoder.right * this.ENC, 0) +
-            '°</span></div>'
-        );
+        let label = '';
+        if (this.left.port) {
+            label +=
+                '<div><label>' +
+                this.left.port +
+                ' ' +
+                Blockly.Msg['SENSOR_ENCODER'] +
+                ' ' +
+                Blockly.Msg.LEFT +
+                '</label><span>' +
+                UTIL.round(this.encoder.left * this.ENC, 0) +
+                '°</span></div>';
+        }
+        if (this.right.port) {
+            label +=
+                '<div><label>' +
+                this.right.port +
+                ' ' +
+                Blockly.Msg['SENSOR_ENCODER'] +
+                ' ' +
+                Blockly.Msg.RIGHT +
+                '</label><span>' +
+                UTIL.round(this.encoder.right * this.ENC, 0) +
+                '°</span></div>';
+        }
+        for (const portKey in this.auxMotors) {
+            const auxMotor = this.auxMotors[portKey];
+            label +=
+                '<div><label>' +
+                auxMotor.port +
+                ' ' +
+                Blockly.Msg['SENSOR_ENCODER'] +
+                '</label><span>' +
+                UTIL.round(auxMotor.encoder * this.ENC, 0) +
+                '°</span></div>';
+        }
+        return label;
     }
 
     readonly labelPriority: number = 10;

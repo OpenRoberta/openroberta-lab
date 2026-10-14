@@ -33,9 +33,40 @@ export default class RobotSpike extends RobotBaseMobile {
         let sensors: object = configuration['SENSORS'] || {};
         for (const c in sensors) {
             switch (sensors[c]['TYPE']) {
-                case 'TOUCH':
-                    this[c] = new ForceSensor(c, 25, 0, this.chassis.geom.color);
+                case 'TOUCH': {
+                    let myTouchSensors = [];
+                    Object.keys(this).forEach((x) => {
+                        if (spike[x] && spike[x] instanceof ForceSensor) {
+                            myTouchSensors.push(spike[x]);
+                        }
+                    });
+                    const ord = myTouchSensors.length + 1;
+                    const num = Object.keys(sensors).filter((port) => sensors[port]['TYPE'] === 'TOUCH').length;
+                    let touchSensor: ForceSensor;
+                    switch (ord) {
+                        case 1:
+                            touchSensor = new ForceSensor(c, 25, 0, this.chassis.geom.color, 'front');
+                            break;
+                        case 2:
+                            touchSensor = new ForceSensor(c, -25, 0, this.chassis.geom.color, 'back');
+                            break;
+                        case 3:
+                            touchSensor = new ForceSensor(c, 25, -17, this.chassis.geom.color, 'frontLeft');
+                            break;
+                        case 4:
+                            touchSensor = new ForceSensor(c, 25, 17, this.chassis.geom.color, 'frontRight');
+                            break;
+                        case 5:
+                            touchSensor = new ForceSensor(c, -25, -14, this.chassis.geom.color, 'backLeft');
+                            break;
+                        default:
+                            touchSensor = new ForceSensor(c, -25, 14, this.chassis.geom.color, 'backRight');
+                            break;
+                    }
+                    touchSensor.sensorLabel = num > 1;
+                    this[c] = touchSensor;
                     break;
+                }
                 case 'COLOUR':
                 case 'COLOR': {
                     let myColorSensors = [];
@@ -45,10 +76,11 @@ export default class RobotSpike extends RobotBaseMobile {
                         }
                     });
                     const ord = myColorSensors.length + 1;
-                    const id = Object.keys(sensors).filter((port) => sensors[port]['TYPE'] == 'COLOUR' || sensors[port]['TYPE'] == 'COLOR').length;
-                    let y = ord * 10 - 5 * (id + 1);
+                    const num = Object.keys(sensors).filter((port) => sensors[port]['TYPE'] == 'COLOUR' || sensors[port]['TYPE'] == 'COLOR').length;
+                    let step = num > 4 ? 7 : 10;
+                    let y = ord * step - (step / 2) * (num + 1);
                     let colorSensor = new ColorSensorHex(c, 20, y, 0, 5);
-                    colorSensor.sensorLabel = false;
+                    colorSensor.sensorLabel = num > 1;
                     this[c] = colorSensor;
                     break;
                 }
@@ -62,13 +94,13 @@ export default class RobotSpike extends RobotBaseMobile {
                     const ord = mySensors.length + 1;
                     const num = Object.keys(sensors).filter((port) => sensors[port]['TYPE'] == 'ULTRASONIC').length;
                     let position: Pose = new Pose(this.chassis.geom.x + this.chassis.geom.w, 0, 0);
-                    if (num == 3) {
-                        if (ord == 1) {
-                            position = new Pose(this.chassis.geom.h / 2, -this.chassis.geom.h / 2, -Math.PI / 4);
-                        } else if (ord == 2) {
-                            position = new Pose(this.chassis.geom.h / 2, this.chassis.geom.h / 2, Math.PI / 4);
+                    if (num === 3) {
+                        if (ord === 1) {
+                            position = new Pose(this.chassis.geom.x + this.chassis.geom.w, -this.chassis.geom.h / 2, -Math.PI / 4);
+                        } else if (ord === 2) {
+                            position = new Pose(this.chassis.geom.x + this.chassis.geom.w, this.chassis.geom.h / 2, Math.PI / 4);
                         }
-                    } else if (num % 2 === 0) {
+                    } else if (num > 1) {
                         switch (ord) {
                             case 1:
                                 position = new Pose(this.chassis.geom.x + this.chassis.geom.w, -this.chassis.geom.h / 2, -Math.PI / 4);
@@ -82,10 +114,16 @@ export default class RobotSpike extends RobotBaseMobile {
                             case 4:
                                 position = new Pose(this.chassis.geom.x, this.chassis.geom.h / 2, (3 * Math.PI) / 4);
                                 break;
+                            case 5:
+                                position = new Pose(this.chassis.geom.x + this.chassis.geom.w, 0, 0);
+                                break;
+                            case 6:
+                                position = new Pose(this.chassis.geom.x, 0, Math.PI);
+                                break;
                         }
                     }
                     let ultrasonicSensor = new UltrasonicSensor(c, position.x, position.y, position.theta, 250);
-                    ultrasonicSensor.sensorLabel = false;
+                    ultrasonicSensor.sensorLabel = num > 1;
                     this[c] = ultrasonicSensor;
                     break;
                 }

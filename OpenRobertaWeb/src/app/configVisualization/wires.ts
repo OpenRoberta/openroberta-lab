@@ -41,6 +41,14 @@ function chooseByDistance(
     return selectBetween[1];
 }
 
+export interface HubBounds {
+    left: number;
+    right: number;
+    top: number;
+    bottom: number;
+    isRightPort: boolean;
+}
+
 export default class WireDrawer {
     public static readonly SEPARATOR = 6;
 
@@ -49,12 +57,18 @@ export default class WireDrawer {
         upperLeft: Point;
         lowerRight: Point;
     };
+    private readonly hubBounds: HubBounds;
     private readonly portIndex: number;
     private readonly left: boolean;
+    private readonly threeSegments: boolean;
 
-    constructor(origin, destination, portIndex, blockCorners?) {
+constructor(origin, destination, portIndex, blockCorners?, hubBounds?: HubBounds, threeSegments: boolean = false) {
         this.blockCorners = blockCorners;
-        if (blockCorners) this.left = this.blockCorners.upperLeft.x === origin.x;
+        this.hubBounds = hubBounds;
+        this.threeSegments = threeSegments;
+        if (blockCorners) {
+            this.left = Math.abs(this.blockCorners.upperLeft.x - origin.x) <= Math.abs(this.blockCorners.lowerRight.x - origin.x);
+        }
 
         this.portIndex = portIndex;
         this.head = new WirePoint(origin);
@@ -62,45 +76,152 @@ export default class WireDrawer {
         this.toOrthoLines_();
     }
 
-    addPoint_(prevPoint, position) {
-        const newPoint = new WirePoint(position);
-        newPoint.next = prevPoint.next;
-        prevPoint.next = newPoint;
+    private get wireOffset(): number {
+        return (this.portIndex + 1) * WireDrawer.SEPARATOR;
     }
 
-    toOrthoLines_() {
+    /** Inserts the given waypoints in order between the wire's origin and destination. */
+    private setIntermediatePoints_(points: { x: number; y: number }[]) {
+        const dest = this.head.next;
+        let current = this.head;
+        for (const pt of points) {
+            const wp = new WirePoint(new Point(pt.x, pt.y));
+            current.next = wp;
+            current = wp;
+        }
+        current.next = dest;
+    }
+
+    /** Routes a 3-segment (horizontal-vertical-horizontal) path with the vertical segment at `x`. */
+    private routeViaVerticalX_(x: number) {
+        this.setIntermediatePoints_([
+            { x, y: this.head.pos.y },
+            { x, y: this.head.next.pos.y },
+        ]);
+    }
+
+    /** Routes a 3-segment path with the vertical segment centered between origin and destination. */
+    private routeMidpointThreeSegments_() {
+        const originX = this.head.pos.x;
+        const destinationX = this.head.next.pos.x;
+        const offset = this.portIndex * WireDrawer.SEPARATOR * (originX < destinationX ? -1 : 1);
+        this.routeViaVerticalX_((originX + destinationX) / 2 + offset);
+    }
+
+    /** Routes the wire around the hub bounding box (and component block) to prevent crossing over the hub. */
+    private routeAroundHub_() {
         const { x: originX, y: originY } = this.head.pos;
         const { x: destinationX, y: destinationY } = this.head.next.pos;
 
-        if (originX === destinationX || originY === destinationY) return;
+        const { left, right, top, bottom, isRightPort } = this.hubBounds;
+        const blockLeft = this.blockCorners ? this.blockCorners.upperLeft.x : originX;
+        const blockRight = this.blockCorners ? this.blockCorners.lowerRight.x : originX;
+        const blockTop = this.blockCorners ? this.blockCorners.upperLeft.y : originY;
+        const blockBottom = this.blockCorners ? this.blockCorners.lowerRight.y : originY;
+
+        const isSameSideOutsideHub = isRightPort
+            ? blockLeft > right + WireDrawer.SEPARATOR
+            : blockRight < left - WireDrawer.SEPARATOR;
+
+        if (isSameSideOutsideHub) {
+            this.routeMidpointThreeSegments_();
+            return;
+        }
+
+        const margin = 16 + this.wireOffset;
+        const outerX = isRightPort
+            ? Math.max(right, destinationX) + margin
+            : Math.min(left, destinationX) - margin;
+
+        const exitsBlockCleanly = this.blockCorners ? (this.left ? outerX < originX : outerX > originX) : true;
+        const clearsHubVertically = originY <= top - margin || originY >= bottom + margin;
+
+        if (exitsBlockCleanly && clearsHubVertically) {
+            this.routeViaVerticalX_(outerX);
+            return;
+        }
+
+        const entryX = !this.left
+            ? blockRight < left
+                ? (blockRight + left) / 2 - this.portIndex * WireDrawer.SEPARATOR
+                : Math.max(blockRight, right) + margin
+            : blockLeft > right
+            ? (blockLeft + right) / 2 + this.portIndex * WireDrawer.SEPARATOR
+            : Math.min(blockLeft, left) - margin;
+
+        if ((isRightPort && entryX > right) || (!isRightPort && entryX < left)) {
+            this.routeViaVerticalX_(entryX);
+            return;
+        }
+
+        const crossesBlockHorizontally =
+            Boolean(this.blockCorners) && Math.min(entryX, outerX) < blockRight && Math.max(entryX, outerX) > blockLeft;
+        const clearTop = (crossesBlockHorizontally ? Math.min(top, blockTop) : top) - margin;
+        const clearBottom = (crossesBlockHorizontally ? Math.max(bottom, blockBottom) : bottom) + margin;
+        const clearY = chooseByDistance([clearTop, clearBottom], (originY + destinationY) / 2, (d1, d2) => d1 <= d2);
+
+        this.setIntermediatePoints_([
+            { x: entryX, y: originY },
+            { x: entryX, y: clearY },
+            { x: outerX, y: clearY },
+            { x: outerX, y: destinationY },
+        ]);
+    }
+
+    /** Routes a 3-segment (horizontal-vertical-horizontal) path for vertical pin-out boards. */
+    private routeThreeSegments_() {
+        if (!this.blockCorners) {
+            this.routeMidpointThreeSegments_();
+            return;
+        }
+
+        // Adjust path around block while keeping horizontal start/end segments
+        const xExtra = this.left ? this.head.pos.x - this.wireOffset : this.head.pos.x + this.wireOffset;
+        this.routeViaVerticalX_(xExtra);
+    }
+
+    /** Routes a 2-segment (vertical-horizontal) path (or detours around the component block) for horizontal pin-out boards. */
+    private routeTwoSegments_() {
+        const { x: originX, y: originY } = this.head.pos;
+        const { x: destinationX, y: destinationY } = this.head.next.pos;
 
         let x = originX < destinationX ? Math.max(originX, destinationX) : Math.min(originX, destinationX);
         let y = originY < destinationY ? Math.min(originY, destinationY) : Math.max(originY, destinationY);
 
         if (!this.blockCorners) {
-            this.addPoint_(this.head, { x, y });
+            this.setIntermediatePoints_([{ x, y }]);
             return;
         }
 
         // Adjust path around block
-
         const { lowerRight, upperLeft } = this.blockCorners;
 
-        const separatorByPortIndex = (this.portIndex + 1) * WireDrawer.SEPARATOR;
-        y = chooseByDistance([lowerRight.y + separatorByPortIndex, upperLeft.y - separatorByPortIndex], destinationY, (x, y) => x < y);
-        const xExtra = this.left ? originX - separatorByPortIndex : originX + separatorByPortIndex;
+        y = chooseByDistance([lowerRight.y + this.wireOffset, upperLeft.y - this.wireOffset], destinationY, (x, y) => x < y);
+        const xExtra = this.left ? originX - this.wireOffset : originX + this.wireOffset;
 
-        this.addPoint_(this.head, { x, y });
+        this.setIntermediatePoints_([
+            { x: xExtra, y: originY },
+            { x: xExtra, y },
+            { x, y },
+        ]);
+    }
 
-        this.addPoint_(this.head, {
-            x: xExtra,
-            y: y,
-        });
+    /** Computes the orthogonal wire waypoints between origin and destination based on the active routing mode. */
+    toOrthoLines_() {
+        if (this.hubBounds) {
+            this.routeAroundHub_();
+            return;
+        }
 
-        this.addPoint_(this.head, {
-            x: xExtra,
-            y: originY,
-        });
+        const { x: originX, y: originY } = this.head.pos;
+        const { x: destinationX, y: destinationY } = this.head.next.pos;
+        if (originX === destinationX || originY === destinationY) return;
+
+        if (this.threeSegments) {
+            this.routeThreeSegments_();
+        } else {
+            this.routeTwoSegments_();
+        }
     }
 
     get path() {
