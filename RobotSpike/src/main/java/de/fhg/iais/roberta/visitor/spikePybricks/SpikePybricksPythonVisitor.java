@@ -31,6 +31,8 @@ import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.functions.MathSingleFunct;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.EncoderReset;
+import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
@@ -303,6 +305,34 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
             default:
                 throw new DbcException("Invalid gyro sensor slot: " + gyroSensor.getSlot());
         }
+        return null;
+    }
+
+    @Override
+    public Void visitEncoderSensor(EncoderSensor encoderSensor) {
+        String motorPort = getMotorPort(encoderSensor.getUserDefinedPort());
+        switch ( encoderSensor.getMode() ) {
+            case "DEGREE":
+                this.src.add("motor").add(motorPort).add(".angle()");
+                break;
+            case "ROTATION":
+                this.src.add("(motor").add(motorPort).add(".angle() / 360.0)");
+                break;
+            case "DISTANCE":
+                ConfigurationComponent diffDrive = this.configurationAst.optConfigurationComponentByType("DIFFERENTIALDRIVE");
+                String wheelDiameter = diffDrive != null ? diffDrive.getComponentProperties().get("BRICK_WHEEL_DIAMETER") : "5.6";
+                this.src.add("(motor").add(motorPort).add(".angle() * math.pi * ").add(wheelDiameter).add(" / 360.0)");
+                break;
+            default:
+                throw new DbcException("Invalid encoder sensor mode: " + encoderSensor.getMode());
+        }
+        return null;
+    }
+
+    @Override
+    public Void visitEncoderReset(EncoderReset encoderReset) {
+        String motorPort = getMotorPort(encoderReset.sensorPort);
+        this.src.add("motor").add(motorPort).add(".reset_angle(0)");
         return null;
     }
 
