@@ -29,6 +29,7 @@ def run():
     print(motorA.get_degrees_counted())
     print((motorA.get_degrees_counted() / 360.0))
     print((motorA.get_degrees_counted() * math.pi * 5.6 / 360.0))
+    hub.motion_sensor.reset_yaw_angle()
     print(color_sensor_F.get_color())
     print(color_sensor_F.get_reflected_light())
     print(color_sensor_F.get_red() / 10.24)
