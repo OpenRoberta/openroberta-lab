@@ -148,35 +148,13 @@ public final class ConfigurationAst {
     }
 
     /**
-     * Preserve Java 11 HashMap table sizing for reproducible test expectations on JDK 19+.
-     * 
-     * ConfigurationAst previously called new HashMap<>(this.configurationComponents) to 
-     * produce a deterministic iteration order for test assertions. In JDK 19+, `new HashMap<>(map)`
-     * changed its internal capacity calculation from `(int) (size / 0.75f + 1.0f)` to 
-     * `(int) Math.ceil(size / 0.75)`, which doubles the table size from 8 to 16 when `size == 6`
-     * and changes iteration order in ReuseIntegrationAsUnitTest. Explicitly computing 
-     * `initialCapacity = (int) ((float) size / 0.75f + 1.0f)` preserves the exact Java 11 bucket 
-     * order across all JDK versions.
-     * 
-     * @return a HashMap with the same contents as the insertion ordered LinkedHashMap of configuration components
-     * 
-     * @todo Move this to the java17 branch.
-     */
-    private Map<String, ConfigurationComponent> getReproducibleConfigurationMap() {
-        int initialCapacity = (int) ((float) this.configurationComponents.size() / 0.75f + 1.0f);
-        Map<String, ConfigurationComponent> map = new HashMap<>(initialCapacity);
-        map.putAll(this.configurationComponents);
-        return map;
-    }
-
-    /**
      * Returns the configuration component map. While insertion order is preserved internally, it is unnecessary for code generation and similar tasks. Here,
      * the insertion ordered {@link LinkedHashMap} is wrapped in a {@link HashMap} to ensure a reproducible order.
      *
      * @return the configuration component map
      */
     public Map<String, ConfigurationComponent> getConfigurationComponents() {
-        return getReproducibleConfigurationMap();
+        return new HashMap<>(this.configurationComponents);
     }
 
     public List<ConfigurationComponent> getAllConfigurationComponents() {
@@ -194,7 +172,7 @@ public final class ConfigurationAst {
      * @return the values of the configuration component map
      */
     public Collection<ConfigurationComponent> getConfigurationComponentsValues() {
-        return getReproducibleConfigurationMap().values();
+        return new HashMap<>(this.configurationComponents).values();
     }
 
     public ConfigurationComponent optConfigurationComponentByType(String type) {
@@ -219,7 +197,7 @@ public final class ConfigurationAst {
      * @return all actors in the configuration component map
      */
     public Collection<ConfigurationComponent> getActors() {
-        return getReproducibleConfigurationMap().values().stream().filter(configurationComponent -> configurationComponent.category.equals("CONFIGURATION_ACTOR")).collect(Collectors.toList());
+        return new HashMap<>(this.configurationComponents).values().stream().filter(configurationComponent -> configurationComponent.category.equals("CONFIGURATION_ACTOR")).collect(Collectors.toList());
     }
 
     /**
@@ -229,7 +207,7 @@ public final class ConfigurationAst {
      * @return all sensors in the configuration component map
      */
     public Collection<ConfigurationComponent> getSensors() {
-        return getReproducibleConfigurationMap().values().stream().filter(configurationComponent -> configurationComponent.category.equals("CONFIGURATION_SENSOR")).collect(Collectors.toList());
+        return new HashMap<>(this.configurationComponents).values().stream().filter(configurationComponent -> configurationComponent.category.equals("CONFIGURATION_SENSOR")).collect(Collectors.toList());
     }
 
     public ConfigurationComponent getConfigurationComponent(String userDefinedName) {
