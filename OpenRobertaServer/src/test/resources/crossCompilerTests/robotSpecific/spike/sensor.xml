@@ -12,6 +12,39 @@
                 <block type="robSensors_timer_reset" id="s/3J+rZvuGSL4+PS/AVL" intask="true">
                     <field name="SENSORPORT">1</field>
                 </block>
+                <block type="robSensors_encoder_reset" id="encReset1" intask="true">
+                    <field name="SENSORPORT">MA</field>
+                </block>
+                <block type="robActions_debug" id="dbgEncDeg" intask="true">
+                    <value name="OUT">
+                        <block type="robSensors_encoder_getSample" id="encSampleDeg" intask="true">
+                            <mutation mode="DEGREE"></mutation>
+                            <field name="MODE">DEGREE</field>
+                            <field name="SENSORPORT">MA</field>
+                            <field name="SLOT"></field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robActions_debug" id="dbgEncRot" intask="true">
+                    <value name="OUT">
+                        <block type="robSensors_encoder_getSample" id="encSampleRot" intask="true">
+                            <mutation mode="ROTATION"></mutation>
+                            <field name="MODE">ROTATION</field>
+                            <field name="SENSORPORT">MA</field>
+                            <field name="SLOT"></field>
+                        </block>
+                    </value>
+                </block>
+                <block type="robActions_debug" id="dbgEncDist" intask="true">
+                    <value name="OUT">
+                        <block type="robSensors_encoder_getSample" id="encSampleDist" intask="true">
+                            <mutation mode="DISTANCE"></mutation>
+                            <field name="MODE">DISTANCE</field>
+                            <field name="SENSORPORT">MA</field>
+                            <field name="SLOT"></field>
+                        </block>
+                    </value>
+                </block>
                 <block type="robActions_debug" id="P_tLjXNRUHL.1rCr.p53" intask="true">
                     <value name="OUT">
                         <block type="robSensors_colour_getSample" id=")dDyF4pz?][#qt.P?^90" intask="true">

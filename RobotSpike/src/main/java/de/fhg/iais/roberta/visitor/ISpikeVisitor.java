@@ -20,6 +20,8 @@ import de.fhg.iais.roberta.syntax.action.spike.PlayToneAction;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.EncoderReset;
+import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
@@ -64,6 +66,10 @@ public interface ISpikeVisitor<V> extends IVisitor<V> {
     V visitTouchSensor(TouchSensor touchSensor);
 
     V visitGyroSensor(GyroSensor gyroSensor);
+
+    V visitEncoderSensor(EncoderSensor encoderSensor);
+
+    V visitEncoderReset(EncoderReset encoderReset);
 
     V visitGestureSensor(GestureSensor gestureSensor);
 

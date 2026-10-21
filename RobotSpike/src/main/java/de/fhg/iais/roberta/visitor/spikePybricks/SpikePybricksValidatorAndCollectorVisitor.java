@@ -26,6 +26,8 @@ import de.fhg.iais.roberta.syntax.configuration.ConfigurationComponent;
 import de.fhg.iais.roberta.syntax.lang.expr.ColorConst;
 import de.fhg.iais.roberta.syntax.lang.stmt.WaitTimeStmt;
 import de.fhg.iais.roberta.syntax.sensor.generic.ColorSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.EncoderReset;
+import de.fhg.iais.roberta.syntax.sensor.generic.EncoderSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GestureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.KeysSensor;
@@ -251,6 +253,20 @@ public class SpikePybricksValidatorAndCollectorVisitor extends AbstractSpikeVali
     @Override
     final public Void visitGyroSensor(GyroSensor gyroSensor) {
         usedHardwareBuilder.addUsedSensor(new UsedSensor("GYRO", SC.GYRO, SC.DEFAULT));
+        return null;
+    }
+
+    @Override
+    public Void visitEncoderSensor(EncoderSensor encoderSensor) {
+        super.visitEncoderSensor(encoderSensor);
+        usedHardwareBuilder.addUsedImport(new UsedImport(SC.PORT));
+        return null;
+    }
+
+    @Override
+    public Void visitEncoderReset(EncoderReset encoderReset) {
+        super.visitEncoderReset(encoderReset);
+        usedHardwareBuilder.addUsedImport(new UsedImport(SC.PORT));
         return null;
     }
 
