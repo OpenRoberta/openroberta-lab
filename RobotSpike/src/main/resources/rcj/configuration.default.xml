@@ -8,6 +8,11 @@
             <field name="MOTOR_R">B</field>
         </block>
     </instance>
+    <instance x="539" y="115">
+        <block type="robConf_display" id="tt" intask="true" deletable="false">
+            <field name="NAME">_B</field>
+        </block>
+    </instance>
     <instance x="289" y="183">
         <block type="robConf_robot" id="robot" intask="true">
             <field name="ROBOT">undefined</field>
@@ -41,6 +46,21 @@
         <block type="robConf_motor" id="42" intask="true">
             <field name="NAME">Grabber</field>
             <field name="PORT">E</field>
+        </block>
+    </instance>
+    <instance x="200" y="439">
+        <block type="robConf_buzzer" id="W3:Yn.C(/356snBah3a:" intask="true" deletable="false">
+            <field name="NAME">_S</field>
+        </block>
+    </instance>
+    <instance x="535" y="437">
+        <block type="robConf_rgbled" id="C8/{!k%9L]YDK@vW/y,h" intask="true" deletable="false">
+            <field name="NAME">_R</field>
+        </block>
+    </instance>
+    <instance x="535" y="468">
+        <block type="robConf_gyro" id="}O,nU9g2cL:S*jCf~_Z*" intask="true" deletable="false">
+            <field name="NAME">_K</field>
         </block>
     </instance>
 </block_set>

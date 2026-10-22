@@ -542,7 +542,9 @@ export class CircuitVisualization {
             const rawHubWidth = this.robot.robot_ && this.robot.robot_.width ? parseFloat(this.robot.robot_.width) : 0;
             const hubWidth = rawHubWidth > 0 ? rawHubWidth : 217;
 
-            const allBlocks: any[] = this.workspace.getTopBlocks(false).filter((b: any) => b.id !== 'robot');
+            const allBlocks: any[] = this.workspace
+                .getTopBlocks(false)
+                .filter((b: any) => b.id !== 'robot' && b.isDeletable());
             const diffDrives: any[] = [];
             const leftConnected: { block: any; portName: string; orderKey: number }[] = [];
             const rightConnected: { block: any; portName: string; orderKey: number }[] = [];
@@ -789,7 +791,8 @@ export class CircuitVisualization {
 
             const blockCorners = this.calculateBlockCorners(block);
             const wireShouldWrap = this.shouldWireWrap(block, destination);
-            const hubBounds = useHubBounds
+            const useDynamicRouting = useHubBounds && block.isDeletable();
+            const hubBounds = useDynamicRouting
                 ? {
                       left: robotPosition.x,
                       right: robotPosition.x + hubWidth,
@@ -802,9 +805,9 @@ export class CircuitVisualization {
                 origin,
                 destination,
                 block.ports.indexOf(blockPort),
-                useHubBounds || wireShouldWrap ? blockCorners : undefined,
+                useDynamicRouting || wireShouldWrap ? blockCorners : undefined,
                 hubBounds,
-                verticalPinOut
+                useDynamicRouting && verticalPinOut
             );
 
             wireSvg.setAttribute('d', drawer.path);

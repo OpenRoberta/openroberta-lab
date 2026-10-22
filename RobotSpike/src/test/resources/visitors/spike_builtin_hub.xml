@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="spike" xmlversion="3.1" description="" tags="">
+    <instance x="0" y="0">
+        <block type="robControls_start" id="start1" intask="true">
+            <mutation declare="false" />
+            <field name="DEBUG" />
+        </block>
+        <block type="actions_display_text" id="disp1" intask="true">
+            <field name="TYPE">TEXT</field>
+            <hide name="ACTORPORT" value="_B" />
+            <value name="TEXT">
+                <block type="text" id="txt1" intask="true">
+                    <field name="TEXT">Hi</field>
+                </block>
+            </value>
+        </block>
+        <block type="actions_display_clear" id="disp2" intask="true">
+            <hide name="ACTORPORT" value="_B" />
+        </block>
+        <block type="actions_play_note" id="play1" intask="true">
+            <field name="DURATION">500</field>
+            <field name="FREQUENCE">261.626</field>
+            <hide name="ACTORPORT" value="_S" />
+        </block>
+        <block type="actions_rgbLed_hidden_on" id="led1" intask="true">
+            <hide name="ACTORPORT" value="_R" />
+            <value name="COLOUR">
+                <block type="robColour_picker" id="col1" intask="true">
+                    <field name="COLOUR">#FA010C</field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="dbg__K" intask="true">
+            <value name="OUT">
+                <block type="robSensors_gyro_getSample" id="sample__K" intask="true">
+                    <mutation mode="ANGLE" />
+                    <field name="MODE">ANGLE</field>
+                    <field name="SENSORPORT">_K</field>
+                    <field name="SLOT">Z</field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="dbg_left" intask="true">
+            <value name="OUT">
+                <block type="robSensors_key_getSample" id="sample_left" intask="true">
+                    <mutation mode="PRESSED" />
+                    <field name="MODE">PRESSED</field>
+                    <field name="SENSORPORT">left</field>
+                    <field name="SLOT" />
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="dbg_right" intask="true">
+            <value name="OUT">
+                <block type="robSensors_key_getSample" id="sample_right" intask="true">
+                    <mutation mode="PRESSED" />
+                    <field name="MODE">PRESSED</field>
+                    <field name="SENSORPORT">right</field>
+                    <field name="SLOT" />
+                </block>
+            </value>
+        </block>
+    </instance>
+</block_set>

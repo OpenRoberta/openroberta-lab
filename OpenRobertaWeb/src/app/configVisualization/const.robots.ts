@@ -47,18 +47,10 @@ export interface RobotBoardConfig {
     configDecl?: ConfigDeclItem[];
 }
 
-const spikeCommon: Pick<RobotBoardConfig, 'pinOut' | 'autoLayout' | 'portFieldNames' | 'configDecl'> = {
+const spikeCommon: Pick<RobotBoardConfig, 'pinOut' | 'autoLayout' | 'portFieldNames'> = {
     pinOut: 'vertical',
     autoLayout: true,
     portFieldNames: ['PORT', 'MOTOR_L', 'MOTOR_R', 'PIN1'],
-    configDecl: [
-        { type: 'gyro', name: '_K' },
-        { type: 'display', name: '_B' },
-        { type: 'buzzer', name: '_S' },
-        { type: 'rgbled', name: '_R' },
-        { type: 'key', name: 'left' },
-        { type: 'key', name: 'right' },
-    ],
 };
 
 const calliope: RobotBoardConfig = {
@@ -628,6 +620,13 @@ export const ROBOTS: { [key: string]: RobotBoardConfig } = {
             { name: 'D', position: { x: 210, y: 168 } },
             { name: 'E', position: { x: 2, y: 229 } },
             { name: 'F', position: { x: 210, y: 229 } },
+            //build in
+            { name: 'display', position: { x: 105, y: 168 } },
+            { name: 'LEFT', position: { x: 35, y: 292 } },
+            { name: 'RIGHT', position: { x: 176, y: 292 } },
+            { name: 'buzzer', position: { x: 105, y: 340 } },
+            { name: 'gyro', position: { x: 130, y: 70 } },
+            { name: 'rgbled', position: { x: 105, y: 292 } },
         ],
         width: '217px',
         height: '342px',
@@ -707,7 +706,6 @@ export const ROBOTS: { [key: string]: RobotBoardConfig } = {
         height: '255px',
     },
     rcj: {
-        ...spikeCommon,
         ports: [
             // ports
             { name: 'A', position: { x: 23, y: 60 } },
@@ -718,6 +716,10 @@ export const ROBOTS: { [key: string]: RobotBoardConfig } = {
             { name: 'F', position: { x: 228, y: 136 } },
             { name: 'G', position: { x: 23, y: 174 } },
             { name: 'H', position: { x: 228, y: 174 } },
+            { name: 'buzzer', position: { x: 70, y: 174 } },
+            { name: 'rgbledh', position: { x: 126, y: 170 } },
+            { name: 'display', position: { x: 126, y: 72 } },
+            { name: 'gyro', position: { x: 180, y: 174 } },
         ],
         width: '255px',
         height: '255px',

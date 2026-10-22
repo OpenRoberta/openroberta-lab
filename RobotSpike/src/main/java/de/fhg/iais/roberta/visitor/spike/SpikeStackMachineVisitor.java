@@ -299,7 +299,7 @@ public class SpikeStackMachineVisitor extends AbstractStackMachineVisitor implem
     @Override
     public Void visitKeysSensor(KeysSensor keysSensor) {
         String portName = keysSensor.getUserDefinedPort();
-        ConfigurationComponent configurationComponent = this.configuration.optConfigurationComponent(portName);
+        ConfigurationComponent configurationComponent = this.configuration.getConfigurationComponent(portName);
         String port = configurationComponent != null ? configurationComponent.getProperty("PIN1") : portName;
         JSONObject o = makeNode(C.GET_SAMPLE).put(C.GET_SAMPLE, C.BUTTONS).put(C.PORT, port.toLowerCase());
         return add(o);

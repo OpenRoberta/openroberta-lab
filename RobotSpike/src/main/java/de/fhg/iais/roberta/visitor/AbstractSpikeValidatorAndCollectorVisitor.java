@@ -79,12 +79,14 @@ public abstract class AbstractSpikeValidatorAndCollectorVisitor extends CommonNe
 
     @Override
     final public Void visitDisplayClearAction(DisplayClearAction displayClearAction) {
+        checkActorPort(displayClearAction);
         return null;
     }
 
     @Override
     public Void visitDisplayImageAction(DisplayImageAction displayImageAction) {
         requiredComponentVisited(displayImageAction, displayImageAction.valuesToDisplay);
+        checkActorPort(displayImageAction);
         usedHardwareBuilder.addUsedActor(new UsedActor("", "DISPLAY"));
         return null;
     }
@@ -92,6 +94,7 @@ public abstract class AbstractSpikeValidatorAndCollectorVisitor extends CommonNe
     @Override
     public Void visitDisplayTextAction(DisplayTextAction displayTextAction) {
         requiredComponentVisited(displayTextAction, displayTextAction.textToDisplay);
+        checkActorPort(displayTextAction);
         usedHardwareBuilder.addUsedActor(new UsedActor("", "DISPLAY"));
         return null;
     }
@@ -103,11 +106,7 @@ public abstract class AbstractSpikeValidatorAndCollectorVisitor extends CommonNe
 
     @Override
     public Void visitKeysSensor(KeysSensor keysSensor) {
-        String port = keysSensor.getUserDefinedPort();
-        if ( this.robotConfiguration.optConfigurationComponent(port) != null
-            || (!"LEFT".equalsIgnoreCase(port) && !"RIGHT".equalsIgnoreCase(port)) ) {
-            checkSensorPort(keysSensor);
-        }
+        checkSensorPort(keysSensor);
         return null;
     }
 
@@ -201,12 +200,14 @@ public abstract class AbstractSpikeValidatorAndCollectorVisitor extends CommonNe
 
     @Override
     public Void visitPlayNoteAction(PlayNoteAction playNoteAction) {
+        checkActorPort(playNoteAction);
         return null;
     }
 
     @Override
     public Void visitPlayToneAction(PlayToneAction playToneAction) {
         requiredComponentVisited(playToneAction, playToneAction.frequency, playToneAction.duration);
+        checkActorPort(playToneAction);
         return null;
     }
 

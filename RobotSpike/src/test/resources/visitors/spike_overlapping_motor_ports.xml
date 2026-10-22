@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="spike" xmlversion="3.1" description="" tags="">
+    <instance x="0" y="0">
+        <block type="robConf_motor" id="mot1" intask="true">
+            <field name="NAME">mot1</field>
+            <field name="PORT">A</field>
+        </block>
+    </instance>
+    <instance x="0" y="0">
+        <block type="robConf_motor" id="mot2" intask="true">
+            <field name="NAME">mot2</field>
+            <field name="PORT">A</field>
+        </block>
+    </instance>
+</block_set>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="spike" xmlversion="3.1" description="" tags="">
+    <instance x="0" y="0">
+        <block type="robConf_motor" id="MA" intask="true">
+            <field name="NAME">MA</field>
+            <field name="PORT">A</field>
+        </block>
+    </instance>
+    <instance x="0" y="0">
+        <block type="robConf_motor" id="motDisconnected" intask="true" disabled="true">
+            <field name="NAME">motDisconnected</field>
+            <field name="PORT"></field>
+        </block>
+    </instance>
+    <instance x="0" y="0">
+        <block type="robConf_ultrasonic" id="ultDisconnected" intask="true" disabled="true">
+            <field name="NAME">ultDisconnected</field>
+            <field name="PORT"></field>
+        </block>
+    </instance>
+</block_set>

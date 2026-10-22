@@ -329,8 +329,8 @@ public final class SpikePythonVisitor extends AbstractSpikePythonVisitor {
     @Override
     public Void visitKeysSensor(KeysSensor keysSensor) {
         String portName = keysSensor.getUserDefinedPort();
-        ConfigurationComponent configurationComponent = this.configurationAst.optConfigurationComponent(portName);
-        String port = configurationComponent != null ? configurationComponent.getProperty("PIN1") : portName.toUpperCase();
+        ConfigurationComponent configurationComponent = this.configurationAst.getConfigurationComponent(portName);
+        String port = configurationComponent.getProperty("PIN1");
         switch ( port ) {
             case "RIGHT":
                 this.src.add("hub.right_button.is_pressed()");
