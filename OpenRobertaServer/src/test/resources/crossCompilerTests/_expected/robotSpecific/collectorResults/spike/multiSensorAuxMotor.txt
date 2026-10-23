@@ -1,0 +1,6 @@
+Sensors: 
+[UsedSensor [U, ULTRASONIC, DISTANCE], UsedSensor [U2, ULTRASONIC, DISTANCE]]
+Actors: 
+[UsedActor [C, MOTOR]]
+Methods: 
+[GETSAMPLEULTRASONIC]

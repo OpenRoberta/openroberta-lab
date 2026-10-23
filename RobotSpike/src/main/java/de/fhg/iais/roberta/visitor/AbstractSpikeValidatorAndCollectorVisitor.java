@@ -124,7 +124,6 @@ public abstract class AbstractSpikeValidatorAndCollectorVisitor extends CommonNe
     @Override
     public Void visitMotorDiffCurveAction(MotorDiffCurveAction motorDiffCurveAction) {
         requiredComponentVisited(motorDiffCurveAction, motorDiffCurveAction.powerLeft, motorDiffCurveAction.powerRight);
-        checkActorPort(motorDiffCurveAction);
         checkDiffDrive(motorDiffCurveAction);
         return null;
     }
@@ -132,7 +131,6 @@ public abstract class AbstractSpikeValidatorAndCollectorVisitor extends CommonNe
     @Override
     public Void visitMotorDiffCurveForAction(MotorDiffCurveForAction motorDiffCurveForAction) {
         requiredComponentVisited(motorDiffCurveForAction, motorDiffCurveForAction.powerLeft, motorDiffCurveForAction.powerRight, motorDiffCurveForAction.distance);
-        checkActorPort(motorDiffCurveForAction);
         checkDiffDrive(motorDiffCurveForAction);
         return null;
     }
@@ -140,7 +138,6 @@ public abstract class AbstractSpikeValidatorAndCollectorVisitor extends CommonNe
     @Override
     public Void visitMotorDiffOnAction(MotorDiffOnAction motorDiffOnAction) {
         requiredComponentVisited(motorDiffOnAction, motorDiffOnAction.power);
-        checkActorPort(motorDiffOnAction);
         checkDiffDrive(motorDiffOnAction);
         return null;
     }
@@ -148,14 +145,12 @@ public abstract class AbstractSpikeValidatorAndCollectorVisitor extends CommonNe
     @Override
     public Void visitMotorDiffOnForAction(MotorDiffOnForAction motorDiffOnForAction) {
         requiredComponentVisited(motorDiffOnForAction, motorDiffOnForAction.distance, motorDiffOnForAction.power);
-        checkActorPort(motorDiffOnForAction);
         checkDiffDrive(motorDiffOnForAction);
         return null;
     }
 
     @Override
     final public Void visitMotorDiffStopAction(MotorDiffStopAction motorDiffStopAction) {
-        checkActorPort(motorDiffStopAction);
         checkDiffDrive(motorDiffStopAction);
         return null;
     }
@@ -163,7 +158,6 @@ public abstract class AbstractSpikeValidatorAndCollectorVisitor extends CommonNe
     @Override
     public Void visitMotorDiffTurnAction(MotorDiffTurnAction motorDiffTurnAction) {
         requiredComponentVisited(motorDiffTurnAction, motorDiffTurnAction.power);
-        checkActorPort(motorDiffTurnAction);
         checkDiffDrive(motorDiffTurnAction);
         return null;
     }
@@ -171,7 +165,6 @@ public abstract class AbstractSpikeValidatorAndCollectorVisitor extends CommonNe
     @Override
     public Void visitMotorDiffTurnForAction(MotorDiffTurnForAction motorDiffTurnForAction) {
         requiredComponentVisited(motorDiffTurnForAction, motorDiffTurnForAction.degrees, motorDiffTurnForAction.power);
-        checkActorPort(motorDiffTurnForAction);
         checkDiffDrive(motorDiffTurnForAction);
         return null;
     }
@@ -249,7 +242,7 @@ public abstract class AbstractSpikeValidatorAndCollectorVisitor extends CommonNe
     @Override
     public Void visitEncoderSensor(EncoderSensor encoderSensor) {
         ConfigurationComponent motor = this.robotConfiguration.optConfigurationComponent(encoderSensor.getUserDefinedPort());
-        if ( motor == null ) {
+        if ( motor == null || !SC.MOTOR.equals(motor.componentType) ) {
             motor = getMotorFromUserName(encoderSensor.getUserDefinedPort());
         }
         if ( motor == null ) {
@@ -269,7 +262,7 @@ public abstract class AbstractSpikeValidatorAndCollectorVisitor extends CommonNe
     @Override
     public Void visitEncoderReset(EncoderReset encoderReset) {
         ConfigurationComponent motor = this.robotConfiguration.optConfigurationComponent(encoderReset.sensorPort);
-        if ( motor == null ) {
+        if ( motor == null || !SC.MOTOR.equals(motor.componentType) ) {
             motor = getMotorFromUserName(encoderReset.sensorPort);
         }
         if ( motor == null ) {
@@ -323,10 +316,13 @@ public abstract class AbstractSpikeValidatorAndCollectorVisitor extends CommonNe
     }
 
     protected ConfigurationComponent getMotorFromUserName(String userName) {
+        if ( userName == null ) {
+            return null;
+        }
         for ( Map.Entry<String, ConfigurationComponent> entry : this.robotConfiguration.getConfigurationComponents().entrySet() ) {
             ConfigurationComponent component = entry.getValue();
             String comProp = component.componentProperties.get("PORT");
-            if ( comProp != null && comProp.equals(userName) ) {
+            if ( SC.MOTOR.equals(component.componentType) && comProp != null && comProp.equals(userName) ) {
                 return component;
             }
         }
@@ -343,8 +339,21 @@ public abstract class AbstractSpikeValidatorAndCollectorVisitor extends CommonNe
         throw new DbcException("port " + portName + " is missing");
     }
 
-    protected void checkDiffDrive(Phrase phrase) {
+    protected ConfigurationComponent getAnyDiffDrive() {
         ConfigurationComponent diffDrive = this.robotConfiguration.optConfigurationComponentByType("DIFFERENTIALDRIVE");
+        if ( diffDrive != null ) {
+            return diffDrive;
+        }
+        for ( ConfigurationComponent comp : this.robotConfiguration.getAllConfigurationComponents() ) {
+            if ( "DIFFERENTIALDRIVE".equals(comp.componentType) ) {
+                return comp;
+            }
+        }
+        return null;
+    }
+
+    protected void checkDiffDrive(Phrase phrase) {
+        ConfigurationComponent diffDrive = getAnyDiffDrive();
         if ( diffDrive == null ) {
             addErrorToPhrase(phrase, "CONFIGURATION_ERROR_ACTOR_MISSING");
         } else {
@@ -352,10 +361,21 @@ public abstract class AbstractSpikeValidatorAndCollectorVisitor extends CommonNe
             String rightUserPort = diffDrive.getComponentProperties().get("MOTOR_R");
             ConfigurationComponent leftMotor = getMotorFromUserName(leftUserPort);
             ConfigurationComponent rightMotor = getMotorFromUserName(rightUserPort);
-            if ( leftMotor == null || rightMotor == null ) {
-                addErrorToPhrase(phrase, "CONFIGURATION_ERROR_ACTOR_MISSING");
-            } else {
-                usedHardwareBuilder.addUsedActor(new UsedActor("DIFFERENTIALDRIVE", SC.DIFFERENTIALDRIVE));
+            if ( leftMotor == null ) {
+                addErrorToPhrase(phrase, "CONFIGURATION_ERROR_MOTOR_LEFT_MISSING");
+            }
+            if ( rightMotor == null ) {
+                addErrorToPhrase(phrase, "CONFIGURATION_ERROR_MOTOR_RIGHT_MISSING");
+            }
+            if ( leftUserPort != null && leftUserPort.equals(rightUserPort) ) {
+                addErrorToPhrase(phrase, "CONFIGURATION_ERROR_OVERLAPPING_PORTS");
+            }
+            if ( leftMotor != null && rightMotor != null && (leftUserPort == null || !leftUserPort.equals(rightUserPort)) ) {
+                if ( this.robotConfiguration.optConfigurationComponentByType("DIFFERENTIALDRIVE") == null ) {
+                    addErrorToPhrase(phrase, "CONFIGURATION_ERROR_ACTOR_MISSING");
+                } else {
+                    usedHardwareBuilder.addUsedActor(new UsedActor("DIFFERENTIALDRIVE", SC.DIFFERENTIALDRIVE));
+                }
             }
         }
     }

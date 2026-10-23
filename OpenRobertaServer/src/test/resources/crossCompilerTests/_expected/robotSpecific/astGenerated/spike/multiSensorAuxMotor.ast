@@ -1,0 +1,4 @@
+MotorOnForAction[power: NumConst[value: 50], unit: DEGREES, value: NumConst[value: 180], port: MC]
+DebugAction[value: SensorExpr [UltrasonicSensor [U, DISTANCE, - EMPTY_SLOT -]]]
+DebugAction[value: SensorExpr [UltrasonicSensor [U2, DISTANCE, - EMPTY_SLOT -]]]
+DebugAction[value: SensorExpr [EncoderSensor [MC, DEGREE, - EMPTY_SLOT -]]]

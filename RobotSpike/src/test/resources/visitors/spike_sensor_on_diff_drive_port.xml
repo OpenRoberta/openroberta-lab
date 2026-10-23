@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="spike" xmlversion="3.1" description="" tags="">
+    <instance x="0" y="0">
+        <block type="robConf_differentialdrive" id="dd1" intask="true">
+            <field name="NAME">_D</field>
+            <field name="BRICK_WHEEL_DIAMETER">5.6</field>
+            <field name="BRICK_TRACK_WIDTH">11.5</field>
+            <field name="MOTOR_L">A</field>
+            <field name="MOTOR_R">B</field>
+        </block>
+    </instance>
+    <instance x="0" y="0">
+        <block type="robConf_motor" id="motA" intask="true">
+            <field name="NAME">motA</field>
+            <field name="PORT">A</field>
+        </block>
+    </instance>
+    <instance x="0" y="0">
+        <block type="robConf_motor" id="motB" intask="true">
+            <field name="NAME">motB</field>
+            <field name="PORT">B</field>
+        </block>
+    </instance>
+    <instance x="0" y="0">
+        <block type="robConf_ultrasonic" id="ultConflict" intask="true">
+            <field name="NAME">ultConflict</field>
+            <field name="PORT">A</field>
+        </block>
+    </instance>
+</block_set>

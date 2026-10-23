@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="spike" xmlversion="3.1" description="" tags="">
+    <instance x="0" y="0">
+        <block type="robConf_colour" id="col1" intask="true">
+            <field name="NAME">col1</field>
+            <field name="PORT">C</field>
+        </block>
+    </instance>
+    <instance x="0" y="0">
+        <block type="robConf_ultrasonic" id="ult1" intask="true">
+            <field name="NAME">ult1</field>
+            <field name="PORT">C</field>
+        </block>
+    </instance>
+</block_set>

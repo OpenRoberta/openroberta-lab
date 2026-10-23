@@ -114,6 +114,29 @@ export class Timer implements ISensor, IReset, IUpdateAction, ILabel {
     }
 }
 
+/**
+ * Assigns deterministic priorities to sensor names for ordering the sensor
+ * value panel.
+ * @param port name of the port
+ * @returns priority value (lower value = higher priority)
+ */
+function portToPriority(port: string): number {
+    // The caller already strips the first char, so `PORT_1` is `ORT_1` here.
+    const cleaned = port.replace('ORT_', '');
+    const num = Number(cleaned);
+    if (!isNaN(num)) {
+        return num;
+    }
+    // Computes a priority value in the range [1..9) so that it falls between
+    // the between the robot pose (-1) and the built-in sensors (10+).
+    // Preserves alphabetical ordering for cleaned.length == 1.
+    let hash = 0;
+    for (let i = 0; i < cleaned.length; i++) {
+        hash = (hash * 31 + cleaned.charCodeAt(i)) % 1000;
+    }
+    return 1 + (hash / 1000) * 8;
+}
+
 export abstract class DistanceSensor implements IExternalSensor, IDrawable, ILabel {
     readonly color: string = '#FF69B4';
     readonly port: string;
@@ -134,7 +157,7 @@ export abstract class DistanceSensor implements IExternalSensor, IDrawable, ILab
 
     constructor(port: string, x: number, y: number, theta: number, maxDistance: number) {
         this.port = port;
-        this.labelPriority = Number(this.port.replace('ORT_', ''));
+        this.labelPriority = portToPriority(this.port);
         this.x = x;
         this.y = y;
         this.theta = theta;
@@ -727,7 +750,7 @@ export class MbotInfraredSensor implements IExternalSensor, IDrawable, ILabel {
         this.x = location.x;
         this.y = location.y;
         this.port = port;
-        this.labelPriority = Number(this.port.replace('ORT_', ''));
+        this.labelPriority = portToPriority(this.port);
     }
 
     draw(rCtx: CanvasRenderingContext2D, myRobot: RobotBase): void {
@@ -963,16 +986,18 @@ export class TouchSensor implements IExternalSensor, IDrawable, ILabel, IReset {
     ry: number = 0;
     value: boolean = false;
     position: string = '';
+    sensorLabel: boolean = false;
 
-    constructor(port: string, x: number, y: number, color?: string) {
+    constructor(port: string, x: number, y: number, color?: string, position?: string) {
         this.port = port;
-        this.labelPriority = Number(this.port.replace('ORT_', ''));
+        this.labelPriority = portToPriority(this.port);
         this.x = x;
         this.y = y;
-        if (this.x > 0) {
+        if (position) {
+            this.position = position;
+        } else if (this.x > 0) {
             this.position = 'front';
-        }
-        if (this.x < 0) {
+        } else if (this.x < 0) {
             this.position = 'back';
         }
         this.color = color || this.color;
@@ -991,12 +1016,49 @@ export class TouchSensor implements IExternalSensor, IDrawable, ILabel, IReset {
         } else {
             rCtx.fillStyle = myRobot.chassis.geom.color;
         }
+        const fl = myRobot.chassis.frontLeft;
+        const fr = myRobot.chassis.frontRight;
+        const bl = myRobot.chassis.backLeft;
+        const br = myRobot.chassis.backRight;
+        const frontH = -fl.y + fr.y;
+        const backH = -bl.y + br.y;
+        let labelX = this.x;
+        let labelY = this.y;
         if (this.position === 'front') {
-            rCtx.fillRect(myRobot.chassis.frontLeft.x - 3.5, myRobot.chassis.frontLeft.y, 3.5, -myRobot.chassis.frontLeft.y + myRobot.chassis.frontRight.y);
+            rCtx.fillRect(fl.x - 3.5, fl.y, 3.5, frontH);
+            labelX = fl.x + 5;
+            labelY = 0;
         } else if (this.position === 'back') {
-            rCtx.fillRect(myRobot.chassis.backLeft.x, myRobot.chassis.backLeft.y, 3.5, -myRobot.chassis.backLeft.y + myRobot.chassis.backRight.y);
+            rCtx.fillRect(bl.x, bl.y, 3.5, backH);
+            labelX = bl.x - 6;
+            labelY = 0;
+        } else if (this.position === 'frontLeft') {
+            rCtx.fillRect(fl.x - 3.5, fl.y, 3.5, frontH / 2 - 1);
+            labelX = fl.x + 5;
+            labelY = fl.y + frontH / 4;
+        } else if (this.position === 'frontRight') {
+            rCtx.fillRect(fl.x - 3.5, fl.y + frontH / 2 + 1, 3.5, frontH / 2 - 1);
+            labelX = fl.x + 5;
+            labelY = fl.y + (3 * frontH) / 4;
+        } else if (this.position === 'backLeft') {
+            rCtx.fillRect(bl.x, bl.y, 3.5, backH / 2 - 1);
+            labelX = bl.x - 6;
+            labelY = bl.y + backH / 4;
+        } else if (this.position === 'backRight') {
+            rCtx.fillRect(bl.x, bl.y + backH / 2 + 1, 3.5, backH / 2 - 1);
+            labelX = bl.x - 6;
+            labelY = bl.y + (3 * backH) / 4;
         }
         rCtx.restore();
+        if (this.sensorLabel) {
+            rCtx.save();
+            rCtx.fillStyle = 'black';
+            rCtx.font = 'bold 10px Roboto';
+            rCtx.textAlign = 'center';
+            rCtx.textBaseline = 'middle';
+            rCtx.fillText(this.port.replace('ORT_', ''), labelX, labelY);
+            rCtx.restore();
+        }
     }
 
     public readonly drawPriority: number = 4;
@@ -1028,12 +1090,19 @@ export class TouchSensor implements IExternalSensor, IDrawable, ILabel, IReset {
         personalObstacleList: any[]
     ): void {
         values['touch'] = values['touch'] || {};
+        const chassis = (myRobot as RobotBaseMobile).chassis;
         if (this.position === 'front') {
-            values['touch'][this.port] = this.value =
-                (myRobot as RobotBaseMobile).chassis.frontLeft.bumped || (myRobot as RobotBaseMobile).chassis.frontRight.bumped;
+            values['touch'][this.port] = this.value = chassis.frontLeft.bumped || chassis.frontRight.bumped;
+        } else if (this.position === 'frontLeft') {
+            values['touch'][this.port] = this.value = chassis.frontLeft.bumped;
+        } else if (this.position === 'frontRight') {
+            values['touch'][this.port] = this.value = chassis.frontRight.bumped;
+        } else if (this.position === 'backLeft') {
+            values['touch'][this.port] = this.value = chassis.backLeft.bumped;
+        } else if (this.position === 'backRight') {
+            values['touch'][this.port] = this.value = chassis.backRight.bumped;
         } else {
-            values['touch'][this.port] = this.value =
-                (myRobot as RobotBaseMobile).chassis.backLeft.bumped || (myRobot as RobotBaseMobile).chassis.backRight.bumped;
+            values['touch'][this.port] = this.value = chassis.backLeft.bumped || chassis.backRight.bumped;
         }
     }
 }
@@ -1146,7 +1215,7 @@ export class ColorSensor implements IExternalSensor, IDrawable, ILabel {
 
     constructor(port: string, x: number, y: number, theta: number, r: number, color?: string) {
         this.port = port;
-        this.labelPriority = Number(this.port.replace('ORT_', ''));
+        this.labelPriority = portToPriority(this.port);
         this.x = x;
         this.y = y;
         this.theta = theta;
@@ -1258,7 +1327,9 @@ export class ColorSensorHex extends ColorSensor {
         udCtx: CanvasRenderingContext2D
     ) {
         super.updateSensor(running, dt, myRobot, values, uCtx, udCtx);
-        this.color = this.colorValue[1];
+        if (this.colorValue[0] !== COLOR_ENUM.NONE) {
+            this.color = this.colorValue[1];
+        }
     }
 }
 

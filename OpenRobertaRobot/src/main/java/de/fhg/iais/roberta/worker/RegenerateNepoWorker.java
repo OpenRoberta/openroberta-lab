@@ -2,7 +2,6 @@ package de.fhg.iais.roberta.worker;
 
 import java.io.StringWriter;
 import java.util.List;
-import java.util.Map;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -108,13 +107,13 @@ public class RegenerateNepoWorker implements IWorker {
 
     private static BlockSet astToJaxb(ConfigurationAst config) {
         Assert.notNull(config);
-        Map<String, ConfigurationComponent> configurationComponents = config.getConfigurationComponents();
+        List<ConfigurationComponent> configurationComponents = config.getAllConfigurationComponents();
         BlockSet blockSet = new BlockSet();
         blockSet.setRobottype(config.getRobotType());
         blockSet.setXmlversion(config.getXmlVersion());
         blockSet.setDescription(config.getDescription());
         blockSet.setTags(config.getTags());
-        for ( ConfigurationComponent configComp : configurationComponents.values() ) {
+        for ( ConfigurationComponent configComp : configurationComponents ) {
             Instance instance = new Instance();
             blockSet.getInstance().add(instance);
             instance.setX(String.valueOf(configComp.x));

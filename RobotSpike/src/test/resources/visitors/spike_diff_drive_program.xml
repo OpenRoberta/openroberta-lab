@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="spike" xmlversion="3.1" description="" tags="">
+    <instance x="0" y="0">
+        <block type="robControls_start" id="start1" intask="true">
+            <mutation declare="false" />
+            <field name="DEBUG"></field>
+        </block>
+        <block type="actions_motorDiff_on_for" id="drive1" intask="true">
+            <field name="DIRECTION">FOREWARD</field>
+            <value name="POWER">
+                <block type="math_number" id="num_POWER" intask="true">
+                    <field name="NUM">50</field>
+                </block>
+            </value>
+            <value name="DISTANCE">
+                <block type="math_number" id="num_DISTANCE" intask="true">
+                    <field name="NUM">20</field>
+                </block>
+            </value>
+        </block>
+    </instance>
+</block_set>

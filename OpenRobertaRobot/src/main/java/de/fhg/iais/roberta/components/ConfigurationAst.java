@@ -20,6 +20,7 @@ import de.fhg.iais.roberta.util.syntax.SC;
 public final class ConfigurationAst {
     // LinkedHashMap to preserve insertion order of elements. Helps to recreate the same XML output as XML input.
     private final LinkedHashMap<String, ConfigurationComponent> configurationComponents;
+    private final List<ConfigurationComponent> allConfigurationComponents;
     private final List<String> componentTypes;
     private final String robotType;
     private final String xmlVersion;
@@ -43,6 +44,10 @@ public final class ConfigurationAst {
         String ipAddress,
         String userName,
         String password) {
+        this.allConfigurationComponents = new ArrayList<>();
+        for ( ConfigurationComponent confComp : configurationComponents ) {
+            this.allConfigurationComponents.add(confComp);
+        }
         this.configurationComponents = buildConfigurationComponentMap(configurationComponents);
         this.robotType = robotType;
         this.xmlVersion = xmlVersion;
@@ -68,9 +73,25 @@ public final class ConfigurationAst {
         }
     }
 
+    private static boolean isComponentDisconnected(ConfigurationComponent confComp) {
+        if ( confComp.getProperty() != null && confComp.getProperty().blocklyRegion != null && confComp.getProperty().blocklyRegion.disabled ) {
+            return true;
+        }
+        for ( String portKey : new String[] {"PORT", "MOTOR_L", "MOTOR_R", "PIN1"} ) {
+            String val = confComp.getOptProperty(portKey);
+            if ( val != null && val.isEmpty() ) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private static LinkedHashMap<String, ConfigurationComponent> buildConfigurationComponentMap(Iterable<ConfigurationComponent> configurationComponents) {
         LinkedHashMap<String, ConfigurationComponent> map = new LinkedHashMap<>();
         for ( ConfigurationComponent confComp : configurationComponents ) {
+            if ( isComponentDisconnected(confComp) ) {
+                continue;
+            }
             map.put(confComp.userDefinedPortName, confComp);
         }
         return map;
@@ -134,6 +155,10 @@ public final class ConfigurationAst {
      */
     public Map<String, ConfigurationComponent> getConfigurationComponents() {
         return new HashMap<>(this.configurationComponents);
+    }
+
+    public List<ConfigurationComponent> getAllConfigurationComponents() {
+        return new ArrayList<>(this.allConfigurationComponents);
     }
 
     public boolean isComponentTypePresent(String componentType) {

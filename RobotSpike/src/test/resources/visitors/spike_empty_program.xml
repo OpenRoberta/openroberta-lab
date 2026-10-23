@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="spike" xmlversion="3.1" description="" tags="">
+    <instance x="0" y="0">
+        <block type="robControls_start" id="start1" intask="true">
+            <mutation declare="false" />
+            <field name="DEBUG" />
+        </block>
+    </instance>
+</block_set>
