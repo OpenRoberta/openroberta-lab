@@ -595,7 +595,7 @@ export const ROBOTS: { [key: string]: RobotBoardConfig } = {
     spike: {
         pinOut: 'vertical',
         autoLayout: true,
-        portFieldNames: ['PORT', 'MOTOR_L', 'MOTOR_R', 'PIN1'],
+        portFieldNames: ['PORT', 'MOTOR_L', 'MOTOR_R'],
         ports: [
             // ports
             { name: 'A', position: { x: 2, y: 105 } },

@@ -138,6 +138,12 @@ export class CircuitVisualization {
         }
 
         Blockly.Xml.domToWorkspace(this.dom, this.workspace);
+        this.workspace.getAllBlocks().forEach((block: any) => {
+            if (block.type === 'robConf_key' && !block.isDeletable() && block.inputList?.length > 1) {
+                block.inputList[1].setVisible(false);
+                block.render(false);
+            }
+        });
         this.robot = this.workspace.getBlockById('robot');
         this.initialBlockIds = new Set(this.workspace.getAllBlocks().map((b: any) => b.id));
         this.updateAllDifferentialDriveStates();
@@ -897,7 +903,8 @@ export class CircuitVisualization {
                                     ? name
                                     : null;
                             if (connectedTo) {
-                                this.appendPortAndConnection(block, fieldGroup_, name, connectedTo);
+                                const svgEl = input.isVisible() ? fieldGroup_ : block.inputList[0]?.fieldRow?.[0]?.textElement_;
+                                this.appendPortAndConnection(block, svgEl, name, connectedTo);
                             }
                         }
                     });
