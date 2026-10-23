@@ -1,5 +1,5 @@
 import { Port } from './port';
-import { ConfigDeclItem, getRobotConfig, getRobotImageKey, RobotBoardConfig } from './const.robots';
+import { getRobotConfig, getRobotImageKey, RobotBoardConfig } from './const.robots';
 
 class RobotViewField extends ((<any>window).Blockly.Field as { new (): any }) {
     board_: any;
@@ -74,10 +74,6 @@ class RobotViewField extends ((<any>window).Blockly.Field as { new (): any }) {
         return this.ports_[index];
     }
 
-    getConfigDecl(): ConfigDeclItem[] {
-        return this.robotConfig && this.robotConfig.configDecl ? this.robotConfig.configDecl : [];
-    }
-
     setPosition(position) {
         if (!position) {
             return;
@@ -96,9 +92,6 @@ export function createRobotBlock(robotIdentifier) {
                 .appendField(this.robot_, 'ROBOT');
             this.getPortByName = (portName) => {
                 return this.robot_.getPortByName(portName);
-            };
-            this.getConfigDecl = () => {
-                return this.robot_.getConfigDecl();
             };
         },
     };

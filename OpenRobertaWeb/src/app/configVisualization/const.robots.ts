@@ -14,11 +14,6 @@ export interface RobotPortConfig {
     position: { x: number; y: number };
 }
 
-export interface ConfigDeclItem {
-    type: string;
-    name: string;
-}
-
 export interface RobotBoardConfig {
     ports: RobotPortConfig[];
     width: string;
@@ -38,20 +33,7 @@ export interface RobotBoardConfig {
      * differential drive port synchronization, and dimming of disconnected blocks).
      */
     portFieldNames?: string[];
-    /**
-     * Built-in sensors and actuators implicitly provided by the `robConf_robot` hub block.
-     * Used by `robConf_robot.getConfigDecl()` so Blockly serializes `<configuration_decl>`
-     * entries without showing standalone blocks for those built-in components. Any legacy
-     * standalone blocks of type `robConf_<type>` are stripped when loading the workspace.
-     */
-    configDecl?: ConfigDeclItem[];
 }
-
-const spikeCommon: Pick<RobotBoardConfig, 'pinOut' | 'autoLayout' | 'portFieldNames'> = {
-    pinOut: 'vertical',
-    autoLayout: true,
-    portFieldNames: ['PORT', 'MOTOR_L', 'MOTOR_R', 'PIN1'],
-};
 
 const calliope: RobotBoardConfig = {
     ports: [
@@ -611,7 +593,9 @@ export const ROBOTS: { [key: string]: RobotBoardConfig } = {
         height: '424.125px',
     },
     spike: {
-        ...spikeCommon,
+        pinOut: 'vertical',
+        autoLayout: true,
+        portFieldNames: ['PORT', 'MOTOR_L', 'MOTOR_R', 'PIN1'],
         ports: [
             // ports
             { name: 'A', position: { x: 2, y: 105 } },

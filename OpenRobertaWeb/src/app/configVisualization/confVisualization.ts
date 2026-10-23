@@ -132,20 +132,6 @@ export class CircuitVisualization {
             this.dom.appendChild(robotElement);
         }
 
-        const configDecl = this.robotConfig?.configDecl;
-        if (configDecl && configDecl.length > 0 && this.dom.querySelectorAll) {
-            const builtinBlockTypes = Array.from(new Set(configDecl.map((decl) => `robConf_${decl.type}`)));
-            const selector = builtinBlockTypes.map((t) => `block[type=${t}]`).join(', ');
-            this.dom.querySelectorAll(selector).forEach((builtinBlock: Element) => {
-                const instanceEl = builtinBlock.parentElement;
-                if (instanceEl && instanceEl.tagName.toLowerCase() === 'instance') {
-                    instanceEl.remove();
-                } else {
-                    builtinBlock.remove();
-                }
-            });
-        }
-
         Blockly.Xml.domToWorkspace(this.dom, this.workspace);
         this.robot = this.workspace.getBlockById('robot');
         this.initialBlockIds = new Set(this.workspace.getAllBlocks().map((b: any) => b.id));
