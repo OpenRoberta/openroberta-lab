@@ -610,7 +610,7 @@ export const ROBOTS: { [key: string]: RobotBoardConfig } = {
             { name: 'RIGHT', position: { x: 176, y: 292 } },
             { name: 'buzzer', position: { x: 105, y: 340 } },
             { name: 'gyro', position: { x: 130, y: 70 } },
-            { name: 'rgbled', position: { x: 105, y: 292 } },
+            { name: 'rgbled', position: { x: 109, y: 292 } },
         ],
         width: '217px',
         height: '342px',
