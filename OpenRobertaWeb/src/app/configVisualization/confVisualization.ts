@@ -530,7 +530,7 @@ export class CircuitVisualization {
 
             const allBlocks: any[] = this.workspace
                 .getTopBlocks(false)
-                .filter((b: any) => b.id !== 'robot' && b.isDeletable());
+                .filter((b: any) => b.id !== 'robot');
             const diffDrives: any[] = [];
             const leftConnected: { block: any; portName: string; orderKey: number }[] = [];
             const rightConnected: { block: any; portName: string; orderKey: number }[] = [];
