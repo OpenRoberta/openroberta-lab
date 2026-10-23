@@ -123,6 +123,11 @@ export class CircuitVisualization {
 
     injectRobotBoard(): void {
         const Blockly = (<any>window).Blockly;
+        const confBlocks = (<any>window).confBlocks;
+        // Replace the RGB LED component to make it not render as programming block.
+        if (confBlocks?.rgbled?.mbot2) {
+            confBlocks.rgbled.spike = confBlocks.rgbled.mbot2;
+        }
         Blockly.Blocks['robConf_robot'] = createRobotBlock(this.currentRobot);
 
         if (!this.dom.querySelector('block[type=robConf_robot]')) {
