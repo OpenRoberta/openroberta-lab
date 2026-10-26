@@ -123,27 +123,16 @@ export class CircuitVisualization {
 
     injectRobotBoard(): void {
         const Blockly = (<any>window).Blockly;
-        const confBlocks = (<any>window).confBlocks;
-        // Replace the RGB LED component to make it not render as programming block.
-        if (confBlocks?.rgbled?.mbot2) {
-            confBlocks.rgbled.spike = confBlocks.rgbled.mbot2;
-        }
         Blockly.Blocks['robConf_robot'] = createRobotBlock(this.currentRobot);
 
         if (!this.dom.querySelector('block[type=robConf_robot]')) {
-            const robotXml = `<instance x="289" y="183"><block type="robConf_robot" id="robot"></block></instance>`;
+            const robotXml = `<instance x='289' y='183'><block type='robConf_robot' id='robot'></block></instance>`;
             const oParser = new DOMParser();
             const robotElement = oParser.parseFromString(robotXml, 'text/xml').firstChild;
             this.dom.appendChild(robotElement);
         }
 
         Blockly.Xml.domToWorkspace(this.dom, this.workspace);
-        this.workspace.getAllBlocks().forEach((block: any) => {
-            if (block.type === 'robConf_key' && !block.isDeletable() && block.inputList?.length > 1) {
-                block.inputList[1].setVisible(false);
-                block.render(false);
-            }
-        });
         this.robot = this.workspace.getBlockById('robot');
         this.initialBlockIds = new Set(this.workspace.getAllBlocks().map((b: any) => b.id));
         this.updateAllDifferentialDriveStates();
@@ -302,8 +291,7 @@ export class CircuitVisualization {
             return;
         }
         const configuredPortFieldNames = this.getPortFieldNames();
-        const fieldsToCheck =
-            changedField && configuredPortFieldNames.includes(changedField) ? [changedField] : this.getBlockPortFieldNames(sourceBlock);
+        const fieldsToCheck = changedField && configuredPortFieldNames.includes(changedField) ? [changedField] : this.getBlockPortFieldNames(sourceBlock);
         if (fieldsToCheck.length === 0) {
             return;
         }
@@ -365,9 +353,7 @@ export class CircuitVisualization {
             return;
         }
         const currentName = motorBlock.getFieldValue('NAME');
-        const isDefaultPortMotorName = Boolean(
-            currentName && this.robotConfig?.ports?.some((p) => currentName === 'M' + p.name)
-        );
+        const isDefaultPortMotorName = Boolean(currentName && this.robotConfig?.ports?.some((p) => currentName === 'M' + p.name));
         if (!isDefaultPortMotorName) {
             return;
         }
@@ -539,9 +525,7 @@ export class CircuitVisualization {
             const rawHubWidth = this.robot.robot_ && this.robot.robot_.width ? parseFloat(this.robot.robot_.width) : 0;
             const hubWidth = rawHubWidth > 0 ? rawHubWidth : 217;
 
-            const allBlocks: any[] = this.workspace
-                .getTopBlocks(false)
-                .filter((b: any) => b.id !== 'robot');
+            const allBlocks: any[] = this.workspace.getTopBlocks(false).filter((b: any) => b.id !== 'robot');
             const diffDrives: any[] = [];
             const leftConnected: { block: any; portName: string; orderKey: number }[] = [];
             const rightConnected: { block: any; portName: string; orderKey: number }[] = [];
@@ -886,8 +870,16 @@ export class CircuitVisualization {
         if (block.inputList.length > 0) {
             block.inputList.forEach((input, index) => {
                 if (index === 0) {
+                    const titleField = input.fieldRow[0];
+
                     if (this.robot.getPortByName(block.confBlock)) {
-                        this.appendPortAndConnection(block, input.fieldRow[0].textElement_, name, block.confBlock);
+                        this.appendPortAndConnection(block, titleField.textElement_, name, block.confBlock);
+                    }
+                    if (this.workspace.device === 'spike' && block.type === 'robConf_key' && !block.isDeletable()) {
+                        const pin = block.getFieldValue('PIN1');
+                        if (pin && this.robot.getPortByName(pin)) {
+                            this.appendPortAndConnection(block, titleField.textElement_, 'PIN1', pin);
+                        }
                     }
                 } else {
                     input.fieldRow.forEach(({ fieldGroup_, name, value_ }) => {
