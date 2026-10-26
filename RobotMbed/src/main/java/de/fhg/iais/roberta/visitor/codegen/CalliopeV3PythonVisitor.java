@@ -45,6 +45,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.MoistureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.Scd40Sensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.CallibotKeysSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.RadioRssiSensor;
@@ -578,6 +579,26 @@ public class CalliopeV3PythonVisitor extends MbedV2PythonVisitor implements ICal
             throw new UnsupportedOperationException("Mode " + humiditySensor.getMode() + " not supported!");
         }
         this.src.add("\")");
+        return null;
+    }
+
+    @Override
+    public Void visitScd40Sensor(Scd40Sensor scd40Sensor) {
+        this.src.add(this.getBean(CodeGeneratorSetupBean.class).getHelperMethodGenerator().getHelperMethodName(CalliopeMethods.SCD40_GET_SAMPLE), "(");
+        switch ( scd40Sensor.getMode() ) {
+            case SC.CO2:
+                this.src.add("0");
+                break;
+            case SC.TEMPERATURE:
+                this.src.add("1");
+                break;
+            case SC.HUMIDITY:
+                this.src.add("2");
+                break;
+            default:
+                throw new UnsupportedOperationException("Mode " + scd40Sensor.getMode() + " not supported!");
+        }
+        this.src.add(")");
         return null;
     }
 

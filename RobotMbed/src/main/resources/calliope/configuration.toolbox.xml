@@ -77,5 +77,6 @@
         <block type="robConf_digitalout"/>
         <block type="robConf_analogout"/>
         <block type="robConf_colourtcs3472"/>
+        <block type="robConf_scd40"/>
     </category>
 </toolbox_set>

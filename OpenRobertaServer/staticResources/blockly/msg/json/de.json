@@ -360,5 +360,11 @@
 	"MESSAGE_PROGRAM_COMPILING": "Das Programm wird kompiliert",
 	"MESSAGE_PROGRAM_FLASHING": "Das Programm wird geflasht, warten Sie bitte",
 	"MESSAGE_PROGRAM_FLASHED": "Das Programm ist geflasht",
-	"MESSAGE_ROBOT_DISCONNECTED": "Ein aktiver Roboter wurde getrennt"
+	"MESSAGE_ROBOT_DISCONNECTED": "Ein aktiver Roboter wurde getrennt",
+	"MODE_CO2": "CO2",
+	"SENSOR_SCD40": "CO2-Sensor SCD40",
+	"SCD40_TOOLTIP": "Repräsentiert einen SCD40-Sensor für CO2, Temperatur und Luftfeuchtigkeit.",
+	"SENSOR_SCD40_CO2_GETSAMPLE_TOOLTIP": "Liest die aktuelle CO2-Konzentration des SCD40-Sensors in ppm.",
+	"SENSOR_SCD40_TEMPERATURE_GETSAMPLE_TOOLTIP": "Liest die aktuelle Temperatur des SCD40-Sensors in Grad Celsius.",
+	"SENSOR_SCD40_HUMIDITY_GETSAMPLE_TOOLTIP": "Liest die aktuelle relative Luftfeuchtigkeit des SCD40-Sensors in Prozent."
 }

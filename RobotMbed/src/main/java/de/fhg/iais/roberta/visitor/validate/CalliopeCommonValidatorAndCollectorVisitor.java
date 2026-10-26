@@ -45,6 +45,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.MoistureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.Scd40Sensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.CallibotKeysSensor;
@@ -136,6 +137,15 @@ public class CalliopeCommonValidatorAndCollectorVisitor extends MbedV2ValidatorA
         addToPhraseIfUnsupportedInSim(humiditySensor, true, isSim);
         checkSensorExists(humiditySensor, SC.HUMIDITY);
         usedHardwareBuilder.addUsedSensor(new UsedSensor(humiditySensor.getUserDefinedPort(), SC.HUMIDITY, humiditySensor.getMode()));
+        return null;
+    }
+
+    @Override
+    public Void visitScd40Sensor(Scd40Sensor scd40Sensor) {
+        addToPhraseIfUnsupportedInSim(scd40Sensor, true, isSim);
+        checkSensorExists(scd40Sensor, SC.SCD40);
+        usedHardwareBuilder.addUsedSensor(new UsedSensor(scd40Sensor.getUserDefinedPort(), SC.SCD40, scd40Sensor.getMode()));
+        usedMethodBuilder.addUsedMethod(CalliopeMethods.SCD40_GET_SAMPLE);
         return null;
     }
 
@@ -469,7 +479,7 @@ public class CalliopeCommonValidatorAndCollectorVisitor extends MbedV2ValidatorA
 
     protected Boolean isMotionKitPinsOverlapping() {
         Map<String, ConfigurationComponent> usedConfig = robotConfiguration.getConfigurationComponents();
-        if ( robotConfiguration.optConfigurationComponentByType(SC.CALLIBOT) != null || robotConfiguration.isComponentTypePresent("LEDBAR") || robotConfiguration.isComponentTypePresent("FOURDIGITDISPLAY") || robotConfiguration.isComponentTypePresent(SC.ULTRASONIC) || robotConfiguration.isComponentTypePresent(SC.HUMIDITY) || robotConfiguration.isComponentTypePresent(SC.COLOUR) ) {
+        if ( robotConfiguration.optConfigurationComponentByType(SC.CALLIBOT) != null || robotConfiguration.isComponentTypePresent("LEDBAR") || robotConfiguration.isComponentTypePresent("FOURDIGITDISPLAY") || robotConfiguration.isComponentTypePresent(SC.ULTRASONIC) || robotConfiguration.isComponentTypePresent(SC.HUMIDITY) || robotConfiguration.isComponentTypePresent(SC.COLOUR) || robotConfiguration.isComponentTypePresent(SC.SCD40) ) {
             return true;
         }
         for ( Map.Entry<String, ConfigurationComponent> confComp : usedConfig.entrySet() ) {

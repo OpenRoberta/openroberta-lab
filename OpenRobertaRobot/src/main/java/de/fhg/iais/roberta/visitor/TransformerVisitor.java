@@ -139,6 +139,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.PinGetValueSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PinTouchSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.PulseSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.RfidSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.Scd40Sensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TemperatureSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.TimerReset;
@@ -765,6 +766,10 @@ public abstract class TransformerVisitor implements IVisitor<Phrase> {
 
     public Phrase visitHumiditySensor(HumiditySensor humiditySensor) {
         return new HumiditySensor(humiditySensor.getProperty(), new ExternalSensorBean(humiditySensor.getUserDefinedPort(), humiditySensor.getMode(), humiditySensor.getSlot(), humiditySensor.getMutation()));
+    }
+
+    public Phrase visitScd40Sensor(Scd40Sensor scd40Sensor) {
+        return new Scd40Sensor(scd40Sensor.getProperty(), new ExternalSensorBean(scd40Sensor.getUserDefinedPort(), scd40Sensor.getMode(), scd40Sensor.getSlot(), scd40Sensor.getMutation()));
     }
 
     public Phrase visitMotionSensor(MotionSensor motionSensor) {

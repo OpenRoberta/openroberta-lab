@@ -9,5 +9,6 @@ public enum CalliopeMethods {
     SET_MOTOR,
     SERVO_GET_ANGLE,
     RECEIVE_MESSAGE,
-    GET_ROTATION
+    GET_ROTATION,
+    SCD40_GET_SAMPLE
 }

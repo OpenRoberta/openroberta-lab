@@ -25,6 +25,7 @@ import de.fhg.iais.roberta.syntax.sensor.generic.GyroSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.HumiditySensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.InfraredSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.MoistureSensor;
+import de.fhg.iais.roberta.syntax.sensor.generic.Scd40Sensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.SoundSensor;
 import de.fhg.iais.roberta.syntax.sensor.generic.UltrasonicSensor;
 import de.fhg.iais.roberta.syntax.sensor.mbed.CallibotKeysSensor;
@@ -73,6 +74,8 @@ public interface ICalliopeVisitor<V> extends IMbedV2Visitor<V> {
     V visitBothMotorsStopAction(BothMotorsStopAction bothMotorsStopAction);
 
     V visitHumiditySensor(HumiditySensor humiditySensor);
+
+    V visitScd40Sensor(Scd40Sensor scd40Sensor);
 
     V visitSwitchLedMatrixAction(SwitchLedMatrixAction switchLedMatrixAction);
 
