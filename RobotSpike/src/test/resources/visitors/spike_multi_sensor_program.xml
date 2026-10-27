@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='utf-8'?>
+<block_set xmlns="http://de.fhg.iais.roberta.blockly" robottype="spike" xmlversion="3.1" description="" tags="">
+    <instance x="0" y="0">
+        <block type="robControls_start" id="start1" intask="true">
+            <mutation declare="false" />
+            <field name="DEBUG" />
+        </block>
+        <block type="actions_motor_on_for" id="motC1" intask="true">
+            <field name="ACTORPORT">MC</field>
+            <field name="UNIT">DEGREES</field>
+            <value name="POWER">
+                <block type="math_number" id="num_POWER" intask="true">
+                    <field name="NUM">50</field>
+                </block>
+            </value>
+            <value name="VALUE">
+                <block type="math_number" id="num_VALUE" intask="true">
+                    <field name="NUM">180</field>
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="dbg_U" intask="true">
+            <value name="OUT">
+                <block type="robSensors_ultrasonic_getSample" id="sample_U" intask="true">
+                    <mutation mode="DISTANCE" />
+                    <field name="MODE">DISTANCE</field>
+                    <field name="SENSORPORT">U</field>
+                    <field name="SLOT" />
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="dbg_U2" intask="true">
+            <value name="OUT">
+                <block type="robSensors_ultrasonic_getSample" id="sample_U2" intask="true">
+                    <mutation mode="DISTANCE" />
+                    <field name="MODE">DISTANCE</field>
+                    <field name="SENSORPORT">U2</field>
+                    <field name="SLOT" />
+                </block>
+            </value>
+        </block>
+        <block type="robActions_debug" id="dbg_MC" intask="true">
+            <value name="OUT">
+                <block type="robSensors_encoder_getSample" id="sample_MC" intask="true">
+                    <mutation mode="DEGREE" />
+                    <field name="MODE">DEGREE</field>
+                    <field name="SENSORPORT">MC</field>
+                    <field name="SLOT" />
+                </block>
+            </value>
+        </block>
+    </instance>
+</block_set>

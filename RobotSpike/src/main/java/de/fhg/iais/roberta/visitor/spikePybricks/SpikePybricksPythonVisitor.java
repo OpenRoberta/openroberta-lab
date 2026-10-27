@@ -890,7 +890,11 @@ public final class SpikePybricksPythonVisitor extends AbstractSpikePythonVisitor
                 usedHardwareBean.getLockedComponent().forEach(
                     (component, port) -> {
                         if ( (motor.getPort()).equals(port) ) {
-                            src.add("motor").add(motor.getPort()).add(" = left_motor").nlI();
+                            if ( component.equals("MOTOR_R") ) {
+                                src.add("motor").add(motor.getPort()).add(" = right_motor").nlI();
+                            } else {
+                                src.add("motor").add(motor.getPort()).add(" = left_motor").nlI();
+                            }
                             componentLocked.set(true);
                         }
                     }

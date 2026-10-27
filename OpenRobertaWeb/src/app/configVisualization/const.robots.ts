@@ -1,4 +1,41 @@
-const calliope = {
+/**
+ * Orientation of the pin/port layout on the robot board image.
+ * This only applies to platforms that render wired connections (Arduino, Calliope, Spike, TXT, ...):
+ * - `horizontal` (default): Pins/ports are arranged in horizontal rows on the controller.
+ *   Wires are drawn using 2 segments (vertical from the port, then horizontal to the block).
+ * - `vertical`: Pins/ports are arranged in vertical columns on the controller.
+ *   Wires are drawn using 3 segments (horizontal from the port, vertical in the middle,
+ *   and horizontal into the connected block).
+ */
+export type PinOutOrientation = 'horizontal' | 'vertical';
+
+export interface RobotPortConfig {
+    name: string;
+    position: { x: number; y: number };
+}
+
+export interface RobotBoardConfig {
+    ports: RobotPortConfig[];
+    width: string;
+    height: string;
+    /**
+     * Controls wire routing geometry for platforms with wired connections:
+     * `horizontal` (2-segments, default) vs. `vertical` (3-segments).
+     */
+    pinOut?: PinOutOrientation;
+    /**
+     * Whether component blocks should be automatically arranged around the hub.
+     */
+    autoLayout?: boolean;
+    /**
+     * Field names on configuration blocks that hold port assignments when exclusive
+     * port management is enabled (1 component per port, port-derived motor naming,
+     * differential drive port synchronization, and dimming of disconnected blocks).
+     */
+    portFieldNames?: string[];
+}
+
+const calliope: RobotBoardConfig = {
     ports: [
         // Exceptions for weird XML names
         { name: 'motor A', position: { x: 153.8, y: 210 } },
@@ -49,7 +86,7 @@ const calliope = {
     width: '322px',
     height: '283px',
 };
-export const ROBOTS = {
+export const ROBOTS: { [key: string]: RobotBoardConfig } = {
     arduino_mega: {
         ports: [
             { name: 'LED_BUILTIN', position: { x: 161.2, y: 9.5 } },
@@ -556,13 +593,16 @@ export const ROBOTS = {
         height: '424.125px',
     },
     spike: {
+        pinOut: 'vertical',
+        autoLayout: true,
+        portFieldNames: ['PORT', 'MOTOR_L', 'MOTOR_R'],
         ports: [
             // ports
-            { name: 'A', position: { x: 0, y: 105 } },
+            { name: 'A', position: { x: 2, y: 105 } },
             { name: 'B', position: { x: 210, y: 105 } },
-            { name: 'C', position: { x: 0, y: 168 } },
+            { name: 'C', position: { x: 2, y: 168 } },
             { name: 'D', position: { x: 210, y: 168 } },
-            { name: 'E', position: { x: 0, y: 229 } },
+            { name: 'E', position: { x: 2, y: 229 } },
             { name: 'F', position: { x: 210, y: 229 } },
             //build in
             { name: 'display', position: { x: 105, y: 168 } },
@@ -570,7 +610,7 @@ export const ROBOTS = {
             { name: 'RIGHT', position: { x: 176, y: 292 } },
             { name: 'buzzer', position: { x: 105, y: 340 } },
             { name: 'gyro', position: { x: 130, y: 70 } },
-            { name: 'rgbled', position: { x: 105, y: 292 } },
+            { name: 'rgbled', position: { x: 109, y: 292 } },
         ],
         width: '217px',
         height: '342px',
@@ -610,6 +650,7 @@ export const ROBOTS = {
         height: '272px',
     },
     txt4: {
+        pinOut: 'vertical',
         ports: [
             // ports
             { name: 'EXT1', position: { x: 2, y: 65 } },
@@ -668,3 +709,22 @@ export const ROBOTS = {
         height: '255px',
     },
 };
+
+export function getRobotImageKey(robotGroup: string, robotName?: string): string | null {
+    if (!robotGroup) {
+        return null;
+    }
+    const fullKey = robotName ? `${robotGroup}_${robotName}` : robotGroup;
+    if (ROBOTS[fullKey]) {
+        return fullKey;
+    }
+    if (ROBOTS[robotGroup]) {
+        return robotGroup;
+    }
+    return null;
+}
+
+export function getRobotConfig(robotGroup: string, robotName?: string): RobotBoardConfig | undefined {
+    const key = getRobotImageKey(robotGroup, robotName);
+    return key ? ROBOTS[key] : undefined;
+}
