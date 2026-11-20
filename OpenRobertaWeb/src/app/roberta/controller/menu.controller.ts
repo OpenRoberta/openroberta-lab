@@ -456,14 +456,14 @@ function initMenuEvents() {
     $('.menuGeneral').onWrap(
         'click',
         function () {
-            window.open('https://jira.iais.fraunhofer.de/wiki/display/ORInfo');
+            window.open('https://roberta-education.atlassian.net/wiki/spaces/RWNE/pages/78348290');
         },
         'head navigation menu item general clicked'
     );
     $('.menuFaq').onWrap(
         'click',
         function () {
-            window.open('https://jira.iais.fraunhofer.de/wiki/display/ORInfo/FAQ');
+            window.open('https://roberta-education.atlassian.net/wiki/spaces/RWNE/pages/78426347');
         },
         'head navigation menu item faq clicked'
     );

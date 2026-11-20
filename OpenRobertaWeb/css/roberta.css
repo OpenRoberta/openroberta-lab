@@ -177,10 +177,6 @@ body.blocklyMinimalBody * {
     background: url(../css/svg/roberta-education.svg) no-repeat;
 }
 
-.fraunhoferLogo {
-    background: url(../css/img/iais_logo.gif) no-repeat;
-}
-
 .googleLogo {
     background: url(../css/svg/Google_logo.svg) no-repeat;
     background-size: contain;
