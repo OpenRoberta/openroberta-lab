@@ -2181,7 +2181,7 @@ Blockly.Msg.WAIT_OR = "oder warte bis";
 Blockly.Msg.WAIT_TIME_TOOLTIP = "Wartet für eine bestimmte Zeit in Millisekunden.";
 Blockly.Msg.WAIT_TOOLTIP = "Wartet bis eine Bedingung wahr wird.";
 Blockly.Msg.WAIT_UNTIL = "Warte bis";
-Blockly.Msg.WEBUSB_DOWLOAD_PROBLEM = "Beim Herunterladen des Programms auf den Roboter ist ein Problem aufgetreten. Bitte versuche es erneut. Wenn das Problem weiterhin besteht, schaue in die <a href=\"https://roberta-education.atlassian.net/wiki/spaces/RWNE/pages/78426347\" target=\"_blank\">FAQs</a>.";
+Blockly.Msg.WEBUSB_DOWLOAD_PROBLEM = "Beim Herunterladen des Programms auf den Roboter ist ein Problem aufgetreten. Bitte versuche es erneut. Wenn das Problem weiterhin besteht, schaue in die <a href=\"https://roberta-education.atlassian.net/wiki/spaces/RWNE/pages/78426347#de-0\" target=\"_blank\">FAQs</a>.";
 Blockly.Msg.WEBUSB_NOT_SUPPORTED = "Dein Browser unterstützt WebUSB nicht. Um das Programm auf deinen Roboter herunterzuladen, wechsele bitte zu einem der folgenden Browser: Chrome, Edge oder Opera.";
 Blockly.Msg.WEIGHT_KG = "Gewicht kg";
 Blockly.Msg.WHEEL_BASE = "Radstand";

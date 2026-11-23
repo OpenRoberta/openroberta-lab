@@ -2181,7 +2181,7 @@ Blockly.Msg.WAIT_OR = "альбо чакаць да";
 Blockly.Msg.WAIT_TIME_TOOLTIP = "Чакае пэўны час у мілісекундах.";
 Blockly.Msg.WAIT_TOOLTIP = "Чакае, пакуль умова не стане ісцінай.";
 Blockly.Msg.WAIT_UNTIL = "чакаць пакуль";
-Blockly.Msg.WEBUSB_DOWLOAD_PROBLEM = "There was a problem downloading the program to the robot, please try again. If the problem persists, see the <a href='https://roberta-education.atlassian.net/wiki/spaces/RWNE/pages/78426347' target='_blank'>FAQ</a> for help.";  // untranslated
+Blockly.Msg.WEBUSB_DOWLOAD_PROBLEM = "There was a problem downloading the program to the robot, please try again. If the problem persists, see the <a href='https://roberta-education.atlassian.net/wiki/spaces/RWNE/pages/78426347#en-0' target='_blank'>FAQ</a> for help.";  // untranslated
 Blockly.Msg.WEBUSB_NOT_SUPPORTED = "Your browser does not support WebUSB. To download the programme to your robot, please switch to one of the following browsers: Chrome, Edge or Opera";  // untranslated
 Blockly.Msg.WEIGHT_KG = "weight kg";  // untranslated
 Blockly.Msg.WHEEL_BASE = "wheel base";  // untranslated

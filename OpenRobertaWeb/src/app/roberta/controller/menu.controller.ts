@@ -460,10 +460,12 @@ function initMenuEvents() {
         },
         'head navigation menu item general clicked'
     );
-    $('.menuFaq').onWrap(
+    $('.menuFAQ').onWrap(
         'click',
         function () {
-            window.open('https://roberta-education.atlassian.net/wiki/spaces/RWNE/pages/78426347');
+            // the wiki page has an English and a German tab; the anchor selects the tab
+            const tab = GUISTATE_C.getLanguage().toLowerCase() === 'de' ? 'de-0' : 'en-0';
+            window.open('https://roberta-education.atlassian.net/wiki/spaces/RWNE/pages/78426347#' + tab);
         },
         'head navigation menu item faq clicked'
     );
